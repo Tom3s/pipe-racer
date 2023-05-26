@@ -1,0 +1,89 @@
+[gd_scene load_steps=14 format=3 uid="uid://b45crncrhwh8b"]
+
+[ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
+[ext_resource type="Shader" uid="uid://cmgjxuy1g6ad0" path="res://ground.tres" id="2_5gwup"]
+[ext_resource type="Script" path="res://StaticBody3D2.gd" id="2_wmxyr"]
+[ext_resource type="Script" path="res://camera.gd" id="3_16b76"]
+[ext_resource type="Script" path="res://DebugDraw3D.gd" id="4_x5c6g"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_762de"]
+size = Vector3(1000, 0.5, 1000)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8m8q6"]
+render_priority = 0
+shader = ExtResource("2_5gwup")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y70uf"]
+size = Vector3(1000, 0.5, 1000)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g3a7t"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xp6u2"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_41qf6"]
+
+[sub_resource type="Sky" id="Sky_ucuut"]
+sky_material = SubResource("ProceduralSkyMaterial_41qf6")
+
+[sub_resource type="Environment" id="Environment_2xiuk"]
+background_mode = 2
+sky = SubResource("Sky_ucuut")
+sky_rotation = Vector3(-2.97055, 1.14319, 0)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="TestPlatform" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_762de")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_y70uf")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.43255, -44.4971)
+constant_linear_velocity = Vector3(0, 0, -5)
+script = ExtResource("2_wmxyr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.58442, 5.06239)
+mesh = SubResource("BoxMesh_g3a7t")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.58442, 5.06239)
+shape = SubResource("BoxShape3D_xp6u2")
+
+[node name="Car" parent="." instance=ExtResource("2_5abju")]
+transform = Transform3D(0.628017, 0, -0.778199, 0, 1, 0, 0.778199, 0, 0.628017, 0, 1.71255, -52.1588)
+
+[node name="Camera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.754171, -0.321836, 0.572405, 0.0101382, 0.87727, 0.47989, -0.6566, -0.356116, 0.664874, 3.27969, 2.43978, -48.0395)
+script = ExtResource("3_16b76")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2xiuk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.74034, 0.580297, -0.339342, -0.0265259, 0.529623, 0.847818, 0.67171, -0.618672, 0.407494, 0, 20.8087, 0)
+shadow_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="DebugDraw3D" type="Control" parent="CanvasLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_x5c6g")
+metadata/_edit_use_anchors_ = true

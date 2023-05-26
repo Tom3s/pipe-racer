@@ -1,0 +1,139 @@
+[gd_scene load_steps=13 format=3 uid="uid://de56s7eayi24e"]
+
+[ext_resource type="Script" path="res://CarRigidBody.gd" id="1_gxrqs"]
+[ext_resource type="PackedScene" uid="uid://b5md64vnuflcp" path="res://tire.glb" id="1_xy06y"]
+[ext_resource type="Material" uid="uid://8c2iujneurql" path="res://tire_mtl.tres" id="3_7gc0r"]
+[ext_resource type="Script" path="res://tire.gd" id="3_hj1pj"]
+[ext_resource type="Shader" uid="uid://oi62eaxkfrry" path="res://tire.tres" id="4_6aaf8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_y4w84"]
+size = Vector3(1.6, 0.575, 3.45)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_inc80"]
+size = Vector3(1.6, 0.575, 3.45)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_y1s5o"]
+output_port_for_preview = 0
+parameter_name = "ColorParameter"
+
+[sub_resource type="VisualShader" id="VisualShader_iefbp"]
+code = "shader_type spatial;
+render_mode cull_front;
+
+uniform vec4 ColorParameter : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-79.1653, 16.8347)
+modes/cull = 1
+nodes/fragment/0/position = Vector2(440, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_y1s5o")
+nodes/fragment/2/position = Vector2(80, 80)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q850n"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("VisualShader_iefbp")
+shader_parameter/ColorParameter = Color(0.27451, 0, 0.368627, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_27h2q"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_6aaf8")
+shader_parameter/ColorParameter = Color(0, 0.705882, 0.819608, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pph1f"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_6aaf8")
+shader_parameter/ColorParameter = Color(0.996078, 0.368627, 0, 1)
+
+[node name="Car" type="Node3D"]
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="CarRigidBody" type="RigidBody3D" parent="Body"]
+unique_name_in_owner = true
+script = ExtResource("1_gxrqs")
+SPRING_STRENGTH = 55.0
+DAMPING = 200.0
+
+[node name="CarBodyMesh" type="MeshInstance3D" parent="Body/CarRigidBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.526465, 0)
+mesh = SubResource("BoxMesh_y4w84")
+
+[node name="CarBodyCollider" type="CollisionShape3D" parent="Body/CarRigidBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.526465, 0)
+shape = SubResource("BoxShape3D_inc80")
+
+[node name="raycasts" type="Node3D" parent="Body/CarRigidBody"]
+
+[node name="FrontLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.375, 1.275)
+debug_shape_custom_color = Color(0.941176, 0.682353, 0.647059, 1)
+
+[node name="FrontRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.375, 1.275)
+
+[node name="BackLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.375, -1.275)
+
+[node name="BackRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.375, -1.275)
+
+[node name="Tires" type="Node3D" parent="Body/CarRigidBody"]
+
+[node name="BackLeftTire" parent="Body/CarRigidBody/Tires" instance=ExtResource("1_xy06y")]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.85, 0.375, -1.275)
+script = ExtResource("3_hj1pj")
+
+[node name="Cube" parent="Body/CarRigidBody/Tires/BackLeftTire" index="0"]
+surface_material_override/0 = ExtResource("3_7gc0r")
+
+[node name="BackRightTire" parent="Body/CarRigidBody/Tires" instance=ExtResource("1_xy06y")]
+unique_name_in_owner = true
+transform = Transform3D(4.37114e-08, 1, -8.74228e-08, 1, -4.37114e-08, 0, -3.82137e-15, -8.74228e-08, -1, 0.85, 0.375, -1.275)
+script = ExtResource("3_hj1pj")
+
+[node name="Cube" parent="Body/CarRigidBody/Tires/BackRightTire" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_q850n")
+
+[node name="FrontLeftTire" parent="Body/CarRigidBody/Tires" instance=ExtResource("1_xy06y")]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.85, 0.375, 1.275)
+script = ExtResource("3_hj1pj")
+
+[node name="Cube" parent="Body/CarRigidBody/Tires/FrontLeftTire" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_27h2q")
+
+[node name="FrontRightTire" parent="Body/CarRigidBody/Tires" instance=ExtResource("1_xy06y")]
+unique_name_in_owner = true
+transform = Transform3D(4.37114e-08, 1, -8.74228e-08, 1, -4.37114e-08, 0, -3.82137e-15, -8.74228e-08, -1, 0.85, 0.375, 1.275)
+script = ExtResource("3_hj1pj")
+
+[node name="Cube" parent="Body/CarRigidBody/Tires/FrontRightTire" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_pph1f")
+
+[node name="InputHandler" type="Node" parent="."]
+
+[editable path="Body/CarRigidBody/Tires/BackLeftTire"]
+[editable path="Body/CarRigidBody/Tires/BackRightTire"]
+[editable path="Body/CarRigidBody/Tires/FrontLeftTire"]
+[editable path="Body/CarRigidBody/Tires/FrontRightTire"]

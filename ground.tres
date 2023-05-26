@@ -1,0 +1,54 @@
+[gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://cmgjxuy1g6ad0"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y2jts"]
+noise_type = 4
+frequency = 0.059
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ja6kg"]
+noise = SubResource("FastNoiseLite_y2jts")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_suq8c"]
+output_port_for_preview = 0
+texture = SubResource("NoiseTexture2D_ja6kg")
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_vfurb"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
+op_type = 2
+operator = 2
+
+[sub_resource type="VisualShaderNodeVec4Constant" id="VisualShaderNodeVec4Constant_am6b5"]
+constant = Quaternion(0.4, 0.4, 0.4, 1)
+
+[resource]
+code = "shader_type spatial;
+uniform sampler2D tex_frg_2;
+
+
+
+void fragment() {
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+
+
+// Vector4Constant:4
+	vec4 n_out4p0 = vec4(0.400000, 0.400000, 0.400000, 1.000000);
+
+
+// VectorOp:3
+	vec4 n_out3p0 = n_out2p0 * n_out4p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(-312.699, 47.9108)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_suq8c")
+nodes/fragment/2/position = Vector2(-100, -60)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorOp_vfurb")
+nodes/fragment/3/position = Vector2(180, 180)
+nodes/fragment/4/node = SubResource("VisualShaderNodeVec4Constant_am6b5")
+nodes/fragment/4/position = Vector2(-280, 320)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 3, 0, 0, 0, 4, 0, 3, 1)
