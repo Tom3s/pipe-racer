@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b5md64vnuflcp"
-path="res://.godot/imported/tire.glb-b1c3329e61a5e7a7cd6ac558b47ae9ab.scn"
+uid="uid://bi064wp2ly0y2"
+path="res://.godot/imported/tire-new.glb-4f0e639c48c7d2548c0bee6ac8de0280.scn"
 
 [deps]
 
-source_file="res://tire.glb"
-dest_files=["res://.godot/imported/tire.glb-b1c3329e61a5e7a7cd6ac558b47ae9ab.scn"]
+source_file="res://tire-new.glb"
+dest_files=["res://.godot/imported/tire-new.glb-4f0e639c48c7d2548c0bee6ac8de0280.scn"]
 
 [params]
 
@@ -28,18 +28,5 @@ animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 import_script/path=""
-_subresources={
-"meshes": {
-"tire_Cube001": {
-"generate/lightmap_uv": 2,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-}
-}
-}
+_subresources={}
 gltf/embedded_image_handling=1

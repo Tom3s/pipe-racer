@@ -1,38 +1,304 @@
-[gd_scene load_steps=14 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=40 format=3 uid="uid://b45crncrhwh8b"]
 
+[ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="1_4yon1"]
 [ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
-[ext_resource type="Shader" uid="uid://cmgjxuy1g6ad0" path="res://ground.tres" id="2_5gwup"]
 [ext_resource type="Script" path="res://StaticBody3D2.gd" id="2_wmxyr"]
 [ext_resource type="Script" path="res://FollowingCamera.gd" id="4_7naf2"]
 [ext_resource type="Script" path="res://DebugDraw3D.gd" id="4_x5c6g"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_762de"]
-size = Vector3(1000, 0.5, 1000)
+[sub_resource type="VisualShaderNodeIntOp" id="VisualShaderNodeIntOp_nuun2"]
+output_port_for_preview = 0
+operator = 9
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8m8q6"]
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_yatxl"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_nbib1"]
+parameter_name = "Base"
+default_value_enabled = true
+default_value = Color(0, 0.125354, 0.296098, 1)
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_pv2ih"]
+output_port_for_preview = 0
+operator = 2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4preb"]
+noise_type = 0
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w7e8e"]
+width = 15000
+height = 32
+noise = SubResource("FastNoiseLite_4preb")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_g1m7r"]
+texture = SubResource("NoiseTexture2D_w7e8e")
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_wllka"]
+output_port_for_preview = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_p6rqr"]
+parameter_name = "Roughness"
+hint = 2
+step = 0.05
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_wu2by"]
+parameter_name = "Metallic"
+hint = 2
+step = 0.05
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_a4eox"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_lif0h"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_a1dav"]
+output_port_for_preview = 0
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_blk33"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_k53uu"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_mwa3j"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0.2, 0.2)]
+op_type = 0
+operator = 4
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jugga"]
+parameter_name = "FloatParameter"
+hint = 2
+max = 0.02
+step = 0.001
+default_value_enabled = true
+default_value = 0.001
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_c2hf8"]
+output_port_for_preview = 0
+op_type = 0
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_3d8et"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_rs48o"]
+default_input_values = [0, Vector2(1, 1), 1, Vector2(0, 0)]
+op_type = 0
+operator = 3
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_m1fba"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 1
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_cb2ni"]
+default_input_values = [0, Vector2(1, 1), 1, Vector2(2, 2)]
+op_type = 0
+operator = 3
+
+[sub_resource type="VisualShader" id="VisualShader_u3c2h"]
+code = "shader_type spatial;
+uniform vec4 Base : source_color = vec4(0.000000, 0.125354, 0.296098, 1.000000);
+uniform sampler2D tex_frg_14;
+uniform float FloatParameter : hint_range(0, 0.01999999955297, 0.0010000000475) = 0.0010000000475;
+uniform float Metallic : hint_range(0, 1, 0.05000000074506);
+uniform float Roughness : hint_range(0, 1, 0.05000000074506);
+
+
+
+void fragment() {
+// ColorParameter:12
+	vec4 n_out12p0 = Base;
+
+
+// Texture2D:14
+	vec4 n_out14p0 = texture(tex_frg_14, UV);
+
+
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// FloatParameter:4
+	float n_out4p0 = FloatParameter;
+
+
+// VectorCompose:5
+	vec2 n_out5p0 = vec2(n_out4p0, n_out4p0);
+
+
+// VectorOp:3
+	vec2 n_out3p0 = mod(n_out2p0, n_out5p0);
+
+
+// VectorOp:7
+	vec2 n_in7p0 = vec2(1.00000, 1.00000);
+	vec2 n_out7p0 = n_in7p0 / n_out5p0;
+
+
+// VectorOp:6
+	vec2 n_out6p0 = n_out3p0 * n_out7p0;
+
+
+// VectorOp:9
+	vec2 n_in9p0 = vec2(1.00000, 1.00000);
+	vec2 n_in9p1 = vec2(2.00000, 2.00000);
+	vec2 n_out9p0 = n_in9p0 / n_in9p1;
+
+
+// Step:8
+	vec2 n_out8p0 = step(n_out6p0, n_out9p0);
+
+
+// VectorDecompose:11
+	float n_out11p0 = n_out8p0.x;
+	float n_out11p1 = n_out8p0.y;
+
+
+// IntOp:10
+	int n_out10p0 = int(n_out11p0) ^ int(n_out11p1);
+
+
+// VectorOp:13
+	vec3 n_out13p0 = vec3(n_out14p0.xyz) * vec3(float(n_out10p0));
+
+
+// VectorOp:15
+	vec3 n_out15p0 = vec3(n_out12p0.xyz) * n_out13p0;
+
+
+// FloatParameter:17
+	float n_out17p0 = Metallic;
+
+
+// VectorCompose:18
+	vec2 n_out18p0 = vec2(n_out17p0, n_out17p0);
+
+
+// VectorOp:20
+	vec2 n_out20p0 = vec2(n_out13p0.xy) * n_out18p0;
+
+
+// FloatParameter:16
+	float n_out16p0 = Roughness;
+
+
+// VectorCompose:19
+	vec2 n_out19p0 = vec2(n_out16p0, n_out16p0);
+
+
+// VectorOp:21
+	vec2 n_out21p0 = vec2(n_out13p0.xy) * n_out19p0;
+
+
+// Output:0
+	ALBEDO = n_out15p0;
+	METALLIC = n_out20p0.x;
+	ROUGHNESS = n_out21p0.x;
+
+
+}
+"
+graph_offset = Vector2(434.942, -108.91)
+nodes/fragment/0/position = Vector2(2020, -100)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_a1dav")
+nodes/fragment/2/position = Vector2(-340, 0)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorOp_mwa3j")
+nodes/fragment/3/position = Vector2(200, 60)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_jugga")
+nodes/fragment/4/position = Vector2(-480, 260)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorCompose_c2hf8")
+nodes/fragment/5/position = Vector2(-80, 240)
+nodes/fragment/6/node = SubResource("VisualShaderNodeVectorOp_3d8et")
+nodes/fragment/6/position = Vector2(440, 180)
+nodes/fragment/7/node = SubResource("VisualShaderNodeVectorOp_rs48o")
+nodes/fragment/7/position = Vector2(220, 400)
+nodes/fragment/8/node = SubResource("VisualShaderNodeStep_m1fba")
+nodes/fragment/8/position = Vector2(680, 260)
+nodes/fragment/9/node = SubResource("VisualShaderNodeVectorOp_cb2ni")
+nodes/fragment/9/position = Vector2(480, 500)
+nodes/fragment/10/node = SubResource("VisualShaderNodeIntOp_nuun2")
+nodes/fragment/10/position = Vector2(880, 400)
+nodes/fragment/11/node = SubResource("VisualShaderNodeVectorDecompose_yatxl")
+nodes/fragment/11/position = Vector2(900, 200)
+nodes/fragment/12/node = SubResource("VisualShaderNodeColorParameter_nbib1")
+nodes/fragment/12/position = Vector2(1040, -160)
+nodes/fragment/13/node = SubResource("VisualShaderNodeVectorOp_pv2ih")
+nodes/fragment/13/position = Vector2(1160, 140)
+nodes/fragment/14/node = SubResource("VisualShaderNodeTexture_g1m7r")
+nodes/fragment/14/position = Vector2(760, -100)
+nodes/fragment/15/node = SubResource("VisualShaderNodeVectorOp_wllka")
+nodes/fragment/15/position = Vector2(1420, -120)
+nodes/fragment/16/node = SubResource("VisualShaderNodeFloatParameter_p6rqr")
+nodes/fragment/16/position = Vector2(1340, 480)
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_wu2by")
+nodes/fragment/17/position = Vector2(1340, 200)
+nodes/fragment/18/node = SubResource("VisualShaderNodeVectorCompose_a4eox")
+nodes/fragment/18/position = Vector2(1640, 140)
+nodes/fragment/19/node = SubResource("VisualShaderNodeVectorCompose_lif0h")
+nodes/fragment/19/position = Vector2(1660, 440)
+nodes/fragment/20/node = SubResource("VisualShaderNodeVectorOp_blk33")
+nodes/fragment/20/position = Vector2(1820, 20)
+nodes/fragment/21/node = SubResource("VisualShaderNodeVectorOp_k53uu")
+nodes/fragment/21/position = Vector2(1820, 240)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 4, 0, 5, 0, 4, 0, 5, 1, 5, 0, 3, 1, 3, 0, 6, 0, 5, 0, 7, 1, 7, 0, 6, 1, 6, 0, 8, 0, 9, 0, 8, 1, 11, 0, 10, 0, 11, 1, 10, 1, 8, 0, 11, 0, 10, 0, 13, 1, 13, 0, 15, 1, 15, 0, 0, 0, 17, 0, 18, 0, 17, 0, 18, 1, 16, 0, 19, 0, 16, 0, 19, 1, 18, 0, 20, 1, 20, 0, 0, 2, 19, 0, 21, 1, 21, 0, 0, 3, 12, 0, 15, 0, 14, 0, 13, 0, 13, 0, 20, 0, 13, 0, 21, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gthte"]
 render_priority = 0
-shader = ExtResource("2_5gwup")
+shader = SubResource("VisualShader_u3c2h")
+shader_parameter/Base = Color(0, 0.125354, 0.296098, 1)
+shader_parameter/FloatParameter = 0.001
+shader_parameter/Metallic = null
+shader_parameter/Roughness = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_762de"]
+material = SubResource("ShaderMaterial_gthte")
+size = Vector3(1000, 0.5, 1000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y70uf"]
 size = Vector3(1000, 0.5, 1000)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g3a7t"]
-size = Vector3(10, 1, 10)
+size = Vector3(30, 1, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8m8q6"]
+render_priority = 0
+shader = ExtResource("1_4yon1")
+shader_parameter/Base = Color(0.94902, 0.403922, 0, 1)
+shader_parameter/FloatParameter = 0.005
+shader_parameter/Metallic = 0.9
+shader_parameter/Roughness = 0.1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xp6u2"]
-size = Vector3(10, 1, 10)
+size = Vector3(30, 1, 10)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_41qf6"]
+[sub_resource type="BoxMesh" id="BoxMesh_lm3xf"]
+size = Vector3(30, 1, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4vfff"]
+size = Vector3(30, 1, 10)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e6q4n"]
 
 [sub_resource type="Sky" id="Sky_ucuut"]
-sky_material = SubResource("ProceduralSkyMaterial_41qf6")
+sky_material = SubResource("ProceduralSkyMaterial_e6q4n")
 
 [sub_resource type="Environment" id="Environment_2xiuk"]
 background_mode = 2
 sky = SubResource("Sky_ucuut")
-sky_rotation = Vector3(-2.97055, 1.14319, 0)
-ambient_light_source = 2
-ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_source = 3
 
 [node name="TestPlatform" type="Node3D"]
 
@@ -41,25 +307,34 @@ ambient_light_color = Color(1, 1, 1, 1)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("BoxMesh_762de")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_y70uf")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="."]
-transform = Transform3D(0.933048, -0.359753, 0, 0.359753, 0.933048, 0, 0, 0, 1, -3.46782, 10.4875, -57.5351)
+transform = Transform3D(0.961353, -0.275319, 0, 0.275319, 0.961353, 0, 0, 0, 1, 4.18021, 3.71533, -52.6859)
 constant_linear_velocity = Vector3(0, 0, -5)
 script = ExtResource("2_wmxyr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.58442, 5.06239)
 mesh = SubResource("BoxMesh_g3a7t")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.58442, 5.06239)
 shape = SubResource("BoxShape3D_xp6u2")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.55427, -0.0503922, -33.6441)
+script = ExtResource("2_wmxyr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D3"]
+mesh = SubResource("BoxMesh_lm3xf")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+shape = SubResource("BoxShape3D_4vfff")
 
 [node name="Car" parent="." instance=ExtResource("2_5abju")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.38956, 5.08989, -52.1588)
@@ -72,7 +347,7 @@ script = ExtResource("4_7naf2")
 environment = SubResource("Environment_2xiuk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(0.74034, 0.580297, -0.339342, -0.0265259, 0.529623, 0.847818, 0.67171, -0.618672, 0.407494, 0, 20.8087, 0)
+transform = Transform3D(1, 0, 0, 0, -0.424895, 0.905243, 0, -0.905243, -0.424895, 76.7524, 845.33, 0)
 shadow_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

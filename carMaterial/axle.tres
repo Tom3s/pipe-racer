@@ -1,0 +1,57 @@
+[gd_resource type="VisualShader" load_steps=4 format=3 uid="uid://dpysl5c815yk1"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_btwgb"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0.223103, 0.223103, 0.223103, 1)
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ixjla"]
+parameter_name = "Metallic"
+hint = 2
+default_value_enabled = true
+default_value = 0.008
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_qwite"]
+parameter_name = "roughness"
+hint = 2
+default_value_enabled = true
+default_value = 0.008
+
+[resource]
+code = "shader_type spatial;
+uniform vec4 ColorParameter : source_color = vec4(0.223103, 0.223103, 0.223103, 1.000000);
+uniform float Metallic : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;
+uniform float roughness : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = ColorParameter;
+
+
+// FloatParameter:3
+	float n_out3p0 = Metallic;
+
+
+// FloatParameter:4
+	float n_out4p0 = roughness;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	METALLIC = n_out3p0;
+	ROUGHNESS = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-58.3636, 38.1818)
+nodes/fragment/0/position = Vector2(620, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_btwgb")
+nodes/fragment/2/position = Vector2(240, 20)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_ixjla")
+nodes/fragment/3/position = Vector2(-20, 180)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_qwite")
+nodes/fragment/4/position = Vector2(240, 260)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 2, 4, 0, 0, 3)

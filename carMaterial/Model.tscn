@@ -1,0 +1,57 @@
+[gd_scene load_steps=11 format=3 uid="uid://cu1o1ufpacigj"]
+
+[ext_resource type="PackedScene" uid="uid://cfd1ij3nm25nw" path="res://pipeframe car 4.glb" id="1_kwhfn"]
+[ext_resource type="Material" uid="uid://kivs4jx58xn8" path="res://carMaterial/body_shader.tres" id="2_183b4"]
+[ext_resource type="Shader" uid="uid://dpysl5c815yk1" path="res://carMaterial/axle.tres" id="3_cv1lv"]
+[ext_resource type="Shader" uid="uid://chglfclwjrhwi" path="res://carMaterial/engine2.tres" id="4_kiygt"]
+[ext_resource type="Material" uid="uid://dbrsm6m16it3c" path="res://carMaterial/rollcage.tres" id="5_puepw"]
+[ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="6_0sx8m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4tgqo"]
+render_priority = 0
+shader = ExtResource("3_cv1lv")
+shader_parameter/ColorParameter = Color(0.619608, 0.619608, 0.619608, 1)
+shader_parameter/Metallic = 0.7
+shader_parameter/roughness = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8h5nm"]
+render_priority = 0
+shader = ExtResource("4_kiygt")
+shader_parameter/Base = Color(0.152941, 0.152941, 0.152941, 1)
+shader_parameter/rust = Color(1, 0.560784, 0.380392, 1)
+shader_parameter/FloatParameter = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vl74q"]
+albedo_color = Color(0.129412, 0.129412, 0.129412, 1)
+metallic_specular = 0.46
+roughness = 0.75
+subsurf_scatter_strength = 0.7
+refraction_scale = -1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7p6nx"]
+render_priority = 0
+shader = ExtResource("6_0sx8m")
+shader_parameter/Base = Color(0.211765, 0.301961, 0.4, 1)
+shader_parameter/FloatParameter = 0.01
+shader_parameter/Metallic = 0.7
+shader_parameter/Roughness = 0.2
+
+[node name="CarWithMaterial" instance=ExtResource("1_kwhfn")]
+
+[node name="Body" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_183b4")
+
+[node name="Axles" parent="." index="1"]
+surface_material_override/0 = SubResource("ShaderMaterial_4tgqo")
+
+[node name="Engine" parent="." index="2"]
+surface_material_override/0 = SubResource("ShaderMaterial_8h5nm")
+
+[node name="Steering Wheel" parent="." index="3"]
+surface_material_override/0 = SubResource("StandardMaterial3D_vl74q")
+
+[node name="Frame 3" parent="." index="4"]
+surface_material_override/0 = ExtResource("5_puepw")
+
+[node name="Plane001" parent="." index="5"]
+surface_material_override/0 = SubResource("ShaderMaterial_7p6nx")

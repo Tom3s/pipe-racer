@@ -48,4 +48,5 @@ respawn={
 
 [physics]
 
+common/physics_ticks_per_second=120
 3d/default_gravity=13.0

@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfpyrrlsxjbd0"]
+
+[ext_resource type="PackedScene" uid="uid://ckgkt4hm7yiyc" path="res://tire-new good normals.glb" id="1_er6md"]
+[ext_resource type="Shader" uid="uid://cln2wbpucyp64" path="res://carMaterial/body.tres" id="2_b1ihq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0kxe"]
+render_priority = 0
+shader = ExtResource("2_b1ihq")
+shader_parameter/BaseColor = Color(0.064697, 0.064697, 0.064696, 1)
+
+[node name="tire-new good normals" instance=ExtResource("1_er6md")]
+
+[node name="Cube" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_g0kxe")

@@ -1,0 +1,97 @@
+[gd_resource type="VisualShader" load_steps=14 format=3 uid="uid://2q0eciq21ba0"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5by8q"]
+input_name = "model_matrix"
+
+[sub_resource type="VisualShaderNodeTransformFunc" id="VisualShaderNodeTransformFunc_20soa"]
+
+[sub_resource type="VisualShaderNodeTransformOp" id="VisualShaderNodeTransformOp_iuaru"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_mykjs"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_jar55"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 0, 1)]
+operator = 2
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_4hb6w"]
+output_port_for_preview = 0
+size = Vector2(739.409, 474.425)
+expression = "//VERTEX = inverse(WORLD_MATRIX) * CAMERA_MATRIX * vec4(VERTEX, 1.0);
+wrld_vertex = CAMERA_MATRIX * vec4(VERTEX, 1.0);"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_246pp"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_jyxm2"]
+input_name = "inv_view_matrix"
+
+[sub_resource type="VisualShaderNodeTransformOp" id="VisualShaderNodeTransformOp_b8hb7"]
+
+[sub_resource type="VisualShaderNodeTransformCompose" id="VisualShaderNodeTransformCompose_js6f4"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0), 2, Vector3(0, 0, 0), 3, Vector3(1, 0, 0)]
+
+[sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_a4nw4"]
+
+[sub_resource type="VisualShaderNodeTransformDecompose" id="VisualShaderNodeTransformDecompose_qh0v4"]
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_odaa5"]
+output_port_for_preview = 0
+
+[resource]
+code = "shader_type spatial;
+
+
+
+void fragment() {
+// Input:13
+	vec3 n_out13p0 = VERTEX;
+
+
+// VectorOp:14
+	vec3 n_in14p1 = vec3(1.00000, 0.00000, 1.00000);
+	vec3 n_out14p0 = n_out13p0 * n_in14p1;
+
+
+// Output:0
+	ALBEDO = n_out14p0;
+
+
+}
+"
+graph_offset = Vector2(-500.565, -14.9662)
+nodes/vertex/0/position = Vector2(560, 160)
+nodes/fragment/0/position = Vector2(680, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_4hb6w")
+nodes/fragment/2/position = Vector2(-460, 200)
+nodes/fragment/2/size = Vector2(739.409, 474.425)
+nodes/fragment/2/input_ports = "0,7,WORLD_MATRIX;1,7,CAMERA_MATRIX;2,4,VERTEX;"
+nodes/fragment/2/output_ports = "0,4,wrld_vertex;"
+nodes/fragment/2/expression = "//VERTEX = inverse(WORLD_MATRIX) * CAMERA_MATRIX * vec4(VERTEX, 1.0);
+wrld_vertex = CAMERA_MATRIX * vec4(VERTEX, 1.0);"
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_246pp")
+nodes/fragment/3/position = Vector2(-1080, 620)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_jyxm2")
+nodes/fragment/4/position = Vector2(-880, 480)
+nodes/fragment/5/node = SubResource("VisualShaderNodeTransformOp_b8hb7")
+nodes/fragment/5/position = Vector2(-220, 600)
+nodes/fragment/6/node = SubResource("VisualShaderNodeTransformCompose_js6f4")
+nodes/fragment/6/position = Vector2(-500, 680)
+nodes/fragment/7/node = SubResource("VisualShaderNodeVectorDecompose_a4nw4")
+nodes/fragment/7/position = Vector2(-760, 620)
+nodes/fragment/8/node = SubResource("VisualShaderNodeTransformDecompose_qh0v4")
+nodes/fragment/8/position = Vector2(40, 640)
+nodes/fragment/9/node = SubResource("VisualShaderNodeVectorCompose_odaa5")
+nodes/fragment/9/position = Vector2(400, 480)
+nodes/fragment/10/node = SubResource("VisualShaderNodeInput_5by8q")
+nodes/fragment/10/position = Vector2(-860, 860)
+nodes/fragment/11/node = SubResource("VisualShaderNodeTransformFunc_20soa")
+nodes/fragment/11/position = Vector2(-460, 840)
+nodes/fragment/12/node = SubResource("VisualShaderNodeTransformOp_iuaru")
+nodes/fragment/12/position = Vector2(-240, 740)
+nodes/fragment/13/node = SubResource("VisualShaderNodeInput_mykjs")
+nodes/fragment/13/position = Vector2(-220, 20)
+nodes/fragment/14/node = SubResource("VisualShaderNodeVectorOp_jar55")
+nodes/fragment/14/position = Vector2(421.867, 58.4928)
+nodes/fragment/connections = PackedInt32Array(3, 0, 7, 0, 7, 0, 6, 0, 7, 1, 6, 1, 7, 2, 6, 2, 5, 0, 8, 0, 8, 0, 9, 0, 8, 1, 9, 1, 8, 2, 9, 2, 6, 0, 5, 1, 10, 0, 11, 0, 11, 0, 12, 0, 4, 0, 12, 1, 12, 0, 5, 0, 4, 0, 2, 1, 3, 0, 2, 2, 13, 0, 14, 0, 14, 0, 0, 0)
+nodes/light/0/position = Vector2(500, 160)
