@@ -2,6 +2,7 @@
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_6vhm6"]
 output_port_for_preview = 0
+expanded_output_ports = [0]
 parameter_name = "ColorParameter"
 
 [resource]
@@ -23,9 +24,9 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-79.1653, 16.8347)
+graph_offset = Vector2(-123.856, -101.78)
 modes/cull = 1
-nodes/fragment/0/position = Vector2(440, 120)
+nodes/fragment/0/position = Vector2(780, 20)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_6vhm6")
-nodes/fragment/2/position = Vector2(80, 80)
+nodes/fragment/2/position = Vector2(-320, -120)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)

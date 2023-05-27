@@ -1,8 +1,8 @@
 [gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://cmgjxuy1g6ad0"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_y2jts"]
-noise_type = 4
-frequency = 0.059
+noise_type = 2
+frequency = 0.95
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ja6kg"]
 noise = SubResource("FastNoiseLite_y2jts")
@@ -44,7 +44,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-312.699, 47.9108)
+graph_offset = Vector2(-284.708, -122.083)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_suq8c")
 nodes/fragment/2/position = Vector2(-100, -60)
 nodes/fragment/3/node = SubResource("VisualShaderNodeVectorOp_vfurb")

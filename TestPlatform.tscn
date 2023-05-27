@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
 [ext_resource type="Shader" uid="uid://cmgjxuy1g6ad0" path="res://ground.tres" id="2_5gwup"]
 [ext_resource type="Script" path="res://StaticBody3D2.gd" id="2_wmxyr"]
-[ext_resource type="Script" path="res://camera.gd" id="3_16b76"]
+[ext_resource type="Script" path="res://FollowingCamera.gd" id="4_7naf2"]
 [ext_resource type="Script" path="res://DebugDraw3D.gd" id="4_x5c6g"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_762de"]
@@ -47,7 +47,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_8m8q6")
 shape = SubResource("BoxShape3D_y70uf")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.43255, -44.4971)
+transform = Transform3D(0.933048, -0.359753, 0, 0.359753, 0.933048, 0, 0, 0, 1, -3.46782, 10.4875, -57.5351)
 constant_linear_velocity = Vector3(0, 0, -5)
 script = ExtResource("2_wmxyr")
 
@@ -62,12 +62,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.58442, 5.06239)
 shape = SubResource("BoxShape3D_xp6u2")
 
 [node name="Car" parent="." instance=ExtResource("2_5abju")]
-transform = Transform3D(0.628017, 0, -0.778199, 0, 1, 0, 0.778199, 0, 0.628017, 0, 1.71255, -52.1588)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.38956, 5.08989, -52.1588)
 
 [node name="Camera" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(0.754171, -0.321836, 0.572405, 0.0101382, 0.87727, 0.47989, -0.6566, -0.356116, 0.664874, 3.27969, 2.43978, -48.0395)
-script = ExtResource("3_16b76")
+script = ExtResource("4_7naf2")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_2xiuk")
