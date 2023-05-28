@@ -29,6 +29,7 @@ func _draw():
 		draw_line(line_endpoints4[0], line_endpoints4[1], Color.BLUE, 2, true)
 		# print(line_endpoints[0], line_endpoints[1])
 	queue_redraw()
+	pass
 	
 
 func draw_vector(origin: Vector3, vector: Vector3, is_it: bool = false) -> Array[Vector2]:

@@ -33,7 +33,7 @@ input_name = "uv"
 
 [resource]
 code = "shader_type spatial;
-uniform vec4 BaseColor : source_color = vec4(0.064697, 0.064697, 0.064696, 1.000000);
+uniform vec4 BaseColor : source_color = vec4(0.064696, 0.064696, 0.064696, 1.000000);
 uniform sampler2D tex_frg_3;
 
 

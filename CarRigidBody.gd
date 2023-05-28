@@ -27,7 +27,9 @@ var STEERING: float = 0.3
 
 var accelerationInput: float = 0
 
-var initialPosition: Basis
+var initialPosition: Vector3
+
+var should_respawn: bool = false
 
 const TIRE_RADIUS = 0.375
 
@@ -45,19 +47,32 @@ func _ready():
 
 	debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
 
-	initialPosition = global_transform.basis
+	initialPosition = global_transform.origin
+
+	set_physics_process(true)
 
 func get_point_velocity (point :Vector3) -> Vector3:
 	return linear_velocity + angular_velocity.cross(point - global_transform.origin)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta):
+	print("position: ", global_transform.origin)
+
 	calculate_forces(delta)
 	
 	if debugDraw != null:
 		debugDraw.queue_redraw()
 	else:
 		print("debugDraw is null")
+	
+	if should_respawn:
+		global_transform.origin = initialPosition
+		linear_velocity = Vector3.UP * 0.1
+		angular_velocity = Vector3.ZERO
+		rotation = Vector3.ZERO
+		should_respawn = false
+		print("global_position: ", global_position)
+		print("initialPosition: ", initialPosition)
+		print("respawned")
 
 func calculate_forces(delta) -> void:
 	for index in 4:
@@ -79,6 +94,9 @@ func calculate_forces(delta) -> void:
 			debugDraw.accelerationVectors[index] = Vector3.FORWARD
 
 			tire.rotate_x(accelerationInput / TIRE_RADIUS)
+			
+		if index in [2, 3]:
+			tire.global_transform.origin += global_transform.basis.z * -0.65
 
 func calculate_suspension(delta, tireRayCast, tire, index):
 		var raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
@@ -112,14 +130,28 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		else:
 			tire.position = tire.original_position
 
+
+const MAX_FRICTION = 0.8
+const MIN_FRICTION = 0.2
+const SLIDE_TRESHOLD = 0.5
+const SLIDE_FRICTION = 0.3
+
+func calculate_tire_grip(tireVelocity, steeringDirection):
+	var x = abs(tireVelocity.normalized().dot(steeringDirection))
+	if x < SLIDE_TRESHOLD:
+		return remap(x, 0, 1, MAX_FRICTION, SLIDE_FRICTION) 
+	else:
+		return remap(x, 0, 1, SLIDE_FRICTION, MIN_FRICTION)
+
 func calculate_steering(delta, tireRayCast, tire, index):
 	var steeringDirection = tireRayCast.global_transform.basis.x
 
 	var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin)
 
 	var steeringVelocity = steeringDirection.dot(tireVelocity)
-
-	var desiredVelocityChange = -steeringVelocity * TIRE_GRIP
+	
+	# var desiredVelocityChange = -steeringVelocity * (1 - calculate_tire_grip(tireVelocity, steeringDirection))# TIRE_GRIP
+	var desiredVelocityChange = -steeringVelocity * calculate_tire_grip(tireVelocity, steeringDirection)# TIRE_GRIP
 
 	var desiredAcceleration = desiredVelocityChange / delta
 
@@ -127,12 +159,31 @@ func calculate_steering(delta, tireRayCast, tire, index):
 
 	apply_force(force, tireRayCast.global_transform.origin - global_transform.origin)
 
+	
+
 	debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
 	debugDraw.steeringVectors[index] = force
 			
 
 func calculate_engine(delta, tireRayCast, tire, index):
 	var accelerationDirection = tireRayCast.global_transform.basis.z
+
+	if accelerationInput == 0:
+		var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin)
+		var tireAxisVelocity = accelerationDirection.dot(tireVelocity)
+
+		var desiredVelocityChange = -tireAxisVelocity * 0.005
+
+		var desiredAcceleration = desiredVelocityChange / delta
+
+		var force = accelerationDirection  * desiredAcceleration * TIRE_MASS
+
+		apply_force(force, tireRayCast.global_transform.origin - global_transform.origin)
+
+		debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
+		debugDraw.accelerationVectors[index] = force
+
+		return
 
 	var force = accelerationDirection * accelerationInput * ACCELERATION			
 
@@ -143,5 +194,6 @@ func calculate_engine(delta, tireRayCast, tire, index):
 	
 
 func respawn():
-	# global_transform.basis = initialPosition
-	apply_impulse(Vector3.UP * 5, Vector3(1, 0, 0))
+	should_respawn = true
+	
+

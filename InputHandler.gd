@@ -19,5 +19,4 @@ func _input(event):
 
 	if event.is_action_pressed("respawn"):
 		car.respawn()
-		print("respawned")
 
