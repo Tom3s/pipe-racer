@@ -11,7 +11,7 @@
 render_priority = 0
 shader = ExtResource("3_cv1lv")
 shader_parameter/ColorParameter = Color(0.619608, 0.619608, 0.619608, 1)
-shader_parameter/Metallic = 0.7
+shader_parameter/Metallic = 1.0
 shader_parameter/roughness = 0.2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8h5nm"]

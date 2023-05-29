@@ -35,5 +35,5 @@ func _draw():
 func draw_vector(origin: Vector3, vector: Vector3, is_it: bool = false) -> Array[Vector2]:
 	var camera := %Camera
 	var start = camera.unproject_position(origin)
-	var end = camera.unproject_position(origin + vector * (1 if is_it else 0.1))
+	var end = camera.unproject_position(origin + vector * (1 if is_it else 0.01))
 	return [start, end]

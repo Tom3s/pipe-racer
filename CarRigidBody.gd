@@ -33,6 +33,15 @@ var should_respawn: bool = false
 
 const TIRE_RADIUS = 0.375
 
+@export
+var playerIndex: int = 1:
+	set(newIndex):
+		playerIndex = on_input_player_changed(newIndex)
+	get:
+		return playerIndex
+	
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	raycasts.push_back(%BackLeftRayCast)
@@ -174,7 +183,7 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 		var desiredVelocityChange = -tireAxisVelocity * 0.005
 
-		var desiredAcceleration = desiredVelocityChange / delta
+		var desiredAcceleration = desiredVelocityChange * delta
 
 		var force = accelerationDirection  * desiredAcceleration * TIRE_MASS
 
@@ -195,5 +204,7 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 func respawn():
 	should_respawn = true
-	
 
+func on_input_player_changed(newIndex: int) -> int:
+	%InputHandler.set_input_player(newIndex)
+	return newIndex
