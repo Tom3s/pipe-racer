@@ -13,8 +13,9 @@ func _ready():
 
 func _input(event):
 	var steering = Input.get_axis(player_prefix + "turn_right", player_prefix + "turn_left")
+	car.steeringInput = steering
 	for raycast in raycasts:
-		var targetRotation = Vector3.UP * steering * car.STEERING
+		var targetRotation = Vector3.UP * steering * car.get_steering_factor()
 		raycast.targetRotation = targetRotation
 	
 	var acceleration = Input.get_axis(player_prefix + "accelerate", player_prefix + "break")

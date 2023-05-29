@@ -2,7 +2,7 @@ extends RayCast3D
 
 var targetRotation: Vector3
 
-const ROTATION_SPEED = 0.1
+const ROTATION_SPEED = 0.08
 
 
 func _ready():
