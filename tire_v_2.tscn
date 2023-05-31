@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://wrubdcbym7i4"]
+
+[ext_resource type="PackedScene" uid="uid://ddj7jc8s5fm5y" path="res://carMaterial/tire v2.glb" id="1_0knlx"]
+
+[node name="tire v2" instance=ExtResource("1_0knlx")]
+
+[node name="Tire" parent="." index="1"]
+visible = false
+
+[node name="TireProfile" parent="." index="2"]
+visible = false

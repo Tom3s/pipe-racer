@@ -428,7 +428,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer1"]
 handle_input_locally = false
 audio_listener_enable_3d = true
-size = Vector2i(1152, 322)
+size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="VBoxContainer/SubViewportContainer1/SubViewport"]
@@ -441,6 +441,7 @@ playerIndex = 2
 current = true
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -449,14 +450,13 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer2"]
 handle_input_locally = false
 size = Vector2i(1152, 322)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera" type="Camera3D" parent="VBoxContainer/SubViewportContainer2/SubViewport"]
 transform = Transform3D(-4.37114e-08, 0.242535, -0.970141, 0, 0.970141, 0.242535, 1, 1.06016e-08, -4.24062e-08, -63.8218, 42.6881, 215.226)
 script = ExtResource("4_7naf2")
 
 [node name="AudioListener3D" type="AudioListener3D" parent="VBoxContainer/SubViewportContainer2/SubViewport"]
-current = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 visible = false
