@@ -155,11 +155,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 
 		tire.rotate_x(tireDistanceTravelled / TIRE_RADIUS)
 		
-		if raycastDistance <= SPRING_REST_DISTANCE:
-			var tireFinalPosition = tire.original_position + Vector3.DOWN * (raycastDistance - 0.28)
-			tire.position = tireFinalPosition
-		else:
-			tire.position = tire.original_position
+		var tireFinalPosition = tire.original_position + Vector3.DOWN * (raycastDistance - 0.28)
+		tire.position = tireFinalPosition
 
 
 

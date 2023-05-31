@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=46 format=3 uid="uid://b45crncrhwh8b"]
 
 [ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="1_4yon1"]
 [ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://DebugDraw3D.gd" id="4_x5c6g"]
 [ext_resource type="Script" path="res://Label.gd" id="5_b6rli"]
 [ext_resource type="ArrayMesh" uid="uid://bq25vv7y8h2k7" path="res://MarioKart/MarioCircuitMesh.tres" id="6_h0iae"]
+[ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="8_mel7x"]
 
 [sub_resource type="VisualShaderNodeIntOp" id="VisualShaderNodeIntOp_nuun2"]
 output_port_for_preview = 0
@@ -267,10 +268,10 @@ shader_parameter/Roughness = null
 
 [sub_resource type="BoxMesh" id="BoxMesh_762de"]
 material = SubResource("ShaderMaterial_gthte")
-size = Vector3(1000, 0.5, 1000)
+size = Vector3(2000, 0.5, 2000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y70uf"]
-size = Vector3(1000, 0.5, 1000)
+size = Vector3(2000, 0.5, 2000)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g3a7t"]
 size = Vector3(30, 1, 10)
@@ -382,6 +383,7 @@ script = ExtResource("5_b6rli")
 
 [node name="StaticBody3D4" type="StaticBody3D" parent="."]
 transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D4"]
 transform = Transform3D(1.5, 0, 0, 0, -6.55671e-08, -1.5, 0, 1.5, -6.55671e-08, 0, 0, 0)
@@ -390,18 +392,19 @@ mesh = ExtResource("6_h0iae")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D4"]
 transform = Transform3D(1.5, 0, 0, 0, -6.55671e-08, -1.5, 0, 1.5, -6.55671e-08, 0, 0, 0)
 shape = SubResource("ConcavePolygonShape3D_qmkwr")
+disabled = true
 
 [node name="Car" parent="." instance=ExtResource("2_5abju")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -296.009, 57.6888, -223.78)
+transform = Transform3D(-2.18557e-07, 0, 1, 0, 1, 0, -1, 0, -2.18557e-07, -59.8218, 39.6881, 215.226)
+
+[node name="CarRigidBody" parent="Car/Body" index="0"]
+playerIndex = 2
 
 [node name="Frame 3" parent="Car/Body/CarRigidBody/pipeframe car 5" index="4"]
 surface_material_override/0 = SubResource("StandardMaterial3D_w1nk6")
 
 [node name="Car2" parent="." instance=ExtResource("2_5abju")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -281.257, 57.6888, -223.78)
-
-[node name="CarRigidBody" parent="Car2/Body" index="0"]
-playerIndex = 2
+transform = Transform3D(-2.18557e-07, 0, 1, 0, 1, 0, -1, 0, -2.18557e-07, -59.8218, 39.6881, 229.978)
 
 [node name="Frame 3" parent="Car2/Body/CarRigidBody/pipeframe car 5" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565338, 1.76329, 1.85594)
@@ -423,16 +426,17 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer1"]
 handle_input_locally = false
-size = Vector2i(574, 648)
+size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="HBoxContainer/SubViewportContainer1/SubViewport"]
 unique_name_in_owner = true
-transform = Transform3D(1, -3.70069e-06, 1.4803e-05, 0, 0.970143, 0.242531, -1.52586e-05, -0.242531, 0.970143, -281.257, 60.6888, -219.78)
+transform = Transform3D(7.58568e-06, 0.242533, -0.970142, 0, 0.970142, 0.242533, 1, -1.83978e-06, 7.35919e-06, -63.8218, 42.6881, 229.978)
 script = ExtResource("4_7naf2")
 playerIndex = 2
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
@@ -440,13 +444,17 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer2"]
 handle_input_locally = false
 size = Vector2i(574, 648)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera" type="Camera3D" parent="HBoxContainer/SubViewportContainer2/SubViewport"]
-transform = Transform3D(1, 3.70085e-06, -1.48034e-05, 0, 0.970142, 0.242536, 1.5259e-05, -0.242536, 0.970142, -296.009, 60.6888, -219.78)
+transform = Transform3D(7.58568e-06, 0.242533, -0.970142, 0, 0.970142, 0.242533, 1, -1.83978e-06, 7.35919e-06, -63.8218, 42.6881, 215.226)
 script = ExtResource("4_7naf2")
+
+[node name="racetrack3" parent="." instance=ExtResource("8_mel7x")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 51, 0)
 
 [editable path="Car"]
 [editable path="Car/Body/CarRigidBody/pipeframe car 5"]
 [editable path="Car2"]
 [editable path="Car2/Body/CarRigidBody/pipeframe car 5"]
+[editable path="racetrack3"]

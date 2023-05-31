@@ -31,7 +31,7 @@ func _physics_process(delta):
 		# position = target
 		# tween.tween_property(self, "position", target, 0.2)
 
-		position = lerp(position, target, 10 * delta)
+		position = lerp(position, target, 20 * delta)
 
 		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
 		# var fromSelfToCar = car_pos - position

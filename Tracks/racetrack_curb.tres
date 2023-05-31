@@ -1,0 +1,40 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://d4dejidfebswt"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_xtvq0"]
+output_port_for_preview = 0
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_08lhw"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0.25, 0.25)]
+op_type = 0
+operator = 4
+
+[resource]
+code = "shader_type spatial;
+
+
+
+void fragment() {
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// VectorOp:3
+	vec2 n_in3p1 = vec2(0.25000, 0.25000);
+	vec2 n_out3p0 = mod(n_out2p0, n_in3p1);
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0, 0.0);
+
+
+}
+"
+graph_offset = Vector2(60, 126.182)
+nodes/fragment/0/position = Vector2(660, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_xtvq0")
+nodes/fragment/2/position = Vector2(-20, 120)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorOp_08lhw")
+nodes/fragment/3/position = Vector2(367, 182)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 3, 0, 0, 0)

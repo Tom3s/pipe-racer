@@ -24,14 +24,15 @@ size = Vector3(1.46891, 0.716233, 0.953785)
 unique_name_in_owner = true
 mass = 15.0
 center_of_mass_mode = 1
-center_of_mass = Vector3(0, 0.35, 0.2)
+center_of_mass = Vector3(0, 0.36, 0.16)
 physics_material_override = SubResource("PhysicsMaterial_f85eo")
 script = ExtResource("1_gxrqs")
 SPRING_STRENGTH = 2000.0
-DAMPING = 9000.0
-TIRE_GRIP = 0.95
+DAMPING = 4000.0
+TIRE_GRIP = 0.9
 TIRE_MASS = 0.3
 ACCELERATION = 115.0
+STEERING = 0.25
 MAX_FRICTION = 0.9
 SLIDE_FRICTION = 0.1
 MIN_FRICTION = 0.05
@@ -50,7 +51,7 @@ shape = SubResource("BoxShape3D_1s8rg")
 
 [node name="FrontLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.293817, 2.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954748, 0.293817, 2.17606)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
@@ -61,7 +62,7 @@ script = ExtResource("3_hj1pj")
 
 [node name="FrontRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.293817, 2.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.950404, 0.293817, 2.17606)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
@@ -72,7 +73,7 @@ script = ExtResource("3_hj1pj")
 
 [node name="BackLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.293817, -1.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954748, 0.293817, -1.86303)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
@@ -83,7 +84,7 @@ script = ExtResource("3_hj1pj")
 
 [node name="BackRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.293817, -1.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.950404, 0.293817, -1.86303)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 

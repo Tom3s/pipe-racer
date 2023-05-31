@@ -1,11 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://cu1o1ufpacigj"]
+[gd_scene load_steps=10 format=3 uid="uid://cu1o1ufpacigj"]
 
 [ext_resource type="PackedScene" uid="uid://cfd1ij3nm25nw" path="res://pipeframe car 4.glb" id="1_kwhfn"]
 [ext_resource type="Material" uid="uid://kivs4jx58xn8" path="res://carMaterial/body_shader.tres" id="2_183b4"]
 [ext_resource type="Shader" uid="uid://dpysl5c815yk1" path="res://carMaterial/axle.tres" id="3_cv1lv"]
 [ext_resource type="Shader" uid="uid://chglfclwjrhwi" path="res://carMaterial/engine2.tres" id="4_kiygt"]
 [ext_resource type="Material" uid="uid://dbrsm6m16it3c" path="res://carMaterial/rollcage.tres" id="5_puepw"]
-[ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="6_0sx8m"]
+[ext_resource type="Material" uid="uid://b8thk3akirfth" path="res://carMaterial/carbon fiber test.tres" id="6_3520i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4tgqo"]
 render_priority = 0
@@ -28,14 +28,6 @@ roughness = 0.75
 subsurf_scatter_strength = 0.7
 refraction_scale = -1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7p6nx"]
-render_priority = 0
-shader = ExtResource("6_0sx8m")
-shader_parameter/Base = Color(0.211765, 0.301961, 0.4, 1)
-shader_parameter/FloatParameter = 0.01
-shader_parameter/Metallic = 0.7
-shader_parameter/Roughness = 0.2
-
 [node name="CarWithMaterial" instance=ExtResource("1_kwhfn")]
 
 [node name="Body" parent="." index="0"]
@@ -54,4 +46,4 @@ surface_material_override/0 = SubResource("StandardMaterial3D_vl74q")
 surface_material_override/0 = ExtResource("5_puepw")
 
 [node name="Plane001" parent="." index="5"]
-surface_material_override/0 = SubResource("ShaderMaterial_7p6nx")
+surface_material_override/0 = ExtResource("6_3520i")
