@@ -1,8 +1,9 @@
-[gd_scene load_steps=46 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=47 format=3 uid="uid://b45crncrhwh8b"]
 
 [ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="1_4yon1"]
 [ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
 [ext_resource type="Script" path="res://StaticBody3D2.gd" id="2_wmxyr"]
+[ext_resource type="Texture2D" uid="uid://ftggr2pli8mx" path="res://Tracks/AllSkyFree_Sky_EpicBlueSunset_Equirect.png" id="3_1weka"]
 [ext_resource type="Script" path="res://FollowingCamera.gd" id="4_7naf2"]
 [ext_resource type="Script" path="res://DebugDraw3D.gd" id="4_x5c6g"]
 [ext_resource type="Script" path="res://Label.gd" id="5_b6rli"]
@@ -293,18 +294,17 @@ size = Vector3(30, 1, 10)
 [sub_resource type="BoxShape3D" id="BoxShape3D_4vfff"]
 size = Vector3(30, 1, 10)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e6q4n"]
-sky_top_color = Color(0.0941176, 0.619608, 0.921569, 1)
-sky_horizon_color = Color(0.733333, 0.909804, 1, 1)
-ground_horizon_color = Color(0.733333, 0.909804, 1, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kgwse"]
+panorama = ExtResource("3_1weka")
 
 [sub_resource type="Sky" id="Sky_ucuut"]
-sky_material = SubResource("ProceduralSkyMaterial_e6q4n")
+sky_material = SubResource("PanoramaSkyMaterial_kgwse")
 
 [sub_resource type="Environment" id="Environment_2xiuk"]
 background_mode = 2
 sky = SubResource("Sky_ucuut")
 ambient_light_source = 3
+reflected_light_source = 2
 sdfgi_use_occlusion = true
 adjustment_enabled = true
 
@@ -369,6 +369,7 @@ unique_name_in_owner = true
 
 [node name="DebugDraw3D" type="Control" parent="CanvasLayer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -410,7 +411,55 @@ transform = Transform3D(-2.18557e-07, 0, 1, 0, 1, 0, -1, 0, -2.18557e-07, -59.82
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565338, 1.76329, 1.85594)
 surface_material_override/0 = SubResource("StandardMaterial3D_ij84e")
 
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="SubViewportContainer1" type="SubViewportContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer1"]
+handle_input_locally = false
+audio_listener_enable_3d = true
+size = Vector2i(1152, 322)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="VBoxContainer/SubViewportContainer1/SubViewport"]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 0.242535, -0.970141, 0, 0.970141, 0.242535, 1, 1.06016e-08, -4.24062e-08, -63.8218, 42.6881, 229.978)
+script = ExtResource("4_7naf2")
+playerIndex = 2
+
+[node name="AudioListener3D" type="AudioListener3D" parent="VBoxContainer/SubViewportContainer1/SubViewport"]
+current = true
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer2"]
+handle_input_locally = false
+size = Vector2i(1152, 322)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="VBoxContainer/SubViewportContainer2/SubViewport"]
+transform = Transform3D(-4.37114e-08, 0.242535, -0.970141, 0, 0.970141, 0.242535, 1, 1.06016e-08, -4.24062e-08, -63.8218, 42.6881, 215.226)
+script = ExtResource("4_7naf2")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="VBoxContainer/SubViewportContainer2/SubViewport"]
+current = true
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -419,42 +468,10 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SubViewportContainer1" type="SubViewportContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer1"]
-handle_input_locally = false
-size = Vector2i(1152, 648)
-render_target_update_mode = 4
-
-[node name="Camera" type="Camera3D" parent="HBoxContainer/SubViewportContainer1/SubViewport"]
-unique_name_in_owner = true
-transform = Transform3D(7.58568e-06, 0.242533, -0.970142, 0, 0.970142, 0.242533, 1, -1.83978e-06, 7.35919e-06, -63.8218, 42.6881, 229.978)
-script = ExtResource("4_7naf2")
-playerIndex = 2
-
-[node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer2"]
-handle_input_locally = false
-size = Vector2i(574, 648)
-render_target_update_mode = 0
-
-[node name="Camera" type="Camera3D" parent="HBoxContainer/SubViewportContainer2/SubViewport"]
-transform = Transform3D(7.58568e-06, 0.242533, -0.970142, 0, 0.970142, 0.242533, 1, -1.83978e-06, 7.35919e-06, -63.8218, 42.6881, 215.226)
-script = ExtResource("4_7naf2")
-
 [node name="racetrack3" parent="." instance=ExtResource("8_mel7x")]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 51, 0)
+transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 51, 0)
 
 [editable path="Car"]
 [editable path="Car/Body/CarRigidBody/pipeframe car 5"]
 [editable path="Car2"]
 [editable path="Car2/Body/CarRigidBody/pipeframe car 5"]
-[editable path="racetrack3"]

@@ -49,6 +49,10 @@ var playerIndex: int = 1:
 
 const LOWER_SPEED_LIMIT = 0.008
 
+@export
+var SOUND_SPEED_LIMIT: float = 0.1
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	raycasts.push_back(%BackLeftRayCast)
@@ -69,6 +73,9 @@ func _ready():
 
 func get_point_velocity (point :Vector3) -> Vector3:
 	return linear_velocity + angular_velocity.cross(point - global_transform.origin)
+
+@export
+var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 
 func _physics_process(delta):
 	calculate_forces(delta)
@@ -91,8 +98,11 @@ func _physics_process(delta):
 	if linear_velocity.length() < LOWER_SPEED_LIMIT:
 		linear_velocity = Vector3.ZERO
 	
-	print("steering factor: ", get_steering_factor())
-
+	if linear_velocity.length() < SOUND_SPEED_LIMIT:
+		%CarEngineSound.targetPitchScale = 0.75
+	else:
+		%CarEngineSound.targetPitchScale = remap(linear_velocity.length(), 1, 75, 1, ENGINE_SOUND_PITCH_FACTOR)
+	
 func calculate_forces(delta) -> void:
 	for index in 4:
 		var tireRayCast = raycasts[index]
@@ -206,6 +216,8 @@ func calculate_steering(delta, tireRayCast, tire, index):
 			
 @export
 var PASSIVE_BRAKING: int = 300
+@export
+var BRAKING_FORCE: int = 2
 
 func calculate_engine(delta, tireRayCast, tire, index):
 	var accelerationDirection = tireRayCast.global_transform.basis.z
@@ -229,6 +241,8 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 	var force = accelerationDirection * accelerationInput * ACCELERATION			
 
+	if force.dot(linear_velocity) < 0:
+		force *= BRAKING_FORCE
 	apply_force(force, tireRayCast.global_transform.origin - global_transform.origin)
 
 	debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
