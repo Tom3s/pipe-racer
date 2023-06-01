@@ -5,6 +5,9 @@ class_name CarRigidBody
 @onready
 var debugDraw: DebugDraw3D
 
+@onready
+var debugLabel: DebugLabel
+
 var raycasts: Array = []
 var tires: Array = []
 
@@ -53,6 +56,8 @@ const LOWER_SPEED_LIMIT = 0.008
 var SOUND_SPEED_LIMIT: float = 0.1
 
 
+const FRICTION = 0.34
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	raycasts.push_back(%BackLeftRayCast)
@@ -66,8 +71,17 @@ func _ready():
 	tires.push_back(%FrontRightTire)
 
 	debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
+	debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
+
+	var startLine: StartLine = get_parent().get_parent().get_parent().get_node("StartLine")
+
+	startLine.body_entered.connect(onStartLine_bodyEntered)
+	startLine.body_exited.connect(onStartLine_bodyExited)
 
 	initialPosition = global_transform.origin
+
+	# physicsMaterial = PhysicsMaterial.new()
+	# physicsMaterial.friction = FRICTION
 
 	set_physics_process(true)
 
@@ -79,6 +93,8 @@ var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 
 func _physics_process(delta):
 	calculate_forces(delta)
+
+	print("friction: ", physics_material_override.friction)
 	
 	if debugDraw != null:
 		debugDraw.queue_redraw()
@@ -102,12 +118,16 @@ func _physics_process(delta):
 		%CarEngineSound.targetPitchScale = 0.75
 	else:
 		%CarEngineSound.targetPitchScale = remap(linear_velocity.length(), 1, 75, 1, ENGINE_SOUND_PITCH_FACTOR)
-	
+
+# var physicsMaterial: PhysicsMaterial = null
+
 func calculate_forces(delta) -> void:
+	# physics_material_override.friction = FRICTION
 	for index in 4:
 		var tireRayCast = raycasts[index]
 		var tire = tires[index]
 		if tireRayCast.is_colliding():
+			# physics_material_override.friction =  0
 			calculate_suspension(delta, tireRayCast, tire, index)
 			calculate_steering(delta, tireRayCast, tire, index)
 			calculate_engine(delta, tireRayCast, tire, index)
@@ -251,6 +271,7 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 func respawn():
 	should_respawn = true
+	timeTrialState = TimeTrialState.WAITING
 
 func on_input_player_changed(newIndex: int) -> int:
 	%InputHandler.set_input_player(newIndex)
@@ -267,3 +288,33 @@ func get_steering_factor() -> float:
 	var f = func(x): return max(g.call(x), 0.25)
 
 	return f.call(linear_velocity.length()) * STEERING
+
+enum TimeTrialState {
+	WAITING,
+	STARTING,
+	ONGOING,
+	FINISHED
+}
+
+var timeTrialState: TimeTrialState = TimeTrialState.WAITING
+var startTime: int = 0
+
+func onStartLine_bodyEntered(body: Node3D) -> void:
+	if body == self:
+		if timeTrialState == TimeTrialState.WAITING:
+			timeTrialState = TimeTrialState.STARTING
+			# startTime = Time.get_ticks_msec()
+			debugLabel.set_start_time(Time.get_ticks_msec())
+		elif timeTrialState == TimeTrialState.ONGOING:
+			timeTrialState = TimeTrialState.STARTING
+			# var time = Time.get_ticks_msec() - startTime
+			debugLabel.set_end_time(Time.get_ticks_msec())
+
+func onStartLine_bodyExited(body: Node3D) -> void:
+	if body == self:
+		if timeTrialState == TimeTrialState.STARTING:
+			timeTrialState = TimeTrialState.ONGOING
+
+			
+			
+		

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=50 format=3 uid="uid://b45crncrhwh8b"]
 
 [ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="1_4yon1"]
 [ext_resource type="PackedScene" uid="uid://de56s7eayi24e" path="res://Car.tscn" id="2_5abju"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Label.gd" id="5_b6rli"]
 [ext_resource type="ArrayMesh" uid="uid://bq25vv7y8h2k7" path="res://MarioKart/MarioCircuitMesh.tres" id="6_h0iae"]
 [ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="8_mel7x"]
+[ext_resource type="Script" path="res://StartLine.gd" id="10_1heqt"]
 
 [sub_resource type="VisualShaderNodeIntOp" id="VisualShaderNodeIntOp_nuun2"]
 output_port_for_preview = 0
@@ -321,6 +322,13 @@ albedo_color = Color(1, 0.180392, 0.235294, 1)
 metallic = 0.76
 roughness = 0.15
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ned6a"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.964706)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h3rnj"]
+size = Vector3(1, 19.4543, 72.5482)
+
 [node name="TestPlatform" type="Node3D"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
@@ -369,7 +377,6 @@ unique_name_in_owner = true
 
 [node name="DebugDraw3D" type="Control" parent="CanvasLayer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -377,7 +384,8 @@ offset_bottom = 40.0
 script = ExtResource("4_x5c6g")
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="DebugLabel" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("5_b6rli")
@@ -396,7 +404,9 @@ shape = SubResource("ConcavePolygonShape3D_qmkwr")
 disabled = true
 
 [node name="Car" parent="." instance=ExtResource("2_5abju")]
+unique_name_in_owner = true
 transform = Transform3D(-2.18557e-07, 0, 1, 0, 1, 0, -1, 0, -2.18557e-07, -59.8218, 39.6881, 215.226)
+visible = false
 
 [node name="CarRigidBody" parent="Car/Body" index="0"]
 playerIndex = 2
@@ -405,6 +415,7 @@ playerIndex = 2
 surface_material_override/0 = SubResource("StandardMaterial3D_w1nk6")
 
 [node name="Car2" parent="." instance=ExtResource("2_5abju")]
+unique_name_in_owner = true
 transform = Transform3D(-2.18557e-07, 0, 1, 0, 1, 0, -1, 0, -2.18557e-07, -59.8218, 39.6881, 229.978)
 
 [node name="Frame 3" parent="Car2/Body/CarRigidBody/pipeframe car 5" index="4"]
@@ -457,6 +468,7 @@ transform = Transform3D(-4.37114e-08, 0.242535, -0.970141, 0, 0.970141, 0.242535
 script = ExtResource("4_7naf2")
 
 [node name="AudioListener3D" type="AudioListener3D" parent="VBoxContainer/SubViewportContainer2/SubViewport"]
+current = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 visible = false
@@ -471,7 +483,21 @@ size_flags_vertical = 3
 [node name="racetrack3" parent="." instance=ExtResource("8_mel7x")]
 transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 51, 0)
 
+[node name="StartLine" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.0375, 47.9635, 219.969)
+script = ExtResource("10_1heqt")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="StartLine"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(-25.1771, 6.579, -32.2767, -9.86611, -31.5672, 8.50365, 32.0355, 8.98102, 32.1112, -10.4804, -31.509, -9.2529, 31.6401, -9.15623, 26.1862, 6.6942)
+material = SubResource("StandardMaterial3D_ned6a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartLine"]
+shape = SubResource("BoxShape3D_h3rnj")
+
 [editable path="Car"]
 [editable path="Car/Body/CarRigidBody/pipeframe car 5"]
 [editable path="Car2"]
 [editable path="Car2/Body/CarRigidBody/pipeframe car 5"]
+[editable path="racetrack3"]
