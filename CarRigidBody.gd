@@ -94,7 +94,7 @@ var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 func _physics_process(delta):
 	calculate_forces(delta)
 
-	print("friction: ", physics_material_override.friction)
+	# print("friction: ", physics_material_override.friction)
 	
 	if debugDraw != null:
 		debugDraw.queue_redraw()
@@ -115,8 +115,10 @@ func _physics_process(delta):
 		linear_velocity = Vector3.ZERO
 	
 	if linear_velocity.length() < SOUND_SPEED_LIMIT:
+		# %CarEngineSound.tempo = 120
 		%CarEngineSound.targetPitchScale = 0.75
 	else:
+		# %CarEngineSound.tempo = remap(linear_velocity.length(), 1, 75, 170, 170 * ENGINE_SOUND_PITCH_FACTOR)
 		%CarEngineSound.targetPitchScale = remap(linear_velocity.length(), 1, 75, 1, ENGINE_SOUND_PITCH_FACTOR)
 
 # var physicsMaterial: PhysicsMaterial = null
@@ -161,9 +163,15 @@ func calculate_air_pitch(delta):
 
 func calculate_suspension(delta, tireRayCast, tire, index):
 		var raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
-	
-		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
 		var springDirection = tireRayCast.global_transform.basis.y
+
+		if raycastDistance <= SPRING_MAX_COMPRESSION:
+			# force += linear_velocity.dot(springDirection)
+			global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
+			print("raycastDistance: ", raycastDistance)
+			print("Extra force: ", linear_velocity.dot(springDirection))
+			raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
+		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
 		var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin) * delta
 
 		debugDraw.actualOrigins[index] = tireRayCast.global_transform.origin
@@ -172,6 +180,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		var offset = SPRING_REST_DISTANCE - raycastDistance
 		var velocity = springDirection.dot(tireVelocity)
 		var force = (offset * SPRING_STRENGTH) - (velocity * DAMPING)
+
+		
 		
 
 		debugDraw.springOrigins[index] = tireRayCast.global_transform.origin

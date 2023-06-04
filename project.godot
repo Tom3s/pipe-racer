@@ -81,5 +81,5 @@ p2_respawn={
 
 common/physics_ticks_per_second=120
 3d/physics_engine="GodotPhysics3D"
-3d/default_gravity=16.0
+3d/default_gravity=30.0
 3d/default_angular_damp=1.5

@@ -33,7 +33,7 @@ func _physics_process(delta):
 		# tween.tween_property(self, "pitch_scale", pitch_scale + GEAR_SHIFT_NEXT_STAGE, GEAR_SHIFT_TIME_FACTOR).from(pitch_scale * 0.5)
 		pitch_scale *= GEAR_SHIFT_PULLBACK
 	elif floor(targetPitchScale / GEAR_STAGE) < prevGearStage:
-		pitch_scale += (1 - GEAR_SHIFT_PULLBACK) * pitch_scale
+		pitch_scale += (1 - GEAR_SHIFT_PULLBACK) * pitch_scale / 2
 	
 	volume_db = -8 + clamp(remap(pitch_scale, 1, 2, 0, 1), 0, 1) * 12
 
