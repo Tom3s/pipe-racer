@@ -16,7 +16,6 @@ config/features=PackedStringArray("4.0", "Forward Plus")
 
 [display]
 
-window/size/always_on_top=true
 window/vsync/vsync_mode=0
 
 [input]

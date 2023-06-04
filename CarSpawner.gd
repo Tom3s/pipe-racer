@@ -12,9 +12,14 @@ func _ready():
 	
 	for i in nrOfCars:
 		var color = Color(randf(), randf(), randf())
-		var car = CarObjectScene.instantiate()
+		var car: CarRigidBody = CarObjectScene.instantiate()
 		car.frameColor = color
 		car.playerIndex = i + 1
+		car.global_transform.origin = Vector3(0, 0, i * 10)
+		car.rotation_degrees.y = 90
+		car.initialPosition = car.global_position
+		car.initialRotation = car.global_rotation
+		car.respawn()
 		add_child(car)
 		var camera = FollowingCamera.new(car, i)
 

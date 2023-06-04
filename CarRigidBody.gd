@@ -37,6 +37,7 @@ var accelerationInput: float = 0
 var steeringInput: float = 0
 
 var initialPosition: Vector3
+var initialRotation: Vector3
 
 var should_respawn: bool = false
 
@@ -122,7 +123,7 @@ func _physics_process(delta):
 		global_transform.origin = initialPosition
 		linear_velocity = Vector3.UP * 0.1
 		angular_velocity = Vector3.ZERO
-		rotation = Vector3.ZERO
+		rotate(initialRotation, PI / 2)
 		should_respawn = false
 		print("global_position: ", global_position)
 		print("initialPosition: ", initialPosition)
