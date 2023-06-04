@@ -30,11 +30,7 @@ data = PackedByteArray(73, 68, 51, 4, 0, 0, 0, 0, 1, 43, 84, 88, 88, 88, 0, 0, 0
 loop = true
 loop_offset = 0.165
 
-[node name="Car" type="Node3D"]
-
-[node name="Body" type="Node3D" parent="."]
-
-[node name="CarRigidBody" type="RigidBody3D" parent="Body"]
+[node name="CarRigidBody" type="RigidBody3D"]
 unique_name_in_owner = true
 mass = 15.0
 center_of_mass_mode = 1
@@ -54,75 +50,76 @@ MAX_FRICTION = 0.9
 SLIDE_FRICTION = 0.1
 MIN_FRICTION = 0.05
 
-[node name="pipeframe car 5" parent="Body/CarRigidBody" instance=ExtResource("2_bvmt0")]
+[node name="CarModel" parent="." instance=ExtResource("2_bvmt0")]
+unique_name_in_owner = true
 
-[node name="CarBodyCollider" type="CollisionShape3D" parent="Body/CarRigidBody"]
+[node name="CarBodyCollider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000572324, 0.586, 0.160678)
 shape = SubResource("BoxShape3D_inc80")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/CarRigidBody/CarBodyCollider"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CarBodyCollider"]
 visible = false
 mesh = SubResource("BoxMesh_u7kc3")
 surface_material_override/0 = ExtResource("4_3vuwg")
 
-[node name="CarHoodCollider" type="CollisionShape3D" parent="Body/CarRigidBody"]
+[node name="CarHoodCollider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22738, -0.408221)
 shape = SubResource("BoxShape3D_1s8rg")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/CarRigidBody/CarHoodCollider"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CarHoodCollider"]
 visible = false
 mesh = SubResource("BoxMesh_k7ngf")
 surface_material_override/0 = ExtResource("4_3vuwg")
 
-[node name="raycasts" type="Node3D" parent="Body/CarRigidBody"]
+[node name="raycasts" type="Node3D" parent="."]
 
-[node name="FrontLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+[node name="FrontLeftRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.929007, 0.293817, 2.15825)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
-[node name="FrontLeftTire" parent="Body/CarRigidBody/raycasts/FrontLeftRayCast" instance=ExtResource("4_bbs70")]
+[node name="FrontLeftTire" parent="raycasts/FrontLeftRayCast" instance=ExtResource("4_bbs70")]
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.081, 0.0031755)
 script = ExtResource("3_hj1pj")
 
-[node name="FrontRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+[node name="FrontRightRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.293817, 2.15825)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
-[node name="FrontRightTire" parent="Body/CarRigidBody/raycasts/FrontRightRayCast" instance=ExtResource("4_bbs70")]
+[node name="FrontRightTire" parent="raycasts/FrontRightRayCast" instance=ExtResource("4_bbs70")]
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0.081, 0.0031755)
 script = ExtResource("3_hj1pj")
 
-[node name="BackLeftRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+[node name="BackLeftRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.929007, 0.293817, -1.83546)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
-[node name="BackLeftTire" parent="Body/CarRigidBody/raycasts/BackLeftRayCast" instance=ExtResource("4_bbs70")]
+[node name="BackLeftTire" parent="raycasts/BackLeftRayCast" instance=ExtResource("4_bbs70")]
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.0809981, 0.351349)
 script = ExtResource("3_hj1pj")
 
-[node name="BackRightRayCast" type="RayCast3D" parent="Body/CarRigidBody/raycasts"]
+[node name="BackRightRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.293817, -1.83546)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
-[node name="BackRightTire" parent="Body/CarRigidBody/raycasts/BackRightRayCast" instance=ExtResource("4_bbs70")]
+[node name="BackRightTire" parent="raycasts/BackRightRayCast" instance=ExtResource("4_bbs70")]
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0.0809981, 0.351349)
 script = ExtResource("3_hj1pj")
 
-[node name="Tires" type="Node3D" parent="Body/CarRigidBody"]
+[node name="Tires" type="Node3D" parent="."]
 
-[node name="CarEngineSound" type="AudioStreamPlayer3D" parent="Body/CarRigidBody"]
+[node name="CarEngineSound" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.739014, 1.68405)
 stream = SubResource("AudioStreamMP3_wfqbn")

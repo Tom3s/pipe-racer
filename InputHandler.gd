@@ -9,7 +9,7 @@ var player_prefix: String = "p1_"
 func _ready():
 	raycasts.push_back(%FrontLeftRayCast)
 	raycasts.push_back(%FrontRightRayCast)
-	car = %CarRigidBody
+	car = get_parent()
 
 func _input(event):
 	var steering = Input.get_axis(player_prefix + "turn_right", player_prefix + "turn_left")

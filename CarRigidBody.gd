@@ -2,8 +2,8 @@ extends RigidBody3D
 
 class_name CarRigidBody
 
-@onready
-var debugDraw: DebugDraw3D
+# @onready
+# var debugDraw: DebugDraw3D
 
 @onready
 var debugLabel: DebugLabel
@@ -48,7 +48,19 @@ var playerIndex: int = 1:
 		playerIndex = on_input_player_changed(newIndex)
 	get:
 		return playerIndex
-	
+
+@export
+var frameColor: Color = Color.PINK:
+	set(newColor):
+		frameColor = onFrameColorChanged(newColor)
+	get:
+		return frameColor
+
+func onFrameColorChanged(newColor: Color) -> Color:
+	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
+	return newColor
 
 const LOWER_SPEED_LIMIT = 0.008
 
@@ -57,6 +69,11 @@ var SOUND_SPEED_LIMIT: float = 0.1
 
 
 const FRICTION = 0.34
+
+# func _init(initialPlayerIndex: int = 1, initialColor: Color = Color(1, 1, 1, 1)):
+# 	playerIndex = initialPlayerIndex
+# 	var rollcage = get_node("%CarModel/%Rollcage")
+# 	rollcage.set("surface_material_override/albedo_color", initialColor)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -70,10 +87,10 @@ func _ready():
 	tires.push_back(%FrontLeftTire)
 	tires.push_back(%FrontRightTire)
 
-	debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
-	debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
+	# debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
+	# debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
 
-	var startLine: StartLine = get_parent().get_parent().get_parent().get_node("StartLine")
+	var startLine: StartLine = get_parent().get_parent().get_node("StartLine")
 
 	startLine.body_entered.connect(onStartLine_bodyEntered)
 	startLine.body_exited.connect(onStartLine_bodyExited)
@@ -96,10 +113,10 @@ func _physics_process(delta):
 
 	# print("friction: ", physics_material_override.friction)
 	
-	if debugDraw != null:
-		debugDraw.queue_redraw()
-	else:
-		print("debugDraw is null")
+	# if debugDraw != null:
+		# debugDraw.queue_redraw()
+	# else:
+		# print("debugDraw is null")
 	
 	if should_respawn:
 		global_transform.origin = initialPosition
@@ -136,15 +153,15 @@ func calculate_forces(delta) -> void:
 		else:
 			calculate_air_pitch(delta)
 			calculate_air_steering(delta)
-			debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
-			debugDraw.springVectors[index] = Vector3.UP
+			# debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
+			# debugDraw.springVectors[index] = Vector3.UP
 			tire.position = tire.original_position
 
-			debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
-			debugDraw.steeringVectors[index] = Vector3.RIGHT
+			# debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
+			# debugDraw.steeringVectors[index] = Vector3.RIGHT
 
-			debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
-			debugDraw.accelerationVectors[index] = Vector3.FORWARD
+			# debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
+			# debugDraw.accelerationVectors[index] = Vector3.FORWARD
 
 			tire.rotate_x(accelerationInput / TIRE_RADIUS)
 			
@@ -174,8 +191,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
 		var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin) * delta
 
-		debugDraw.actualOrigins[index] = tireRayCast.global_transform.origin
-		debugDraw.actualVectors[index] = tireRayCast.get_collision_point() - tireRayCast.global_transform.origin
+		# debugDraw.actualOrigins[index] = tireRayCast.global_transform.origin
+		# debugDraw.actualVectors[index] = tireRayCast.get_collision_point() - tireRayCast.global_transform.origin
 		
 		var offset = SPRING_REST_DISTANCE - raycastDistance
 		var velocity = springDirection.dot(tireVelocity)
@@ -184,8 +201,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		
 		
 
-		debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
-		debugDraw.springVectors[index] = springDirection * force
+		# debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
+		# debugDraw.springVectors[index] = springDirection * force
 
 		apply_force(springDirection * force, tireRayCast.global_transform.origin - global_transform.origin)
 		
@@ -241,8 +258,8 @@ func calculate_steering(delta, tireRayCast, tire, index):
 
 	
 
-	debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
-	debugDraw.steeringVectors[index] = force
+	# debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
+	# debugDraw.steeringVectors[index] = force
 			
 @export
 var PASSIVE_BRAKING: int = 300
@@ -264,8 +281,8 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 		apply_force(force, tireRayCast.global_transform.origin - global_transform.origin)
 
-		debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
-		debugDraw.accelerationVectors[index] = force
+		# debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
+		# debugDraw.accelerationVectors[index] = force
 
 		return
 
@@ -275,8 +292,8 @@ func calculate_engine(delta, tireRayCast, tire, index):
 		force *= BRAKING_FORCE
 	apply_force(force, tireRayCast.global_transform.origin - global_transform.origin)
 
-	debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
-	debugDraw.accelerationVectors[index] = force
+	# debugDraw.accelerationOrigins[index] = tireRayCast.global_transform.origin
+	# debugDraw.accelerationVectors[index] = force
 	
 
 func respawn():

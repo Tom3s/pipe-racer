@@ -1,15 +1,21 @@
 @tool
 extends Camera3D
 
-@onready
-var car1: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car/%CarRigidBody")
-@onready
-var car2: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car2/%CarRigidBody")
+class_name FollowingCamera
+
+# @onready
+# var car1: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car/%CarRigidBody")
+# @onready
+# var car2: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car2/%CarRigidBody")
 
 var car = null
 
 @export
 var playerIndex = 1
+
+func _init(carReference, initialPlayerIndex = 1):
+	playerIndex = initialPlayerIndex
+	car = carReference
 
 func _ready():
 	set_physics_process(true)
@@ -17,10 +23,11 @@ func _ready():
 
 func _physics_process(delta):
 	if car == null:
-		if playerIndex == 1:
-			car = car1
-		else:
-			car = car2
+		# if playerIndex == 1:
+		# 	car = car1
+		# else:
+		# 	car = car2
+		pass
 	else:
 		var car_pos = car.global_transform.origin
 		var car_y = car.global_transform.basis.y
