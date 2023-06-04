@@ -19,7 +19,7 @@ func _ready():
 		car.frameColor = color
 		car.playerIndex = i + 1
 		car.global_transform.origin = Vector3(0, 0, i * 10)
-		car.rotation_degrees.y = 90
+		# car.rotation_degrees.y = 90
 		car.respawnPosition = car.global_position
 		car.respawnRotation = car.global_rotation
 

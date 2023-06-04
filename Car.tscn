@@ -82,6 +82,8 @@ target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="raycasts/FrontLeftRayCast"]
+remote_path = NodePath("../../../Tires/FrontLeftVisualCast")
+use_global_coordinates = false
 update_position = false
 update_scale = false
 
@@ -90,6 +92,12 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.293817, 2.15825)
 target_position = Vector3(0, -0.5, 0)
 script = ExtResource("2_4ug8g")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="raycasts/FrontRightRayCast"]
+remote_path = NodePath("../../../Tires/FrontRightVisualCast")
+use_global_coordinates = false
+update_position = false
+update_scale = false
 
 [node name="BackLeftRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true

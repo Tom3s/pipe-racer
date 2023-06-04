@@ -124,7 +124,7 @@ func _physics_process(delta):
 		global_transform.origin = respawnPosition
 		linear_velocity = Vector3.UP * 0.1
 		angular_velocity = Vector3.ZERO
-		global_rotation = respawnRotation
+		global_rotation = respawnRotation + Vector3.UP * PI / 2
 		should_respawn = false
 		print("global_position: ", global_position)
 		print("respawnPosition: ", respawnPosition)
@@ -377,7 +377,7 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 		if cpIndex == currentCheckPoint + 1:
 			currentCheckPoint = cpIndex
 			respawnPosition = checkpoint.global_position
-			respawnRotation = checkpoint.global_rotation.rotated(Vector3.UP, PI / 2)
+			respawnRotation = checkpoint.global_rotation.rotated(Vector3.UP, PI)
 			debugLabel.incorrectCheckPoint = false
 		else:
 			debugLabel.incorrectCheckPoint = !cpIndex == currentCheckPoint
