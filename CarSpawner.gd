@@ -6,6 +6,9 @@ var nrOfCars = 4
 var FollowingCamera := preload("FollowingCamera.gd")
 var CarObjectScene := preload("Car.tscn")
 
+@export
+var nrLaps: int = 5
+
 func _ready():
 	if nrOfCars == 1:
 		%VerticalSplitBottom.visible = false
@@ -17,8 +20,18 @@ func _ready():
 		car.playerIndex = i + 1
 		car.global_transform.origin = Vector3(0, 0, i * 10)
 		car.rotation_degrees.y = 90
-		car.initialPosition = car.global_position
-		car.initialRotation = car.global_rotation
+		car.respawnPosition = car.global_position
+		car.respawnRotation = car.global_rotation
+
+		var cpSystem = %CheckPointSystem
+		for cp in cpSystem.get_children():
+			cp.bodyEnteredCheckpoint.connect(car.onCheckpoint_bodyEntered)
+		
+		car.nrCheckpoints = cpSystem.get_child_count()
+		car.nrLaps = nrLaps
+		
+		%Countdown.countdownFinished.connect(car.onCountdown_finished)
+
 		car.respawn()
 		add_child(car)
 		var camera = FollowingCamera.new(car, i)
@@ -30,6 +43,15 @@ func _ready():
 		var viewPort = SubViewport.new()
 		viewPort.audio_listener_enable_3d = true
 		viewPort.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+
+		var canvasLayer = CanvasLayer.new()
+		canvasLayer.follow_viewport_enabled = true
+		viewPort.add_child(canvasLayer)
+
+		var debugLabel = DebugLabel.new()
+		canvasLayer.add_child(debugLabel)
+
+		car.debugLabel = debugLabel
 
 		viewPortContainer.add_child(viewPort)
 		viewPort.add_child(camera)

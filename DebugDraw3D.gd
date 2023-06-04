@@ -14,6 +14,15 @@ var steeringVectors = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vec
 var accelerationOrigins = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
 var accelerationVectors = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
 
+func _unhandled_input(event):
+	if event.is_action_pressed("fullscreen"):
+		var nextWindowMode = DisplayServer.window_get_mode()
+		if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
+			nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
+		else:
+			nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
+		DisplayServer.window_set_mode(nextWindowMode)
+
 func _draw():
 	for i in range(4):
 		var line_endpoints = draw_vector(springOrigins[i], springVectors[i])

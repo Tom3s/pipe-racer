@@ -10,7 +10,7 @@ var GEAR_SHIFT_SPEED: float = 0.75
 var GEAR_SHIFT_NEXT_STAGE: float = 0.2
 
 var prevGearStage = 0
-var targetPitchScale = 1
+var targetPitchScale: float = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

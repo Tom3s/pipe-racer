@@ -24,6 +24,8 @@ func _input(event):
 	if event.is_action_pressed(player_prefix + "respawn"):
 		car.respawn()
 
+	# car.driftInput = car.DRIFT_FACTOR if event.is_action_pressed(player_prefix + "drift") else 1
+	car.driftInput = Input.get_action_strength(player_prefix + "drift")
 func set_input_player(player: int):
 	player_prefix = "p" + str(player) + "_"
 

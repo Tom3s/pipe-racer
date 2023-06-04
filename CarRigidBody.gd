@@ -36,8 +36,8 @@ var AIR_PITCH_CONTROL: float = 1000
 var accelerationInput: float = 0
 var steeringInput: float = 0
 
-var initialPosition: Vector3
-var initialRotation: Vector3
+var respawnPosition: Vector3
+var respawnRotation: Vector3
 
 var should_respawn: bool = false
 
@@ -96,7 +96,7 @@ func _ready():
 	startLine.body_entered.connect(onStartLine_bodyEntered)
 	startLine.body_exited.connect(onStartLine_bodyExited)
 
-	initialPosition = global_transform.origin
+	respawnPosition = global_transform.origin
 
 	# physicsMaterial = PhysicsMaterial.new()
 	# physicsMaterial.friction = FRICTION
@@ -110,6 +110,7 @@ func get_point_velocity (point :Vector3) -> Vector3:
 var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 
 func _physics_process(delta):
+	
 	calculate_forces(delta)
 
 	# print("friction: ", physics_material_override.friction)
@@ -120,13 +121,13 @@ func _physics_process(delta):
 		# print("debugDraw is null")
 	
 	if should_respawn:
-		global_transform.origin = initialPosition
+		global_transform.origin = respawnPosition
 		linear_velocity = Vector3.UP * 0.1
 		angular_velocity = Vector3.ZERO
-		rotate(initialRotation, PI / 2)
+		rotate(respawnRotation, PI / 2)
 		should_respawn = false
 		print("global_position: ", global_position)
-		print("initialPosition: ", initialPosition)
+		print("respawnPosition: ", respawnPosition)
 		print("respawned")
 	
 	if linear_velocity.length() < LOWER_SPEED_LIMIT:
@@ -149,9 +150,13 @@ func calculate_forces(delta) -> void:
 		if tireRayCast.is_colliding():
 			# physics_material_override.friction =  0
 			calculate_suspension(delta, tireRayCast, tire, index)
+			if timeTrialState == TimeTrialState.COUNTDOWN || timeTrialState == TimeTrialState.FINISHED:
+				continue
 			calculate_steering(delta, tireRayCast, tire, index)
 			calculate_engine(delta, tireRayCast, tire, index)
 		else:
+			if timeTrialState == TimeTrialState.COUNTDOWN || timeTrialState == TimeTrialState.FINISHED:
+				continue
 			calculate_air_pitch(delta)
 			calculate_air_steering(delta)
 			# debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
@@ -227,6 +232,11 @@ var MIN_FRICTION = 0.1
 @export_range(0, 1, 0.1)
 var SLIDE_TRESHOLD = 0.6
 
+@export_range(0.1, 1, 0.1)
+var DRIFT_FACTOR = 0.5
+
+var driftInput: float = 1
+
 func calculate_tire_grip(tireVelocity, steeringDirection):
 	# var x = tireVelocity.dot(steeringDirection)
 	# # x = clamp(abs(x), 0, 1)
@@ -237,7 +247,7 @@ func calculate_tire_grip(tireVelocity, steeringDirection):
 	# 	return remap(x, SLIDE_TRESHOLD, 1, SLIDE_FRICTION, MIN_FRICTION)
 	# else:
 	# 	return remap(x, 0, SLIDE_TRESHOLD, MAX_FRICTION, SLIDE_FRICTION)
-	return TIRE_GRIP
+	return TIRE_GRIP * remap(driftInput, 0, 1, 1, DRIFT_FACTOR)
 
 func calculate_steering(delta, tireRayCast, tire, index):
 	var steeringDirection = tireRayCast.global_transform.basis.x
@@ -299,7 +309,7 @@ func calculate_engine(delta, tireRayCast, tire, index):
 
 func respawn():
 	should_respawn = true
-	timeTrialState = TimeTrialState.WAITING
+	# timeTrialState = TimeTrialState.WAITING
 
 func on_input_player_changed(newIndex: int) -> int:
 	%InputHandler.set_input_player(newIndex)
@@ -318,14 +328,21 @@ func get_steering_factor() -> float:
 	return f.call(linear_velocity.length()) * STEERING
 
 enum TimeTrialState {
+	COUNTDOWN,
 	WAITING,
 	STARTING,
 	ONGOING,
 	FINISHED
 }
 
-var timeTrialState: TimeTrialState = TimeTrialState.WAITING
+var timeTrialState: TimeTrialState = TimeTrialState.COUNTDOWN
 var startTime: int = 0
+
+var currentCheckPoint: int = 0
+var nrCheckpoints: int = 0
+
+var nrLaps = 0
+var currentLap = 0
 
 func onStartLine_bodyEntered(body: Node3D) -> void:
 	if body == self:
@@ -334,14 +351,41 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 			# startTime = Time.get_ticks_msec()
 			debugLabel.set_start_time(Time.get_ticks_msec())
 		elif timeTrialState == TimeTrialState.ONGOING:
-			timeTrialState = TimeTrialState.STARTING
-			# var time = Time.get_ticks_msec() - startTime
-			debugLabel.set_end_time(Time.get_ticks_msec())
+			if currentCheckPoint == nrCheckpoints:
+				timeTrialState = TimeTrialState.STARTING
+				currentCheckPoint = 0
+				currentLap += 1
+				debugLabel.set_lap(currentLap + 1)
+				# var time = Time.get_ticks_msec() - startTime
+				debugLabel.set_end_time(Time.get_ticks_msec())
+
+				if currentLap >= nrLaps:
+					timeTrialState = TimeTrialState.FINISHED
 
 func onStartLine_bodyExited(body: Node3D) -> void:
 	if body == self:
 		if timeTrialState == TimeTrialState.STARTING:
 			timeTrialState = TimeTrialState.ONGOING
+
+func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
+	if body == self:
+		var cpIndex = int(checkpoint.name.replace("cp", ""))
+		# print("Player ", playerIndex, " entered checkpoint ", cpIndex)
+
+		# print("currentCheckPoint: ", currentCheckPoint)
+		# print("cpIndex: ", cpIndex)
+		# print("nrCheckpoints: ", nrCheckpoints)
+	
+
+		if cpIndex == currentCheckPoint + 1:
+			currentCheckPoint = cpIndex
+			respawnPosition = checkpoint.global_position
+			respawnRotation = checkpoint.global_transform.basis.get_euler()
+
+func onCountdown_finished() -> void:
+	timeTrialState = TimeTrialState.WAITING
+			
+		
 
 			
 			

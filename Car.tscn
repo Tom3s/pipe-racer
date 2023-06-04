@@ -49,6 +49,7 @@ ENGINE_SOUND_PITCH_FACTOR = 4.0
 MAX_FRICTION = 0.9
 SLIDE_FRICTION = 0.1
 MIN_FRICTION = 0.05
+DRIFT_FACTOR = 0.2
 
 [node name="CarModel" parent="." instance=ExtResource("2_bvmt0")]
 unique_name_in_owner = true
