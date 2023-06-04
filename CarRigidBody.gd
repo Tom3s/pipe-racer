@@ -352,6 +352,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 			debugLabel.set_start_time(Time.get_ticks_msec())
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
+				debugLabel.incorrectCheckPoint = false
 				timeTrialState = TimeTrialState.STARTING
 				currentCheckPoint = 0
 				currentLap += 1
@@ -361,6 +362,8 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
+			else:
+				debugLabel.incorrectCheckPoint = true
 
 func onStartLine_bodyExited(body: Node3D) -> void:
 	if body == self:
