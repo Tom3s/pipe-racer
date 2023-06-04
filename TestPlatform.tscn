@@ -418,7 +418,7 @@ disabled = true
 [node name="CarSpawner" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8878, 41.0925, 203.23)
 script = ExtResource("8_6ts8f")
-nrOfCars = 2
+nrOfCars = 1
 
 [node name="HorizontalSplit" type="VBoxContainer" parent="."]
 anchors_preset = 15

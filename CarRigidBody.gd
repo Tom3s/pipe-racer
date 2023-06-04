@@ -124,7 +124,7 @@ func _physics_process(delta):
 		global_transform.origin = respawnPosition
 		linear_velocity = Vector3.UP * 0.1
 		angular_velocity = Vector3.ZERO
-		rotate(respawnRotation, PI / 2)
+		global_rotation = respawnRotation
 		should_respawn = false
 		print("global_position: ", global_position)
 		print("respawnPosition: ", respawnPosition)
@@ -150,18 +150,14 @@ func calculate_forces(delta) -> void:
 		if tireRayCast.is_colliding():
 			# physics_material_override.friction =  0
 			calculate_suspension(delta, tireRayCast, tire, index)
-			if timeTrialState == TimeTrialState.COUNTDOWN || timeTrialState == TimeTrialState.FINISHED:
-				continue
 			calculate_steering(delta, tireRayCast, tire, index)
 			calculate_engine(delta, tireRayCast, tire, index)
 		else:
-			if timeTrialState == TimeTrialState.COUNTDOWN || timeTrialState == TimeTrialState.FINISHED:
-				continue
 			calculate_air_pitch(delta)
 			calculate_air_steering(delta)
 			# debugDraw.springOrigins[index] = tireRayCast.global_transform.origin
 			# debugDraw.springVectors[index] = Vector3.UP
-			tire.position = tire.original_position
+			# tire.position = tire.original_position
 
 			# debugDraw.steeringOrigins[index] = tireRayCast.global_transform.origin
 			# debugDraw.steeringVectors[index] = Vector3.RIGHT
@@ -171,8 +167,8 @@ func calculate_forces(delta) -> void:
 
 			tire.rotate_x(accelerationInput / TIRE_RADIUS)
 			
-		if index in [2, 3]:
-			tire.global_transform.origin += global_transform.basis.z * -0.65
+		# if index in [2, 3]:
+		# 	tire.global_transform.origin += global_transform.basis.z * -0.65
 
 func calculate_air_steering(delta):
 	var yaw = steeringInput * AIR_STEERING
@@ -218,8 +214,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 
 		tire.rotate_x(tireDistanceTravelled / TIRE_RADIUS)
 		
-		var tireFinalPosition = tire.original_position + Vector3.DOWN * (raycastDistance - 0.28)
-		tire.position = tireFinalPosition
+		# var tireFinalPosition = tire.original_position + Vector3.DOWN * (raycastDistance - 0.28)
+		# tire.position = tireFinalPosition
 
 
 
@@ -352,7 +348,6 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 			debugLabel.set_start_time(Time.get_ticks_msec())
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
-				debugLabel.incorrectCheckPoint = false
 				timeTrialState = TimeTrialState.STARTING
 				currentCheckPoint = 0
 				currentLap += 1
@@ -362,8 +357,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
-			else:
-				debugLabel.incorrectCheckPoint = true
+			
 
 func onStartLine_bodyExited(body: Node3D) -> void:
 	if body == self:
@@ -383,7 +377,10 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 		if cpIndex == currentCheckPoint + 1:
 			currentCheckPoint = cpIndex
 			respawnPosition = checkpoint.global_position
-			respawnRotation = checkpoint.global_transform.basis.get_euler()
+			respawnRotation = checkpoint.global_rotation.rotated(Vector3.UP, PI / 2)
+			debugLabel.incorrectCheckPoint = false
+		else:
+			debugLabel.incorrectCheckPoint = !cpIndex == currentCheckPoint
 
 func onCountdown_finished() -> void:
 	timeTrialState = TimeTrialState.WAITING

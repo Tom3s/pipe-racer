@@ -12,6 +12,8 @@ func _ready():
 	car = get_parent()
 
 func _input(event):
+	if car.timeTrialState == car.TimeTrialState.COUNTDOWN || car.timeTrialState == car.TimeTrialState.FINISHED:
+		return
 	var steering = Input.get_axis(player_prefix + "turn_right", player_prefix + "turn_left")
 	car.steeringInput = steering
 	for raycast in raycasts:
