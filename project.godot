@@ -14,8 +14,14 @@ config/name="Pipe Racer"
 run/main_scene="res://TestPlatform.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 
+[autoload]
+
+Network="*res://Network.gd"
+
 [display]
 
+window/size/viewport_width=640
+window/size/viewport_height=360
 window/vsync/vsync_mode=0
 
 [input]

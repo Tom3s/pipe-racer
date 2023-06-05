@@ -22,8 +22,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	# print("Pitch: ", pitch_scale)
-
 	if playing:
 		pitch_scale = lerp(pitch_scale, targetPitchScale, GEAR_SHIFT_SPEED / max(1, prevGearStage))
 		pass

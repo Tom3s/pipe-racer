@@ -10,11 +10,11 @@ class_name FollowingCamera
 
 var car = null
 
-@export
-var playerIndex = 1
+# @export
+# var playerIndex = 1
 
-func _init(carReference, initialPlayerIndex = 1):
-	playerIndex = initialPlayerIndex
+func _init(carReference):
+	# playerIndex = initialPlayerIndex
 	car = carReference
 
 func _ready():

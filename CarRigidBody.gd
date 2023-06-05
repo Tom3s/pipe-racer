@@ -59,7 +59,7 @@ var frameColor: Color = Color.PINK:
 
 func onFrameColorChanged(newColor: Color) -> Color:
 	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
-	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+	# rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
 	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
 	return newColor
 
@@ -76,8 +76,12 @@ const FRICTION = 0.34
 # 	var rollcage = get_node("%CarModel/%Rollcage")
 # 	rollcage.set("surface_material_override/albedo_color", initialColor)
 
-# Called when the node enters the scene tree for the first time.
+@onready
+var synchronizer = %MultiplayerSynchronizer
+
 func _ready():
+	synchronizer.set_multiplayer_authority(name.to_int())
+
 	raycasts.push_back(%BackLeftRayCast)
 	raycasts.push_back(%BackRightRayCast)
 	raycasts.push_back(%FrontLeftRayCast)
@@ -88,6 +92,9 @@ func _ready():
 	tires.push_back(%FrontLeftTire)
 	tires.push_back(%FrontRightTire)
 
+	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+
 	# debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
 	# debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
 
@@ -96,12 +103,43 @@ func _ready():
 	startLine.body_entered.connect(onStartLine_bodyEntered)
 	startLine.body_exited.connect(onStartLine_bodyExited)
 
-	respawnPosition = global_transform.origin
+	if respawnPosition == null:
+		respawnPosition = global_transform.origin
 
 	# physicsMaterial = PhysicsMaterial.new()
 	# physicsMaterial.friction = FRICTION
 
 	set_physics_process(true)
+
+	if synchronizer.is_multiplayer_authority():
+		get_parent().get_node("%UniversalCanvas/Countdown").countdownFinished.connect(onCountdown_finished)
+
+		var camera = FollowingCamera.new(self)
+
+		var viewPortContainer = SubViewportContainer.new()
+		viewPortContainer.stretch = true
+		viewPortContainer.size_flags_horizontal = SubViewportContainer.SIZE_EXPAND_FILL
+		viewPortContainer.size_flags_vertical = SubViewportContainer.SIZE_EXPAND_FILL
+		var viewPort = SubViewport.new()
+		viewPort.audio_listener_enable_3d = true
+		viewPort.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+
+		var canvasLayer = CanvasLayer.new()
+		canvasLayer.follow_viewport_enabled = true
+		viewPort.add_child(canvasLayer)
+
+		debugLabel = DebugLabel.new()
+		canvasLayer.add_child(debugLabel)
+
+		debugLabel = debugLabel
+
+		viewPortContainer.add_child(viewPort)
+		viewPort.add_child(camera)
+
+		get_parent().get_node("%VerticalSplitTop").add_child(viewPortContainer)
+		get_parent().get_node("%VerticalSplitBottom").visible = false
+
+	respawn()
 
 func get_point_velocity (point :Vector3) -> Vector3:
 	return linear_velocity + angular_velocity.cross(point - global_transform.origin)
@@ -110,7 +148,6 @@ func get_point_velocity (point :Vector3) -> Vector3:
 var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 
 func _physics_process(delta):
-	
 	calculate_forces(delta)
 
 	# print("friction: ", physics_material_override.friction)
@@ -122,13 +159,10 @@ func _physics_process(delta):
 	
 	if should_respawn:
 		global_transform.origin = respawnPosition
-		linear_velocity = Vector3.UP * 0.1
+		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
 		global_rotation = respawnRotation + Vector3.UP * PI / 2
 		should_respawn = false
-		print("global_position: ", global_position)
-		print("respawnPosition: ", respawnPosition)
-		print("respawned")
 	
 	if linear_velocity.length() < LOWER_SPEED_LIMIT:
 		linear_velocity = Vector3.ZERO
@@ -139,6 +173,61 @@ func _physics_process(delta):
 	else:
 		# %CarEngineSound.tempo = remap(linear_velocity.length(), 1, 75, 170, 170 * ENGINE_SOUND_PITCH_FACTOR)
 		%CarEngineSound.targetPitchScale = remap(linear_velocity.length(), 1, 75, 1, ENGINE_SOUND_PITCH_FACTOR)
+	
+	synchronizer.position = position
+	synchronizer.rotation = rotation
+	synchronizer.linear_velocity = linear_velocity
+	synchronizer.angular_velocity = angular_velocity
+	synchronizer.frameColor = frameColor
+	synchronizer.timeTrialState = timeTrialState
+
+	# synchronizer.currentCheckPoint = currentCheckPoint
+	# synchronizer.nrCheckpoints = nrCheckpoints
+	# synchronizer.nrLaps = nrLaps
+	# synchronizer.currentLap = currentLap
+
+	if timeTrialState == TimeTrialState.COUNTDOWN:
+		recalculateSpawnPositions()
+		linear_velocity *= Vector3.UP
+
+
+
+func recalculateSpawnPositions():
+	if (global_position * Vector3(1, 0, 1)).distance_to(respawnPosition * Vector3(1, 0, 1)) > SOUND_SPEED_LIMIT:
+		respawn()
+
+	var needsRespawn: bool = false
+	var spawnPositions: Array = []
+
+	var cars = get_parent().get_children()
+
+	for car in cars:
+		if car is CarRigidBody:
+			spawnPositions.push_back(car.respawnPosition)
+
+	for i in spawnPositions.size():
+		for j in spawnPositions.size():
+			if i != j and spawnPositions[i].distance_to(spawnPositions[j]) < 1:
+				needsRespawn = true
+				print("Respawn recalculation needed")
+				break
+	
+	if !needsRespawn:
+		return
+
+	cars.sort_custom(func(a, b): return a.name.to_int() < b.name.to_int())
+	
+	# for index in get_parent().get_child_count():
+	# 	get_parent().get_child(index).respawnPosition = cars[0].global_position + Vector3(0, 0, index * 10)
+	
+	for index in cars.size():
+		cars[index].respawnPosition = cars[0].respawnPosition + Vector3(0, 0, index * 10)	
+
+	# for index in get_parent().get_child_count():
+	# 	get_parent().get_child(index).respawn()
+
+
+
 
 # var physicsMaterial: PhysicsMaterial = null
 
@@ -187,8 +276,6 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		if raycastDistance <= SPRING_MAX_COMPRESSION:
 			# force += linear_velocity.dot(springDirection)
 			global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
-			print("raycastDistance: ", raycastDistance)
-			print("Extra force: ", linear_velocity.dot(springDirection))
 			raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
 		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
 		var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin) * delta
@@ -304,6 +391,7 @@ func calculate_engine(delta, tireRayCast, tire, index):
 	
 
 func respawn():
+	print("RespawnPos for ", name , ": ", respawnPosition)
 	should_respawn = true
 	# timeTrialState = TimeTrialState.WAITING
 
@@ -345,15 +433,16 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 		if timeTrialState == TimeTrialState.WAITING:
 			timeTrialState = TimeTrialState.STARTING
 			# startTime = Time.get_ticks_msec()
-			debugLabel.set_start_time(Time.get_ticks_msec())
+			if debugLabel != null:
+				debugLabel.set_start_time(Time.get_ticks_msec())
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
 				timeTrialState = TimeTrialState.STARTING
 				currentCheckPoint = 0
 				currentLap += 1
-				debugLabel.set_lap(currentLap + 1)
-				# var time = Time.get_ticks_msec() - startTime
-				debugLabel.set_end_time(Time.get_ticks_msec())
+				if debugLabel != null:
+					debugLabel.set_lap(currentLap + 1)
+					debugLabel.set_end_time(Time.get_ticks_msec())
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
@@ -378,12 +467,17 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 			currentCheckPoint = cpIndex
 			respawnPosition = checkpoint.global_position
 			respawnRotation = checkpoint.global_rotation.rotated(Vector3.UP, PI)
-			debugLabel.incorrectCheckPoint = false
-		else:
+			if debugLabel != null:
+				debugLabel.incorrectCheckPoint = false
+
+			print("Player ", name, " entered checkpoint ", cpIndex)
+
+		elif debugLabel != null:
 			debugLabel.incorrectCheckPoint = !cpIndex == currentCheckPoint
 
 func onCountdown_finished() -> void:
-	timeTrialState = TimeTrialState.WAITING
+	if timeTrialState == TimeTrialState.COUNTDOWN:
+		timeTrialState = TimeTrialState.WAITING
 			
 		
 

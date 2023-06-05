@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdgchw45sjh3m"]
+
+[ext_resource type="Script" path="res://CarSpawner.gd" id="1_svhe4"]
+
+[node name="CarSpawner" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8878, 41.0925, 203.23)
+script = ExtResource("1_svhe4")
+nrOfCars = 0

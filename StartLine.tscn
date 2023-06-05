@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbysb8dy0gxal"]
+
+[ext_resource type="Script" path="res://StartLine.gd" id="1_giorv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ned6a"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.964706)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h3rnj"]
+size = Vector3(1, 19.4543, 72.5482)
+
+[node name="StartLine" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.0375, 47.9635, 219.969)
+script = ExtResource("1_giorv")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(-25.1771, 6.579, -32.2767, -9.86611, -31.5672, 8.50365, 32.0355, 8.98102, 32.1112, -10.4804, -31.509, -9.2529, 31.6401, -9.15623, 26.1862, 6.6942)
+material = SubResource("StandardMaterial3D_ned6a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_h3rnj")

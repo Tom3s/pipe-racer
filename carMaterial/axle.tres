@@ -19,6 +19,8 @@ default_value = 0.008
 
 [resource]
 code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
 uniform vec4 ColorParameter : source_color = vec4(0.223103, 0.223103, 0.223103, 1.000000);
 uniform float Metallic : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;
 uniform float roughness : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;

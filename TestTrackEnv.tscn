@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://buuhagohaw8gr"]
+
+[ext_resource type="Texture2D" uid="uid://ftggr2pli8mx" path="res://Tracks/AllSkyFree_Sky_EpicBlueSunset_Equirect.png" id="1_6amej"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kgwse"]
+panorama = ExtResource("1_6amej")
+
+[sub_resource type="Sky" id="Sky_ucuut"]
+sky_material = SubResource("PanoramaSkyMaterial_kgwse")
+
+[sub_resource type="Environment" id="Environment_2xiuk"]
+background_mode = 2
+sky = SubResource("Sky_ucuut")
+ambient_light_source = 3
+reflected_light_source = 2
+sdfgi_use_occlusion = true
+adjustment_enabled = true
+
+[node name="TestTrackEnv" type="WorldEnvironment"]
+environment = SubResource("Environment_2xiuk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.424895, 0.905243, 0, -0.905243, -0.424895, 76.7524, 845.33, 0)
+shadow_enabled = true

@@ -1,6 +1,6 @@
-extends Node
+extends Node3D
 
-@export_range(1, 4)
+@export_range(0, 4)
 var nrOfCars = 4
 
 var FollowingCamera := preload("FollowingCamera.gd")
@@ -8,6 +8,9 @@ var CarObjectScene := preload("Car.tscn")
 
 @export
 var nrLaps: int = 5
+
+@export
+var nrCarsSpawned: int = 0
 
 func _ready():
 	if nrOfCars == 1:
@@ -30,11 +33,11 @@ func _ready():
 		car.nrCheckpoints = cpSystem.get_child_count()
 		car.nrLaps = nrLaps
 		
-		%Countdown.countdownFinished.connect(car.onCountdown_finished)
+		%UniversalCanvas/Countdown.countdownFinished.connect(car.onCountdown_finished)
 
 		car.respawn()
 		add_child(car)
-		var camera = FollowingCamera.new(car, i)
+		var camera = FollowingCamera.new(car)
 
 		var viewPortContainer = SubViewportContainer.new()
 		viewPortContainer.stretch = true
@@ -60,3 +63,47 @@ func _ready():
 			%VerticalSplitTop.add_child(viewPortContainer)
 		else:
 			%VerticalSplitBottom.add_child(viewPortContainer)
+
+
+func spawnCar(peer_id: int):
+	if peer_id == -1:
+		peer_id = get_tree().get_multiplayer().get_unique_id()
+	
+	if has_node(str(peer_id)):
+		return
+
+	var color = Color(randf(), randf(), randf())
+	var car: CarRigidBody = CarObjectScene.instantiate()
+	car.name = str(peer_id)
+	car.frameColor = color
+
+	# car.get_node("MultiplayerSynchronizer").set_multiplayer_authority(peer_id, true)
+
+
+	car.playerIndex = 1
+	var nrPeers = get_tree().get_multiplayer().get_peers().size()
+	print("Friends of peer ", peer_id, ": ", nrPeers)
+	# car.global_transform.origin = Vector3(0, 0, 10 * nrPeers)
+	car.respawnPosition = global_position + Vector3(0, 0, nrPeers * 10)
+	# print("respawnPosition of ", peer_id, ": ", car.respawnPosition)
+	car.respawnRotation = car.global_rotation
+
+	var cpSystem = %CheckPointSystem
+	for cp in cpSystem.get_children():
+		cp.bodyEnteredCheckpoint.connect(car.onCheckpoint_bodyEntered)
+	
+	car.nrCheckpoints = cpSystem.get_child_count()
+	car.nrLaps = nrLaps
+
+	add_child(car)
+	
+	# car.respawn()
+	
+	nrCarsSpawned += 1
+	
+	
+	
+	
+
+# func _process(delta):
+# 	print("nr cars: ", nrCarsSpawned)

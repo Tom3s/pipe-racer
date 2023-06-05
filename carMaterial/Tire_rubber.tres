@@ -43,6 +43,8 @@ operator = 1
 
 [resource]
 code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
 uniform vec4 ColorParameter : source_color = vec4(0.000000, 0.000000, 0.000000, 1.000000);
 uniform sampler2D tex_frg_3;
 uniform sampler2D tex_frg_4;

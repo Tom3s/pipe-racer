@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://bf023ng2nrvk2"]
+
+[ext_resource type="Script" path="res://DebugDraw3D.gd" id="1_6bey7"]
+[ext_resource type="Script" path="res://Countdown.gd" id="2_vrpsj"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jyalr"]
+properties/0/path = NodePath("../Countdown:countdownStartTime")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath("../Countdown:countdownTime")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath("../Countdown:countingDown")
+properties/2/spawn = true
+properties/2/sync = true
+
+[sub_resource type="Theme" id="Theme_ibman"]
+default_font_size = 400
+
+[node name="UniversalCanvas" type="CanvasLayer"]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+unique_name_in_owner = true
+root_path = NodePath("../Countdown")
+replication_config = SubResource("SceneReplicationConfig_jyalr")
+
+[node name="DebugDraw3D" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_6bey7")
+metadata/_edit_use_anchors_ = true
+
+[node name="Countdown" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ibman")
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_vrpsj")
