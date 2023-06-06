@@ -32,7 +32,6 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
-	# if synchronizer.is_multiplayer_authority():
 	if get_tree().get_multiplayer().is_server():
 		if event.is_action_pressed("start_countdown"):
 			start_countdown()

@@ -181,11 +181,6 @@ func _physics_process(delta):
 	synchronizer.frameColor = frameColor
 	synchronizer.timeTrialState = timeTrialState
 
-	# synchronizer.currentCheckPoint = currentCheckPoint
-	# synchronizer.nrCheckpoints = nrCheckpoints
-	# synchronizer.nrLaps = nrLaps
-	# synchronizer.currentLap = currentLap
-
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		recalculateSpawnPositions()
 		linear_velocity *= Vector3.UP
@@ -446,6 +441,9 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
+					accelerationInput = 0
+					steeringInput = 0
+					driftInput = 0
 			
 
 func onStartLine_bodyExited(body: Node3D) -> void:

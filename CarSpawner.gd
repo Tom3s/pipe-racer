@@ -1,18 +1,23 @@
 extends Node3D
 
-@export_range(0, 4)
-var nrOfCars = 4
+# @export_range(0, 4)
+# var nrOfCars = 4
+
+class_name CarSpawner
 
 var FollowingCamera := preload("FollowingCamera.gd")
 var CarObjectScene := preload("Car.tscn")
 
 @export
-var nrLaps: int = 5
+var nrLaps: int = 3
 
 @export
 var nrCarsSpawned: int = 0
 
 func _ready():
+	pass
+
+func spawnForLocalGame(nrOfCars: int):
 	if nrOfCars == 1:
 		%VerticalSplitBottom.visible = false
 	
@@ -21,10 +26,8 @@ func _ready():
 		var car: CarRigidBody = CarObjectScene.instantiate()
 		car.frameColor = color
 		car.playerIndex = i + 1
-		car.global_transform.origin = Vector3(0, 0, i * 10)
-		# car.rotation_degrees.y = 90
-		car.respawnPosition = car.global_position
-		car.respawnRotation = car.global_rotation
+
+		car.respawnPosition = global_position
 
 		var cpSystem = %CheckPointSystem
 		for cp in cpSystem.get_children():
@@ -63,7 +66,6 @@ func _ready():
 			%VerticalSplitTop.add_child(viewPortContainer)
 		else:
 			%VerticalSplitBottom.add_child(viewPortContainer)
-
 
 func spawnCar(peer_id: int):
 	if peer_id == -1:

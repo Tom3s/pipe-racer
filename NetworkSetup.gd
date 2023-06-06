@@ -17,10 +17,10 @@ func _ready():
 	# get_tree().connect("connected_to_server", onConnectedToServer)
 
 	var createServerButton: Button = %MultiplayerConfig/CreateServer
-	createServerButton.pressed.connect(onCreateServerButton_Pressed)
+	createServerButton.button_up.connect(onCreateServerButton_Pressed)
 
 	var joinServerButton: Button = %MultiplayerConfig/JoinServer
-	joinServerButton.pressed.connect(onJoinServerButton_Pressed)
+	joinServerButton.button_up.connect(onJoinServerButton_Pressed)
 
 	deviceIpAddress.text = Network.ipAddress
 

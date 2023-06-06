@@ -20,8 +20,6 @@ Network="*res://Network.gd"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
 window/vsync/vsync_mode=0
 
 [input]

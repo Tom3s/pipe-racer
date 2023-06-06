@@ -15,7 +15,7 @@ func _ready():
 	car = get_parent()
 
 func _input(event):
-	if synchronizer.is_multiplayer_authority():
+	if synchronizer.is_multiplayer_authority() or get_tree().get_multiplayer().is_server():
 		var steering = Input.get_axis(player_prefix + "turn_right", player_prefix + "turn_left")
 		var acceleration = Input.get_axis(player_prefix + "accelerate", player_prefix + "break")
 		if car.timeTrialState == car.TimeTrialState.COUNTDOWN || car.timeTrialState == car.TimeTrialState.FINISHED:

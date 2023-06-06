@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=11 format=3 uid="uid://b45crncrhwh8b"]
 
 [ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="1_th3py"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_7nkat"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dbysb8dy0gxal" path="res://StartLine.tscn" id="6_bjjp4"]
 [ext_resource type="ArrayMesh" uid="uid://bq25vv7y8h2k7" path="res://MarioKart/MarioCircuitMesh.tres" id="6_h0iae"]
 [ext_resource type="PackedScene" uid="uid://bdvqfwasst8ko" path="res://CheckPointSystem.tscn" id="7_38krf"]
+[ext_resource type="PackedScene" uid="uid://c0bjc4qk7b5e1" path="res://Menu/MainMenu.tscn" id="8_i47lq"]
 [ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="8_mel7x"]
 [ext_resource type="PackedScene" uid="uid://ca7gqgiralhwj" path="res://NetworkSetup.tscn" id="9_ejah4"]
 
@@ -65,8 +66,11 @@ unique_name_in_owner = true
 [node name="CheckPointSystem" parent="." instance=ExtResource("7_38krf")]
 unique_name_in_owner = true
 
+[node name="MainMenu" parent="." instance=ExtResource("8_i47lq")]
+
 [node name="NetworkSetup" parent="." instance=ExtResource("9_ejah4")]
 unique_name_in_owner = true
+mouse_filter = 2
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://Car.tscn")

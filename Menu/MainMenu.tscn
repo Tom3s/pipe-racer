@@ -1,0 +1,116 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0bjc4qk7b5e1"]
+
+[ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
+[ext_resource type="Gradient" uid="uid://bw08j2j2rodnd" path="res://Menu/fireGradient.tres" id="1_ow1n5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4d38d"]
+noise_type = 5
+frequency = 0.0092
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fiuws"]
+width = 2048
+height = 2048
+color_ramp = ExtResource("1_ow1n5")
+noise = SubResource("FastNoiseLite_4d38d")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8nrm6")
+
+[node name="SelectMode" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayLocal" type="Button" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = -55.0
+offset_right = 5.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Local"
+
+[node name="SelectNrPlayers" type="OptionButton" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = -55.0
+offset_right = 69.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+item_count = 4
+selected = 1
+popup/item_0/text = "1"
+popup/item_0/id = 1
+popup/item_1/text = "2"
+popup/item_1/id = 2
+popup/item_2/text = "3"
+popup/item_2/id = 3
+popup/item_3/text = "4"
+popup/item_3/id = 4
+
+[node name="PlayOnline" type="Button" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 15.0
+offset_right = 69.0
+offset_bottom = 57.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Online"
+
+[node name="Label" type="Label" parent="SelectMode"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 58.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Pipe Racer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Background" type="TextureRect" parent="SelectMode"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -704.0
+offset_top = -844.0
+offset_right = 704.0
+offset_bottom = 844.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("NoiseTexture2D_fiuws")
+stretch_mode = 3
