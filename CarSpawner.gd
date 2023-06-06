@@ -18,6 +18,7 @@ func _ready():
 	pass
 
 func spawnForLocalGame(nrOfCars: int):
+	nrCarsSpawned = nrOfCars
 	if nrOfCars == 1:
 		%VerticalSplitBottom.visible = false
 	
@@ -38,6 +39,8 @@ func spawnForLocalGame(nrOfCars: int):
 		
 		%UniversalCanvas/Countdown.countdownFinished.connect(car.onCountdown_finished)
 
+		car.finishedRacing.connect(onCarFinishedRacing)
+
 		car.respawn()
 		add_child(car)
 		var camera = FollowingCamera.new(car)
@@ -55,6 +58,7 @@ func spawnForLocalGame(nrOfCars: int):
 		viewPort.add_child(canvasLayer)
 
 		var debugLabel = DebugLabel.new()
+		debugLabel.nrLaps = nrLaps
 		canvasLayer.add_child(debugLabel)
 
 		car.debugLabel = debugLabel
@@ -79,8 +83,7 @@ func spawnCar(peer_id: int):
 	car.name = str(peer_id)
 	car.frameColor = color
 
-	# car.get_node("MultiplayerSynchronizer").set_multiplayer_authority(peer_id, true)
-
+	car.finishedRacing.connect(onCarFinishedRacing)
 
 	car.playerIndex = 1
 	var nrPeers = get_tree().get_multiplayer().get_peers().size()
@@ -103,9 +106,14 @@ func spawnCar(peer_id: int):
 	
 	nrCarsSpawned += 1
 	
-	
-	
-	
+
+var finishedCars: int = 0
+
+func onCarFinishedRacing():
+	finishedCars += 1
+	if finishedCars == nrCarsSpawned:
+		get_parent().get_node("%LeaderboardUI/%List").refreshLists()
+		get_parent().get_node("%LeaderboardUI/%List").show()
 
 # func _process(delta):
 # 	print("nr cars: ", nrCarsSpawned)

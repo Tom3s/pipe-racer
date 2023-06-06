@@ -79,6 +79,11 @@ const FRICTION = 0.34
 @onready
 var synchronizer = %MultiplayerSynchronizer
 
+
+
+signal finishedRacing()
+
+
 func _ready():
 	synchronizer.set_multiplayer_authority(name.to_int())
 
@@ -129,6 +134,7 @@ func _ready():
 		viewPort.add_child(canvasLayer)
 
 		debugLabel = DebugLabel.new()
+		debugLabel.nrLaps = nrLaps
 		canvasLayer.add_child(debugLabel)
 
 		debugLabel = debugLabel
@@ -184,6 +190,8 @@ func _physics_process(delta):
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		recalculateSpawnPositions()
 		linear_velocity *= Vector3.UP
+		# TODO: figure this out properly
+		debugLabel.nrLaps = nrLaps
 
 
 
@@ -444,6 +452,9 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 					accelerationInput = 0
 					steeringInput = 0
 					driftInput = 0
+					Leaderboard.addScoreTotalTime(debugLabel.getTotalTime())
+					Leaderboard.addScoreBestLap(debugLabel.getBestLap())
+					finishedRacing.emit()
 			
 
 func onStartLine_bodyExited(body: Node3D) -> void:
