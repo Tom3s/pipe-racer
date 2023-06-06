@@ -12,7 +12,6 @@ grow_vertical = 2
 
 [node name="List" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,9 +37,10 @@ unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 auto_height = true
 item_count = 1
-item_0/text = "asdasdasd dasd"
+item_0/text = "Loading..."
 item_0/selectable = false
 
 [node name="TotalTimesList" type="ItemList" parent="List/HBoxContainer"]
@@ -50,5 +50,5 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 auto_height = true
 item_count = 1
-item_0/text = "asdasdasd dasd"
+item_0/text = "Loading..."
 item_0/selectable = false

@@ -19,7 +19,10 @@ func fetchBestLaps():
 
 func onGetScoresTotalTimes_completed(_result, _response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	print(json)
+	# print(json)
+	if json == null:
+		fetchBestTotalTimes()
+		return
 	var result = json["dreamlo"]["leaderboard"]["entry"]
 	if result is Array:
 		totalTimes = result
@@ -28,21 +31,25 @@ func onGetScoresTotalTimes_completed(_result, _response_code, _headers, body):
 
 	var totalTimesList: ItemList = %TotalTimesList
 	totalTimesList.clear()
+	var placement = 1
 	for entry in totalTimes:
 		# entry = entry["entry"]
 		var playerName = entry["name"]
 		var score = get_time_string_from_ticks(-(entry["score"]).to_int())
 		var date = entry["date"].split(" ")[0]
 
-		var row = playerName + " - " + score + " - " + date
+		var row = placement + "." + playerName + " - " + score + " - " + date
 		if entry["text"] != "":
-			row += "(" + entry["text"] + ")"
+			row += " (" + entry["text"] + ")"
 		
 		totalTimesList.add_item(row, null, false)
 
 func onGetScoresBestLaps_completed(_result, _response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	print(json)
+	# print(json)
+	if json == null:
+		fetchBestLaps()
+		return
 	var result = json["dreamlo"]["leaderboard"]["entry"]
 	if result is Array:
 		bestLaps = result
@@ -51,15 +58,16 @@ func onGetScoresBestLaps_completed(_result, _response_code, _headers, body):
 
 	var bestLapsList: ItemList = %BestLapsList
 	bestLapsList.clear()
+	var placement = 1
 	for entry in bestLaps:
 		# entry = entry["entry"]
 		var playerName = entry["name"]
 		var score = get_time_string_from_ticks(-(entry["score"]).to_int())
 		var date = entry["date"].split(" ")[0]
 
-		var row = playerName + " - " + score + " - " + date
+		var row = placement + "." + playerName + " - " + score + " - " + date
 		if entry["text"] != "":
-			row += "(" + entry["text"] + ")"
+			row += " (" + entry["text"] + ")"
 		
 		bestLapsList.add_item(row, null, false)
 
@@ -73,6 +81,7 @@ func _ready():
 	timer.one_shot = false
 	timer.timeout.connect(refreshLists)
 	timer.start()
+	timer.paused = !visible
 	# refreshLists()
 
 func refreshLists():

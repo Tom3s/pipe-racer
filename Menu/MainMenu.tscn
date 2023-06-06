@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=7 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Gradient" uid="uid://bw08j2j2rodnd" path="res://Menu/fireGradient.tres" id="1_ow1n5"]
+[ext_resource type="Script" path="res://Menu/LineEdit.gd" id="3_y78nt"]
+[ext_resource type="Script" path="res://Menu/ColorPickerButton.gd" id="4_rfw21"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4d38d"]
 noise_type = 5
@@ -114,3 +116,36 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("NoiseTexture2D_fiuws")
 stretch_mode = 3
+
+[node name="LineEdit" type="LineEdit" parent="SelectMode"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -99.0
+offset_top = 213.0
+offset_right = 71.0
+offset_bottom = 244.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Nickname"
+script = ExtResource("3_y78nt")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="SelectMode"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 71.0
+offset_top = 213.0
+offset_right = 103.0
+offset_bottom = 244.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.509804, 0.647059, 1)
+edit_alpha = false
+script = ExtResource("4_rfw21")

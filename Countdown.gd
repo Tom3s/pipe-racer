@@ -5,7 +5,7 @@ signal countdownFinished()
 @export
 var countdownStartTime: float = 0
 @export
-var countdownTime: float = 1
+var countdownTime: float = 3
 
 @export
 var countingDown: bool = false

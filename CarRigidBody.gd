@@ -79,7 +79,7 @@ const FRICTION = 0.34
 @onready
 var synchronizer = %MultiplayerSynchronizer
 
-
+var playerName: String = Playerstats.PLAYER_NAME
 
 signal finishedRacing()
 
@@ -111,8 +111,8 @@ func _ready():
 	if respawnPosition == null:
 		respawnPosition = global_transform.origin
 
-	# physicsMaterial = PhysicsMaterial.new()
-	# physicsMaterial.friction = FRICTION
+	if playerIndex != 1:
+		playerName += "_" + str(playerIndex)
 
 	set_physics_process(true)
 
@@ -452,8 +452,9 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 					accelerationInput = 0
 					steeringInput = 0
 					driftInput = 0
-					Leaderboard.addScoreTotalTime(debugLabel.getTotalTime())
-					Leaderboard.addScoreBestLap(debugLabel.getBestLap())
+					if synchronizer.is_multiplayer_authority() || get_tree().get_multiplayer().is_server():
+						Leaderboard.addScoreTotalTime(debugLabel.getTotalTime(), playerName)
+						Leaderboard.addScoreBestLap(debugLabel.getBestLap(), playerName)
 					finishedRacing.emit()
 			
 
