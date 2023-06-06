@@ -38,11 +38,12 @@ func onGetScoresTotalTimes_completed(_result, _response_code, _headers, body):
 		var score = get_time_string_from_ticks(-(entry["score"]).to_int())
 		var date = entry["date"].split(" ")[0]
 
-		var row = placement + "." + playerName + " - " + score + " - " + date
+		var row = str(placement) + "." + playerName + " - " + score + " - " + date
 		if entry["text"] != "":
 			row += " (" + entry["text"] + ")"
 		
 		totalTimesList.add_item(row, null, false)
+		placement += 1
 
 func onGetScoresBestLaps_completed(_result, _response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
@@ -65,11 +66,12 @@ func onGetScoresBestLaps_completed(_result, _response_code, _headers, body):
 		var score = get_time_string_from_ticks(-(entry["score"]).to_int())
 		var date = entry["date"].split(" ")[0]
 
-		var row = placement + "." + playerName + " - " + score + " - " + date
+		var row = str(placement) + "." + playerName + " - " + score + " - " + date
 		if entry["text"] != "":
 			row += " (" + entry["text"] + ")"
 		
 		bestLapsList.add_item(row, null, false)
+		placement += 1
 
 var timer = null
 
@@ -82,7 +84,10 @@ func _ready():
 	timer.timeout.connect(refreshLists)
 	timer.start()
 	timer.paused = !visible
-	# refreshLists()
+
+	refreshLists()
+
+	%CloseButton.button_up.connect(func(): self.hide())
 
 func refreshLists():
 	fetchBestTotalTimes()

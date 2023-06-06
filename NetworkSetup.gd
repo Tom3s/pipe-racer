@@ -24,6 +24,8 @@ func _ready():
 
 	deviceIpAddress.text = Network.ipAddress
 
+	%BackButton.button_up.connect(onBackButton_pressed)
+
 func onPlayerConnected(id: int):
 	# print("Player connected: " + str(id))
 
@@ -70,3 +72,6 @@ func onJoinServerButton_Pressed():
 	Network.joinServer(func(): spawner.spawnCar(-1))
 
 	
+func onBackButton_pressed():
+	get_parent().get_node("%MainMenu/%SelectMode").show()
+	%MultiplayerConfig.hide()

@@ -90,6 +90,22 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Online"
 
+[node name="ViewScores" type="Button" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 75.0
+offset_right = 69.0
+offset_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "LeaderBoard"
+
 [node name="Label" type="Label" parent="SelectMode"]
 layout_mode = 1
 anchors_preset = 10

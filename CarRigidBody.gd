@@ -39,6 +39,9 @@ var steeringInput: float = 0
 var respawnPosition: Vector3
 var respawnRotation: Vector3
 
+var spawnPosition: Vector3
+var spawnRotation: Vector3
+
 var should_respawn: bool = false
 
 const TIRE_RADIUS = 0.375
@@ -225,6 +228,7 @@ func recalculateSpawnPositions():
 	
 	for index in cars.size():
 		cars[index].respawnPosition = cars[0].respawnPosition + Vector3(0, 0, index * 10)	
+		cars[index].spawnPosition = cars[index].respawnPosition
 
 	# for index in get_parent().get_child_count():
 	# 	get_parent().get_child(index).respawn()
@@ -488,6 +492,21 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 func onCountdown_finished() -> void:
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		timeTrialState = TimeTrialState.WAITING
+		spawnPosition = respawnPosition
+		spawnRotation = respawnRotation
+
+func reset():
+	timeTrialState = TimeTrialState.COUNTDOWN
+	respawnPosition = spawnPosition
+	respawnRotation = spawnRotation
+	respawn()
+
+	currentCheckPoint = 0
+	currentLap = 0
+
+	debugLabel.reset()
+
+	
 			
 		
 

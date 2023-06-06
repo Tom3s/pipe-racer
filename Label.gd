@@ -60,3 +60,10 @@ func getTotalTime() -> int:
 
 func getBestLap() -> int:
 	return times.min()
+
+func reset() -> void:
+	timeTrialStart = -1
+	timeTrialEnd = -1
+	times = []
+	currentLap = 1
+	incorrectCheckPoint = false

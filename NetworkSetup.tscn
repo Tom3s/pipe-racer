@@ -90,6 +90,22 @@ mouse_filter = 2
 texture = SubResource("NoiseTexture2D_s0c3n")
 stretch_mode = 3
 
+[node name="BackButton" type="Button" parent="MultiplayerConfig"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 166.0
+offset_right = 60.0
+offset_bottom = 213.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Go Back"
+
 [node name="ClientCanvas" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 4

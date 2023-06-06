@@ -31,12 +31,22 @@ func _physics_process(delta):
 		text = "GO!" if (countdownStartTime + countdownTime * 1000 - Time.get_ticks_msec()) >= -1000 else ""
 
 
-func _unhandled_input(event):
+func _input(event):
 	if get_tree().get_multiplayer().is_server():
-		if event.is_action_pressed("start_countdown"):
+		if event.is_action_pressed("start_countdown") && countdownStartTime == 0:
 			start_countdown()
+		if event.is_action_pressed("reset_race"):
+			get_parent().get_parent().get_node("%PauseMenu").onRestartButton_pressed()
+		if event.is_action_pressed("pause"):
+			var pauseMenuButtons = get_parent().get_parent().get_node("%PauseMenu/%Buttons")
+			pauseMenuButtons.visible = !pauseMenuButtons.visible
 
 # @rpc
 func start_countdown():
 	countdownStartTime = Time.get_ticks_msec()
 	countingDown = true
+
+func reset():
+	countdownStartTime = 0
+	countingDown = false
+	text = ""
