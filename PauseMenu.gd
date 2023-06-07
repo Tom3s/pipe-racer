@@ -27,6 +27,6 @@ func onExitButton_pressed():
 	
 	%Buttons.hide()
 
-	get_tree().get_multiplayer().multiplayer_peer = null
+	# get_tree().get_multiplayer().multiplayer_peer = null
 
 	get_parent().get_node("%MainMenu/%SelectMode").show()

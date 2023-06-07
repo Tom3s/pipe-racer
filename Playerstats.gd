@@ -47,4 +47,9 @@ func loadFromFile() -> void:
 		var jsonData = JSON.parse_string(jsonText)
 
 		PLAYER_NAME = jsonData["PLAYER_NAME"]
-		PLAYER_COLOR = Color.from_string(jsonData["PLAYER_COLOR"], Color.TURQUOISE)
+		print(jsonData["PLAYER_COLOR"])
+		PLAYER_COLOR = Color.html(jsonData["PLAYER_COLOR"])
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		saveToFile()

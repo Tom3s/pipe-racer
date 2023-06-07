@@ -21,6 +21,8 @@ func spawnForLocalGame(nrOfCars: int):
 	nrCarsSpawned = nrOfCars
 	if nrOfCars == 1:
 		%VerticalSplitBottom.visible = false
+	else:
+		%VerticalSplitBottom.visible = true
 	
 	for i in nrOfCars:
 		var color = Color(randf(), randf(), randf())
@@ -31,6 +33,8 @@ func spawnForLocalGame(nrOfCars: int):
 		car.playerIndex = i + 1
 
 		car.respawnPosition = global_position
+		car.spawnPosition = car.respawnPosition
+
 
 		var cpSystem = %CheckPointSystem
 		for cp in cpSystem.get_children():
@@ -94,6 +98,7 @@ func spawnCar(peer_id: int):
 	print("Friends of peer ", peer_id, ": ", nrPeers)
 	# car.global_transform.origin = Vector3(0, 0, 10 * nrPeers)
 	car.respawnPosition = global_position + Vector3(0, 0, nrPeers * 10)
+	car.spawnPosition = car.respawnPosition
 	# print("respawnPosition of ", peer_id, ": ", car.respawnPosition)
 	car.respawnRotation = car.global_rotation
 
