@@ -81,5 +81,5 @@ mouse_filter = 2
 unique_name_in_owner = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://Car.tscn")
+_spawnable_scenes = PackedStringArray("res://Car.tscn", "res://UniversalCanvas.tscn")
 spawn_path = NodePath("../CarSpawner")
