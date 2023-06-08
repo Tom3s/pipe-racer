@@ -31,7 +31,7 @@ func _physics_process(delta):
 		text = "GO!" if (countdownStartTime + countdownTime * 1000 - Time.get_ticks_msec()) >= -1000 else ""
 
 
-func _input(event):
+func _unhandled_input(event):
 	if get_tree().get_multiplayer().is_server():
 		if event.is_action_pressed("start_countdown") && countdownStartTime == 0:
 			start_countdown()
