@@ -1,7 +1,7 @@
 extends Node
 
-var DEFAULT_PORT = 80
-var MAX_CLIENTS = 4
+var DEFAULT_PORT = 7777
+var MAX_CLIENTS = 8
 
 var server = null
 var client = null
@@ -42,6 +42,7 @@ func joinServer(_callback: Callable = func(): return) -> void:
 	client = ENetMultiplayerPeer.new()
 	client.create_client(ipAddress, DEFAULT_PORT)
 	get_tree().get_multiplayer().multiplayer_peer = client
+	print("Joining server at " + ipAddress + ":" + str(DEFAULT_PORT))
 
 func connectedToServer() -> void:
 	print("Connected to server")
