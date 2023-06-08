@@ -7,7 +7,7 @@ var multiplayerConfigUI = %MultiplayerConfig
 var serverIpAddress = get_node("%MultiplayerConfig/ServerIpAddress")
 
 @onready
-var deviceIpAddress = get_node("%ClientCanvas/DeviceIpAdress")
+var deviceIpAddress = get_node("%DeviceIpAdress")
 
 func _ready():
 	# get_tree().connect("network_peer_connected", onPlayerConnected)
