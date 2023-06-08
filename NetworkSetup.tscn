@@ -25,7 +25,6 @@ script = ExtResource("1_whtda")
 
 [node name="MultiplayerConfig" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 z_index = 5
 layout_mode = 1
 anchors_preset = 15
@@ -106,17 +105,20 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Go Back"
 
-[node name="ClientCanvas" type="CanvasLayer" parent="."]
+[node name="DeviceIpAdress" type="Label" parent="MultiplayerConfig"]
 unique_name_in_owner = true
-layer = 4
-
-[node name="DeviceIpAdress" type="Label" parent="ClientCanvas"]
+layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -48.0
+offset_top = -70.0
 grow_horizontal = 2
 grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ClientCanvas" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 4
+visible = false
