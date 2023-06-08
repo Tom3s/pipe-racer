@@ -1,7 +1,7 @@
 extends Node
 
-var DEFAULT_PORT = 80
-var MAX_CLIENTS = 4
+var DEFAULT_PORT = 7777
+var MAX_CLIENTS = 8
 
 var server = null
 var client = null

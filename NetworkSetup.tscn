@@ -25,6 +25,7 @@ script = ExtResource("1_whtda")
 
 [node name="MultiplayerConfig" type="Control" parent="."]
 unique_name_in_owner = true
+visible = false
 z_index = 5
 layout_mode = 1
 anchors_preset = 15
