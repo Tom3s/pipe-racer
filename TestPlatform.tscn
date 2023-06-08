@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://b45crncrhwh8b"]
+[gd_scene load_steps=12 format=3 uid="uid://b45crncrhwh8b"]
 
 [ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="1_th3py"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_7nkat"]
 [ext_resource type="PackedScene" uid="uid://bdgchw45sjh3m" path="res://CarSpawner.tscn" id="4_oewlr"]
 [ext_resource type="PackedScene" uid="uid://dbysb8dy0gxal" path="res://StartLine.tscn" id="6_bjjp4"]
-[ext_resource type="ArrayMesh" uid="uid://bq25vv7y8h2k7" path="res://MarioKart/MarioCircuitMesh.tres" id="6_h0iae"]
 [ext_resource type="PackedScene" uid="uid://bdvqfwasst8ko" path="res://CheckPointSystem.tscn" id="7_38krf"]
 [ext_resource type="PackedScene" uid="uid://c0bjc4qk7b5e1" path="res://Menu/MainMenu.tscn" id="8_i47lq"]
 [ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="8_mel7x"]
@@ -28,7 +27,6 @@ visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D4"]
 transform = Transform3D(1.5, 0, 0, 0, -6.55671e-08, -1.5, 0, 1.5, -6.55671e-08, 0, 0, 0)
-mesh = ExtResource("6_h0iae")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D4"]
 transform = Transform3D(1.5, 0, 0, 0, -6.55671e-08, -1.5, 0, 1.5, -6.55671e-08, 0, 0, 0)

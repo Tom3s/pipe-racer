@@ -194,7 +194,8 @@ func _physics_process(delta):
 		recalculateSpawnPositions()
 		linear_velocity *= Vector3.UP
 		# TODO: figure this out properly
-		debugLabel.nrLaps = nrLaps
+		if debugLabel != null:
+			debugLabel.nrLaps = nrLaps
 
 
 
