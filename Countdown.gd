@@ -37,9 +37,9 @@ func _unhandled_input(event):
 			start_countdown()
 		if event.is_action_pressed("reset_race"):
 			get_parent().get_parent().get_node("%PauseMenu").onRestartButton_pressed()
-		if event.is_action_pressed("pause"):
-			var pauseMenuButtons = get_parent().get_parent().get_node("%PauseMenu/%Buttons")
-			pauseMenuButtons.visible = !pauseMenuButtons.visible
+	if event.is_action_pressed("pause"):
+		var pauseMenuButtons = get_parent().get_parent().get_node("%PauseMenu/%Buttons")
+		pauseMenuButtons.visible = !pauseMenuButtons.visible
 
 # @rpc
 func start_countdown():
