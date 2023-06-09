@@ -156,6 +156,12 @@ func get_point_velocity (point :Vector3) -> Vector3:
 @export
 var ENGINE_SOUND_PITCH_FACTOR: float = 3.0
 
+@export
+var gear1Speed = 1
+
+@export
+var gear6Speed = 150
+
 func _physics_process(delta):
 	calculate_forces(delta)
 
@@ -178,10 +184,12 @@ func _physics_process(delta):
 	
 	if linear_velocity.length() < SOUND_SPEED_LIMIT:
 		# %CarEngineSound.tempo = 120
-		%CarEngineSound.targetPitchScale = 0.75
+		# %CarEngineSound.targetPitchScale = 0.75
+		%CarEngineSound.playingIdle = true
 	else:
 		# %CarEngineSound.tempo = remap(linear_velocity.length(), 1, 75, 170, 170 * ENGINE_SOUND_PITCH_FACTOR)
-		%CarEngineSound.targetPitchScale = remap(linear_velocity.length(), 1, 75, 1, ENGINE_SOUND_PITCH_FACTOR)
+		%CarEngineSound.targetPitchScale = max(0, remap(linear_velocity.length(), SOUND_SPEED_LIMIT, gear6Speed, 1, 4))
+		%CarEngineSound.playingIdle = false
 	
 	synchronizer.position = position
 	synchronizer.rotation = rotation
@@ -241,12 +249,14 @@ func recalculateSpawnPositions():
 
 func calculate_forces(delta) -> void:
 	# physics_material_override.friction = FRICTION
+	var springOvercompressionCorrection = Vector3.ZERO
 	for index in 4:
 		var tireRayCast = raycasts[index]
 		var tire = tires[index]
 		if tireRayCast.is_colliding():
 			# physics_material_override.friction =  0
-			calculate_suspension(delta, tireRayCast, tire, index)
+			var overCompressionForce = calculate_suspension(delta, tireRayCast, tire, index)
+			springOvercompressionCorrection = springOvercompressionCorrection if springOvercompressionCorrection.length() > overCompressionForce.length() else overCompressionForce
 			calculate_steering(delta, tireRayCast, tire, index)
 			calculate_engine(delta, tireRayCast, tire, index)
 		else:
@@ -263,7 +273,8 @@ func calculate_forces(delta) -> void:
 			# debugDraw.accelerationVectors[index] = Vector3.FORWARD
 
 			tire.rotate_x(accelerationInput / TIRE_RADIUS)
-			
+	# apply_central_force(springOvercompressionCorrection)
+	global_position += springOvercompressionCorrection
 		# if index in [2, 3]:
 		# 	tire.global_transform.origin += global_transform.basis.z * -0.65
 
@@ -281,10 +292,14 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		var raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
 		var springDirection = tireRayCast.global_transform.basis.y
 
+		var overcompressedSpringForce = Vector3.ZERO
+		# TODO uncomment this for less ground clipping
 		if raycastDistance <= SPRING_MAX_COMPRESSION:
-			# force += linear_velocity.dot(springDirection)
-			global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
-			raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
+		# 	global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
+			# raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
+			overcompressedSpringForce = springDirection * ( (SPRING_MAX_COMPRESSION - raycastDistance)) #linear_velocity.dot(springDirection) +
+
+
 		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
 		var tireVelocity = get_point_velocity(tireRayCast.global_transform.origin) * delta
 
@@ -311,6 +326,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		
 		# var tireFinalPosition = tire.original_position + Vector3.DOWN * (raycastDistance - 0.28)
 		# tire.position = tireFinalPosition
+		# apply_force(overcompressedSpringForce, tireRayCast.global_transform.origin - global_transform.origin)
+		return overcompressedSpringForce
 
 
 

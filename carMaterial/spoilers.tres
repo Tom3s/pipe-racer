@@ -104,6 +104,8 @@ operator = 3
 
 [resource]
 code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
 uniform vec4 Base : source_color = vec4(0.000000, 0.125354, 0.296098, 1.000000);
 uniform sampler2D tex_frg_14;
 uniform float FloatParameter : hint_range(0.00499999988824, 0.01999999955297, 0.00499999988824) = 0.10000000149012;

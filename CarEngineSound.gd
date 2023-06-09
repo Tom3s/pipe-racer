@@ -11,29 +11,83 @@ var GEAR_SHIFT_NEXT_STAGE: float = 0.2
 
 var prevGearStage = 0
 var targetPitchScale: float = 1
+var playingIdle = false
 
+var gearPlayers: Array = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# playing = true
-	play()
+	# play()
 	set_physics_process(true)
+	gearPlayers = [GEAR2, GEAR3, GEAR4, GEAR5, GEAR6]
+	# GEAR2.play()
 	pass # Replace with function body.
 
+@onready
+var IDLE = %Idle
 
+@onready
+var GEAR1 = %Gear1
+
+@onready
+var GEAR2 = %Gear2
+
+@onready
+var GEAR3 = %Gear3
+
+@onready
+var GEAR4 = %Gear4
+
+@onready
+var GEAR5 = %Gear5
+
+@onready
+var GEAR6 = %Gear6
+
+@export
+var PITCH_DIVISION_FACTOR: float = 2
+
+@export
+var GEAR_SHIFT_COOLDOWN_DEFAULT: float = 5
+
+var GEAR_SHIFT_COOLDOWN: float = 0
+
+var currentGearStage: int
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if playing:
-		pitch_scale = lerp(pitch_scale, targetPitchScale, GEAR_SHIFT_SPEED / max(1, prevGearStage))
-		pass
+	currentGearStage = min(floor(targetPitchScale), 4)
+	for gear in gearPlayers:
+		gear.pitch_scale = (targetPitchScale - int(targetPitchScale)) / PITCH_DIVISION_FACTOR + 1
 
-	if floor(targetPitchScale / GEAR_STAGE) > prevGearStage:
-		# var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
-		# tween.tween_property(self, "pitch_scale", pitch_scale + GEAR_SHIFT_NEXT_STAGE, GEAR_SHIFT_TIME_FACTOR).from(pitch_scale * 0.5)
-		pitch_scale *= GEAR_SHIFT_PULLBACK
-	elif floor(targetPitchScale / GEAR_STAGE) < prevGearStage:
-		pitch_scale += (1 - GEAR_SHIFT_PULLBACK) * pitch_scale / 2
-	
-	volume_db = -8 + clamp(remap(pitch_scale, 1, 2, 0, 1), 0, 1) * 12
+	if playingIdle:
+		if !IDLE.playing:
+			IDLE.play()
+			for gear in gearPlayers:
+				gear.stop()
+	elif !playingIdle && IDLE.playing:
+		IDLE.stop()
+		gearPlayers[0].play()
+	else:
+		if currentGearStage > prevGearStage && GEAR_SHIFT_COOLDOWN <= 0:
+			# gearPlayers[currentGearStage - 2].stop()
+			# gearPlayers[currentGearStage - 1].play() 
+			for i in gearPlayers.size():
+				if i == currentGearStage - 1:
+					gearPlayers[i].play()
+				else:
+					gearPlayers[i].stop()
+			GEAR_SHIFT_COOLDOWN = GEAR_SHIFT_COOLDOWN_DEFAULT
+		elif currentGearStage < prevGearStage && GEAR_SHIFT_COOLDOWN <= 0:
+			# gearPlayers[currentGearStage].stop()
+			# gearPlayers[currentGearStage - 1].play()
+			for i in gearPlayers.size():
+				if i == currentGearStage - 1:
+					gearPlayers[i].play()
+				else:
+					gearPlayers[i].stop()
+			GEAR_SHIFT_COOLDOWN = GEAR_SHIFT_COOLDOWN_DEFAULT
 
-	prevGearStage = floor(targetPitchScale / GEAR_STAGE)
-	pass
+
+	GEAR_SHIFT_COOLDOWN -= delta
+
+	prevGearStage = currentGearStage
