@@ -44,42 +44,21 @@ var GEAR5 = %Gear5
 @onready
 var GEAR6 = %Gear6
 
+@export
+var PITCH_DIVISION_FACTOR: float = 2
+
+@export
+var GEAR_SHIFT_COOLDOWN_DEFAULT: float = 5
+
+var GEAR_SHIFT_COOLDOWN: float = 0
+
 var currentGearStage: int
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	# if playing:
-	# pitch_scale = lerp(pitch_scale, targetPitchScale, GEAR_SHIFT_SPEED / max(1, prevGearStage))
-
-	# currentGearStage = floor(targetPitchScale / GEAR_STAGE)
 	currentGearStage = min(floor(targetPitchScale), 4)
 	for gear in gearPlayers:
-		# gear.stop()
-		gear.pitch_scale = targetPitchScale - int(targetPitchScale) + 1
-		# gear.volume_db = volume_db
+		gear.pitch_scale = (targetPitchScale - int(targetPitchScale)) / PITCH_DIVISION_FACTOR + 1
 
-	# if currentGearStage > prevGearStage && currentGearStage >= 2:
-	# 	# var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUINT)
-	# 	# tween.tween_property(self, "pitch_scale", pitch_scale + GEAR_SHIFT_NEXT_STAGE, GEAR_SHIFT_TIME_FACTOR).from(pitch_scale * 0.5)
-	# 	# currentGearStage = prevGearStage + 1 // currentGearStage : 1 - 7 => prevGearStage : 0 - 6
-	# 	pitch_scale *= GEAR_SHIFT_PULLBACK
-	# 	gearPlayers[currentGearStage - 2].stop()
-	# 	gearPlayers[currentGearStage - 1].play() 
-
-	# elif currentGearStage < prevGearStage && currentGearStage >= 1:
-	# 	pitch_scale += (1 - GEAR_SHIFT_PULLBACK) * pitch_scale / 2
-	# 	# currentGearStage = prevGearStage - 1
-	# 	gearPlayers[currentGearStage].stop()
-	# 	gearPlayers[currentGearStage - 1].play()
-	
-	# volume_db = -8 + clamp(remap(pitch_scale, 1, 2, 0, 1), 0, 1) * 12
-	
-	# if targetPitchScale <= 0.75:
-	# 	for gear in gearPlayers:
-	# 		gear.stop()
-	# 	IDLE.play()
-	# elif IDLE.playing:
-	# 	IDLE.stop()
-	# 	GEAR1.play()
 	if playingIdle:
 		if !IDLE.playing:
 			IDLE.play()
@@ -89,7 +68,7 @@ func _physics_process(delta):
 		IDLE.stop()
 		gearPlayers[0].play()
 	else:
-		if currentGearStage > prevGearStage:
+		if currentGearStage > prevGearStage && GEAR_SHIFT_COOLDOWN <= 0:
 			# gearPlayers[currentGearStage - 2].stop()
 			# gearPlayers[currentGearStage - 1].play() 
 			for i in gearPlayers.size():
@@ -97,7 +76,8 @@ func _physics_process(delta):
 					gearPlayers[i].play()
 				else:
 					gearPlayers[i].stop()
-		elif currentGearStage < prevGearStage:
+			GEAR_SHIFT_COOLDOWN = GEAR_SHIFT_COOLDOWN_DEFAULT
+		elif currentGearStage < prevGearStage && GEAR_SHIFT_COOLDOWN <= 0:
 			# gearPlayers[currentGearStage].stop()
 			# gearPlayers[currentGearStage - 1].play()
 			for i in gearPlayers.size():
@@ -105,7 +85,9 @@ func _physics_process(delta):
 					gearPlayers[i].play()
 				else:
 					gearPlayers[i].stop()
+			GEAR_SHIFT_COOLDOWN = GEAR_SHIFT_COOLDOWN_DEFAULT
 
+
+	GEAR_SHIFT_COOLDOWN -= delta
 
 	prevGearStage = currentGearStage
-	pass
