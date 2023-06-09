@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://uobfgrtxmket"
+path="res://.godot/imported/enginge-gear1.wav-b9f62db1e377a9eba236633882258340.sample"
+
+[deps]
+
+source_file="res://Engine Sound/enginge-gear1.wav"
+dest_files=["res://.godot/imported/enginge-gear1.wav-b9f62db1e377a9eba236633882258340.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

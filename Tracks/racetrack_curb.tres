@@ -12,6 +12,8 @@ operator = 4
 
 [resource]
 code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
 
 
 
@@ -31,7 +33,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(60, 126.182)
 nodes/fragment/0/position = Vector2(660, 120)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_xtvq0")
 nodes/fragment/2/position = Vector2(-20, 120)
