@@ -9,8 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_bbs70"]
 [ext_resource type="Script" path="res://InputHandler.gd" id="6_56wu2"]
 [ext_resource type="Script" path="res://VisualRayCast.gd" id="6_vmnhn"]
-[ext_resource type="Shader" uid="uid://crgo2oc2gp05s" path="res://SmokeParticleShader.tres" id="9_02vrk"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="9_c4lag"]
+[ext_resource type="Shader" uid="uid://c4ook7wi6vv3" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
 [ext_resource type="Script" path="res://CarSyncronizer.gd" id="11_yulfi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_inc80"]
@@ -49,23 +49,19 @@ emission_box_extents = Vector3(0.3, 0.1, 0.1)
 spread = 0.0
 flatness = 1.0
 gravity = Vector3(0, 25, 0)
-angle_max = 660.0
 scale_max = 1.2
 scale_curve = SubResource("CurveTexture_og40x")
 color_ramp = SubResource("GradientTexture1D_a8a45")
 turbulence_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wg8bt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
 render_priority = 0
-shader = ExtResource("9_02vrk")
+shader = ExtResource("9_i4dcy")
 
-[sub_resource type="SphereMesh" id="SphereMesh_o1h5t"]
-lightmap_size_hint = Vector2i(17, 9)
-material = SubResource("ShaderMaterial_wg8bt")
-radius = 0.1
-height = 0.2
-radial_segments = 16
-rings = 16
+[sub_resource type="PlaneMesh" id="PlaneMesh_dhktc"]
+material = SubResource("ShaderMaterial_ggqdx")
+size = Vector2(0.2, 0.2)
+orientation = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_73hp7"]
 properties/0/path = NodePath(".:position")
@@ -201,11 +197,12 @@ script = ExtResource("3_hj1pj")
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/FrontLeftVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
-amount = 28
+emitting = false
+amount = 32
 lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_hyqd4")
-draw_pass_1 = SubResource("SphereMesh_o1h5t")
+draw_pass_1 = SubResource("PlaneMesh_dhktc")
 
 [node name="FrontRightVisualCast" type="RayCast3D" parent="Tires"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.475, 1.5)
@@ -219,11 +216,12 @@ script = ExtResource("3_hj1pj")
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/FrontRightVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.3, -0.3)
-amount = 28
+emitting = false
+amount = 32
 lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_hyqd4")
-draw_pass_1 = SubResource("SphereMesh_o1h5t")
+draw_pass_1 = SubResource("PlaneMesh_dhktc")
 
 [node name="BackLeftVisualCast" type="RayCast3D" parent="Tires"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.929, 0.475, -1.5)
@@ -237,11 +235,12 @@ script = ExtResource("3_hj1pj")
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/BackLeftVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
-amount = 28
+emitting = false
+amount = 32
 lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_hyqd4")
-draw_pass_1 = SubResource("SphereMesh_o1h5t")
+draw_pass_1 = SubResource("PlaneMesh_dhktc")
 
 [node name="BackRightVisualCast" type="RayCast3D" parent="Tires"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.475, -1.5)
@@ -255,11 +254,12 @@ script = ExtResource("3_hj1pj")
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/BackRightVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.3, -0.3)
-amount = 28
+emitting = false
+amount = 32
 lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_hyqd4")
-draw_pass_1 = SubResource("SphereMesh_o1h5t")
+draw_pass_1 = SubResource("PlaneMesh_dhktc")
 
 [node name="CarEngineSound" parent="." instance=ExtResource("9_c4lag")]
 unique_name_in_owner = true

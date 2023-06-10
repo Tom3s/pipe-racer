@@ -298,6 +298,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		# 	global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
 			# raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
 			overcompressedSpringForce = springDirection * ( (SPRING_MAX_COMPRESSION - raycastDistance)) #linear_velocity.dot(springDirection) +
+			# TODO this cancels momentum as well
+			linear_velocity -= linear_velocity.dot(springDirection) * springDirection
 
 
 		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
@@ -343,7 +345,7 @@ var SLIDE_TRESHOLD = 0.6
 @export_range(0.1, 1, 0.1)
 var DRIFT_FACTOR = 0.5
 
-var driftInput: float = 1
+var driftInput: float = 0
 
 func calculate_tire_grip(tireVelocity, steeringDirection):
 	# var x = tireVelocity.dot(steeringDirection)
@@ -509,7 +511,9 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 
 func onCountdown_finished() -> void:
 	if timeTrialState == TimeTrialState.COUNTDOWN:
-		timeTrialState = TimeTrialState.WAITING
+		timeTrialState = TimeTrialState.STARTING
+		if debugLabel != null:
+			debugLabel.set_start_time(Time.get_ticks_msec())
 		spawnPosition = respawnPosition
 		spawnRotation = respawnRotation
 
