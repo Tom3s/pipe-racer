@@ -67,6 +67,7 @@ properties/11/sync = true
 
 [node name="CarRigidBody" type="RigidBody3D"]
 unique_name_in_owner = true
+collision_mask = 3
 mass = 15.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.36, 0.16)
