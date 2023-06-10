@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbysb8dy0gxal"]
+
+[ext_resource type="PackedScene" uid="uid://cqksavnq7whwm" path="res://Track Props/StartLineProp.tscn" id="1_f37g8"]
+[ext_resource type="Script" path="res://StartLine.gd" id="2_0ooaq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h3rnj"]
+size = Vector3(5.1, 20, 64)
+
+[node name="Start" type="Node3D"]
+
+[node name="FINISHLINE" parent="." instance=ExtResource("1_f37g8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+
+[node name="StartLine" type="Area3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_0ooaq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartLine"]
+shape = SubResource("BoxShape3D_h3rnj")

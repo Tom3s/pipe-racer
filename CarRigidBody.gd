@@ -106,7 +106,7 @@ func _ready():
 	# debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
 	# debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
 
-	var startLine: StartLine = get_parent().get_parent().get_node("StartLine")
+	var startLine: StartLine = get_parent().get_parent().get_node("%Start/%StartLine")
 
 	startLine.body_entered.connect(onStartLine_bodyEntered)
 	startLine.body_exited.connect(onStartLine_bodyExited)
