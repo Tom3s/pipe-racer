@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://de56s7eayi24e"]
+[gd_scene load_steps=28 format=3 uid="uid://de56s7eayi24e"]
 
 [ext_resource type="Script" path="res://CarRigidBody.gd" id="1_gxrqs"]
 [ext_resource type="PhysicsMaterial" uid="uid://bjm334ebiwq52" path="res://car_physics.tres" id="1_qwj5j"]
@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="9_c4lag"]
 [ext_resource type="Shader" uid="uid://c4ook7wi6vv3" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
 [ext_resource type="Script" path="res://CarSyncronizer.gd" id="11_yulfi"]
+[ext_resource type="Script" path="res://CarSoundEffects.gd" id="13_eu83n"]
+[ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="13_nhrhm"]
+[ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="14_kv02k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_inc80"]
 margin = 0.2
@@ -109,6 +112,8 @@ center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.36, 0.16)
 physics_material_override = ExtResource("1_qwj5j")
 continuous_cd = true
+max_contacts_reported = 5
+contact_monitor = true
 script = ExtResource("1_gxrqs")
 SPRING_STRENGTH = 2250.0
 SPRING_MAX_COMPRESSION = 0.125
@@ -274,3 +279,17 @@ root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_73hp7")
 visibility_update_mode = 1
 script = ExtResource("11_yulfi")
+
+[node name="SoundEffects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.923604, 0)
+script = ExtResource("13_eu83n")
+
+[node name="Impact1" type="AudioStreamPlayer3D" parent="SoundEffects"]
+unique_name_in_owner = true
+stream = ExtResource("13_nhrhm")
+unit_size = 100.0
+
+[node name="Impact2" type="AudioStreamPlayer3D" parent="SoundEffects"]
+unique_name_in_owner = true
+stream = ExtResource("14_kv02k")
+unit_size = 100.0

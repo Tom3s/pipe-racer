@@ -207,6 +207,7 @@ func _physics_process(delta):
 
 
 
+
 func recalculateSpawnPositions():
 	if (global_position * Vector3(1, 0, 1)).distance_to(respawnPosition * Vector3(1, 0, 1)) > SOUND_SPEED_LIMIT:
 		respawn()
