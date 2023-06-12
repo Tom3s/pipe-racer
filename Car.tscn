@@ -155,7 +155,7 @@ surface_material_override/0 = ExtResource("4_3vuwg")
 [node name="FrontLeftRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.929007, 0.293817, 2.15825)
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.4, 0)
 script = ExtResource("2_4ug8g")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="raycasts/FrontLeftRayCast"]
@@ -167,7 +167,7 @@ update_scale = false
 [node name="FrontRightRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.293817, 2.15825)
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.4, 0)
 script = ExtResource("2_4ug8g")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="raycasts/FrontRightRayCast"]
@@ -179,13 +179,13 @@ update_scale = false
 [node name="BackLeftRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.929007, 0.293817, -1.83546)
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.4, 0)
 script = ExtResource("2_4ug8g")
 
 [node name="BackRightRayCast" type="RayCast3D" parent="raycasts"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.929, 0.293817, -1.83546)
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.4, 0)
 script = ExtResource("2_4ug8g")
 
 [node name="Tires" type="Node3D" parent="."]
@@ -288,8 +288,10 @@ script = ExtResource("13_eu83n")
 unique_name_in_owner = true
 stream = ExtResource("13_nhrhm")
 unit_size = 100.0
+bus = &"Car SFX"
 
 [node name="Impact2" type="AudioStreamPlayer3D" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("14_kv02k")
 unit_size = 100.0
+bus = &"Car SFX"

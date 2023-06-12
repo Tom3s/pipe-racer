@@ -19,4 +19,4 @@ func playImpact(_body: Node):
 	var sound = impactSounds.pick_random()
 
 	sound.pitch_scale = randf_range(0.8, 1.2)
-	sound.play(0.1)
+	sound.play(0.15)

@@ -32,7 +32,7 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
-	if get_tree().get_multiplayer().is_server():
+	if get_tree().get_multiplayer().is_server() || get_parent().get_parent().get_node("%CarSpawner").get_child_count() == 1:
 		if event.is_action_pressed("start_countdown") && countdownStartTime == 0:
 			start_countdown()
 		if event.is_action_pressed("reset_race"):
