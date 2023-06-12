@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bt66q374ttas7"]
+
+[ext_resource type="Shader" uid="uid://cehjfdkk6rslk" path="res://Tracks/Scenery.tres" id="1_gk31k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ot5bw"]
+render_priority = 0
+shader = ExtResource("1_gk31k")
+shader_parameter/Terrain_Height = 100.0
+shader_parameter/Noise_Size = 20.0
+shader_parameter/Noise_Layer_2_Scale = 100.0
+shader_parameter/Noise_Layer_3_Scale = 10000.0
+shader_parameter/Noise_Layer_3_Distance = 750.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dx5g2"]
+material = SubResource("ShaderMaterial_ot5bw")
+size = Vector2(1000, 1000)
+subdivide_width = 128
+subdivide_depth = 128
+
+[node name="Scenery" type="MeshInstance3D"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, -46.1671, 0)
+mesh = SubResource("PlaneMesh_dx5g2")

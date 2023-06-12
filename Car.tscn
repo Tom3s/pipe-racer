@@ -110,7 +110,7 @@ center_of_mass = Vector3(0, 0.36, 0.16)
 physics_material_override = ExtResource("1_qwj5j")
 continuous_cd = true
 script = ExtResource("1_gxrqs")
-SPRING_STRENGTH = 2700.0
+SPRING_STRENGTH = 2250.0
 SPRING_MAX_COMPRESSION = 0.125
 DAMPING = 7000.0
 TIRE_GRIP = 0.9
@@ -128,7 +128,7 @@ DRIFT_FACTOR = 0.2
 unique_name_in_owner = true
 
 [node name="CarBodyCollider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000572324, 0.586, 0.160678)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.586, 0.161)
 shape = SubResource("BoxShape3D_inc80")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CarBodyCollider"]

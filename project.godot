@@ -24,6 +24,10 @@ Leaderboard="*res://Leaderboard.gd"
 
 window/vsync/vsync_mode=0
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/yamms/plugin.cfg")
+
 [input]
 
 p1_accelerate={
