@@ -13,8 +13,11 @@ var countingDown: bool = false
 @onready
 var synchronizer = %MultiplayerSynchronizer
 
+var musicPlayer: MusicPlayer = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	musicPlayer = get_parent().get_parent().get_node("%MusicPlayer")
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -23,6 +26,7 @@ func _physics_process(delta):
 		if timeLeft <= 0:
 			# countdownStartTime = 0
 			countdownFinished.emit()
+			musicPlayer.playIngameMusic()
 			countingDown = false
 		else:
 			text = str(ceil(timeLeft / 1000))
@@ -45,6 +49,7 @@ func _unhandled_input(event):
 func start_countdown():
 	countdownStartTime = Time.get_ticks_msec()
 	countingDown = true
+	musicPlayer.playMenuMusic()
 
 func reset():
 	countdownStartTime = 0

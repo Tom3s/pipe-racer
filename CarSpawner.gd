@@ -123,6 +123,7 @@ func onCarFinishedRacing():
 	if finishedCars == nrCarsSpawned:
 		get_parent().get_node("%LeaderboardUI/%List").refreshLists()
 		get_parent().get_node("%LeaderboardUI/%List").show()
+		get_parent().get_node("%MusicPlayer").playMenuMusic()
 
 # func _process(delta):
 # 	print("nr cars: ", nrCarsSpawned)

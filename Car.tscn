@@ -115,7 +115,7 @@ continuous_cd = true
 max_contacts_reported = 5
 contact_monitor = true
 script = ExtResource("1_gxrqs")
-SPRING_STRENGTH = 2250.0
+SPRING_STRENGTH = 2200.0
 SPRING_MAX_COMPRESSION = 0.125
 DAMPING = 7000.0
 TIRE_GRIP = 0.9
@@ -268,6 +268,7 @@ draw_pass_1 = SubResource("PlaneMesh_dhktc")
 
 [node name="CarEngineSound" parent="." instance=ExtResource("9_c4lag")]
 unique_name_in_owner = true
+bus = &"Engine Sound"
 
 [node name="InputHandler" type="Node" parent="."]
 unique_name_in_owner = true
@@ -288,10 +289,8 @@ script = ExtResource("13_eu83n")
 unique_name_in_owner = true
 stream = ExtResource("13_nhrhm")
 unit_size = 100.0
-bus = &"Car SFX"
 
 [node name="Impact2" type="AudioStreamPlayer3D" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("14_kv02k")
 unit_size = 100.0
-bus = &"Car SFX"

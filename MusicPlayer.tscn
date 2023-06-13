@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://df1rccijala1n"]
+
+[ext_resource type="Script" path="res://MusicPlayer.gd" id="1_2tuvd"]
+[ext_resource type="AudioStream" uid="uid://bhw24jp2by2ra" path="res://Sounds/Music/Pipe racer menu.wav" id="2_b8tyx"]
+[ext_resource type="Script" path="res://DynamicAudio.gd" id="2_qjytw"]
+[ext_resource type="AudioStream" uid="uid://fvsud3aio1ve" path="res://Sounds/Music/Pipe racer ingame.wav" id="4_eu3xa"]
+
+[node name="MusicPlayer" type="Node"]
+script = ExtResource("1_2tuvd")
+FADE_TIME = 0.3
+
+[node name="Menu" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_b8tyx")
+bus = &"Music"
+script = ExtResource("2_qjytw")
+
+[node name="Ingame" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_eu3xa")
+bus = &"Music"
+script = ExtResource("2_qjytw")
