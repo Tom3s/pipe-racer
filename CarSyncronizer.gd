@@ -48,6 +48,21 @@ var timeTrialState: int:
 		else:
 			get_parent().timeTrialState = newTimeTrialState
 
+@export
+var respawnPosition: Vector3:
+	set(newRespawnPosition):
+		if is_multiplayer_authority():
+			respawnPosition = newRespawnPosition
+		else:
+			get_parent().respawnPosition = newRespawnPosition
+
+@export
+var driftInput: float:
+	set(newDriftInput):
+		if is_multiplayer_authority():
+			driftInput = newDriftInput
+		else:
+			get_parent().driftInput = newDriftInput
 
 func _ready():
 	set_physics_process(true)

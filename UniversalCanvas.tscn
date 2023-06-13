@@ -44,7 +44,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_ibman")
 theme_override_fonts/font = ExtResource("2_43vtq")
-text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("2_vrpsj")

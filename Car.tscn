@@ -81,7 +81,7 @@ properties/3/spawn = true
 properties/3/sync = true
 properties/4/path = NodePath(".:frameColor")
 properties/4/spawn = true
-properties/4/sync = true
+properties/4/sync = false
 properties/5/path = NodePath(".:respawnRotation")
 properties/5/spawn = false
 properties/5/sync = false
@@ -103,6 +103,9 @@ properties/10/sync = false
 properties/11/path = NodePath(".:timeTrialState")
 properties/11/spawn = true
 properties/11/sync = true
+properties/12/path = NodePath(".:driftInput")
+properties/12/spawn = true
+properties/12/sync = true
 
 [node name="CarRigidBody" type="RigidBody3D"]
 unique_name_in_owner = true

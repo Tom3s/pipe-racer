@@ -5,8 +5,12 @@ class_name DebugLabel
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_physics_process(true)
-	pass # Replace with function body.
 
+	theme = load("res://DarkTheme/Dark.theme")
+	add_theme_font_size_override("font_size", 22)
+	add_theme_color_override("font_color", Color.WHITE)
+	add_theme_color_override("font_outline_color", Color.BLACK)
+	add_theme_constant_override("outline_size", 3)
 
 var timeTrialStart: int = -1
 var timeTrialEnd: int = -1
@@ -24,7 +28,7 @@ func _physics_process(_delta: float) -> void:
 	if timeTrialStart != -1:
 		text += ("Lap: " + str(currentLap) + "/" + str(nrLaps) if currentLap <= nrLaps else "Finished - Time " + get_time_string_from_ticks(getTotalTime())) + "\n"
 		if currentLap <= nrLaps:
-			text += "Time: " + get_time_string_from_ticks((Time.get_ticks_msec() - timeTrialStart)) + "\n"
+			text += "Time: " + get_time_string_from_ticks(((Time.get_unix_time_from_system() * 1000.0) - timeTrialStart)) + "\n"
 		text += "Last Lap: " + get_time_string_from_ticks(-1 if times.is_empty() else times[-1]) + "\n"
 		text += "Best Lap: " + get_time_string_from_ticks(-1 if times.is_empty() else getBestLap()) + "\n"
 	

@@ -10,6 +10,8 @@ func _ready():
 	ingameMusic = get_child(1)
 	# menuMusic.targetVolume = 0.0
 	# ingameMusic.targetVolume = -60.0
+	menuMusic.volume_db = -60.0
+	ingameMusic.volume_db = -60.0
 	menuMusic.targetVolume = 0.0
 	ingameMusic.targetVolume = -60.0
 	menuMusic.play()

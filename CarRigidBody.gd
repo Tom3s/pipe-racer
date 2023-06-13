@@ -197,6 +197,8 @@ func _physics_process(delta):
 	synchronizer.angular_velocity = angular_velocity
 	synchronizer.frameColor = frameColor
 	synchronizer.timeTrialState = timeTrialState
+	synchronizer.respawnPosition = respawnPosition
+	synchronizer.driftInput = driftInput
 
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		recalculateSpawnPositions()
@@ -462,7 +464,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 			timeTrialState = TimeTrialState.STARTING
 			# startTime = Time.get_ticks_msec()
 			if debugLabel != null:
-				debugLabel.set_start_time(Time.get_ticks_msec())
+				debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
 				timeTrialState = TimeTrialState.STARTING
@@ -470,7 +472,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 				currentLap += 1
 				if debugLabel != null:
 					debugLabel.set_lap(currentLap + 1)
-					debugLabel.set_end_time(Time.get_ticks_msec())
+					debugLabel.set_end_time((Time.get_unix_time_from_system() * 1000.0))
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
@@ -514,7 +516,7 @@ func onCountdown_finished() -> void:
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		timeTrialState = TimeTrialState.STARTING
 		if debugLabel != null:
-			debugLabel.set_start_time(Time.get_ticks_msec())
+			debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
 		spawnPosition = respawnPosition
 		spawnRotation = respawnRotation
 

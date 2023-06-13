@@ -31,10 +31,13 @@ func onExitButton_pressed():
 	
 	%Buttons.hide()
 
-	# get_tree().get_multiplayer().multiplayer_peer = null
-
+	
 	get_parent().get_node("%MainMenu/%SelectMode").show()
 	get_parent().get_node("%MusicPlayer").playMenuMusic()
+	
+	if get_tree().get_multiplayer().is_server():
+		Network.deletePortMappings()
+	get_tree().get_multiplayer().multiplayer_peer = OfflineMultiplayerPeer.new()
 
 func onSettingsButton_pressed():
 	get_parent().get_node("%SettingsMenu/%Elements").show()

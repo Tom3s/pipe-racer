@@ -52,7 +52,8 @@ func onPlayerConnected(id: int):
 func onPlayerDisconnected(id: int):
 	# print("Player disconnected: " + str(id))
 
-	get_node(".").get_parent().get_node("%CarSpawner").get_node(str(id)).queue_free()
+	if get_node(".").get_parent().get_node("%CarSpawner").has_node(str(id)):
+		get_node(".").get_parent().get_node("%CarSpawner").get_node(str(id)).queue_free()
 
 func onCreateServerButton_Pressed():
 	multiplayerConfigUI.hide()

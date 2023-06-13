@@ -16,7 +16,7 @@ doppler_tracking = 2
 script = ExtResource("1_71pax")
 GEAR_SHIFT_PULLBACK = 0.5
 GEAR_SHIFT_SPEED = 0.03
-PITCH_DIVISION_FACTOR = 4.0
+PITCH_HARSHNESS = 0.8
 GEAR_SHIFT_COOLDOWN_DEFAULT = 0.0
 
 [node name="Idle" type="AudioStreamPlayer3D" parent="."]
@@ -29,6 +29,7 @@ bus = &"Engine Sound"
 unique_name_in_owner = true
 stream = ExtResource("3_0k3bo")
 unit_size = 100.0
+pitch_scale = 1.74
 bus = &"Engine Sound"
 
 [node name="Gear2" type="AudioStreamPlayer3D" parent="."]
