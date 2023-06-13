@@ -1,18 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://ca7gqgiralhwj"]
+[gd_scene load_steps=6 format=3 uid="uid://ca7gqgiralhwj"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_vxwpq"]
 [ext_resource type="Script" path="res://NetworkSetup.gd" id="1_whtda"]
-[ext_resource type="Gradient" uid="uid://bw08j2j2rodnd" path="res://Menu/fireGradient.tres" id="2_co5ri"]
+[ext_resource type="Shader" uid="uid://cluafy80w7sqc" path="res://Menu/MainMenu2.tres" id="3_7i6t6"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_hik7m"]
-noise_type = 5
-frequency = 0.008
-offset = Vector3(1000, 0, 0)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5bjno"]
+shader = ExtResource("3_7i6t6")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s0c3n"]
-width = 2048
-height = 2048
-color_ramp = ExtResource("2_co5ri")
-noise = SubResource("FastNoiseLite_hik7m")
+[sub_resource type="CanvasTexture" id="CanvasTexture_5oklb"]
 
 [node name="NetworkSetup" type="Control"]
 layout_mode = 3
@@ -21,11 +16,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_vxwpq")
 script = ExtResource("1_whtda")
 
 [node name="MultiplayerConfig" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 z_index = 5
 layout_mode = 1
 anchors_preset = 15
@@ -80,6 +75,7 @@ alignment = 1
 
 [node name="Background" type="TextureRect" parent="MultiplayerConfig"]
 z_index = -2
+material = SubResource("ShaderMaterial_5bjno")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,8 +83,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("NoiseTexture2D_s0c3n")
-stretch_mode = 3
+texture = SubResource("CanvasTexture_5oklb")
 
 [node name="BackButton" type="Button" parent="MultiplayerConfig"]
 unique_name_in_owner = true

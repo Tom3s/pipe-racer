@@ -1,30 +1,26 @@
-[gd_scene load_steps=38 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_resource type="VisualShader" load_steps=31 format=3 uid="uid://cluafy80w7sqc"]
 
-[ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
-[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
-[ext_resource type="Script" path="res://addons/shaderV/tools/sinTime.gd" id="3_wlkks"]
-[ext_resource type="Script" path="res://Menu/LineEdit.gd" id="3_y78nt"]
-[ext_resource type="Script" path="res://addons/shaderV/rgba/noise/simplex3d.gd" id="4_qdbcx"]
-[ext_resource type="Script" path="res://Menu/ColorPickerButton.gd" id="4_rfw21"]
-[ext_resource type="Script" path="res://addons/shaderV/tools/TimeScaled.gd" id="5_1lfkb"]
-[ext_resource type="Gradient" uid="uid://t8fol05jf5l8" path="res://PastelRainbow.tres" id="6_xm83m"]
+[ext_resource type="Script" path="res://addons/shaderV/tools/sinTime.gd" id="1_r3lh7"]
+[ext_resource type="Script" path="res://addons/shaderV/rgba/noise/simplex3d.gd" id="2_rvatb"]
+[ext_resource type="Script" path="res://addons/shaderV/tools/TimeScaled.gd" id="3_mn2v5"]
+[ext_resource type="Gradient" uid="uid://t8fol05jf5l8" path="res://PastelRainbow.tres" id="4_8b60h"]
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_628ji"]
 default_input_values = [0, 0.05, 1, 2.0]
 initialized = true
-script = ExtResource("3_wlkks")
+script = ExtResource("1_r3lh7")
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_empey"]
 default_input_values = [1, Vector3(0, 0, 0), 2, 5.0, 3, 0.0]
 initialized = true
-script = ExtResource("4_qdbcx")
+script = ExtResource("2_rvatb")
 
 [sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_7jt0m"]
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_kr33o"]
 default_input_values = [0, 0.05]
 initialized = true
-script = ExtResource("5_1lfkb")
+script = ExtResource("3_mn2v5")
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_1152q"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0, 0.03, 0)]
@@ -39,17 +35,17 @@ operator = 6
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_04tdw"]
 default_input_values = [0, 1.0, 1, 0.03]
 initialized = true
-script = ExtResource("3_wlkks")
+script = ExtResource("1_r3lh7")
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_isau1"]
 default_input_values = [0, 0.97, 1, 0.07]
 initialized = true
-script = ExtResource("3_wlkks")
+script = ExtResource("1_r3lh7")
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_jxp6d"]
 default_input_values = [1, Vector3(0, 0, 0), 2, 5.0, 3, 0.0]
 initialized = true
-script = ExtResource("4_qdbcx")
+script = ExtResource("2_rvatb")
 
 [sub_resource type="Gradient" id="Gradient_ndhag"]
 colors = PackedColorArray(0.196078, 0.196078, 0.196078, 1, 1, 1, 1, 1)
@@ -61,7 +57,7 @@ gradient = SubResource("Gradient_ndhag")
 texture = SubResource("GradientTexture1D_asj8o")
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_yhj1j"]
-gradient = ExtResource("6_xm83m")
+gradient = ExtResource("4_8b60h")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_064s8"]
 texture = SubResource("GradientTexture1D_yhj1j")
@@ -69,7 +65,7 @@ texture = SubResource("GradientTexture1D_yhj1j")
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_damr6"]
 default_input_values = [0, 0.05, 1, 1.0]
 initialized = true
-script = ExtResource("3_wlkks")
+script = ExtResource("1_r3lh7")
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_0d4dy"]
 operator = 2
@@ -86,14 +82,14 @@ function = 1
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_apvfy"]
 default_input_values = [0, 0.05, 1, 2.0]
 initialized = true
-script = ExtResource("3_wlkks")
+script = ExtResource("1_r3lh7")
 
 [sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_h84vi"]
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_j2rfv"]
 default_input_values = [0, 0.05]
 initialized = true
-script = ExtResource("5_1lfkb")
+script = ExtResource("3_mn2v5")
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_7mo4p"]
 default_input_values = [0, 0.0, 1, 0.5]
@@ -103,7 +99,7 @@ operator = 2
 default_input_values = [1, Vector2(1.77, 1), 2, Vector2(0, 0)]
 function = 1
 
-[sub_resource type="VisualShader" id="VisualShader_jl1gl"]
+[resource]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -387,159 +383,3 @@ nodes/fragment/24/position = Vector2(1580, 360)
 nodes/fragment/25/node = SubResource("VisualShaderNodeRemap_rbti5")
 nodes/fragment/25/position = Vector2(1000, 540)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 5, 0, 2, 3, 6, 0, 2, 1, 7, 0, 6, 1, 9, 0, 11, 0, 10, 0, 11, 3, 13, 0, 12, 1, 12, 0, 14, 0, 14, 0, 11, 1, 11, 0, 16, 0, 16, 0, 15, 1, 8, 0, 15, 0, 17, 0, 14, 1, 18, 0, 17, 1, 15, 0, 20, 0, 2, 0, 4, 0, 19, 0, 4, 1, 4, 0, 8, 0, 20, 0, 24, 0, 22, 0, 24, 1, 24, 0, 0, 0, 23, 0, 25, 0, 25, 0, 22, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]
-shader = SubResource("VisualShader_jl1gl")
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_40t0c"]
-
-[node name="MainMenu" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_ibxhk")
-script = ExtResource("1_8nrm6")
-
-[node name="SelectMode" type="Control" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PlayLocal" type="Button" parent="SelectMode"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = -55.0
-offset_right = 5.0
-offset_bottom = -13.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Local"
-
-[node name="SelectNrPlayers" type="OptionButton" parent="SelectMode"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 5.0
-offset_top = -55.0
-offset_right = 69.0
-offset_bottom = -13.0
-grow_horizontal = 2
-grow_vertical = 2
-item_count = 4
-selected = 1
-popup/item_0/text = "1"
-popup/item_0/id = 1
-popup/item_1/text = "2"
-popup/item_1/id = 2
-popup/item_2/text = "3"
-popup/item_2/id = 3
-popup/item_3/text = "4"
-popup/item_3/id = 4
-
-[node name="PlayOnline" type="Button" parent="SelectMode"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 15.0
-offset_right = 69.0
-offset_bottom = 57.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Online"
-
-[node name="ViewScores" type="Button" parent="SelectMode"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 75.0
-offset_right = 69.0
-offset_bottom = 117.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "LeaderBoard"
-
-[node name="Label" type="Label" parent="SelectMode"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 179.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 25
-theme_override_font_sizes/font_size = 100
-text = "PIPE RACER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Background" type="TextureRect" parent="SelectMode"]
-z_index = -1
-material = SubResource("ShaderMaterial_nj34w")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("CanvasTexture_40t0c")
-
-[node name="LineEdit" type="LineEdit" parent="SelectMode"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -99.0
-offset_top = 213.0
-offset_right = 71.0
-offset_bottom = 244.0
-grow_horizontal = 2
-grow_vertical = 2
-placeholder_text = "Nickname"
-script = ExtResource("3_y78nt")
-
-[node name="ColorPickerButton" type="ColorPickerButton" parent="SelectMode"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 71.0
-offset_top = 213.0
-offset_right = 103.0
-offset_bottom = 244.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0.509804, 0.647059, 1)
-edit_alpha = false
-script = ExtResource("4_rfw21")

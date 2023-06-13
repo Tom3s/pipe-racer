@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf023ng2nrvk2"]
+[gd_scene load_steps=6 format=3 uid="uid://bf023ng2nrvk2"]
 
 [ext_resource type="Script" path="res://DebugDraw3D.gd" id="1_6bey7"]
+[ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="2_43vtq"]
 [ext_resource type="Script" path="res://Countdown.gd" id="2_vrpsj"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jyalr"]
@@ -42,6 +43,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_ibman")
+theme_override_fonts/font = ExtResource("2_43vtq")
 text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
