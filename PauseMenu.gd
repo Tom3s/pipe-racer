@@ -3,11 +3,15 @@ extends Control
 func _ready():
 	%RestartButton.button_up.connect(onRestartButton_pressed)
 	%ResumeButton.button_up.connect(onResumeButton_pressed)
+	%SettingsButton.button_up.connect(onSettingsButton_pressed)
 	%ExitButton.button_up.connect(onExitButton_pressed)
 
+
 func onRestartButton_pressed():
-	for car in get_parent().get_node("%CarSpawner").get_children():
+	var carSpawner = get_parent().get_node("%CarSpawner")
+	for car in carSpawner.get_children():
 		car.reset()
+	carSpawner.finishedCars = 0
 	get_parent().get_node("%UniversalCanvas/%Countdown").reset()
 	get_parent().get_node("%UniversalCanvas/%Countdown").start_countdown()
 	%Buttons.hide()
@@ -27,6 +31,13 @@ func onExitButton_pressed():
 	
 	%Buttons.hide()
 
-	# get_tree().get_multiplayer().multiplayer_peer = null
-
+	
 	get_parent().get_node("%MainMenu/%SelectMode").show()
+	get_parent().get_node("%MusicPlayer").playMenuMusic()
+	
+	if get_tree().get_multiplayer().is_server():
+		Network.deletePortMappings()
+	get_tree().get_multiplayer().multiplayer_peer = OfflineMultiplayerPeer.new()
+
+func onSettingsButton_pressed():
+	get_parent().get_node("%SettingsMenu/%Elements").show()

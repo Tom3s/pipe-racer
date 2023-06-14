@@ -5,6 +5,7 @@ func _ready():
 	%PlayOnline.button_up.connect(onPlayOnlinePressed)
 	%PlayLocal.button_up.connect(onPlayLocalPressed)
 	%ViewScores.button_up.connect(onViewScoresPressed)
+	%Settings.button_up.connect(onSettingsPressed)
 
 func onPlayLocalPressed():
 	var spawner: CarSpawner = get_parent().get_node("%CarSpawner")
@@ -18,3 +19,6 @@ func onPlayOnlinePressed():
 
 func onViewScoresPressed():
 	get_parent().get_node("%LeaderboardUI/%List").show()
+
+func onSettingsPressed():
+	get_parent().get_node("%SettingsMenu/%Elements").show()

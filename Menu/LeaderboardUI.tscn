@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://wgcae8ei5xn5"]
+[gd_scene load_steps=3 format=3 uid="uid://wgcae8ei5xn5"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_iw064"]
 [ext_resource type="Script" path="res://List.gd" id="1_qmjdn"]
 
 [node name="LeaderboardUI" type="Control"]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_iw064")
 
 [node name="List" type="Control" parent="."]
 unique_name_in_owner = true
@@ -33,21 +35,39 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="BestLapsList" type="ItemList" parent="List/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="List/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button" type="Button" parent="List/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+button_mask = 0
+text = "Best Lap Times"
+
+[node name="BestLapsList" type="ItemList" parent="List/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 clip_contents = false
-custom_minimum_size = Vector2(500, 0)
+custom_minimum_size = Vector2(500, 450)
 layout_mode = 2
-size_flags_horizontal = 0
 auto_height = true
 item_count = 1
 item_0/text = "Loading..."
 item_0/selectable = false
 
-[node name="TotalTimesList" type="ItemList" parent="List/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="List/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="List/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 2
+button_mask = 0
+text = "Best Total Times"
+
+[node name="TotalTimesList" type="ItemList" parent="List/HBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
 clip_contents = false
-custom_minimum_size = Vector2(500, 0)
+custom_minimum_size = Vector2(500, 450)
 layout_mode = 2
 auto_height = true
 item_count = 1

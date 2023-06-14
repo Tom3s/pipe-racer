@@ -6,6 +6,7 @@ extends Node
 var PLAYER_NAME: String = "Player" + str(randi() % 1000):
 	set(newName):
 		PLAYER_NAME = onPlayerNameChanged(newName)
+		saveToFile()
 	get:
 		return PLAYER_NAME
 
@@ -13,8 +14,34 @@ var PLAYER_NAME: String = "Player" + str(randi() % 1000):
 var PLAYER_COLOR: Color = Color(randf(), randf(), randf(), 1.0):
 	set(newColor):
 		PLAYER_COLOR = onPlayerColorChanged(newColor)
+		saveToFile()
 	get:
 		return PLAYER_COLOR
+
+
+@export
+var MASTER_VOLUME: float = 100.0:
+	set(newVolume):
+		MASTER_VOLUME = newVolume
+		saveToFile()
+	get:
+		return MASTER_VOLUME
+
+@export
+var MUSIC_VOLUME: float = 100.0:
+	set(newVolume):
+		MUSIC_VOLUME = newVolume
+		saveToFile()
+	get:
+		return MUSIC_VOLUME
+
+@export
+var SFX_VOLUME: float = 100.0:
+	set(newVolume):
+		SFX_VOLUME = newVolume
+		saveToFile()
+	get:
+		return SFX_VOLUME
 
 const SAVE_FILE := "user://player.json"
 
@@ -22,17 +49,20 @@ func _ready() -> void:
 	loadFromFile()
 
 func onPlayerNameChanged(newName: String) -> String:
-	saveToFile()
+	# saveToFile()
 	return newName
 
 func onPlayerColorChanged(newColor: Color) -> Color:
-	saveToFile()
+	# saveToFile()
 	return newColor
 
 func saveToFile() -> void:
 	var jsonData = {
 		"PLAYER_NAME": PLAYER_NAME,
 		"PLAYER_COLOR": PLAYER_COLOR.to_html(),
+		"MASTER_VOLUME": MASTER_VOLUME,
+		"MUSIC_VOLUME": MUSIC_VOLUME,
+		"SFX_VOLUME": SFX_VOLUME,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -47,8 +77,11 @@ func loadFromFile() -> void:
 		var jsonData = JSON.parse_string(jsonText)
 
 		PLAYER_NAME = jsonData["PLAYER_NAME"]
-		print(jsonData["PLAYER_COLOR"])
+		# print(jsonData["PLAYER_COLOR"])
 		PLAYER_COLOR = Color.html(jsonData["PLAYER_COLOR"])
+		MASTER_VOLUME = float(jsonData["MASTER_VOLUME"])
+		MUSIC_VOLUME = float(jsonData["MUSIC_VOLUME"])
+		SFX_VOLUME = float(jsonData["SFX_VOLUME"])
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

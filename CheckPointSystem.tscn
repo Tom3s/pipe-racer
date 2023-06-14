@@ -52,7 +52,7 @@ script = ExtResource("2_hmvk0")
 shape = SubResource("BoxShape3D_qwu43")
 
 [node name="cp7" type="Area3D" parent="."]
-transform = Transform3D(0.0607176, 0, 0.998155, 0, 1, 0, -0.998155, 0, 0.0607176, 136.33, 53.4745, -75.3385)
+transform = Transform3D(0.0607176, 0, 0.998155, 0, 1, 0, -0.998155, 0, 0.0607176, 136.33, 63.5826, -75.3385)
 script = ExtResource("2_hmvk0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="cp7"]

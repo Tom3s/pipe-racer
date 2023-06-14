@@ -1,6 +1,6 @@
 extends Node
 
-var DEFAULT_PORT = 7777
+var DEFAULT_PORT = 7890
 var MAX_CLIENTS = 8
 
 var server = null
@@ -33,6 +33,20 @@ func _ready() -> void:
 
 
 func createServer() -> void:
+	var upnp = UPNP.new()
+	var discoverResult = upnp.discover()
+
+	if discoverResult ==  UPNP.UPNP_RESULT_SUCCESS:
+		if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+			var mappingResultUDP = upnp.add_port_mapping(DEFAULT_PORT, 0, "Pipe_racer", "UDP")
+			var mappingResultTCP = upnp.add_port_mapping(DEFAULT_PORT, 0, "Pipe_racer", "TCP")
+
+			if mappingResultUDP != UPNP.UPNP_RESULT_SUCCESS:
+				upnp.add_port_mapping(DEFAULT_PORT, 0, "", "UDP")
+			if mappingResultTCP != UPNP.UPNP_RESULT_SUCCESS:
+				upnp.add_port_mapping(DEFAULT_PORT, 0, "", "TCP")
+			
+
 	server = ENetMultiplayerPeer.new()
 	server.create_server(DEFAULT_PORT, MAX_CLIENTS)
 	get_tree().get_multiplayer().multiplayer_peer = server
@@ -50,3 +64,13 @@ func connectedToServer() -> void:
 func disconnectedFromServer() -> void:
 	print("Disconnected from server")
 
+func deletePortMappings() -> void:
+	var upnp = UPNP.new()
+	var discoverResult = upnp.discover()
+
+	upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
+	upnp.delete_port_mapping(DEFAULT_PORT, "TCP")
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		deletePortMappings()

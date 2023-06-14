@@ -1,0 +1,7 @@
+[gd_resource type="MultiMesh" load_steps=2 format=3 uid="uid://dn138m7ef2xd0"]
+
+[ext_resource type="ArrayMesh" uid="uid://cavntvcu3poej" path="res://Trees/Simple_Tree_06.obj" id="1_v8swa"]
+
+[resource]
+transform_format = 1
+mesh = ExtResource("1_v8swa")

@@ -106,7 +106,7 @@ func _ready():
 	# debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
 	# debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
 
-	var startLine: StartLine = get_parent().get_parent().get_node("StartLine")
+	var startLine: StartLine = get_parent().get_parent().get_node("%Start/%StartLine")
 
 	startLine.body_entered.connect(onStartLine_bodyEntered)
 	startLine.body_exited.connect(onStartLine_bodyExited)
@@ -197,6 +197,8 @@ func _physics_process(delta):
 	synchronizer.angular_velocity = angular_velocity
 	synchronizer.frameColor = frameColor
 	synchronizer.timeTrialState = timeTrialState
+	synchronizer.respawnPosition = respawnPosition
+	synchronizer.driftInput = driftInput
 
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		recalculateSpawnPositions()
@@ -204,6 +206,7 @@ func _physics_process(delta):
 		# TODO: figure this out properly
 		if debugLabel != null:
 			debugLabel.nrLaps = nrLaps
+
 
 
 
@@ -298,6 +301,8 @@ func calculate_suspension(delta, tireRayCast, tire, index):
 		# 	global_position += springDirection * (SPRING_MAX_COMPRESSION - raycastDistance)
 			# raycastDistance = (tireRayCast.global_transform.origin.distance_to(tireRayCast.get_collision_point()))
 			overcompressedSpringForce = springDirection * ( (SPRING_MAX_COMPRESSION - raycastDistance)) #linear_velocity.dot(springDirection) +
+			# TODO this cancels momentum as well
+			linear_velocity -= linear_velocity.dot(springDirection) * springDirection
 
 
 		# var springDirection = (tireRayCast.global_transform.origin - tireRayCast.get_collision_point()).normalized()
@@ -343,7 +348,7 @@ var SLIDE_TRESHOLD = 0.6
 @export_range(0.1, 1, 0.1)
 var DRIFT_FACTOR = 0.5
 
-var driftInput: float = 1
+var driftInput: float = 0
 
 func calculate_tire_grip(tireVelocity, steeringDirection):
 	# var x = tireVelocity.dot(steeringDirection)
@@ -459,7 +464,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 			timeTrialState = TimeTrialState.STARTING
 			# startTime = Time.get_ticks_msec()
 			if debugLabel != null:
-				debugLabel.set_start_time(Time.get_ticks_msec())
+				debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
 				timeTrialState = TimeTrialState.STARTING
@@ -467,7 +472,7 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 				currentLap += 1
 				if debugLabel != null:
 					debugLabel.set_lap(currentLap + 1)
-					debugLabel.set_end_time(Time.get_ticks_msec())
+					debugLabel.set_end_time((Time.get_unix_time_from_system() * 1000.0))
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
@@ -509,7 +514,9 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 
 func onCountdown_finished() -> void:
 	if timeTrialState == TimeTrialState.COUNTDOWN:
-		timeTrialState = TimeTrialState.WAITING
+		timeTrialState = TimeTrialState.STARTING
+		if debugLabel != null:
+			debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
 		spawnPosition = respawnPosition
 		spawnRotation = respawnRotation
 

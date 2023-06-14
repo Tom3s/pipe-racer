@@ -12,13 +12,25 @@ sky_material = SubResource("PanoramaSkyMaterial_kgwse")
 background_mode = 2
 sky = SubResource("Sky_ucuut")
 ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
 reflected_light_source = 2
 sdfgi_use_occlusion = true
+glow_enabled = true
+fog_light_color = Color(0.611765, 0.643137, 0.698039, 1)
+fog_sun_scatter = 2.16
+fog_density = 0.0
 adjustment_enabled = true
 
 [node name="TestTrackEnv" type="WorldEnvironment"]
 environment = SubResource("Environment_2xiuk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.424895, 0.905243, 0, -0.905243, -0.424895, 76.7524, 845.33, 0)
+transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
 shadow_enabled = true
+shadow_bias = 0.08
+directional_shadow_split_1 = 0.041
+directional_shadow_split_2 = 0.489
+directional_shadow_split_3 = 1.0
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.984
+directional_shadow_max_distance = 443.2

@@ -1,0 +1,135 @@
+[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://c4ook7wi6vv3"]
+
+[ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="1_jemex"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_uaxtg"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_f8wuo"]
+output_port_for_preview = 0
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_6uhea"]
+output_port_for_preview = 0
+default_input_values = [1, Vector3(0.5, 0.5, 0), 2, Vector3(1, 1, 0), 3, Vector3(0.5, 0.5, 0), 4, 0.0, 5, Vector3(0.5, 0.5, 0)]
+initialized = true
+script = ExtResource("1_jemex")
+
+[sub_resource type="VisualShaderNodeVectorDistance" id="VisualShaderNodeVectorDistance_ywlx3"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="Curve" id="Curve_7lyhi"]
+_data = [Vector2(0.0696203, 0), 0.0, 0.0, 0, 0, Vector2(0.376582, 0.281818), 0.0, 0.0, 0, 0, Vector2(0.496835, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_gtmh3"]
+curve = SubResource("Curve_7lyhi")
+
+[sub_resource type="VisualShaderNodeCurveTexture" id="VisualShaderNodeCurveTexture_o0p4p"]
+texture = SubResource("CurveTexture_gtmh3")
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_qww8k"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_j4237"]
+billboard_type = 3
+keep_scale = true
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha, unshaded;
+
+uniform sampler2D curve_frg_6 : repeat_disable;
+
+
+// TransformUV
+vec2 _transformUV(vec2 _uv_transform, vec2 _scale_uv_, vec2 _pivot_scale_uv_, vec2 _offset_uv_, float _rotate_uv, vec2 _pivot_rotate_uv_){
+	_uv_transform -= _offset_uv_; // offset
+	_uv_transform = (_uv_transform - _pivot_scale_uv_) * _scale_uv_ + _pivot_scale_uv_; // zoom
+	vec2 _rot_uv_angl = vec2(cos(_rotate_uv), sin(_rotate_uv));
+	mat2 _rot_matrix = mat2(vec2(_rot_uv_angl.x, - _rot_uv_angl.y), vec2(_rot_uv_angl.y, _rot_uv_angl.x));
+	_uv_transform = (_uv_transform - _pivot_rotate_uv_) * _rot_matrix + _pivot_rotate_uv_; // rotate
+	return _uv_transform;
+}
+
+void vertex() {
+	mat4 n_out2p0;
+// GetBillboardMatrix:2
+	{
+		mat4 __wm = mat4(normalize(INV_VIEW_MATRIX[0]), normalize(INV_VIEW_MATRIX[1]), normalize(INV_VIEW_MATRIX[2]), MODEL_MATRIX[3]);
+		__wm = __wm * mat4(vec4(cos(INSTANCE_CUSTOM.x), -sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(0.0, 0.0, 1.0, 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		__wm = __wm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		n_out2p0 = VIEW_MATRIX * __wm;
+	}
+
+
+// Output:0
+	MODELVIEW_MATRIX = n_out2p0;
+
+
+}
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+	float n_out2p4 = n_out2p0.a;
+
+
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+	vec3 n_out4p0;
+// TransformUV:4
+	vec3 n_in4p1 = vec3(0.50000, 0.50000, 0.00000);
+	vec3 n_in4p2 = vec3(1.00000, 1.00000, 0.00000);
+	vec3 n_in4p3 = vec3(0.50000, 0.50000, 0.00000);
+	float n_in4p4 = 0.00000;
+	vec3 n_in4p5 = vec3(0.50000, 0.50000, 0.00000);
+	{
+		n_out4p0.xy = _transformUV(vec3(n_out3p0, 0.0).xy, n_in4p2.xy, n_in4p3.xy, n_in4p1.xy, n_in4p4, n_in4p5.xy);
+	}
+
+
+// Distance:5
+	vec2 n_in5p1 = vec2(0.00000, 0.00000);
+	float n_out5p0 = distance(vec2(n_out4p0.xy), n_in5p1);
+
+
+// CurveTexture:6
+	float n_out6p0 = texture(curve_frg_6, vec2(n_out5p0)).r;
+
+
+// FloatOp:7
+	float n_out7p0 = n_out2p4 * n_out6p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(-627.22, -62.793)
+flags/depth_prepass_alpha = true
+flags/unshaded = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_j4237")
+nodes/vertex/2/position = Vector2(-200, 240)
+nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_uaxtg")
+nodes/fragment/2/position = Vector2(-220, 60)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_f8wuo")
+nodes/fragment/3/position = Vector2(-920, 120)
+nodes/fragment/4/node = SubResource("VisualShaderNodeCustom_6uhea")
+nodes/fragment/4/position = Vector2(-580, 180)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorDistance_ywlx3")
+nodes/fragment/5/position = Vector2(-320, 260)
+nodes/fragment/6/node = SubResource("VisualShaderNodeCurveTexture_o0p4p")
+nodes/fragment/6/position = Vector2(-100, 340)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_qww8k")
+nodes/fragment/7/position = Vector2(240, 240)
+nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 6, 0, 2, 0, 0, 0, 2, 4, 7, 0, 7, 0, 0, 1, 6, 0, 7, 1)

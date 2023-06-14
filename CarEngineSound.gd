@@ -45,7 +45,10 @@ var GEAR5 = %Gear5
 var GEAR6 = %Gear6
 
 @export
-var PITCH_DIVISION_FACTOR: float = 2
+var PITCH_FACTOR: float = 2
+
+@export_range(0, 1, 0.05)
+var PITCH_HARSHNESS: float = 0.33
 
 @export
 var GEAR_SHIFT_COOLDOWN_DEFAULT: float = 5
@@ -57,7 +60,7 @@ var currentGearStage: int
 func _physics_process(delta):
 	currentGearStage = min(floor(targetPitchScale), 4)
 	for gear in gearPlayers:
-		gear.pitch_scale = (targetPitchScale - int(targetPitchScale)) / PITCH_DIVISION_FACTOR + 1
+		gear.pitch_scale = ((targetPitchScale - int(targetPitchScale)) ** PITCH_FACTOR) * PITCH_HARSHNESS + 1
 
 	if playingIdle:
 		if !IDLE.playing:

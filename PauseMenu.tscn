@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0e2cc72nlueq"]
+[gd_scene load_steps=3 format=3 uid="uid://d0e2cc72nlueq"]
 
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_o61t1"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_otsnw"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -10,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("1_otsnw")
 script = ExtResource("1_o61t1")
 
 [node name="Buttons" type="Control" parent="."]
@@ -31,9 +33,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -75.0
-offset_top = -18.0
+offset_top = -54.0
 offset_right = 75.0
-offset_bottom = 18.0
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Restart"
@@ -47,12 +49,29 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -75.0
-offset_top = -61.0
+offset_top = -97.0
 offset_right = 75.0
-offset_bottom = -25.0
+offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -10.0
+offset_right = 75.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Settings
+"
 
 [node name="ExitButton" type="Button" parent="Buttons"]
 unique_name_in_owner = true
@@ -63,9 +82,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -75.0
-offset_top = 26.0
+offset_top = 35.0
 offset_right = 75.0
-offset_bottom = 62.0
+offset_bottom = 71.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Exit

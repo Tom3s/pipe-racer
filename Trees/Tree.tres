@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://clayqtb4a4ssb"]
+
+[ext_resource type="Texture2D" uid="uid://n2cg3k4c0bx4" path="res://Trees/Lp_tree_bake_DefaultMaterial_BaseColor.png" id="1_kq76b"]
+[ext_resource type="Texture2D" uid="uid://h26rfeps7qog" path="res://Trees/Ambient Occlusion Map from Mesh DefaultMaterial.png" id="2_qgasl"]
+[ext_resource type="Texture2D" uid="uid://cr3qf3ofr1txb" path="res://Trees/Curvature DefaultMaterial.png" id="3_l61sp"]
+[ext_resource type="Texture2D" uid="uid://bswvsv1juu45r" path="res://Trees/Lp_tree_bake_DefaultMaterial_Normal.png" id="4_4ltf5"]
+
+[resource]
+albedo_texture = ExtResource("1_kq76b")
+normal_enabled = true
+normal_scale = 0.4
+normal_texture = ExtResource("4_4ltf5")
+ao_enabled = true
+ao_light_affect = 0.2
+ao_texture = ExtResource("2_qgasl")
+heightmap_texture = ExtResource("3_l61sp")
