@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
-[ext_resource type="Shader" uid="uid://cluafy80w7sqc" path="res://Menu/MainMenu2.tres" id="3_3culy"]
+[ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="Script" path="res://Menu/LineEdit.gd" id="3_y78nt"]
 [ext_resource type="Script" path="res://Menu/ColorPickerButton.gd" id="4_rfw21"]
 
