@@ -109,7 +109,7 @@ func _ready():
 	if respawnPosition == null:
 		respawnPosition = global_transform.origin
 
-	if playerIndex != 1:
+	if playerIndex != 1 && playerName == Playerstats.PLAYER_NAME:
 		playerName += "_" + str(playerIndex)
 
 	set_physics_process(true)

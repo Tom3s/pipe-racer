@@ -38,11 +38,12 @@ func init(initialCar: CarRigidBody, initialTimeTrialManager: TimeTrialManager, t
 	car = initialCar
 	timeTrialManager = initialTimeTrialManager
 	TOTAL_CARS = totalCars
-	setNickname(car.playerName)
 	%HUDContainer.hide()
 
 func _ready() -> void:
 	print("HUD loaded")
+	setNickname(car.playerName)
+
 	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
@@ -61,7 +62,7 @@ func setPositionText(currentPosition: int, total: int) -> void:
 	positionLabel.text = "Pos: " + str(currentPosition) + "/" + str(total)
 
 func setLapText(currentLap: int, total: int) -> void:
-	lap.text = "Lap: " + str(max(currentLap, total)) + "/" + str(total)
+	lap.text = "Lap: " + str(min(currentLap, total)) + "/" + str(total)
 
 func setLapTimerText(ticks: int) -> void:
 	lapTimer.text = getTimeStringFromTicks(ticks)

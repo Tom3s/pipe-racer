@@ -25,13 +25,24 @@ func spawnForLocalGame(nrOfCars: int):
 	else:
 		%VerticalSplitBottom.visible = true
 	
+	var mainMenu = get_parent().get_node("%MainMenu")
+
+	var playernames = []
+
+	for i in range(1,5):
+		var lineEdit = mainMenu.get_node("%LocalNicknameP" + str(i))
+		playernames.append(lineEdit.text)
+
 	for i in nrOfCars:
 		var color = Color(randf(), randf(), randf())
-		if i == 0:
+		if i == 0 && playernames[i] != Playerstats.PLAYER_NAME:
 			color = Playerstats.PLAYER_COLOR
 		var car: CarRigidBody = CarObjectScene.instantiate()
 		car.frameColor = color
 		car.playerIndex = i + 1
+
+		if playernames[i] != "":
+			car.playerName = playernames[i]
 
 		car.respawnPosition = global_position
 		car.spawnPosition = car.respawnPosition
