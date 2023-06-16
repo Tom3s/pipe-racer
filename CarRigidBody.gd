@@ -5,8 +5,6 @@ class_name CarRigidBody
 # @onready
 # var debugDraw: DebugDraw3D
 
-@onready
-var debugLabel: DebugLabel
 
 var raycasts: Array = []
 var tires: Array = []
@@ -103,9 +101,6 @@ func _ready():
 	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
 	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
 
-	# debugDraw = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugDraw3D")
-	# debugLabel = get_parent().get_parent().get_parent().get_node("CanvasLayer").get_node("DebugLabel")
-
 	var startLine: StartLine = get_parent().get_parent().get_node("%Start/%StartLine")
 
 	startLine.body_entered.connect(onStartLine_bodyEntered)
@@ -135,12 +130,6 @@ func _ready():
 		var canvasLayer = CanvasLayer.new()
 		canvasLayer.follow_viewport_enabled = true
 		viewPort.add_child(canvasLayer)
-
-		debugLabel = DebugLabel.new()
-		debugLabel.nrLaps = nrLaps
-		canvasLayer.add_child(debugLabel)
-
-		debugLabel = debugLabel
 
 		viewPortContainer.add_child(viewPort)
 		viewPort.add_child(camera)
@@ -179,16 +168,16 @@ func _physics_process(delta):
 		global_rotation = respawnRotation + Vector3.UP * PI / 2
 		should_respawn = false
 	
-	if linear_velocity.length() < LOWER_SPEED_LIMIT:
-		linear_velocity = Vector3.ZERO
+	if getSpeed() < LOWER_SPEED_LIMIT:
+		linear_velocity *= Vector3.UP
 	
-	if linear_velocity.length() < SOUND_SPEED_LIMIT:
+	if getSpeed() < SOUND_SPEED_LIMIT:
 		# %CarEngineSound.tempo = 120
 		# %CarEngineSound.targetPitchScale = 0.75
 		%CarEngineSound.playingIdle = true
 	else:
-		# %CarEngineSound.tempo = remap(linear_velocity.length(), 1, 75, 170, 170 * ENGINE_SOUND_PITCH_FACTOR)
-		%CarEngineSound.targetPitchScale = max(0, remap(linear_velocity.length(), SOUND_SPEED_LIMIT, gear6Speed, 1, 4))
+		# %CarEngineSound.tempo = remap(getSpeed(), 1, 75, 170, 170 * ENGINE_SOUND_PITCH_FACTOR)
+		%CarEngineSound.targetPitchScale = max(0, remap(getSpeed(), SOUND_SPEED_LIMIT, gear6Speed, 1, 4))
 		%CarEngineSound.playingIdle = false
 	
 	synchronizer.position = position
@@ -203,11 +192,6 @@ func _physics_process(delta):
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		recalculateSpawnPositions()
 		linear_velocity *= Vector3.UP
-		# TODO: figure this out properly
-		if debugLabel != null:
-			debugLabel.nrLaps = nrLaps
-
-
 
 
 func recalculateSpawnPositions():
@@ -439,7 +423,7 @@ func get_steering_factor() -> float:
 	var g = func(x): return (- x / 150) + 1
 	var f = func(x): return max(g.call(x), 0.25)
 
-	return f.call(linear_velocity.length()) * STEERING
+	return f.call(getSpeed()) * STEERING
 
 enum TimeTrialState {
 	COUNTDOWN,
@@ -458,21 +442,22 @@ var nrCheckpoints: int = 0
 var nrLaps = 0
 var currentLap = 0
 
+var placement: int = 0
+
+var timeTrialManager: TimeTrialManager = null
+
 func onStartLine_bodyEntered(body: Node3D) -> void:
 	if body == self:
 		if timeTrialState == TimeTrialState.WAITING:
 			timeTrialState = TimeTrialState.STARTING
-			# startTime = Time.get_ticks_msec()
-			if debugLabel != null:
-				debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
+
 		elif timeTrialState == TimeTrialState.ONGOING:
 			if currentCheckPoint == nrCheckpoints:
 				timeTrialState = TimeTrialState.STARTING
 				currentCheckPoint = 0
 				currentLap += 1
-				if debugLabel != null:
-					debugLabel.set_lap(currentLap + 1)
-					debugLabel.set_end_time((Time.get_unix_time_from_system() * 1000.0))
+
+				timeTrialManager.finishedLap()
 
 				if currentLap >= nrLaps:
 					timeTrialState = TimeTrialState.FINISHED
@@ -480,10 +465,12 @@ func onStartLine_bodyEntered(body: Node3D) -> void:
 					steeringInput = 0
 					driftInput = 0
 					if synchronizer.is_multiplayer_authority() || get_tree().get_multiplayer().is_server():
-						Leaderboard.addScoreTotalTime(debugLabel.getTotalTime(), playerName)
-						Leaderboard.addScoreBestLap(debugLabel.getBestLap(), playerName)
+						Leaderboard.addScoreTotalTime(timeTrialManager.getTotalTime(), playerName)
+						Leaderboard.addScoreBestLap(timeTrialManager.getBestLap(), playerName)
 					finishedRacing.emit()
 			
+
+var incorrectCheckPoint: bool = false
 
 func onStartLine_bodyExited(body: Node3D) -> void:
 	if body == self:
@@ -501,27 +488,25 @@ func onCheckpoint_bodyEntered(body: Node3D, checkpoint: Node3D) -> void:
 	
 
 		if cpIndex == currentCheckPoint + 1:
+			placement = checkpoint.getPlacement(currentLap)
 			currentCheckPoint = cpIndex
 			respawnPosition = checkpoint.global_position
 			respawnRotation = checkpoint.global_rotation.rotated(Vector3.UP, PI)
-			if debugLabel != null:
-				debugLabel.incorrectCheckPoint = false
+			incorrectCheckPoint = false
 
 			print("Player ", name, " entered checkpoint ", cpIndex)
+		else:
+			incorrectCheckPoint = !cpIndex == currentCheckPoint
 
-		elif debugLabel != null:
-			debugLabel.incorrectCheckPoint = !cpIndex == currentCheckPoint
-
-func onCountdown_finished() -> void:
+func onCountdown_finished(_timestamp) -> void:
 	if timeTrialState == TimeTrialState.COUNTDOWN:
 		timeTrialState = TimeTrialState.STARTING
-		if debugLabel != null:
-			debugLabel.set_start_time((Time.get_unix_time_from_system() * 1000.0))
 		spawnPosition = respawnPosition
 		spawnRotation = respawnRotation
 
 func reset():
 	timeTrialState = TimeTrialState.COUNTDOWN
+	timeTrialManager.reset()
 	respawnPosition = spawnPosition
 	respawnRotation = spawnRotation
 	respawn()
@@ -529,9 +514,14 @@ func reset():
 	currentCheckPoint = 0
 	currentLap = 0
 
-	debugLabel.reset()
+	timeTrialManager.reset()
 
-	
+func getSpeed() -> float:
+	var velocityForward = global_transform.basis.z.dot(linear_velocity)
+	var velocityRight = global_transform.basis.x.dot(linear_velocity)
+
+	return Vector2(velocityForward, velocityRight).length()
+
 			
 		
 

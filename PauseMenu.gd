@@ -13,7 +13,7 @@ func onRestartButton_pressed():
 		car.reset()
 	carSpawner.finishedCars = 0
 	get_parent().get_node("%UniversalCanvas/%Countdown").reset()
-	get_parent().get_node("%UniversalCanvas/%Countdown").start_countdown()
+	get_parent().get_node("%UniversalCanvas/%Countdown").startCountdown()
 	%Buttons.hide()
 
 func onResumeButton_pressed():
