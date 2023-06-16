@@ -63,6 +63,7 @@ func spawnForLocalGame(nrOfCars: int):
 		add_child(car)
 		var camera = FollowingCamera.new(car)
 
+
 		var viewPortContainer = SubViewportContainer.new()
 		viewPortContainer.stretch = true
 		viewPortContainer.size_flags_horizontal = SubViewportContainer.SIZE_EXPAND_FILL
