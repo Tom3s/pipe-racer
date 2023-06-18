@@ -18,6 +18,7 @@ func _init(carReference):
 	car = carReference
 
 func _ready():
+	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
 	set_physics_process(true)
 # 	pass
 

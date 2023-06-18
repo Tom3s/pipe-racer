@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://InputHandler.gd" id="6_56wu2"]
 [ext_resource type="Script" path="res://VisualRayCast.gd" id="6_vmnhn"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="9_c4lag"]
-[ext_resource type="Shader" uid="uid://c4ook7wi6vv3" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
+[ext_resource type="Shader" uid="uid://tfdck0ea3rd4" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
 [ext_resource type="Script" path="res://CarSyncronizer.gd" id="11_yulfi"]
 [ext_resource type="Script" path="res://CarSoundEffects.gd" id="13_eu83n"]
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="13_nhrhm"]
@@ -118,7 +118,7 @@ continuous_cd = true
 max_contacts_reported = 5
 contact_monitor = true
 script = ExtResource("1_gxrqs")
-SPRING_STRENGTH = 2200.0
+SPRING_STRENGTH = 2250.0
 SPRING_MAX_COMPRESSION = 0.125
 DAMPING = 7000.0
 TIRE_GRIP = 0.9

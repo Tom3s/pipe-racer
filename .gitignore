@@ -13,3 +13,6 @@ data_*/
 .godot/**/*
 MarioKart/**/*
 Leaderboard.gd
+
+.vscode/**/*
+

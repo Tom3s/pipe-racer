@@ -1,10 +1,10 @@
-[gd_resource type="VisualShader" load_steps=40 format=3 uid="uid://cehjfdkk6rslk"]
+[gd_resource type="VisualShader" load_steps=40 format=3 uid="uid://mu6ff6lb7ykw"]
 
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/perlin2d.gd" id="1_vheb3"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/worley2d.gd" id="1_vnuwk"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/generic2d_fractal.gd" id="2_28k7d"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/generateCircle.gd" id="2_bdkfy"]
-[ext_resource type="Gradient" uid="uid://caro1box0tjw4" path="res://Tracks/MountainGradient.tres" id="3_vtqan"]
+[ext_resource type="Gradient" path="res://Tracks/MountainGradient.tres" id="3_vtqan"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7luys"]
 input_name = "color"
