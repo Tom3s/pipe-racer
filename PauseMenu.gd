@@ -14,14 +14,19 @@ func onRestartButton_pressed():
 	carSpawner.finishedCars = 0
 	get_parent().get_node("%UniversalCanvas/%Countdown").reset()
 	get_parent().get_node("%UniversalCanvas/%Countdown").startCountdown()
+	get_parent().get_node("%CheckPointSystem").reset()
 	%Buttons.hide()
 
 func onResumeButton_pressed():
 	%Buttons.hide()
 
 func onExitButton_pressed():
-	for car in get_parent().get_node("%CarSpawner").get_children():
+	var carSpawner = get_parent().get_node("%CarSpawner")
+	for car in carSpawner.get_children():
 		car.queue_free()
+	carSpawner.finishedCars = 0
+
+	get_parent().get_node("%CheckPointSystem").reset()
 	
 	for viewport in get_parent().get_node("%VerticalSplitTop").get_children():
 		viewport.queue_free()

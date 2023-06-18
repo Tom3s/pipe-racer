@@ -85,6 +85,7 @@ offset_right = 69.0
 offset_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
+disabled = true
 text = "Online"
 
 [node name="ViewScores" type="Button" parent="SelectMode"]

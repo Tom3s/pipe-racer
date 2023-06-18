@@ -26,5 +26,5 @@ func getPlacement(lapNumber: int) -> int:
 	return placements[lapNumber]
 
 func reset():
-	placements.clear()
+	placements = []
 	

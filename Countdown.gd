@@ -37,7 +37,6 @@ func _unhandled_input(event):
 			shouldCountdown = true
 		if event.is_action_pressed("reset_race"):
 			get_parent().get_parent().get_node("%PauseMenu").onRestartButton_pressed()
-			get_parent().get_parent().get_node("%CheckPointSystem").reset()
 			shouldReset.emit()
 	if event.is_action_pressed("pause"):
 		var pauseMenuButtons = get_parent().get_parent().get_node("%PauseMenu/%Buttons")
