@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pipe Racer"
-run/main_scene="res://TestPlatform.tscn"
+run/main_scene="res://TestTrack.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 
 [autoload]
@@ -191,4 +191,3 @@ pause={
 common/physics_ticks_per_second=120
 3d/physics_engine="GodotPhysics3D"
 3d/default_gravity=30.0
-3d/default_angular_damp=2.5

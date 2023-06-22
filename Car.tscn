@@ -110,7 +110,7 @@ properties/12/sync = true
 [node name="CarRigidBody" type="RigidBody3D"]
 unique_name_in_owner = true
 collision_mask = 3
-mass = 15.0
+mass = 800.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.36, 0.16)
 physics_material_override = ExtResource("1_qwj5j")
@@ -118,13 +118,14 @@ continuous_cd = true
 max_contacts_reported = 5
 contact_monitor = true
 script = ExtResource("1_gxrqs")
-SPRING_STRENGTH = 2250.0
-SPRING_MAX_COMPRESSION = 0.125
-DAMPING = 7000.0
+SPRING_STRENGTH = 120000.0
+DAMPING = 373333.0
 TIRE_GRIP = 0.9
-TIRE_MASS = 0.3
-ACCELERATION = 115.0
+TIRE_MASS = 30.0
+ACCELERATION = 6133.0
 STEERING = 0.2
+AIR_STEERING = 53333.0
+AIR_PITCH_CONTROL = 53333.0
 SOUND_SPEED_LIMIT = 1.0
 ENGINE_SOUND_PITCH_FACTOR = 4.0
 MAX_FRICTION = 0.9
@@ -134,13 +135,13 @@ DRIFT_FACTOR = 0.2
 
 [node name="CarModel" parent="." instance=ExtResource("2_bvmt0")]
 unique_name_in_owner = true
+visible = false
 
 [node name="CarBodyCollider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.586, 0.161)
 shape = SubResource("BoxShape3D_inc80")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CarBodyCollider"]
-visible = false
 mesh = SubResource("BoxMesh_u7kc3")
 surface_material_override/0 = ExtResource("4_3vuwg")
 
@@ -149,7 +150,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22738, -0.408221)
 shape = SubResource("BoxShape3D_1s8rg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CarHoodCollider"]
-visible = false
 mesh = SubResource("BoxMesh_k7ngf")
 surface_material_override/0 = ExtResource("4_3vuwg")
 

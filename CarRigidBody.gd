@@ -103,8 +103,9 @@ func _ready():
 
 	var startLine: StartLine = get_parent().get_parent().get_node("%Start/%StartLine")
 
-	startLine.body_entered.connect(onStartLine_bodyEntered)
-	startLine.body_exited.connect(onStartLine_bodyExited)
+	if startLine != null:
+		startLine.body_entered.connect(onStartLine_bodyEntered)
+		startLine.body_exited.connect(onStartLine_bodyExited)
 
 	if respawnPosition == null:
 		respawnPosition = global_transform.origin
@@ -114,7 +115,8 @@ func _ready():
 
 	set_physics_process(true)
 
-	if synchronizer.is_multiplayer_authority():
+	# TODO this line never gets called
+	if synchronizer.is_multiplayer_authority() and false:
 		get_parent().get_node("%UniversalCanvas/Countdown").countdownFinished.connect(onCountdown_finished)
 
 		var camera = FollowingCamera.new(self)
@@ -136,7 +138,8 @@ func _ready():
 
 		get_parent().get_node("%VerticalSplitTop").add_child(viewPortContainer)
 		get_parent().get_node("%VerticalSplitBottom").visible = false
-
+	else:
+		timeTrialState = TimeTrialState.ONGOING
 	respawn()
 
 func get_point_velocity (point :Vector3) -> Vector3:

@@ -1,0 +1,162 @@
+[gd_scene load_steps=9 format=3 uid="uid://mb0dn5rd1jjs"]
+
+[ext_resource type="Script" path="res://CarController/CarController.gd" id="1_a7ges"]
+[ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_xk6ga"]
+[ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="3_dygmh"]
+[ext_resource type="Script" path="res://CarController/Tire.gd" id="3_il85m"]
+[ext_resource type="Script" path="res://InputHandler.gd" id="5_hvckg"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_i8e0o"]
+friction = 0.3
+bounce = 0.01
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bjvh7"]
+friction = 0.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dch7c"]
+radius = 0.375
+
+[node name="CarController" type="RigidBody3D"]
+collision_layer = 2
+mass = 700.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0.28, 0)
+physics_material_override = SubResource("PhysicsMaterial_i8e0o")
+continuous_cd = true
+max_contacts_reported = 5
+contact_monitor = true
+script = ExtResource("1_a7ges")
+acceleration = 8.0
+maxSteerAngle = 0.3
+tireGripFactor = 0.005
+
+[node name="CarWithMaterial" parent="." instance=ExtResource("1_xk6ga")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+
+[node name="CarPolygonCollider" type="CollisionPolygon3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.025, 0)
+depth = 1.75
+polygon = PackedVector2Array(-0.55, 1.15, 0.05, 1.55, 0.85, 1.55, 1.8, 0.85, 1.95, 0.55, 1.5, 0.3, -1.5, 0.3, -1.95, 0.55, -1.9, 0.75)
+
+[node name="TireRaycasts" type="Node3D" parent="."]
+visible = false
+
+[node name="FrontLeftRaycast" type="RayCast3D" parent="TireRaycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 0.375, 1.5)
+target_position = Vector3(0, -0.41, 0)
+
+[node name="FrontRightRaycast" type="RayCast3D" parent="TireRaycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, 0.375, 1.5)
+target_position = Vector3(0, -0.41, 0)
+
+[node name="BackLeftRaycast" type="RayCast3D" parent="TireRaycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 0.375, -1.5)
+target_position = Vector3(0, -0.41, 0)
+
+[node name="BackRightRaycast" type="RayCast3D" parent="TireRaycasts"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.875, 0.375, -1.5)
+target_position = Vector3(0, -0.41, 0)
+
+[node name="Tires" type="Node3D" parent="."]
+
+[node name="SuspensionFL" type="PinJoint3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 1, 0.3, 1.5)
+node_a = NodePath("TireFL")
+node_b = NodePath("../..")
+params/bias = 0.01
+params/damping = 0.27
+
+[node name="TireFL" type="RigidBody3D" parent="Tires/SuspensionFL"]
+unique_name_in_owner = true
+collision_layer = 4
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_bjvh7")
+continuous_cd = true
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("3_il85m")
+
+[node name="TireCollider" type="CollisionShape3D" parent="Tires/SuspensionFL/TireFL"]
+shape = SubResource("SphereShape3D_dch7c")
+
+[node name="tire-new good normals" parent="Tires/SuspensionFL/TireFL" instance=ExtResource("3_dygmh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+
+[node name="SuspensionFR" type="PinJoint3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -1, 0.3, 1.5)
+node_a = NodePath("TireFR")
+node_b = NodePath("../..")
+params/bias = 0.01
+params/damping = 0.27
+
+[node name="TireFR" type="RigidBody3D" parent="Tires/SuspensionFR"]
+unique_name_in_owner = true
+collision_layer = 4
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_bjvh7")
+continuous_cd = true
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("3_il85m")
+
+[node name="TireCollider" type="CollisionShape3D" parent="Tires/SuspensionFR/TireFR"]
+shape = SubResource("SphereShape3D_dch7c")
+
+[node name="tire-new good normals" parent="Tires/SuspensionFR/TireFR" instance=ExtResource("3_dygmh")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.15, 0)
+
+[node name="SuspensionBL" type="PinJoint3D" parent="Tires"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 1, 0.3, -1.5)
+node_a = NodePath("TireBL")
+node_b = NodePath("../..")
+params/bias = 0.01
+params/damping = 0.27
+
+[node name="TireBL" type="RigidBody3D" parent="Tires/SuspensionBL"]
+unique_name_in_owner = true
+collision_layer = 4
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_bjvh7")
+continuous_cd = true
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("3_il85m")
+
+[node name="TireCollider" type="CollisionShape3D" parent="Tires/SuspensionBL/TireBL"]
+shape = SubResource("SphereShape3D_dch7c")
+
+[node name="tire-new good normals" parent="Tires/SuspensionBL/TireBL" instance=ExtResource("3_dygmh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+
+[node name="SuspensionBR" type="PinJoint3D" parent="Tires"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -1, 0.3, -1.5)
+node_a = NodePath("TireBR")
+node_b = NodePath("../..")
+params/bias = 0.01
+params/damping = 0.27
+
+[node name="TireBR" type="RigidBody3D" parent="Tires/SuspensionBR"]
+unique_name_in_owner = true
+collision_layer = 4
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_bjvh7")
+continuous_cd = true
+max_contacts_reported = 10
+contact_monitor = true
+script = ExtResource("3_il85m")
+
+[node name="TireCollider" type="CollisionShape3D" parent="Tires/SuspensionBR/TireBR"]
+shape = SubResource("SphereShape3D_dch7c")
+
+[node name="tire-new good normals" parent="Tires/SuspensionBR/TireBR" instance=ExtResource("3_dygmh")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.15, 0)
+
+[node name="InputHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_hvckg")
