@@ -1,0 +1,126 @@
+[gd_scene load_steps=9 format=3 uid="uid://dvesbfub7s22l"]
+
+[ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
+[ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
+[ext_resource type="Script" path="res://InputHandlerNew.gd" id="3_kfdpd"]
+[ext_resource type="Script" path="res://Tire.gd" id="3_qi2cw"]
+[ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
+[ext_resource type="Script" path="res://BottomOut.gd" id="5_rud3q"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
+friction = 0.05
+bounce = 0.01
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_c21hd"]
+radius = 0.0402005
+height = 2.2
+
+[node name="CarController" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 3
+mass = 700.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0.1, 0)
+physics_material_override = SubResource("PhysicsMaterial_nb3em")
+continuous_cd = true
+max_contacts_reported = 16
+contact_monitor = true
+script = ExtResource("1_wde5o")
+springConstant = 180.0
+springDamping = 5500.0
+springBottomOut = 0.25
+maxSteeringAngle = 0.2
+tireGrip = 0.65
+driftFactor = 0.2
+acceleration = 8.0
+passiveBraking = 0.1
+downforceMaximumSpeed = 70.0
+downForce = 100.0
+
+[node name="CarModel" parent="." instance=ExtResource("1_onavb")]
+unique_name_in_owner = true
+
+[node name="CarPolygonCollider" type="CollisionPolygon3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.025, 0)
+depth = 1.75
+polygon = PackedVector2Array(-0.55, 1.15, 0.05, 1.55, 0.85, 1.55, 1.8, 0.85, 1.95, 0.55, 1.5, 0.3, -1.5, 0.3, -1.83874, 0.626155, -1.66193, 0.784355)
+
+[node name="FrontAxle" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.375, 1.5)
+shape = SubResource("CapsuleShape3D_c21hd")
+
+[node name="RearAxle" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.375, -1.5)
+shape = SubResource("CapsuleShape3D_c21hd")
+
+[node name="Tires" type="Node3D" parent="."]
+
+[node name="TireFL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+
+[node name="tire-new good normals" parent="Tires/TireFL" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+
+[node name="TireFR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 1
+
+[node name="tire-new good normals" parent="Tires/TireFR" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="TireBL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 2
+
+[node name="tire-new good normals" parent="Tires/TireBL" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+
+[node name="TireBR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 3
+
+[node name="tire-new good normals" parent="Tires/TireBR" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="BottomOutFL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutFR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutBL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutBR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="InputHandler" type="Node" parent="."]
+script = ExtResource("3_kfdpd")
