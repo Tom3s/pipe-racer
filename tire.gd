@@ -20,6 +20,8 @@ func _ready():
 	tireModel = get_child(0)
 	set_physics_process(true)
 
+
+
 func _physics_process(delta):
 	rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
 	
@@ -40,6 +42,10 @@ func _physics_process(delta):
 		car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint)
 	
 		car.applyAcceleration(global_transform.basis.z, tireVelocityActual, contactPoint)
+		
+		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(global_transform.basis.z)
+		
+		tireModel.rotate_x(tireDistanceTravelled / 0.375)
 	else:
 		car.groundedTires[tireIndex] = false		
 		tireModel.position.y = target_position.y + 0.375
