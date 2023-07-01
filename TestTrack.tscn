@@ -41,6 +41,7 @@ func toggleDebugScreen():
 [node name="TestTrackEnv" parent="." instance=ExtResource("1_hot7f")]
 
 [node name="racetrack3" parent="." instance=ExtResource("2_e2ipk")]
+transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 51, 0)
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 anchors_preset = 15
@@ -70,5 +71,5 @@ script = SubResource("GDScript_gwuv6")
 
 [node name="CarController" parent="." instance=ExtResource("4_rbwmu")]
 unique_name_in_owner = true
-respawnPosition = Vector3(0, -10, 220)
-respawnRotation = Vector3(0, 1.5, 0)
+respawnPosition = Vector3(-52.8878, 41.0925, 203.23)
+respawnRotation = Vector3(0, 1.571, 0)
