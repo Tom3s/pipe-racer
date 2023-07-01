@@ -14,10 +14,15 @@ var targetPitchScale: float = 1
 var playingIdle = false
 
 var gearPlayers: Array = []
-# Called when the node enters the scene tree for the first time.
+
+var car: CarController = null
+
 func _ready():
 	# playing = true
 	# play()
+	
+	car = get_parent()
+	
 	set_physics_process(true)
 	gearPlayers = [GEAR2, GEAR3, GEAR4, GEAR5, GEAR6]
 	# GEAR2.play()
@@ -47,7 +52,7 @@ var GEAR6 = %Gear6
 @export
 var PITCH_FACTOR: float = 2
 
-@export_range(0, 1, 0.05)
+@export_range(0, 1, 0.01)
 var PITCH_HARSHNESS: float = 0.33
 
 @export
@@ -58,6 +63,9 @@ var GEAR_SHIFT_COOLDOWN: float = 0
 var currentGearStage: int
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+	playingIdle = car.getPlayingIdle()
+	targetPitchScale = car.getPitchScale()
+	
 	currentGearStage = min(floor(targetPitchScale), 4)
 	for gear in gearPlayers:
 		gear.pitch_scale = ((targetPitchScale - int(targetPitchScale)) ** PITCH_FACTOR) * PITCH_HARSHNESS + 1

@@ -5,6 +5,7 @@ var targetRotation: float = 0.0
 var car: CarController = null
 
 var tireModel = null
+var smokeEmitter = null
 
 @export
 var steeringSpeed: float = 0.05
@@ -18,6 +19,8 @@ var tireIndex: int = 0
 func _ready():
 	car = get_parent().get_parent()
 	tireModel = get_child(0)
+	smokeEmitter = get_child(1)
+	smokeEmitter.emitting = false
 	set_physics_process(true)
 
 
@@ -46,7 +49,10 @@ func _physics_process(delta):
 		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(global_transform.basis.z)
 		
 		tireModel.rotate_x(tireDistanceTravelled / 0.375)
+		
+		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
 	else:
 		car.groundedTires[tireIndex] = false		
 		tireModel.position.y = target_position.y + 0.375
+		smokeEmitter.emitting = false
 	

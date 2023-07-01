@@ -87,8 +87,8 @@ func _physics_process(_delta):
 		
 		
 	
-#	if getSpeed() < lowerSpeedLimit:
-#		linear_velocity *= Vector3.UP
+	if getSpeed() < lowerSpeedLimit && !accelerationInput:
+		linear_velocity *= Vector3.UP
 	
 	if shouldRespawn:
 		global_position = respawnPosition
@@ -282,7 +282,20 @@ func getTireSkidRatio(tirePosition: Vector3, sidewaysDirecion: Vector3):
 	
 	return abs(skiddingRatio) if !is_nan(skiddingRatio) else 0.0
 	
+
+@export
+var soundSpeedLimit: float = 1.0
+
+@export
+var gear6Speed: float = 150
 	
+func getPitchScale():
+	return max(0, remap(getSpeed(), soundSpeedLimit, gear6Speed, 1, 4))
+
+func getPlayingIdle():
+	return getSpeed() < soundSpeedLimit
+
+
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
