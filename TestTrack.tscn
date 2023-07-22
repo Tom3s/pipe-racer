@@ -5,36 +5,7 @@
 [ext_resource type="Script" path="res://SubViewport.gd" id="3_ot30s"]
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="4_rbwmu"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="4_wg7ot"]
-
-[sub_resource type="GDScript" id="GDScript_gwuv6"]
-script/source = "extends Label
-
-class_name DebugLabel
-
-var debugRows: Array[Callable]
-
-@export
-var enabled: bool = true
-
-func _ready():
-	addFunctionToDisplay(Callable(%CarController, \"debugSkiddingRatio\"))
-
-
-func _process(delta):
-	if not enabled:
-		text = ''
-		return
-	var debugText: String = 'FPS: ' + str(Engine.get_frames_per_second()) + '\\n'
-	for function in debugRows:
-		debugText += function.call() + '\\n'
-	text = debugText
-
-func addFunctionToDisplay(textFunction: Callable):
-	debugRows.append(textFunction)
-
-func toggleDebugScreen():
-	enabled = !enabled
-"
+[ext_resource type="Script" path="res://DebugLabel.gd" id="5_gyv2v"]
 
 [node name="TestTrack" type="Node3D"]
 
@@ -68,7 +39,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20
 text = "asd"
-script = SubResource("GDScript_gwuv6")
+script = ExtResource("5_gyv2v")
 
 [node name="CarController" parent="." instance=ExtResource("4_rbwmu")]
 unique_name_in_owner = true

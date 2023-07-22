@@ -16,6 +16,9 @@ var tireMass: float = 20.0
 @export
 var tireIndex: int = 0
 
+@export
+var visualRotation: float = 2.0
+
 func _ready():
 	car = get_parent().get_parent()
 	tireModel = get_child(0)
@@ -27,6 +30,7 @@ func _ready():
 
 func _physics_process(delta):
 	rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
+#	tireModel.rotation = tireModel.rotation * Vector3(1, 0, 1) + Vector3(0, rotation.y, 0)
 	
 	if is_colliding():
 		car.groundedTires[tireIndex] = true
@@ -50,7 +54,8 @@ func _physics_process(delta):
 		
 		tireModel.rotate_x(tireDistanceTravelled / 0.375)
 		
-		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
+#		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
+		smokeEmitter.emitting = car.slidingFactor > 0.1
 	else:
 		car.groundedTires[tireIndex] = false		
 		tireModel.position.y = target_position.y + 0.375
