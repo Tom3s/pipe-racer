@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=26 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -62,6 +62,18 @@ shader = ExtResource("5_7q8eh")
 material = SubResource("ShaderMaterial_ggqdx")
 size = Vector2(0.2, 0.2)
 orientation = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s4xv3"]
+direction = Vector3(0, 0, 1)
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5uti"]
+use_particle_trails = true
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_hntb3"]
+material = SubResource("StandardMaterial3D_f5uti")
+shape = 0
+section_segments = 16
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2
@@ -238,3 +250,11 @@ unit_size = 100.0
 unique_name_in_owner = true
 stream = ExtResource("11_ryyl8")
 unit_size = 100.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.678018, 0)
+amount = 128
+trail_enabled = true
+trail_lifetime = 3.46
+process_material = SubResource("ParticleProcessMaterial_s4xv3")
+draw_pass_1 = SubResource("RibbonTrailMesh_hntb3")

@@ -21,6 +21,7 @@ func _ready():
 	tireModel = get_child(0)
 	smokeEmitter = get_child(1)
 	smokeEmitter.emitting = false
+	smokeEmitter.one_shot = false
 	set_physics_process(true)
 
 
@@ -50,7 +51,9 @@ func _physics_process(delta):
 		
 		tireModel.rotate_x(tireDistanceTravelled / 0.375)
 		
-		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
+#		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
+		smokeEmitter.emitting = true
+		
 	else:
 		car.groundedTires[tireIndex] = false		
 		tireModel.position.y = target_position.y + 0.375
