@@ -1,11 +1,27 @@
 extends Label
 
+class_name DebugLabel
 
-# Called when the node enters the scene tree for the first time.
+var debugRows: Array[Callable]
+
+@export
+var enabled: bool = true
+
 func _ready():
-	pass # Replace with function body.
+	addFunctionToDisplay(Callable(%CarController, "debugSkiddingRatio"))
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if not enabled:
+		text = ''
+		return
+	var debugText: String = 'FPS: ' + str(Engine.get_frames_per_second()) + '\n'
+	for function in debugRows:
+		debugText += function.call() + '\n'
+	text = debugText
+
+func addFunctionToDisplay(textFunction: Callable):
+	debugRows.append(textFunction)
+
+func toggleDebugScreen():
+	enabled = !enabled

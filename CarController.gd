@@ -299,6 +299,6 @@ func getPlayingIdle():
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
-	var text = "Skidding Ratio: "
-	text += str(getSkiddingRatio())
+	var text = "Sliding Factor: "
+	text += str(slidingFactor)
 	return text
