@@ -1,0 +1,260 @@
+[gd_scene load_steps=26 format=3 uid="uid://dvesbfub7s22l"]
+
+[ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
+[ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
+[ext_resource type="Script" path="res://InputHandlerNew.gd" id="3_kfdpd"]
+[ext_resource type="Script" path="res://Tire.gd" id="3_qi2cw"]
+[ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
+[ext_resource type="Shader" uid="uid://tfdck0ea3rd4" path="res://carMaterial/SmokeMaterialBillboard.tres" id="5_7q8eh"]
+[ext_resource type="Script" path="res://BottomOut.gd" id="5_rud3q"]
+[ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
+[ext_resource type="Script" path="res://CarSoundEffects.gd" id="9_n17k7"]
+[ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
+[ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
+friction = 0.05
+bounce = 0.01
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_52nqf"]
+radius = 0.161
+height = 2.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t31ly"]
+radius = 0.375
+height = 4.15
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e0f4h"]
+radius = 0.634647
+height = 1.99853
+
+[sub_resource type="Gradient" id="Gradient_phovb"]
+colors = PackedColorArray(0.623057, 0.709816, 0.773414, 1, 0.623529, 0.709804, 0.772549, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_a8a45"]
+gradient = SubResource("Gradient_phovb")
+
+[sub_resource type="Curve" id="Curve_4xdyt"]
+max_value = 31.12
+_data = [Vector2(0, 5.37527), 0.0, 0.0, 0, 0, Vector2(1, 24.0473), 4.62529, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_og40x"]
+curve = SubResource("Curve_4xdyt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k33ti"]
+lifetime_randomness = 0.3
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.1, 0.1)
+spread = 0.0
+flatness = 1.0
+gravity = Vector3(0, 25, 0)
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_og40x")
+color_ramp = SubResource("GradientTexture1D_a8a45")
+turbulence_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
+render_priority = 0
+shader = ExtResource("5_7q8eh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lk12m"]
+material = SubResource("ShaderMaterial_ggqdx")
+size = Vector2(0.2, 0.2)
+orientation = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s4xv3"]
+direction = Vector3(0, 0, 1)
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5uti"]
+use_particle_trails = true
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_hntb3"]
+material = SubResource("StandardMaterial3D_f5uti")
+shape = 0
+section_segments = 16
+
+[node name="CarController" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 3
+mass = 700.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0.1, 0)
+physics_material_override = SubResource("PhysicsMaterial_nb3em")
+continuous_cd = true
+max_contacts_reported = 16
+contact_monitor = true
+angular_damp = 0.5
+script = ExtResource("1_wde5o")
+springConstant = 180.0
+springDamping = 5500.0
+springBottomOut = 0.25
+maxSteeringAngle = 0.13
+tireGrip = 1.0
+driftFactor = 0.2
+acceleration = 7.7
+passiveBraking = 0.05
+downforceMaximumSpeed = 70.0
+downForce = 100.0
+airPitchControl = 1.5
+airYawControl = 1.5
+skiddingTreshold = 0.1
+gripDecayRate = 0.8
+regripFactor = 0.02
+
+[node name="CarModel" parent="." instance=ExtResource("1_onavb")]
+unique_name_in_owner = true
+
+[node name="FrontAxle2" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.505, 1.5)
+shape = SubResource("CapsuleShape3D_52nqf")
+
+[node name="RearAxle2" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.505, -1.5)
+shape = SubResource("CapsuleShape3D_52nqf")
+
+[node name="CarBodyCapsule" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.675, 0)
+shape = SubResource("CapsuleShape3D_t31ly")
+
+[node name="CarBodyCapsule2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.45, 0.675, 0)
+shape = SubResource("CapsuleShape3D_t31ly")
+
+[node name="CarBodyCapsule3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0.942996, -0.271399)
+shape = SubResource("CapsuleShape3D_e0f4h")
+
+[node name="Tires" type="Node3D" parent="."]
+
+[node name="TireFL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+
+[node name="tire-new good normals" parent="Tires/TireFL" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+
+[node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+lifetime = 0.71
+randomness = 0.05
+process_material = SubResource("ParticleProcessMaterial_k33ti")
+draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="TireFR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 1
+
+[node name="tire-new good normals" parent="Tires/TireFR" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+lifetime = 0.71
+randomness = 0.05
+process_material = SubResource("ParticleProcessMaterial_k33ti")
+draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="TireBL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 2
+
+[node name="tire-new good normals" parent="Tires/TireBL" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+
+[node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+lifetime = 0.71
+randomness = 0.05
+process_material = SubResource("ParticleProcessMaterial_k33ti")
+draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="TireBR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+target_position = Vector3(0, -0.6, 0)
+script = ExtResource("3_qi2cw")
+steeringSpeed = 0.1
+tireIndex = 3
+
+[node name="tire-new good normals" parent="Tires/TireBR" instance=ExtResource("4_k78f3")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+lifetime = 0.71
+randomness = 0.05
+process_material = SubResource("ParticleProcessMaterial_k33ti")
+draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="BottomOutFL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutFR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutBL" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="BottomOutBR" type="RayCast3D" parent="Tires"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+target_position = Vector3(0, -0.25, 0)
+script = ExtResource("5_rud3q")
+
+[node name="CarEngineSound" parent="." instance=ExtResource("6_g1nx1")]
+bus = &"Engine Sound"
+
+[node name="InputHandler" type="Node" parent="."]
+script = ExtResource("3_kfdpd")
+
+[node name="SoundEffects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.923604, 0)
+script = ExtResource("9_n17k7")
+
+[node name="Impact1" type="AudioStreamPlayer3D" parent="SoundEffects"]
+unique_name_in_owner = true
+stream = ExtResource("10_8irg8")
+unit_size = 100.0
+
+[node name="Impact2" type="AudioStreamPlayer3D" parent="SoundEffects"]
+unique_name_in_owner = true
+stream = ExtResource("11_ryyl8")
+unit_size = 100.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.678018, 0)
+amount = 128
+trail_enabled = true
+trail_lifetime = 3.46
+process_material = SubResource("ParticleProcessMaterial_s4xv3")
+draw_pass_1 = SubResource("RibbonTrailMesh_hntb3")

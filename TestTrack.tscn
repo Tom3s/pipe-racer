@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://sl6jv6nsccdf"]
+
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="1_hot7f"]
+[ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="2_e2ipk"]
+[ext_resource type="Script" path="res://SubViewport.gd" id="3_ot30s"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="4_rbwmu"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="4_wg7ot"]
+[ext_resource type="Script" path="res://DebugLabel.gd" id="5_gyv2v"]
+
+[node name="TestTrack" type="Node3D"]
+
+[node name="TestTrackEnv" parent="." instance=ExtResource("1_hot7f")]
+
+[node name="racetrack3" parent="." instance=ExtResource("2_e2ipk")]
+transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 51, 0)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+audio_listener_enable_3d = true
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+script = ExtResource("3_ot30s")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
+
+[node name="DebugLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("4_wg7ot")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "asd"
+script = ExtResource("5_gyv2v")
+
+[node name="CarController" parent="." instance=ExtResource("4_rbwmu")]
+unique_name_in_owner = true
+respawnPosition = Vector3(-52.8878, 41.0925, 203.23)
+respawnRotation = Vector3(0, 1.571, 0)

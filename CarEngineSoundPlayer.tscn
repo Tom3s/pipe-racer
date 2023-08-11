@@ -24,6 +24,7 @@ unique_name_in_owner = true
 stream = ExtResource("2_5nb4o")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear1" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
@@ -31,33 +32,39 @@ stream = ExtResource("3_0k3bo")
 unit_size = 100.0
 pitch_scale = 1.74
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear2" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("4_uc03k")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear3" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("5_msmfa")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear4" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("6_8dasw")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear5" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("7_4uctg")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2
 
 [node name="Gear6" type="AudioStreamPlayer3D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("8_ds321")
 unit_size = 100.0
 bus = &"Engine Sound"
+doppler_tracking = 2

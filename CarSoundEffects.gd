@@ -1,6 +1,6 @@
 extends Node3D
 @onready
-var car: CarRigidBody = null
+var car: CarController = null
 
 var impactSounds = []
 

@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgurpytbg7dx6"]
+
+[ext_resource type="AudioStream" uid="uid://08e0wud2nwkh" path="res://Sounds/SFX/Countdown.wav" id="1_oc12v"]
+[ext_resource type="Script" path="res://Sounds/IngameSFX.gd" id="1_rsk1f"]
+[ext_resource type="AudioStream" uid="uid://24t0r5ic421f" path="res://Sounds/SFX/StartRace.wav" id="2_ejhrk"]
+[ext_resource type="AudioStream" uid="uid://cv3rdo33ccueu" path="res://Sounds/SFX/FinishLap.wav" id="3_pfje7"]
+
+[node name="IngameSFX" type="Node"]
+script = ExtResource("1_rsk1f")
+
+[node name="Countdown" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("1_oc12v")
+
+[node name="StartRace" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_ejhrk")
+
+[node name="FinishLap" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_pfje7")
+volume_db = 6.0
+max_polyphony = 4
+bus = &"SFX"

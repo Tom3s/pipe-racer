@@ -8,6 +8,8 @@ var client = null
 
 var ipAddress = ""
 
+var portsMapped = false
+
 @export
 var LAG_COMPENSATION: float = 0.9
 
@@ -45,6 +47,7 @@ func createServer() -> void:
 				upnp.add_port_mapping(DEFAULT_PORT, 0, "", "UDP")
 			if mappingResultTCP != UPNP.UPNP_RESULT_SUCCESS:
 				upnp.add_port_mapping(DEFAULT_PORT, 0, "", "TCP")
+			portsMapped = true
 			
 
 	server = ENetMultiplayerPeer.new()
@@ -65,11 +68,14 @@ func disconnectedFromServer() -> void:
 	print("Disconnected from server")
 
 func deletePortMappings() -> void:
-	var upnp = UPNP.new()
-	var discoverResult = upnp.discover()
+	if portsMapped:
+		var upnp = UPNP.new()
+		var discoverResult = upnp.discover()
 
-	upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
-	upnp.delete_port_mapping(DEFAULT_PORT, "TCP")
+		upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
+		upnp.delete_port_mapping(DEFAULT_PORT, "TCP")
+
+		portsMapped = false
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

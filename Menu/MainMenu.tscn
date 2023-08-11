@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
-[ext_resource type="Shader" uid="uid://cluafy80w7sqc" path="res://Menu/MainMenu2.tres" id="3_3culy"]
+[ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="Script" path="res://Menu/LineEdit.gd" id="3_y78nt"]
 [ext_resource type="Script" path="res://Menu/ColorPickerButton.gd" id="4_rfw21"]
 
@@ -85,6 +85,7 @@ offset_right = 69.0
 offset_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
+disabled = true
 text = "Online"
 
 [node name="ViewScores" type="Button" parent="SelectMode"]
@@ -177,3 +178,39 @@ grow_vertical = 2
 color = Color(0, 0.509804, 0.647059, 1)
 edit_alpha = false
 script = ExtResource("4_rfw21")
+
+[node name="LocalNicknameP1" type="LineEdit" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 195.0
+offset_top = 247.0
+offset_right = 344.0
+offset_bottom = 278.0
+placeholder_text = "P1 nickname"
+
+[node name="LocalNicknameP2" type="LineEdit" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 195.0
+offset_top = 289.0
+offset_right = 344.0
+offset_bottom = 320.0
+placeholder_text = "P2 nickname"
+
+[node name="LocalNicknameP3" type="LineEdit" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 195.0
+offset_top = 331.0
+offset_right = 344.0
+offset_bottom = 362.0
+placeholder_text = "P3 nickname"
+
+[node name="LocalNicknameP4" type="LineEdit" parent="SelectMode"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 195.0
+offset_top = 376.0
+offset_right = 344.0
+offset_bottom = 407.0
+placeholder_text = "P4 nickname"

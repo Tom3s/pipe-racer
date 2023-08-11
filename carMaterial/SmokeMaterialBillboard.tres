@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://c4ook7wi6vv3"]
+[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://tfdck0ea3rd4"]
 
 [ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="1_jemex"]
 
@@ -32,6 +32,7 @@ curve = SubResource("Curve_7lyhi")
 texture = SubResource("CurveTexture_gtmh3")
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_qww8k"]
+default_input_values = [0, 1.0, 1, 0.0]
 operator = 2
 
 [sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_j4237"]
@@ -78,10 +79,6 @@ void fragment() {
 	float n_out2p4 = n_out2p0.a;
 
 
-// Input:3
-	vec2 n_out3p0 = UV;
-
-
 	vec3 n_out4p0;
 // TransformUV:4
 	vec3 n_in4p1 = vec3(0.50000, 0.50000, 0.00000);
@@ -90,7 +87,7 @@ void fragment() {
 	float n_in4p4 = 0.00000;
 	vec3 n_in4p5 = vec3(0.50000, 0.50000, 0.00000);
 	{
-		n_out4p0.xy = _transformUV(vec3(n_out3p0, 0.0).xy, n_in4p2.xy, n_in4p3.xy, n_in4p1.xy, n_in4p4, n_in4p5.xy);
+		n_out4p0.xy = _transformUV(UV.xy, n_in4p2.xy, n_in4p3.xy, n_in4p1.xy, n_in4p4, n_in4p5.xy);
 	}
 
 
@@ -114,7 +111,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-627.22, -62.793)
+graph_offset = Vector2(-202.14, -15.6784)
 flags/depth_prepass_alpha = true
 flags/unshaded = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_j4237")
@@ -129,7 +126,7 @@ nodes/fragment/4/position = Vector2(-580, 180)
 nodes/fragment/5/node = SubResource("VisualShaderNodeVectorDistance_ywlx3")
 nodes/fragment/5/position = Vector2(-320, 260)
 nodes/fragment/6/node = SubResource("VisualShaderNodeCurveTexture_o0p4p")
-nodes/fragment/6/position = Vector2(-100, 340)
+nodes/fragment/6/position = Vector2(-120, 300)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_qww8k")
 nodes/fragment/7/position = Vector2(240, 240)
-nodes/fragment/connections = PackedInt32Array(3, 0, 4, 0, 4, 0, 5, 0, 5, 0, 6, 0, 2, 0, 0, 0, 2, 4, 7, 0, 7, 0, 0, 1, 6, 0, 7, 1)
+nodes/fragment/connections = PackedInt32Array(4, 0, 5, 0, 5, 0, 6, 0, 6, 0, 7, 1, 2, 0, 0, 0, 7, 0, 0, 1, 2, 4, 7, 0)

@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://InputHandler.gd" id="6_56wu2"]
 [ext_resource type="Script" path="res://VisualRayCast.gd" id="6_vmnhn"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="9_c4lag"]
-[ext_resource type="Shader" uid="uid://c4ook7wi6vv3" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
+[ext_resource type="Shader" uid="uid://tfdck0ea3rd4" path="res://carMaterial/SmokeMaterialBillboard.tres" id="9_i4dcy"]
 [ext_resource type="Script" path="res://CarSyncronizer.gd" id="11_yulfi"]
 [ext_resource type="Script" path="res://CarSoundEffects.gd" id="13_eu83n"]
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="13_nhrhm"]
@@ -34,7 +34,7 @@ size = Vector3(1.46891, 0.716233, 0.953785)
 [sub_resource type="Gradient" id="Gradient_r41vh"]
 colors = PackedColorArray(0.623057, 0.709816, 0.773414, 1, 0.623529, 0.709804, 0.772549, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_a8a45"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7sdjn"]
 gradient = SubResource("Gradient_r41vh")
 
 [sub_resource type="Curve" id="Curve_vm18q"]
@@ -42,7 +42,7 @@ max_value = 31.12
 _data = [Vector2(0, 5.37527), 0.0, 0.0, 0, 0, Vector2(1, 24.0473), 4.62529, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_og40x"]
+[sub_resource type="CurveTexture" id="CurveTexture_pryo0"]
 curve = SubResource("Curve_vm18q")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hyqd4"]
@@ -53,16 +53,16 @@ spread = 0.0
 flatness = 1.0
 gravity = Vector3(0, 25, 0)
 scale_max = 1.2
-scale_curve = SubResource("CurveTexture_og40x")
-color_ramp = SubResource("GradientTexture1D_a8a45")
+scale_curve = SubResource("CurveTexture_pryo0")
+color_ramp = SubResource("GradientTexture1D_7sdjn")
 turbulence_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gqxft"]
 render_priority = 0
 shader = ExtResource("9_i4dcy")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_dhktc"]
-material = SubResource("ShaderMaterial_ggqdx")
+material = SubResource("ShaderMaterial_gqxft")
 size = Vector2(0.2, 0.2)
 orientation = 2
 
@@ -118,7 +118,7 @@ continuous_cd = true
 max_contacts_reported = 5
 contact_monitor = true
 script = ExtResource("1_gxrqs")
-SPRING_STRENGTH = 2200.0
+SPRING_STRENGTH = 2250.0
 SPRING_MAX_COMPRESSION = 0.125
 DAMPING = 7000.0
 TIRE_GRIP = 0.9
@@ -202,6 +202,9 @@ script = ExtResource("6_vmnhn")
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("3_hj1pj")
+steeringSpeed = null
+tireMass = null
+tireIndex = null
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/FrontLeftVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
@@ -221,6 +224,9 @@ script = ExtResource("6_vmnhn")
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("3_hj1pj")
+steeringSpeed = null
+tireMass = null
+tireIndex = null
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/FrontRightVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.3, -0.3)
@@ -240,6 +246,9 @@ script = ExtResource("6_vmnhn")
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("3_hj1pj")
+steeringSpeed = null
+tireMass = null
+tireIndex = null
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/BackLeftVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
@@ -259,6 +268,9 @@ script = ExtResource("6_vmnhn")
 unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("3_hj1pj")
+steeringSpeed = null
+tireMass = null
+tireIndex = null
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/BackRightVisualCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.3, -0.3)

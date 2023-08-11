@@ -5,6 +5,7 @@ extends Node3D
 
 class_name CarSpawner
 
+var HudScene := preload("HUD/HUD.tscn")
 var FollowingCamera := preload("FollowingCamera.gd")
 var CarObjectScene := preload("Car.tscn")
 
@@ -24,13 +25,24 @@ func spawnForLocalGame(nrOfCars: int):
 	else:
 		%VerticalSplitBottom.visible = true
 	
+	var mainMenu = get_parent().get_node("%MainMenu")
+
+	var playernames = []
+
+	for i in range(1,5):
+		var lineEdit = mainMenu.get_node("%LocalNicknameP" + str(i))
+		playernames.append(lineEdit.text)
+
 	for i in nrOfCars:
 		var color = Color(randf(), randf(), randf())
-		if i == 0:
+		if i == 0 && playernames[i] != Playerstats.PLAYER_NAME:
 			color = Playerstats.PLAYER_COLOR
 		var car: CarRigidBody = CarObjectScene.instantiate()
 		car.frameColor = color
 		car.playerIndex = i + 1
+
+		if playernames[i] != "":
+			car.playerName = playernames[i]
 
 		car.respawnPosition = global_position
 		car.spawnPosition = car.respawnPosition
@@ -51,6 +63,7 @@ func spawnForLocalGame(nrOfCars: int):
 		add_child(car)
 		var camera = FollowingCamera.new(car)
 
+
 		var viewPortContainer = SubViewportContainer.new()
 		viewPortContainer.stretch = true
 		viewPortContainer.size_flags_horizontal = SubViewportContainer.SIZE_EXPAND_FILL
@@ -62,12 +75,23 @@ func spawnForLocalGame(nrOfCars: int):
 		var canvasLayer = CanvasLayer.new()
 		canvasLayer.follow_viewport_enabled = true
 		viewPort.add_child(canvasLayer)
+		
+		var timeTrialManager = TimeTrialManager.new()
+		car.add_child(timeTrialManager)
+		%UniversalCanvas/Countdown.countdownFinished.connect(timeTrialManager.startTimeTrial)
 
-		var debugLabel = DebugLabel.new()
-		debugLabel.nrLaps = nrLaps
-		canvasLayer.add_child(debugLabel)
+		car.timeTrialManager = timeTrialManager
+		# var ingameHUD = HUD.new(car, timeTrialManager, nrOfCars)
+		var ingameHUD := HudScene.instantiate()
 
-		car.debugLabel = debugLabel
+		ingameHUD.init(car, timeTrialManager, nrOfCars)
+
+		%UniversalCanvas/Countdown.countdownFinished.connect(ingameHUD.onCountdown_finished)
+		%UniversalCanvas/Countdown.shouldReset.connect(ingameHUD.onReset)
+
+		canvasLayer.add_child(ingameHUD)
+
+
 
 		viewPortContainer.add_child(viewPort)
 		viewPort.add_child(camera)
@@ -76,6 +100,9 @@ func spawnForLocalGame(nrOfCars: int):
 			%VerticalSplitTop.add_child(viewPortContainer)
 		else:
 			%VerticalSplitBottom.add_child(viewPortContainer)
+		
+
+
 
 func spawnCar(peer_id: int):
 	var color = Playerstats.PLAYER_COLOR

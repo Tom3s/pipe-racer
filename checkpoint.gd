@@ -13,4 +13,18 @@ func _process(delta):
 	pass
 
 func onBodyEntered(body):
-	emit_signal("bodyEnteredCheckpoint", body, self)
+	# emit_signal("bodyEnteredCheckpoint", body, self)
+	bodyEnteredCheckpoint.emit(body, self)
+
+var placements: Array = []
+
+func getPlacement(lapNumber: int) -> int:
+	if placements.size() <= lapNumber:
+		placements.push_back(0)
+	
+	placements[lapNumber] += 1
+	return placements[lapNumber]
+
+func reset():
+	placements = []
+	
