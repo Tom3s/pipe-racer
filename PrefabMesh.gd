@@ -162,6 +162,26 @@ func generatePositionArrayCurveOutside() -> Array[Vector2]:
 	
 	return positions
 
+func generatePositionArrayCurveInside2() -> Array[Vector2]:
+	var positions: Array[Vector2] = []
+	
+	var topRight = Vector2(curveSideways * GRID_SIZE, curveForward * GRID_SIZE)
+	var bottomRight = Vector2(curveSideways * GRID_SIZE, 0)
+	
+	var top: float = curveForward * GRID_SIZE - TRACK_WIDTH
+	var right: float = curveSideways * GRID_SIZE - TRACK_WIDTH
+	
+	for index in lengthDivisionPoints.size():
+		var xLerp = remapCurveSideways(lengthDivisionPoints[index])
+		var yLerp = remapCurveForward(lengthDivisionPoints[index])
+		
+		var xPos = lerp(0.0, right, xLerp)
+		var yPos = lerp(0.0, top, yLerp)
+		
+		positions.push_back(Vector2(xPos, yPos))
+	
+	return positions
+
 func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
@@ -312,7 +332,8 @@ func refreshMesh():
 		for index in range(LENGTH_SEGMENTS + 1):
 			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS))
 		leftPositions = generatePositionArrayCurveOutside()
-		rightPositions = generatePositionArrayCurveInside(leftPositions)
+#		rightPositions = generatePositionArrayCurveInside(leftPositions)
+		rightPositions = generatePositionArrayCurveInside2()
 		pass
 		
 	
