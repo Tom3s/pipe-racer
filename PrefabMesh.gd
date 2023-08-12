@@ -1,6 +1,7 @@
 @tool
 extends MeshInstance3D
 
+@export_group("Global Constants")
 @export
 var TRACK_WIDTH: float = 20.0:
 	set(value):
@@ -8,13 +9,13 @@ var TRACK_WIDTH: float = 20.0:
 		refreshMesh()
 
 @export
-var GRID_HEIGHT: float = 2.0:
+var GRID_SIZE: float = 2.0:
 	set(value):
-		GRID_HEIGHT = value
+		GRID_SIZE = value
 		refreshMesh()
 
 @export
-var LENGTH_SEGMENTS: int = 32:
+var LENGTH_SEGMENTS: int = 16:
 	set(value):
 		LENGTH_SEGMENTS = value
 		refreshMesh()
@@ -27,6 +28,7 @@ var WIDTH_SEGMENTS: int = 8:
 
 var lengthDivisionPoints: Array[float] = []
 
+@export_group("General Properties")
 @export var leftStartHeight: int = 0:
 	set(value):
 		leftStartHeight = value
@@ -37,9 +39,9 @@ var lengthDivisionPoints: Array[float] = []
 		leftEndHeight = value
 		refreshMesh()
 
-@export var leftSmoothCurve: bool = true:
+@export var leftSmoothTilt: bool = true:
 	set(value):
-		leftSmoothCurve = value
+		leftSmoothTilt = value
 		refreshMesh()
 
 
@@ -55,15 +57,45 @@ var lengthDivisionPoints: Array[float] = []
 		rightEndHeight = value
 		refreshMesh()
 
-@export var rightSmoothCurve: bool = true:
+@export var rightSmoothTilt: bool = true:
 	set(value):
-		rightSmoothCurve = value
+		rightSmoothTilt = value
+		refreshMesh()
+
+@export_group("Prefab Type")
+
+@export var curve: bool = false:
+	set(value):
+		curve = value
+		refreshMesh()
+
+@export_group("Straight Prefab Properties")
+@export var endOffset: int = 0:
+	set(value):
+		endOffset = value
+		refreshMesh()
+
+@export var smoothOffset: bool = true:
+	set(value):
+		smoothOffset = value
 		refreshMesh()
 
 @export var length: int = 1:
 	set(value):
 		length = value
 		refreshMesh()
+
+@export_group("Curved Prefab Properties")
+@export var curveForward: int = TRACK_WIDTH / GRID_SIZE:
+	set(value):
+		curveForward = max(value, TRACK_WIDTH / GRID_SIZE)
+		refreshMesh()
+
+@export var curveSideways: int = TRACK_WIDTH / GRID_SIZE:
+	set(value):
+		curveSideways = max(value, TRACK_WIDTH / GRID_SIZE)
+		refreshMesh()
+
 
 #@export
 #var refresher: bool:
@@ -90,7 +122,7 @@ func generateHeightArray(startOffset: float, endOffset: float, smooth: bool) -> 
 	var heightArray: Array[float] = []
 	for index in lengthDivisionPoints.size():
 		var remappedIndex = smoothRemap(lengthDivisionPoints[index]) if smooth else lengthDivisionPoints[index]
-		heightArray.push_back(GRID_HEIGHT * remap(remappedIndex, 0, 1, startOffset, endOffset))
+		heightArray.push_back(GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
 	return heightArray
 
@@ -98,8 +130,71 @@ func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
 	for index in lengthDivisionPoints.size():
-		positions.push_back(Vector2(xOffset, lengthDivisionPoints[index] * TRACK_WIDTH * length))
+		var lerpValue = smoothRemap(lengthDivisionPoints[index]) if smoothOffset else lengthDivisionPoints[index]
+		var xPos = lerp(xOffset, xOffset + endOffset * GRID_SIZE, lerpValue)
+		positions.push_back(Vector2(xPos, lengthDivisionPoints[index] * TRACK_WIDTH * length))
 	
+	return positions
+
+func remapCurveForward(value: float) -> float:
+	return sin(value * PI / 2)
+
+func remapCurveSideways(value: float) -> float:
+	return sin(value * PI / 2 + PI / 2)
+
+func generatePositionArrayCurveOutside() -> Array[Vector2]:
+	var positions: Array[Vector2] = []
+	
+	var topRight = Vector2(curveSideways * GRID_SIZE, curveForward * GRID_SIZE)
+	var bottomRight = Vector2(curveSideways * GRID_SIZE, 0)
+	
+	var top: float = curveForward * GRID_SIZE
+	var right: float = curveSideways * GRID_SIZE
+	
+	for index in lengthDivisionPoints.size():
+		var xLerp = remapCurveSideways(lengthDivisionPoints[index])
+		var yLerp = remapCurveForward(lengthDivisionPoints[index])
+		
+		var xPos = lerp(0.0, right, xLerp)
+		var yPos = lerp(0.0, top, yLerp)
+		
+		positions.push_back(Vector2(xPos, yPos))
+	
+	return positions
+
+func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array[Vector2]:
+	var positions: Array[Vector2] = []
+	
+	var bottomRight = Vector2(0, 0)
+	
+#	for point in outsidePositions:
+#		var insidePosition = point + ((bottomRight - point).normalized() * TRACK_WIDTH)
+#
+#		positions.push_back(insidePosition)
+	# First point
+	var point = outsidePositions[0]
+	positions.push_back(point + ((bottomRight - point).normalized() * TRACK_WIDTH))
+	
+	for index in range(1, outsidePositions.size() - 1):
+		var prevPoint = outsidePositions[index - 1]
+		var nextPoint = outsidePositions[index + 1]
+		var tangentVector = nextPoint - prevPoint
+		var normalVector = Vector2(-tangentVector.y, tangentVector.x).normalized()
+		
+		var insidePoint = outsidePositions[index] + normalVector * TRACK_WIDTH
+		
+		if insidePoint.x < 0:
+			point = outsidePositions[outsidePositions.size() - 1]
+			insidePoint = point + ((bottomRight - point).normalized() * TRACK_WIDTH)
+		
+		positions.push_back(insidePoint)
+		
+	
+	# Last Point
+	point = outsidePositions[outsidePositions.size() - 1]
+	positions.push_back(point + ((bottomRight - point).normalized() * TRACK_WIDTH))
+	
+		
 	return positions
 
 #def generate_face_list(self) -> list:
@@ -123,10 +218,20 @@ func getIndexArray() -> Array[int]:
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	for y in (LENGTH_SEGMENTS * length + 1):
+	var actualLength = 1 if curve else length
+	
+	var multiplier = 1
+	if curve:
+		var larger = max(curveForward, curveSideways)
+		multiplier = round(float(larger) / (TRACK_WIDTH / GRID_SIZE))
+		
+	for y in (LENGTH_SEGMENTS * actualLength + 1):
 		for x in (WIDTH_SEGMENTS + 1):
 			var u = 1.0 - (float(x) / WIDTH_SEGMENTS)
-			var v = 1.0 - (float(y) / LENGTH_SEGMENTS)
+			
+#			
+			
+			var v = 1.0 - (float(y * multiplier) / LENGTH_SEGMENTS)
 			uvArray.push_back(Vector2(u, v))
 	
 	return uvArray
@@ -164,13 +269,24 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 func refreshMesh():
 	
 	lengthDivisionPoints.clear()
-	for index in range(LENGTH_SEGMENTS * length + 1):
-		lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * length))
 	
-	var leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
-	var rightPositions = generatePositionArrayStraight(0)
+	var leftPositions = []
+	var rightPositions = []
 	
-	var leftHeights = generateHeightArray(leftStartHeight, leftEndHeight, leftSmoothCurve)
-	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight, rightSmoothCurve) 
+	if !curve:
+		for index in range(LENGTH_SEGMENTS * length + 1):
+			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * length))
+		leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
+		rightPositions = generatePositionArrayStraight(0)
+	else:
+		for index in range(LENGTH_SEGMENTS + 1):
+			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS))
+		leftPositions = generatePositionArrayCurveOutside()
+		rightPositions = generatePositionArrayCurveInside(leftPositions)
+		pass
+		
+	
+	var leftHeights = generateHeightArray(leftStartHeight, leftEndHeight, leftSmoothTilt)
+	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight, rightSmoothTilt) 
 	
 	generateMesh(leftHeights, rightHeights, leftPositions, rightPositions)
