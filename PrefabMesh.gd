@@ -236,6 +236,34 @@ func getUVArray() -> Array[Vector2]:
 	
 	return uvArray
 
+func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2], leftHeights: Array[float], rightHeights: Array[float]) -> Array[Vector3]:
+
+	var normalArray: Array[Vector3] = []
+
+	for index in (leftPositions.size() - 1):
+		var a: Vector3 = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
+		var b: Vector3 = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
+		var c: Vector3 = Vector3(leftPositions[index + 1].x, leftHeights[index + 1], leftPositions[index + 1].y)
+		
+		var normal = ((b - a).cross(c - a)).normalized()
+		for _x in (WIDTH_SEGMENTS + 1): 
+			normalArray.push_back(normal)
+		
+	
+	var index = leftPositions.size() - 1 
+	
+	var a: Vector3 = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
+	var b: Vector3 = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
+	var c: Vector3 = Vector3(leftPositions[index - 1].x, leftHeights[index - 1], leftPositions[index - 1].y)
+	
+	var normal = ((c - a).cross(b - a)).normalized()
+	
+	for _x in (WIDTH_SEGMENTS + 1): 
+		normalArray.push_back(normal)
+	
+	
+	return normalArray
+
 func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPositions: Array[Vector2], rightPositions: Array[Vector2]):
 	var meshData = []
 	meshData.resize(ArrayMesh.ARRAY_MAX)
@@ -261,6 +289,8 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(getIndexArray())
 	
 	meshData[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array(getUVArray())
+	
+	meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(leftPositions, rightPositions, leftHeights, rightHeights))
 	
 	mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
