@@ -2,26 +2,55 @@
 extends MeshInstance3D
 
 @export
-var TRACK_WIDTH: float = 20.0
+var TRACK_WIDTH: float = 20.0:
+	set(value):
+		TRACK_WIDTH = value
+		refreshMesh()
 
 @export
-var GRID_HEIGHT: float = 2.0
+var GRID_HEIGHT: float = 2.0:
+	set(value):
+		GRID_HEIGHT = value
+		refreshMesh()
 
 @export
-var SEGMENTS: int = 32
+var LENGTH_SEGMENTS: int = 32:
+	set(value):
+		LENGTH_SEGMENTS = value
+		refreshMesh()
+
+@export
+var WIDTH_SEGMENTS: int = 8:
+	set(value):
+		WIDTH_SEGMENTS = value
+		refreshMesh()
 
 var divisionPoints: Array[float] = []
 
-@export var leftStartHeight: int = 0
-@export var rightStartHeight: int = 0
-
-@export var leftEndHeight: int = 0
-@export var rightEndHeight: int = 0
-
-@export
-var refresher: bool:
+@export var leftStartHeight: int = 0:
 	set(value):
-		refresher = setRefresh(value)
+		leftStartHeight = value
+		refreshMesh()
+@export var rightStartHeight: int = 0:
+	set(value):
+		rightStartHeight = value
+		refreshMesh()
+
+@export var leftEndHeight: int = 0:
+	set(value):
+		leftEndHeight = value
+		refreshMesh()
+
+@export var rightEndHeight: int = 0:
+	set(value):
+		rightEndHeight = value
+		refreshMesh()
+
+#@export
+#var refresher: bool:
+#	set(value):
+#		refreshMesh()
+#		refresher = value
 
 func setRefresh(value):
 	refreshMesh()
@@ -29,7 +58,7 @@ func setRefresh(value):
 
 func _ready():
 	
-#	divisionPoints = [x / SEGMENTS for x in  range(SEGMENTS + 1)]
+#	divisionPoints = [x / LENGTH_SEGMENTS for x in  range(LENGTH_SEGMENTS + 1)]
 	
 
 	
@@ -40,7 +69,7 @@ func smoothRemap(value: float) -> float:
 
 func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
 	var heightArray: Array[float] = []
-	for index in range(SEGMENTS + 1):
+	for index in range(LENGTH_SEGMENTS + 1):
 		var remappedIndex = smoothRemap(divisionPoints[index])
 		heightArray.push_back(GRID_HEIGHT * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
@@ -49,7 +78,7 @@ func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
 func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
-	for index in range(SEGMENTS + 1):
+	for index in range(LENGTH_SEGMENTS + 1):
 		positions.push_back(Vector2(xOffset, divisionPoints[index] * TRACK_WIDTH))
 	
 	return positions
@@ -60,15 +89,15 @@ func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
 #
 #	for i in range(1, parameters.OBJ_RESOLUTION + 1):
-	for index in range(SEGMENTS):
+	for index in range(LENGTH_SEGMENTS):
 #		face_list.append(Vector3i(i, i + 1, i + parameters.OBJ_RESOLUTION + 1))
 		indexList.append(index)
-		indexList.append(index + SEGMENTS + 1)
+		indexList.append(index + LENGTH_SEGMENTS + 1)
 		indexList.append(index + 1)
 #		face_list.append(Vector3i(i + parameters.OBJ_RESOLUTION + 1, i + 1, i + parameters.OBJ_RESOLUTION + 1 + 1))
 		indexList.append(index + 1)
-		indexList.append(index + SEGMENTS + 1)
-		indexList.append(index + SEGMENTS + 2)
+		indexList.append(index + LENGTH_SEGMENTS + 1)
+		indexList.append(index + LENGTH_SEGMENTS + 2)
 	
 	return indexList
 
@@ -107,8 +136,8 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 func refreshMesh():
 	
 	divisionPoints.clear()
-	for index in range(SEGMENTS + 1):
-		divisionPoints.push_back(float(index) / SEGMENTS)
+	for index in range(LENGTH_SEGMENTS + 1):
+		divisionPoints.push_back(float(index) / LENGTH_SEGMENTS)
 	
 	var leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
 	var rightPositions = generatePositionArrayStraight(0)
