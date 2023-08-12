@@ -46,6 +46,11 @@ var lengthDivisionPoints: Array[float] = []
 		rightEndHeight = value
 		refreshMesh()
 
+@export var length: int = 1:
+	set(value):
+		length = value
+		refreshMesh()
+
 #@export
 #var refresher: bool:
 #	set(value):
@@ -69,7 +74,7 @@ func smoothRemap(value: float) -> float:
 
 func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
 	var heightArray: Array[float] = []
-	for index in range(LENGTH_SEGMENTS + 1):
+	for index in lengthDivisionPoints.size():
 		var remappedIndex = smoothRemap(lengthDivisionPoints[index])
 		heightArray.push_back(GRID_HEIGHT * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
@@ -78,8 +83,8 @@ func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
 func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
-	for index in range(LENGTH_SEGMENTS + 1):
-		positions.push_back(Vector2(xOffset, lengthDivisionPoints[index] * TRACK_WIDTH))
+	for index in lengthDivisionPoints.size():
+		positions.push_back(Vector2(xOffset, lengthDivisionPoints[index] * TRACK_WIDTH * length))
 	
 	return positions
 
@@ -87,7 +92,7 @@ func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
 	
-	for y in LENGTH_SEGMENTS:
+	for y in LENGTH_SEGMENTS * length:
 		for x in WIDTH_SEGMENTS:
 			var bottomRightIndex = x + y * (WIDTH_SEGMENTS + 1)
 			var topRightIndex = x + (y + 1) * (WIDTH_SEGMENTS + 1)
@@ -104,7 +109,7 @@ func getIndexArray() -> Array[int]:
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	for y in (LENGTH_SEGMENTS + 1):
+	for y in (LENGTH_SEGMENTS * length + 1):
 		for x in (WIDTH_SEGMENTS + 1):
 			var u = 1.0 - (float(x) / WIDTH_SEGMENTS)
 			var v = 1.0 - (float(y) / LENGTH_SEGMENTS)
@@ -145,8 +150,8 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 func refreshMesh():
 	
 	lengthDivisionPoints.clear()
-	for index in range(LENGTH_SEGMENTS + 1):
-		lengthDivisionPoints.push_back(float(index) / LENGTH_SEGMENTS)
+	for index in range(LENGTH_SEGMENTS * length + 1):
+		lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * length))
 	
 	var leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
 	var rightPositions = generatePositionArrayStraight(0)
