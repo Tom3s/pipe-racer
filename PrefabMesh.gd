@@ -25,7 +25,7 @@ var WIDTH_SEGMENTS: int = 8:
 		WIDTH_SEGMENTS = value
 		refreshMesh()
 
-var divisionPoints: Array[float] = []
+var lengthDivisionPoints: Array[float] = []
 
 @export var leftStartHeight: int = 0:
 	set(value):
@@ -58,7 +58,7 @@ func setRefresh(value):
 
 func _ready():
 	
-#	divisionPoints = [x / LENGTH_SEGMENTS for x in  range(LENGTH_SEGMENTS + 1)]
+#	lengthDivisionPoints = [x / LENGTH_SEGMENTS for x in  range(LENGTH_SEGMENTS + 1)]
 	
 
 	
@@ -70,7 +70,7 @@ func smoothRemap(value: float) -> float:
 func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
 	var heightArray: Array[float] = []
 	for index in range(LENGTH_SEGMENTS + 1):
-		var remappedIndex = smoothRemap(divisionPoints[index])
+		var remappedIndex = smoothRemap(lengthDivisionPoints[index])
 		heightArray.push_back(GRID_HEIGHT * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
 	return heightArray
@@ -79,36 +79,36 @@ func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
 	for index in range(LENGTH_SEGMENTS + 1):
-		positions.push_back(Vector2(xOffset, divisionPoints[index] * TRACK_WIDTH))
+		positions.push_back(Vector2(xOffset, lengthDivisionPoints[index] * TRACK_WIDTH))
 	
 	return positions
 
 #def generate_face_list(self) -> list:
 func getIndexArray() -> Array[int]:
-#	face_list: list[Vector3i] = []
 	var indexList: Array[int] = []
-#
-#	for i in range(1, parameters.OBJ_RESOLUTION + 1):
-	for index in range(LENGTH_SEGMENTS):
-#		face_list.append(Vector3i(i, i + 1, i + parameters.OBJ_RESOLUTION + 1))
-		indexList.append(index)
-		indexList.append(index + LENGTH_SEGMENTS + 1)
-		indexList.append(index + 1)
-#		face_list.append(Vector3i(i + parameters.OBJ_RESOLUTION + 1, i + 1, i + parameters.OBJ_RESOLUTION + 1 + 1))
-		indexList.append(index + 1)
-		indexList.append(index + LENGTH_SEGMENTS + 1)
-		indexList.append(index + LENGTH_SEGMENTS + 2)
 	
+	for y in LENGTH_SEGMENTS:
+		for x in WIDTH_SEGMENTS:
+			var bottomRightIndex = x + y * (WIDTH_SEGMENTS + 1)
+			var topRightIndex = x + (y + 1) * (WIDTH_SEGMENTS + 1)
+			indexList.push_back(bottomRightIndex)
+			indexList.push_back(bottomRightIndex + 1)
+			indexList.push_back(topRightIndex)
+			
+			indexList.push_back(bottomRightIndex + 1)
+			indexList.push_back(topRightIndex + 1)
+			indexList.push_back(topRightIndex)
+
 	return indexList
 
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	for point in divisionPoints:
-		uvArray.push_back(Vector2(1, 1.0 - point))
-	
-	for point in divisionPoints:
-		uvArray.push_back(Vector2(0, 1.0 - point))
+	for y in (LENGTH_SEGMENTS + 1):
+		for x in (WIDTH_SEGMENTS + 1):
+			var u = 1.0 - (float(x) / WIDTH_SEGMENTS)
+			var v = 1.0 - (float(y) / LENGTH_SEGMENTS)
+			uvArray.push_back(Vector2(u, v))
 	
 	return uvArray
 
@@ -117,11 +117,20 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	meshData.resize(ArrayMesh.ARRAY_MAX)
 	
 	var vertices = []
-	for index in rightHeights.size():
-		vertices.push_back(Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y))
-	
-	for index in leftHeights.size():
-		vertices.push_back(Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y))
+#	for index in rightHeights.size():
+#		vertices.push_back(Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y))
+#
+#	for index in leftHeights.size():
+#		vertices.push_back(Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y))
+	for index in rightPositions.size():
+		var rightMostVertex = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
+		var leftMostVertex = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
+		
+		vertices.push_back(rightMostVertex)
+		for divIndex in range(1, WIDTH_SEGMENTS):
+			vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / WIDTH_SEGMENTS))
+		
+		vertices.push_back(leftMostVertex)
 	
 	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertices)
 	
@@ -135,9 +144,9 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 
 func refreshMesh():
 	
-	divisionPoints.clear()
+	lengthDivisionPoints.clear()
 	for index in range(LENGTH_SEGMENTS + 1):
-		divisionPoints.push_back(float(index) / LENGTH_SEGMENTS)
+		lengthDivisionPoints.push_back(float(index) / LENGTH_SEGMENTS)
 	
 	var leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
 	var rightPositions = generatePositionArrayStraight(0)
