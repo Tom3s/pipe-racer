@@ -31,19 +31,33 @@ var lengthDivisionPoints: Array[float] = []
 	set(value):
 		leftStartHeight = value
 		refreshMesh()
-@export var rightStartHeight: int = 0:
-	set(value):
-		rightStartHeight = value
-		refreshMesh()
 
 @export var leftEndHeight: int = 0:
 	set(value):
 		leftEndHeight = value
 		refreshMesh()
 
+@export var leftSmoothCurve: bool = true:
+	set(value):
+		leftSmoothCurve = value
+		refreshMesh()
+
+
+
+@export var rightStartHeight: int = 0:
+	set(value):
+		rightStartHeight = value
+		refreshMesh()
+
+
 @export var rightEndHeight: int = 0:
 	set(value):
 		rightEndHeight = value
+		refreshMesh()
+
+@export var rightSmoothCurve: bool = true:
+	set(value):
+		rightSmoothCurve = value
 		refreshMesh()
 
 @export var length: int = 1:
@@ -72,10 +86,10 @@ func _ready():
 func smoothRemap(value: float) -> float:
 	return (cos(value * PI + PI) + 1) / 2
 
-func generateHeightArray(startOffset: float, endOffset: float) -> Array[float]:
+func generateHeightArray(startOffset: float, endOffset: float, smooth: bool) -> Array[float]:
 	var heightArray: Array[float] = []
 	for index in lengthDivisionPoints.size():
-		var remappedIndex = smoothRemap(lengthDivisionPoints[index])
+		var remappedIndex = smoothRemap(lengthDivisionPoints[index]) if smooth else lengthDivisionPoints[index]
 		heightArray.push_back(GRID_HEIGHT * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
 	return heightArray
@@ -156,7 +170,7 @@ func refreshMesh():
 	var leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
 	var rightPositions = generatePositionArrayStraight(0)
 	
-	var leftHeights = generateHeightArray(leftStartHeight, leftEndHeight)
-	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight) 
+	var leftHeights = generateHeightArray(leftStartHeight, leftEndHeight, leftSmoothCurve)
+	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight, rightSmoothCurve) 
 	
 	generateMesh(leftHeights, rightHeights, leftPositions, rightPositions)
