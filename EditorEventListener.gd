@@ -4,6 +4,7 @@ var editorInputHandler: EditorInputHandler
 var prefabMesher: PrefabMesher
 var editorStateMachine: EditorStateMachine
 var camera: EditorCamera
+var map: Map
 
 func _ready():
 	# assign nodes
@@ -11,11 +12,13 @@ func _ready():
 	prefabMesher = %PrefabGenerator/PrefabMesher
 	editorStateMachine = %EditorStateMachine 
 	camera = %EditorCamera
+	map = %Map
 
 	# connect signals
 	editorInputHandler.mouseMovedTo.connect(onEditorInputHandler_mouseMovedTo)
 	editorInputHandler.moveUpGrid.connect(onEditorInputHandler_moveUpGrid)
 	editorInputHandler.moveDownGrid.connect(onEditorInputHandler_moveDownGrid)
+	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
 
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
@@ -29,3 +32,9 @@ func onEditorInputHandler_moveUpGrid():
 func onEditorInputHandler_moveDownGrid():
 	editorStateMachine.gridCurrentHeight -= 1	
 	camera.position.y -= prefabMesher.GRID_SIZE
+
+func onEditorInputHandler_placePressed():
+	var prefab = MeshInstance3D.new()
+	prefab.mesh = prefabMesher.mesh
+	
+	map.addPrefab(prefab, prefabMesher.global_position, prefabMesher.global_rotation)

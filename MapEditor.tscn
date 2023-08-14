@@ -11,6 +11,7 @@
 [node name="MapEditor" type="Node3D"]
 
 [node name="Map" parent="." instance=ExtResource("1_d0rt7")]
+unique_name_in_owner = true
 
 [node name="TestTrackEnv" parent="." instance=ExtResource("2_l42gs")]
 
