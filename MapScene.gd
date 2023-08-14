@@ -19,10 +19,5 @@ func addPrefab(prefab: MeshInstance3D, prefabPosition: Vector3, prefabRotation: 
 	trackPieces.add_child(prefab)
 	prefab.global_position = prefabPosition
 	prefab.global_rotation = prefabRotation
-	# prefab.mesh.surface_set_material(0, roadMaterial)
-	# prefab.mesh.surface_get_material(0).set("ColorParameter", Color.DARK_GRAY)
-	# prefab.set_surface_override_material(0, roadMaterial)
-	# prefab.get_surface_override_material(0).set("shader_parameter/ColorParameter", Color.DARK_GRAY)
-	print(roadMaterial)
 	prefab.mesh.surface_set_material(0, roadMaterial)
 	prefab.create_trimesh_collision()

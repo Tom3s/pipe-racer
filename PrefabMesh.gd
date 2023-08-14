@@ -132,7 +132,7 @@ func smoothEndRemamp(value: float) -> float:
 	return cos(value * PI / 2 + PI) + 1
 
 
-func generateHeightArray(startOffset: float, endOffset: float, smooth: int) -> Array[float]:
+func generateHeightArray(startOffset: float, finalOffset: float, smooth: int) -> Array[float]:
 	var heightArray: Array[float] = []
 	for index in lengthDivisionPoints.size():
 		# var remappedIndex = smoothRemap(lengthDivisionPoints[index]) if smooth else lengthDivisionPoints
@@ -145,7 +145,7 @@ func generateHeightArray(startOffset: float, endOffset: float, smooth: int) -> A
 		elif smooth == SMOOTH_BOTH:
 			remappedIndex = smoothRemap(remappedIndex)
 
-		heightArray.push_back(GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, endOffset))
+		heightArray.push_back(GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, finalOffset))
 	
 	return heightArray
 
