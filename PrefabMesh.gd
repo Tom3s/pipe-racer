@@ -247,8 +247,10 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 #def generate_face_list(self) -> list:
 func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
+
+	var actualLength = 1 if curve else length
 	
-	for y in LENGTH_SEGMENTS * length:
+	for y in LENGTH_SEGMENTS * actualLength:
 		for x in WIDTH_SEGMENTS:
 			var bottomRightIndex = x + y * (WIDTH_SEGMENTS + 1)
 			var topRightIndex = x + (y + 1) * (WIDTH_SEGMENTS + 1)
@@ -398,3 +400,40 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 
 func rotate90():
 	global_rotation_degrees.y += 90
+
+func encodeData():
+	var data = {}
+	data["leftStartHeight"] = leftStartHeight
+	data["leftEndHeight"] = leftEndHeight
+	data["leftSmoothTilt"] = leftSmoothTilt
+	data["rightStartHeight"] = rightStartHeight
+	data["rightEndHeight"] = rightEndHeight
+	data["rightSmoothTilt"] = rightSmoothTilt
+	data["curve"] = curve
+	data["endOffset"] = endOffset
+	data["smoothOffset"] = smoothOffset
+	data["length"] = length
+	data["curveForward"] = curveForward
+	data["curveSideways"] = curveSideways
+
+	data["global_position"] = global_position
+	data["global_rotation"] = global_rotation
+	return data
+
+func decodeData(data: Variant):
+	leftStartHeight = data["leftStartHeight"]
+	leftEndHeight = data["leftEndHeight"]
+	leftSmoothTilt = data["leftSmoothTilt"]
+	rightStartHeight = data["rightStartHeight"]
+	rightEndHeight = data["rightEndHeight"]
+	rightSmoothTilt = data["rightSmoothTilt"]
+	curve = data["curve"]
+	endOffset = data["endOffset"]
+	smoothOffset = data["smoothOffset"]
+	length = data["length"]
+	curveForward = data["curveForward"]
+	curveSideways = data["curveSideways"]
+
+	global_position = data["global_position"]
+	global_rotation = data["global_rotation"]
+	refreshMesh()
