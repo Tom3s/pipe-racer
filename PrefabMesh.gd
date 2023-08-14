@@ -356,6 +356,8 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 		offset.x = TRACK_WIDTH / 2
 		offset.z = TRACK_WIDTH * length / 2
 
+	offset = offset.rotated(Vector3.UP, global_rotation.y)
+
 	newPosition -= offset
 
 	newPosition /= GRID_SIZE
@@ -366,3 +368,6 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 	newPosition *= GRID_SIZE
 
 	global_position = newPosition
+
+func rotate90():
+	global_rotation_degrees.y += 90

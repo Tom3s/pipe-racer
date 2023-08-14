@@ -19,6 +19,7 @@ func _ready():
 	editorInputHandler.moveUpGrid.connect(onEditorInputHandler_moveUpGrid)
 	editorInputHandler.moveDownGrid.connect(onEditorInputHandler_moveDownGrid)
 	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
+	editorInputHandler.rotatePressed.connect(onEditorInputHandler_rotatePressed)
 
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
@@ -38,3 +39,6 @@ func onEditorInputHandler_placePressed():
 	prefab.mesh = prefabMesher.mesh
 	
 	map.addPrefab(prefab, prefabMesher.global_position, prefabMesher.global_rotation)
+
+func onEditorInputHandler_rotatePressed():
+	prefabMesher.rotate90()

@@ -7,6 +7,7 @@ signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()
 signal moveDownGrid()
 signal placePressed()
+signal rotatePressed()
 
 func _input(event):
 	if !Input.is_action_pressed("editor_look_around"):
@@ -18,6 +19,8 @@ func _input(event):
 		moveDownGrid.emit()
 	if Input.is_action_just_pressed("editor_place"):
 		placePressed.emit()
+	if Input.is_action_just_pressed("editor_rotate_prefab"):
+		rotatePressed.emit()
 
 func screenPointToRay() -> Vector3:
 	var spaceState = get_world_3d().direct_space_state
