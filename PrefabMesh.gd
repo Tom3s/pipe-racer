@@ -29,6 +29,12 @@ var WIDTH_SEGMENTS: int = 8:
 
 var lengthDivisionPoints: Array[float] = []
 
+const NON_SMOOTH = 0
+const SMOOTH_START = 1
+const SMOOTH_END = 2
+const SMOOTH_BOTH = 3
+
+
 @export_group("General Properties")
 @export var leftStartHeight: int = 0:
 	set(value):
@@ -40,9 +46,9 @@ var lengthDivisionPoints: Array[float] = []
 		leftEndHeight = value
 		refreshMesh()
 
-@export var leftSmoothTilt: bool = true:
+@export var leftSmoothTilt: int = 0:
 	set(value):
-		leftSmoothTilt = value
+		leftSmoothTilt = (value + 4) % 4
 		refreshMesh()
 
 
@@ -58,9 +64,9 @@ var lengthDivisionPoints: Array[float] = []
 		rightEndHeight = value
 		refreshMesh()
 
-@export var rightSmoothTilt: bool = true:
+@export var rightSmoothTilt: int = 0:
 	set(value):
-		rightSmoothTilt = value
+		rightSmoothTilt = (value + 4) % 4
 		refreshMesh()
 
 @export_group("Prefab Type")
@@ -76,9 +82,9 @@ var lengthDivisionPoints: Array[float] = []
 		endOffset = value
 		refreshMesh()
 
-@export var smoothOffset: bool = true:
+@export var smoothOffset: int = 0:
 	set(value):
-		smoothOffset = value
+		smoothOffset = (value + 4) % 4
 		refreshMesh()
 
 @export var length: int = 1:
@@ -119,10 +125,26 @@ func _ready():
 func smoothRemap(value: float) -> float:
 	return (cos(value * PI + PI) + 1) / 2
 
-func generateHeightArray(startOffset: float, endOffset: float, smooth: bool) -> Array[float]:
+func smoothStartRemamp(value: float) -> float:
+	return sin(value * PI / 2)
+
+func smoothEndRemamp(value: float) -> float:
+	return cos(value * PI / 2 + PI) + 1
+
+
+func generateHeightArray(startOffset: float, endOffset: float, smooth: int) -> Array[float]:
 	var heightArray: Array[float] = []
 	for index in lengthDivisionPoints.size():
-		var remappedIndex = smoothRemap(lengthDivisionPoints[index]) if smooth else lengthDivisionPoints[index]
+		# var remappedIndex = smoothRemap(lengthDivisionPoints[index]) if smooth else lengthDivisionPoints
+		var remappedIndex = lengthDivisionPoints[index]
+
+		if smooth == SMOOTH_START:
+			remappedIndex = smoothStartRemamp(remappedIndex)
+		elif smooth == SMOOTH_END:
+			remappedIndex = smoothEndRemamp(remappedIndex)
+		elif smooth == SMOOTH_BOTH:
+			remappedIndex = smoothRemap(remappedIndex)
+
 		heightArray.push_back(GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, endOffset))
 	
 	return heightArray
@@ -131,7 +153,17 @@ func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
 	for index in lengthDivisionPoints.size():
-		var lerpValue = smoothRemap(lengthDivisionPoints[index]) if smoothOffset else lengthDivisionPoints[index]
+		# var lerpValue = smoothRemap(lengthDivisionPoints[index]) if smoothOffset else lengthDivisionPoints[index]
+
+		var lerpValue = lengthDivisionPoints[index]
+
+		if smoothOffset == SMOOTH_START:
+			lerpValue = smoothStartRemamp(lerpValue)
+		elif smoothOffset == SMOOTH_END:
+			lerpValue = smoothEndRemamp(lerpValue)
+		elif smoothOffset == SMOOTH_BOTH:
+			lerpValue = smoothRemap(lerpValue)
+
 		var xPos = lerp(xOffset, xOffset + endOffset * GRID_SIZE, lerpValue)
 		positions.push_back(Vector2(xPos, lengthDivisionPoints[index] * TRACK_WIDTH * length))
 	
@@ -145,9 +177,6 @@ func remapCurveSideways(value: float) -> float:
 
 func generatePositionArrayCurveOutside() -> Array[Vector2]:
 	var positions: Array[Vector2] = []
-	
-	var topRight = Vector2(curveSideways * GRID_SIZE, curveForward * GRID_SIZE)
-	var bottomRight = Vector2(curveSideways * GRID_SIZE, 0)
 	
 	var top: float = curveForward * GRID_SIZE
 	var right: float = curveSideways * GRID_SIZE
@@ -165,9 +194,6 @@ func generatePositionArrayCurveOutside() -> Array[Vector2]:
 
 func generatePositionArrayCurveInside2() -> Array[Vector2]:
 	var positions: Array[Vector2] = []
-	
-	var topRight = Vector2(curveSideways * GRID_SIZE, curveForward * GRID_SIZE)
-	var bottomRight = Vector2(curveSideways * GRID_SIZE, 0)
 	
 	var top: float = curveForward * GRID_SIZE - TRACK_WIDTH
 	var right: float = curveSideways * GRID_SIZE - TRACK_WIDTH
@@ -304,6 +330,7 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 			vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / WIDTH_SEGMENTS))
 		
 		vertices.push_back(leftMostVertex)
+
 	
 	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertices)
 	
