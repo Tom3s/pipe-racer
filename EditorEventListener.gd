@@ -35,7 +35,7 @@ func onEditorInputHandler_moveDownGrid():
 	camera.position.y -= prefabMesher.GRID_SIZE
 
 func onEditorInputHandler_placePressed():
-	var prefab = MeshInstance3D.new()
+	var prefab = PrefabProperties.new(prefabMesher.encodeData())
 	prefab.mesh = prefabMesher.mesh
 	
 	map.addPrefab(prefab, prefabMesher.global_position, prefabMesher.global_rotation)
