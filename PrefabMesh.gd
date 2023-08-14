@@ -1,5 +1,6 @@
 @tool
 extends MeshInstance3D
+class_name PrefabMesher
 
 @export_group("Global Constants")
 @export
@@ -341,3 +342,27 @@ func refreshMesh():
 	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight, rightSmoothTilt) 
 	
 	generateMesh(leftHeights, rightHeights, leftPositions, rightPositions)
+
+
+func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float):
+	
+	newPosition += (cameraPosition - newPosition) * (GRID_SIZE * height / cameraPosition.y)
+
+	var offset = Vector3.ZERO
+	if curve:
+		offset.x = curveForward * GRID_SIZE / 2
+		offset.z = curveSideways * GRID_SIZE / 2
+	else:
+		offset.x = TRACK_WIDTH / 2
+		offset.z = TRACK_WIDTH * length / 2
+
+	newPosition -= offset
+
+	newPosition /= GRID_SIZE
+	newPosition.x = round(newPosition.x)
+	newPosition.y = height
+	newPosition.z = round(newPosition.z)
+
+	newPosition *= GRID_SIZE
+
+	global_position = newPosition
