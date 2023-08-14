@@ -124,3 +124,7 @@ func _update_mouselook():
 	
 		rotate_y(deg_to_rad(-yaw))
 		rotate_object_local(Vector3(1,0,0), deg_to_rad(-pitch))
+
+
+func getPositionInFrontOfCamera(distance: float) -> Vector3:
+	return global_position - global_transform.basis.z * distance

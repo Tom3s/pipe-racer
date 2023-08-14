@@ -373,21 +373,24 @@ func refreshMesh():
 	generateMesh(leftHeights, rightHeights, leftPositions, rightPositions)
 
 
-func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float):
-	
-	newPosition += (cameraPosition - newPosition) * (GRID_SIZE * height / cameraPosition.y)
-
+func getCenteringOffset() -> Vector3:
 	var offset = Vector3.ZERO
 	if curve:
-		offset.x = curveForward * GRID_SIZE / 2
-		offset.z = curveSideways * GRID_SIZE / 2
+		offset.z = curveForward * GRID_SIZE / 2
+		offset.x = curveSideways * GRID_SIZE / 2
 	else:
 		offset.x = TRACK_WIDTH / 2
 		offset.z = TRACK_WIDTH * length / 2
 
 	offset = offset.rotated(Vector3.UP, global_rotation.y)
 
-	newPosition -= offset
+	return offset
+
+func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float):
+	
+	newPosition += (cameraPosition - newPosition) * (GRID_SIZE * height / cameraPosition.y)
+
+	newPosition -= getCenteringOffset()
 
 	newPosition /= GRID_SIZE
 	newPosition.x = round(newPosition.x)
@@ -398,8 +401,14 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 
 	global_position = newPosition
 
+func updatePositionExact(newPosition: Vector3):
+	newPosition -= getCenteringOffset()
+	global_position = newPosition
+
 func rotate90():
+	global_position += getCenteringOffset()
 	global_rotation_degrees.y += 90
+	global_position -= getCenteringOffset()
 
 func encodeData():
 	var data = {}

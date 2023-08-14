@@ -1,4 +1,5 @@
 extends Control
+class_name PrefabPropertiesUI
 
 var leftEnd: VSlider
 var rightEnd: VSlider
@@ -38,6 +39,9 @@ signal straightSmoothingChanged(value: int)
 
 signal curveForwardChanged(value: float)
 signal curveSidewaysChanged(value: float)
+
+signal mouseEnteredPrefabProperties()
+signal mouseExitedPrefabProperties()
 
 func _ready():
 	leftEnd = %LeftEnd
@@ -80,6 +84,9 @@ func _ready():
 	straightLength.value_changed.connect(onStraightLengthChanged)
 	straightOffset.value_changed.connect(onStraightOffsetChanged)
 	straightSmoothing.item_selected.connect(onStraightSmoothingChanged)
+
+	curveForward.value_changed.connect(onCurveForwardChanged)
+	curveSideways.value_changed.connect(onCurveSidewaysChanged)
 
 # sync slider with spinbox
 func onLeftEndChanged(value: float):
@@ -141,4 +148,10 @@ func onStraightOffsetChanged(value: float):
 
 func onStraightSmoothingChanged(value: int):
 	straightSmoothingChanged.emit(value)
+
+func onCurveForwardChanged(value: float):
+	curveForwardChanged.emit(value)
+
+func onCurveSidewaysChanged(value: float):
+	curveSidewaysChanged.emit(value)
 

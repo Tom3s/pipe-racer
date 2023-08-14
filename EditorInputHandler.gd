@@ -3,11 +3,31 @@ class_name EditorInputHandler
 
 var maxDistance: int = 2000
 
+const prefabSafeZone: Vector2i = Vector2i(235, 400)
+
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()
 signal moveDownGrid()
 signal placePressed()
 signal rotatePressed()
+
+signal mouseEnteredUI()
+signal mouseExitedUI()
+
+var mousePos: Vector2 = Vector2()
+var windowSize: Vector2 = Vector2()
+
+var mouseOverUI: bool = false:
+	set(value):
+		mouseOverUI = mouseOverUIChanged(value)
+
+func mouseOverUIChanged(value: bool) -> bool:
+	if value != mouseOverUI:
+		if value:
+			mouseEnteredUI.emit()
+		else:
+			mouseExitedUI.emit()
+	return value
 
 func _input(event):
 	if !Input.is_action_pressed("editor_look_around"):
@@ -21,6 +41,17 @@ func _input(event):
 		placePressed.emit()
 	if Input.is_action_just_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
+
+
+
+	windowSize = DisplayServer.window_get_size()
+	mousePos = get_viewport().get_mouse_position()
+
+	if mousePos.x > windowSize.x - prefabSafeZone.x && mousePos.y < prefabSafeZone.y:
+		mouseOverUI = true
+	else:
+		mouseOverUI = false
+
 
 func screenPointToRay() -> Vector3:
 	var spaceState = get_world_3d().direct_space_state

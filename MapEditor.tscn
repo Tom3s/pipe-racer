@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=9 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
+[ext_resource type="PackedScene" uid="uid://dekkh255k7tti" path="res://Tracks/prefab_properties_ui.tscn" id="1_oo1hv"]
 [ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="2_l42gs"]
 [ext_resource type="Script" path="res://EditorInputHandler.gd" id="2_nlp2q"]
 [ext_resource type="Script" path="res://EditorCamera.gd" id="3_ciak8"]
@@ -9,6 +10,11 @@
 [ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
 
 [node name="MapEditor" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PrefabPropertiesUI" parent="CanvasLayer" instance=ExtResource("1_oo1hv")]
+unique_name_in_owner = true
 
 [node name="Map" parent="." instance=ExtResource("1_d0rt7")]
 unique_name_in_owner = true
