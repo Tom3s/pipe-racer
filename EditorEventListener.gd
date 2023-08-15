@@ -22,6 +22,7 @@ func _ready():
 	editorInputHandler.moveDownGrid.connect(onEditorInputHandler_moveDownGrid)
 	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
 	editorInputHandler.rotatePressed.connect(onEditorInputHandler_rotatePressed)
+	editorInputHandler.selectPressed.connect(onEditorInputHandler_selectPressed)
 
 	# connect prefab UI to value changes
 	# PrefabPropertiesUI:
@@ -56,6 +57,10 @@ func _ready():
 	editorInputHandler.undoPressed.connect(onEditorInputHandler_undoPressed)
 	editorInputHandler.redoPressed.connect(onEditorInputHandler_redoPressed)
 
+	editorInputHandler.editorModeBuildPressed.connect(onEditorInputHandler_editorModeBuildPressed)
+	editorInputHandler.editorModeEditPressed.connect(onEditorInputHandler_editorModeEditPressed)
+	editorInputHandler.editorModeDeletePressed.connect(onEditorInputHandler_editorModeDeletePressed)
+
 	map.undidLastOperation.connect(onMap_undidLastOperation)
 	map.redidLastOperation.connect(onMap_redidLastOperation)
 	map.noOperationToBeUndone.connect(onMap_noOperationToBeUndone)
@@ -63,11 +68,11 @@ func _ready():
 
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
-	if worldMousePos != Vector3.INF && editorStateMachine.mouseNotOverUI():
+	if worldMousePos != Vector3.INF && editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
 		prefabMesher.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
 	elif editorStateMachine.mouseOverUI:
 		# prefabMesher.global_position = camera.getPositionInFrontOfCamera(50)
-		prefabMesher.updatePositionExact(camera.getPositionInFrontOfCamera(50))
+		prefabMesher.updatePositionExact(camera.getPositionInFrontOfCamera(60))
 
 func onEditorInputHandler_moveUpGrid():
 	if editorStateMachine.mouseNotOverUI():
@@ -88,6 +93,17 @@ func onEditorInputHandler_placePressed():
 
 func onEditorInputHandler_rotatePressed():
 	prefabMesher.rotate90()
+
+func onEditorInputHandler_selectPressed(object: Object):
+	print(object, "was ray hit with selection", object.get_class())
+	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
+		var oldSelection = editorStateMachine.setCurrentSelection(object)
+		if object.has_method("select"):
+			object.select()
+			prefabPropertiesUI.setFromData(object.prefabData)
+		
+		if oldSelection != null:
+			oldSelection.deselect()
 
 
 func onPrefabPropertiesUI_leftEndChanged(value: float):
@@ -129,7 +145,7 @@ func onPrefabPropertiesUI_curveSidewaysChanged(value: float):
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
 	# prefabMesher.global_position = camera.getPositionInFrontOfCamera(50)
-	prefabMesher.updatePositionExact(camera.getPositionInFrontOfCamera(50))
+	prefabMesher.updatePositionExact(camera.getPositionInFrontOfCamera(60))
 	print("Mouse entered prefab properties")
 
 func onEditorInputHandler_mouseExitedUI():
@@ -153,3 +169,19 @@ func onMap_noOperationToBeUndone():
 
 func onMap_noOperationToBeRedone():
 	print("No operation to be redone")
+
+func onEditorInputHandler_editorModeBuildPressed():
+	editorStateMachine.setEditorStateBuild()
+	prefabMesher.visible = true
+	print("Build mode")
+
+func onEditorInputHandler_editorModeEditPressed():
+	editorStateMachine.setEditorStateEdit()
+	prefabMesher.visible = false
+	print("Edit mode")
+
+func onEditorInputHandler_editorModeDeletePressed():
+	editorStateMachine.setEditorStateDelete()
+	prefabMesher.visible = false
+	print("Delete mode")
+	

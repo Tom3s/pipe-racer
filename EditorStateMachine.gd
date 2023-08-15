@@ -24,6 +24,8 @@ var mouseOverUI: bool = false:
 	get:
 		return mouseOverUI
 
+var currentSelection: PrefabProperties = null
+
 func mouseOverUIChanged(value: bool) -> bool:
 	return value
 
@@ -33,5 +35,38 @@ func mouseNotOverUI() -> bool:
 func inBuildState() -> bool:
 	return editorState == EDITOR_STATE_BUILD
 
+func inEditState() -> bool:
+	return editorState == EDITOR_STATE_EDIT
+
+func inDeleteState() -> bool:
+	return editorState == EDITOR_STATE_DELETE
+
 func canBuild() -> bool:
 	return mouseNotOverUI() and inBuildState()
+
+func setEditorStateBuild() -> void:
+	currentSelection.deselect()
+	currentSelection = null
+	editorState = EDITOR_STATE_BUILD
+
+func setEditorStateEdit() -> void:
+	editorState = EDITOR_STATE_EDIT
+
+func setEditorStateDelete() -> void:
+	editorState = EDITOR_STATE_DELETE
+
+func setCurrentSelection(selection: Object) -> PrefabProperties:
+
+	if selection == currentSelection:
+		return null
+
+	if !(selection.has_method("select")):
+		var oldSelection = currentSelection
+		currentSelection = null
+
+		return oldSelection
+
+	var oldSelection = currentSelection
+	currentSelection = selection
+
+	return oldSelection

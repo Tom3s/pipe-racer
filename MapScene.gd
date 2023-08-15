@@ -28,7 +28,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func addPrefab(prefab: MeshInstance3D, prefabPosition: Vector3, prefabRotation: Vector3):
+func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3, prefabRotation: Vector3):
 	trackPieces.add_child(prefab)
 	prefab.global_position = prefabPosition
 	prefab.global_rotation = prefabRotation

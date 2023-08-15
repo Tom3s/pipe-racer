@@ -10,6 +10,7 @@ signal moveUpGrid()
 signal moveDownGrid()
 signal placePressed()
 signal rotatePressed()
+signal selectPressed(object: Object)
 
 signal undoPressed()
 signal redoPressed()
@@ -17,7 +18,11 @@ signal redoPressed()
 signal mouseEnteredUI()
 signal mouseExitedUI()
 
-var mousePos: Vector2 = Vector2()
+signal editorModeBuildPressed()
+signal editorModeEditPressed()
+signal editorModeDeletePressed()
+
+var mousePos2D: Vector2 = Vector2()
 var windowSize: Vector2 = Vector2()
 
 var mouseOverUI: bool = false:
@@ -44,16 +49,24 @@ func _input(event):
 		placePressed.emit()
 	if Input.is_action_just_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
+	if Input.is_action_just_pressed("editor_select"):
+		selectPressed.emit(screenPointToRaySelect())
 	if Input.is_action_just_pressed("editor_undo"):
 		undoPressed.emit()
 	if Input.is_action_just_pressed("editor_redo"):
 		redoPressed.emit()
-
+	if Input.is_action_just_pressed("editor_mode_build"):
+		editorModeBuildPressed.emit()
+	if Input.is_action_just_pressed("editor_mode_edit"):
+		editorModeEditPressed.emit()
+	if Input.is_action_just_pressed("editor_mode_delete"):
+		editorModeDeletePressed.emit()
+	
 
 	windowSize = DisplayServer.window_get_size()
-	mousePos = get_viewport().get_mouse_position()
+	mousePos2D = get_viewport().get_mouse_position()
 
-	if mousePos.x > windowSize.x - prefabSafeZone.x && mousePos.y < prefabSafeZone.y:
+	if mousePos2D.x > windowSize.x - prefabSafeZone.x && mousePos2D.y < prefabSafeZone.y:
 		mouseOverUI = true
 	else:
 		mouseOverUI = false
@@ -72,3 +85,15 @@ func screenPointToRay() -> Vector3:
 		return rayArray["position"]
 	return Vector3.INF
 
+func screenPointToRaySelect() -> Object:
+	var spaceState = get_world_3d().direct_space_state
+
+	var mousePos = get_viewport().get_mouse_position()
+	var camera = get_tree().root.get_camera_3d()
+	var from = camera.project_ray_origin(mousePos)
+	var to = from + camera.project_ray_normal(mousePos) * maxDistance
+	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to))
+	
+	if rayArray.has("collider"):
+		return rayArray["collider"].get_parent()
+	return null

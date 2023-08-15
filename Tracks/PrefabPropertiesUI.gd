@@ -155,3 +155,30 @@ func onCurveForwardChanged(value: float):
 func onCurveSidewaysChanged(value: float):
 	curveSidewaysChanged.emit(value)
 
+func setFromData(data):
+	# func decodeData(data: Variant):
+	# leftStartHeight = data["leftStartHeight"]
+	# leftEndHeight = data["leftEndHeight"]
+	# leftSmoothTilt = data["leftSmoothTilt"]
+	# rightStartHeight = data["rightStartHeight"]
+	# rightEndHeight = data["rightEndHeight"]
+	# rightSmoothTilt = data["rightSmoothTilt"]
+	# curve = data["curve"]
+	# endOffset = data["endOffset"]
+	# smoothOffset = data["smoothOffset"]
+	# length = data["length"]
+	# curveForward = data["curveForward"]
+	# curveSideways = data["curveSideways"]
+
+	leftStart.value = data["leftStartHeight"]
+	leftEnd.value = data["leftEndHeight"]
+	leftSmoothing.selected = data["leftSmoothTilt"]
+	rightStart.value = data["rightStartHeight"]
+	rightEnd.value = data["rightEndHeight"]
+	rightSmoothing.selected = data["rightSmoothTilt"]
+	curvedTickBox.button_pressed = data["curve"]
+	straightOffset.value = data["endOffset"]
+	straightSmoothing.selected = data["smoothOffset"]
+	straightLength.value = data["length"]
+	curveForward.value = data["curveForward"]
+	curveSideways.value = data["curveSideways"]
