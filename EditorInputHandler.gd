@@ -11,6 +11,9 @@ signal moveDownGrid()
 signal placePressed()
 signal rotatePressed()
 
+signal undoPressed()
+signal redoPressed()
+
 signal mouseEnteredUI()
 signal mouseExitedUI()
 
@@ -41,7 +44,10 @@ func _input(event):
 		placePressed.emit()
 	if Input.is_action_just_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
-
+	if Input.is_action_just_pressed("editor_undo"):
+		undoPressed.emit()
+	if Input.is_action_just_pressed("editor_redo"):
+		redoPressed.emit()
 
 
 	windowSize = DisplayServer.window_get_size()

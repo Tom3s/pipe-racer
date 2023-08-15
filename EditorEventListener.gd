@@ -53,6 +53,14 @@ func _ready():
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
 
+	editorInputHandler.undoPressed.connect(onEditorInputHandler_undoPressed)
+	editorInputHandler.redoPressed.connect(onEditorInputHandler_redoPressed)
+
+	map.undidLastOperation.connect(onMap_undidLastOperation)
+	map.redidLastOperation.connect(onMap_redidLastOperation)
+	map.noOperationToBeUndone.connect(onMap_noOperationToBeUndone)
+	map.noOperationToBeRedone.connect(onMap_noOperationToBeRedone)
+
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
 	if worldMousePos != Vector3.INF && editorStateMachine.mouseNotOverUI():
@@ -127,3 +135,21 @@ func onEditorInputHandler_mouseEnteredUI():
 func onEditorInputHandler_mouseExitedUI():
 	editorStateMachine.mouseOverUI = false
 	print("Mouse exited prefab properties")
+
+func onEditorInputHandler_undoPressed():
+	map.undo()
+
+func onEditorInputHandler_redoPressed():
+	map.redo()
+
+func onMap_undidLastOperation():
+	print("Undid last operation")
+
+func onMap_redidLastOperation():
+	print("Redid last operation")
+
+func onMap_noOperationToBeUndone():
+	print("No operation to be undone")
+
+func onMap_noOperationToBeRedone():
+	print("No operation to be redone")
