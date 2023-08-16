@@ -11,6 +11,7 @@ signal moveDownGrid()
 signal placePressed()
 signal rotatePressed()
 signal selectPressed(object: Object)
+signal deleteSelectedPressed()
 
 signal undoPressed()
 signal redoPressed()
@@ -51,6 +52,8 @@ func _input(event):
 		rotatePressed.emit()
 	if Input.is_action_just_pressed("editor_select"):
 		selectPressed.emit(screenPointToRaySelect())
+	if Input.is_action_just_pressed("editor_delete_selected"):
+		deleteSelectedPressed.emit()
 	if Input.is_action_just_pressed("editor_undo"):
 		undoPressed.emit()
 	if Input.is_action_just_pressed("editor_redo"):
@@ -61,6 +64,7 @@ func _input(event):
 		editorModeEditPressed.emit()
 	if Input.is_action_just_pressed("editor_mode_delete"):
 		editorModeDeletePressed.emit()
+		
 	
 
 	windowSize = DisplayServer.window_get_size()

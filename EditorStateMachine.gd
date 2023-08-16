@@ -71,3 +71,8 @@ func setCurrentSelection(selection: Object) -> PrefabProperties:
 	currentSelection = selection
 
 	return oldSelection
+
+func clearSelection() -> void:
+	if currentSelection != null:
+		currentSelection.deselect()
+	currentSelection = null

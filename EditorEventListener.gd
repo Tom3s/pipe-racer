@@ -23,6 +23,7 @@ func _ready():
 	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
 	editorInputHandler.rotatePressed.connect(onEditorInputHandler_rotatePressed)
 	editorInputHandler.selectPressed.connect(onEditorInputHandler_selectPressed)
+	editorInputHandler.deleteSelectedPressed.connect(onEditorInputHandler_deleteSelectedPressed)
 
 	# connect prefab UI to value changes
 	# PrefabPropertiesUI:
@@ -112,6 +113,14 @@ func onEditorInputHandler_selectPressed(object: Object):
 			prefabMesher.visible = true
 			prefabMesher.updatePositionExact(object.global_position, object.global_rotation)
 
+func onEditorInputHandler_deleteSelectedPressed():
+	if editorStateMachine.inEditState() || editorStateMachine.inDeleteState():
+		var oldSelection = editorStateMachine.currentSelection
+		if oldSelection != null:
+			oldSelection.deselect()
+			map.remove(oldSelection)
+			editorStateMachine.clearSelection()
+			prefabMesher.visible = false
 		
 
 
