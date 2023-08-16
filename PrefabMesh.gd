@@ -401,9 +401,16 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 
 	global_position = newPosition
 
-func updatePositionExact(newPosition: Vector3):
+func updatePositionExactCentered(newPosition: Vector3, newRotation: Vector3 = Vector3.INF):
 	newPosition -= getCenteringOffset()
 	global_position = newPosition
+	if newRotation != Vector3.INF:
+		global_rotation = newRotation
+
+func updatePositionExact(newPosition: Vector3, newRotation: Vector3 = Vector3.INF):
+	global_position = newPosition
+	if newRotation != Vector3.INF:
+		global_rotation = newRotation
 
 func rotate90():
 	global_position += getCenteringOffset()
@@ -446,3 +453,14 @@ func decodeData(data: Variant):
 	global_position = data["global_position"]
 	global_rotation = data["global_rotation"]
 	refreshMesh()
+
+func objectFromData(data: Variant = null):
+	if data != null:
+		decodeData(data)
+	
+	refreshMesh()
+
+	var object = PrefabProperties.new(encodeData())
+	object.mesh = mesh
+
+	return object

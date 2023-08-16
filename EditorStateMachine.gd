@@ -45,7 +45,8 @@ func canBuild() -> bool:
 	return mouseNotOverUI() and inBuildState()
 
 func setEditorStateBuild() -> void:
-	currentSelection.deselect()
+	if currentSelection != null:
+		currentSelection.deselect()
 	currentSelection = null
 	editorState = EDITOR_STATE_BUILD
 
