@@ -55,6 +55,7 @@ func setEditorStateEdit() -> void:
 
 func setEditorStateDelete() -> void:
 	editorState = EDITOR_STATE_DELETE
+	clearSelection()
 
 func setCurrentSelection(selection: Object) -> PrefabProperties:
 

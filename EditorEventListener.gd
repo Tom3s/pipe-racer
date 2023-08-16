@@ -113,11 +113,14 @@ func onEditorInputHandler_selectPressed(object: Object):
 			prefabMesher.visible = true
 			prefabMesher.updatePositionExact(object.global_position, object.global_rotation)
 
+	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
+		if object.has_method("select"):
+			map.remove(object)
+
 func onEditorInputHandler_deleteSelectedPressed():
 	if editorStateMachine.inEditState() || editorStateMachine.inDeleteState():
 		var oldSelection = editorStateMachine.currentSelection
 		if oldSelection != null:
-			oldSelection.deselect()
 			map.remove(oldSelection)
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
