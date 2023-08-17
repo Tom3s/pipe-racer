@@ -29,3 +29,9 @@ func select():
 func deselect():
 	selected = false
 	print(name, "deselected")
+
+func equals(other) -> bool:
+	for key in prefabData.keys():
+		if prefabData[key] != other.prefabData[key]:
+			return false
+	return true

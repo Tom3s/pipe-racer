@@ -51,6 +51,7 @@ func _ready():
 	prefabPropertiesUI.straightSmoothingChanged.connect(onPrefabPropertiesUI_straightSmoothingChanged)
 	prefabPropertiesUI.curveForwardChanged.connect(onPrefabPropertiesUI_curveForwardChanged)
 	prefabPropertiesUI.curveSidewaysChanged.connect(onPrefabPropertiesUI_curveSidewaysChanged)
+	prefabPropertiesUI.roadTypeChanged.connect(onPrefabPropertiesUI_roadTypeChanged)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
@@ -163,6 +164,9 @@ func onPrefabPropertiesUI_curveForwardChanged(value: float):
 func onPrefabPropertiesUI_curveSidewaysChanged(value: float):
 	prefabMesher.curveSideways = value
 
+func onPrefabPropertiesUI_roadTypeChanged(value: int):
+	prefabMesher.roadType = value
+
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
 	if editorStateMachine.inBuildState():
@@ -193,6 +197,10 @@ func onMap_noOperationToBeRedone():
 
 func onEditorInputHandler_editorModeBuildPressed():
 	editorStateMachine.setEditorStateBuild()
+	var oldSelection = editorStateMachine.currentSelection
+	if oldSelection != null:
+		map.update(oldSelection, prefabMesher)
+		editorStateMachine.clearSelection()
 	prefabMesher.visible = true
 	print("Build mode")
 
@@ -203,6 +211,10 @@ func onEditorInputHandler_editorModeEditPressed():
 
 func onEditorInputHandler_editorModeDeletePressed():
 	editorStateMachine.setEditorStateDelete()
+	var oldSelection = editorStateMachine.currentSelection
+	if oldSelection != null:
+		map.update(oldSelection, prefabMesher)
+		editorStateMachine.clearSelection()
 	prefabMesher.visible = false
 	print("Delete mode")
 	

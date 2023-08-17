@@ -3,7 +3,7 @@ class_name EditorInputHandler
 
 var maxDistance: int = 2000
 
-const prefabSafeZone: Vector2i = Vector2i(235, 400)
+const prefabSafeZone: Vector2i = Vector2i(235, 470)
 
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()

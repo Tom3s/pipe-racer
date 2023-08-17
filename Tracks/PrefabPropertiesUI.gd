@@ -23,6 +23,8 @@ var straightSmoothing: OptionButton
 var curveForward: SpinBox
 var curveSideways: SpinBox
 
+var roadTypeSelector: ItemList
+
 signal leftEndChanged(value: float)
 signal rightEndChanged(value: float)
 signal leftStartChanged(value: float)
@@ -40,6 +42,8 @@ signal straightSmoothingChanged(value: int)
 signal curveForwardChanged(value: float)
 signal curveSidewaysChanged(value: float)
 
+signal roadTypeChanged(value: int)
+
 signal mouseEnteredPrefabProperties()
 signal mouseExitedPrefabProperties()
 
@@ -56,15 +60,22 @@ func _ready():
 
 	leftSmoothing = %LeftSmoothing
 	rightSmoothing = %RightSmoothing
+	leftSmoothingChanged.emit(3)
+	rightSmoothingChanged.emit(3)
 
 	curvedTickBox = %CurvedTickBox
 
 	straightLength = %StraightLength
 	straightOffset = %StraightOffset
 	straightSmoothing = %StraightSmoothing
+	straightSmoothingChanged.emit(3)
 
 	curveForward = %CurveForward
 	curveSideways = %CurveSideways
+
+	roadTypeSelector = %RoadTypeSelector
+	roadTypeSelector.select(0)
+	roadTypeChanged.emit(0)
 
 	leftEnd.value_changed.connect(onLeftEndChanged)
 	rightEnd.value_changed.connect(onRightEndChanged)
@@ -87,6 +98,8 @@ func _ready():
 
 	curveForward.value_changed.connect(onCurveForwardChanged)
 	curveSideways.value_changed.connect(onCurveSidewaysChanged)
+
+	roadTypeSelector.item_selected.connect(onRoadTypeChanged)
 
 # sync slider with spinbox
 func onLeftEndChanged(value: float):
@@ -155,6 +168,9 @@ func onCurveForwardChanged(value: float):
 func onCurveSidewaysChanged(value: float):
 	curveSidewaysChanged.emit(value)
 
+func onRoadTypeChanged(value: int):
+	roadTypeChanged.emit(value)
+
 func setFromData(data):
 	# func decodeData(data: Variant):
 	# leftStartHeight = data["leftStartHeight"]
@@ -173,12 +189,17 @@ func setFromData(data):
 	leftStart.value = data["leftStartHeight"]
 	leftEnd.value = data["leftEndHeight"]
 	leftSmoothing.selected = data["leftSmoothTilt"]
+	leftSmoothingChanged.emit(data["leftSmoothTilt"])
 	rightStart.value = data["rightStartHeight"]
 	rightEnd.value = data["rightEndHeight"]
 	rightSmoothing.selected = data["rightSmoothTilt"]
+	rightSmoothingChanged.emit(data["rightSmoothTilt"])
 	curvedTickBox.button_pressed = data["curve"]
 	straightOffset.value = data["endOffset"]
 	straightSmoothing.selected = data["smoothOffset"]
+	straightSmoothingChanged.emit(data["smoothOffset"])
 	straightLength.value = data["length"]
 	curveForward.value = data["curveForward"]
 	curveSideways.value = data["curveSideways"]
+	roadTypeSelector.select(data["roadType"])
+	roadTypeChanged.emit(data["roadType"])

@@ -104,6 +104,12 @@ const SMOOTH_BOTH = 3
 		refreshMesh()
 
 
+const ROAD_TYPE_TARMAC = 0
+const ROAD_TYPE_GRASS = 1
+
+@export 
+var roadType: int = ROAD_TYPE_TARMAC
+
 #@export
 #var refresher: bool:
 #	set(value):
@@ -432,6 +438,8 @@ func encodeData():
 	data["curveForward"] = curveForward
 	data["curveSideways"] = curveSideways
 
+	data["roadType"] = roadType
+
 	data["global_position"] = global_position
 	data["global_rotation"] = global_rotation
 	return data
@@ -449,6 +457,8 @@ func decodeData(data: Variant):
 	length = data["length"]
 	curveForward = data["curveForward"]
 	curveSideways = data["curveSideways"]
+
+	roadType = data["roadType"]
 
 	global_position = data["global_position"]
 	global_rotation = data["global_rotation"]

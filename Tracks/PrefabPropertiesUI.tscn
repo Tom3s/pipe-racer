@@ -20,7 +20,7 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -237.0
-offset_bottom = 394.0
+offset_bottom = 470.0
 grow_horizontal = 0
 
 [node name="Panel" type="Panel" parent="."]
@@ -397,3 +397,26 @@ popup/item_2/text = "End"
 popup/item_2/id = 2
 popup/item_3/text = "Both"
 popup/item_3/id = 3
+
+[node name="Panel3" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -227.0
+offset_top = 394.0
+offset_right = -13.0
+offset_bottom = 462.0
+grow_horizontal = 0
+
+[node name="RoadTypeSelector" type="ItemList" parent="Panel3"]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 6.0
+offset_top = 59.0
+offset_right = 59.0
+offset_bottom = 259.0
+rotation = -1.57079
+item_count = 2
+item_0/text = "Road"
+item_1/text = "Grass"

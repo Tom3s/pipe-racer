@@ -4,7 +4,16 @@ class_name Map
 var trackPieces: Node3D
 
 @onready
-var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
+# var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
+var materials = [
+	preload("res://Tracks/RacetrackMaterial.tres"), # ROAD
+	preload("res://grass2.tres") # GRASS
+]
+
+var frictions = [
+	1.0, # ROAD
+	0.3 # GRASS
+]
 
 var operationStack: Array = []
 
@@ -31,16 +40,19 @@ func _process(delta):
 
 func add(prefabMesher: PrefabMesher):
 	var prefab = prefabMesher.objectFromData()
-	addPrefab(prefab, prefabMesher.position, prefabMesher.rotation)
+	addPrefab(prefab)
 	storeAddPrefab(prefab)
 
 func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, prefabRotation: Vector3 = Vector3.INF):
 	trackPieces.add_child(prefab)
-	if prefabPosition != Vector3.INF:
-		prefab.global_position = prefabPosition
-	if prefabRotation != Vector3.INF:
-		prefab.global_rotation = prefabRotation
-	prefab.mesh.surface_set_material(0, roadMaterial)
+	var prefabData = prefab.prefabData
+	# if prefabPosition != Vector3.INF:
+	# 	prefab.global_position = prefabPosition
+	# if prefabRotation != Vector3.INF:
+	# 	prefab.global_rotation = prefabRotation
+	prefab.global_position = prefabData["global_position"]
+	prefab.global_rotation = prefabData["global_rotation"]
+	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
 	prefab.create_trimesh_collision()
 
 func storeAddPrefab(prefab: PrefabProperties):
@@ -73,8 +85,12 @@ func storeRemovePrefab(prefab: PrefabProperties):
 	lastOperationIndex += 1
 
 func update(oldPrefab: PrefabProperties, prefabMesher: PrefabMesher):
-	removePrefab(oldPrefab)
 	var prefab = prefabMesher.objectFromData()
+
+	if oldPrefab.equals(prefab):
+		return
+
+	removePrefab(oldPrefab)
 	addPrefab(prefab, prefabMesher.position, prefabMesher.rotation)
 
 	storeUpdatePrefab(oldPrefab, prefab)
