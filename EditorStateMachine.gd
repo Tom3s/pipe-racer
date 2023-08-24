@@ -5,7 +5,23 @@ const EDITOR_STATE_BUILD = 0
 const EDITOR_STATE_EDIT = 1
 const EDITOR_STATE_DELETE = 2
 
+const EDITOR_BUILD_MODE_PREFAB = 0
+const EDITOR_BUILD_MODE_START = 1
+const EDITOR_BUILD_MODE_CHECKPOINT = 2
+const EDITOR_BUILD_MODE_PROP = 3
+
+signal buildModeChanged(buildMode: int)
+
 var editorState: int = 0
+var buildMode: int = 0:
+	set(value):
+		buildMode = value
+		buildModeChanged.emit(buildMode)
+	get:
+		return buildMode
+
+var currentPlacerNode: Node3D = null
+
 
 @export 
 var GRID_MAX_HEIGHT: int = 256
@@ -74,3 +90,11 @@ func clearSelection() -> void:
 	if currentSelection != null:
 		currentSelection.deselect()
 	currentSelection = null
+
+func prevBuildMode() -> void:
+	if inBuildState():
+		buildMode = (buildMode + 3) % 4
+
+func nextBuildMode() -> void:
+	if inBuildState():
+		buildMode = (buildMode + 1) % 4

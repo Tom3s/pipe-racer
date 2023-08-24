@@ -4,13 +4,13 @@ class_name PrefabMesher
 
 @export_group("Global Constants")
 @export
-var TRACK_WIDTH: float = 20.0:
+var TRACK_WIDTH: float = 64.0:
 	set(value):
 		TRACK_WIDTH = value
 		refreshMesh()
 
 @export
-var GRID_SIZE: float = 2.0:
+var GRID_SIZE: float = 4.0:
 	set(value):
 		GRID_SIZE = value
 		refreshMesh()

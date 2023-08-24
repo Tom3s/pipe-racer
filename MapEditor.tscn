@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=10 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://EditorInputHandler.gd" id="2_nlp2q"]
 [ext_resource type="Script" path="res://EditorCamera.gd" id="3_ciak8"]
 [ext_resource type="PackedScene" uid="uid://brl2uu62fx8nm" path="res://PrefabGenerator.tscn" id="6_ayac0"]
+[ext_resource type="PackedScene" uid="uid://bf1ljjah7ojpp" path="res://PropPlacer.tscn" id="6_gdrqn"]
 [ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
 
 [node name="MapEditor" type="Node3D"]
@@ -26,6 +27,9 @@ unique_name_in_owner = true
 script = ExtResource("3_ciak8")
 
 [node name="PrefabGenerator" parent="." instance=ExtResource("6_ayac0")]
+unique_name_in_owner = true
+
+[node name="PropPlacer" parent="." instance=ExtResource("6_gdrqn")]
 unique_name_in_owner = true
 
 [node name="EditorInputHandler" type="Node3D" parent="."]

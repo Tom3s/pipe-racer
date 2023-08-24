@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbysb8dy0gxal"]
+[gd_scene load_steps=4 format=3 uid="uid://cyll4xd25crp7"]
 
 [ext_resource type="PackedScene" uid="uid://cqksavnq7whwm" path="res://Track Props/StartLineProp.tscn" id="1_f37g8"]
 [ext_resource type="Script" path="res://StartLine.gd" id="2_0ooaq"]

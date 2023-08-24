@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="1_th3py"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_7nkat"]
 [ext_resource type="PackedScene" uid="uid://bdgchw45sjh3m" path="res://CarSpawner.tscn" id="4_oewlr"]
-[ext_resource type="PackedScene" path="res://Start.tscn" id="6_3tuis"]
+[ext_resource type="PackedScene" uid="uid://cyll4xd25crp7" path="res://Start.tscn" id="6_3tuis"]
 [ext_resource type="PackedScene" uid="uid://bdvqfwasst8ko" path="res://CheckPointSystem.tscn" id="7_38krf"]
 [ext_resource type="PackedScene" uid="uid://c0bjc4qk7b5e1" path="res://Menu/MainMenu.tscn" id="8_i47lq"]
 [ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="8_mel7x"]

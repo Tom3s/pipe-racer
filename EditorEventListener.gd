@@ -6,6 +6,7 @@ var editorStateMachine: EditorStateMachine
 var camera: EditorCamera
 var map: Map
 var prefabPropertiesUI: PrefabPropertiesUI
+var propPlacer: PropPlacer
 
 func _ready():
 	# assign nodes
@@ -15,6 +16,11 @@ func _ready():
 	camera = %EditorCamera
 	map = %Map
 	prefabPropertiesUI = %PrefabPropertiesUI
+	propPlacer = %PropPlacer
+
+	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
+	editorStateMachine.currentPlacerNode = prefabMesher
+
 
 	# connect signals
 	editorInputHandler.mouseMovedTo.connect(onEditorInputHandler_mouseMovedTo)
@@ -63,6 +69,11 @@ func _ready():
 	editorInputHandler.editorModeEditPressed.connect(onEditorInputHandler_editorModeEditPressed)
 	editorInputHandler.editorModeDeletePressed.connect(onEditorInputHandler_editorModeDeletePressed)
 
+	editorInputHandler.prevBuildModePressed.connect(onEditorInputHandler_prevBuildModePressed)
+	editorInputHandler.nextBuildModePressed.connect(onEditorInputHandler_nextBuildModePressed)
+
+	editorStateMachine.buildModeChanged.connect(onEditorStateMachine_buildModeChanged)
+
 	map.undidLastOperation.connect(onMap_undidLastOperation)
 	map.redidLastOperation.connect(onMap_redidLastOperation)
 	map.noOperationToBeUndone.connect(onMap_noOperationToBeUndone)
@@ -70,10 +81,11 @@ func _ready():
 
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
+	var currentPlacerNode = editorStateMachine.currentPlacerNode
 	if worldMousePos != Vector3.INF && editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
-		prefabMesher.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
+		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
 	elif editorStateMachine.mouseOverUI && editorStateMachine.inBuildState():
-		prefabMesher.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
+		currentPlacerNode.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
 
 func onEditorInputHandler_moveUpGrid():
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
@@ -93,10 +105,15 @@ func onEditorInputHandler_moveDownGrid():
 
 func onEditorInputHandler_placePressed():
 	if editorStateMachine.canBuild():
-		map.add(prefabMesher)
+		if editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
+			map.add(prefabMesher)
+		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_START:
+			map.addStart(propPlacer)
 
 func onEditorInputHandler_rotatePressed():
-	prefabMesher.rotate90()
+	var currentPlacerNode = editorStateMachine.currentPlacerNode
+	# prefabMesher.rotate90()
+	currentPlacerNode.rotate90()
 
 func onEditorInputHandler_selectPressed(object: Object):
 	print(object, "was ray hit with selection", object.get_class())
@@ -217,4 +234,22 @@ func onEditorInputHandler_editorModeDeletePressed():
 		editorStateMachine.clearSelection()
 	prefabMesher.visible = false
 	print("Delete mode")
-	
+
+func onEditorInputHandler_prevBuildModePressed():
+	editorStateMachine.prevBuildMode()
+	print("Previous build mode: ", editorStateMachine.buildMode)
+
+func onEditorInputHandler_nextBuildModePressed():
+	editorStateMachine.nextBuildMode()
+	print("Next build mode: ", editorStateMachine.buildMode)
+
+func onEditorStateMachine_buildModeChanged(newMode: int):
+	if newMode != editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
+		propPlacer.mode = newMode - 1
+		prefabMesher.visible = false
+		propPlacer.visible = true
+		editorStateMachine.currentPlacerNode = propPlacer
+	else:
+		prefabMesher.visible = true
+		propPlacer.visible = false
+		editorStateMachine.currentPlacerNode = prefabMesher

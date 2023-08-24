@@ -12,6 +12,8 @@ signal placePressed()
 signal rotatePressed()
 signal selectPressed(object: Object)
 signal deleteSelectedPressed()
+signal prevBuildModePressed()
+signal nextBuildModePressed()
 
 signal undoPressed()
 signal redoPressed()
@@ -64,6 +66,10 @@ func _input(event):
 		editorModeEditPressed.emit()
 	if Input.is_action_just_pressed("editor_mode_delete"):
 		editorModeDeletePressed.emit()
+	if Input.is_action_just_pressed("editor_prev_build_mode"):
+		prevBuildModePressed.emit()
+	if Input.is_action_just_pressed("editor_next_build_mode"):
+		nextBuildModePressed.emit()
 		
 	
 

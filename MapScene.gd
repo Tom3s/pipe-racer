@@ -1,6 +1,8 @@
 extends Node3D
 class_name Map
 
+var StartScene = load("res://Start.tscn")
+
 var trackPieces: Node3D
 
 @onready
@@ -22,15 +24,23 @@ var lastOperationIndex: int = -1
 const PLACED = 0
 const REMOVED = 1
 const UPDATED = 2
+const PLACED_START = 3
 
 signal undidLastOperation()
 signal redidLastOperation()
 signal noOperationToBeUndone()
 signal noOperationToBeRedone()
 
+var start
+const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	trackPieces = %TrackPieces
+	start = StartScene.instantiate()
+	add_child(start)
+	start.global_position = START_MAGIC_VECTOR
+	start.visible = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -62,6 +72,32 @@ func storeAddPrefab(prefab: PrefabProperties):
 	operationStack.append({
 		"prefab": prefab,
 		"operation": PLACED
+	})
+	lastOperationIndex += 1
+
+func addStart(startObject):
+	var oldPosition = start.global_position
+	var oldRotation = start.global_rotation
+	
+	updateStartPosition(startObject.global_position, startObject.global_rotation)
+	storeAddStartObject(oldPosition, oldRotation, start.global_position, start.global_rotation)
+
+func updateStartPosition(newPosition: Vector3, newRotation: Vector3):
+	start.global_position = newPosition
+	start.global_rotation = newRotation
+
+	start.visible = start.global_position != START_MAGIC_VECTOR
+
+func storeAddStartObject(oldPosition: Vector3, oldRotation: Vector3, newPosition: Vector3, newRotation: Vector3):
+	if operationStack.size() > lastOperationIndex + 1:
+		operationStack.resize(lastOperationIndex + 1)
+
+	operationStack.append({
+		"oldPosition": oldPosition,
+		"oldRotation": oldRotation,
+		"newPosition": newPosition,
+		"newRotation": newRotation,
+		"operation": PLACED_START
 	})
 	lastOperationIndex += 1
 
@@ -130,6 +166,10 @@ func undo():
 		addPrefab(lastOperation["oldPrefab"])
 		lastOperationIndex -= 1
 		undidLastOperation.emit()
+	elif lastOperation["operation"] == PLACED_START:
+		updateStartPosition(lastOperation["oldPosition"], lastOperation["oldRotation"])
+		lastOperationIndex -= 1
+		undidLastOperation.emit()
 
 func redo():
 	if lastOperationIndex >= operationStack.size() - 1:
@@ -149,4 +189,7 @@ func redo():
 	elif lastOperation["operation"] == UPDATED:
 		removePrefab(lastOperation["oldPrefab"])
 		addPrefab(lastOperation["newPrefab"])
+		redidLastOperation.emit()
+	elif lastOperation["operation"] == PLACED_START:
+		updateStartPosition(lastOperation["newPosition"], lastOperation["newRotation"])
 		redidLastOperation.emit()

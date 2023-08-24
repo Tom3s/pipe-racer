@@ -308,12 +308,12 @@ text = "Curve Forward"
 [node name="CurveForward" type="SpinBox" parent="Panel2/CurveProperties/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-min_value = 10.0
-max_value = 300.0
-value = 10.0
+min_value = 16.0
+max_value = 512.0
+value = 16.0
 rounded = true
 alignment = 1
-custom_arrow_step = 10.0
+custom_arrow_step = 16.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Panel2/CurveProperties"]
 layout_mode = 2
@@ -325,9 +325,9 @@ text = "Curve Sideways"
 [node name="CurveSideways" type="SpinBox" parent="Panel2/CurveProperties/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-min_value = 10.0
-max_value = 300.0
-value = 10.0
+min_value = 16.0
+max_value = 512.0
+value = 16.0
 rounded = true
 alignment = 1
 custom_arrow_step = 10.0
