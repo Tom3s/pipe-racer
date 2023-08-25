@@ -40,7 +40,7 @@ var mouseOverUI: bool = false:
 	get:
 		return mouseOverUI
 
-var currentSelection: PrefabProperties = null
+var currentSelection: Object = null
 
 func mouseOverUIChanged(value: bool) -> bool:
 	return value
@@ -71,12 +71,16 @@ func setEditorStateDelete() -> void:
 	editorState = EDITOR_STATE_DELETE
 	# clearSelection()
 
-func setCurrentSelection(selection: Object) -> PrefabProperties:
+func setCurrentSelection(selection: Object) -> Object:
 
-	if selection == currentSelection:
-		return null
+	# if selection == currentSelection:
+	# 	return null
 
-	if !(selection.has_method("select")):
+	if selection != null && !(
+		selection.has_method("select") || 
+		selection.has_method("isStart") || 
+		selection.has_method("isCheckPoint")
+	):
 		var oldSelection = currentSelection
 		currentSelection = null
 
@@ -89,7 +93,8 @@ func setCurrentSelection(selection: Object) -> PrefabProperties:
 
 func clearSelection() -> void:
 	if currentSelection != null:
-		currentSelection.deselect()
+		if currentSelection.has_method("deselect"):
+			currentSelection.deselect()
 	currentSelection = null
 
 func prevBuildMode() -> void:
@@ -99,3 +104,9 @@ func prevBuildMode() -> void:
 func nextBuildMode() -> void:
 	if inBuildState():
 		buildMode = (buildMode + 1) % 4
+
+func inPropEditState():
+	return inEditState() and currentSelection != null and (currentSelection.has_method("isStart") || currentSelection.has_method("isCheckPoint"))
+
+func canMovePreview():
+	return mouseNotOverUI() && (inBuildState() || inPropEditState())

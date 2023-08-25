@@ -85,26 +85,28 @@ func _ready():
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
-	if worldMousePos != Vector3.INF && editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
+	if worldMousePos != Vector3.INF && editorStateMachine.canMovePreview():
 		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
 	elif editorStateMachine.mouseOverUI && editorStateMachine.inBuildState():
 		currentPlacerNode.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
 
 func onEditorInputHandler_moveUpGrid():
-	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
+	if editorStateMachine.canMovePreview():
 		editorStateMachine.gridCurrentHeight += 1
 		camera.position.y += prefabMesher.GRID_SIZE
 	elif editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
+		var currentPlacerNode = editorStateMachine.currentPlacerNode
 		camera.position.y += prefabMesher.GRID_SIZE
-		prefabMesher.global_position.y += prefabMesher.GRID_SIZE
+		currentPlacerNode.global_position.y += prefabMesher.GRID_SIZE
 
 func onEditorInputHandler_moveDownGrid():
-	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inBuildState():
+	if editorStateMachine.canMovePreview():
 		editorStateMachine.gridCurrentHeight -= 1	
 		camera.position.y -= prefabMesher.GRID_SIZE
 	elif editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
+		var currentPlacerNode = editorStateMachine.currentPlacerNode
 		camera.position.y -= prefabMesher.GRID_SIZE
-		prefabMesher.global_position.y -= prefabMesher.GRID_SIZE
+		currentPlacerNode.global_position.y -= prefabMesher.GRID_SIZE
 
 func onEditorInputHandler_placePressed():
 	if editorStateMachine.canBuild():
@@ -131,16 +133,47 @@ func onEditorInputHandler_selectPressed(object: Object):
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var oldSelection = editorStateMachine.setCurrentSelection(object)
 		if oldSelection != null || oldSelection == object:
-			oldSelection.deselect()
-			map.update(oldSelection, prefabMesher)
-			prefabMesher.visible = false
+			if oldSelection.has_method("deselect"):
+				oldSelection.deselect()
+				map.update(oldSelection, prefabMesher)
+				prefabMesher.visible = false
+			elif oldSelection.has_method("isStart"):
+				map.addStart(propPlacer)
+				oldSelection.visible = true
+				propPlacer.visible = false
+			elif oldSelection.has_method("isCheckPoint"):
+				map.updateCheckPoint(oldSelection, propPlacer)
+				oldSelection.visible = true
+				propPlacer.visible = false
+			editorStateMachine.clearSelection()
+			return
 
 		if object.has_method("select"):
 			object.select()
 			prefabPropertiesUI.setFromData(object.prefabData)
 
+			editorStateMachine.currentPlacerNode = prefabMesher
+
 			prefabMesher.visible = true
 			prefabMesher.updatePositionExact(object.global_position, object.global_rotation)
+		elif object.has_method("isStart"):
+			object.visible = false
+			propPlacer.visible = true
+
+			editorStateMachine.currentPlacerNode = propPlacer
+
+			editorStateMachine.gridCurrentHeight = (object.global_position - map.START_OFFSET).y / prefabMesher.GRID_SIZE
+			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
+			propPlacer.mode = propPlacer.MODE_START_LINE
+		elif object.has_method("isCheckPoint"):
+			object.visible = false
+			propPlacer.visible = true
+
+			editorStateMachine.currentPlacerNode = propPlacer
+
+			editorStateMachine.gridCurrentHeight = object.global_position.y / prefabMesher.GRID_SIZE
+			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
+			propPlacer.mode = propPlacer.MODE_CHECKPOINT
 
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
 		if object.has_method("select"):
@@ -270,3 +303,4 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 		prefabMesher.visible = true
 		propPlacer.visible = false
 		editorStateMachine.currentPlacerNode = prefabMesher
+
