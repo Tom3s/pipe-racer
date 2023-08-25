@@ -41,4 +41,5 @@ unique_name_in_owner = true
 script = ExtResource("6_lmcfs")
 
 [node name="EditorEventListener" type="Node3D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("1_f0b2n")

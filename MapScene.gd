@@ -4,6 +4,7 @@ class_name Map
 var StartScene = load("res://Start.tscn")
 
 var trackPieces: Node3D
+var checkPointSystem: Node3D
 
 @onready
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
@@ -25,6 +26,9 @@ const PLACED = 0
 const REMOVED = 1
 const UPDATED = 2
 const PLACED_START = 3
+const PLACED_CP = 4
+const REMOVED_CP = 5
+const UPDATED_CP = 6
 
 signal undidLastOperation()
 signal redidLastOperation()
@@ -38,15 +42,12 @@ const START_OFFSET = Vector3(0, 9.15, 0)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	trackPieces = %TrackPieces
+	checkPointSystem = %CheckPointSystem
 	start = StartScene.instantiate()
 	add_child(start)
 	start.global_position = START_MAGIC_VECTOR
 	start.visible = false
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
 func add(prefabMesher: PrefabMesher):
@@ -67,8 +68,7 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 	prefab.create_trimesh_collision()
 
 func storeAddPrefab(prefab: PrefabProperties):
-	if operationStack.size() > lastOperationIndex + 1:
-		operationStack.resize(lastOperationIndex + 1)
+	safeResizeStack()
 
 	operationStack.append({
 		"prefab": prefab,
@@ -90,8 +90,7 @@ func updateStartPosition(newPosition: Vector3, newRotation: Vector3):
 	start.visible = start.global_position != START_MAGIC_VECTOR
 
 func storeAddStartObject(oldPosition: Vector3, oldRotation: Vector3, newPosition: Vector3, newRotation: Vector3):
-	if operationStack.size() > lastOperationIndex + 1:
-		operationStack.resize(lastOperationIndex + 1)
+	safeResizeStack()
 
 	operationStack.append({
 		"oldPosition": oldPosition,
@@ -101,6 +100,28 @@ func storeAddStartObject(oldPosition: Vector3, oldRotation: Vector3, newPosition
 		"operation": PLACED_START
 	})
 	lastOperationIndex += 1
+
+func addCheckPoint(propPlacer: PropPlacer):
+	var checkPointObject = propPlacer.getCheckPointObject()
+	addCheckPointObject(checkPointObject, propPlacer.global_position, propPlacer.global_rotation)
+	storeAddCheckPointObject(checkPointObject, propPlacer.global_position, propPlacer.global_rotation)
+
+func addCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
+	checkPointSystem.add_child(checkPointObject)
+	checkPointObject.global_position = checkPointPos
+	checkPointObject.global_rotation = checkPointRotation
+
+func storeAddCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"checkPointObject": checkPointObject,
+		"position": checkPointPos,
+		"rotation": checkPointRotation,
+		"operation": PLACED_CP
+	})
+	lastOperationIndex += 1
+# remove
 
 func remove(prefab: PrefabProperties):
 	removePrefab(prefab)
@@ -112,14 +133,33 @@ func removePrefab(prefab: PrefabProperties):
 	trackPieces.remove_child(prefab)
 
 func storeRemovePrefab(prefab: PrefabProperties):
-	if operationStack.size() > lastOperationIndex + 1:
-		operationStack.resize(lastOperationIndex + 1)
+	safeResizeStack()
 
 	operationStack.append({
 		"prefab": prefab,
 		"operation": REMOVED
 	})
 	lastOperationIndex += 1
+
+func removeCheckPoint(checkPointObject: Area3D):
+	storeRemoveCheckPointObject(checkPointObject, checkPointObject.global_position, checkPointObject.global_rotation)
+	removeCheckPointObject(checkPointObject)
+
+func removeCheckPointObject(checkPointObject: Area3D):
+	checkPointSystem.remove_child(checkPointObject)
+
+func storeRemoveCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"checkPointObject": checkPointObject,
+		"position": checkPointPos,
+		"rotation": checkPointRotation,
+		"operation": REMOVED_CP
+	})
+	lastOperationIndex += 1
+
+# update
 
 func update(oldPrefab: PrefabProperties, prefabMesher: PrefabMesher):
 	var prefab = prefabMesher.objectFromData()
@@ -133,8 +173,7 @@ func update(oldPrefab: PrefabProperties, prefabMesher: PrefabMesher):
 	storeUpdatePrefab(oldPrefab, prefab)
 
 func storeUpdatePrefab(oldPrefab: PrefabProperties, newPrefab: PrefabProperties):
-	if operationStack.size() > lastOperationIndex + 1:
-		operationStack.resize(lastOperationIndex + 1)
+	safeResizeStack()
 
 	operationStack.append({
 		"oldPrefab": oldPrefab,
@@ -142,6 +181,62 @@ func storeUpdatePrefab(oldPrefab: PrefabProperties, newPrefab: PrefabProperties)
 		"operation": UPDATED
 	})
 	lastOperationIndex += 1
+
+func updateCheckPoint(oldCheckPointObject: Area3D, propPlacer: PropPlacer):
+	# var checkPointObject = propPlacer.getCheckPointObject()
+	# flipping order, because the old object is the one that is already in the scene
+	storeUpdateCheckPointObject(oldCheckPointObject, propPlacer.global_position, propPlacer.global_rotation)
+	updateCheckPointObject(oldCheckPointObject, propPlacer.global_position, propPlacer.global_rotation)
+
+func updateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
+	checkPointObject.global_position = checkPointPos
+	checkPointObject.global_rotation = checkPointRotation
+
+func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"checkPointObject": checkPointObject,
+		"oldPosition": checkPointObject.global_position,
+		"oldRotation": checkPointObject.global_rotation,
+		"newPosition": checkPointPos,
+		"newRotation": checkPointRotation,
+		"operation": UPDATED_CP
+	})
+	lastOperationIndex += 1
+
+
+# operatioin handler
+
+func safeResizeStack():
+	for i in range(lastOperationIndex + 1, operationStack.size()):
+		var operation = operationStack[i]
+
+		match operation["operation"]:
+			# this prefab will be lost after resize
+			PLACED:
+				operation["prefab"].queue_free()
+
+			# REMOVED: no need to do anything
+
+			# new prefab will never be needed
+			UPDATED:
+				operation["newPrefab"].queue_free()
+			
+			# PLACED_START: no need to do anything
+
+			# this checkpoint will be lost after resize
+			PLACED_CP:
+				operation["checkPointObject"].queue_free()
+			
+			# REMOVED_CP: no need to do anything
+
+			# UPDATED_CP: no need to do anything
+
+
+	if operationStack.size() > lastOperationIndex + 1:
+		operationStack.resize(lastOperationIndex + 1)
+
 
 func undo():
 	if lastOperationIndex < 0:
@@ -156,21 +251,25 @@ func undo():
 		# 	child.queue_free()
 		# trackPieces.remove_child(lastOperation["prefab"])
 		removePrefab(lastOperation["prefab"])
-		lastOperationIndex -= 1
-		undidLastOperation.emit()
 	elif lastOperation["operation"] == REMOVED:
 		addPrefab(lastOperation["prefab"])
-		lastOperationIndex -= 1
-		undidLastOperation.emit()
 	elif lastOperation["operation"] == UPDATED:
 		removePrefab(lastOperation["newPrefab"])
 		addPrefab(lastOperation["oldPrefab"])
-		lastOperationIndex -= 1
-		undidLastOperation.emit()
 	elif lastOperation["operation"] == PLACED_START:
 		updateStartPosition(lastOperation["oldPosition"], lastOperation["oldRotation"])
-		lastOperationIndex -= 1
-		undidLastOperation.emit()
+	elif lastOperation["operation"] == PLACED_CP:
+		removeCheckPointObject(lastOperation["checkPointObject"])
+	elif lastOperation["operation"] == REMOVED_CP:
+		addCheckPointObject(lastOperation["checkPointObject"], lastOperation["position"], lastOperation["rotation"])
+	elif lastOperation["operation"] == UPDATED_CP:
+		updateCheckPointObject(lastOperation["checkPointObject"], lastOperation["oldPosition"], lastOperation["oldRotation"])
+
+	else:
+		return
+	
+	lastOperationIndex -= 1
+	undidLastOperation.emit()
 
 func redo():
 	if lastOperationIndex >= operationStack.size() - 1:
@@ -183,14 +282,22 @@ func redo():
 
 	if lastOperation["operation"] == PLACED:
 		addPrefab(lastOperation["prefab"])
-		redidLastOperation.emit()
 	elif lastOperation["operation"] == REMOVED:
 		removePrefab(lastOperation["prefab"])
-		redidLastOperation.emit()
 	elif lastOperation["operation"] == UPDATED:
 		removePrefab(lastOperation["oldPrefab"])
 		addPrefab(lastOperation["newPrefab"])
-		redidLastOperation.emit()
 	elif lastOperation["operation"] == PLACED_START:
 		updateStartPosition(lastOperation["newPosition"], lastOperation["newRotation"])
-		redidLastOperation.emit()
+	elif lastOperation["operation"] == PLACED_CP:
+		addCheckPointObject(lastOperation["checkPointObject"], lastOperation["position"], lastOperation["rotation"])
+	elif lastOperation["operation"] == REMOVED_CP:
+		removeCheckPointObject(lastOperation["checkPointObject"])
+	elif lastOperation["operation"] == UPDATED_CP:
+		updateCheckPointObject(lastOperation["checkPointObject"], lastOperation["newPosition"], lastOperation["newRotation"])
+
+	else:
+		lastOperationIndex -= 1
+		return
+	
+	redidLastOperation.emit()

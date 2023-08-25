@@ -44,3 +44,6 @@ shape = SubResource("ConcavePolygonShape3D_5f7d2")
 
 [node name="TrackPieces" type="Node3D" parent="."]
 unique_name_in_owner = true
+
+[node name="CheckPointSystem" type="Node3D" parent="."]
+unique_name_in_owner = true

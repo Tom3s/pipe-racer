@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://sl6jv6nsccdf"]
+[gd_scene load_steps=7 format=3 uid="uid://sl6jv6nsccdf"]
 
 [ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="1_hot7f"]
 [ext_resource type="PackedScene" uid="uid://cpygnkw845oe2" path="res://Tracks/racetrack_3.tscn" id="2_e2ipk"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="4_rbwmu"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="4_wg7ot"]
 [ext_resource type="Script" path="res://DebugLabel.gd" id="5_gyv2v"]
-[ext_resource type="PackedScene" uid="uid://b68qfbwqr8dgt" path="res://CheckPoint.tscn" id="7_yojnp"]
 
 [node name="TestTrack" type="Node3D"]
 
@@ -46,6 +45,3 @@ script = ExtResource("5_gyv2v")
 unique_name_in_owner = true
 respawnPosition = Vector3(-52.8878, 41.0925, 203.23)
 respawnRotation = Vector3(0, 1.571, 0)
-
-[node name="cp" parent="." instance=ExtResource("7_yojnp")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 50.8256, 39.1467, 210.927)

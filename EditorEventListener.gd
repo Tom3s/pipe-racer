@@ -18,6 +18,8 @@ func _ready():
 	prefabPropertiesUI = %PrefabPropertiesUI
 	propPlacer = %PropPlacer
 
+	propPlacer.startLinePreview.visible = false
+
 	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
 	editorStateMachine.currentPlacerNode = prefabMesher
 
@@ -110,6 +112,8 @@ func onEditorInputHandler_placePressed():
 			map.add(prefabMesher)
 		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_START:
 			map.addStart(propPlacer)
+		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_CHECKPOINT:
+			map.addCheckPoint(propPlacer)
 
 func onEditorInputHandler_rotatePressed():
 	var currentPlacerNode = editorStateMachine.currentPlacerNode

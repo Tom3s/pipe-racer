@@ -17,6 +17,9 @@ var mode: int = MODE_START_LINE:
 	get:
 		return mode
 
+@onready
+var checkPointObject: PackedScene = preload("res://CheckPoint.tscn")
+
 func onModeChange(value: int) -> int:
 
 	startLinePreview.visible = false
@@ -92,3 +95,6 @@ func rotate90():
 
 func rotateFine(amount: int):
 	global_rotation_degrees.y += amount * FINE_ROTATION_DEGREES
+
+func getCheckPointObject() -> Area3D:
+	return checkPointObject.instantiate()
