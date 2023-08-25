@@ -228,6 +228,7 @@ script = ExtResource("1_fo23j")
 
 [node name="StartLinePreview" type="Node3D" parent="."]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.15, 0)
 visible = false
 
 [node name="Checkers" type="MeshInstance3D" parent="StartLinePreview"]
@@ -249,6 +250,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.51955, 0)
 mesh = SubResource("ArrayMesh_gnaob")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_v3u8t")
+
+[node name="Arrow" type="CSGPolygon3D" parent="StartLinePreview"]
+transform = Transform3D(1.31134e-07, -3, -2.62268e-07, -3, -1.31134e-07, 0, -1.14641e-14, 2.62268e-07, -3, 0, 0, 0)
+polygon = PackedVector2Array(0, -5, -1.5, -3, -0.4, -3, -0.7, 5, 0, 5)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 16
+smooth_faces = true
+material = ExtResource("3_v3u8t")
 
 [node name="PropPreview" type="Node3D" parent="."]
 unique_name_in_owner = true

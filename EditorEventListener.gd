@@ -218,12 +218,13 @@ func onEditorInputHandler_editorModeBuildPressed():
 	if oldSelection != null:
 		map.update(oldSelection, prefabMesher)
 		editorStateMachine.clearSelection()
-	prefabMesher.visible = true
+	# onEditorStateMachine_buildModeChanged(editorStateMachine.buildMode)
 	print("Build mode")
 
 func onEditorInputHandler_editorModeEditPressed():
 	editorStateMachine.setEditorStateEdit()
 	prefabMesher.visible = false
+	propPlacer.visible = false
 	print("Edit mode")
 
 func onEditorInputHandler_editorModeDeletePressed():
@@ -233,6 +234,7 @@ func onEditorInputHandler_editorModeDeletePressed():
 		map.update(oldSelection, prefabMesher)
 		editorStateMachine.clearSelection()
 	prefabMesher.visible = false
+	propPlacer.visible = false
 	print("Delete mode")
 
 func onEditorInputHandler_prevBuildModePressed():

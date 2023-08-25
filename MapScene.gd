@@ -33,6 +33,7 @@ signal noOperationToBeRedone()
 
 var start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
+const START_OFFSET = Vector3(0, 9.25, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -79,7 +80,7 @@ func addStart(startObject):
 	var oldPosition = start.global_position
 	var oldRotation = start.global_rotation
 	
-	updateStartPosition(startObject.global_position, startObject.global_rotation)
+	updateStartPosition(startObject.global_position + START_OFFSET, startObject.global_rotation)
 	storeAddStartObject(oldPosition, oldRotation, start.global_position, start.global_rotation)
 
 func updateStartPosition(newPosition: Vector3, newRotation: Vector3):

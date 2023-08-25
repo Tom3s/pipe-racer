@@ -9,7 +9,6 @@ size = Vector3(5.1, 20, 64)
 [node name="Start" type="Node3D"]
 
 [node name="FINISHLINE" parent="." instance=ExtResource("1_f37g8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 
 [node name="StartLine" type="Area3D" parent="."]
 unique_name_in_owner = true

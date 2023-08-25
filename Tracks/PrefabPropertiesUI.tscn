@@ -330,7 +330,7 @@ max_value = 512.0
 value = 16.0
 rounded = true
 alignment = 1
-custom_arrow_step = 10.0
+custom_arrow_step = 16.0
 
 [node name="StraightProperties" type="HBoxContainer" parent="Panel2"]
 unique_name_in_owner = true
