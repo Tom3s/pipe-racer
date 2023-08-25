@@ -141,7 +141,7 @@ func applySuspension(raycastDistance: float, springDirection: Vector3, tireVeloc
 	
 	if aboutToJump:
 		force *= jumpingForceReduction
-#	DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
+	# DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
 
 	apply_force(force, forcePosition)
 
@@ -210,7 +210,7 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 
 	var force = steeringDirection * desiredAcceleration * tireMass
 	
-	DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
+	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
 	
 	if aboutToJump:
 		force *= jumpingForceReduction
@@ -226,7 +226,7 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 
 		var force = accelerationDirection * desiredAcceleration #* mass
 		
-		DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
+		# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
 		
 		apply_force(force, contactPoint - global_position)
 		return
@@ -236,7 +236,7 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 	if force.dot(linear_velocity) < 0:
 		force *= brakingMultiplier
 	
-	DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
+	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
 	
 	
 	apply_force(force, contactPoint - global_position)

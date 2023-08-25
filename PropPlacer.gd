@@ -21,25 +21,28 @@ func onModeChange(value: int) -> int:
 
 	startLinePreview.visible = false
 	propPreview.visible = false
-	# checkpointPreview.visible = false
+	checkpointPreview.visible = false
 
 	if value == MODE_START_LINE:
 		startLinePreview.visible = true
 	elif value == MODE_PROP:
 		propPreview.visible = true
-	# elif value == MODE_CHECKPOINT:
-	# 	checkpointPreview.visible = true
+	elif value == MODE_CHECKPOINT:
+		checkpointPreview.visible = true
 
 	return mode
 
 var startLinePreview: Node3D
 var propPreview: Node3D
+var checkpointPreview: Node3D
 
 func _ready():
 	startLinePreview = %StartLinePreview
 	propPreview = %PropPreview
+	checkpointPreview = %CheckPointPreview
 	startLinePreview.visible = false
 	propPreview.visible = false
+	checkpointPreview.visible = false
 
 	mode = MODE_START_LINE
 
