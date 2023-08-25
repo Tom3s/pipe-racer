@@ -5,7 +5,7 @@ var TRACK_WIDTH: float = 64.0
 var GRID_SIZE: float = 4.0
 var length: float = 5.1
 
-const FINE_ROTATION_DEGREES = 15
+const FINE_ROTATION_DEGREES = 10
 
 const MODE_START_LINE = 0
 const MODE_CHECKPOINT = 1

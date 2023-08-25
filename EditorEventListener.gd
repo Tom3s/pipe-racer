@@ -130,7 +130,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 	print(object, "was ray hit with selection", object.get_class())
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var oldSelection = editorStateMachine.setCurrentSelection(object)
-		if oldSelection != null:
+		if oldSelection != null || oldSelection == object:
 			oldSelection.deselect()
 			map.update(oldSelection, prefabMesher)
 			prefabMesher.visible = false
@@ -145,6 +145,10 @@ func onEditorInputHandler_selectPressed(object: Object):
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
 		if object.has_method("select"):
 			map.remove(object)
+		elif object.has_method("isStart"):
+			map.removeStart()
+		elif object.has_method("isCheckPoint"):
+			map.removeCheckPoint(object)
 
 func onEditorInputHandler_deleteSelectedPressed():
 	if editorStateMachine.inEditState() || editorStateMachine.inDeleteState():

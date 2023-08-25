@@ -141,6 +141,13 @@ func storeRemovePrefab(prefab: PrefabProperties):
 	})
 	lastOperationIndex += 1
 
+func removeStart():
+	var oldPosition = start.global_position
+	var oldRotation = start.global_rotation
+
+	updateStartPosition(START_MAGIC_VECTOR, Vector3.ZERO)
+	storeAddStartObject(oldPosition, oldRotation, start.global_position, start.global_rotation)
+
 func removeCheckPoint(checkPointObject: Area3D):
 	storeRemoveCheckPointObject(checkPointObject, checkPointObject.global_position, checkPointObject.global_rotation)
 	removeCheckPointObject(checkPointObject)

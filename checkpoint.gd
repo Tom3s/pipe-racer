@@ -27,4 +27,6 @@ func getPlacement(lapNumber: int) -> int:
 
 func reset():
 	placements = []
-	
+
+func isCheckPoint():
+	pass
