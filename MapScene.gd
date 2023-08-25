@@ -43,10 +43,13 @@ const START_OFFSET = Vector3(0, 9.15, 0)
 func _ready():
 	trackPieces = %TrackPieces
 	checkPointSystem = %CheckPointSystem
-	start = StartScene.instantiate()
-	add_child(start)
-	start.global_position = START_MAGIC_VECTOR
-	start.visible = false
+	if find_child("Start") != null:
+		start = find_child("Start")
+	else:
+		start = StartScene.instantiate()
+		add_child(start)
+		start.global_position = START_MAGIC_VECTOR
+		start.visible = false
 
 
 
@@ -308,3 +311,17 @@ func redo():
 		return
 	
 	redidLastOperation.emit()
+
+func save():
+	var scene = PackedScene.new()
+
+	for child in get_children(true):
+		child.owner = self
+
+	var result = scene.pack(self)
+
+	if result == OK:
+		var trackName = "track_" + str(Time.get_date_string_from_system())
+		var error = ResourceSaver.save(scene, "res://builderTracks/" + trackName +".tscn")  # Or "user://..."
+		if error != OK:
+			push_error("An error occurred while saving the scene to disk.")

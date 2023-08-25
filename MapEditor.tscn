@@ -24,6 +24,7 @@ unique_name_in_owner = true
 
 [node name="EditorCamera" type="Camera3D" parent="."]
 unique_name_in_owner = true
+current = true
 script = ExtResource("3_ciak8")
 
 [node name="PrefabGenerator" parent="." instance=ExtResource("6_ayac0")]

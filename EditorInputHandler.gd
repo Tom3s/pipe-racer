@@ -26,6 +26,8 @@ signal editorModeBuildPressed()
 signal editorModeEditPressed()
 signal editorModeDeletePressed()
 
+signal savePressed()
+
 var mousePos2D: Vector2 = Vector2()
 var windowSize: Vector2 = Vector2()
 
@@ -82,6 +84,8 @@ func _input(event):
 		prevBuildModePressed.emit()
 	if Input.is_action_just_pressed("editor_next_build_mode"):
 		nextBuildModePressed.emit()
+	if Input.is_action_just_pressed("editor_save"):
+		savePressed.emit()
 		
 	
 

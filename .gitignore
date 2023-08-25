@@ -16,3 +16,7 @@ Leaderboard.gd
 
 .vscode/**/*
 
+builderTracks/track_2023-08-25_proper.tscn
+builderTracks/track_2023-08-25.tscn
+builderTracks/test.tscn
+builderTracks/Map2.tscn

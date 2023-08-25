@@ -75,6 +75,8 @@ func _ready():
 	editorInputHandler.prevBuildModePressed.connect(onEditorInputHandler_prevBuildModePressed)
 	editorInputHandler.nextBuildModePressed.connect(onEditorInputHandler_nextBuildModePressed)
 
+	editorInputHandler.savePressed.connect(onEditorInputHandler_savePressed)
+
 	editorStateMachine.buildModeChanged.connect(onEditorStateMachine_buildModeChanged)
 
 	map.undidLastOperation.connect(onMap_undidLastOperation)
@@ -129,7 +131,8 @@ func onEditorInputHandler_fineRotatePressed(direction: int):
 		propPlacer.rotateFine(direction)
 
 func onEditorInputHandler_selectPressed(object: Object):
-	print(object, "was ray hit with selection", object.get_class())
+	if object != null:
+		print(object, "was ray hit with selection", object.get_class())
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var oldSelection = editorStateMachine.setCurrentSelection(object)
 		if oldSelection != null || oldSelection == object:
@@ -247,6 +250,9 @@ func onEditorInputHandler_undoPressed():
 
 func onEditorInputHandler_redoPressed():
 	map.redo()
+
+func onEditorInputHandler_savePressed():
+	map.save()
 
 func onMap_undidLastOperation():
 	print("Undid last operation")
