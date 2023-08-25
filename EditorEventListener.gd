@@ -28,6 +28,7 @@ func _ready():
 	editorInputHandler.moveDownGrid.connect(onEditorInputHandler_moveDownGrid)
 	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
 	editorInputHandler.rotatePressed.connect(onEditorInputHandler_rotatePressed)
+	editorInputHandler.fineRotatePressed.connect(onEditorInputHandler_fineRotatePressed)
 	editorInputHandler.selectPressed.connect(onEditorInputHandler_selectPressed)
 	editorInputHandler.deleteSelectedPressed.connect(onEditorInputHandler_deleteSelectedPressed)
 
@@ -114,6 +115,12 @@ func onEditorInputHandler_rotatePressed():
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
 	# prefabMesher.rotate90()
 	currentPlacerNode.rotate90()
+
+func onEditorInputHandler_fineRotatePressed(direction: int):
+	if editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
+		prefabMesher.rotate90(direction)
+	else:
+		propPlacer.rotateFine(direction)
 
 func onEditorInputHandler_selectPressed(object: Object):
 	print(object, "was ray hit with selection", object.get_class())

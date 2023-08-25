@@ -418,9 +418,9 @@ func updatePositionExact(newPosition: Vector3, newRotation: Vector3 = Vector3.IN
 	if newRotation != Vector3.INF:
 		global_rotation = newRotation
 
-func rotate90():
+func rotate90(direction: int = 1):
 	global_position += getCenteringOffset()
-	global_rotation_degrees.y += 90
+	global_rotation_degrees.y += 90 * direction
 	global_position -= getCenteringOffset()
 
 func encodeData():

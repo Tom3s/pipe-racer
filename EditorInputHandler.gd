@@ -10,6 +10,7 @@ signal moveUpGrid()
 signal moveDownGrid()
 signal placePressed()
 signal rotatePressed()
+signal fineRotatePressed(direction: int)
 signal selectPressed(object: Object)
 signal deleteSelectedPressed()
 signal prevBuildModePressed()
@@ -44,14 +45,28 @@ func _input(event):
 	if !Input.is_action_pressed("editor_look_around"):
 		mouseMovedTo.emit(screenPointToRay())
 
-	if Input.is_action_just_pressed("editor_grid_up"):
+	# if Input.is_action_just_pressed("editor_grid_up") && !Input.is_action_just_pressed("editor_fine_rotate_left"):
+	# 	moveUpGrid.emit()
+	# if Input.is_action_just_pressed("editor_grid_down") && !Input.is_action_just_pressed("editor_fine_rotate_right"):
+	# 	moveDownGrid.emit()
+	if Input.is_action_just_pressed("editor_fine_rotate_left"):
+		fineRotatePressed.emit(1)
+	elif Input.is_action_just_pressed("editor_grid_up"):
 		moveUpGrid.emit()
-	if Input.is_action_just_pressed("editor_grid_down"):
+	
+	if Input.is_action_just_pressed("editor_fine_rotate_right"):
+		fineRotatePressed.emit(-1)
+	elif Input.is_action_just_pressed("editor_grid_down"):
 		moveDownGrid.emit()
+
 	if Input.is_action_just_pressed("editor_place"):
 		placePressed.emit()
 	if Input.is_action_just_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
+	# if Input.is_action_just_pressed("editor_fine_rotate_left"):
+	# 	fineRotatePressed.emit(1)
+	# if Input.is_action_just_pressed("editor_fine_rotate_right"):
+	# 	fineRotatePressed.emit(-1)
 	if Input.is_action_just_pressed("editor_select"):
 		selectPressed.emit(screenPointToRaySelect())
 	if Input.is_action_just_pressed("editor_delete_selected"):

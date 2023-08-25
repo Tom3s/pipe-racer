@@ -5,6 +5,8 @@ var TRACK_WIDTH: float = 64.0
 var GRID_SIZE: float = 4.0
 var length: float = 5.1
 
+const FINE_ROTATION_DEGREES = 15
+
 const MODE_START_LINE = 0
 const MODE_CHECKPOINT = 1
 const MODE_PROP = 2
@@ -79,5 +81,11 @@ func updatePositionExact(newPosition: Vector3, newRotation: Vector3 = Vector3.IN
 
 func rotate90():
 	# global_position += getCenteringOffset()
+
+	global_rotation_degrees.y = floor(global_rotation_degrees.y / 90) * 90
+
 	global_rotation_degrees.y += 90
 	# global_position -= getCenteringOffset()
+
+func rotateFine(amount: int):
+	global_rotation_degrees.y += amount * FINE_ROTATION_DEGREES

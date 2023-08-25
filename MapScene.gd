@@ -33,7 +33,7 @@ signal noOperationToBeRedone()
 
 var start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
-const START_OFFSET = Vector3(0, 9.25, 0)
+const START_OFFSET = Vector3(0, 9.15, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
