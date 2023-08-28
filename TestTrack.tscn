@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="4_rbwmu"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="4_wg7ot"]
 [ext_resource type="Script" path="res://DebugLabel.gd" id="5_gyv2v"]
-[ext_resource type="PackedScene" uid="uid://cfo6b5awm1ba2" path="res://builderTracks/Map3.tscn" id="6_7j4w0"]
+[ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="6_50qb3"]
 
 [node name="TestTrack" type="Node3D"]
 
@@ -43,4 +43,5 @@ unique_name_in_owner = true
 respawnPosition = Vector3(-10, 90, 0)
 respawnRotation = Vector3(0, 1.571, 0)
 
-[node name="Map" parent="." instance=ExtResource("6_7j4w0")]
+[node name="Map" parent="." instance=ExtResource("6_50qb3")]
+loadFrom = "res://builderTracks/track_2023-08-28T13-12-49.json"

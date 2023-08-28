@@ -20,6 +20,10 @@ Playerstats="*res://Playerstats.gd"
 Network="*res://Network.gd"
 Leaderboard="*res://Leaderboard.gd"
 
+[debug]
+
+gdscript/warnings/onready_with_export=1
+
 [display]
 
 window/vsync/vsync_mode=0

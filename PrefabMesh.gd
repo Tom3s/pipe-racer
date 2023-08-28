@@ -440,8 +440,15 @@ func encodeData():
 
 	data["roadType"] = roadType
 
-	data["global_position"] = global_position
-	data["global_rotation"] = global_rotation
+	# data["position"] = global_position
+	# data["rotation"] = global_rotation
+	data["positionX"] = global_position.x
+	data["positionY"] = global_position.y
+	data["positionZ"] = global_position.z
+	# data["rotationX"] = global_rotation.x
+	# data["rotationY"] = global_rotation.y
+	# data["rotationZ"] = global_rotation.z
+	data["rotation"] = global_rotation.y
 	return data
 
 func decodeData(data: Variant):
@@ -460,8 +467,11 @@ func decodeData(data: Variant):
 
 	roadType = data["roadType"]
 
-	global_position = data["global_position"]
-	global_rotation = data["global_rotation"]
+	# global_position = data["position"]
+	# global_rotation = data["rotation"]
+	global_position = Vector3(data["positionX"], data["positionY"], data["positionZ"])
+	# global_rotation = Vector3(data["rotationX"], data["rotationY"], data["rotationZ"])
+	global_rotation = Vector3(0, data["rotation"], 0)
 	refreshMesh()
 
 func objectFromData(data: Variant = null):

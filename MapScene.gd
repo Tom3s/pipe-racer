@@ -1,7 +1,10 @@
 extends Node3D
 class_name Map
 
-var StartScene = load("res://Start.tscn")
+
+var StartScene = preload("res://Start.tscn")
+@onready
+var PropPlacer = preload("res://PropPlacer.tscn")
 
 var trackPieces: Node3D
 var checkPointSystem: Node3D
@@ -39,6 +42,27 @@ var start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
 const START_OFFSET = Vector3(0, 9.15, 0)
 
+@export_file("*.json")
+var loadFrom: String:
+	set(newFile):
+		loadFrom = loadFromChanged(newFile)
+		print("loadFrom changed to: ", loadFrom)
+		# emit_signal("loadFromChanged", loadFrom)
+		# load(loadFrom
+	get:
+		return loadFrom
+
+func loadFromChanged(newFile: String) -> String:
+	if newFile == "":
+		return newFile
+	
+	if is_node_ready():
+		loadMap(newFile)
+		# return newFile
+	
+	return newFile
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	trackPieces = %TrackPieces
@@ -50,6 +74,9 @@ func _ready():
 		add_child(start)
 		start.global_position = START_MAGIC_VECTOR
 		start.visible = false
+	
+	if loadFrom != "":
+		loadMap(loadFrom)
 
 
 
@@ -65,8 +92,12 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 	# 	prefab.global_position = prefabPosition
 	# if prefabRotation != Vector3.INF:
 	# 	prefab.global_rotation = prefabRotation
-	prefab.global_position = prefabData["global_position"]
-	prefab.global_rotation = prefabData["global_rotation"]
+	# prefab.global_position = prefabData["position"]
+	# prefab.global_rotation = prefabData["rotation"]
+
+	prefab.global_position = Vector3(prefabData["positionX"], prefabData["positionY"], prefabData["positionZ"])
+	prefab.global_rotation = Vector3(0, prefabData["rotation"], 0)
+
 	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
 	prefab.create_trimesh_collision()
 
@@ -312,16 +343,112 @@ func redo():
 	
 	redidLastOperation.emit()
 
+func clearMap():
+	for child in trackPieces.get_children():
+		child.queue_free()
+	for child in checkPointSystem.get_children():
+		child.queue_free()
+	# trackPieces.get_child(0).queue_free()
+	# checkPointSystem.get_child(0).queue_free()
+
+	start.visible = false
+
+	operationStack.clear()
+	lastOperationIndex = -1
+
 func save():
-	var scene = PackedScene.new()
+	saveToJSON()
 
-	for child in get_children(true):
-		child.owner = self
+func saveToJSON():
+	var trackName = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
 
-	var result = scene.pack(self)
+	var trackData = {
+		"trackName": trackName,
+		"trackPieces": [],
+		"start": {
+			# "position": start.global_position,
+			# "rotation": start.global_rotation
+			"positionX": start.global_position.x,
+			"positionY": start.global_position.y,
+			"positionZ": start.global_position.z,
+			# "rotationX": start.global_rotation.x,
+			# "rotationY": start.global_rotation.y,
+			# "rotationZ": start.global_rotation.z
+			"rotation": start.global_rotation.y
+		},
+		"checkPoints": []
+	}
 
-	if result == OK:
-		var trackName = "track_" + str(Time.get_date_string_from_system())
-		var error = ResourceSaver.save(scene, "res://builderTracks/" + trackName +".tscn")  # Or "user://..."
-		if error != OK:
-			push_error("An error occurred while saving the scene to disk.")
+	for child in trackPieces.get_children():
+		# var prefabData = child.prefabData
+		trackData["trackPieces"].append(child.prefabData)
+	
+	for child in checkPointSystem.get_children():
+		trackData["checkPoints"].append({
+			# "position": child.global_position,
+			# "rotation": child.global_rotation
+			"positionX": child.global_position.x,
+			"positionY": child.global_position.y,
+			"positionZ": child.global_position.z,
+			# "rotationX": child.global_rotation.x,
+			# "rotationY": child.global_rotation.y,
+			# "rotationZ": child.global_rotation.z
+			"rotation": child.global_rotation.y
+		})
+	
+	# var fileHandler = FileAccess.new()
+	var path = "res://builderTracks/" + trackName + ".json"
+	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
+
+	if fileHandler == null:
+		print("Error opening file to save into")
+		return
+
+	fileHandler.store_string(JSON.stringify(trackData, "\t"))
+
+func loadMap(fileName: String):
+	print(fileName.split(".")[-1])
+	if fileName.split(".")[-1] == "json":
+		loadFromJSON(fileName)
+
+func loadFromJSON(fileName: String):
+	var path = fileName
+	if !fileName.begins_with("res://builderTracks/"):
+		path = "res://builderTracks/" + fileName
+
+	var fileHandler = FileAccess.open(path, FileAccess.READ)
+
+	if fileHandler == null:
+		print("Error opening file to load from")
+		return
+	
+	var trackData = JSON.parse_string(fileHandler.get_as_text())
+
+	if trackData == null:
+		print("Error parsing JSON when loading map")
+		return
+
+	clearMap()
+
+	var prefabMesher = PrefabMesher.new()
+	add_child(prefabMesher)
+
+	for prefabData in trackData["trackPieces"]:
+		var prefab = prefabMesher.objectFromData(prefabData)
+		addPrefab(prefab)
+
+	prefabMesher.queue_free()
+
+	var startPosData = trackData["start"]
+	updateStartPosition(Vector3(startPosData["positionX"], startPosData["positionY"], startPosData["positionZ"]), Vector3(0, startPosData["rotation"], 0))
+
+	var propPlacer = PropPlacer.instantiate()
+	add_child(propPlacer)
+
+	for checkPointData in trackData["checkPoints"]:
+		var checkPointObject = propPlacer.getCheckPointObject()
+		addCheckPointObject(checkPointObject, Vector3(checkPointData["positionX"], checkPointData["positionY"], checkPointData["positionZ"]), Vector3(0, checkPointData["rotation"], 0))
+	
+	propPlacer.queue_free()
+
+	print("Loaded track: " + trackData["trackName"])
