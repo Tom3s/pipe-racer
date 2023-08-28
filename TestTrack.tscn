@@ -40,7 +40,7 @@ script = ExtResource("5_gyv2v")
 
 [node name="CarController" parent="." instance=ExtResource("4_rbwmu")]
 unique_name_in_owner = true
-respawnPosition = Vector3(-10, 90, 0)
+respawnPosition = Vector3(-10, 5, 0)
 respawnRotation = Vector3(0, 1.571, 0)
 
 [node name="Map" parent="." instance=ExtResource("6_50qb3")]
