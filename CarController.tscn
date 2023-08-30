@@ -43,7 +43,6 @@ point_count = 2
 curve = SubResource("Curve_4xdyt")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k33ti"]
-lifetime_randomness = 0.3
 emission_shape = 3
 emission_box_extents = Vector3(0.3, 0.1, 0.1)
 spread = 0.0

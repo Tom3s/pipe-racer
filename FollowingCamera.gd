@@ -10,6 +10,7 @@ func _init(carReference):
 
 func _ready():
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
+	fov = 65
 	set_physics_process(true)
 
 func _physics_process(delta):
