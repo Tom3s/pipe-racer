@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cgg507s0d4uvi"]
+[gd_scene load_steps=7 format=3 uid="uid://cgg507s0d4uvi"]
 
 [ext_resource type="Script" path="res://RaceIngame.gd" id="1_sr2yh"]
+[ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_1u75j"]
 [ext_resource type="Script" path="res://RaceEventListener.gd" id="2_c5cfr"]
 [ext_resource type="Script" path="res://RaceInputHandler.gd" id="3_4be1a"]
 [ext_resource type="PackedScene" path="res://MusicPlayer.tscn" id="4_v6a6n"]
@@ -8,6 +9,9 @@
 
 [node name="RaceIngame" type="Node3D"]
 script = ExtResource("1_sr2yh")
+
+[node name="UniversalCanvas" parent="." instance=ExtResource("2_1u75j")]
+unique_name_in_owner = true
 
 [node name="HorizontalSplit" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

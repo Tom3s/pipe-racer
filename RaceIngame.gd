@@ -7,6 +7,7 @@ var Map = preload("res://MapScene.tscn")
 @onready
 var MapEnvironment = preload("res://TestTrackEnv.tscn")
 var Car := preload("res://CarController.tscn")
+var HudScene := preload("res://HUD/HUD.tscn")
 
 var raceSettings: RaceSettings
 
@@ -31,17 +32,28 @@ func init(newRaceSettings: RaceSettings):
 	raceEventListener = %RaceEventListener
 	raceInputHandler = %RaceInputHandler
 
+	raceInputHandler.setup(raceSettings.nrPlayers)
+
 	environment = MapEnvironment.instantiate()
 	add_child(environment)
 
 	verticalSplitTop = %VerticalSplitTop
 	verticalSplitBottom = %VerticalSplitBottom
 
-	setupCars()
-	setupViewports()
+	var cars: Array[CarController] = []
+	setupCars(cars)
+	
+	var timeTrialManagers: Array[TimeTrialManager] = []
+	for i in raceSettings.nrPlayers:
+		timeTrialManagers.append(TimeTrialManager.new())
+	var huds: Array[IngameHUD] = []
+
+	setupViewports(timeTrialManagers, huds)
+
+	raceEventListener.setup(cars, timeTrialManagers, huds)
 
 
-func setupCars():
+func setupCars(cars: Array[CarController]):
 	var playersNode = %Players
 	for i in raceSettings.nrPlayers:
 		var spawnPoint = map.start.getStartPosition(i, raceSettings.nrPlayers)
@@ -49,8 +61,9 @@ func setupCars():
 		playersNode.add_child(car)
 
 		car.setup(raceSettings.players[i], i + 1, spawnPoint["position"], spawnPoint["rotation"])
+		cars.append(car)
 
-func setupViewports():
+func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD]):
 	var index = 0
 	for car in %Players.get_children():
 		var camera = FollowingCamera.new(car)
@@ -59,6 +72,14 @@ func setupViewports():
 
 		var canvasLayer = CanvasLayer.new()
 		canvasLayer.follow_viewport_enabled = true
+
+		var hud: IngameHUD = HudScene.instantiate()
+		hud.init(car, timeTrialManagers[index], raceSettings.nrPlayers)
+
+		huds.append(hud)
+
+		canvasLayer.add_child(hud)
+
 		viewPort.add_child(canvasLayer)
 		viewPortContainer.add_child(viewPort)
 		viewPort.add_child(camera)

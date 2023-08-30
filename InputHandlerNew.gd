@@ -40,13 +40,6 @@ func _unhandled_input(event):
 	respawnInput = event.is_action_pressed(playerPrefix + "respawn")
 	driftInput = Input.get_action_strength(playerPrefix + "drift")
 
-	if Input.is_action_just_pressed(playerPrefix + "pause"):
-		pausedState = !pausedState
-		if pausedState:
-			car.pauseMovement()
-		else:
-			car.unpauseMovement()
-
 	if respawnInput:
 		car.respawn()
 

@@ -75,6 +75,8 @@ var paused: bool = false
 
 var shouldPause: bool = false
 
+var initialRespawn: bool = false
+
 # ingameData
 var playerName: String = ""
 @export
@@ -107,7 +109,7 @@ func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Vector
 	frameColor = playerData.PLAYER_COLOR
 
 	setRespawnPosition(startingPosition, startingRotation)
-	respawn()
+	respawn(true)
 	# pauseMovement()
 
 
@@ -150,6 +152,11 @@ func _physics_process(_delta):
 		pauseAngularVelocity = angular_velocity
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
+
+		if initialRespawn:
+			global_position = respawnPosition
+			global_rotation = respawnRotation
+			initialRespawn = false
 		paused = true
 		freeze = true
 	elif !shouldPause && paused:
@@ -158,12 +165,16 @@ func _physics_process(_delta):
 		angular_velocity = pauseAngularVelocity
 		paused = false
 
+
 func _integrate_forces(state):
 	if shouldRespawn:
 		state.linear_velocity = Vector3.ZERO
 		state.angular_velocity = Vector3.ZERO
 		state.transform = createRespawnTransform3D()
 		shouldRespawn = false
+		if initialRespawn:
+			# initialRespawn = false
+			pauseMovement()
 
 func createRespawnTransform3D():
 	var tempTransform = Transform3D()
@@ -340,10 +351,11 @@ func setRespawnPosition(newPosition: Vector3, newRotation: Vector3):
 	respawnPosition = newPosition
 	respawnRotation = newRotation
 
-func respawn():
+func respawn(initial: bool = false):
 	shouldRespawn = true
 	pauseAngularVelocity = Vector3.ZERO
 	pauseLinearVelocity = Vector3.ZERO
+	initialRespawn = initial
 
 func getSkiddingRatio():
 	var skiddinForward = linear_velocity.dot(global_transform.basis.z)
@@ -380,9 +392,12 @@ func pauseMovement():
 	shouldPause = true
 	print('pause movement')
 
-func unpauseMovement():
+func resumeMovement():
 	shouldPause = false
 	print('unpause movement')
+
+func startRace():
+	resumeMovement()
 
 # DEBUG FUNCTIONS
 

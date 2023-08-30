@@ -1,4 +1,5 @@
 extends Label
+class_name Countdown
 
 signal countdownFinished(timestamp: int)
 signal shouldReset()
@@ -27,20 +28,8 @@ func _ready():
 
 func _physics_process(delta):
 	if shouldCountdown:
-		startCountdown()
+		playCountdown()
 		shouldCountdown = false
-
-func _unhandled_input(event):
-	if get_tree().get_multiplayer().is_server() || get_parent().get_parent().get_node("%CarSpawner").get_child_count() == 1:
-		if event.is_action_pressed("start_countdown") && countdownStartTime == 0:
-			# startCountdown()
-			shouldCountdown = true
-		if event.is_action_pressed("reset_race"):
-			get_parent().get_parent().get_node("%PauseMenu").onRestartButton_pressed()
-			shouldReset.emit()
-	if event.is_action_pressed("pause"):
-		var pauseMenuButtons = get_parent().get_parent().get_node("%PauseMenu/%Buttons")
-		pauseMenuButtons.visible = !pauseMenuButtons.visible
 
 @export_range(0.0, 1.0, 0.05)
 var COUNTDOWN_INBETWEEN_TIME: float = 0.75
@@ -52,7 +41,7 @@ var COUNTDOWN_GO_TIME: float = 1.0
 var COUNTDOWN_GO_FADE_TIME: float = 0.3
 
 # @rpc
-func startCountdown():
+func playCountdown():
 	modulate = Color(1, 1, 1, 1)
 
 	musicPlayer.playMenuMusic()
@@ -78,3 +67,6 @@ func onCountdownFinished():
 	musicPlayer.playIngameMusic()
 	ingameSFX.playStartRaceSFX()
 	countdownFinished.emit(floor(Time.get_unix_time_from_system() * 1000))
+
+func startCountdown():
+	shouldCountdown = true

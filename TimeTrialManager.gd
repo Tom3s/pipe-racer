@@ -4,6 +4,8 @@ class_name TimeTrialManager
 
 var timeTrialLapEnd: int = -1
 
+var paused: bool = false
+
 var times: Array = []
 
 var ingameSFX: IngameSFX = null
@@ -34,9 +36,19 @@ func getBestLap() -> int:
 	return times.min()
 
 func getCurrentLapTime() -> int:
+	if paused:
+		return timeTrialLapEnd
 	if times.size() == 3:
 		return 0
 	return floor(Time.get_unix_time_from_system() * 1000) - timeTrialLapEnd
+
+func pauseTimeTrial(timestamp: int) -> void:
+	paused = true
+	timeTrialLapEnd = timestamp - timeTrialLapEnd
+
+func resumeTimeTrial(timestamp: int) -> void:
+	paused = false
+	timeTrialLapEnd = timestamp - timeTrialLapEnd
 
 func reset() -> void:
 	times = []

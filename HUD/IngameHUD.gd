@@ -24,21 +24,17 @@ var respawnIndicator: Label = %RespawnIndicator
 var nickname: Label = %Nickname
 
 
-var car: CarRigidBody = null
+var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
 
 var TOTAL_CARS: int = 0
 
-# func _init(initialCar: CarRigidBody, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
-# 	car = initialCar
-# 	timeTrialManager = initialTimeTrialManager
-# 	TOTAL_CARS = totalCars
-
-func init(initialCar: CarRigidBody, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
+func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
 	car = initialCar
 	timeTrialManager = initialTimeTrialManager
 	TOTAL_CARS = totalCars
 	%HUDContainer.hide()
+	setRespawnIndicator(false)
 
 func _ready() -> void:
 	print("HUD loaded")
@@ -48,11 +44,11 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	setSpeedText(car.getSpeed())
-	setPositionText(car.placement, TOTAL_CARS)
-	setLapText(car.currentLap + 1, car.nrLaps)
+	# setPositionText(car.placement, TOTAL_CARS)
+	# setLapText(car.currentLap + 1, car.nrLaps)
 	setLapTimerText(timeTrialManager.getCurrentLapTime())
 	setStatsText(timeTrialManager.getTotalTime() + timeTrialManager.getCurrentLapTime(), timeTrialManager.getLastLap(), timeTrialManager.getBestLap())
-	setRespawnIndicator(car.incorrectCheckPoint) 
+	# setRespawnIndicator(car.incorrectCheckPoint) 
 
 
 func setSpeedText(speed: float) -> void:
@@ -87,8 +83,8 @@ func getTimeStringFromTicks(ticks: int) -> String:
 func setNickname(name: String) -> void:
 	nickname.text = name
 
-func onCountdown_finished(_timestamp):
+func startTimer():
 	%HUDContainer.show()
 
-func onReset():
+func reset():
 	%HUDContainer.hide()
