@@ -38,7 +38,7 @@ signal redidLastOperation()
 signal noOperationToBeUndone()
 signal noOperationToBeRedone()
 
-var start
+var start: Start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
 const START_OFFSET = Vector3(0, 9.15, 0)
 
@@ -430,8 +430,13 @@ func loadFromJSON(fileName: String):
 
 	clearMap()
 
+	if !trackData.has("trackPieces"):
+		print("Error loading map: no trackPieces")
+		return
+	
 	var prefabMesher = PrefabMesher.new()
 	add_child(prefabMesher)
+
 
 	for prefabData in trackData["trackPieces"]:
 		var prefab = prefabMesher.objectFromData(prefabData)
@@ -439,8 +444,17 @@ func loadFromJSON(fileName: String):
 
 	prefabMesher.queue_free()
 
+
+	if !trackData.has("start"):
+		print("Error loading map: no start")
+		return
+	
 	var startPosData = trackData["start"]
 	updateStartPosition(Vector3(startPosData["positionX"], startPosData["positionY"], startPosData["positionZ"]), Vector3(0, startPosData["rotation"], 0))
+
+	if !trackData.has("checkPoints"):
+		print("Error loading map: no checkPoints")
+		return
 
 	var propPlacer = PropPlacer.instantiate()
 	add_child(propPlacer)

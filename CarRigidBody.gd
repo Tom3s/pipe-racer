@@ -82,6 +82,11 @@ var synchronizer = %MultiplayerSynchronizer
 
 var playerName: String = Playerstats.PLAYER_NAME
 
+var pauseLinearVelocity: Vector3
+var pauseAngularVelocity: Vector3
+
+var paused: bool = false
+
 signal finishedRacing()
 
 

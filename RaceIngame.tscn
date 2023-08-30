@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://cgg507s0d4uvi"]
+
+[ext_resource type="Script" path="res://RaceIngame.gd" id="1_sr2yh"]
+[ext_resource type="Script" path="res://RaceEventListener.gd" id="2_c5cfr"]
+[ext_resource type="Script" path="res://RaceInputHandler.gd" id="3_4be1a"]
+[ext_resource type="PackedScene" path="res://MusicPlayer.tscn" id="4_v6a6n"]
+[ext_resource type="PackedScene" uid="uid://dgurpytbg7dx6" path="res://Sounds/IngameSFX.tscn" id="5_tnrfk"]
+
+[node name="RaceIngame" type="Node3D"]
+script = ExtResource("1_sr2yh")
+
+[node name="HorizontalSplit" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="VerticalSplitTop" type="HBoxContainer" parent="HorizontalSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VerticalSplitBottom" type="HBoxContainer" parent="HorizontalSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MusicPlayer" parent="." instance=ExtResource("4_v6a6n")]
+unique_name_in_owner = true
+
+[node name="IngameSFX" parent="." instance=ExtResource("5_tnrfk")]
+unique_name_in_owner = true
+
+[node name="Players" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="RaceInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_4be1a")
+
+[node name="RaceEventListener" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_c5cfr")

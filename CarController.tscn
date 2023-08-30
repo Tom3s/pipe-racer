@@ -235,6 +235,7 @@ script = ExtResource("5_rud3q")
 bus = &"Engine Sound"
 
 [node name="InputHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("3_kfdpd")
 
 [node name="SoundEffects" type="Node3D" parent="."]

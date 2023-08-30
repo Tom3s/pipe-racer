@@ -62,14 +62,69 @@ var accelerationInput: float = 0.0
 var steeringInput: float = 0.0
 var driftInput: float = 0.0
 
+var inputHandler: InputHandlerNew
+
 var groundedTires: Array = [false, false, false, false]
 
 var aboutToJump = false
 
+var pauseLinearVelocity: Vector3
+var pauseAngularVelocity: Vector3
+
+var paused: bool = false
+
+var shouldPause: bool = false
+
+# ingameData
+var playerName: String = ""
+@export
+var playerIndex: int = 1:
+	set(newIndex):
+		playerIndex = onInputPlayerIndeChanged(newIndex)
+	get:
+		return playerIndex
+
+func onInputPlayerIndeChanged(newIndex: int) -> int:
+	%InputHandler.setInputPlayer(newIndex)
+	return newIndex
+
+@export
+var frameColor: Color = Color.PINK:
+	set(newColor):
+		frameColor = onFrameColorChanged(newColor)
+	get:
+		return frameColor
+
+func onFrameColorChanged(newColor: Color) -> Color:
+	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
+	return newColor
+
+func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Vector3, startingRotation: Vector3):
+	playerIndex = newPlayerIndex
+	playerName = playerData.PLAYER_NAME
+	frameColor = playerData.PLAYER_COLOR
+
+	setRespawnPosition(startingPosition, startingRotation)
+	respawn()
+	# pauseMovement()
+
+
+
 func _ready():
+	inputHandler = %InputHandler
 	set_physics_process(true)
 
 func _physics_process(_delta):
+	# if shouldRespawn:
+	# 	linear_velocity = Vector3.ZERO
+	# 	angular_velocity = Vector3.ZERO
+	# 	rotation = respawnRotation
+	# 	global_position = respawnPosition
+	# 	shouldRespawn = false
+	# 	return
+	
 	var groundedTireCount: float = 0.0
 	for grounded in groundedTires:
 		if grounded:
@@ -85,18 +140,38 @@ func _physics_process(_delta):
 		applyAirSteering()
 		slidingFactor = 1
 		
-		
-	
 	if getSpeed() < lowerSpeedLimit && !accelerationInput:
 		linear_velocity *= Vector3.UP
 	
-	if shouldRespawn:
-		global_position = respawnPosition
-		rotation = respawnRotation
+	
+	
+	if shouldPause && !paused:
+		pauseLinearVelocity = linear_velocity
+		pauseAngularVelocity = angular_velocity
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
+		paused = true
+		freeze = true
+	elif !shouldPause && paused:
+		freeze = false
+		linear_velocity = pauseLinearVelocity
+		angular_velocity = pauseAngularVelocity
+		paused = false
+
+func _integrate_forces(state):
+	if shouldRespawn:
+		state.linear_velocity = Vector3.ZERO
+		state.angular_velocity = Vector3.ZERO
+		state.transform = createRespawnTransform3D()
 		shouldRespawn = false
 
+func createRespawnTransform3D():
+	var tempTransform = Transform3D()
+	tempTransform.origin = respawnPosition
+	tempTransform = tempTransform.rotated(Vector3.UP, respawnRotation.y)
+	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.x)
+	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.z)
+	return tempTransform
 @export
 var airPitchControl: float = 8
 
@@ -261,8 +336,14 @@ func getForwardSpeed() -> float:
 	
 	return speed
 
+func setRespawnPosition(newPosition: Vector3, newRotation: Vector3):
+	respawnPosition = newPosition
+	respawnRotation = newRotation
+
 func respawn():
 	shouldRespawn = true
+	pauseAngularVelocity = Vector3.ZERO
+	pauseLinearVelocity = Vector3.ZERO
 
 func getSkiddingRatio():
 	var skiddinForward = linear_velocity.dot(global_transform.basis.z)
@@ -295,6 +376,13 @@ func getPitchScale():
 func getPlayingIdle():
 	return getSpeed() < soundSpeedLimit
 
+func pauseMovement():
+	shouldPause = true
+	print('pause movement')
+
+func unpauseMovement():
+	shouldPause = false
+	print('unpause movement')
 
 # DEBUG FUNCTIONS
 

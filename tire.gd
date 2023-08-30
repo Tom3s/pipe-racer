@@ -30,35 +30,36 @@ func _ready():
 
 
 func _physics_process(delta):
-	rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
-#	tireModel.rotation = tireModel.rotation * Vector3(1, 0, 1) + Vector3(0, rotation.y, 0)
-	
-	if is_colliding():
-		car.groundedTires[tireIndex] = true
+	if !car.paused:
+		rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
+	#	tireModel.rotation = tireModel.rotation * Vector3(1, 0, 1) + Vector3(0, rotation.y, 0)
 		
-		var contactPoint = get_collision_point()
-		var raycastDistance = (get_collision_point() - global_position).length()
+		if is_colliding():
+			car.groundedTires[tireIndex] = true
+			
+			var contactPoint = get_collision_point()
+			var raycastDistance = (get_collision_point() - global_position).length()
+			
+			tireModel.position.y = -raycastDistance + 0.375
+			
+			var tireVelocitySuspension = car.get_point_velocity(global_position)
+			
+			car.applySuspension(raycastDistance, global_transform.basis.y, tireVelocitySuspension, global_position, delta)
+			
+			var tireVelocityActual = car.get_point_velocity(contactPoint)
+			
+			car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint)
 		
-		tireModel.position.y = -raycastDistance + 0.375
-		
-		var tireVelocitySuspension = car.get_point_velocity(global_position)
-		
-		car.applySuspension(raycastDistance, global_transform.basis.y, tireVelocitySuspension, global_position, delta)
-		
-		var tireVelocityActual = car.get_point_velocity(contactPoint)
-		
-		car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint)
-	
-		car.applyAcceleration(global_transform.basis.z, tireVelocityActual, contactPoint)
-		
-		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(global_transform.basis.z)
-		
-		tireModel.rotate_x(tireDistanceTravelled / 0.375)
-		
-#		smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
-		smokeEmitter.emitting = car.slidingFactor > 0.1
-	else:
-		car.groundedTires[tireIndex] = false		
-		tireModel.position.y = target_position.y + 0.375
-		smokeEmitter.emitting = false
+			car.applyAcceleration(global_transform.basis.z, tireVelocityActual, contactPoint)
+			
+			var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(global_transform.basis.z)
+			
+			tireModel.rotate_x(tireDistanceTravelled / 0.375)
+			
+			smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 5
+			# smokeEmitter.emitting = car.slidingFactor > 0.1
+		else:
+			car.groundedTires[tireIndex] = false		
+			tireModel.position.y = target_position.y + 0.375
+			smokeEmitter.emitting = false
 	
