@@ -80,14 +80,14 @@ var initialRespawn: bool = false
 # ingameData
 var playerName: String = ""
 @export
-var playerIndex: int = 1:
+var playerIndex: int = 0:
 	set(newIndex):
-		playerIndex = onInputPlayerIndeChanged(newIndex)
+		playerIndex = onInputPlayerIndexChanged(newIndex)
 	get:
 		return playerIndex
 
-func onInputPlayerIndeChanged(newIndex: int) -> int:
-	%InputHandler.setInputPlayer(newIndex)
+func onInputPlayerIndexChanged(newIndex: int) -> int:
+	%InputHandler.setInputPlayer(newIndex + 1)
 	return newIndex
 
 @export
@@ -102,6 +102,19 @@ func onFrameColorChanged(newColor: Color) -> Color:
 	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
 	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
 	return newColor
+
+
+# SIGNALS
+
+signal respawned(playerIndex: int)
+
+
+
+
+
+
+
+
 
 func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Vector3, startingRotation: Vector3):
 	playerIndex = newPlayerIndex
@@ -156,6 +169,7 @@ func _physics_process(_delta):
 		if initialRespawn:
 			global_position = respawnPosition
 			global_rotation = respawnRotation
+			respawned.emit(playerIndex)
 			initialRespawn = false
 		paused = true
 		freeze = true
@@ -175,6 +189,7 @@ func _integrate_forces(state):
 		if initialRespawn:
 			# initialRespawn = false
 			pauseMovement()
+		respawned.emit(playerIndex)
 
 func createRespawnTransform3D():
 	var tempTransform = Transform3D()

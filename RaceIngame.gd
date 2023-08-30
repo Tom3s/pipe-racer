@@ -47,10 +47,12 @@ func init(newRaceSettings: RaceSettings):
 	for i in raceSettings.nrPlayers:
 		timeTrialManagers.append(TimeTrialManager.new())
 	var huds: Array[IngameHUD] = []
+	var cameras: Array[FollowingCamera] = []
 
-	setupViewports(timeTrialManagers, huds)
+	setupViewports(timeTrialManagers, huds, cameras)
 
-	raceEventListener.setup(cars, timeTrialManagers, huds)
+
+	raceEventListener.setup(cars, timeTrialManagers, huds, cameras)
 
 
 func setupCars(cars: Array[CarController]):
@@ -60,13 +62,14 @@ func setupCars(cars: Array[CarController]):
 		var car: CarController = Car.instantiate()
 		playersNode.add_child(car)
 
-		car.setup(raceSettings.players[i], i + 1, spawnPoint["position"], spawnPoint["rotation"])
+		car.setup(raceSettings.players[i], i, spawnPoint["position"], spawnPoint["rotation"])
 		cars.append(car)
 
-func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD]):
+func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):
 	var index = 0
 	for car in %Players.get_children():
 		var camera = FollowingCamera.new(car)
+		cameras.append(camera)
 		var viewPortContainer = getNewViewportContainer()
 		var viewPort = getNewViewport()
 

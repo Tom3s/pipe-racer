@@ -34,11 +34,11 @@ func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, 
 	timeTrialManager = initialTimeTrialManager
 	TOTAL_CARS = totalCars
 	%HUDContainer.hide()
-	setRespawnIndicator(false)
 
 func _ready() -> void:
 	print("HUD loaded")
 	setNickname(car.playerName)
+	setRespawnIndicator(false)
 
 	set_physics_process(true)
 

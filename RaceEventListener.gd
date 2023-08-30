@@ -4,16 +4,18 @@ class_name RaceEventListener
 var cars: Array[CarController]
 var timeTrialManagers: Array[TimeTrialManager]
 var huds: Array[IngameHUD]
+var cameras: Array[FollowingCamera]
 
 var countdown: Countdown
 var raceInputHandler: RaceInputHandler
 
 var paused = -1
 
-func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array):
+func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array):
 	cars = initialCars
 	timeTrialManagers = initialTimeTrialManagers
 	huds = initialHuds
+	cameras = initialCameras
 
 	countdown = %UniversalCanvas/%Countdown
 	raceInputHandler = %RaceInputHandler
@@ -25,6 +27,8 @@ func connectSignals():
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
 
+	for i in cars.size():
+		cars[i].respawned.connect(onCar_respawned)
 
 func onCountdown_countdownFinished(timestamp: int):
 	for i in range(cars.size()):
@@ -48,3 +52,6 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			cars[i].pauseMovement()
 			timeTrialManagers[i].pauseTimeTrial(timestamp)
 		paused = playerIndex
+
+func onCar_respawned(playerIndex: int):
+	cameras[playerIndex].forceUpdatePosition()
