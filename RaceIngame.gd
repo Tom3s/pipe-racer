@@ -92,7 +92,8 @@ func _ready():
 	var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
 	var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
 
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-28T13-12-49.json", 3)
+	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-28T13-12-49.json", 3)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-30T21-41-44.json", 3)
 	raceSettings.addPlayer(player1)
 	raceSettings.addPlayer(player2)
 	raceSettings.addPlayer(player3)

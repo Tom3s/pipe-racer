@@ -20,7 +20,7 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var localRight = (-localBackwards).cross(raycastNormal).normalized()
 
-	var baseSpawnPosition = raycastPosition + raycastNormal * 0.2 + localBackwards * 8
+	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 + localBackwards * 8
 
 	var leftLimit = -localRight * 24
 	var rightLimit = localRight * 24
@@ -29,14 +29,18 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
 
+	print("Spawn position: ", spawnPosition)
+
 	return {
 		"position": spawnPosition,
 		"rotation": getRotationVector(-localBackwards, localRight)
 	}
 
 func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
-	var localBasis = Basis(localForward, localForward.cross(localRight).normalized(), localRight)
-	var localQuaternion = Quaternion(localBasis)
+	var localBasis = Basis(localRight, localForward.cross(localRight).normalized(), -localForward)
+	var localQuaternion = Quaternion(localBasis.get_rotation_quaternion())
+
+	print("Rotation: ", localQuaternion.get_euler())
 
 	return localQuaternion.get_euler()
 

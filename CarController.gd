@@ -167,10 +167,10 @@ func _integrate_forces(state):
 
 func createRespawnTransform3D():
 	var tempTransform = Transform3D()
-	tempTransform.origin = respawnPosition
 	tempTransform = tempTransform.rotated(Vector3.UP, respawnRotation.y)
-	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.x)
-	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.z)
+	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.x)
+	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.z)
+	tempTransform.origin = respawnPosition
 	return tempTransform
 @export
 var airPitchControl: float = 8
