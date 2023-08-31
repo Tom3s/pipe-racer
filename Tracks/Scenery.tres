@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=42 format=3 uid="uid://mu6ff6lb7ykw"]
+[gd_resource type="VisualShader" load_steps=46 format=3 uid="uid://mu6ff6lb7ykw"]
 
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/perlin2d.gd" id="1_vheb3"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/worley2d.gd" id="1_vnuwk"]
@@ -115,6 +115,24 @@ step = 0.01
 default_value_enabled = true
 default_value = 0.01
 
+[sub_resource type="VisualShaderNodeVectorDistance" id="VisualShaderNodeVectorDistance_805hu"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0.5, 0.5)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_imx82"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_y5u7o"]
+output_port_for_preview = 0
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_tj7ep"]
+output_port_for_preview = 0
+size = Vector2(672.725, 421.777)
+expression = "float pi = 3.141592;
+//value = (cos(x * pi * 2.0) + 1.0) / 2.0;
+value = cos(x * pi);"
+
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6ed0o"]
 input_name = "vertex"
 
@@ -197,19 +215,6 @@ vec2 _cellular2dNoiseFunc(vec2 P, float _jitter_w2d) {
 	d1.y = min(d1.y, d1.z);
 	d1.y = min(d1.y, d2.x);
 	return sqrt(d1.xy);
-}
-// CircleShape
-vec4 _generateCircleFunc(vec2 _uv_circle, vec2 _center_circle, vec2 _scale_factor_circle, float _innerRad_circle, float _outRad_circle, float _hard_circle) {
-	float _innerRadiusCheck0 = min(_innerRad_circle, _outRad_circle);
-	float _outerRadiusCheck0 = max(_innerRad_circle, _outRad_circle);
-	
-	float currentPositionCircle = length((_uv_circle - _center_circle) * _scale_factor_circle);
-	float maxIntencityCenterCircle = (_outerRadiusCheck0 + _innerRadiusCheck0) * 0.5;
-	float rd0 = _outerRadiusCheck0 - maxIntencityCenterCircle;
-	float circleDistribution = min(max(abs(currentPositionCircle - maxIntencityCenterCircle) / rd0, 0.0), 1.0);
-	vec4 _outputColor0 = vec4(1.0);
-	_outputColor0.a = 1.0 - pow(circleDistribution, _hard_circle);
-	return _outputColor0;
 }
 // PerlinNoise2D
 float _perlin2dNoiseFunc(vec2 P, vec2 _period_perl2) {
@@ -316,20 +321,29 @@ void vertex() {
 	float n_out6p0 = n_out4p0 * n_out7p0;
 
 
-	vec3 n_out9p0;
-	float n_out9p1;
-// CircleShape:9
-	vec3 n_in9p1 = vec3(0.50000, 0.50000, 0.00000);
-	vec3 n_in9p2 = vec3(1.00000, 1.00000, 0.00000);
-	float n_in9p3 = -0.50000;
-	float n_in9p4 = 0.50000;
-	float n_in9p5 = 2.00000;
-	vec3 n_in9p6 = vec3(1.00000, 1.00000, 1.00000);
-	float n_in9p7 = 1.00000;
+// Input:15
+	vec2 n_out15p0 = UV;
+
+
+// Distance:14
+	vec2 n_in14p1 = vec2(0.50000, 0.50000);
+	float n_out14p0 = distance(n_out15p0, n_in14p1);
+
+
+	float n_out18p0;
+// Expression:18
+	n_out18p0 = 0.0;
 	{
-		n_out9p0 = n_in9p6;
-		n_out9p1 = _generateCircleFunc(UV.xy, n_in9p1.xy, n_in9p2.xy, n_in9p3, n_in9p4, n_in9p5).a * n_in9p7;
+		float pi = 3.141592;
+		//n_out18p0 = (cos(n_out14p0 * pi * 2.0) + 1.0) / 2.0;
+		n_out18p0 = cos(n_out14p0 * pi);
 	}
+
+
+// Clamp:17
+	float n_in17p1 = 0.00000;
+	float n_in17p2 = 1.00000;
+	float n_out17p0 = clamp(n_out18p0, n_in17p1, n_in17p2);
 
 
 // FloatParameter:13
@@ -337,7 +351,7 @@ void vertex() {
 
 
 // FloatOp:12
-	float n_out12p0 = n_out9p1 * n_out13p0;
+	float n_out12p0 = n_out17p0 * n_out13p0;
 
 
 // FloatFunc:10
@@ -503,24 +517,24 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(273.283, 18.2764)
+graph_offset = Vector2(-662.421, 260.391)
 nodes/vertex/0/position = Vector2(900, 100)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_6ed0o")
 nodes/vertex/2/position = Vector2(-480, 40)
 nodes/vertex/3/node = SubResource("VisualShaderNodeVectorOp_bkrno")
 nodes/vertex/3/position = Vector2(380, 60)
 nodes/vertex/4/node = SubResource("VisualShaderNodeCustom_jrdk7")
-nodes/vertex/4/position = Vector2(-520, 220)
+nodes/vertex/4/position = Vector2(-540, 180)
 nodes/vertex/5/node = SubResource("VisualShaderNodeParameterRef_pb5l0")
-nodes/vertex/5/position = Vector2(-820, 220)
+nodes/vertex/5/position = Vector2(-840, 160)
 nodes/vertex/6/node = SubResource("VisualShaderNodeFloatOp_ykbpy")
 nodes/vertex/6/position = Vector2(-260, 200)
 nodes/vertex/7/node = SubResource("VisualShaderNodeFloatParameter_t15mf")
-nodes/vertex/7/position = Vector2(-820, 360)
+nodes/vertex/7/position = Vector2(-860, 360)
 nodes/vertex/8/node = SubResource("VisualShaderNodeVectorCompose_p6a07")
 nodes/vertex/8/position = Vector2(120, 140)
 nodes/vertex/9/node = SubResource("VisualShaderNodeCustom_ejw6d")
-nodes/vertex/9/position = Vector2(-540, 420)
+nodes/vertex/9/position = Vector2(-600, 440)
 nodes/vertex/10/node = SubResource("VisualShaderNodeFloatFunc_hobvw")
 nodes/vertex/10/position = Vector2(-160, 340)
 nodes/vertex/11/node = SubResource("VisualShaderNodeFloatOp_3faaw")
@@ -528,8 +542,22 @@ nodes/vertex/11/position = Vector2(-40, 200)
 nodes/vertex/12/node = SubResource("VisualShaderNodeFloatOp_elp04")
 nodes/vertex/12/position = Vector2(-280, 400)
 nodes/vertex/13/node = SubResource("VisualShaderNodeFloatParameter_a1roo")
-nodes/vertex/13/position = Vector2(-320, 580)
-nodes/vertex/connections = PackedInt32Array(2, 0, 3, 0, 5, 0, 4, 2, 4, 0, 6, 0, 7, 0, 6, 1, 8, 0, 3, 1, 10, 0, 11, 1, 6, 0, 11, 0, 11, 0, 8, 1, 9, 1, 12, 0, 12, 0, 10, 0, 13, 0, 12, 1, 3, 0, 0, 0, 3, 0, 0, 6)
+nodes/vertex/13/position = Vector2(-380, 580)
+nodes/vertex/14/node = SubResource("VisualShaderNodeVectorDistance_805hu")
+nodes/vertex/14/position = Vector2(-760, 860)
+nodes/vertex/15/node = SubResource("VisualShaderNodeInput_imx82")
+nodes/vertex/15/position = Vector2(-1080, 780)
+nodes/vertex/17/node = SubResource("VisualShaderNodeClamp_y5u7o")
+nodes/vertex/17/position = Vector2(220, 740)
+nodes/vertex/18/node = SubResource("VisualShaderNodeExpression_tj7ep")
+nodes/vertex/18/position = Vector2(-540, 900)
+nodes/vertex/18/size = Vector2(672.725, 421.777)
+nodes/vertex/18/input_ports = "0,0,x;"
+nodes/vertex/18/output_ports = "0,0,value;"
+nodes/vertex/18/expression = "float pi = 3.141592;
+//value = (cos(x * pi * 2.0) + 1.0) / 2.0;
+value = cos(x * pi);"
+nodes/vertex/connections = PackedInt32Array(2, 0, 3, 0, 5, 0, 4, 2, 4, 0, 6, 0, 7, 0, 6, 1, 8, 0, 3, 1, 10, 0, 11, 1, 6, 0, 11, 0, 11, 0, 8, 1, 12, 0, 10, 0, 13, 0, 12, 1, 3, 0, 0, 0, 3, 0, 0, 6, 15, 0, 14, 0, 14, 0, 18, 0, 18, 0, 17, 0, 17, 0, 12, 0)
 nodes/fragment/0/position = Vector2(1120, -20)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_slii5")
 nodes/fragment/3/position = Vector2(-580, 140)
@@ -546,7 +574,7 @@ nodes/fragment/11/position = Vector2(-580, 800)
 nodes/fragment/13/node = SubResource("VisualShaderNodeCustom_g7yek")
 nodes/fragment/13/position = Vector2(-40, 160)
 nodes/fragment/15/node = SubResource("VisualShaderNodeFloatParameter_3iwjo")
-nodes/fragment/15/position = Vector2(-800, 300)
+nodes/fragment/15/position = Vector2(-900, 300)
 nodes/fragment/16/node = SubResource("VisualShaderNodeFloatOp_0ao1c")
 nodes/fragment/16/position = Vector2(120, 120)
 nodes/fragment/17/node = SubResource("VisualShaderNodeFloatOp_ej2tk")
@@ -577,4 +605,4 @@ nodes/fragment/31/node = SubResource("VisualShaderNodeRemap_436a3")
 nodes/fragment/31/position = Vector2(800, 220)
 nodes/fragment/32/node = SubResource("VisualShaderNodeRemap_4kdno")
 nodes/fragment/32/position = Vector2(780, 420)
-nodes/fragment/connections = PackedInt32Array(9, 1, 7, 0, 10, 0, 9, 0, 11, 0, 7, 1, 18, 0, 4, 0, 19, 0, 13, 2, 7, 0, 17, 0, 13, 0, 16, 0, 16, 0, 17, 1, 23, 0, 22, 1, 22, 0, 18, 0, 17, 0, 22, 0, 26, 0, 25, 0, 27, 0, 23, 0, 25, 0, 28, 0, 28, 0, 23, 1, 20, 0, 29, 0, 20, 0, 29, 1, 29, 0, 27, 2, 4, 0, 0, 0, 30, 0, 4, 2, 18, 0, 31, 0, 32, 0, 0, 4, 18, 0, 32, 0, 31, 0, 0, 3)
+nodes/fragment/connections = PackedInt32Array(9, 1, 7, 0, 10, 0, 9, 0, 11, 0, 7, 1, 18, 0, 4, 0, 19, 0, 13, 2, 7, 0, 17, 0, 13, 0, 16, 0, 16, 0, 17, 1, 23, 0, 22, 1, 22, 0, 18, 0, 17, 0, 22, 0, 26, 0, 25, 0, 27, 0, 23, 0, 25, 0, 28, 0, 28, 0, 23, 1, 20, 0, 29, 0, 20, 0, 29, 1, 29, 0, 27, 2, 30, 0, 4, 2, 18, 0, 31, 0, 32, 0, 0, 4, 18, 0, 32, 0, 31, 0, 0, 3, 4, 0, 0, 0)
