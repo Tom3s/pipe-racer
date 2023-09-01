@@ -12,8 +12,11 @@ var splits: Array = []
 
 var ingameSFX: IngameSFX = null
 
-func _init(ingameSFXNode: IngameSFX) -> void:
+var nrLaps: int
+
+func _init(ingameSFXNode: IngameSFX, initnrLaps: int) -> void:
 	ingameSFX = ingameSFXNode
+	nrLaps = initnrLaps
 
 func _ready() -> void:
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
@@ -43,7 +46,7 @@ func getBestLap() -> int:
 func getCurrentLapTime() -> int:
 	if paused:
 		return timeTrialLapEnd
-	if times.size() == 3:
+	if times.size() == nrLaps:
 		return 0
 	return floor(Time.get_unix_time_from_system() * 1000) - timeTrialLapEnd
 

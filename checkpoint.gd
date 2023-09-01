@@ -51,7 +51,7 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var localRight = (-localBackwards).cross(raycastNormal).normalized()
 
-	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 + localBackwards * 8
+	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 # + localBackwards * 8
 
 	var leftLimit = -localRight * 24
 	var rightLimit = localRight * 24

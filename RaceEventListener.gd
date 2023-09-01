@@ -39,6 +39,7 @@ func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
+	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
@@ -115,3 +116,11 @@ func onCar_finishedRace(playerIndex: int):
 	print("Player ", cars[playerIndex], " finished")
 	print("Best Lap: ", timeTrialManagers[playerIndex].getBestLap())
 	print("Total time: ", timeTrialManagers[playerIndex].getTotalTime())
+
+func onRaceInputHandler_fullScreenPressed():
+	var nextWindowMode = DisplayServer.window_get_mode()
+	if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
+		nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
+	else:
+		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(nextWindowMode)

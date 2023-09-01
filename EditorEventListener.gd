@@ -86,6 +86,7 @@ func _ready():
 
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
+	print("Mouse moved to: ", worldMousePos)
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
 	if worldMousePos != Vector3.INF && editorStateMachine.canMovePreview():
 		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
@@ -131,8 +132,8 @@ func onEditorInputHandler_fineRotatePressed(direction: int):
 		propPlacer.rotateFine(direction)
 
 func onEditorInputHandler_selectPressed(object: Object):
-	if object != null:
-		print(object, "was ray hit with selection", object.get_class())
+	if object == null:
+		return
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var oldSelection = editorStateMachine.setCurrentSelection(object)
 		if oldSelection != null || oldSelection == object:
