@@ -52,17 +52,18 @@ func init(newRaceSettings: RaceSettings):
 	setupViewports(timeTrialManagers, huds, cameras)
 
 
-	raceEventListener.setup(cars, timeTrialManagers, huds, cameras)
+	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, map)
 
 
 func setupCars(cars: Array[CarController]):
 	var playersNode = %Players
+	var checkpointCount = map.getCheckpointCount()
 	for i in raceSettings.nrPlayers:
 		var spawnPoint = map.start.getStartPosition(i, raceSettings.nrPlayers)
 		var car: CarController = Car.instantiate()
 		playersNode.add_child(car)
 
-		car.setup(raceSettings.players[i], i, spawnPoint["position"], spawnPoint["rotation"])
+		car.setup(raceSettings.players[i], i, spawnPoint, checkpointCount)
 		cars.append(car)
 
 func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):
@@ -113,15 +114,15 @@ func getNewViewport() -> SubViewport:
 func _ready():
 	var player1 = PlayerData.new(0, "Player 1", Color(1, 0, 0))
 	var player2 = PlayerData.new(1, "Player 2", Color(0, 0, 1))
-	var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
-	var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
+	# var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
+	# var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
 
-	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-28T13-12-49.json", 3)
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-30T21-41-44.json", 3)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-28T13-12-49.json", 3)
+	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-30T21-41-44.json", 3)
 	raceSettings.addPlayer(player1)
 	raceSettings.addPlayer(player2)
-	raceSettings.addPlayer(player3)
-	raceSettings.addPlayer(player4)
+	# raceSettings.addPlayer(player3)
+	# raceSettings.addPlayer(player4)
 
 	init(raceSettings)
 

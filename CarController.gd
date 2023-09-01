@@ -64,10 +64,6 @@ var driftInput: float = 0.0
 
 var inputHandler: InputHandlerNew
 
-var groundedTires: Array = [false, false, false, false]
-
-var aboutToJump = false
-
 var pauseLinearVelocity: Vector3
 var pauseAngularVelocity: Vector3
 
@@ -103,6 +99,7 @@ func onFrameColorChanged(newColor: Color) -> Color:
 	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
 	return newColor
 
+var state: CarStateMachine
 
 # SIGNALS
 
@@ -116,12 +113,14 @@ signal respawned(playerIndex: int)
 
 
 
-func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Vector3, startingRotation: Vector3):
+func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Dictionary, checkpointCount: int):
 	playerIndex = newPlayerIndex
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
 
-	setRespawnPosition(startingPosition, startingRotation)
+	state.prepareCheckpointList(checkpointCount)
+
+	setRespawnPositionFromDictionary(startingPosition)
 	respawn(true)
 	# pauseMovement()
 
@@ -129,28 +128,13 @@ func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Vector
 
 func _ready():
 	inputHandler = %InputHandler
+	state = %CarStateMachine
 	set_physics_process(true)
 
 func _physics_process(_delta):
-	# if shouldRespawn:
-	# 	linear_velocity = Vector3.ZERO
-	# 	angular_velocity = Vector3.ZERO
-	# 	rotation = respawnRotation
-	# 	global_position = respawnPosition
-	# 	shouldRespawn = false
-	# 	return
+	applyDownforce(state.getGroundedTireCount())
 	
-	var groundedTireCount: float = 0.0
-	for grounded in groundedTires:
-		if grounded:
-			groundedTireCount += 1
-	applyDownforce(groundedTireCount)
-	
-	var aboutToJumpForward = !groundedTires[0] && !groundedTires[1] && (groundedTires[2] || groundedTires[3])
-	var aboutToJumpBackward = (groundedTires[0] || groundedTires[1]) && !groundedTires[2] && !groundedTires[3]
-	aboutToJump = aboutToJumpForward || aboutToJumpBackward
-	
-	if groundedTireCount == 0:
+	if state.isAirborne():
 		applyAirPitch()
 		applyAirSteering()
 		slidingFactor = 1
@@ -180,11 +164,11 @@ func _physics_process(_delta):
 		paused = false
 
 
-func _integrate_forces(state):
+func _integrate_forces(physicsState):
 	if shouldRespawn:
-		state.linear_velocity = Vector3.ZERO
-		state.angular_velocity = Vector3.ZERO
-		state.transform = createRespawnTransform3D()
+		physicsState.linear_velocity = Vector3.ZERO
+		physicsState.angular_velocity = Vector3.ZERO
+		physicsState.transform = createRespawnTransform3D()
 		shouldRespawn = false
 		if initialRespawn:
 			# initialRespawn = false
@@ -240,7 +224,7 @@ func applySuspension(raycastDistance: float, springDirection: Vector3, tireVeloc
 	var forceMagnitude = (offset * springConstant * mass) - (velocity * springDamping )
 	var force = forceMagnitude * springDirection #* mass
 	
-	if aboutToJump:
+	if state.aboutToJump():
 		force *= jumpingForceReduction
 	# DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
 
@@ -313,7 +297,7 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 	
 	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
 	
-	if aboutToJump:
+	if state.aboutToJump():
 		force *= jumpingForceReduction
 	
 	apply_force(force, contactPoint - global_position)
@@ -365,6 +349,10 @@ func getForwardSpeed() -> float:
 func setRespawnPosition(newPosition: Vector3, newRotation: Vector3):
 	respawnPosition = newPosition
 	respawnRotation = newRotation
+
+func setRespawnPositionFromDictionary(newPosition: Dictionary):
+	respawnPosition = newPosition["position"]
+	respawnRotation = newPosition["rotation"]
 
 func respawn(initial: bool = false):
 	shouldRespawn = true

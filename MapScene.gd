@@ -459,10 +459,19 @@ func loadFromJSON(fileName: String):
 	var propPlacer = PropPlacer.instantiate()
 	add_child(propPlacer)
 
+	var checkpointIndex = 0
 	for checkPointData in trackData["checkPoints"]:
 		var checkPointObject = propPlacer.getCheckPointObject()
+		checkPointObject.index = checkpointIndex
 		addCheckPointObject(checkPointObject, Vector3(checkPointData["positionX"], checkPointData["positionY"], checkPointData["positionZ"]), Vector3(0, checkPointData["rotation"], 0))
-	
+		checkpointIndex += 1
+
 	propPlacer.queue_free()
 
 	print("Loaded track: " + trackData["trackName"])
+
+func getCheckpoints():
+	return checkPointSystem.get_children()
+
+func getCheckpointCount():
+	return checkPointSystem.get_child_count()

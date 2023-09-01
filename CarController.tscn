@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=27 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://CarSoundEffects.gd" id="9_n17k7"]
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
 [ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
+[ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
 friction = 0.05
@@ -258,3 +259,7 @@ trail_enabled = true
 trail_lifetime = 3.46
 process_material = SubResource("ParticleProcessMaterial_s4xv3")
 draw_pass_1 = SubResource("RibbonTrailMesh_hntb3")
+
+[node name="CarStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("12_usspm")

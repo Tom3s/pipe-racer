@@ -9,10 +9,10 @@ var players: Array[PlayerData]
 
 var nrLaps: int
 
-func _init(mapName, nrLaps):
-	self.mapName = mapName
-	self.nrLaps = nrLaps
-	self.players = []
+func _init(initialMapName, initialNrLaps):
+	mapName = initialMapName
+	nrLaps = initialNrLaps
+	players = []
 
 func addPlayer(playerData):
 	players.append(playerData)

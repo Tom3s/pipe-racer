@@ -35,7 +35,7 @@ func _physics_process(delta):
 	#	tireModel.rotation = tireModel.rotation * Vector3(1, 0, 1) + Vector3(0, rotation.y, 0)
 		
 		if is_colliding():
-			car.groundedTires[tireIndex] = true
+			car.state.groundedTires[tireIndex] = 1
 			
 			var contactPoint = get_collision_point()
 			var raycastDistance = (get_collision_point() - global_position).length()
@@ -59,7 +59,7 @@ func _physics_process(delta):
 			smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 15
 			# smokeEmitter.emitting = car.slidingFactor > 0.1
 		else:
-			car.groundedTires[tireIndex] = false		
+			car.state.groundedTires[tireIndex] = 0		
 			tireModel.position.y = target_position.y + 0.375
 			smokeEmitter.emitting = false
 	

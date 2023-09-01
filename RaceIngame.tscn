@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgg507s0d4uvi"]
+[gd_scene load_steps=8 format=3 uid="uid://cgg507s0d4uvi"]
 
 [ext_resource type="Script" path="res://RaceIngame.gd" id="1_sr2yh"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_1u75j"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://RaceInputHandler.gd" id="3_4be1a"]
 [ext_resource type="PackedScene" path="res://MusicPlayer.tscn" id="4_v6a6n"]
 [ext_resource type="PackedScene" uid="uid://dgurpytbg7dx6" path="res://Sounds/IngameSFX.tscn" id="5_tnrfk"]
+[ext_resource type="Script" path="res://RaceStateMachine.gd" id="6_nt5ye"]
 
 [node name="RaceIngame" type="Node3D"]
 script = ExtResource("1_sr2yh")
@@ -47,6 +48,10 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 script = ExtResource("3_4be1a")
 
-[node name="RaceEventListener" type="Node3D" parent="."]
+[node name="RaceStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_nt5ye")
+
+[node name="RaceEventListener" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_c5cfr")

@@ -8,6 +8,8 @@ var paused: bool = false
 
 var times: Array = []
 
+var splits: Array = []
+
 var ingameSFX: IngameSFX = null
 
 func _ready() -> void:
@@ -49,6 +51,11 @@ func pauseTimeTrial(timestamp: int) -> void:
 func resumeTimeTrial(timestamp: int) -> void:
 	paused = false
 	timeTrialLapEnd = timestamp - timeTrialLapEnd
+
+func collectCheckpoint(timestamp: int, lap: int) -> void:
+	if splits.size() <= lap:
+		splits.append([])
+	splits[lap].append(timestamp)
 
 func reset() -> void:
 	times = []

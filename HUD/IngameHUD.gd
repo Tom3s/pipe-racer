@@ -80,8 +80,8 @@ func getTimeStringFromTicks(ticks: int) -> String:
 
 	return "%02d:%02d:" % [minutes % 60, seconds % 60] + ("%.3f" % ((ticks % 1000) / float(1000))).split(".")[1]
 
-func setNickname(name: String) -> void:
-	nickname.text = name
+func setNickname(newName: String) -> void:
+	nickname.text = newName
 
 func startTimer():
 	%HUDContainer.show()
