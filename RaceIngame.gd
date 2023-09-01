@@ -52,7 +52,7 @@ func init(newRaceSettings: RaceSettings):
 	setupViewports(timeTrialManagers, huds, cameras)
 
 
-	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, map)
+	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, map, %IngameSFX)
 
 
 func setupCars(cars: Array[CarController]):

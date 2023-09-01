@@ -11,17 +11,20 @@ var countdown: Countdown
 var raceInputHandler: RaceInputHandler
 var state: RaceStateMachine
 
+var ingameSFX: IngameSFX
+
 var paused = -1
 
 func getTimestamp():
 	return floor(Time.get_unix_time_from_system() * 1000)
 
-func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array, initialMap: Map):
+func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array, initialMap: Map, initialIngameSFX: IngameSFX):
 	cars = initialCars
 	timeTrialManagers = initialTimeTrialManagers
 	huds = initialHuds
 	cameras = initialCameras
 	map = initialMap
+	ingameSFX = initialIngameSFX
 
 	countdown = %UniversalCanvas/%Countdown
 	raceInputHandler = %RaceInputHandler
@@ -90,6 +93,7 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 		car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(playerIndex, cars.size()))
 		checkpoint.collect()
 		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
+		ingameSFX.playCheckpointSFX()
 
 func onStart_bodyEnteredStart(car: CarController, start: Start):
 	if car.state.hasCollectedAllCheckpoints():

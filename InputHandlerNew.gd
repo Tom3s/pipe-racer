@@ -41,6 +41,8 @@ var pausedState = false
 # 		car.respawn()
 func _physics_process(delta):
 	if !car.state.hasControl:
+		tires[0].targetRotation = 0
+		tires[1].targetRotation = 0
 		return
 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")
 	car.driftInput = Input.get_action_strength(playerPrefix + "drift")
