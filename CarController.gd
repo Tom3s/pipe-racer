@@ -104,6 +104,8 @@ var state: CarStateMachine
 # SIGNALS
 
 signal respawned(playerIndex: int)
+signal finishedRace(playerIndex: int)
+signal isReady(playerIndex: int)
 
 
 
@@ -111,14 +113,20 @@ signal respawned(playerIndex: int)
 
 
 
-
-
-func setup(playerData: PlayerData, newPlayerIndex: int, startingPosition: Dictionary, checkpointCount: int):
+func setup(
+		playerData: PlayerData, 
+		newPlayerIndex: int, 
+		startingPosition: Dictionary, 
+		checkpointCount: int, 
+		nrLaps: int
+):
 	playerIndex = newPlayerIndex
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
 
 	state.prepareCheckpointList(checkpointCount)
+	state.nrLaps = nrLaps
+	state.placement = playerIndex + 1
 
 	setRespawnPositionFromDictionary(startingPosition)
 	respawn(true)
@@ -401,6 +409,13 @@ func resumeMovement():
 
 func startRace():
 	resumeMovement()
+	state.currentLap = 0
+
+
+func resetInputs():
+	accelerationInput = 0.0
+	steeringInput = 0.0
+	driftInput = 0.0
 
 # DEBUG FUNCTIONS
 

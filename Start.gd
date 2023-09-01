@@ -1,6 +1,15 @@
 extends Node3D
 class_name Start
 
+signal bodyEnteredStart(body: Node3D, start: Node3D)
+
+func onBodyEntered(body):
+	print("[Start.gd] Body entered start: ", body)
+	bodyEnteredStart.emit(body, self)
+
+func _ready():
+	%StartLine.body_entered.connect(onBodyEntered)
+
 const RAYCAST_MAX_DISTANCE = 100
 
 var raycastPosition = null

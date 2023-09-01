@@ -9,6 +9,7 @@ var map: Map
 
 var countdown: Countdown
 var raceInputHandler: RaceInputHandler
+var state: RaceStateMachine
 
 var paused = -1
 
@@ -24,6 +25,10 @@ func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Arr
 
 	countdown = %UniversalCanvas/%Countdown
 	raceInputHandler = %RaceInputHandler
+	state = %RaceStateMachine
+
+	state.nrPlayers = cars.size()
+	state.setupReadyPlayersList()
 
 	connectSignals()
 
@@ -34,9 +39,15 @@ func connectSignals():
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
+		cars[i].isReady.connect(onCar_isReady)
+		cars[i].finishedRace.connect(onCar_finishedRace)
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
+	map.start.bodyEnteredStart.connect(onStart_bodyEnteredStart)
+
+	state.allPlayersReady.connect(onState_allPlayersReady)
+	state.allPlayersFinished.connect(onState_allPlayersFinished)
 
 func onCountdown_countdownFinished(timestamp: int):
 	for i in range(cars.size()):
@@ -45,6 +56,10 @@ func onCountdown_countdownFinished(timestamp: int):
 		huds[i].startTimer()
 
 func onRaceInputHandler_forceStartRace():
+	# countdown.startCountdown()
+	pass
+
+func onState_allPlayersReady():
 	countdown.startCountdown()
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
@@ -65,6 +80,8 @@ func onCar_respawned(playerIndex: int):
 	cameras[playerIndex].forceUpdatePosition()
 
 func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
+	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
+
 	var alreadyCollected = car.state.collectCheckpoint(checkpoint.index)
 
 	if !alreadyCollected:
@@ -72,3 +89,25 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 		timeTrialManagers[playerIndex].collectCheckpoint(getTimestamp(), car.state.currentLap)
 		car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(playerIndex, cars.size()))
 		checkpoint.collect()
+		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
+
+func onStart_bodyEnteredStart(car: CarController, start: Start):
+	if car.state.hasCollectedAllCheckpoints():
+		car.state.finishLap()
+		car.setRespawnPositionFromDictionary(start.getStartPosition(car.playerIndex, cars.size()))
+		for checkpoint in map.getCheckpoints():
+			checkpoint.setUncollected()
+		timeTrialManagers[car.playerIndex].finishedLap()
+		state.finishedPlayers += 1
+
+func onState_allPlayersFinished():
+	print("All players finished")
+
+func onCar_isReady(playerIndex: int):
+	state.setPlayerReady(playerIndex)
+
+func onCar_finishedRace(playerIndex: int):
+	state.newPlayerFinished()
+	print("Player ", cars[playerIndex], " finished")
+	print("Best Lap: ", timeTrialManagers[playerIndex].getBestLap())
+	print("Total time: ", timeTrialManagers[playerIndex].getTotalTime())

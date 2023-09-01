@@ -5,7 +5,14 @@ var groundedTires: Array[bool] = [false, false, false, false]
 var collectedCheckpoints: Array[bool]
 var collectedCheckpointCount: int = 0
 
+var hasControl: bool = true
+
 var currentLap: int = -1
+var nrLaps: int
+
+var placement: int = 0
+
+var isReady: bool = false
 
 var groundedTireCount: int = 0
 func getGroundedTireCount() -> int:
@@ -46,3 +53,22 @@ func collectCheckpoint(index: int) -> bool:
 	if oldCheckpoint == false:
 		collectedCheckpointCount += 1
 	return oldCheckpoint
+
+func hasCollectedAllCheckpoints() -> bool:
+	return collectedCheckpointCount == collectedCheckpoints.size()
+
+func finishLap():
+	currentLap += 1
+	clearCollectedCheckpoints()
+	if finisishedRacing():
+		hasControl = false
+		get_parent().resetInputs()
+		get_parent().finishedRace.emit(get_parent().playerIndex)
+
+func finisishedRacing() -> bool:
+	return currentLap >= nrLaps
+
+func setReadyTrue():
+	isReady = true
+	get_parent().isReady.emit(get_parent().playerIndex)
+		

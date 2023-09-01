@@ -17,6 +17,7 @@ func _ready():
 	setUncollected()
 
 func onBodyEntered(body):
+	print("[Checkpoint.gd] Body entered checkpoint: ", body)
 	bodyEnteredCheckpoint.emit(body, self)
 
 var placements: Array = []
@@ -46,7 +47,7 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 	if raycastPosition == null || raycastNormal == null:
 		calculateRaycast()
 
-	var localBackwards = -global_transform.basis.x
+	var localBackwards = -global_transform.basis.z
 
 	var localRight = (-localBackwards).cross(raycastNormal).normalized()
 

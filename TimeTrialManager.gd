@@ -12,6 +12,9 @@ var splits: Array = []
 
 var ingameSFX: IngameSFX = null
 
+func _init(ingameSFXNode: IngameSFX) -> void:
+	ingameSFX = ingameSFXNode
+
 func _ready() -> void:
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
 

@@ -45,7 +45,7 @@ func init(newRaceSettings: RaceSettings):
 	
 	var timeTrialManagers: Array[TimeTrialManager] = []
 	for i in raceSettings.nrPlayers:
-		timeTrialManagers.append(TimeTrialManager.new())
+		timeTrialManagers.append(TimeTrialManager.new(%IngameSFX))
 	var huds: Array[IngameHUD] = []
 	var cameras: Array[FollowingCamera] = []
 
@@ -63,7 +63,7 @@ func setupCars(cars: Array[CarController]):
 		var car: CarController = Car.instantiate()
 		playersNode.add_child(car)
 
-		car.setup(raceSettings.players[i], i, spawnPoint, checkpointCount)
+		car.setup(raceSettings.players[i], i, spawnPoint, checkpointCount, raceSettings.nrLaps)
 		cars.append(car)
 
 func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):

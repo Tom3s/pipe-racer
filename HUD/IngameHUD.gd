@@ -18,7 +18,7 @@ var lapTimer: Label = %LapTimer
 var stats: Label = %Stats
 
 @onready
-var respawnIndicator: Label = %RespawnIndicator
+var readyIndicator: Label = %ReadyIndicator
 
 @onready
 var nickname: Label = %Nickname
@@ -38,17 +38,18 @@ func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, 
 func _ready() -> void:
 	print("HUD loaded")
 	setNickname(car.playerName)
-	setRespawnIndicator(false)
+	setReadyIndicator(false)
 
 	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
 	setSpeedText(car.getSpeed())
-	# setPositionText(car.placement, TOTAL_CARS)
-	# setLapText(car.currentLap + 1, car.nrLaps)
+	setPositionText(car.state.placement, TOTAL_CARS)
+	setLapText(car.state.currentLap + 1, car.state.nrLaps)
 	setLapTimerText(timeTrialManager.getCurrentLapTime())
 	setStatsText(timeTrialManager.getTotalTime() + timeTrialManager.getCurrentLapTime(), timeTrialManager.getLastLap(), timeTrialManager.getBestLap())
-	# setRespawnIndicator(car.incorrectCheckPoint) 
+	# setReadyIndicator(car.incorrectCheckPoint) 
+	setReadyIndicator(!car.state.isReady)
 
 
 func setSpeedText(speed: float) -> void:
@@ -69,8 +70,11 @@ func setStatsText(totalTick: int, lastLapTicks: int, bestLapTicks: int) -> void:
 	stats.text += "Last:\t" + getTimeStringFromTicks(lastLapTicks) + "\n"
 	stats.text += "Best:\t" + getTimeStringFromTicks(bestLapTicks)
 
-func setRespawnIndicator(needsRespawn: bool) -> void:
-	respawnIndicator.visible = needsRespawn
+# func setReadyIndicator(needsRespawn: bool) -> void:
+# 	readyIndicator.visible = needsRespawn
+
+func setReadyIndicator(isReady: bool) -> void:
+	readyIndicator.visible = isReady
 
 func getTimeStringFromTicks(ticks: int) -> String:
 	if ticks == -1:

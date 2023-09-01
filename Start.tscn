@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyll4xd25crp7"]
+[gd_scene load_steps=4 format=3 uid="uid://cyll4xd25crp7"]
 
 [ext_resource type="Script" path="res://Start.gd" id="1_3bpir"]
 [ext_resource type="PackedScene" uid="uid://cqksavnq7whwm" path="res://Track Props/StartLineProp.tscn" id="1_f37g8"]
-[ext_resource type="Script" path="res://StartLine.gd" id="2_0ooaq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h3rnj"]
 size = Vector3(5.1, 20, 64)
@@ -14,7 +13,7 @@ script = ExtResource("1_3bpir")
 
 [node name="StartLine" type="Area3D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("2_0ooaq")
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StartLine"]
 shape = SubResource("BoxShape3D_h3rnj")
