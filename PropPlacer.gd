@@ -59,7 +59,7 @@ func _ready():
 
 # 	return offset
 
-func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float):
+func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float, _sink):
 	
 	newPosition += (cameraPosition - newPosition) * (GRID_SIZE * height / cameraPosition.y)
 

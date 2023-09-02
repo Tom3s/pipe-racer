@@ -62,6 +62,7 @@ func loadFromChanged(newFile: String) -> String:
 	
 	return newFile
 
+var connectionPoints: Array[Dictionary] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -81,7 +82,7 @@ func _ready():
 
 
 func add(prefabMesher: PrefabMesher):
-	var prefab = prefabMesher.objectFromData()
+	var prefab: PrefabProperties = prefabMesher.objectFromData()
 	addPrefab(prefab)
 	storeAddPrefab(prefab)
 
@@ -100,6 +101,35 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 
 	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
 	prefab.create_trimesh_collision()
+
+	prefab.calculateCorners()
+
+	tryAddingConnectionPoints(prefab.topLeft, prefab.topRight, prefab.bottomLeft, prefab.bottomRight)
+
+func tryAddingConnectionPoints(topLeft: Vector3, topRight: Vector3, bottomLeft: Vector3, bottomRight: Vector3):
+	var frontFound = false
+	var backFound = false
+	for connectionPoint in connectionPoints:
+		if (connectionPoint["right"].is_equal_approx(topLeft) && connectionPoint["left"].is_equal_approx(topRight)):
+			connectionPoints.erase(connectionPoint)
+			frontFound = true
+			break
+		elif (connectionPoint["right"].is_equal_approx(bottomRight) && connectionPoint["left"].is_equal_approx(bottomLeft)):
+			connectionPoints.erase(connectionPoint)
+			backFound = true
+			break
+
+
+	if !frontFound:
+		connectionPoints.append({
+			"left": topLeft,
+			"right": topRight,
+		})
+	if !backFound:
+		connectionPoints.append({
+			"left": bottomRight,
+			"right": bottomLeft,
+		})
 
 func storeAddPrefab(prefab: PrefabProperties):
 	safeResizeStack()
@@ -165,6 +195,8 @@ func removePrefab(prefab: PrefabProperties):
 	for child in prefab.get_children(true):
 		child.queue_free()
 	trackPieces.remove_child(prefab)
+
+	recalculateConnectionPoints()
 
 func storeRemovePrefab(prefab: PrefabProperties):
 	safeResizeStack()
@@ -246,6 +278,13 @@ func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 	})
 	lastOperationIndex += 1
 
+
+func recalculateConnectionPoints():
+	connectionPoints.clear()
+
+	for child in trackPieces.get_children():
+		var prefab = child
+		tryAddingConnectionPoints(prefab.topLeft, prefab.topRight, prefab.bottomLeft, prefab.bottomRight)
 
 # operatioin handler
 
@@ -475,3 +514,6 @@ func getCheckpoints():
 
 func getCheckpointCount():
 	return checkPointSystem.get_child_count()
+
+func getConnectionPoints() -> Array[Dictionary]:
+	return connectionPoints

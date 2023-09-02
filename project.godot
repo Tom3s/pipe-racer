@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.0", "Forward Plus")
 Playerstats="*res://Playerstats.gd"
 Network="*res://Network.gd"
 Leaderboard="*res://Leaderboard.gd"
+PrefabConstants="*res://PrefabConstants.gd"
 
 [debug]
 

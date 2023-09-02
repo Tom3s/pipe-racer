@@ -20,6 +20,8 @@ func _ready():
 
 	propPlacer.startLinePreview.visible = false
 
+	prefabMesher.propertiesUpdated.connect(onPrefabMesher_propertiesUpdated)
+
 	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
 	editorStateMachine.currentPlacerNode = prefabMesher
 
@@ -85,31 +87,34 @@ func _ready():
 	map.noOperationToBeRedone.connect(onMap_noOperationToBeRedone)
 
 
+func onPrefabMesher_propertiesUpdated():
+	prefabPropertiesUI.setFromData(prefabMesher)
+
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
-	print("Mouse moved to: ", worldMousePos)
+	# print("Mouse moved to: ", worldMousePos)
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
 	if worldMousePos != Vector3.INF && editorStateMachine.canMovePreview():
-		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight)
+		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight, map.getConnectionPoints())
 	elif editorStateMachine.mouseOverUI && editorStateMachine.inBuildState():
 		currentPlacerNode.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
 
 func onEditorInputHandler_moveUpGrid():
 	if editorStateMachine.canMovePreview():
 		editorStateMachine.gridCurrentHeight += 1
-		camera.position.y += prefabMesher.GRID_SIZE
+		camera.position.y += PrefabConstants.GRID_SIZE
 	elif editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var currentPlacerNode = editorStateMachine.currentPlacerNode
-		camera.position.y += prefabMesher.GRID_SIZE
-		currentPlacerNode.global_position.y += prefabMesher.GRID_SIZE
+		camera.position.y += PrefabConstants.GRID_SIZE
+		currentPlacerNode.global_position.y += PrefabConstants.GRID_SIZE
 
 func onEditorInputHandler_moveDownGrid():
 	if editorStateMachine.canMovePreview():
 		editorStateMachine.gridCurrentHeight -= 1	
-		camera.position.y -= prefabMesher.GRID_SIZE
+		camera.position.y -= PrefabConstants.GRID_SIZE
 	elif editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
 		var currentPlacerNode = editorStateMachine.currentPlacerNode
-		camera.position.y -= prefabMesher.GRID_SIZE
-		currentPlacerNode.global_position.y -= prefabMesher.GRID_SIZE
+		camera.position.y -= PrefabConstants.GRID_SIZE
+		currentPlacerNode.global_position.y -= PrefabConstants.GRID_SIZE
 
 func onEditorInputHandler_placePressed():
 	if editorStateMachine.canBuild():
@@ -166,7 +171,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 
 			editorStateMachine.currentPlacerNode = propPlacer
 
-			editorStateMachine.gridCurrentHeight = (object.global_position - map.START_OFFSET).y / prefabMesher.GRID_SIZE
+			editorStateMachine.gridCurrentHeight = (object.global_position - map.START_OFFSET).y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_START_LINE
 		elif object.has_method("isCheckPoint"):
@@ -175,7 +180,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 
 			editorStateMachine.currentPlacerNode = propPlacer
 
-			editorStateMachine.gridCurrentHeight = object.global_position.y / prefabMesher.GRID_SIZE
+			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_CHECKPOINT
 
@@ -197,16 +202,16 @@ func onEditorInputHandler_deleteSelectedPressed():
 		
 
 
-func onPrefabPropertiesUI_leftEndChanged(value: float):
+func onPrefabPropertiesUI_leftEndChanged(value: int):
 	prefabMesher.leftEndHeight = value
 
-func onPrefabPropertiesUI_rightEndChanged(value: float):
+func onPrefabPropertiesUI_rightEndChanged(value: int):
 	prefabMesher.rightEndHeight = value
 
-func onPrefabPropertiesUI_leftStartChanged(value: float):
+func onPrefabPropertiesUI_leftStartChanged(value: int):
 	prefabMesher.leftStartHeight = value
 
-func onPrefabPropertiesUI_rightStartChanged(value: float):
+func onPrefabPropertiesUI_rightStartChanged(value: int):
 	prefabMesher.rightStartHeight = value
 
 func onPrefabPropertiesUI_leftSmoothingChanged(value: int):
@@ -218,19 +223,19 @@ func onPrefabPropertiesUI_rightSmoothingChanged(value: int):
 func onPrefabPropertiesUI_curvedChanged(value: bool):
 	prefabMesher.curve = value
 
-func onPrefabPropertiesUI_straightLengthChanged(value: float):
+func onPrefabPropertiesUI_straightLengthChanged(value: int):
 	prefabMesher.length = value
 
-func onPrefabPropertiesUI_straightOffsetChanged(value: float):
+func onPrefabPropertiesUI_straightOffsetChanged(value: int):
 	prefabMesher.endOffset = value
 
 func onPrefabPropertiesUI_straightSmoothingChanged(value: int):
 	prefabMesher.smoothOffset = value
 
-func onPrefabPropertiesUI_curveForwardChanged(value: float):
+func onPrefabPropertiesUI_curveForwardChanged(value: int):
 	prefabMesher.curveForward = value
 
-func onPrefabPropertiesUI_curveSidewaysChanged(value: float):
+func onPrefabPropertiesUI_curveSidewaysChanged(value: int):
 	prefabMesher.curveSideways = value
 
 func onPrefabPropertiesUI_roadTypeChanged(value: int):

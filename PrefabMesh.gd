@@ -2,31 +2,6 @@
 extends MeshInstance3D
 class_name PrefabMesher
 
-@export_group("Global Constants")
-@export
-var TRACK_WIDTH: float = 64.0:
-	set(value):
-		TRACK_WIDTH = value
-		refreshMesh()
-
-@export
-var GRID_SIZE: float = 4.0:
-	set(value):
-		GRID_SIZE = value
-		refreshMesh()
-
-@export
-var LENGTH_SEGMENTS: int = 16:
-	set(value):
-		LENGTH_SEGMENTS = value
-		refreshMesh()
-
-@export
-var WIDTH_SEGMENTS: int = 8:
-	set(value):
-		WIDTH_SEGMENTS = value
-		refreshMesh()
-
 var lengthDivisionPoints: Array[float] = []
 
 const NON_SMOOTH = 0
@@ -93,16 +68,18 @@ const SMOOTH_BOTH = 3
 		refreshMesh()
 
 @export_group("Curved Prefab Properties")
-@export var curveForward: int = TRACK_WIDTH / GRID_SIZE:
+@export var curveForward: int = PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE:
 	set(value):
-		curveForward = max(value, TRACK_WIDTH / GRID_SIZE)
+		curveForward = max(value, PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 		refreshMesh()
 
-@export var curveSideways: int = TRACK_WIDTH / GRID_SIZE:
+@export var curveSideways: int = PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE:
 	set(value):
-		curveSideways = max(value, TRACK_WIDTH / GRID_SIZE)
+		curveSideways = max(value, PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 		refreshMesh()
 
+
+signal propertiesUpdated()
 
 const ROAD_TYPE_TARMAC = 0
 const ROAD_TYPE_GRASS = 1
@@ -122,7 +99,7 @@ func setRefresh(value):
 
 func _ready():
 	
-#	lengthDivisionPoints = [x / LENGTH_SEGMENTS for x in  range(LENGTH_SEGMENTS + 1)]
+#	lengthDivisionPoints = [x / PrefabConstants.LENGTH_SEGMENTS for x in  range(PrefabConstants.LENGTH_SEGMENTS + 1)]
 	
 
 	
@@ -151,7 +128,7 @@ func generateHeightArray(startOffset: float, finalOffset: float, smooth: int) ->
 		elif smooth == SMOOTH_BOTH:
 			remappedIndex = smoothRemap(remappedIndex)
 
-		heightArray.push_back(GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, finalOffset))
+		heightArray.push_back(PrefabConstants.GRID_SIZE * remap(remappedIndex, 0, 1, startOffset, finalOffset))
 	
 	return heightArray
 
@@ -170,8 +147,8 @@ func generatePositionArrayStraight(xOffset: float) -> Array[Vector2]:
 		elif smoothOffset == SMOOTH_BOTH:
 			lerpValue = smoothRemap(lerpValue)
 
-		var xPos = lerp(xOffset, xOffset + endOffset * GRID_SIZE, lerpValue)
-		positions.push_back(Vector2(xPos, lengthDivisionPoints[index] * TRACK_WIDTH * length))
+		var xPos = lerp(xOffset, xOffset + endOffset * PrefabConstants.GRID_SIZE, lerpValue)
+		positions.push_back(Vector2(xPos, lengthDivisionPoints[index] * PrefabConstants.TRACK_WIDTH * length))
 	
 	return positions
 
@@ -184,8 +161,8 @@ func remapCurveSideways(value: float) -> float:
 func generatePositionArrayCurveOutside() -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
-	var top: float = curveForward * GRID_SIZE
-	var right: float = curveSideways * GRID_SIZE
+	var top: float = curveForward * PrefabConstants.GRID_SIZE
+	var right: float = curveSideways * PrefabConstants.GRID_SIZE
 	
 	for index in lengthDivisionPoints.size():
 		var xLerp = remapCurveSideways(lengthDivisionPoints[index])
@@ -201,8 +178,8 @@ func generatePositionArrayCurveOutside() -> Array[Vector2]:
 func generatePositionArrayCurveInside2() -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	
-	var top: float = curveForward * GRID_SIZE - TRACK_WIDTH
-	var right: float = curveSideways * GRID_SIZE - TRACK_WIDTH
+	var top: float = curveForward * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH
+	var right: float = curveSideways * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH
 	
 	for index in lengthDivisionPoints.size():
 		var xLerp = remapCurveSideways(lengthDivisionPoints[index])
@@ -221,12 +198,12 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 	var bottomRight = Vector2(0, 0)
 	
 #	for point in outsidePositions:
-#		var insidePosition = point + ((bottomRight - point).normalized() * TRACK_WIDTH)
+#		var insidePosition = point + ((bottomRight - point).normalized() * PrefabConstants.TRACK_WIDTH)
 #
 #		positions.push_back(insidePosition)
 	# First point
 	var point = outsidePositions[0]
-	positions.push_back(point + ((bottomRight - point).normalized() * TRACK_WIDTH))
+	positions.push_back(point + ((bottomRight - point).normalized() * PrefabConstants.TRACK_WIDTH))
 	
 	for index in range(1, outsidePositions.size() - 1):
 		var prevPoint = outsidePositions[index - 1]
@@ -234,18 +211,18 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 		var tangentVector = nextPoint - prevPoint
 		var normalVector = Vector2(-tangentVector.y, tangentVector.x).normalized()
 		
-		var insidePoint = outsidePositions[index] + normalVector * TRACK_WIDTH
+		var insidePoint = outsidePositions[index] + normalVector * PrefabConstants.TRACK_WIDTH
 		
 		if insidePoint.x < 0:
 			point = outsidePositions[outsidePositions.size() - 1]
-			insidePoint = point + ((bottomRight - point).normalized() * TRACK_WIDTH)
+			insidePoint = point + ((bottomRight - point).normalized() * PrefabConstants.TRACK_WIDTH)
 		
 		positions.push_back(insidePoint)
 		
 	
 	# Last Point
 	point = outsidePositions[outsidePositions.size() - 1]
-	positions.push_back(point + ((bottomRight - point).normalized() * TRACK_WIDTH))
+	positions.push_back(point + ((bottomRight - point).normalized() * PrefabConstants.TRACK_WIDTH))
 	
 		
 	return positions
@@ -256,10 +233,10 @@ func getIndexArray() -> Array[int]:
 
 	var actualLength = 2 if curve else length
 	
-	for y in LENGTH_SEGMENTS * actualLength:
-		for x in WIDTH_SEGMENTS:
-			var bottomRightIndex = x + y * (WIDTH_SEGMENTS + 1)
-			var topRightIndex = x + (y + 1) * (WIDTH_SEGMENTS + 1)
+	for y in PrefabConstants.LENGTH_SEGMENTS * actualLength:
+		for x in PrefabConstants.WIDTH_SEGMENTS:
+			var bottomRightIndex = x + y * (PrefabConstants.WIDTH_SEGMENTS + 1)
+			var topRightIndex = x + (y + 1) * (PrefabConstants.WIDTH_SEGMENTS + 1)
 			indexList.push_back(bottomRightIndex)
 			indexList.push_back(bottomRightIndex + 1)
 			indexList.push_back(topRightIndex)
@@ -278,15 +255,15 @@ func getUVArray() -> Array[Vector2]:
 	var multiplier = 1
 	if curve:
 		var larger = max(curveForward, curveSideways)
-		multiplier = round(float(larger) / (TRACK_WIDTH / GRID_SIZE))
+		multiplier = round(float(larger) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
 		
-	for y in (LENGTH_SEGMENTS * actualLength + 1):
-		for x in (WIDTH_SEGMENTS + 1):
-			var u = 1.0 - (float(x) / WIDTH_SEGMENTS)
+	for y in (PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
+		for x in (PrefabConstants.WIDTH_SEGMENTS + 1):
+			var u = 1.0 - (float(x) / PrefabConstants.WIDTH_SEGMENTS)
 			
 #			
 			
-			var v = 1.0 - (float(y * multiplier) / LENGTH_SEGMENTS)
+			var v = 1.0 - (float(y * multiplier) / PrefabConstants.LENGTH_SEGMENTS)
 			uvArray.push_back(Vector2(u, v))
 	
 	return uvArray
@@ -301,7 +278,7 @@ func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2
 		var c: Vector3 = Vector3(leftPositions[index + 1].x, leftHeights[index + 1], leftPositions[index + 1].y)
 		
 		var normal = ((b - a).cross(c - a)).normalized()
-		for _x in (WIDTH_SEGMENTS + 1): 
+		for _x in (PrefabConstants.WIDTH_SEGMENTS + 1): 
 			normalArray.push_back(normal)
 		
 	
@@ -313,7 +290,7 @@ func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2
 	
 	var normal = ((c - a).cross(b - a)).normalized()
 	
-	for _x in (WIDTH_SEGMENTS + 1): 
+	for _x in (PrefabConstants.WIDTH_SEGMENTS + 1): 
 		normalArray.push_back(normal)
 	
 	
@@ -334,8 +311,8 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 		var leftMostVertex = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
 		
 		vertices.push_back(rightMostVertex)
-		for divIndex in range(1, WIDTH_SEGMENTS):
-			vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / WIDTH_SEGMENTS))
+		for divIndex in range(1, PrefabConstants.WIDTH_SEGMENTS):
+			vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS))
 		
 		vertices.push_back(leftMostVertex)
 
@@ -360,13 +337,13 @@ func refreshMesh():
 	var rightPositions = []
 	
 	if !curve:
-		for index in range(LENGTH_SEGMENTS * length + 1):
-			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * length))
-		leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
+		for index in range(PrefabConstants.LENGTH_SEGMENTS * length + 1):
+			lengthDivisionPoints.push_back(float(index) / (PrefabConstants.LENGTH_SEGMENTS * length))
+		leftPositions = generatePositionArrayStraight(PrefabConstants.TRACK_WIDTH)
 		rightPositions = generatePositionArrayStraight(0)
 	else:
-		for index in range(LENGTH_SEGMENTS * 2 + 1):
-			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * 2))
+		for index in range(PrefabConstants.LENGTH_SEGMENTS * 2 + 1):
+			lengthDivisionPoints.push_back(float(index) / (PrefabConstants.LENGTH_SEGMENTS * 2))
 		leftPositions = generatePositionArrayCurveOutside()
 #		rightPositions = generatePositionArrayCurveInside(leftPositions)
 		rightPositions = generatePositionArrayCurveInside2()
@@ -376,36 +353,62 @@ func refreshMesh():
 	var leftHeights = generateHeightArray(leftStartHeight, leftEndHeight, leftSmoothTilt)
 	var rightHeights = generateHeightArray(rightStartHeight, rightEndHeight, rightSmoothTilt) 
 	
+	
+	var offsetVector = Vector3.RIGHT * endOffset * PrefabConstants.GRID_SIZE
+
+	var bottomRight = Vector3(0, rightStartHeight * PrefabConstants.GRID_SIZE, 0)
+	var bottomLeft = Vector3(PrefabConstants.TRACK_WIDTH, leftStartHeight * PrefabConstants.GRID_SIZE, 0)
+	var topRight = Vector3(0, rightEndHeight * PrefabConstants.GRID_SIZE, PrefabConstants.TRACK_WIDTH * length) + offsetVector
+	var topLeft = Vector3(PrefabConstants.TRACK_WIDTH, leftEndHeight * PrefabConstants.GRID_SIZE, PrefabConstants.TRACK_WIDTH * length) + offsetVector
+
+	if curve:
+		bottomRight = Vector3(curveSideways * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH, rightStartHeight * PrefabConstants.GRID_SIZE, 0)
+		bottomLeft = Vector3(curveSideways * PrefabConstants.GRID_SIZE, leftStartHeight * PrefabConstants.GRID_SIZE, 0)
+		topRight = Vector3(0, rightEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH)
+		topLeft = Vector3(0, leftEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE)
+
+	if is_node_ready():
+		%BottomRight.position = bottomRight
+		%BottomLeft.position = bottomLeft
+		%TopRight.position = topRight
+		%TopLeft.position = topLeft
+
+
+
 	generateMesh(leftHeights, rightHeights, leftPositions, rightPositions)
 
 
 func getCenteringOffset() -> Vector3:
 	var offset = Vector3.ZERO
 	if curve:
-		offset.z = curveForward * GRID_SIZE / 2
-		offset.x = curveSideways * GRID_SIZE / 2
+		offset.z = curveForward * PrefabConstants.GRID_SIZE / 2
+		offset.x = curveSideways * PrefabConstants.GRID_SIZE / 2
 	else:
-		offset.x = TRACK_WIDTH / 2
-		offset.z = TRACK_WIDTH * length / 2
+		offset.x = PrefabConstants.TRACK_WIDTH / 2
+		offset.z = PrefabConstants.TRACK_WIDTH * length / 2
 
 	offset = offset.rotated(Vector3.UP, global_rotation.y)
 
 	return offset
 
-func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float):
+func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float, connectionPoints: Array[Dictionary] = []):
 	
-	newPosition += (cameraPosition - newPosition) * (GRID_SIZE * height / cameraPosition.y)
+	newPosition += (cameraPosition - newPosition) * (PrefabConstants.GRID_SIZE * height / cameraPosition.y)
 
 	newPosition -= getCenteringOffset()
 
-	newPosition /= GRID_SIZE
+	newPosition /= PrefabConstants.GRID_SIZE
 	newPosition.x = round(newPosition.x)
 	newPosition.y = height
 	newPosition.z = round(newPosition.z)
 
-	newPosition *= GRID_SIZE
+	newPosition *= PrefabConstants.GRID_SIZE
 
 	global_position = newPosition
+
+	var connectionPoint = trySnappingToTile(connectionPoints)
+	if connectionPoint != null:
+		tryUpdatingProperties(connectionPoint)
 
 func updatePositionExactCentered(newPosition: Vector3, newRotation: Vector3 = Vector3.INF):
 	newPosition -= getCenteringOffset()
@@ -474,7 +477,7 @@ func decodeData(data: Variant):
 	global_rotation = Vector3(0, data["rotation"], 0)
 	refreshMesh()
 
-func objectFromData(data: Variant = null):
+func objectFromData(data: Variant = null) -> PrefabProperties:
 	if data != null:
 		decodeData(data)
 	
@@ -484,3 +487,111 @@ func objectFromData(data: Variant = null):
 	object.mesh = mesh
 
 	return object
+
+const MAX_CONNECTION_DISTANCE = 7
+
+func canConnectOnFront(connectionPoint: Dictionary):
+
+	var left = %TopLeft.global_position
+	var right = %TopRight.global_position
+
+	return canConnect(connectionPoint, left, right)
+
+func canConnectOnBack(connectionPoint: Dictionary):
+
+	var left = %BottomRight.global_position
+	var right = %BottomLeft.global_position
+
+	return canConnect(connectionPoint, left, right)
+
+func canConnect(connectionPoint: Dictionary, left: Vector3, right: Vector3) -> bool:
+	var leftCloseEnough = left.distance_to(connectionPoint["right"]) <= MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE
+	var rightCloseEnough = right.distance_to(connectionPoint["left"]) <= MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE
+	
+	return leftCloseEnough && rightCloseEnough
+
+func updateFrontParameters(connectionPoint: Dictionary):
+	var left = %TopLeft.global_position
+	var right = %TopRight.global_position
+
+	var leftOffset = (connectionPoint["right"] - left).y / PrefabConstants.GRID_SIZE
+	var rightOffset = (connectionPoint["left"] - right).y / PrefabConstants.GRID_SIZE
+
+	leftEndHeight += leftOffset
+	rightEndHeight += rightOffset
+
+func updateBackParameters(connectionPoint: Dictionary):
+	var left = %BottomRight.global_position
+	var right = %BottomLeft.global_position
+
+	var leftOffset = (connectionPoint["right"] - left).y / PrefabConstants.GRID_SIZE
+	var rightOffset = (connectionPoint["left"] - right).y / PrefabConstants.GRID_SIZE
+
+	leftStartHeight += rightOffset
+	rightStartHeight += leftOffset
+
+const MAX_HEIGHT = 10
+func clampHeights():
+	leftStartHeight = clamp(leftStartHeight, -MAX_HEIGHT, MAX_HEIGHT)
+	leftEndHeight = clamp(leftEndHeight, -MAX_HEIGHT, MAX_HEIGHT)
+	rightStartHeight = clamp(rightStartHeight, -MAX_HEIGHT, MAX_HEIGHT)
+	rightEndHeight = clamp(rightEndHeight, -MAX_HEIGHT, MAX_HEIGHT) 
+
+func trySnapOnEnd(connectionPoint: Dictionary, left: Vector3, right: Vector3) -> bool:
+
+	if abs(connectionPoint["left"].y - right.y) > MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE || abs(connectionPoint["right"].y - left.y) > MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE:
+		return false
+
+	const twoDimensionalVector := Vector3(1, 0, 1)
+
+	var leftDistance = (left * twoDimensionalVector) - (connectionPoint["right"] * twoDimensionalVector) # <= MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE
+	var rightDistance = (right * twoDimensionalVector) - (connectionPoint["left"] * twoDimensionalVector) # <= MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE
+	
+	return leftDistance.is_equal_approx(rightDistance) && leftDistance.length() <= MAX_CONNECTION_DISTANCE * PrefabConstants.GRID_SIZE
+
+func trySnapOnFront(connectionPoint: Dictionary) -> bool:
+	var left = %TopLeft.global_position
+	var right = %TopRight.global_position
+
+	return trySnapOnEnd(connectionPoint, left, right)
+
+func trySnapOnBack(connectionPoint: Dictionary) -> bool:
+	var left = %BottomRight.global_position
+	var right = %BottomLeft.global_position
+
+	return trySnapOnEnd(connectionPoint, left, right)
+
+func snap(connectionPoint: Dictionary, left: Vector3) -> void:
+	var offset = connectionPoint["right"] - left
+	offset.y = 0
+	global_position += offset
+
+func snapFront(connectionPoint: Dictionary):
+	var left = %TopLeft.global_position
+	snap(connectionPoint, left)
+
+func snapBack(connectionPoint: Dictionary):
+	var left = %BottomRight.global_position
+	snap(connectionPoint, left)
+
+
+func trySnappingToTile(connectionPoints: Array[Dictionary]):
+	for connectionPoint in connectionPoints:
+		if trySnapOnFront(connectionPoint):
+			snapFront(connectionPoint)
+			return connectionPoint
+		elif trySnapOnBack(connectionPoint):
+			snapBack(connectionPoint)
+			return connectionPoint
+	return null
+
+func tryUpdatingProperties(connectionPoint: Dictionary):
+	if canConnectOnFront(connectionPoint):
+		updateFrontParameters(connectionPoint)
+
+	elif canConnectOnBack(connectionPoint):
+		updateBackParameters(connectionPoint)
+	
+	clampHeights()
+	refreshMesh()
+	propertiesUpdated.emit()
