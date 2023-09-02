@@ -254,7 +254,7 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
 
-	var actualLength = 1 if curve else length
+	var actualLength = 2 if curve else length
 	
 	for y in LENGTH_SEGMENTS * actualLength:
 		for x in WIDTH_SEGMENTS:
@@ -273,7 +273,7 @@ func getIndexArray() -> Array[int]:
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	var actualLength = 1 if curve else length
+	var actualLength = 2 if curve else length
 	
 	var multiplier = 1
 	if curve:
@@ -365,8 +365,8 @@ func refreshMesh():
 		leftPositions = generatePositionArrayStraight(TRACK_WIDTH)
 		rightPositions = generatePositionArrayStraight(0)
 	else:
-		for index in range(LENGTH_SEGMENTS + 1):
-			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS))
+		for index in range(LENGTH_SEGMENTS * 2 + 1):
+			lengthDivisionPoints.push_back(float(index) / (LENGTH_SEGMENTS * 2))
 		leftPositions = generatePositionArrayCurveOutside()
 #		rightPositions = generatePositionArrayCurveInside(leftPositions)
 		rightPositions = generatePositionArrayCurveInside2()

@@ -33,7 +33,7 @@ func isAirborne() -> bool:
 var aboutToJumpForward: bool = false
 var aboutToJumpBackward: bool = false
 func aboutToJump() -> bool:
-	return false
+	# return false
 	
 	aboutToJumpForward = !groundedTires[0] && !groundedTires[1] && (groundedTires[2] || groundedTires[3])
 	aboutToJumpBackward = (groundedTires[0] || groundedTires[1]) && !groundedTires[2] && !groundedTires[3]

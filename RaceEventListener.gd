@@ -74,7 +74,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			cars[i].resumeMovement()
 			timeTrialManagers[i].resumeTimeTrial(timestamp)
 		state.pausedBy = -1
-	elif state.pausedBy == -1 && !state.raceStarted:
+	elif state.pausedBy == -1 && state.raceStarted:
 		var timestamp = floor(getTimestamp())
 		for i in range(cars.size()):
 			cars[i].pauseMovement()

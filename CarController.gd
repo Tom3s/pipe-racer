@@ -232,8 +232,8 @@ func applySuspension(raycastDistance: float, springDirection: Vector3, tireVeloc
 	var forceMagnitude = (offset * springConstant * mass) - (velocity * springDamping )
 	var force = forceMagnitude * springDirection #* mass
 	
-	if state.aboutToJump():
-		force *= jumpingForceReduction
+	# if state.aboutToJump():
+	# 	force *= jumpingForceReduction
 	# DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
 
 	apply_force(force, forcePosition)
