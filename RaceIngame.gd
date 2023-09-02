@@ -68,6 +68,8 @@ func setupCars(cars: Array[CarController]):
 
 func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):
 	var index = 0
+	if raceSettings.nrPlayers == 1:
+		%VerticalSplitBottom.visible = false
 	for car in %Players.get_children():
 		var camera = FollowingCamera.new(car)
 		cameras.append(camera)
@@ -114,18 +116,18 @@ func getNewViewport() -> SubViewport:
 func _ready():
 	var player1 = PlayerData.new(0, "mogyi", Color.TURQUOISE)
 	var player2 = PlayerData.new(1, "tometo", Color.DARK_RED)
-	# var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
-	# var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
+	var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
+	var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
 
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-28T13-12-49.json", 3)
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-30T21-41-44.json", 10)
+	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-08-30T21-41-44.json", 10)
 	# TAMAS TRACKJE \|/ (nagyon szar amugy)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-01-56.json", 20)
 	# mogyi mapja jee
-	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
 	# 20:712
 	raceSettings.addPlayer(player1)
-	raceSettings.addPlayer(player2)
+	# raceSettings.addPlayer(player2)
 	# raceSettings.addPlayer(player3)
 	# raceSettings.addPlayer(player4)
 

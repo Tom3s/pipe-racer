@@ -5,6 +5,10 @@ var nrPlayers: int
 var finishedPlayers: int = 0
 var readyPlayers: Array[bool] = []
 
+var pausedBy: int = -1
+
+var raceStarted: bool = false
+
 signal allPlayersReady()
 signal allPlayersFinished()
 
@@ -27,3 +31,11 @@ func areAllPlayersReady():
 		if !readyPlayer:
 			return false
 	return true
+
+# func setPausedBy(playerIndex: int) -> int:
+# 	if pausedBy == playerIndex:
+# 		pausedBy = -1
+# 	elif pausedBy == -1:
+# 		pausedBy = playerIndex
+
+# 	return pausedBy

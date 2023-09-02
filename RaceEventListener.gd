@@ -58,6 +58,7 @@ func onCountdown_countdownFinished(timestamp: int):
 		cars[i].startRace()
 		timeTrialManagers[i].startTimeTrial(timestamp)
 		huds[i].startTimer()
+		state.raceStarted = true
 
 func onRaceInputHandler_forceStartRace():
 	# countdown.startCountdown()
@@ -67,18 +68,18 @@ func onState_allPlayersReady():
 	countdown.startCountdown()
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
-	if paused == playerIndex:
+	if state.pausedBy == playerIndex:
 		var timestamp = floor(getTimestamp())
 		for i in range(cars.size()):
 			cars[i].resumeMovement()
 			timeTrialManagers[i].resumeTimeTrial(timestamp)
-		paused = -1
-	elif paused == -1:
+		state.pausedBy = -1
+	elif state.pausedBy == -1 && !state.raceStarted:
 		var timestamp = floor(getTimestamp())
 		for i in range(cars.size()):
 			cars[i].pauseMovement()
 			timeTrialManagers[i].pauseTimeTrial(timestamp)
-		paused = playerIndex
+		state.pausedBy = playerIndex
 
 func onCar_respawned(playerIndex: int):
 	cameras[playerIndex].forceUpdatePosition()

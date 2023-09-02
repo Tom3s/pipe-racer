@@ -36,6 +36,9 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var playerFraction = remap(playerIndex, 0, nrPlayers - 1, 0, 1)
 
+	if nrPlayers == 1:
+		playerFraction = 0.5
+
 	var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
 
 	print("Spawn position: ", spawnPosition)

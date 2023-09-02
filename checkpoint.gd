@@ -4,7 +4,7 @@ class_name Checkpoint
 var collectedMaterial := preload("res://Track Props/CheckPointGreen.tres")
 var uncollectedMaterial := preload("res://Track Props/CheckPointRed.tres")
 
-signal bodyEnteredCheckpoint(body: Node3D, checkpoint: Node3D)
+signal bodyEnteredCheckpoint(body, checkpoint: Node3D)
 
 var index: int = -1
 
@@ -57,6 +57,9 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 	var rightLimit = localRight * 24
 
 	var playerFraction = remap(playerIndex, 0, nrPlayers - 1, 0, 1)
+
+	if nrPlayers == 1:
+		playerFraction = 0.5
 
 	var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
 

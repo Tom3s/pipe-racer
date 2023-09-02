@@ -23,6 +23,7 @@ func _ready() -> void:
 
 func startTimeTrial(startTime: int) -> void:
 	timeTrialLapEnd = startTime
+	paused = false
 
 func finishedLap() -> void:
 	var lapFinishTime = floor(Time.get_unix_time_from_system() * 1000) 
