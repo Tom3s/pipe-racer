@@ -9,62 +9,46 @@
 [ext_resource type="AudioStream" uid="uid://dj7g1r0q8liox" path="res://Engine Sound/enginge-gear5.wav" id="7_4uctg"]
 [ext_resource type="AudioStream" uid="uid://cunkq1ikggm86" path="res://Engine Sound/enginge-gear6.wav" id="8_ds321"]
 
-[node name="CarEngineSound" type="AudioStreamPlayer3D"]
+[node name="CarEngineSound" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.739014, 1.68405)
-unit_size = 100.0
-doppler_tracking = 2
 script = ExtResource("1_71pax")
 GEAR_SHIFT_PULLBACK = 0.5
 GEAR_SHIFT_SPEED = 0.03
 PITCH_HARSHNESS = 0.8
 GEAR_SHIFT_COOLDOWN_DEFAULT = 0.0
 
-[node name="Idle" type="AudioStreamPlayer3D" parent="."]
+[node name="Idle" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_5nb4o")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear1" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear1" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("3_0k3bo")
-unit_size = 100.0
 pitch_scale = 1.74
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear2" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear2" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("4_uc03k")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear3" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear3" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("5_msmfa")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear4" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear4" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("6_8dasw")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear5" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear5" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("7_4uctg")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2
 
-[node name="Gear6" type="AudioStreamPlayer3D" parent="."]
+[node name="Gear6" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("8_ds321")
-unit_size = 100.0
 bus = &"Engine Sound"
-doppler_tracking = 2

@@ -1,4 +1,4 @@
-extends AudioStreamPlayer3D
+extends Node3D
 
 @export
 var GEAR_STAGE: float = 1
