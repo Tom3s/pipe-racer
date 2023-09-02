@@ -40,6 +40,7 @@ func connectSignals():
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
 	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+	raceInputHandler.resetRacePressed.connect(onRaceInputHandler_resetRacePressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
@@ -125,3 +126,24 @@ func onRaceInputHandler_fullScreenPressed():
 	else:
 		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(nextWindowMode)
+
+func onRaceInputHandler_resetRacePressed():
+	# reset cars
+	# reset checkpoints
+	# reset time trial managers
+	# reset huds (may not be necessary)
+	# reset state machine
+
+	for car in cars:
+		car.reset(map.start.getStartPosition(car.playerIndex, cars.size()), map.getCheckpointCount())
+	
+	for checkpoint in map.getCheckpoints():
+		checkpoint.reset()
+	
+	for timeTrialManager in timeTrialManagers:
+		timeTrialManager.reset()
+	
+	for hud in huds:
+		hud.reset()
+	
+	state.reset()

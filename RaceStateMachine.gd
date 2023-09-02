@@ -18,10 +18,13 @@ func newPlayerFinished():
 		allPlayersFinished.emit()
 
 func setupReadyPlayersList():
+	readyPlayers.clear()
 	for i in nrPlayers:
 		readyPlayers.append(false)
 
 func setPlayerReady(playerId: int):
+	if readyPlayers[playerId]:
+		return
 	readyPlayers[playerId] = true
 	if areAllPlayersReady():
 		allPlayersReady.emit()
@@ -31,11 +34,8 @@ func areAllPlayersReady():
 		if !readyPlayer:
 			return false
 	return true
-
-# func setPausedBy(playerIndex: int) -> int:
-# 	if pausedBy == playerIndex:
-# 		pausedBy = -1
-# 	elif pausedBy == -1:
-# 		pausedBy = playerIndex
-
-# 	return pausedBy
+func reset():
+	finishedPlayers = 0
+	setupReadyPlayersList()
+	raceStarted = false
+	pausedBy = -1

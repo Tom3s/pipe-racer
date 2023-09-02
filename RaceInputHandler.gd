@@ -4,6 +4,7 @@ class_name RaceInputHandler
 signal forceStartRace()
 signal fullScreenPressed()
 signal pausePressed(playerIndex: int)
+signal resetRacePressed()
 
 var playerPrefixes = []
 
@@ -17,6 +18,9 @@ func _input(event):
 
 	if Input.is_action_just_pressed("fullscreen"):
 		fullScreenPressed.emit()
+
+	if Input.is_action_just_pressed("reset_race"):
+		resetRacePressed.emit()
 	
 	for playerPrefix in playerPrefixes:
 		if Input.is_action_just_pressed(playerPrefix + "pause"):

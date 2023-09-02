@@ -67,3 +67,6 @@ func collectCheckpoint(timestamp: int, lap: int) -> void:
 func reset() -> void:
 	times = []
 	timeTrialLapEnd = -1
+	for splitList in splits:
+		splitList.clear()
+	splits.clear()

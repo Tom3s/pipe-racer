@@ -29,9 +29,6 @@ func getPlacement(lapNumber: int) -> int:
 	placements[lapNumber] += 1
 	return placements[lapNumber]
 
-func reset():
-	placements = []
-
 func isCheckPoint():
 	pass
 
@@ -101,3 +98,7 @@ func setCollected():
 
 func setUncollected():
 	checkpointModel.set_surface_override_material(0, uncollectedMaterial)
+
+func reset():
+	setUncollected()
+	placements.clear()

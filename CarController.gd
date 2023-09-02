@@ -130,9 +130,12 @@ func setup(
 
 	setRespawnPositionFromDictionary(startingPosition)
 	respawn(true)
-	# pauseMovement()
 
+func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
+	state.reset(checkpointCount, playerIndex)
 
+	setRespawnPositionFromDictionary(startingPosition)
+	respawn(true)
 
 func _ready():
 	inputHandler = %InputHandler
@@ -161,6 +164,8 @@ func _physics_process(_delta):
 		if initialRespawn:
 			global_position = respawnPosition
 			global_rotation = respawnRotation
+			pauseLinearVelocity = Vector3.ZERO
+			pauseAngularVelocity = Vector3.ZERO
 			respawned.emit(playerIndex)
 			initialRespawn = false
 		paused = true
@@ -366,6 +371,7 @@ func respawn(initial: bool = false):
 	shouldRespawn = true
 	pauseAngularVelocity = Vector3.ZERO
 	pauseLinearVelocity = Vector3.ZERO
+	print('Reset paused velocity')
 	initialRespawn = initial
 
 func getSkiddingRatio():
@@ -410,6 +416,7 @@ func resumeMovement():
 func startRace():
 	resumeMovement()
 	state.currentLap = 0
+	state.hasControl = true
 
 
 func resetInputs():

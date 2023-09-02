@@ -40,9 +40,10 @@ func aboutToJump() -> bool:
 	return aboutToJumpForward || aboutToJumpBackward
 
 func prepareCheckpointList(count: int):
-	collectedCheckpoints = []
+	collectedCheckpoints.clear()
 	for i in range(count):
 		collectedCheckpoints.append(false)
+	collectedCheckpointCount = 0
 
 func clearCollectedCheckpoints():
 	for i in range(collectedCheckpoints.size()):
@@ -57,7 +58,7 @@ func collectCheckpoint(index: int) -> bool:
 	return oldCheckpoint
 
 func hasCollectedAllCheckpoints() -> bool:
-	return collectedCheckpointCount == collectedCheckpoints.size()
+	return collectedCheckpointCount >= collectedCheckpoints.size()
 
 func finishLap():
 	currentLap += 1
@@ -73,4 +74,8 @@ func finisishedRacing() -> bool:
 func setReadyTrue():
 	isReady = true
 	get_parent().isReady.emit(get_parent().playerIndex)
-		
+
+func reset(checkpointCount: int, playerIndex: int):
+	prepareCheckpointList(checkpointCount)
+	placement = playerIndex + 1
+	isReady = false
