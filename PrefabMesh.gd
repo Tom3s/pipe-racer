@@ -44,6 +44,30 @@ const SMOOTH_BOTH = 3
 		rightSmoothTilt = (value + 4) % 4
 		refreshMesh()
 
+
+
+@export var leftWallStart: bool = false:
+	set(value):
+		leftWallStart = value
+		refreshMesh()
+
+@export var leftWallEnd: bool = false:
+	set(value):
+		leftWallEnd = value
+		refreshMesh()
+
+@export var rightWallStart: bool = false:
+	set(value):
+		rightWallStart = value
+		refreshMesh()
+
+@export var rightWallEnd: bool = false:
+	set(value):
+		rightWallEnd = value
+		refreshMesh()
+
+
+
 @export_group("Prefab Type")
 
 @export var curve: bool = false:
@@ -296,25 +320,61 @@ func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2
 	
 	return normalArray
 
+func getVerticesAcross(leftMostVertex: Vector3, rightMostVertex: Vector3, leftHeight: float, rightHeight: float) -> Array[Vector3]:
+	var vertices: Array[Vector3] = []
+
+	var fromIndex = 1 if !rightWallStart && !rightWallEnd else 4
+	var toIndex = PrefabConstants.WIDTH_SEGMENTS if !leftWallStart && !leftWallEnd else PrefabConstants.WIDTH_SEGMENTS - 3
+
+	# push wall vertices
+	if rightWallStart || rightWallEnd:
+		var newRightMostVertex = lerp(rightMostVertex, leftMostVertex, 0.05)
+		vertices.push_back(rightMostVertex)
+		vertices.push_back(rightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+		vertices.push_back(newRightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+		vertices.push_back(newRightMostVertex)
+	else:
+		vertices.push_back(rightMostVertex)
+	
+	for divIndex in range(fromIndex, toIndex):
+		vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS))
+
+	if leftWallStart || leftWallEnd:
+		var newLeftMostVertex = lerp(leftMostVertex, rightMostVertex, 0.05)
+		vertices.push_back(newLeftMostVertex)
+		vertices.push_back(newLeftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+		vertices.push_back(leftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+		vertices.push_back(leftMostVertex)
+	else:
+		vertices.push_back(leftMostVertex)
+	
+	return vertices
+
+func getWallHeight(start: bool, end: bool, lerpValue: float) -> float:
+	if start && end:
+		return 1
+	elif start:
+		return smoothRemap(1 - lerpValue)
+	elif end:
+		return smoothRemap(lerpValue)
+	else:
+		return 0
+
 func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPositions: Array[Vector2], rightPositions: Array[Vector2]):
 	var meshData = []
 	meshData.resize(ArrayMesh.ARRAY_MAX)
 	
 	var vertices = []
-#	for index in rightHeights.size():
-#		vertices.push_back(Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y))
-#
-#	for index in leftHeights.size():
-#		vertices.push_back(Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y))
+
 	for index in rightPositions.size():
 		var rightMostVertex = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
 		var leftMostVertex = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
 		
-		vertices.push_back(rightMostVertex)
-		for divIndex in range(1, PrefabConstants.WIDTH_SEGMENTS):
-			vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS))
-		
-		vertices.push_back(leftMostVertex)
+		var leftWallHeight = getWallHeight(leftWallStart, leftWallEnd, lengthDivisionPoints[index])
+		var rightWallHeight = getWallHeight(rightWallStart, rightWallEnd, lengthDivisionPoints[index])
+
+
+		vertices.append_array(getVerticesAcross(leftMostVertex, rightMostVertex, leftWallHeight, rightWallHeight))
 
 	
 	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertices)
