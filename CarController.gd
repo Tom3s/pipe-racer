@@ -55,7 +55,7 @@ var shouldRespawn: bool = false
 var jumpingForceReduction: float = 0.02
 
 @export
-var lowerSpeedLimit: float = 1.0
+var lowerSpeedLimit: float = 3.0
 
 # input vars
 var accelerationInput: float = 0.0
@@ -151,8 +151,8 @@ func _physics_process(_delta):
 		applyAirSteering()
 		slidingFactor = 1
 		
-	if getSpeed() < lowerSpeedLimit && !accelerationInput:
-		linear_velocity *= Vector3.UP
+	# if getSpeed() < lowerSpeedLimit && !accelerationInput:
+	# 	linear_velocity *= Vector3.UP
 	
 	
 	

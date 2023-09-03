@@ -524,3 +524,8 @@ func getCheckpointCount():
 
 func getConnectionPoints() -> Array[Dictionary]:
 	return connectionPoints
+
+func setIngame():
+	# %Scenery/%Proper.disabled = false
+	# %Scenery/%Flat.disabled = true
+	%Scenery.setIngameCollision()

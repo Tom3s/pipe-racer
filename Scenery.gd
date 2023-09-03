@@ -118,7 +118,7 @@ func calculateCollisionShape():
 	for array in heights:
 		flatArray.append_array(array)
 	
-	var collisionNode = %Collision
+	var collisionNode = %Proper
 
 	collisionNode.shape = HeightMapShape3D.new()
 	collisionNode.shape.map_width = subdivisions + 1
@@ -130,3 +130,6 @@ func calculateCollisionShape():
 	heightmapTexture = ImageTexture.create_from_image(heightmap)
 	get_surface_override_material(0).set_shader_parameter("HeightMap", heightmapTexture)
 
+func setIngameCollision():
+	%Proper.disabled = false
+	%Flat.disabled = true

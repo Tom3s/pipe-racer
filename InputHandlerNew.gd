@@ -40,6 +40,11 @@ var pausedState = false
 # 	if respawnInput:
 # 		car.respawn()
 func _physics_process(delta):
+	if Input.is_action_just_pressed(playerPrefix + "ready"):
+		car.state.setReadyTrue()
+	if Input.is_action_just_pressed(playerPrefix + "reset"):
+		car.state.setResetting()
+
 	if !car.state.hasControl:
 		tires[0].targetRotation = 0
 		tires[1].targetRotation = 0
@@ -55,10 +60,6 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed(playerPrefix + "respawn"):
 		car.respawn()
-	if Input.is_action_just_pressed(playerPrefix + "ready"):
-		car.state.setReadyTrue()
-	if Input.is_action_just_pressed(playerPrefix + "reset"):
-		car.state.setResetting()
 
 # func _unhandled_input(event):
 # 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")

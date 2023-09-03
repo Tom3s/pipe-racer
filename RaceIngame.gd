@@ -28,6 +28,7 @@ func init(newRaceSettings: RaceSettings):
 	map = Map.instantiate()
 	add_child(map)
 	map.loadFrom = raceSettings.mapName
+	map.setIngame()
 
 	raceEventListener = %RaceEventListener
 	raceInputHandler = %RaceInputHandler
@@ -126,7 +127,7 @@ func _ready():
 	# mogyi mapja jee
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T12-50-40.json", 5)
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T14-33-53.json", 3)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T16-41-15.json", 5)
 	# 20:712
 	raceSettings.addPlayer(player1)
 	# raceSettings.addPlayer(player2)

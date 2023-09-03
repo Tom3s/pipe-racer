@@ -21,6 +21,8 @@ var rightSmoothing: OptionButton
 
 var curvedTickBox: CheckBox
 
+var snapTickBox: CheckBox
+
 var straightLength: SpinBox
 var straightOffset: SpinBox
 var straightSmoothing: OptionButton
@@ -44,6 +46,8 @@ signal leftSmoothingChanged(value: int)
 signal rightSmoothingChanged(value: int)
 
 signal curvedChanged(value: bool)
+
+signal snapChanged(value: bool)
 
 signal straightLengthChanged(value: float)
 signal straightOffsetChanged(value: float)
@@ -80,6 +84,8 @@ func _ready():
 
 	curvedTickBox = %CurvedTickBox
 
+	snapTickBox = %SnapTickBox
+
 	straightLength = %StraightLength
 	straightOffset = %StraightOffset
 	straightSmoothing = %StraightSmoothing
@@ -111,6 +117,8 @@ func _ready():
 	rightSmoothing.item_selected.connect(onRightSmoothingChanged)
 
 	curvedTickBox.toggled.connect(onCurvedChanged)
+
+	snapTickBox.toggled.connect(onSnapChanged)
 
 	straightLength.value_changed.connect(onStraightLengthChanged)
 	straightOffset.value_changed.connect(onStraightOffsetChanged)
@@ -184,6 +192,9 @@ func onCurvedChanged(value: bool):
 	%CurveProperties.visible = value
 	%StraightProperties.visible = !value
 	curvedChanged.emit(value)
+
+func onSnapChanged(value: bool):
+	snapChanged.emit(value)
 
 func onStraightLengthChanged(value: float):
 	straightLengthChanged.emit(value)

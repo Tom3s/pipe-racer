@@ -64,6 +64,7 @@ func connectSignals():
 	prefabPropertiesUI.leftWallEndChanged.connect(onPrefabPropertiesUI_leftWallEndChanged)
 	prefabPropertiesUI.rightWallEndChanged.connect(onPrefabPropertiesUI_rightWallEndChanged)
 	prefabPropertiesUI.curvedChanged.connect(onPrefabPropertiesUI_curvedChanged)
+	prefabPropertiesUI.snapChanged.connect(onPrefabPropertiesUI_snapChanged)
 	prefabPropertiesUI.straightLengthChanged.connect(onPrefabPropertiesUI_straightLengthChanged)
 	prefabPropertiesUI.straightOffsetChanged.connect(onPrefabPropertiesUI_straightOffsetChanged)
 	prefabPropertiesUI.straightSmoothingChanged.connect(onPrefabPropertiesUI_straightSmoothingChanged)
@@ -203,7 +204,12 @@ func onEditorInputHandler_deleteSelectedPressed():
 	if editorStateMachine.inEditState() || editorStateMachine.inDeleteState():
 		var oldSelection = editorStateMachine.currentSelection
 		if oldSelection != null:
-			map.remove(oldSelection)
+			if oldSelection.has_method("select"):
+				map.remove(oldSelection)
+			elif oldSelection.has_method("isStart"):
+				map.removeStart()
+			elif oldSelection.has_method("isCheckPoint"):
+				map.removeCheckPoint(oldSelection)
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
 		
@@ -241,6 +247,9 @@ func onPrefabPropertiesUI_rightWallEndChanged(value: bool):
 
 func onPrefabPropertiesUI_curvedChanged(value: bool):
 	prefabMesher.curve = value
+
+func onPrefabPropertiesUI_snapChanged(value: bool):
+	prefabMesher.snapping = value
 
 func onPrefabPropertiesUI_straightLengthChanged(value: int):
 	prefabMesher.length = value

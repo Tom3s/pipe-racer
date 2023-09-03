@@ -103,6 +103,7 @@ const SMOOTH_BOTH = 3
 		refreshMesh()
 
 var debug: bool = false
+var snapping: bool = true
 
 signal propertiesUpdated()
 
@@ -466,6 +467,9 @@ func updatePosition(newPosition: Vector3, cameraPosition: Vector3, height: float
 	newPosition *= PrefabConstants.GRID_SIZE
 
 	global_position = newPosition
+
+	if !snapping:
+		return
 
 	var connectionPoint = trySnappingToTile(connectionPoints)
 	if connectionPoint != null:
