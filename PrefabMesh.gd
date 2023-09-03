@@ -102,6 +102,7 @@ const SMOOTH_BOTH = 3
 		curveSideways = max(value, PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 		refreshMesh()
 
+var debug: bool = false
 
 signal propertiesUpdated()
 
@@ -280,7 +281,7 @@ func getUVArray() -> Array[Vector2]:
 	if curve:
 		var larger = max(curveForward, curveSideways)
 		multiplier = round(float(larger) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
-		
+	
 	for y in (PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
 		for x in (PrefabConstants.WIDTH_SEGMENTS + 1):
 			var u = 1.0 - (float(x) / PrefabConstants.WIDTH_SEGMENTS)
@@ -427,7 +428,7 @@ func refreshMesh():
 		topRight = Vector3(0, rightEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH)
 		topLeft = Vector3(0, leftEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE)
 
-	if is_node_ready():
+	if is_node_ready() && debug:
 		%BottomRight.position = bottomRight
 		%BottomLeft.position = bottomLeft
 		%TopRight.position = topRight
@@ -494,6 +495,10 @@ func encodeData():
 	data["rightStartHeight"] = rightStartHeight
 	data["rightEndHeight"] = rightEndHeight
 	data["rightSmoothTilt"] = rightSmoothTilt
+	data["leftWallStart"] = leftWallStart
+	data["leftWallEnd"] = leftWallEnd
+	data["rightWallStart"] = rightWallStart
+	data["rightWallEnd"] = rightWallEnd
 	data["curve"] = curve
 	data["endOffset"] = endOffset
 	data["smoothOffset"] = smoothOffset
@@ -521,6 +526,10 @@ func decodeData(data: Variant):
 	rightStartHeight = data["rightStartHeight"]
 	rightEndHeight = data["rightEndHeight"]
 	rightSmoothTilt = data["rightSmoothTilt"]
+	leftWallStart = data["leftWallStart"]
+	leftWallEnd = data["leftWallEnd"]
+	rightWallStart = data["rightWallStart"]
+	rightWallEnd = data["rightWallEnd"]
 	curve = data["curve"]
 	endOffset = data["endOffset"]
 	smoothOffset = data["smoothOffset"]

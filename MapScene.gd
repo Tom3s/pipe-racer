@@ -12,13 +12,18 @@ var checkPointSystem: Node3D
 @onready
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
 var materials = [
-	preload("res://Tracks/RacetrackMaterial.tres"), # ROAD
+	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
 	preload("res://grass2.tres") # GRASS
 ]
 
 var frictions = [
 	1.0, # ROAD
 	0.3 # GRASS
+]
+
+var accelerationPenalties = [
+	0.0, # ROAD
+	0.8 # GRASS
 ]
 
 var operationStack: Array = []
@@ -100,6 +105,8 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 	prefab.global_rotation = Vector3(0, prefabData["rotation"], 0)
 
 	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
+	prefab.friction = frictions[prefabData["roadType"]]
+	prefab.accelerationPenalty = accelerationPenalties[prefabData["roadType"]]
 	prefab.create_trimesh_collision()
 
 	prefab.calculateCorners()

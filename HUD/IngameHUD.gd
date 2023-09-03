@@ -21,6 +21,9 @@ var stats: Label = %Stats
 var readyIndicator: Label = %ReadyIndicator
 
 @onready
+var resetIndicator: Label = %ResetIndicator
+
+@onready
 var nickname: Label = %Nickname
 
 
@@ -39,6 +42,7 @@ func _ready() -> void:
 	print("HUD loaded")
 	setNickname(car.playerName)
 	setReadyIndicator(false)
+	setResetIndicator(false)
 
 	set_physics_process(true)
 
@@ -50,6 +54,7 @@ func _physics_process(_delta: float) -> void:
 	setStatsText(timeTrialManager.getTotalTime() + timeTrialManager.getCurrentLapTime(), timeTrialManager.getLastLap(), timeTrialManager.getBestLap())
 	# setReadyIndicator(car.incorrectCheckPoint) 
 	setReadyIndicator(!car.state.isReady)
+	setResetIndicator(car.state.isResetting)
 
 
 func setSpeedText(speed: float) -> void:
@@ -75,6 +80,9 @@ func setStatsText(totalTick: int, lastLapTicks: int, bestLapTicks: int) -> void:
 
 func setReadyIndicator(isReady: bool) -> void:
 	readyIndicator.visible = isReady
+
+func setResetIndicator(isResetting: bool) -> void:
+	resetIndicator.visible = isResetting
 
 func getTimeStringFromTicks(ticks: int) -> String:
 	if ticks == -1:

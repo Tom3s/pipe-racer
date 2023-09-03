@@ -57,6 +57,8 @@ func _physics_process(delta):
 		car.respawn()
 	if Input.is_action_just_pressed(playerPrefix + "ready"):
 		car.state.setReadyTrue()
+	if Input.is_action_just_pressed(playerPrefix + "reset"):
+		car.state.setResetting()
 
 # func _unhandled_input(event):
 # 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")

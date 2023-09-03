@@ -2,7 +2,8 @@ extends MeshInstance3D
 class_name PrefabProperties
 
 var prefabData: Dictionary = {}
-# var friction: float = 1.0
+var friction: float = 1.0
+var accelerationPenalty: float = 0.0
 
 var selected: bool = false:
 	set(value):
@@ -16,11 +17,16 @@ var bottomLeft: Vector3
 var topRight: Vector3
 var topLeft: Vector3
 
-func _init(data):
+func _init(data, frictionMultiplier = 1.0, accelerationPenaltyFactor = 0.0):
 	prefabData = data
+	friction = frictionMultiplier
+	accelerationPenalty = accelerationPenaltyFactor
 
-# func _ready():
-# 	calculateCorners()
+func getFriction() -> float:
+	return friction
+
+func getAccelerationPenalty() -> float:
+	return accelerationPenalty
 
 func selectionChanged(value):
 	if value:

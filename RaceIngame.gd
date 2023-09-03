@@ -124,10 +124,12 @@ func _ready():
 	# TAMAS TRACKJE \|/ (nagyon szar amugy)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-01-56.json", 20)
 	# mogyi mapja jee
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
+	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
+	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T12-50-40.json", 5)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T14-33-53.json", 3)
 	# 20:712
 	raceSettings.addPlayer(player1)
-	raceSettings.addPlayer(player2)
+	# raceSettings.addPlayer(player2)
 	# raceSettings.addPlayer(player3)
 	# raceSettings.addPlayer(player4)
 

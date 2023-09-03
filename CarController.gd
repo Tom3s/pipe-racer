@@ -106,6 +106,7 @@ var state: CarStateMachine
 signal respawned(playerIndex: int)
 signal finishedRace(playerIndex: int)
 signal isReady(playerIndex: int)
+signal isResetting(playerIndex: int, resetting: bool)
 
 
 
@@ -296,10 +297,10 @@ func calculate_tire_grip(slipAngle: float):
 	
 	return tireGrip * driftMultiplier * skidMultiplier
 
-func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: float, contactPoint: Vector3):
+func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: float, contactPoint: Vector3, frictionMultiplier: float):
 	var steeringVelocity = steeringDirection.dot(tireVelocity)
 #	var tireGripFactor = calculate_tire_grip(getTireSkidRatio(contactPoint, steeringDirection))
-	var tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2)))
+	var tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2))) * frictionMultiplier
 
 	
 	var desiredVelocityChange = -steeringVelocity * tireGripFactor
@@ -315,7 +316,7 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 	
 	apply_force(force, contactPoint - global_position)
 
-func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3):
+func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3, accelerationMultiplier: float):
 	if accelerationInput == 0:
 		var tireAxisVelocity = accelerationDirection.dot(tireVelocity)
 		var desiredVelocityChange = - tireAxisVelocity * passiveBraking
@@ -329,7 +330,7 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 		apply_force(force, contactPoint - global_position)
 		return
 
-	var force = accelerationDirection * accelerationInput * acceleration * mass
+	var force = accelerationDirection * accelerationInput * acceleration * mass * accelerationMultiplier
 
 	if force.dot(linear_velocity) < 0:
 		force *= brakingMultiplier

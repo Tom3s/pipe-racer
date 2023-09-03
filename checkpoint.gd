@@ -50,8 +50,8 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 # + localBackwards * 8
 
-	var leftLimit = -localRight * 24
-	var rightLimit = localRight * 24
+	var leftLimit = -localRight * 18
+	var rightLimit = localRight * 18
 
 	var playerFraction = remap(playerIndex, 0, nrPlayers - 1, 0, 1)
 

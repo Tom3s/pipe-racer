@@ -11,6 +11,11 @@ var rightEndSpinbox: SpinBox
 var leftStartSpinbox: SpinBox
 var rightStartSpinbox: SpinBox
 
+var leftWallStart: CheckBox
+var rightWallStart: CheckBox
+var leftWallEnd: CheckBox
+var rightWallEnd: CheckBox
+
 var leftSmoothing: OptionButton
 var rightSmoothing: OptionButton
 
@@ -29,6 +34,11 @@ signal leftEndChanged(value: float)
 signal rightEndChanged(value: float)
 signal leftStartChanged(value: float)
 signal rightStartChanged(value: float)
+
+signal leftWallEndChanged(value: bool)
+signal rightWallEndChanged(value: bool)
+signal leftWallStartChanged(value: bool)
+signal rightWallStartChanged(value: bool)
 
 signal leftSmoothingChanged(value: int)
 signal rightSmoothingChanged(value: int)
@@ -58,6 +68,11 @@ func _ready():
 	leftStartSpinbox = %LeftStartSpinbox
 	rightStartSpinbox = %RightStartSpinbox
 
+	leftWallStart = %LeftWallStart
+	rightWallStart = %RightWallStart
+	leftWallEnd = %LeftWallEnd
+	rightWallEnd = %RightWallEnd
+
 	leftSmoothing = %LeftSmoothing
 	rightSmoothing = %RightSmoothing
 	leftSmoothingChanged.emit(3)
@@ -86,6 +101,11 @@ func _ready():
 	rightEndSpinbox.value_changed.connect(onRightEndSpinboxChanged)
 	leftStartSpinbox.value_changed.connect(onLeftStartSpinboxChanged)
 	rightStartSpinbox.value_changed.connect(onRightStartSpinboxChanged)
+
+	leftWallStart.toggled.connect(onLeftWallStartChanged)
+	rightWallStart.toggled.connect(onRightWallStartChanged)
+	leftWallEnd.toggled.connect(onLeftWallEndChanged)
+	rightWallEnd.toggled.connect(onRightWallEndChanged)
 
 	leftSmoothing.item_selected.connect(onLeftSmoothingChanged)
 	rightSmoothing.item_selected.connect(onRightSmoothingChanged)
@@ -142,6 +162,18 @@ func onRightStartSpinboxChanged(value: float):
 		rightStart.value = value
 		rightStartChanged.emit(value)
 
+func onLeftWallStartChanged(value: bool):
+	leftWallStartChanged.emit(value)
+
+func onRightWallStartChanged(value: bool):
+	rightWallStartChanged.emit(value)
+
+func onLeftWallEndChanged(value: bool):
+	leftWallEndChanged.emit(value)
+
+func onRightWallEndChanged(value: bool):
+	rightWallEndChanged.emit(value)
+
 func onLeftSmoothingChanged(value: int):
 	leftSmoothingChanged.emit(value)
 
@@ -194,6 +226,10 @@ func setFromData(data):
 	rightEnd.value = data["rightEndHeight"]
 	rightSmoothing.selected = data["rightSmoothTilt"]
 	rightSmoothingChanged.emit(data["rightSmoothTilt"])
+	leftWallStart.button_pressed = data["leftWallStart"]
+	rightWallStart.button_pressed = data["rightWallStart"]
+	leftWallEnd.button_pressed = data["leftWallEnd"]
+	rightWallEnd.button_pressed = data["rightWallEnd"]
 	curvedTickBox.button_pressed = data["curve"]
 	straightOffset.value = data["endOffset"]
 	straightSmoothing.selected = data["smoothOffset"]

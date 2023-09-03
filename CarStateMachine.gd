@@ -14,6 +14,8 @@ var placement: int = 0
 
 var isReady: bool = false
 
+var isResetting: bool = false
+
 var groundedTireCount: int = 0
 func getGroundedTireCount() -> int:
 	# return groundedTires[0] + groundedTires[1] + groundedTires[2] + groundedTires[3]
@@ -79,3 +81,8 @@ func reset(checkpointCount: int, playerIndex: int):
 	prepareCheckpointList(checkpointCount)
 	placement = playerIndex + 1
 	isReady = false
+	isResetting = false
+
+func setResetting():
+	isResetting = !isResetting
+	get_parent().isResetting.emit(get_parent().playerIndex, isResetting)

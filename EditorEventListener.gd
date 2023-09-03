@@ -19,13 +19,16 @@ func _ready():
 	propPlacer = %PropPlacer
 
 	propPlacer.startLinePreview.visible = false
+	prefabMesher.debug = true
 
-	prefabMesher.propertiesUpdated.connect(onPrefabMesher_propertiesUpdated)
 
 	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
 	editorStateMachine.currentPlacerNode = prefabMesher
 
+	connectSignals()
 
+func connectSignals():
+	prefabMesher.propertiesUpdated.connect(onPrefabMesher_propertiesUpdated)
 	# connect signals
 	editorInputHandler.mouseMovedTo.connect(onEditorInputHandler_mouseMovedTo)
 	editorInputHandler.moveUpGrid.connect(onEditorInputHandler_moveUpGrid)
@@ -56,6 +59,10 @@ func _ready():
 	prefabPropertiesUI.rightStartChanged.connect(onPrefabPropertiesUI_rightStartChanged)
 	prefabPropertiesUI.leftSmoothingChanged.connect(onPrefabPropertiesUI_leftSmoothingChanged)
 	prefabPropertiesUI.rightSmoothingChanged.connect(onPrefabPropertiesUI_rightSmoothingChanged)
+	prefabPropertiesUI.leftWallStartChanged.connect(onPrefabPropertiesUI_leftWallStartChanged)
+	prefabPropertiesUI.rightWallStartChanged.connect(onPrefabPropertiesUI_rightWallStartChanged)
+	prefabPropertiesUI.leftWallEndChanged.connect(onPrefabPropertiesUI_leftWallEndChanged)
+	prefabPropertiesUI.rightWallEndChanged.connect(onPrefabPropertiesUI_rightWallEndChanged)
 	prefabPropertiesUI.curvedChanged.connect(onPrefabPropertiesUI_curvedChanged)
 	prefabPropertiesUI.straightLengthChanged.connect(onPrefabPropertiesUI_straightLengthChanged)
 	prefabPropertiesUI.straightOffsetChanged.connect(onPrefabPropertiesUI_straightOffsetChanged)
@@ -219,6 +226,18 @@ func onPrefabPropertiesUI_leftSmoothingChanged(value: int):
 
 func onPrefabPropertiesUI_rightSmoothingChanged(value: int):
 	prefabMesher.rightSmoothTilt = value
+
+func onPrefabPropertiesUI_leftWallStartChanged(value: bool):
+	prefabMesher.leftWallStart = value
+
+func onPrefabPropertiesUI_rightWallStartChanged(value: bool):
+	prefabMesher.rightWallStart = value
+
+func onPrefabPropertiesUI_leftWallEndChanged(value: bool):
+	prefabMesher.leftWallEnd = value
+
+func onPrefabPropertiesUI_rightWallEndChanged(value: bool):
+	prefabMesher.rightWallEnd = value
 
 func onPrefabPropertiesUI_curvedChanged(value: bool):
 	prefabMesher.curve = value

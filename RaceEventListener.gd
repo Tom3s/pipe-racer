@@ -32,6 +32,7 @@ func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Arr
 
 	state.nrPlayers = cars.size()
 	state.setupReadyPlayersList()
+	state.setupResettingPlayersList()
 
 	connectSignals()
 
@@ -40,12 +41,13 @@ func connectSignals():
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
 	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
-	raceInputHandler.resetRacePressed.connect(onRaceInputHandler_resetRacePressed)
+	# raceInputHandler.resetRacePressed.connect(onRaceInputHandler_resetRacePressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
 		cars[i].isReady.connect(onCar_isReady)
 		cars[i].finishedRace.connect(onCar_finishedRace)
+		cars[i].isResetting.connect(onCar_isResetting)
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
@@ -53,6 +55,7 @@ func connectSignals():
 
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
+	state.allPlayersReset.connect(onState_allPlayersReset)
 
 func onCountdown_countdownFinished(timestamp: int):
 	for i in range(cars.size()):
@@ -127,7 +130,7 @@ func onRaceInputHandler_fullScreenPressed():
 		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(nextWindowMode)
 
-func onRaceInputHandler_resetRacePressed():
+func onState_allPlayersReset():
 	# reset cars
 	# reset checkpoints
 	# reset time trial managers
@@ -147,3 +150,10 @@ func onRaceInputHandler_resetRacePressed():
 		hud.reset()
 	
 	state.reset()
+
+func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
+	state.setPlayerReset(playerIndex, resetting)
+
+# func onState_allPlayersReset():
+# 	print("All players reset")
+# 	state.setupReadyPlayersList()

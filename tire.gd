@@ -28,7 +28,8 @@ func _ready():
 	set_physics_process(true)
 
 
-
+var frictionMultiplier: float = 1.0
+var accelerationPenalty: float = 0.0
 func _physics_process(delta):
 	if !car.paused:
 		rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
@@ -48,9 +49,18 @@ func _physics_process(delta):
 			
 			var tireVelocityActual = car.get_point_velocity(contactPoint)
 			
-			car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint)
+			# print(get_collider())
+
+			if get_collider().get_parent().has_method("getFriction"):
+				frictionMultiplier = get_collider().get_parent().getFriction()
+				accelerationPenalty = get_collider().get_parent().getAccelerationPenalty()
+			else:
+				frictionMultiplier = 1.0
+				accelerationPenalty = 0.0
+
+			car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint, frictionMultiplier)
 		
-			car.applyAcceleration(global_transform.basis.z, tireVelocityActual, contactPoint)
+			car.applyAcceleration(global_transform.basis.z, tireVelocityActual, contactPoint, 1 - accelerationPenalty)
 			
 			var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(global_transform.basis.z)
 			
