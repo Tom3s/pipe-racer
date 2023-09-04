@@ -20,6 +20,19 @@ var mode: int = MODE_START_LINE:
 @onready
 var checkPointObject: PackedScene = preload("res://CheckPoint.tscn")
 
+var billboardObject: PackedScene = preload("res://Track Props/Sign.tscn")
+
+@export
+var billboardTextures: Array[Texture] = []
+
+const BILLBOARD_TEXTURE_BUMPY_ROAD = 0
+const BILLBOARD_TEXTURE_CHICANE_LEFT = 1
+const BILLBOARD_TEXTURE_CHICANE_RIGHT = 2
+const BILLBOARD_TEXTURE_SHARP_LEFT = 3
+const BILLBOARD_TEXTURE_SHARP_RIGHT = 4
+
+var currentBillboardTexture: int = BILLBOARD_TEXTURE_BUMPY_ROAD
+
 func onModeChange(value: int) -> int:
 
 	startLinePreview.visible = false
@@ -98,3 +111,13 @@ func rotateFine(amount: int):
 
 func getCheckPointObject() -> Area3D:
 	return checkPointObject.instantiate()
+
+func getPropObject(textureIndex: int = -1) -> Node3D:
+	if textureIndex == -1:
+		textureIndex = currentBillboardTexture
+	var prop = billboardObject.instantiate()
+	# prop.billboardTexture = billboardTextures[textureIndex]
+	# prop.billboardTextureIndex = textureIndex
+	prop.setTexture(billboardTextures[textureIndex], textureIndex)
+	# prop.scale = Vector3.ONE * 8.5
+	return prop

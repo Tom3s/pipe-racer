@@ -132,6 +132,8 @@ func onEditorInputHandler_placePressed():
 			map.addStart(propPlacer)
 		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_CHECKPOINT:
 			map.addCheckPoint(propPlacer)
+		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PROP:
+			map.addProp(propPlacer)
 
 func onEditorInputHandler_rotatePressed():
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
@@ -162,6 +164,12 @@ func onEditorInputHandler_selectPressed(object: Object):
 				map.updateCheckPoint(oldSelection, propPlacer)
 				oldSelection.visible = true
 				propPlacer.visible = false
+			elif oldSelection.has_method("isProp"):
+				map.updateProp(oldSelection, propPlacer)
+				oldSelection.visible = true
+				propPlacer.visible = false
+			
+
 			editorStateMachine.clearSelection()
 			return
 
@@ -191,6 +199,16 @@ func onEditorInputHandler_selectPressed(object: Object):
 			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_CHECKPOINT
+		elif object.has_method("isProp"):
+			object.visible = false
+			propPlacer.visible = true
+
+			editorStateMachine.currentPlacerNode = propPlacer
+
+			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
+			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
+			propPlacer.mode = propPlacer.MODE_PROP
+
 
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
 		if object.has_method("select"):
@@ -199,6 +217,8 @@ func onEditorInputHandler_selectPressed(object: Object):
 			map.removeStart()
 		elif object.has_method("isCheckPoint"):
 			map.removeCheckPoint(object)
+		elif object.has_method("isProp"):
+			map.removeProp(object)
 
 func onEditorInputHandler_deleteSelectedPressed():
 	if editorStateMachine.inEditState() || editorStateMachine.inDeleteState():
@@ -210,6 +230,9 @@ func onEditorInputHandler_deleteSelectedPressed():
 				map.removeStart()
 			elif oldSelection.has_method("isCheckPoint"):
 				map.removeCheckPoint(oldSelection)
+			elif oldSelection.has_method("isProp"):
+				map.removeProp(oldSelection)
+
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
 		

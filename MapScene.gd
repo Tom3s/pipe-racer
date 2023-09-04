@@ -8,6 +8,7 @@ var PropPlacer = preload("res://PropPlacer.tscn")
 
 var trackPieces: Node3D
 var checkPointSystem: Node3D
+var props: Node3D
 
 @onready
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
@@ -37,6 +38,9 @@ const PLACED_START = 3
 const PLACED_CP = 4
 const REMOVED_CP = 5
 const UPDATED_CP = 6
+const PLACED_PROP = 7
+const REMOVED_PROP = 8
+const UPDATED_PROP = 9
 
 signal undidLastOperation()
 signal redidLastOperation()
@@ -73,6 +77,8 @@ var connectionPoints: Array[Dictionary] = []
 func _ready():
 	trackPieces = %TrackPieces
 	checkPointSystem = %CheckPointSystem
+	props = %Props
+
 	if find_child("Start") != null:
 		start = find_child("Start")
 	else:
@@ -192,6 +198,30 @@ func storeAddCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, 
 		"operation": PLACED_CP
 	})
 	lastOperationIndex += 1
+
+func addProp(propPlacer: PropPlacer):
+	var propObject = propPlacer.getPropObject()
+	addPropObject(propObject, propPlacer.global_position, propPlacer.global_rotation)
+	storeAddPropObject(propObject, propPlacer.global_position, propPlacer.global_rotation)
+
+func addPropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+	props.add_child(propObject)
+	propObject.global_position = propPos
+	propObject.global_rotation = propRotation
+
+func storeAddPropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"propObject": propObject,
+		"position": propPos,
+		"rotation": propRotation,
+		"operation": PLACED_PROP
+	})
+	lastOperationIndex += 1
+
+
+
 # remove
 
 func remove(prefab: PrefabProperties):
@@ -239,6 +269,26 @@ func storeRemoveCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 	})
 	lastOperationIndex += 1
 
+func removeProp(propObject: Node3D):
+	storeRemovePropObject(propObject, propObject.global_position, propObject.global_rotation)
+	removePropObject(propObject)
+
+func removePropObject(propObject: Node3D):
+	props.remove_child(propObject)
+
+func storeRemovePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"propObject": propObject,
+		"position": propPos,
+		"rotation": propRotation,
+		"operation": REMOVED_PROP
+	})
+	lastOperationIndex += 1
+
+
+
 # update
 
 func update(oldPrefab: PrefabProperties, prefabMesher: PrefabMesher):
@@ -285,6 +335,31 @@ func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 	})
 	lastOperationIndex += 1
 
+func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
+	# var propObject = propPlacer.getPropObject()
+	# flipping order, because the old object is the one that is already in the scene
+	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation)
+	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation)
+
+func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+	propObject.global_position = propPos
+	propObject.global_rotation = propRotation
+
+func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+	safeResizeStack()
+
+	operationStack.append({
+		"propObject": propObject,
+		"oldPosition": propObject.global_position,
+		"oldRotation": propObject.global_rotation,
+		"newPosition": propPos,
+		"newRotation": propRotation,
+		"operation": UPDATED_PROP
+	})
+	lastOperationIndex += 1
+
+
+# misc
 
 func recalculateConnectionPoints():
 	connectionPoints.clear()
@@ -320,6 +395,13 @@ func safeResizeStack():
 
 			# UPDATED_CP: no need to do anything
 
+			PLACED_PROP:
+				operation["propObject"].queue_free()
+			
+			# REMOVED_PROP: no need to do anything
+
+			# UPDATED_PROP: no need to do anything
+
 
 	if operationStack.size() > lastOperationIndex + 1:
 		operationStack.resize(lastOperationIndex + 1)
@@ -351,6 +433,12 @@ func undo():
 		addCheckPointObject(lastOperation["checkPointObject"], lastOperation["position"], lastOperation["rotation"])
 	elif lastOperation["operation"] == UPDATED_CP:
 		updateCheckPointObject(lastOperation["checkPointObject"], lastOperation["oldPosition"], lastOperation["oldRotation"])
+	elif lastOperation["operation"] == PLACED_PROP:
+		removePropObject(lastOperation["propObject"])
+	elif lastOperation["operation"] == REMOVED_PROP:
+		addPropObject(lastOperation["propObject"], lastOperation["position"], lastOperation["rotation"])
+	elif lastOperation["operation"] == UPDATED_PROP:
+		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"])
 
 	else:
 		return
@@ -382,6 +470,12 @@ func redo():
 		removeCheckPointObject(lastOperation["checkPointObject"])
 	elif lastOperation["operation"] == UPDATED_CP:
 		updateCheckPointObject(lastOperation["checkPointObject"], lastOperation["newPosition"], lastOperation["newRotation"])
+	elif lastOperation["operation"] == PLACED_PROP:
+		addPropObject(lastOperation["propObject"], lastOperation["position"], lastOperation["rotation"])
+	elif lastOperation["operation"] == REMOVED_PROP:
+		removePropObject(lastOperation["propObject"])
+	elif lastOperation["operation"] == UPDATED_PROP:
+		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"])
 
 	else:
 		lastOperationIndex -= 1
@@ -393,6 +487,8 @@ func clearMap():
 	for child in trackPieces.get_children():
 		child.queue_free()
 	for child in checkPointSystem.get_children():
+		child.queue_free()
+	for child in props.get_children():
 		child.queue_free()
 	# trackPieces.get_child(0).queue_free()
 	# checkPointSystem.get_child(0).queue_free()
@@ -422,7 +518,8 @@ func saveToJSON():
 			# "rotationZ": start.global_rotation.z
 			"rotation": start.global_rotation.y
 		},
-		"checkPoints": []
+		"checkPoints": [],
+		"props": []
 	}
 
 	for child in trackPieces.get_children():
@@ -442,6 +539,20 @@ func saveToJSON():
 			"rotation": child.global_rotation.y
 		})
 	
+	for child in props.get_children():
+		trackData["props"].append({
+			# "position": child.global_position,
+			# "rotation": child.global_rotation
+			"positionX": child.global_position.x,
+			"positionY": child.global_position.y,
+			"positionZ": child.global_position.z,
+			# "rotationX": child.global_rotation.x,
+			# "rotationY": child.global_rotation.y,
+			# "rotationZ": child.global_rotation.z
+			"rotation": child.global_rotation.y,
+			"textureIndex": child.billboardTextureIndex
+		})
+
 	# var fileHandler = FileAccess.new()
 	var path = "res://builderTracks/" + trackName + ".json"
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
@@ -511,6 +622,14 @@ func loadFromJSON(fileName: String):
 		checkPointObject.index = checkpointIndex
 		addCheckPointObject(checkPointObject, Vector3(checkPointData["positionX"], checkPointData["positionY"], checkPointData["positionZ"]), Vector3(0, checkPointData["rotation"], 0))
 		checkpointIndex += 1
+
+
+	if trackData.has("props"):
+		for propData in trackData["props"]:
+			var propObject = propPlacer.getPropObject(propData["textureIndex"])
+			addPropObject(propObject, Vector3(propData["positionX"], propData["positionY"], propData["positionZ"]), Vector3(0, propData["rotation"], 0))
+	else:
+		print("No props on this track")
 
 	propPlacer.queue_free()
 

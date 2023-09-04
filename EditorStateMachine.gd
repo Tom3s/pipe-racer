@@ -79,7 +79,8 @@ func setCurrentSelection(selection: Object) -> Object:
 	if selection != null && !(
 		selection.has_method("select") || 
 		selection.has_method("isStart") || 
-		selection.has_method("isCheckPoint")
+		selection.has_method("isCheckPoint") || 
+		selection.has_method("isProp")
 	):
 		var oldSelection = currentSelection
 		currentSelection = null
