@@ -135,7 +135,7 @@ func _ready():
 	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T23-52-23.json", 3)
 	# 20:712
 	raceSettings.addPlayer(player1)
-	raceSettings.addPlayer(player2)
+	# raceSettings.addPlayer(player2)
 	# raceSettings.addPlayer(player3)
 	# raceSettings.addPlayer(player4)
 

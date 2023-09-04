@@ -149,7 +149,7 @@ func _physics_process(_delta):
 	if state.isAirborne():
 		applyAirPitch()
 		applyAirSteering()
-		slidingFactor = 1
+		slidingFactor = 0.9
 		
 	# if getSpeed() < lowerSpeedLimit && !accelerationInput:
 	# 	linear_velocity *= Vector3.UP
