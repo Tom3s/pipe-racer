@@ -137,6 +137,8 @@ func onState_allPlayersReset():
 	# reset huds (may not be necessary)
 	# reset state machine
 
+	%MusicPlayer.playMenuMusic()
+
 	for car in cars:
 		car.reset(map.start.getStartPosition(car.playerIndex, cars.size()), map.getCheckpointCount())
 	
