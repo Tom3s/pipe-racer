@@ -346,9 +346,19 @@ func getSpeed() -> float:
 
 	return Vector2(velocityForward, velocityRight).length()
 
+# func getSteeringFactor() -> float:
+# 	var g = func(x): return (- x / 150) + 1
+# 	var f = func(x): return max(g.call(x), 0.25)
+
+# 	return f.call(getSpeed()) * maxSteeringAngle
 func getSteeringFactor() -> float:
-	var g = func(x): return (- x / 150) + 1
-	var f = func(x): return max(g.call(x), 0.25)
+	var g = func(x): return (- x / 150) + 1.07
+	# var f = func(x): return min(max(g.call(x), 0.25), 1.0)
+	var h = func(x): return (- x / 60) + 1.2
+	var f = func(x): return max(max(g.call(x), 0.25), h.call(x))
+
+	# var l = func(x): return -log(x / 18 + 0.7) + 1.15
+	# var f = func(x): return max(l.call(x), 0.25)
 
 	return f.call(getSpeed()) * maxSteeringAngle
 
