@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8mpq5k80nw87"]
+
+[ext_resource type="Script" path="res://PropPropertiesUI.gd" id="1_we2y5"]
+[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="2_sn0p8"]
+[ext_resource type="Texture2D" uid="uid://dvxlqb8ty68ye" path="res://Track Props/Chicane left.png" id="3_xpbdd"]
+[ext_resource type="Texture2D" uid="uid://cdrphd6rbd85y" path="res://Track Props/Chicane right.png" id="4_q45dc"]
+[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="5_1yls2"]
+[ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="6_fetov"]
+
+[node name="PropPropertiesUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_we2y5")
+
+[node name="Safezone" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -237.0
+offset_bottom = 470.0
+grow_horizontal = 0
+
+[node name="Panel3" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -227.0
+offset_top = 11.0
+offset_right = -13.0
+offset_bottom = 462.0
+grow_horizontal = 0
+
+[node name="TextureSelector" type="ItemList" parent="Panel3"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 32.0
+offset_right = 206.0
+offset_bottom = 451.0
+auto_height = true
+text_overrun_behavior = 0
+item_count = 5
+max_columns = 2
+same_column_width = true
+fixed_icon_size = Vector2i(90, 60)
+item_0/text = ""
+item_0/icon = ExtResource("2_sn0p8")
+item_1/text = ""
+item_1/icon = ExtResource("3_xpbdd")
+item_2/text = ""
+item_2/icon = ExtResource("4_q45dc")
+item_3/text = ""
+item_3/icon = ExtResource("5_1yls2")
+item_4/text = ""
+item_4/icon = ExtResource("6_fetov")
+
+[node name="Label" type="Label" parent="Panel3"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 67.0
+offset_bottom = 32.0
+text = "Texture"

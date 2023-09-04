@@ -28,6 +28,8 @@ signal editorModeDeletePressed()
 
 signal savePressed()
 
+signal fullScreenPressed()
+
 var mousePos2D: Vector2 = Vector2()
 var windowSize: Vector2 = Vector2()
 
@@ -86,7 +88,10 @@ func _input(event):
 		nextBuildModePressed.emit()
 	if Input.is_action_just_pressed("editor_save"):
 		savePressed.emit()
-		
+	
+
+	if Input.is_action_just_pressed("fullscreen"):
+		fullScreenPressed.emit()
 	
 
 	windowSize = DisplayServer.window_get_size()

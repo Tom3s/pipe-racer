@@ -5,8 +5,10 @@ var prefabMesher: PrefabMesher
 var editorStateMachine: EditorStateMachine
 var camera: EditorCamera
 var map: Map
-var prefabPropertiesUI: PrefabPropertiesUI
 var propPlacer: PropPlacer
+
+var prefabPropertiesUI: PrefabPropertiesUI
+var propPropertiesUI: PropPropertiesUI
 
 func _ready():
 	# assign nodes
@@ -16,7 +18,11 @@ func _ready():
 	camera = %EditorCamera
 	map = %Map
 	prefabPropertiesUI = %PrefabPropertiesUI
+	propPropertiesUI = %PropPropertiesUI
 	propPlacer = %PropPlacer
+
+	prefabPropertiesUI.visible = true
+	propPropertiesUI.visible = false
 
 	propPlacer.startLinePreview.visible = false
 	prefabMesher.debug = true
@@ -72,6 +78,8 @@ func connectSignals():
 	prefabPropertiesUI.curveSidewaysChanged.connect(onPrefabPropertiesUI_curveSidewaysChanged)
 	prefabPropertiesUI.roadTypeChanged.connect(onPrefabPropertiesUI_roadTypeChanged)
 
+	propPropertiesUI.textureIndexChanged.connect(onPropPropertiesUI_textureIndexChanged)
+
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
 
@@ -87,12 +95,15 @@ func connectSignals():
 
 	editorInputHandler.savePressed.connect(onEditorInputHandler_savePressed)
 
+	editorInputHandler.fullScreenPressed.connect(onEditorInputHandler_fullScreenPressed)
+
 	editorStateMachine.buildModeChanged.connect(onEditorStateMachine_buildModeChanged)
 
 	map.undidLastOperation.connect(onMap_undidLastOperation)
 	map.redidLastOperation.connect(onMap_redidLastOperation)
 	map.noOperationToBeUndone.connect(onMap_noOperationToBeUndone)
 	map.noOperationToBeRedone.connect(onMap_noOperationToBeRedone)
+
 
 
 func onPrefabMesher_propertiesUpdated():
@@ -292,6 +303,9 @@ func onPrefabPropertiesUI_curveSidewaysChanged(value: int):
 func onPrefabPropertiesUI_roadTypeChanged(value: int):
 	prefabMesher.roadType = value
 
+func onPropPropertiesUI_textureIndexChanged(value: int):
+	propPlacer.currentBillboardTexture = value
+
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
 	if editorStateMachine.inBuildState():
@@ -367,3 +381,17 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 		propPlacer.visible = false
 		editorStateMachine.currentPlacerNode = prefabMesher
 
+	if newMode == editorStateMachine.EDITOR_BUILD_MODE_PROP:
+		propPropertiesUI.visible = true
+		prefabPropertiesUI.visible = false
+	else:
+		propPropertiesUI.visible = false
+		prefabPropertiesUI.visible = true
+
+func onEditorInputHandler_fullScreenPressed():
+	var nextWindowMode = DisplayServer.window_get_mode()
+	if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
+		nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
+	else:
+		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(nextWindowMode)

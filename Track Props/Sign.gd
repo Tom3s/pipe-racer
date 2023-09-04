@@ -21,6 +21,9 @@ func isProp():
 func setTexture(texture: Texture, index: int) -> void:
 	billboardTexture = texture
 	billboardTextureIndex = index
+
+	if is_node_ready():
+		board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
 	
 
 func _ready():
@@ -32,7 +35,8 @@ func _ready():
 	%Board.scale = newScale
 
 
-	board.set_surface_override_material(0, billboardMaterial.duplicate())
-	# board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
+	var newMaterial = billboardMaterial.duplicate()
+	newMaterial.set_shader_parameter("Texture", billboardTexture)
+	board.set_surface_override_material(0, newMaterial)
 
 	print("Prop ready")

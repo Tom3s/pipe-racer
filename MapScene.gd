@@ -22,7 +22,7 @@ var frictions = [
 	0.3 # GRASS
 ]
 
-var accelerationPenalties = [
+var accelerationMultipliers = [
 	0.0, # ROAD
 	0.8 # GRASS
 ]
@@ -112,7 +112,7 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 
 	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
 	prefab.friction = frictions[prefabData["roadType"]]
-	prefab.accelerationPenalty = accelerationPenalties[prefabData["roadType"]]
+	prefab.accelerationPenalty = accelerationMultipliers[prefabData["roadType"]]
 	prefab.create_trimesh_collision()
 
 	prefab.calculateCorners()
@@ -338,22 +338,29 @@ func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
 	# var propObject = propPlacer.getPropObject()
 	# flipping order, because the old object is the one that is already in the scene
-	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation)
-	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation)
+	var index = propPlacer.currentBillboardTexture
+	var texture = propPlacer.billboardTextures[index]
+	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture)
+	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture)
 
-func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture):
 	propObject.global_position = propPos
 	propObject.global_rotation = propRotation
+	propObject.setTexture(texture, index)
 
-func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
+func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture):
 	safeResizeStack()
 
 	operationStack.append({
 		"propObject": propObject,
 		"oldPosition": propObject.global_position,
 		"oldRotation": propObject.global_rotation,
+		"oldTextureIndex": propObject.billboardTextureIndex,
+		"oldTexture": propObject.billboardTexture,
 		"newPosition": propPos,
 		"newRotation": propRotation,
+		"newTextureIndex": index,
+		"newTexture": texture,
 		"operation": UPDATED_PROP
 	})
 	lastOperationIndex += 1
@@ -438,7 +445,7 @@ func undo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		addPropObject(lastOperation["propObject"], lastOperation["position"], lastOperation["rotation"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"])
+		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"], lastOperation["oldTextureIndex"], lastOperation["oldTexture"])
 
 	else:
 		return
@@ -475,7 +482,7 @@ func redo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		removePropObject(lastOperation["propObject"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"])
+		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"], lastOperation["newTextureIndex"], lastOperation["newTexture"])
 
 	else:
 		lastOperationIndex -= 1
