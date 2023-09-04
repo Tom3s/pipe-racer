@@ -23,7 +23,6 @@ unique_name_in_owner = true
 
 [node name="Map" parent="." instance=ExtResource("1_d0rt7")]
 unique_name_in_owner = true
-loadFrom = "res://builderTracks/track_2023-09-04T20-04-04.json"
 
 [node name="TestTrackEnv" parent="." instance=ExtResource("2_l42gs")]
 

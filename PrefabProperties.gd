@@ -25,7 +25,7 @@ func _init(data, frictionMultiplier = 1.0, accelerationPenaltyFactor = 0.0):
 func getFriction() -> float:
 	return friction
 
-func getAccelerationPenalty() -> float:
+func getAccelerationMultiplier() -> float:
 	return accelerationPenalty
 
 func selectionChanged(value):

@@ -14,17 +14,20 @@ var props: Node3D
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
 var materials = [
 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
-	preload("res://grass2.tres") # GRASS
+	preload("res://grass2.tres"), # GRASS
+	preload("res://Track Props/DirtMaterial.tres"), # DIRT
 ]
 
 var frictions = [
 	1.0, # ROAD
-	0.3 # GRASS
+	0.3, # GRASS
+	0.35 # DIRT
 ]
 
 var accelerationMultipliers = [
-	0.0, # ROAD
-	0.8 # GRASS
+	1.0, # ROAD
+	0.2, # GRASS
+	0.9 # DIRT
 ]
 
 var operationStack: Array = []

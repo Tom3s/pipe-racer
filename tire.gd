@@ -57,7 +57,7 @@ func _physics_process(delta):
 				accelerationMultiplier = collider.getAccelerationMultiplier()
 			else:
 				frictionMultiplier = 1.0
-				accelerationMultiplier = 0.0
+				accelerationMultiplier = 1.0
 
 			car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint, frictionMultiplier)
 		
