@@ -1,0 +1,12 @@
+[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://dvof0mms3yhd8"]
+
+[ext_resource type="Shader" uid="uid://be7y4x0cky4as" path="res://Track Props/smokeParticleShader.tres" id="1_echmt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fbwj2"]
+render_priority = 0
+shader = ExtResource("1_echmt")
+
+[resource]
+material = SubResource("ShaderMaterial_fbwj2")
+size = Vector2(0.2, 0.2)
+orientation = 2
