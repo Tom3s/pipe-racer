@@ -1,12 +1,13 @@
-[gd_scene load_steps=27 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=29 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
 [ext_resource type="Script" path="res://InputHandlerNew.gd" id="3_kfdpd"]
 [ext_resource type="Script" path="res://Tire.gd" id="3_qi2cw"]
 [ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
-[ext_resource type="Shader" uid="uid://tfdck0ea3rd4" path="res://carMaterial/SmokeMaterialBillboard.tres" id="5_7q8eh"]
+[ext_resource type="Shader" uid="uid://ddhtdhtpsdk5r" path="res://Track Props/dirtParticleShader.tres" id="5_0o4p6"]
 [ext_resource type="Script" path="res://BottomOut.gd" id="5_rud3q"]
+[ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
 [ext_resource type="Script" path="res://CarSoundEffects.gd" id="9_n17k7"]
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
@@ -56,9 +57,14 @@ turbulence_enabled = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
 render_priority = 0
-shader = ExtResource("5_7q8eh")
+shader = ExtResource("5_0o4p6")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lk12m"]
+material = SubResource("ShaderMaterial_ggqdx")
+size = Vector2(0.2, 0.2)
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lagfo"]
 material = SubResource("ShaderMaterial_ggqdx")
 size = Vector2(0.2, 0.2)
 orientation = 2
@@ -148,6 +154,13 @@ randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_k33ti")
 draw_pass_1 = SubResource("PlaneMesh_lk12m")
 
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
+
 [node name="TireFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
@@ -168,6 +181,13 @@ lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_k33ti")
 draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
@@ -190,6 +210,13 @@ randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_k33ti")
 draw_pass_1 = SubResource("PlaneMesh_lk12m")
 
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
+
 [node name="TireBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
@@ -210,6 +237,13 @@ lifetime = 0.71
 randomness = 0.05
 process_material = SubResource("ParticleProcessMaterial_k33ti")
 draw_pass_1 = SubResource("PlaneMesh_lk12m")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="BottomOutFL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true

@@ -21,13 +21,19 @@ var materials = [
 var frictions = [
 	1.0, # ROAD
 	0.3, # GRASS
-	0.35 # DIRT
+	0.3 # DIRT
 ]
 
 var accelerationMultipliers = [
 	1.0, # ROAD
 	0.2, # GRASS
-	0.9 # DIRT
+	1.0 # DIRT
+]
+
+var smokeParticles =[
+	true, # ROAD
+	true, # GRASS
+	false # DIRT
 ]
 
 var operationStack: Array = []
@@ -116,6 +122,7 @@ func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, 
 	prefab.mesh.surface_set_material(0, materials[prefabData["roadType"]])
 	prefab.friction = frictions[prefabData["roadType"]]
 	prefab.accelerationPenalty = accelerationMultipliers[prefabData["roadType"]]
+	prefab.smokeParticles = smokeParticles[prefabData["roadType"]]
 	prefab.create_trimesh_collision()
 
 	prefab.calculateCorners()

@@ -4,6 +4,7 @@ class_name PrefabProperties
 var prefabData: Dictionary = {}
 var friction: float = 1.0
 var accelerationPenalty: float = 0.0
+var smokeParticles: bool = true
 
 var selected: bool = false:
 	set(value):
@@ -27,6 +28,9 @@ func getFriction() -> float:
 
 func getAccelerationMultiplier() -> float:
 	return accelerationPenalty
+
+func getSmokeParticles() -> bool:
+	return smokeParticles
 
 func selectionChanged(value):
 	if value:

@@ -5,7 +5,8 @@ var targetRotation: float = 0.0
 var car: CarController = null
 
 var tireModel = null
-var smokeEmitter = null
+var smokeEmitter: GPUParticles3D  = null
+var dirtEmitter: GPUParticles3D = null
 
 @export
 var steeringSpeed: float = 0.05
@@ -25,12 +26,16 @@ func _ready():
 	smokeEmitter = get_child(1)
 	smokeEmitter.emitting = false
 	smokeEmitter.one_shot = false
+	dirtEmitter = get_child(2)
+	dirtEmitter.emitting = false
+	dirtEmitter.one_shot = false
 	set_physics_process(true)
 
 
 var frictionMultiplier: float = 1.0
 var accelerationMultiplier: float = 0.0
 var collider: Node3D = null
+var useSmokeParticles: bool = true
 func _physics_process(delta):
 	if !car.paused:
 		rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
@@ -55,9 +60,11 @@ func _physics_process(delta):
 			if collider.has_method("getFriction"):
 				frictionMultiplier = collider.getFriction()
 				accelerationMultiplier = collider.getAccelerationMultiplier()
+				useSmokeParticles = collider.getSmokeParticles()
 			else:
 				frictionMultiplier = 1.0
 				accelerationMultiplier = 1.0
+				useSmokeParticles = true
 
 			car.applyFriction(global_transform.basis.x, tireVelocityActual, tireMass, contactPoint, frictionMultiplier)
 		
@@ -67,10 +74,12 @@ func _physics_process(delta):
 			
 			tireModel.rotate_x(tireDistanceTravelled / 0.375)
 			
-			smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 15
+			smokeEmitter.emitting = car.slidingFactor > 0.1 && car.getSpeed() > 15 && useSmokeParticles
+			dirtEmitter.emitting = car.getSpeed() > 15 && !useSmokeParticles
 			# smokeEmitter.emitting = car.slidingFactor > 0.1
 		else:
 			car.state.groundedTires[tireIndex] = 0		
 			tireModel.position.y = target_position.y + 0.375
 			smokeEmitter.emitting = false
+			dirtEmitter.emitting = false
 	

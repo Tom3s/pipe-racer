@@ -115,8 +115,8 @@ func getNewViewport() -> SubViewport:
 	return viewPort
 
 func _ready():
-	var player2 = PlayerData.new(0, "mogyi", Color.DARK_RED)
-	var player1 = PlayerData.new(1, "tometo", Color.TURQUOISE)
+	var player1 = PlayerData.new(0, "mogyi", Color.DARK_RED)
+	var player2 = PlayerData.new(1, "tometo", Color.TURQUOISE)
 	var player3 = PlayerData.new(2, "Player 3", Color(0, 1, 0))
 	var player4 = PlayerData.new(3, "Player 4", Color(1, 1, 1))
 
@@ -134,7 +134,7 @@ func _ready():
 	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T20-31-46.json", 3)
 	# 20:712
 	raceSettings.addPlayer(player1)
-	# raceSettings.addPlayer(player2)
+	raceSettings.addPlayer(player2)
 	# raceSettings.addPlayer(player3)
 	# raceSettings.addPlayer(player4)
 
