@@ -58,7 +58,9 @@ func _physics_process(_delta: float) -> void:
 
 
 func setSpeedText(speed: float) -> void:
-	speedometer.text = str(int(speed)) + " KM/H"
+	# convert speed from m/s to km/h
+	# speedometer.text = str(int(speed)) + " M/s | " + str(int(speed * 1.25)) + " Ku/H" 
+	speedometer.text = str(int(speed * 1.25)) + " KM/H"
 
 func setPositionText(currentPosition: int, total: int) -> void:
 	positionLabel.text = "Pos: " + str(currentPosition) + "/" + str(total)

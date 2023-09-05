@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=62 format=3 uid="uid://cf00oa4xifmry"]
+[gd_resource type="VisualShader" load_steps=63 format=3 uid="uid://cf00oa4xifmry"]
 
 [ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="1_ybjc6"]
 [ext_resource type="Script" path="res://addons/shaderV/tools/TimeScaled.gd" id="2_72js4"]
@@ -249,6 +249,9 @@ y *= y;"
 size = Vector2(372.148, 219.398)
 expression = "y = ((sin(x) + 1.0)/2.0);
 y *= y;"
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_ckoan"]
+function = 31
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_vx1k4"]
 default_input_values = [1, 1.571, 2, Vector3(0.5, 0.5, 0)]
@@ -757,6 +760,10 @@ void fragment() {
 	float n_out59p0 = n_out53p0 + n_in59p1;
 
 
+// FloatFunc:69
+	float n_out69p0 = 1.0 - n_out59p0;
+
+
 // FloatOp:64
 	float n_out64p0 = n_out62p0 * n_out59p0;
 
@@ -776,6 +783,7 @@ void fragment() {
 
 // Output:0
 	ALBEDO = vec3(n_out56p0.xyz);
+	ALPHA = n_out69p0;
 	METALLIC = n_out59p0;
 	ROUGHNESS = n_out65p0;
 	EMISSION = vec3(n_out52p0.xyz);
@@ -783,7 +791,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-578.168, 617.313)
+graph_offset = Vector2(1587.2, 140.837)
 nodes/fragment/0/position = Vector2(3000, 440)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ttc4p")
 nodes/fragment/2/position = Vector2(-1380, 100)
@@ -912,4 +920,6 @@ nodes/fragment/68/input_ports = "0,0,x;"
 nodes/fragment/68/output_ports = "0,0,y;"
 nodes/fragment/68/expression = "y = ((sin(x) + 1.0)/2.0);
 y *= y;"
-nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 3, 0, 6, 1, 7, 0, 4, 0, 2, 0, 7, 0, 9, 0, 4, 1, 10, 0, 9, 1, 11, 0, 3, 0, 14, 0, 15, 1, 16, 0, 17, 0, 15, 0, 17, 1, 13, 0, 14, 0, 23, 0, 21, 0, 19, 0, 24, 0, 20, 0, 24, 1, 24, 0, 18, 1, 17, 0, 18, 0, 25, 0, 20, 1, 21, 0, 25, 0, 14, 0, 25, 1, 26, 0, 27, 0, 18, 0, 28, 0, 27, 0, 28, 1, 29, 0, 27, 1, 30, 0, 31, 0, 31, 0, 32, 0, 21, 0, 32, 1, 32, 0, 29, 1, 6, 0, 36, 0, 33, 0, 36, 1, 34, 0, 41, 1, 35, 0, 42, 1, 43, 0, 44, 0, 45, 0, 46, 0, 4, 0, 47, 0, 44, 0, 47, 1, 47, 0, 41, 0, 4, 0, 48, 0, 46, 0, 48, 1, 48, 0, 42, 0, 50, 0, 49, 4, 28, 0, 51, 0, 31, 0, 52, 1, 49, 0, 51, 1, 51, 0, 52, 0, 31, 0, 53, 0, 54, 0, 55, 0, 53, 0, 55, 1, 52, 0, 56, 0, 56, 0, 0, 0, 53, 0, 59, 0, 59, 0, 60, 1, 51, 0, 60, 0, 52, 0, 0, 5, 62, 0, 63, 0, 63, 0, 56, 1, 55, 0, 63, 1, 7, 0, 62, 0, 62, 0, 64, 0, 59, 0, 64, 1, 59, 0, 0, 2, 64, 0, 65, 0, 65, 0, 0, 3, 36, 0, 66, 0, 66, 0, 15, 0, 41, 0, 68, 0, 68, 0, 20, 0, 42, 0, 67, 0, 67, 0, 29, 0)
+nodes/fragment/69/node = SubResource("VisualShaderNodeFloatFunc_ckoan")
+nodes/fragment/69/position = Vector2(2740, 420)
+nodes/fragment/connections = PackedInt32Array(4, 0, 6, 0, 3, 0, 6, 1, 7, 0, 4, 0, 2, 0, 7, 0, 9, 0, 4, 1, 10, 0, 9, 1, 11, 0, 3, 0, 14, 0, 15, 1, 16, 0, 17, 0, 15, 0, 17, 1, 13, 0, 14, 0, 23, 0, 21, 0, 19, 0, 24, 0, 20, 0, 24, 1, 24, 0, 18, 1, 17, 0, 18, 0, 25, 0, 20, 1, 21, 0, 25, 0, 14, 0, 25, 1, 26, 0, 27, 0, 18, 0, 28, 0, 27, 0, 28, 1, 29, 0, 27, 1, 30, 0, 31, 0, 31, 0, 32, 0, 21, 0, 32, 1, 32, 0, 29, 1, 6, 0, 36, 0, 33, 0, 36, 1, 34, 0, 41, 1, 35, 0, 42, 1, 43, 0, 44, 0, 45, 0, 46, 0, 4, 0, 47, 0, 44, 0, 47, 1, 47, 0, 41, 0, 4, 0, 48, 0, 46, 0, 48, 1, 48, 0, 42, 0, 50, 0, 49, 4, 28, 0, 51, 0, 31, 0, 52, 1, 49, 0, 51, 1, 51, 0, 52, 0, 31, 0, 53, 0, 54, 0, 55, 0, 53, 0, 55, 1, 52, 0, 56, 0, 56, 0, 0, 0, 53, 0, 59, 0, 59, 0, 60, 1, 51, 0, 60, 0, 52, 0, 0, 5, 62, 0, 63, 0, 63, 0, 56, 1, 55, 0, 63, 1, 7, 0, 62, 0, 62, 0, 64, 0, 59, 0, 64, 1, 59, 0, 0, 2, 64, 0, 65, 0, 65, 0, 0, 3, 36, 0, 66, 0, 66, 0, 15, 0, 41, 0, 68, 0, 68, 0, 20, 0, 42, 0, 67, 0, 67, 0, 29, 0, 59, 0, 69, 0, 69, 0, 0, 1)

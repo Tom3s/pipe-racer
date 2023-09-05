@@ -319,8 +319,29 @@ func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2
 	for _x in (PrefabConstants.WIDTH_SEGMENTS + 1): 
 		normalArray.push_back(normal)
 	
-	
 	return normalArray
+# func getNormalArray(vertices: Array[Vector3]) -> Array[Vector3]:
+# 	var normalArray: Array[Vector3] = []
+	
+# 	for index in vertices.size() - PrefabConstants.WIDTH_SEGMENTS - 1:
+# 		var a: Vector3 = vertices[index + 1]
+# 		var b: Vector3 = vertices[index]
+# 		var c: Vector3 = vertices[index + PrefabConstants.WIDTH_SEGMENTS + 1]
+
+# 		var normal = ((b - a).cross(c - a)).normalized()
+
+# 		normalArray.push_back(normal)
+
+# 	for index in range(vertices.size() - PrefabConstants.WIDTH_SEGMENTS - 1, vertices.size()):
+# 		var a: Vector3 = vertices[vertices.size() - index]
+# 		var b: Vector3 = vertices[vertices.size() - index - 1]
+# 		var c: Vector3 = vertices[vertices.size() - index - PrefabConstants.WIDTH_SEGMENTS - 1]
+
+# 		var normal = ((b - a).cross(c - a)).normalized()
+
+# 		normalArray.push_back(normal)
+	
+# 	return normalArray
 
 func getVerticesAcross(leftMostVertex: Vector3, rightMostVertex: Vector3, leftHeight: float, rightHeight: float) -> Array[Vector3]:
 	var vertices: Array[Vector3] = []
@@ -366,7 +387,7 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	var meshData = []
 	meshData.resize(ArrayMesh.ARRAY_MAX)
 	
-	var vertices = []
+	var vertices: Array[Vector3] = []
 
 	for index in rightPositions.size():
 		var rightMostVertex = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
@@ -386,6 +407,7 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	meshData[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array(getUVArray())
 	
 	meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(leftPositions, rightPositions, leftHeights, rightHeights))
+	# meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(vertices))
 	
 	mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)

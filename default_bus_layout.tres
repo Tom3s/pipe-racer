@@ -1,4 +1,31 @@
-[gd_resource type="AudioBusLayout" format=3 uid="uid://n6b4x02624r2"]
+[gd_resource type="AudioBusLayout" load_steps=5 format=3 uid="uid://n6b4x02624r2"]
+
+[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_vqdmd"]
+resource_name = "PitchShift"
+pitch_scale = 0.85
+
+[sub_resource type="AudioEffectDistortion" id="AudioEffectDistortion_kes0b"]
+resource_name = "Distortion"
+mode = 4
+drive = 0.33
+post_gain = -4.89
+
+[sub_resource type="AudioEffectEQ10" id="AudioEffectEQ10_544my"]
+resource_name = "EQ10"
+band_db/31_hz = 1.0
+band_db/62_hz = -1.5
+band_db/125_hz = -3.0
+band_db/250_hz = -4.6
+band_db/500_hz = -6.7
+band_db/1000_hz = -3.6
+band_db/2000_hz = -2.0
+band_db/4000_hz = 2.6
+band_db/8000_hz = 6.6
+band_db/16000_hz = -16.4
+
+[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_wtpsv"]
+resource_name = "PitchShift"
+pitch_scale = 1.05
 
 [resource]
 bus/0/volume_db = -9.63278
@@ -20,3 +47,11 @@ bus/3/mute = false
 bus/3/bypass_fx = false
 bus/3/volume_db = -3.32444
 bus/3/send = &"SFX"
+bus/3/effect/0/effect = SubResource("AudioEffectPitchShift_vqdmd")
+bus/3/effect/0/enabled = true
+bus/3/effect/1/effect = SubResource("AudioEffectDistortion_kes0b")
+bus/3/effect/1/enabled = true
+bus/3/effect/2/effect = SubResource("AudioEffectEQ10_544my")
+bus/3/effect/2/enabled = true
+bus/3/effect/3/effect = SubResource("AudioEffectPitchShift_wtpsv")
+bus/3/effect/3/enabled = false

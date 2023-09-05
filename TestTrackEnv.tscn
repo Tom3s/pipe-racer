@@ -14,7 +14,6 @@ sky = SubResource("Sky_ucuut")
 ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
 reflected_light_source = 2
-ssr_enabled = true
 sdfgi_use_occlusion = true
 glow_enabled = true
 fog_light_color = Color(0.611765, 0.643137, 0.698039, 1)

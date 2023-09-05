@@ -14,7 +14,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.739014, 1.68405)
 script = ExtResource("1_71pax")
 GEAR_SHIFT_PULLBACK = 0.5
 GEAR_SHIFT_SPEED = 0.03
-PITCH_HARSHNESS = 0.8
+PITCH_FACTOR = 1.2
+PITCH_HARSHNESS = 0.65
 GEAR_SHIFT_COOLDOWN_DEFAULT = 0.0
 
 [node name="Idle" type="AudioStreamPlayer" parent="."]
