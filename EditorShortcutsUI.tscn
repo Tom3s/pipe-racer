@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://0u42v7u8akxk"]
+
+[ext_resource type="Script" path="res://EditorShortcutsUI.gd" id="1_7cnup"]
+[ext_resource type="Texture2D" uid="uid://dam3u2pifje8i" path="res://Editor Icons/screwdriver-wrench-solid.svg" id="1_i20p7"]
+[ext_resource type="Texture2D" uid="uid://bsu5nu3i5aj55" path="res://Editor Icons/pen-to-square-solid.svg" id="2_sh6s4"]
+[ext_resource type="Texture2D" uid="uid://bkjcetuvutsxp" path="res://Editor Icons/trash-can-solid.svg" id="3_7pdwe"]
+
+[node name="EditorShortcutsUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7cnup")
+
+[node name="Safezone" type="Panel" parent="."]
+layout_mode = 1
+offset_right = 195.0
+offset_bottom = 205.0
+
+[node name="EditorModeSelector" type="ItemList" parent="Safezone"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 190.0
+offset_bottom = 75.0
+focus_mode = 0
+auto_height = true
+item_count = 3
+max_columns = 3
+same_column_width = true
+icon_mode = 0
+fixed_icon_size = Vector2i(30, 30)
+item_0/text = "Build"
+item_0/icon = ExtResource("1_i20p7")
+item_1/text = "Edit"
+item_1/icon = ExtResource("2_sh6s4")
+item_2/text = "Delete"
+item_2/icon = ExtResource("3_7pdwe")
+
+[node name="BuildModeSelector" type="ItemList" parent="Safezone"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 5.0
+offset_top = 81.0
+offset_right = 190.0
+offset_bottom = 200.0
+focus_mode = 0
+item_count = 4
+item_0/text = "Track"
+item_1/text = "Start"
+item_2/text = "Checkpoint"
+item_3/text = "Props"

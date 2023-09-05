@@ -71,6 +71,14 @@ func setEditorStateDelete() -> void:
 	editorState = EDITOR_STATE_DELETE
 	# clearSelection()
 
+func setEditorState(state: int) -> void:
+	if state == EDITOR_STATE_BUILD:
+		setEditorStateBuild()
+	elif state == EDITOR_STATE_EDIT:
+		setEditorStateEdit()
+	elif state == EDITOR_STATE_DELETE:
+		setEditorStateDelete()
+
 func setCurrentSelection(selection: Object) -> Object:
 
 	# if selection == currentSelection:

@@ -28,7 +28,7 @@ resource_name = "PitchShift"
 pitch_scale = 1.05
 
 [resource]
-bus/0/volume_db = -9.63278
+bus/0/volume_db = -7.27252
 bus/1/name = &"SFX"
 bus/1/solo = false
 bus/1/mute = false
@@ -45,7 +45,7 @@ bus/3/name = &"Engine Sound"
 bus/3/solo = false
 bus/3/mute = false
 bus/3/bypass_fx = false
-bus/3/volume_db = -3.32444
+bus/3/volume_db = 0.0
 bus/3/send = &"SFX"
 bus/3/effect/0/effect = SubResource("AudioEffectPitchShift_vqdmd")
 bus/3/effect/0/enabled = true

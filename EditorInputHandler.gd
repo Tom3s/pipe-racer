@@ -4,6 +4,7 @@ class_name EditorInputHandler
 var maxDistance: int = 2000
 
 const prefabSafeZone: Vector2i = Vector2i(235, 470)
+const shortcutSafeZone: Vector2i = Vector2i(195, 205)
 
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()
@@ -97,11 +98,16 @@ func _input(event):
 	windowSize = DisplayServer.window_get_size()
 	mousePos2D = get_viewport().get_mouse_position()
 
-	if mousePos2D.x > windowSize.x - prefabSafeZone.x && mousePos2D.y < prefabSafeZone.y:
+	if isMouseOverPrefabUI() || isMouseOverShortcutUI():
 		mouseOverUI = true
 	else:
 		mouseOverUI = false
 
+func isMouseOverPrefabUI() -> bool:
+	return mousePos2D.x > windowSize.x - prefabSafeZone.x && mousePos2D.y < prefabSafeZone.y
+
+func isMouseOverShortcutUI() -> bool:
+	return mousePos2D.x < shortcutSafeZone.x && mousePos2D.y < shortcutSafeZone.y
 
 func screenPointToRay() -> Vector3:
 	var spaceState = get_world_3d().direct_space_state

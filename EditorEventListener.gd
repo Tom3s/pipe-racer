@@ -9,6 +9,7 @@ var propPlacer: PropPlacer
 
 var prefabPropertiesUI: PrefabPropertiesUI
 var propPropertiesUI: PropPropertiesUI
+var editorShortcutsUI: EditorShortcutsUI
 
 func _ready():
 	# assign nodes
@@ -19,6 +20,8 @@ func _ready():
 	map = %Map
 	prefabPropertiesUI = %PrefabPropertiesUI
 	propPropertiesUI = %PropPropertiesUI
+	editorShortcutsUI = %EditorShortcutsUI
+
 	propPlacer = %PropPlacer
 
 	prefabPropertiesUI.visible = true
@@ -79,6 +82,9 @@ func connectSignals():
 	prefabPropertiesUI.roadTypeChanged.connect(onPrefabPropertiesUI_roadTypeChanged)
 
 	propPropertiesUI.textureIndexChanged.connect(onPropPropertiesUI_textureIndexChanged)
+
+	editorShortcutsUI.editorModeChanged.connect(onEditorShortcutsUI_editorModeChanged)
+	editorShortcutsUI.buildModeChanged.connect(onEditorShortcutsUI_buildModeChanged)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
@@ -306,6 +312,17 @@ func onPrefabPropertiesUI_roadTypeChanged(value: int):
 func onPropPropertiesUI_textureIndexChanged(value: int):
 	propPlacer.currentBillboardTexture = value
 
+func onEditorShortcutsUI_editorModeChanged(newMode: int):
+	if newMode == editorStateMachine.EDITOR_STATE_BUILD:
+		onEditorInputHandler_editorModeBuildPressed()
+	elif newMode == editorStateMachine.EDITOR_STATE_EDIT:
+		onEditorInputHandler_editorModeEditPressed()
+	elif newMode == editorStateMachine.EDITOR_STATE_DELETE:
+		onEditorInputHandler_editorModeDeletePressed()
+
+func onEditorShortcutsUI_buildModeChanged(newMode: int):
+	editorStateMachine.buildMode = newMode
+
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
 	if editorStateMachine.inBuildState():
@@ -344,12 +361,14 @@ func onEditorInputHandler_editorModeBuildPressed():
 		map.update(oldSelection, prefabMesher)
 		editorStateMachine.clearSelection()
 	# onEditorStateMachine_buildModeChanged(editorStateMachine.buildMode)
+	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_BUILD)
 	print("Build mode")
 
 func onEditorInputHandler_editorModeEditPressed():
 	editorStateMachine.setEditorStateEdit()
 	prefabMesher.visible = false
 	propPlacer.visible = false
+	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_EDIT)
 	print("Edit mode")
 
 func onEditorInputHandler_editorModeDeletePressed():
@@ -360,6 +379,7 @@ func onEditorInputHandler_editorModeDeletePressed():
 		editorStateMachine.clearSelection()
 	prefabMesher.visible = false
 	propPlacer.visible = false
+	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_DELETE)
 	print("Delete mode")
 
 func onEditorInputHandler_prevBuildModePressed():
@@ -387,6 +407,8 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 	else:
 		propPropertiesUI.visible = false
 		prefabPropertiesUI.visible = true
+	
+	editorShortcutsUI.changeBuildMode(newMode)
 
 func onEditorInputHandler_fullScreenPressed():
 	var nextWindowMode = DisplayServer.window_get_mode()
