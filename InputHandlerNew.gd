@@ -44,6 +44,8 @@ func _physics_process(delta):
 		car.state.setReadyTrue()
 	if Input.is_action_just_pressed(playerPrefix + "reset"):
 		car.state.setResetting()
+	if Input.is_action_just_pressed(playerPrefix + "change_camera_mode"):
+		car.changeCameraMode.emit()
 
 	if !car.state.hasControl:
 		tires[0].targetRotation = 0

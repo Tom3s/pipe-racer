@@ -128,7 +128,7 @@ func _ready():
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-01T22-50-49.json", 7)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T12-50-40.json", 5)
 	# cool track with proper editor
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T16-41-15.json", 5)
+	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T16-41-15.json", 4)
 	# another cool track with proper editor
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T23-25-13.json", 5)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T20-31-46.json", 3)

@@ -44,4 +44,4 @@ respawnPosition = Vector3(-10, 5, 0)
 respawnRotation = Vector3(0, 1.571, 0)
 
 [node name="Map" parent="." instance=ExtResource("6_50qb3")]
-loadFrom = "res://builderTracks/track_2023-08-28T13-12-49.json"
+loadFrom = "res://builderTracks/track_2023-09-04T23-52-23.json"

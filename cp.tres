@@ -264,7 +264,7 @@ operator = 2
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha;
 
 uniform vec4 ring_color1 : source_color = vec4(1.000000, 0.000000, 0.000000, 1.000000);
 uniform int Segments_Main_Rings : hint_range(2, 100, 2) = 10;
@@ -791,7 +791,8 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(1587.2, 140.837)
+graph_offset = Vector2(1604.2, 272.837)
+flags/depth_prepass_alpha = true
 nodes/fragment/0/position = Vector2(3000, 440)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ttc4p")
 nodes/fragment/2/position = Vector2(-1380, 100)

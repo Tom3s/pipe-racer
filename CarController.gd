@@ -107,7 +107,7 @@ signal respawned(playerIndex: int)
 signal finishedRace(playerIndex: int)
 signal isReady(playerIndex: int)
 signal isResetting(playerIndex: int, resetting: bool)
-
+signal changeCameraMode()
 
 
 
