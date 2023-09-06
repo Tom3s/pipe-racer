@@ -49,5 +49,5 @@ func onCloseButton_pressed():
 
 func remapVolume(value: float):
 	# return -80 - 80 * (log(value) / log(10))
-	return log(value) / log(10) - 2
+	return max((log(value) / log(10) - 2) * 20, -80)
 	
