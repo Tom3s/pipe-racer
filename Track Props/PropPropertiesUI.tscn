@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://c8mpq5k80nw87"]
+[gd_scene load_steps=8 format=3 uid="uid://c8mpq5k80nw87"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_74pes"]
 [ext_resource type="Script" path="res://PropPropertiesUI.gd" id="1_we2y5"]
 [ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="2_sn0p8"]
 [ext_resource type="Texture2D" uid="uid://dvxlqb8ty68ye" path="res://Track Props/Chicane left.png" id="3_xpbdd"]
@@ -15,6 +16,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("1_74pes")
 script = ExtResource("1_we2y5")
 
 [node name="Safezone" type="Panel" parent="."]

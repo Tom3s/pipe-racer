@@ -14,6 +14,7 @@ extends Control
 @onready var raceMapLoader: RaceMapLoader = %RaceMapLoader
 @onready var editorMapLoader: EditorMapLoader = %EditorMapLoader
 
+@onready var musicPlayer: MusicPlayer = %MusicPlayer
 
 func _ready():
 	nickname.text = Playerstats.PLAYER_NAME
@@ -34,6 +35,8 @@ func connectSignals():
 
 	raceMapLoader.backPressed.connect(onRaceMapLoader_backPressed)
 	editorMapLoader.backPressed.connect(onEditorMapLoader_backPressed)
+	editorMapLoader.enteredMapEditor.connect(onEditorMapLoader_enteredMapEditor)
+	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 
 
 func onPlayButton_pressed():
@@ -72,3 +75,11 @@ func onTextChanged(newText: String) -> void:
 
 func onColorChanged(new_color):
 	Playerstats.PLAYER_COLOR = new_color
+
+func onEditorMapLoader_enteredMapEditor():
+	%Background.visible = false
+	musicPlayer.stopMusic()
+
+func onEditorMapLoader_exitedMapEditor():
+	%Background.visible = true
+	musicPlayer.playMenuMusic()

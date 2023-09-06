@@ -113,6 +113,7 @@ func connectSignals():
 	trackMetadataUI.trackNameChanged.connect(onTrackMetadataUI_trackNameChanged)
 	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
 	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
+	trackMetadataUI.applyPressed.connect(onTrackMetadataUI_closePressed)
 
 	pauseMenu.resumePressed.connect(onEditorInputHandler_pausePressed)
 	pauseMenu.exitPressed.connect(onEditorExited)

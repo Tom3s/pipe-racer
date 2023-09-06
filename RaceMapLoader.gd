@@ -15,6 +15,7 @@ signal backPressed()
 func _ready():
 	playerSelectorMenu.visible = true
 	mapLoader.visible = false
+	mapLoader.showNewButton(false)
 	connectSignals()
 
 func connectSignals():

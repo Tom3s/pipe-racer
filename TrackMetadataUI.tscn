@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xwrlnq5s5gin"]
+[gd_scene load_steps=3 format=3 uid="uid://xwrlnq5s5gin"]
 
 [ext_resource type="Script" path="res://TrackMetadataUI.gd" id="1_60hnn"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_uslow"]
 
 [node name="TrackMetadataUI" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_uslow")
 script = ExtResource("1_60hnn")
 
 [node name="Panel" type="Panel" parent="."]
@@ -111,7 +113,6 @@ grow_vertical = 2
 [node name="ApplyButton" type="Button" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "Apply"
 
 [node name="CloseButton" type="Button" parent="HBoxContainer"]

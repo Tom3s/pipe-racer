@@ -4,6 +4,7 @@ class_name MapLoader
 @onready var trackList: ItemList = %TrackList
 @onready var loadButton: Button = %LoadButton
 @onready var backButton: Button = %BackButton
+@onready var newButton: Button = %NewButton
 
 var trackListItems: Array = []
 
@@ -13,6 +14,7 @@ signal backPressed()
 func _ready():
 	loadButton.pressed.connect(onLoadButton_pressed)
 	backButton.pressed.connect(onBackButton_pressed)
+	newButton.pressed.connect(onNewButton_pressed)
 
 	loadButton.disabled = true
 
@@ -45,3 +47,10 @@ func onLoadButton_pressed() -> void:
 func onBackButton_pressed() -> void:
 	visible = false
 	backPressed.emit()
+
+func onNewButton_pressed() -> void:
+	visible = false
+	trackSelected.emit("")
+
+func showNewButton(value: bool):
+	newButton.visible = value

@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dekkh255k7tti"]
+[gd_scene load_steps=8 format=3 uid="uid://dekkh255k7tti"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_h1vys"]
 [ext_resource type="Script" path="res://Tracks/PrefabPropertiesUI.gd" id="1_oof12"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3wny"]
@@ -32,6 +33,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
+theme = ExtResource("1_h1vys")
 script = ExtResource("1_oof12")
 
 [node name="Safezone" type="Panel" parent="."]
@@ -553,6 +555,8 @@ offset_top = 59.0
 offset_right = 59.0
 offset_bottom = 259.0
 rotation = -1.57079
+theme_override_font_sizes/font_size = 12
+text_overrun_behavior = 0
 item_count = 4
 item_0/text = "Road"
 item_1/text = "Grass"

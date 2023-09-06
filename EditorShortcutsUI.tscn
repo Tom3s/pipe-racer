@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://0u42v7u8akxk"]
+[gd_scene load_steps=6 format=3 uid="uid://0u42v7u8akxk"]
 
 [ext_resource type="Script" path="res://EditorShortcutsUI.gd" id="1_7cnup"]
 [ext_resource type="Texture2D" uid="uid://dam3u2pifje8i" path="res://Editor Icons/screwdriver-wrench-solid.svg" id="1_i20p7"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_xa2w3"]
 [ext_resource type="Texture2D" uid="uid://bsu5nu3i5aj55" path="res://Editor Icons/pen-to-square-solid.svg" id="2_sh6s4"]
 [ext_resource type="Texture2D" uid="uid://bkjcetuvutsxp" path="res://Editor Icons/trash-can-solid.svg" id="3_7pdwe"]
 
@@ -13,11 +14,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("1_xa2w3")
 script = ExtResource("1_7cnup")
 
 [node name="Safezone" type="Panel" parent="."]
 layout_mode = 1
-offset_right = 195.0
+offset_right = 220.0
 offset_bottom = 205.0
 
 [node name="EditorModeSelector" type="ItemList" parent="Safezone"]
@@ -25,7 +27,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 5.0
 offset_top = 4.0
-offset_right = 190.0
+offset_right = 214.0
 offset_bottom = 75.0
 focus_mode = 0
 auto_height = true
@@ -46,7 +48,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 5.0
 offset_top = 81.0
-offset_right = 190.0
+offset_right = 214.0
 offset_bottom = 200.0
 focus_mode = 0
 item_count = 4
@@ -60,8 +62,8 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -159.0
-offset_right = 158.0
+offset_left = -174.0
+offset_right = 176.0
 offset_bottom = 50.0
 grow_horizontal = 2
 

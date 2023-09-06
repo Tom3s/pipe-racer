@@ -82,6 +82,7 @@ func reset(checkpointCount: int, playerIndex: int):
 	placement = playerIndex + 1
 	isReady = false
 	isResetting = false
+	hasControl = true
 
 func setResetting():
 	isResetting = !isResetting

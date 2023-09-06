@@ -153,6 +153,7 @@ func onState_allPlayersReset():
 	musicPlayer.playMenuMusic()
 
 	for car in cars:
+		car.resumeMovement()
 		car.reset(map.start.getStartPosition(car.playerIndex, cars.size()), map.getCheckpointCount())
 	
 	for checkpoint in map.getCheckpoints():
@@ -170,6 +171,8 @@ func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
 	state.setPlayerReset(playerIndex, resetting)
 
 func onPauseMenu_exitPressed():
+	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
+	musicPlayer.playMenuMusic()
 	get_parent().exitPressed.emit()
 
 # func onState_allPlayersReset():
