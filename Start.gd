@@ -44,7 +44,7 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	return {
 		"position": spawnPosition,
-		"rotation": getRotationVector(-localBackwards, localRight)
+		"rotation": getRotationVector(-localBackwards, (-localBackwards).cross(raycastNormal).normalized())
 	}
 
 func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
