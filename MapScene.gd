@@ -10,6 +10,9 @@ var trackPieces: Node3D
 var checkPointSystem: Node3D
 var props: Node3D
 
+var trackName: String = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
+var lapCount: int = 3
+
 @onready
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
 var materials = [
@@ -551,10 +554,9 @@ func save():
 	saveToJSON()
 
 func saveToJSON():
-	var trackName = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
-
 	var trackData = {
 		"trackName": trackName,
+		"lapCount": lapCount,
 		"trackPieces": [],
 		"start": {
 			# "position": start.global_position,
@@ -635,6 +637,9 @@ func loadFromJSON(fileName: String):
 		return
 
 	clearMap()
+
+	trackName = trackData["trackName"]
+	lapCount = trackData["lapCount"]
 
 	if !trackData.has("trackPieces"):
 		print("Error loading map: no trackPieces")

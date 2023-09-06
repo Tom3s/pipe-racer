@@ -10,6 +10,7 @@ var propPlacer: PropPlacer
 var prefabPropertiesUI: PrefabPropertiesUI
 var propPropertiesUI: PropPropertiesUI
 var editorShortcutsUI: EditorShortcutsUI
+var trackMetadataUI: TrackMetadataUI
 
 var car: CarController
 var carCamera: FollowingCamera
@@ -24,6 +25,8 @@ func _ready():
 	prefabPropertiesUI = %PrefabPropertiesUI
 	propPropertiesUI = %PropPropertiesUI
 	editorShortcutsUI = %EditorShortcutsUI
+	trackMetadataUI = %TrackMetadataUI
+	trackMetadataUI.visible = false
 
 	propPlacer = %PropPlacer
 
@@ -97,9 +100,15 @@ func connectSignals():
 
 	editorShortcutsUI.editorModeChanged.connect(onEditorShortcutsUI_editorModeChanged)
 	editorShortcutsUI.buildModeChanged.connect(onEditorShortcutsUI_buildModeChanged)
+	editorShortcutsUI.propertiesPressed.connect(onEditorShortcutsUI_propertiesPressed)
+	editorShortcutsUI.savePressed.connect(onEditorInputHandler_savePressed)
 	editorShortcutsUI.undoPressed.connect(onEditorInputHandler_undoPressed)
 	editorShortcutsUI.redoPressed.connect(onEditorInputHandler_redoPressed)
 	editorShortcutsUI.testPressed.connect(onEditorInputHandler_testPressed)
+
+	trackMetadataUI.trackNameChanged.connect(onTrackMetadataUI_trackNameChanged)
+	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
+	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
@@ -345,6 +354,20 @@ func onEditorShortcutsUI_editorModeChanged(newMode: int):
 
 func onEditorShortcutsUI_buildModeChanged(newMode: int):
 	editorStateMachine.buildMode = newMode
+
+func onEditorShortcutsUI_propertiesPressed():
+	trackMetadataUI.visible = true
+	editorInputHandler.propertiesOpen = true
+
+func onTrackMetadataUI_closePressed():
+	# trackMetadataUI.visible = false
+	editorInputHandler.propertiesOpen = false
+
+func onTrackMetadataUI_trackNameChanged(newName: String):
+	map.trackName = newName
+
+func onTrackMetadataUI_lapCountChanged(newCount: int):
+	map.lapCount = newCount
 
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true

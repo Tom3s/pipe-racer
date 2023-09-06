@@ -60,8 +60,8 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -85.0
-offset_right = 84.0
+offset_left = -159.0
+offset_right = 158.0
 offset_bottom = 50.0
 grow_horizontal = 2
 
@@ -75,6 +75,21 @@ offset_top = 4.0
 offset_right = 77.5
 offset_bottom = 43.0
 grow_horizontal = 2
+
+[node name="PropertiesButton" type="Button" parent="Safezone2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Properties"
+
+[node name="SaveButton" type="Button" parent="Safezone2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Save"
+
+[node name="VSeparator" type="VSeparator" parent="Safezone2/HBoxContainer"]
+layout_mode = 2
 
 [node name="UndoButton" type="Button" parent="Safezone2/HBoxContainer"]
 unique_name_in_owner = true
@@ -90,7 +105,7 @@ focus_mode = 0
 disabled = true
 text = "Redo"
 
-[node name="VSeparator" type="VSeparator" parent="Safezone2/HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="Safezone2/HBoxContainer"]
 layout_mode = 2
 
 [node name="TestButton" type="Button" parent="Safezone2/HBoxContainer"]

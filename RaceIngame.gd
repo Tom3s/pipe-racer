@@ -30,6 +30,9 @@ func init(newRaceSettings: RaceSettings):
 	map.loadFrom = raceSettings.mapName
 	map.setIngame()
 
+	if raceSettings.nrLaps == -1:
+		raceSettings.nrLaps = map.lapCount
+
 	raceEventListener = %RaceEventListener
 	raceInputHandler = %RaceInputHandler
 
@@ -132,7 +135,7 @@ func _ready():
 	# another cool track with proper editor
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T23-25-13.json", 5)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T20-31-46.json", 3)
-	raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T23-52-23.json", 3)
+	raceSettings = RaceSettings.new("res://builderTracks/yeboo.json")
 	# 20:712
 	raceSettings.addPlayer(player1)
 	raceSettings.addPlayer(player2)

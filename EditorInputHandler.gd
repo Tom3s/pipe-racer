@@ -5,7 +5,7 @@ var maxDistance: int = 2000
 
 const prefabSafeZone: Vector2i = Vector2i(235, 470)
 const shortcutSafeZone: Vector2i = Vector2i(195, 205)
-const undoRedoSafeZone: Vector2i = Vector2i(169, 50)
+const undoRedoSafeZone: Vector2i = Vector2i(317, 50)
 
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()
@@ -39,6 +39,8 @@ var mouseOverUI: bool = false:
 	set(value):
 		mouseOverUI = mouseOverUIChanged(value)
 
+var propertiesOpen: bool = false
+
 func mouseOverUIChanged(value: bool) -> bool:
 	if value != mouseOverUI:
 		if value:
@@ -48,6 +50,17 @@ func mouseOverUIChanged(value: bool) -> bool:
 	return value
 
 func _input(event):
+
+	if Input.is_action_just_pressed("editor_save"):
+		savePressed.emit()
+	
+
+	if Input.is_action_just_pressed("fullscreen"):
+		fullScreenPressed.emit()
+
+	if propertiesOpen:
+		return
+	
 	if !Input.is_action_pressed("editor_look_around"):
 		mouseMovedTo.emit(screenPointToRay())
 
@@ -88,12 +101,7 @@ func _input(event):
 		prevBuildModePressed.emit()
 	if Input.is_action_just_pressed("editor_next_build_mode"):
 		nextBuildModePressed.emit()
-	if Input.is_action_just_pressed("editor_save"):
-		savePressed.emit()
-	
 
-	if Input.is_action_just_pressed("fullscreen"):
-		fullScreenPressed.emit()
 	
 
 	windowSize = DisplayServer.window_get_size()
