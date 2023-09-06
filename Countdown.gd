@@ -22,7 +22,12 @@ var shouldCountdown: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	musicPlayer = get_parent().get_parent().get_node("%MusicPlayer")
+	# musicPlayer = get_parent().get_parent().get_node("%MusicPlayer")
+	musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
+	# var tree = get_tree()
+	# var root = tree.root
+	# var node = root.get_node("MusicPlayer")
+	# musicPlayer.playMenuMusic()
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
 	set_physics_process(true)
 
@@ -44,7 +49,8 @@ var COUNTDOWN_GO_FADE_TIME: float = 0.3
 func playCountdown():
 	modulate = Color(1, 1, 1, 1)
 
-	musicPlayer.playMenuMusic()
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()
 
 	var tween = create_tween()
 

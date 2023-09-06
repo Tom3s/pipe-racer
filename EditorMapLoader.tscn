@@ -10,3 +10,4 @@ script = ExtResource("1_rob7f")
 
 [node name="MapLoader" parent="CanvasLayer" instance=ExtResource("2_jam6w")]
 unique_name_in_owner = true
+visible = false

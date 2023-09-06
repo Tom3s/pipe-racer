@@ -1,19 +1,18 @@
 extends Control
 class_name MapLoader
 
-var trackList: ItemList
-var loadButton: Button
+@onready var trackList: ItemList = %TrackList
+@onready var loadButton: Button = %LoadButton
+@onready var backButton: Button = %BackButton
 
 var trackListItems: Array = []
 
 signal trackSelected(trackName: String)
+signal backPressed()
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
-	trackList = %TrackList
-	loadButton = %LoadButton
-
 	loadButton.pressed.connect(onLoadButton_pressed)
+	backButton.pressed.connect(onBackButton_pressed)
 
 	loadButton.disabled = true
 
@@ -42,3 +41,7 @@ func onLoadButton_pressed() -> void:
 	visible = false
 	trackSelected.emit(trackName)
 	print("Selected track: ", trackName)
+
+func onBackButton_pressed() -> void:
+	visible = false
+	backPressed.emit()

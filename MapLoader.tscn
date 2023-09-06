@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://xgu8t5v8d54r"]
+[gd_scene load_steps=3 format=3 uid="uid://xgu8t5v8d54r"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_8amij"]
 [ext_resource type="Script" path="res://MapLoader.gd" id="1_u7ct6"]
 
 [node name="MapLoader" type="Control"]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_8amij")
 script = ExtResource("1_u7ct6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -35,7 +37,18 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LoadButton" type="Button" parent="VBoxContainer"]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "Load Map"
+alignment = 1
+
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Back"
+
+[node name="LoadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Load Track"

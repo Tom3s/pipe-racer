@@ -62,7 +62,7 @@ func connectSignals():
 	state.allPlayersReset.connect(onState_allPlayersReset)
 
 	pauseMenu.resumePressed.connect(forceResumeGame)
-	pauseMenu.resetPressed.connect(onState_allPlayersReset)
+	pauseMenu.restartPressed.connect(onState_allPlayersReset)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
 
 func onCountdown_countdownFinished(timestamp: int):
@@ -154,7 +154,8 @@ func onState_allPlayersReset():
 	# reset huds (may not be necessary)
 	# reset state machine
 
-	%MusicPlayer.playMenuMusic()
+	var musicPlayer = get_tree().root.get_node("MusicPlayer")
+	musicPlayer.playMenuMusic()
 
 	for car in cars:
 		car.reset(map.start.getStartPosition(car.playerIndex, cars.size()), map.getCheckpointCount())

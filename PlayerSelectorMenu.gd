@@ -18,6 +18,7 @@ var nrPlayers: int = 1
 
 
 signal nextPressed(players: Array[PlayerData])
+signal backPressed()
 
 
 # Called when the node enters the scene tree for the first time.
@@ -59,14 +60,12 @@ func onNextButton_Pressed():
 	for panel in panels:
 		if panel.visible:
 			players.append(panel.getPlayerData())
-	
-	for player in players:
-		print(player.PLAYER_NAME, player.PLAYER_COLOR)
-
+	visible = false
 	nextPressed.emit(players)
 
 func onBackButton_Pressed():
 	visible = false
+	backPressed.emit()
 	pass
 		
 
