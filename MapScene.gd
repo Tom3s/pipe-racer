@@ -13,6 +13,8 @@ var props: Node3D
 var trackName: String = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
 var lapCount: int = 3
 
+var autoSaveInterval: float = 12
+
 @onready
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
 var materials = [
@@ -108,7 +110,18 @@ func _ready():
 	if loadFrom != "":
 		loadMap(loadFrom)
 
+	setupAutoSave()
 
+func setupAutoSave():
+	var timer = Timer.new()
+	timer.wait_time = autoSaveInterval * 60
+	timer.one_shot = false
+	add_child(timer)
+	timer.start()
+	timer.timeout.connect(autoSave)
+
+func autoSave():
+	saveToJSON(true)
 
 func add(prefabMesher: PrefabMesher):
 	var prefab: PrefabProperties = prefabMesher.objectFromData()
@@ -553,7 +566,7 @@ func clearMap():
 func save():
 	saveToJSON()
 
-func saveToJSON():
+func saveToJSON(autosave: bool = false):
 	var trackData = {
 		"trackName": trackName,
 		"lapCount": lapCount,
@@ -605,7 +618,9 @@ func saveToJSON():
 		})
 
 	# var fileHandler = FileAccess.new()
-	var path = "res://builderTracks/" + trackName + ".json"
+	var path = "user://tracks/local/" + trackName + ".json"
+	if autosave:
+		path = "user://tracks/autosave/" + trackName + "_" + str(Time.get_datetime_string_from_system().replace(":", "-")) + ".json"
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
 
 	if fileHandler == null:
@@ -621,8 +636,8 @@ func loadMap(fileName: String):
 
 func loadFromJSON(fileName: String):
 	var path = fileName
-	if !fileName.begins_with("res://builderTracks/"):
-		path = "res://builderTracks/" + fileName
+	if !fileName.begins_with("user://tracks/local/"):
+		path = "user://tracks/local/" + fileName
 
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 
