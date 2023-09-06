@@ -1,6 +1,26 @@
-[gd_scene load_steps=2 format=3 uid="uid://dekkh255k7tti"]
+[gd_scene load_steps=7 format=3 uid="uid://dekkh255k7tti"]
 
 [ext_resource type="Script" path="res://Tracks/PrefabPropertiesUI.gd" id="1_oof12"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3wny"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nguf1"]
+bg_color = Color(0.878431, 0, 0.501961, 0.392157)
+corner_radius_top_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i0jaf"]
+bg_color = Color(0.878431, 0, 0, 0.392157)
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocjib"]
+bg_color = Color(0, 0, 0.878431, 0.392157)
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1ano"]
+bg_color = Color(0.419608, 0.419608, 0.419608, 0.392157)
+corner_radius_bottom_right = 10
 
 [node name="PrefabPropertiesUI" type="Control"]
 layout_mode = 3
@@ -35,6 +55,39 @@ offset_top = 11.0
 offset_right = -13.0
 offset_bottom = 304.0
 grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k3wny")
+
+[node name="Panel" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_right = 107.0
+offset_bottom = 146.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nguf1")
+
+[node name="Panel2" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_left = 108.0
+offset_right = 213.0
+offset_bottom = 146.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i0jaf")
+
+[node name="Panel3" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_top = 147.0
+offset_right = 107.0
+offset_bottom = 292.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ocjib")
+
+[node name="Panel4" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 147.0
+offset_right = 213.0
+offset_bottom = 292.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n1ano")
 
 [node name="VSeparator" type="VSeparator" parent="Panel"]
 layout_mode = 1
@@ -98,9 +151,9 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 offset_left = 9.0
-offset_top = 140.0
+offset_top = 150.0
 offset_right = 31.0
-offset_bottom = 269.0
+offset_bottom = 279.0
 min_value = -10.0
 max_value = 10.0
 rounded = true
@@ -123,9 +176,9 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 offset_left = 175.0
-offset_top = 140.0
+offset_top = 150.0
 offset_right = 197.0
-offset_bottom = 269.0
+offset_bottom = 279.0
 min_value = -10.0
 max_value = 10.0
 rounded = true
