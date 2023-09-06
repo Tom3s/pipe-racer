@@ -28,7 +28,6 @@ resource_name = "PitchShift"
 pitch_scale = 1.05
 
 [resource]
-bus/0/volume_db = -7.27252
 bus/1/name = &"SFX"
 bus/1/solo = false
 bus/1/mute = false
@@ -39,7 +38,7 @@ bus/2/name = &"Music"
 bus/2/solo = false
 bus/2/mute = false
 bus/2/bypass_fx = false
-bus/2/volume_db = -80.0
+bus/2/volume_db = 0.0
 bus/2/send = &"Master"
 bus/3/name = &"Engine Sound"
 bus/3/solo = false

@@ -21,6 +21,10 @@ var environment: WorldEnvironment
 var verticalSplitTop: HBoxContainer
 var verticalSplitBottom: HBoxContainer
 
+
+signal exitPressed()
+
+
 func init(newRaceSettings: RaceSettings):
 	raceSettings = newRaceSettings
 
@@ -135,7 +139,7 @@ func _ready():
 	# another cool track with proper editor
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-03T23-25-13.json", 5)
 	# raceSettings = RaceSettings.new("res://builderTracks/track_2023-09-04T20-31-46.json", 3)
-	raceSettings = RaceSettings.new("res://builderTracks/yeboo.json")
+	raceSettings = RaceSettings.new("matyi cool trackje.json")
 	# 20:712
 	raceSettings.addPlayer(player1)
 	raceSettings.addPlayer(player2)

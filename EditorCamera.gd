@@ -17,7 +17,7 @@ var _direction = Vector3(0.0, 0.0, 0.0)
 var _velocity = Vector3(0.0, 0.0, 0.0)
 var _acceleration = 30
 var _deceleration = -10
-var _vel_multiplier = 32
+var _vel_multiplier = 80
 
 # Keyboard state
 var _w = false
@@ -29,7 +29,7 @@ var _e = false
 var _shift = false
 var _alt = false
 
-func _input(event):
+func _unhandled_input(event):
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative

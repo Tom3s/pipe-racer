@@ -15,6 +15,8 @@ var ingameSFX: IngameSFX
 
 var paused = -1
 
+@onready var pauseMenu: PauseMenu = %PauseMenu
+
 func getTimestamp():
 	return floor(Time.get_unix_time_from_system() * 1000)
 
@@ -29,6 +31,8 @@ func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Arr
 	countdown = %UniversalCanvas/%Countdown
 	raceInputHandler = %RaceInputHandler
 	state = %RaceStateMachine
+
+	pauseMenu.visible = false
 
 	state.nrPlayers = cars.size()
 	state.setupReadyPlayersList()
@@ -57,6 +61,10 @@ func connectSignals():
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
 	state.allPlayersReset.connect(onState_allPlayersReset)
 
+	pauseMenu.resumePressed.connect(forceResumeGame)
+	pauseMenu.resetPressed.connect(onState_allPlayersReset)
+	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
+
 func onCountdown_countdownFinished(timestamp: int):
 	for i in range(cars.size()):
 		cars[i].startRace()
@@ -78,12 +86,21 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			cars[i].resumeMovement()
 			timeTrialManagers[i].resumeTimeTrial(timestamp)
 		state.pausedBy = -1
+		pauseMenu.visible = false
 	elif state.pausedBy == -1 && state.raceStarted:
 		var timestamp = floor(getTimestamp())
 		for i in range(cars.size()):
 			cars[i].pauseMovement()
 			timeTrialManagers[i].pauseTimeTrial(timestamp)
 		state.pausedBy = playerIndex
+		pauseMenu.visible = true
+
+func forceResumeGame():
+	var timestamp = floor(getTimestamp())
+	for i in range(cars.size()):
+		cars[i].resumeMovement()
+		timeTrialManagers[i].resumeTimeTrial(timestamp)
+	state.pausedBy = -1
 
 func onCar_respawned(playerIndex: int):
 	cameras[playerIndex].forceUpdatePosition()
@@ -155,6 +172,9 @@ func onState_allPlayersReset():
 
 func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
 	state.setPlayerReset(playerIndex, resetting)
+
+func onPauseMenu_exitPressed():
+	get_parent().exitPressed.emit()
 
 # func onState_allPlayersReset():
 # 	print("All players reset")
