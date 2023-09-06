@@ -22,14 +22,9 @@ func isStart():
 	pass
 
 func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
-	if raycastPosition == null || raycastNormal == null:
-		calculateRaycast()
-
 	var localBackwards = -global_transform.basis.x
 
-	var localRight = (-localBackwards).cross(raycastNormal).normalized()
-
-	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 + localBackwards * 8
+	var localRight = global_transform.basis.z
 
 	var leftLimit = -localRight * 18
 	var rightLimit = localRight * 18
@@ -39,9 +34,13 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 	if nrPlayers == 1:
 		playerFraction = 0.5
 
-	var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
+	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 8
 
-	print("Spawn position: ", spawnPosition)
+	calculateRaycast(raycastOrigin)
+
+	var spawnPosition = raycastPosition + raycastNormal * 0.35
+
+	# print("Spawn position: ", spawnPosition)
 
 	return {
 		"position": spawnPosition,
@@ -56,13 +55,13 @@ func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
 
 	return localQuaternion.get_euler()
 
-func calculateRaycast():
+func calculateRaycast(origin: Vector3):
 	var spaceState = get_world_3d().direct_space_state
 
-	var from = global_position
-	var to = from + Vector3.DOWN * RAYCAST_MAX_DISTANCE
+	# var from = global_position
+	var to = origin + Vector3.DOWN * RAYCAST_MAX_DISTANCE
 
-	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to))
+	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(origin, to))
 
 	if result.has("position"):
 		raycastPosition = result.position

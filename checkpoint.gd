@@ -41,14 +41,35 @@ var raycastNormal = null
 # 24 units sideways
 
 func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
-	if raycastPosition == null || raycastNormal == null:
-		calculateRaycast()
+	# if raycastPosition == null || raycastNormal == null:
+	# 	calculateRaycast()
+
+	# var localBackwards = -global_transform.basis.z
+
+	# var localRight = (-localBackwards).cross(raycastNormal).normalized()
+
+	# var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 # + localBackwards * 8
+
+	# var leftLimit = -localRight * 18
+	# var rightLimit = localRight * 18
+
+	# var playerFraction = remap(playerIndex, 0, nrPlayers - 1, 0, 1)
+
+	# if nrPlayers == 1:
+	# 	playerFraction = 0.5
+
+	# var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
+
+	# print("Spawn position: ", spawnPosition)
+
+	# return {
+	# 	"position": spawnPosition,
+	# 	"rotation": getRotationVector(-localBackwards, localRight)
+	# }
 
 	var localBackwards = -global_transform.basis.z
 
-	var localRight = (-localBackwards).cross(raycastNormal).normalized()
-
-	var baseSpawnPosition = raycastPosition + raycastNormal * 0.35 # + localBackwards * 8
+	var localRight = -global_transform.basis.x
 
 	var leftLimit = -localRight * 18
 	var rightLimit = localRight * 18
@@ -58,9 +79,13 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 	if nrPlayers == 1:
 		playerFraction = 0.5
 
-	var spawnPosition = baseSpawnPosition + leftLimit.lerp(rightLimit, playerFraction)
+	var raycastOrigin = global_position + Vector3.UP * 24 + leftLimit.lerp(rightLimit, playerFraction)
 
-	print("Spawn position: ", spawnPosition)
+	calculateRaycast(raycastOrigin)
+
+	var spawnPosition = raycastPosition + raycastNormal * 0.35
+
+	# print("Spawn position: ", spawnPosition)
 
 	return {
 		"position": spawnPosition,
@@ -75,13 +100,12 @@ func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
 
 	return localQuaternion.get_euler()
 
-func calculateRaycast():
+func calculateRaycast(origin: Vector3):
 	var spaceState = get_world_3d().direct_space_state
 
-	var from = global_position + Vector3.UP * 24
-	var to = from + Vector3.DOWN * RAYCAST_MAX_DISTANCE
+	var to = origin + Vector3.DOWN * RAYCAST_MAX_DISTANCE
 
-	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to))
+	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(origin, to))
 
 	if result.has("position"):
 		raycastPosition = result.position
