@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/shaderV/tools/sinTime.gd" id="1_r3lh7"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/simplex3d.gd" id="2_rvatb"]
 [ext_resource type="Script" path="res://addons/shaderV/tools/TimeScaled.gd" id="3_mn2v5"]
-[ext_resource type="Gradient" path="res://PastelRainbow.tres" id="4_8b60h"]
+[ext_resource type="Gradient" uid="uid://cwk6b1gg7ac2b" path="res://PastelRainbow.tres" id="4_8b60h"]
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_628ji"]
 default_input_values = [0, 0.05, 1, 2.0]

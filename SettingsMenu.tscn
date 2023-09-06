@@ -1,14 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://djhajovaodjr4"]
+[gd_scene load_steps=3 format=3 uid="uid://q0icvxyovnsr"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_rvs7i"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
-[ext_resource type="Shader" uid="uid://cluafy80w7sqc" path="res://Menu/MainMenu2.tres" id="3_rvebe"]
-[ext_resource type="Script" path="res://Settings/MasterVolumeSlider.gd" id="4_p2600"]
-[ext_resource type="Script" path="res://Settings/MusicVolumeSlider.gd" id="5_sawst"]
-[ext_resource type="Script" path="res://Settings/SFXVolumeSlider.gd" id="6_qi2gf"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vc0rj"]
-shader = ExtResource("3_rvebe")
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3
@@ -21,28 +14,7 @@ mouse_filter = 2
 theme = ExtResource("1_rvs7i")
 script = ExtResource("2_7exx8")
 
-[node name="Elements" type="Control" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-
-[node name="Background" type="ColorRect" parent="Elements"]
-material = SubResource("ShaderMaterial_vc0rj")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Panel" type="Panel" parent="Elements"]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +28,7 @@ grow_vertical = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Elements/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -72,61 +44,58 @@ grow_vertical = 2
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="Label" type="Label" parent="Elements/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="Master" type="HBoxContainer" parent="Elements/Panel/VBoxContainer"]
+[node name="Master" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Elements/Panel/VBoxContainer/Master"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Master"]
 layout_mode = 2
 text = "Master Volume"
 
-[node name="MasterVolumeSlider" type="HSlider" parent="Elements/Panel/VBoxContainer/Master"]
+[node name="MasterVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/Master"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 value = 100.0
-script = ExtResource("4_p2600")
 
-[node name="Music" type="HBoxContainer" parent="Elements/Panel/VBoxContainer"]
+[node name="Music" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Elements/Panel/VBoxContainer/Music"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Music"]
 layout_mode = 2
 text = "Music"
 
-[node name="MusicVolumeSlider" type="HSlider" parent="Elements/Panel/VBoxContainer/Music"]
+[node name="MusicVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/Music"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 value = 100.0
-script = ExtResource("5_sawst")
 
-[node name="SFX" type="HBoxContainer" parent="Elements/Panel/VBoxContainer"]
+[node name="SFX" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Elements/Panel/VBoxContainer/SFX"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/SFX"]
 layout_mode = 2
 text = "Sound Effects"
 
-[node name="SFXVolumeSlider" type="HSlider" parent="Elements/Panel/VBoxContainer/SFX"]
+[node name="SFXVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/SFX"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 value = 100.0
-script = ExtResource("6_qi2gf")
 
-[node name="CloseButton" type="Button" parent="Elements"]
+[node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2

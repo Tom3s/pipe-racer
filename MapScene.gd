@@ -67,6 +67,8 @@ signal noOperationToBeRedone()
 signal canUndo(value: bool)
 signal canRedo(value: bool)
 
+signal mapLoaded(trackName: String, lapCount: int)
+
 var start: Start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
 const START_OFFSET = Vector3(0, 9.15, 0)
@@ -703,6 +705,8 @@ func loadFromJSON(fileName: String):
 	propPlacer.queue_free()
 
 	print("Loaded track: " + trackData["trackName"])
+
+	mapLoaded.emit(trackData["trackName"], trackData["lapCount"])
 
 func getCheckpoints():
 	return checkPointSystem.get_children()

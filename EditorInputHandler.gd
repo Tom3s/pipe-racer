@@ -30,6 +30,8 @@ signal editorModeDeletePressed()
 
 signal savePressed()
 
+signal pausePressed()
+
 signal fullScreenPressed()
 
 var mousePos2D: Vector2 = Vector2()
@@ -40,6 +42,7 @@ var mouseOverUI: bool = false:
 		mouseOverUI = mouseOverUIChanged(value)
 
 var propertiesOpen: bool = false
+var paused: bool = false
 
 func mouseOverUIChanged(value: bool) -> bool:
 	if value != mouseOverUI:
@@ -53,12 +56,15 @@ func _input(event):
 
 	if Input.is_action_just_pressed("editor_save"):
 		savePressed.emit()
-	
 
 	if Input.is_action_just_pressed("fullscreen"):
 		fullScreenPressed.emit()
 
-	if propertiesOpen:
+	if Input.is_action_just_pressed("p1_pause"):
+		paused = true
+		pausePressed.emit()
+
+	if propertiesOpen || paused:
 		return
 	
 	if !Input.is_action_pressed("editor_look_around"):

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://jdupmg2nr6om"]
+
+[ext_resource type="Script" path="res://EditorMapLoader.gd" id="1_rob7f"]
+[ext_resource type="PackedScene" uid="uid://xgu8t5v8d54r" path="res://MapLoader.tscn" id="2_jam6w"]
+
+[node name="EditorMapLoader" type="Node"]
+script = ExtResource("1_rob7f")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MapLoader" parent="CanvasLayer" instance=ExtResource("2_jam6w")]
+unique_name_in_owner = true

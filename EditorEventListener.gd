@@ -11,9 +11,11 @@ var prefabPropertiesUI: PrefabPropertiesUI
 var propPropertiesUI: PropPropertiesUI
 var editorShortcutsUI: EditorShortcutsUI
 var trackMetadataUI: TrackMetadataUI
+var pauseMenu: PauseMenu
 
 var car: CarController
 var carCamera: FollowingCamera
+
 
 func _ready():
 	# assign nodes
@@ -26,6 +28,7 @@ func _ready():
 	propPropertiesUI = %PropPropertiesUI
 	editorShortcutsUI = %EditorShortcutsUI
 	trackMetadataUI = %TrackMetadataUI
+	pauseMenu = %PauseMenu
 	trackMetadataUI.visible = false
 
 	propPlacer = %PropPlacer
@@ -62,6 +65,7 @@ func connectSignals():
 	editorInputHandler.fineRotatePressed.connect(onEditorInputHandler_fineRotatePressed)
 	editorInputHandler.selectPressed.connect(onEditorInputHandler_selectPressed)
 	editorInputHandler.deleteSelectedPressed.connect(onEditorInputHandler_deleteSelectedPressed)
+	editorInputHandler.pausePressed.connect(onEditorInputHandler_pausePressed)
 
 	# connect prefab UI to value changes
 	# PrefabPropertiesUI:
@@ -110,6 +114,8 @@ func connectSignals():
 	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
 	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
 
+	pauseMenu.exitPressed.connect(onEditorExited)
+
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
 
@@ -137,6 +143,8 @@ func connectSignals():
 	map.canUndo.connect(editorShortcutsUI.setUndoEnabled)
 	map.canRedo.connect(editorShortcutsUI.setRedoEnabled)
 	
+	map.mapLoaded.connect(onMap_mapLoaded)
+
 	car.isResetting.connect(onCar_pausePressed)
 
 
@@ -284,8 +292,9 @@ func onEditorInputHandler_deleteSelectedPressed():
 
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
-		
 
+func onEditorInputHandler_pausePressed():
+	pauseMenu.visible = true
 
 func onPrefabPropertiesUI_leftEndChanged(value: int):
 	prefabMesher.leftEndHeight = value
@@ -482,6 +491,14 @@ func onCar_pausePressed(_sink = null, _sink2 = null):
 	camera.current = true
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
 
+func onMap_mapLoaded(trackName: String, lapCount: int):
+	trackMetadataUI.setFromData({
+		"trackName": trackName,
+		"lapCount": lapCount
+	})
+
+func onEditorExited():
+	get_parent().editorExited.emit()
 
 const EDITOR_UI_PREFAB_PROPERTIES: int = 0
 const EDITOR_UI_START_PROPERTIES: int = 1

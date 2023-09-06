@@ -1,48 +1,59 @@
 extends Control
+class_name PauseMenu
+
+@onready
+var mainElements: Control = %MainElements
+
+@onready
+var resumeButton: Button = %ResumeButton
+@onready
+var restartButton: Button = %RestartButton
+@onready
+var settingsButton: Button = %SettingsButton
+@onready
+var exitButton: Button = %ExitButton
+
+@onready
+var settingsMenu: SettingsMenu = %SettingsMenu
+
+signal resumePressed()
+signal restartPressed()
+signal exitPressed()
+
 
 func _ready():
-	%RestartButton.button_up.connect(onRestartButton_pressed)
-	%ResumeButton.button_up.connect(onResumeButton_pressed)
-	%SettingsButton.button_up.connect(onSettingsButton_pressed)
-	%ExitButton.button_up.connect(onExitButton_pressed)
+	visible = false
 
+	# resumeButton = %ResumeButton
+	# restartButton = %RestartButton
+	# settingsButton = %SettingsButton
+	# exitButton = %ExitButton
 
-func onRestartButton_pressed():
-	var carSpawner = get_parent().get_node("%CarSpawner")
-	for car in carSpawner.get_children():
-		car.reset()
-	carSpawner.finishedCars = 0
-	get_parent().get_node("%UniversalCanvas/%Countdown").reset()
-	get_parent().get_node("%UniversalCanvas/%Countdown").startCountdown()
-	get_parent().get_node("%CheckPointSystem").reset()
-	%Buttons.hide()
+	settingsMenu.visible = false
 
-func onResumeButton_pressed():
-	%Buttons.hide()
+	connectSignals()
 
-func onExitButton_pressed():
-	var carSpawner = get_parent().get_node("%CarSpawner")
-	for car in carSpawner.get_children():
-		car.queue_free()
-	carSpawner.finishedCars = 0
-
-	get_parent().get_node("%CheckPointSystem").reset()
-	
-	for viewport in get_parent().get_node("%VerticalSplitTop").get_children():
-		viewport.queue_free()
-	
-	for viewport in get_parent().get_node("%VerticalSplitBottom").get_children():
-		viewport.queue_free()
-	
-	%Buttons.hide()
-
-	
-	get_parent().get_node("%MainMenu/%SelectMode").show()
-	get_parent().get_node("%MusicPlayer").playMenuMusic()
-	
-	if get_tree().get_multiplayer().is_server():
-		Network.deletePortMappings()
-	get_tree().get_multiplayer().multiplayer_peer = OfflineMultiplayerPeer.new()
+func connectSignals():
+	resumeButton.pressed.connect(onResumeButton_pressed)
+	restartButton.pressed.connect(onRestartButton_pressed)
+	settingsButton.pressed.connect(onSettingsButton_pressed)
+	exitButton.pressed.connect(onExitButton_pressed)
+	settingsMenu.closePressed.connect(onSettingsMenu_closePressed)
 
 func onSettingsButton_pressed():
-	get_parent().get_node("%SettingsMenu/%Elements").show()
+	settingsMenu.visible = true
+	mainElements.visible = false
+
+func onSettingsMenu_closePressed():
+	settingsMenu.visible = false
+	mainElements.visible = true
+
+func onResumeButton_pressed():
+	visible = false
+	resumePressed.emit()
+
+func onRestartButton_pressed():
+	restartPressed.emit()
+
+func onExitButton_pressed():
+	exitPressed.emit()
