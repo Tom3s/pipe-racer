@@ -4,6 +4,7 @@ class_name EditorStateMachine
 const EDITOR_STATE_BUILD = 0
 const EDITOR_STATE_EDIT = 1
 const EDITOR_STATE_DELETE = 2
+const EDITOR_STATE_PLAYTEST = 3
 
 const EDITOR_BUILD_MODE_PREFAB = 0
 const EDITOR_BUILD_MODE_START = 1

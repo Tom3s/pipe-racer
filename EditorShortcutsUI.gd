@@ -6,17 +6,20 @@ var buildModeSelector: ItemList
 
 var undoButton: Button
 var redoButton: Button
+var testButton: Button
 
 signal editorModeChanged(mode: int)
 signal buildModeChanged(mode: int)
 signal undoPressed()
 signal redoPressed()
+signal testPressed()
 
 func _ready():
 	editorModeSelector = %EditorModeSelector
 	buildModeSelector = %BuildModeSelector
 	undoButton = %UndoButton
 	redoButton = %RedoButton
+	testButton = %TestButton
 
 	editorModeSelector.select(0)
 	buildModeSelector.select(0)
@@ -28,6 +31,7 @@ func _ready():
 	buildModeSelector.item_selected.connect(onBuildModeSelector_itemSelected)
 	undoButton.pressed.connect(onUndoButton_pressed)
 	redoButton.pressed.connect(onRedoButton_pressed)
+	testButton.pressed.connect(onTestButton_pressed)
 
 func onEditorModeSelector_itemSelected(index: int):
 	editorModeChanged.emit(index)
@@ -58,3 +62,6 @@ func setUndoEnabled(enabled: bool):
 
 func setRedoEnabled(enabled: bool):
 	redoButton.disabled = !enabled
+
+func onTestButton_pressed():
+	testPressed.emit()

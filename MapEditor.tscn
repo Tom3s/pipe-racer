@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=13 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c8mpq5k80nw87" path="res://Track Props/PropPropertiesUI.tscn" id="2_p5lab"]
 [ext_resource type="Script" path="res://EditorCamera.gd" id="3_ciak8"]
 [ext_resource type="PackedScene" uid="uid://0u42v7u8akxk" path="res://EditorShortcutsUI.tscn" id="3_gtd2l"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="5_atlqn"]
 [ext_resource type="PackedScene" uid="uid://brl2uu62fx8nm" path="res://PrefabGenerator.tscn" id="6_ayac0"]
 [ext_resource type="PackedScene" uid="uid://bf1ljjah7ojpp" path="res://PropPlacer.tscn" id="6_gdrqn"]
 [ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
@@ -23,6 +24,12 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="EditorShortcutsUI" parent="CanvasLayer" instance=ExtResource("3_gtd2l")]
+unique_name_in_owner = true
+
+[node name="Player" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CarController" parent="Player" instance=ExtResource("5_atlqn")]
 unique_name_in_owner = true
 
 [node name="Map" parent="." instance=ExtResource("1_d0rt7")]

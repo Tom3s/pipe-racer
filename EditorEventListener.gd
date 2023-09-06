@@ -11,6 +11,9 @@ var prefabPropertiesUI: PrefabPropertiesUI
 var propPropertiesUI: PropPropertiesUI
 var editorShortcutsUI: EditorShortcutsUI
 
+var car: CarController
+var carCamera: FollowingCamera
+
 func _ready():
 	# assign nodes
 	editorInputHandler = %EditorInputHandler
@@ -23,6 +26,15 @@ func _ready():
 	editorShortcutsUI = %EditorShortcutsUI
 
 	propPlacer = %PropPlacer
+
+	car = %CarController
+
+	var playerNode = %Player
+	carCamera = FollowingCamera.new(car)
+	carCamera.current = false
+	playerNode.add_child(carCamera)
+
+	onCar_pausePressed()
 
 	prefabPropertiesUI.visible = true
 	propPropertiesUI.visible = false
@@ -87,6 +99,7 @@ func connectSignals():
 	editorShortcutsUI.buildModeChanged.connect(onEditorShortcutsUI_buildModeChanged)
 	editorShortcutsUI.undoPressed.connect(onEditorInputHandler_undoPressed)
 	editorShortcutsUI.redoPressed.connect(onEditorInputHandler_redoPressed)
+	editorShortcutsUI.testPressed.connect(onEditorInputHandler_testPressed)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
@@ -114,7 +127,8 @@ func connectSignals():
 	# HOORIBLE DONT DO THIS
 	map.canUndo.connect(editorShortcutsUI.setUndoEnabled)
 	map.canRedo.connect(editorShortcutsUI.setRedoEnabled)
-
+	
+	car.isResetting.connect(onCar_pausePressed)
 
 
 func onPrefabMesher_propertiesUpdated():
@@ -422,6 +436,29 @@ func onEditorInputHandler_fullScreenPressed():
 		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(nextWindowMode)
 
+func onEditorInputHandler_testPressed():
+	car.resumeMovement()
+	car.setRespawnPositionFromDictionary(map.start.getStartPosition(0, 1))
+	car.respawn()
+	car.visible = true
+	carCamera.current = true
+	camera.current = false
+	hideUI()
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), 0)
+	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
+
+func onCar_pausePressed(_sink = null, _sink2 = null):
+	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_BUILD
+	setVisibleUI(editorStateMachine.editorState)
+	editorShortcutsUI.visible = true
+	car.setRespawnPosition(Vector3(0, -1000, 0), Vector3(0, 0, 0))
+	car.respawn()
+	car.pauseMovement()
+	car.visible = false
+	carCamera.current = false
+	camera.current = true
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
+
 
 const EDITOR_UI_PREFAB_PROPERTIES: int = 0
 const EDITOR_UI_START_PROPERTIES: int = 1
@@ -431,3 +468,8 @@ const EDITOR_UI_PROP_PROPERTIES: int = 3
 func setVisibleUI(visibleUI: int):
 	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
 	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES
+
+func hideUI():
+	prefabPropertiesUI.visible = false
+	propPropertiesUI.visible = false
+	editorShortcutsUI.visible = false

@@ -5,7 +5,7 @@ var maxDistance: int = 2000
 
 const prefabSafeZone: Vector2i = Vector2i(235, 470)
 const shortcutSafeZone: Vector2i = Vector2i(195, 205)
-const undoRedoSafeZone: Vector2i = Vector2i(135, 50)
+const undoRedoSafeZone: Vector2i = Vector2i(169, 50)
 
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()

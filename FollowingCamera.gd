@@ -24,6 +24,10 @@ func _init(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
 
+func setup(carReference):
+	car = carReference
+	car.changeCameraMode.connect(changeMode)
+
 func _ready():
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
 	fov = 65
