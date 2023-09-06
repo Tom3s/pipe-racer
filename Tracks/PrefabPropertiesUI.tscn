@@ -11,6 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 script = ExtResource("1_oof12")
 
 [node name="Safezone" type="Panel" parent="."]
@@ -361,6 +362,11 @@ text = "Snapping"
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
+
+[node name="ResetButton" type="Button" parent="Panel2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset"
 
 [node name="CurveProperties" type="HBoxContainer" parent="Panel2"]
 unique_name_in_owner = true

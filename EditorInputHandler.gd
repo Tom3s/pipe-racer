@@ -5,6 +5,7 @@ var maxDistance: int = 2000
 
 const prefabSafeZone: Vector2i = Vector2i(235, 470)
 const shortcutSafeZone: Vector2i = Vector2i(195, 205)
+const undoRedoSafeZone: Vector2i = Vector2i(135, 50)
 
 signal mouseMovedTo(worldPosition: Vector3)
 signal moveUpGrid()
@@ -98,7 +99,7 @@ func _input(event):
 	windowSize = DisplayServer.window_get_size()
 	mousePos2D = get_viewport().get_mouse_position()
 
-	if isMouseOverPrefabUI() || isMouseOverShortcutUI():
+	if isMouseOverPrefabUI() || isMouseOverShortcutUI() || isMouseOverUndoRedoUI():
 		mouseOverUI = true
 	else:
 		mouseOverUI = false
@@ -108,6 +109,9 @@ func isMouseOverPrefabUI() -> bool:
 
 func isMouseOverShortcutUI() -> bool:
 	return mousePos2D.x < shortcutSafeZone.x && mousePos2D.y < shortcutSafeZone.y
+
+func isMouseOverUndoRedoUI() -> bool:
+	return mousePos2D.y < undoRedoSafeZone.y && (mousePos2D.x > (windowSize.x / 2) - (undoRedoSafeZone.x / 2) && mousePos2D.x < (windowSize.x / 2) + (undoRedoSafeZone.x / 2))
 
 func screenPointToRay() -> Vector3:
 	var spaceState = get_world_3d().direct_space_state

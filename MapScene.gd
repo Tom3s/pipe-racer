@@ -59,6 +59,8 @@ signal undidLastOperation()
 signal redidLastOperation()
 signal noOperationToBeUndone()
 signal noOperationToBeRedone()
+signal canUndo(value: bool)
+signal canRedo(value: bool)
 
 var start: Start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
@@ -166,6 +168,7 @@ func storeAddPrefab(prefab: PrefabProperties):
 		"operation": PLACED
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
 
 func addStart(startObject):
 	var oldPosition = start.global_position
@@ -191,6 +194,8 @@ func storeAddStartObject(oldPosition: Vector3, oldRotation: Vector3, newPosition
 		"operation": PLACED_START
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func addCheckPoint(propPlacer: PropPlacer):
 	var checkPointObject = propPlacer.getCheckPointObject()
@@ -212,6 +217,8 @@ func storeAddCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, 
 		"operation": PLACED_CP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func addProp(propPlacer: PropPlacer):
 	var propObject = propPlacer.getPropObject()
@@ -233,6 +240,8 @@ func storeAddPropObject(propObject: Node3D, propPos: Vector3, propRotation: Vect
 		"operation": PLACED_PROP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 
 
@@ -257,6 +266,8 @@ func storeRemovePrefab(prefab: PrefabProperties):
 		"operation": REMOVED
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func removeStart():
 	var oldPosition = start.global_position
@@ -282,6 +293,8 @@ func storeRemoveCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 		"operation": REMOVED_CP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func removeProp(propObject: Node3D):
 	storeRemovePropObject(propObject, propObject.global_position, propObject.global_rotation)
@@ -300,6 +313,8 @@ func storeRemovePropObject(propObject: Node3D, propPos: Vector3, propRotation: V
 		"operation": REMOVED_PROP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 
 
@@ -325,6 +340,8 @@ func storeUpdatePrefab(oldPrefab: PrefabProperties, newPrefab: PrefabProperties)
 		"operation": UPDATED
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func updateCheckPoint(oldCheckPointObject: Area3D, propPlacer: PropPlacer):
 	# var checkPointObject = propPlacer.getCheckPointObject()
@@ -348,6 +365,8 @@ func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 		"operation": UPDATED_CP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
 	# var propObject = propPlacer.getPropObject()
@@ -378,6 +397,8 @@ func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: V
 		"operation": UPDATED_PROP
 	})
 	lastOperationIndex += 1
+	emitUndoRedoSignals()
+
 
 
 # misc
@@ -427,10 +448,15 @@ func safeResizeStack():
 	if operationStack.size() > lastOperationIndex + 1:
 		operationStack.resize(lastOperationIndex + 1)
 
+func ableToUndo():
+	return lastOperationIndex >= 0
+
+func ableToRedo():
+	return lastOperationIndex < operationStack.size() - 1
 
 func undo():
-	if lastOperationIndex < 0:
-		# print("No more operations to undo")
+	if !ableToUndo():
+		emitUndoRedoSignals()
 		noOperationToBeUndone.emit()
 		return
 
@@ -466,10 +492,11 @@ func undo():
 	
 	lastOperationIndex -= 1
 	undidLastOperation.emit()
+	emitUndoRedoSignals()
 
 func redo():
-	if lastOperationIndex >= operationStack.size() - 1:
-		# print("No more operations to redo")
+	if !ableToRedo():
+		emitUndoRedoSignals()
 		noOperationToBeRedone.emit()
 		return
 
@@ -503,6 +530,7 @@ func redo():
 		return
 	
 	redidLastOperation.emit()
+	emitUndoRedoSignals()
 
 func clearMap():
 	for child in trackPieces.get_children():
@@ -669,3 +697,7 @@ func setIngame():
 	# %Scenery/%Proper.disabled = false
 	# %Scenery/%Flat.disabled = true
 	%Scenery.setIngameCollision()
+
+func emitUndoRedoSignals():
+	canUndo.emit(ableToUndo())
+	canRedo.emit(ableToRedo())

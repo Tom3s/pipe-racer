@@ -23,6 +23,8 @@ var curvedTickBox: CheckBox
 
 var snapTickBox: CheckBox
 
+var resetButton: Button
+
 var straightLength: SpinBox
 var straightOffset: SpinBox
 var straightSmoothing: OptionButton
@@ -86,6 +88,8 @@ func _ready():
 
 	snapTickBox = %SnapTickBox
 
+	resetButton = %ResetButton
+
 	straightLength = %StraightLength
 	straightOffset = %StraightOffset
 	straightSmoothing = %StraightSmoothing
@@ -119,6 +123,8 @@ func _ready():
 	curvedTickBox.toggled.connect(onCurvedChanged)
 
 	snapTickBox.toggled.connect(onSnapChanged)
+
+	resetButton.pressed.connect(reset)
 
 	straightLength.value_changed.connect(onStraightLengthChanged)
 	straightOffset.value_changed.connect(onStraightOffsetChanged)
@@ -250,3 +256,24 @@ func setFromData(data):
 	curveSideways.value = data["curveSideways"]
 	roadTypeSelector.select(data["roadType"])
 	roadTypeChanged.emit(data["roadType"])
+
+func reset():
+	setFromData({
+		"leftStartHeight": 0,
+		"leftEndHeight": 0,
+		"leftSmoothTilt": 3,
+		"rightStartHeight": 0,
+		"rightEndHeight": 0,
+		"rightSmoothTilt": 3,
+		"leftWallStart": false,
+		"rightWallStart": false,
+		"leftWallEnd": false,
+		"rightWallEnd": false,
+		"curve": false,
+		"endOffset": 0,
+		"smoothOffset": 3,
+		"length": 1,
+		"curveForward": 16,
+		"curveSideways": 16,
+		"roadType": 0,
+	})

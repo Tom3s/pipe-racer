@@ -85,6 +85,8 @@ func connectSignals():
 
 	editorShortcutsUI.editorModeChanged.connect(onEditorShortcutsUI_editorModeChanged)
 	editorShortcutsUI.buildModeChanged.connect(onEditorShortcutsUI_buildModeChanged)
+	editorShortcutsUI.undoPressed.connect(onEditorInputHandler_undoPressed)
+	editorShortcutsUI.redoPressed.connect(onEditorInputHandler_redoPressed)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
 	editorInputHandler.mouseExitedUI.connect(onEditorInputHandler_mouseExitedUI)
@@ -109,6 +111,9 @@ func connectSignals():
 	map.redidLastOperation.connect(onMap_redidLastOperation)
 	map.noOperationToBeUndone.connect(onMap_noOperationToBeUndone)
 	map.noOperationToBeRedone.connect(onMap_noOperationToBeRedone)
+	# HOORIBLE DONT DO THIS
+	map.canUndo.connect(editorShortcutsUI.setUndoEnabled)
+	map.canRedo.connect(editorShortcutsUI.setRedoEnabled)
 
 
 
@@ -198,6 +203,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 
 			prefabMesher.visible = true
 			prefabMesher.updatePositionExact(object.global_position, object.global_rotation)
+			setVisibleUI(EDITOR_UI_PREFAB_PROPERTIES)
 		elif object.has_method("isStart"):
 			object.visible = false
 			propPlacer.visible = true
@@ -207,6 +213,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 			editorStateMachine.gridCurrentHeight = (object.global_position - map.START_OFFSET).y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_START_LINE
+			setVisibleUI(EDITOR_UI_START_PROPERTIES)
 		elif object.has_method("isCheckPoint"):
 			object.visible = false
 			propPlacer.visible = true
@@ -216,6 +223,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_CHECKPOINT
+			setVisibleUI(EDITOR_UI_CHECKPOINT_PROPERTIES)
 		elif object.has_method("isProp"):
 			object.visible = false
 			propPlacer.visible = true
@@ -225,6 +233,7 @@ func onEditorInputHandler_selectPressed(object: Object):
 			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_PROP
+			setVisibleUI(EDITOR_UI_PROP_PROPERTIES)
 
 
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
@@ -401,12 +410,7 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 		propPlacer.visible = false
 		editorStateMachine.currentPlacerNode = prefabMesher
 
-	if newMode == editorStateMachine.EDITOR_BUILD_MODE_PROP:
-		propPropertiesUI.visible = true
-		prefabPropertiesUI.visible = false
-	else:
-		propPropertiesUI.visible = false
-		prefabPropertiesUI.visible = true
+	setVisibleUI(newMode)
 	
 	editorShortcutsUI.changeBuildMode(newMode)
 
@@ -417,3 +421,13 @@ func onEditorInputHandler_fullScreenPressed():
 	else:
 		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(nextWindowMode)
+
+
+const EDITOR_UI_PREFAB_PROPERTIES: int = 0
+const EDITOR_UI_START_PROPERTIES: int = 1
+const EDITOR_UI_CHECKPOINT_PROPERTIES: int = 2
+const EDITOR_UI_PROP_PROPERTIES: int = 3
+
+func setVisibleUI(visibleUI: int):
+	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
+	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES
