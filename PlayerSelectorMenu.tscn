@@ -1,0 +1,140 @@
+[gd_scene load_steps=3 format=3 uid="uid://bigmru3rmry2m"]
+
+[ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_10c83"]
+
+[node name="PlayerSelectorMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_10c83")
+script = ExtResource("1_8wdo8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 38.0
+offset_top = 43.0
+offset_right = 413.0
+offset_bottom = -43.0
+grow_vertical = 2
+
+[node name="PanelHolder" type="VBoxContainer" parent="Panel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(375, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -187.0
+offset_top = -283.0
+offset_right = 188.0
+offset_bottom = 283.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+alignment = 2
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 121.0
+offset_top = -93.0
+offset_right = 242.0
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
+layout_mode = 2
+offset_left = 10.5
+offset_top = 8.5
+offset_right = 110.5
+offset_bottom = 177.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Button1" type="Button" parent="Panel2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "1 Player"
+
+[node name="Button2" type="Button" parent="Panel2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "2 Players"
+
+[node name="Button3" type="Button" parent="Panel2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "3 Players"
+
+[node name="Button4" type="Button" parent="Panel2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "4 Players"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel2"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -230.0
+offset_top = 26.0
+offset_right = 630.4
+offset_bottom = 198.4
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 80
+text = "SELECT
+PLAYERS
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -98.0
+offset_right = 325.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BackButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Back"
+
+[node name="NextButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Next"

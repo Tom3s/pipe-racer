@@ -1,20 +1,13 @@
 extends Control
 class_name SettingsMenu
 
-@onready
-var elements = %Elements
+@onready var elements = %Elements
+@onready var masterVolumeSlider = %MasterVolumeSlider
+@onready var musicVolumeSlider = %MusicVolumeSlider
+@onready var sfxVolumeSlider = %SFXVolumeSlider
+@onready var closeButton = %CloseButton
+@onready var fullscreenButton = %FullscreenButton
 
-@onready
-var masterVolumeSlider = %MasterVolumeSlider
-
-@onready
-var musicVolumeSlider = %MusicVolumeSlider
-
-@onready
-var sfxVolumeSlider = %SFXVolumeSlider
-
-@onready
-var closeButton = %CloseButton
 
 signal closePressed()
 
@@ -22,6 +15,8 @@ func _ready():
 	masterVolumeSlider.value_changed.connect(onMasterVolumeSlider_valueChanged)
 	musicVolumeSlider.value_changed.connect(onMusicVolumeSlider_valueChanged)
 	sfxVolumeSlider.value_changed.connect(onSFXVolumeSlider_valueChanged)
+
+	fullscreenButton.pressed.connect(onFullscreenButton_pressed)
 
 	closeButton.button_up.connect(onCloseButton_pressed)
 	masterVolumeSlider.value = Playerstats.MASTER_VOLUME
@@ -51,3 +46,10 @@ func remapVolume(value: float):
 	# return -80 - 80 * (log(value) / log(10))
 	return max((log(value) / log(10) - 2) * 20, -80)
 	
+func onFullscreenButton_pressed():
+	var nextWindowMode = DisplayServer.window_get_mode()
+	if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
+		nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
+	else:
+		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(nextWindowMode)
