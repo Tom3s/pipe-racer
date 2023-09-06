@@ -57,3 +57,4 @@ func onRestartButton_pressed():
 
 func onExitButton_pressed():
 	exitPressed.emit()
+	visible = false

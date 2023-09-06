@@ -114,6 +114,7 @@ func connectSignals():
 	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
 	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
 
+	pauseMenu.resumePressed.connect(onEditorInputHandler_pausePressed)
 	pauseMenu.exitPressed.connect(onEditorExited)
 
 	editorInputHandler.mouseEnteredUI.connect(onEditorInputHandler_mouseEnteredUI)
@@ -293,8 +294,9 @@ func onEditorInputHandler_deleteSelectedPressed():
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
 
-func onEditorInputHandler_pausePressed():
-	pauseMenu.visible = true
+func onEditorInputHandler_pausePressed(paused: bool = false):
+	pauseMenu.visible = paused
+	editorInputHandler.paused = paused
 
 func onPrefabPropertiesUI_leftEndChanged(value: int):
 	prefabMesher.leftEndHeight = value
@@ -468,6 +470,7 @@ func onEditorInputHandler_fullScreenPressed():
 		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(nextWindowMode)
 
+var oldSoundVolume: float = 0
 func onEditorInputHandler_testPressed():
 	car.resumeMovement()
 	car.setRespawnPositionFromDictionary(map.start.getStartPosition(0, 1))
@@ -476,7 +479,7 @@ func onEditorInputHandler_testPressed():
 	carCamera.current = true
 	camera.current = false
 	hideUI()
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), 0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 
 func onCar_pausePressed(_sink = null, _sink2 = null):
@@ -489,6 +492,7 @@ func onCar_pausePressed(_sink = null, _sink2 = null):
 	car.visible = false
 	carCamera.current = false
 	camera.current = true
+	oldSoundVolume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
 
 func onMap_mapLoaded(trackName: String, lapCount: int):
@@ -498,6 +502,7 @@ func onMap_mapLoaded(trackName: String, lapCount: int):
 	})
 
 func onEditorExited():
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 	get_parent().editorExited.emit()
 
 const EDITOR_UI_PREFAB_PROPERTIES: int = 0

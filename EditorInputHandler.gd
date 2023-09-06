@@ -30,7 +30,7 @@ signal editorModeDeletePressed()
 
 signal savePressed()
 
-signal pausePressed()
+signal pausePressed(paused)
 
 signal fullScreenPressed()
 
@@ -61,8 +61,8 @@ func _input(event):
 		fullScreenPressed.emit()
 
 	if Input.is_action_just_pressed("p1_pause"):
-		paused = true
-		pausePressed.emit()
+		# paused = !paused
+		pausePressed.emit(!paused)
 
 	if propertiesOpen || paused:
 		return

@@ -48,5 +48,6 @@ func onCloseButton_pressed():
 #     return min_dB + (max_dB - min_dB) * math.log10(percent / 100)
 
 func remapVolume(value: float):
-	return -80 - 80 * (log(value) / log(10))
+	# return -80 - 80 * (log(value) / log(10))
+	return log(value) / log(10) - 2
 	
