@@ -53,8 +53,9 @@ func onResumeButton_pressed():
 	resumePressed.emit()
 
 func onRestartButton_pressed():
+	visible = false
 	restartPressed.emit()
 
 func onExitButton_pressed():
-	exitPressed.emit()
 	visible = false
+	exitPressed.emit()

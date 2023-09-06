@@ -47,9 +47,4 @@ func remapVolume(value: float):
 	return max((log(value) / log(10) - 2) * 20, -80)
 	
 func onFullscreenButton_pressed():
-	var nextWindowMode = DisplayServer.window_get_mode()
-	if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
-		nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
-	else:
-		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
-	DisplayServer.window_set_mode(nextWindowMode)
+	Playerstats.FULLSCREEN = !Playerstats.FULLSCREEN

@@ -43,6 +43,18 @@ var SFX_VOLUME: float = 100.0:
 	get:
 		return SFX_VOLUME
 
+@export
+var FULLSCREEN: bool = false:
+	set(newFullscreen):
+		FULLSCREEN = newFullscreen
+		if FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		saveToFile()
+	get:
+		return FULLSCREEN
+
 const SAVE_FILE := "user://player.json"
 
 func _ready() -> void:
@@ -63,6 +75,7 @@ func saveToFile() -> void:
 		"MASTER_VOLUME": MASTER_VOLUME,
 		"MUSIC_VOLUME": MUSIC_VOLUME,
 		"SFX_VOLUME": SFX_VOLUME,
+		"FULLSCREEN": FULLSCREEN,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -82,6 +95,7 @@ func loadFromFile() -> void:
 		MASTER_VOLUME = float(jsonData["MASTER_VOLUME"])
 		MUSIC_VOLUME = float(jsonData["MUSIC_VOLUME"])
 		SFX_VOLUME = float(jsonData["SFX_VOLUME"])
+		FULLSCREEN = bool(jsonData["FULLSCREEN"])
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

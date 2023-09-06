@@ -140,12 +140,7 @@ func onCar_finishedRace(playerIndex: int):
 	print("Total time: ", timeTrialManagers[playerIndex].getTotalTime())
 
 func onRaceInputHandler_fullScreenPressed():
-	var nextWindowMode = DisplayServer.window_get_mode()
-	if nextWindowMode == DisplayServer.WINDOW_MODE_WINDOWED:
-		nextWindowMode = DisplayServer.WINDOW_MODE_FULLSCREEN
-	else:
-		nextWindowMode = DisplayServer.WINDOW_MODE_WINDOWED
-	DisplayServer.window_set_mode(nextWindowMode)
+	Playerstats.FULLSCREEN = !Playerstats.FULLSCREEN
 
 func onState_allPlayersReset():
 	# reset cars
@@ -154,7 +149,7 @@ func onState_allPlayersReset():
 	# reset huds (may not be necessary)
 	# reset state machine
 
-	var musicPlayer = get_tree().root.get_node("MusicPlayer")
+	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	musicPlayer.playMenuMusic()
 
 	for car in cars:

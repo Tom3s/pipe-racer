@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pipe Racer"
-run/main_scene="res://RaceIngame.tscn"
+run/main_scene="res://Menu/MainMenu.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 
 [autoload]
