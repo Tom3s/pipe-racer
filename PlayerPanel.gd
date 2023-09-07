@@ -7,6 +7,8 @@ extends Control
 @onready var loginButton: Button = %LoginButton
 @onready var randomColorButton: Button = %RandomColorButton
 
+@onready var profilePicture: TextureRect = %ProfilePicture
+
 func _ready():
 	connectSignals()
 
@@ -46,6 +48,9 @@ func setMainPlayerData():
 	colorPicker.color = Playerstats.PLAYER_COLOR
 	colorPicker.color_changed.connect(onColorChanged)
 
+	loadProfilePicture("https://yt3.googleusercontent.com/ytc/AOPolaT2pQVPhbomlBCkncISGhpcanMpzdHJOQz5XI6_qA=s176-c-k-c0x00ffffff-no-rj")
+	# loadProfilePicture("https://via.placeholder.com/500")
+
 
 func setRandomPlayerData():
 	username.text = "Player" + str(randi() % 1000)
@@ -60,3 +65,34 @@ func onColorChanged(new_color):
 
 func getPlayerData() -> PlayerData:
 	return PlayerData.new(0, username.text, colorPicker.color)
+
+func loadProfilePicture(imageUrl: String):
+	var httpRequest = HTTPRequest.new()
+	add_child(httpRequest)
+	httpRequest.request_completed.connect(onHttpRequestCompleted)
+
+	var httpError = httpRequest.request(imageUrl)
+	if httpError != OK:
+		print("Error: " + str(httpError))
+
+func onHttpRequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+	var image = Image.new()
+	var imageError = image.load_jpg_from_buffer(body)
+	if imageError != OK:
+		print("Error loading jpg: " + str(imageError))
+		print("Trying PNG...")
+		imageError = image.load_png_from_buffer(body)
+		if imageError != OK:
+			print("Error loading png: " + str(imageError))
+			return
+		else:
+			print("PNG loaded successfully")
+	else:
+		print("JPG loaded successfully")
+	
+	# var profileTexture = ImageTexture.new()
+	
+
+	profilePicture.texture = ImageTexture.create_from_image(image)
+
+

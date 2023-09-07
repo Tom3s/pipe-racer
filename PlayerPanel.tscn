@@ -25,7 +25,8 @@ layout_mode = 0
 offset_right = 372.0
 offset_bottom = 126.0
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer"]
+[node name="ProfilePicture" type="TextureRect" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 texture = ExtResource("3_sq1jl")

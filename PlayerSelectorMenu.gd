@@ -31,6 +31,8 @@ func _ready():
 
 	panels[0].setMainPlayerData()
 
+	setNumberOfPlayers(1)
+
 	button1.pressed.connect(onButton1_Pressed)
 	button2.pressed.connect(onButton2_Pressed)
 	button3.pressed.connect(onButton3_Pressed)
