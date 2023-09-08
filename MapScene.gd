@@ -587,8 +587,8 @@ func saveToJSON(autosave: bool = false):
 			"rotation": start.global_rotation.y
 		},
 		"checkPoints": [],
-		"props": [],
-		"author": Playerstats.PLAYER_NAME
+		"props": []
+		# "author": Playerstats.PLAYER_NAME
 	}
 
 	for child in trackPieces.get_children():
