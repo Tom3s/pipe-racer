@@ -587,7 +587,8 @@ func saveToJSON(autosave: bool = false):
 			"rotation": start.global_rotation.y
 		},
 		"checkPoints": [],
-		"props": []
+		"props": [],
+		"author": Playerstats.PLAYER_NAME
 	}
 
 	for child in trackPieces.get_children():
@@ -640,13 +641,13 @@ func loadMap(fileName: String):
 
 func loadFromJSON(fileName: String):
 	var path = fileName
-	if !fileName.begins_with("user://tracks/local/"):
+	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
 		path = "user://tracks/local/" + fileName
 
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 
 	if fileHandler == null:
-		print("Error opening file to load from")
+		print("Error opening file to load from", path)
 		return
 	
 	var trackData = JSON.parse_string(fileHandler.get_as_text())
