@@ -124,7 +124,7 @@ func onColorChanged(new_color):
 	Playerstats.PLAYER_COLOR = new_color
 
 func getPlayerData() -> PlayerData:
-	return PlayerData.new(userId, username.text, colorPicker.color)
+	return PlayerData.new(userId, username.text, colorPicker.color, sessionToken)
 
 func getLoginData() -> Dictionary:
 	return {

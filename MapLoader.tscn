@@ -32,7 +32,40 @@ layout_mode = 2
 text = "Select Track"
 horizontal_alignment = 1
 
-[node name="TrackList" type="ItemList" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LocalButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Local"
+
+[node name="DownloadedButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Downloaded"
+
+[node name="FindButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Find
+"
+
+[node name="LocalTrackList" type="ItemList" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DownloadedTrackList" type="ItemList" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OnlineTrackList" type="ItemList" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -59,6 +92,13 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 disabled = true
 text = "Upload"
+
+[node name="DownloadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+disabled = true
+text = "Download"
 
 [node name="NewButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
