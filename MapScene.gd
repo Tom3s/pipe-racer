@@ -1,6 +1,7 @@
 extends Node3D
 class_name Map
 
+const CURRENT_FORMAT_VERSION = 1
 
 var StartScene = preload("res://Start.tscn")
 @onready
@@ -570,6 +571,7 @@ func save():
 
 func saveToJSON(autosave: bool = false):
 	var trackData = {
+		"format": CURRENT_FORMAT_VERSION,
 		"trackName": trackName,
 		"lapCount": lapCount,
 		"trackPieces": [],

@@ -16,6 +16,8 @@ func _ready():
 	backButton.pressed.connect(onBackButton_pressed)
 	newButton.pressed.connect(onNewButton_pressed)
 
+	visibility_changed.connect(loadTracks)
+
 	loadButton.disabled = true
 
 	loadTracks()
