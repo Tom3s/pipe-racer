@@ -14,7 +14,7 @@ signal exitedMapEditor()
 func _ready():
 	mapLoader = %MapLoader
 
-	mapLoader.showNewButton(true)
+	mapLoader.setEditorSelect(true)
 	mapLoader.trackSelected.connect(editMap)
 	mapLoader.backPressed.connect(onMapLoader_backPressed)
 

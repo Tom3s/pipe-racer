@@ -10,6 +10,8 @@ extends Control
 
 @onready var profilePicture: TextureRect = %ProfilePicture
 
+var isMainPlayer: bool = false
+
 var defaultPicture: Texture
 
 var sessionToken: String = ""
@@ -55,10 +57,10 @@ func onLoginButton_pressed():
 		"http://localhost:80/api/auth/login",
 		["Content-Type: application/json"],
 		HTTPClient.METHOD_POST,
-		JSON.stringify((loginData))
+		JSON.stringify(loginData)
 	)
 	if httpError != OK:
-		print("Error: " + str(httpError))
+		print("Error: " + error_string(httpError))
 
 func onLogoutButton_pressed():
 	setButtonsLoggedOut()
@@ -82,21 +84,25 @@ func onLoginRequestCompleted(result: int, responseCode: int, headers: PackedStri
 	sessionToken = json.sessionToken
 	userId = json.userId
 
+	if isMainPlayer:
+		Playerstats.SESSION_TOKEN = sessionToken
+		Playerstats.USER_ID = userId
+
 	loadProfilePicture(json.profilePictureUrl)
 
 func onRandomColorButton_pressed():
 	colorPicker.color = Color(randf(), randf(), randf(), 1.0)
 
 func setMainPlayerData():
+	isMainPlayer = true
 	username.text = Playerstats.PLAYER_NAME
-	# password.text = Playerstats.PLAYER_PASSWORD
 	username.text_changed.connect(onTextChanged)
-
+	password.text = Playerstats.PLAYER_PASSWORD
+	password.text_changed.connect(onPasswordTextChanged)
 	colorPicker.color = Playerstats.PLAYER_COLOR
 	colorPicker.color_changed.connect(onColorChanged)
 
-	# loadProfilePicture("https://yt3.googleusercontent.com/ytc/AOPolaT2pQVPhbomlBCkncISGhpcanMpzdHJOQz5XI6_qA=s176-c-k-c0x00ffffff-no-rj")
-	# loadProfilePicture("https://via.placeholder.com/500")
+	onLoginButton_pressed()
 
 
 func setRandomPlayerData():
@@ -110,11 +116,15 @@ func onTextChanged(newText: String) -> void:
 	if newText != "":
 		Playerstats.PLAYER_NAME = newText
 
+func onPasswordTextChanged(newText: String) -> void:
+	if newText != "":
+		Playerstats.PLAYER_PASSWORD = newText
+
 func onColorChanged(new_color):
 	Playerstats.PLAYER_COLOR = new_color
 
 func getPlayerData() -> PlayerData:
-	return PlayerData.new(0, username.text, colorPicker.color)
+	return PlayerData.new(userId, username.text, colorPicker.color)
 
 func getLoginData() -> Dictionary:
 	return {
@@ -135,11 +145,11 @@ func onLoadProfilePictureRequestCompleted(result: int, responseCode: int, header
 	var image = Image.new()
 	var imageError = image.load_jpg_from_buffer(body)
 	if imageError != OK:
-		print("Error loading jpg: " + str(imageError))
+		print("Error loading jpg: " + error_string(imageError))
 		print("Trying PNG...")
 		imageError = image.load_png_from_buffer(body)
 		if imageError != OK:
-			print("Error loading png: " + str(imageError))
+			print("Error loading png: " + error_string(imageError))
 			return
 		else:
 			print("PNG loaded successfully")

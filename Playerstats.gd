@@ -65,7 +65,11 @@ var FULLSCREEN: bool = false:
 	get:
 		return FULLSCREEN
 
+var SESSION_TOKEN: String = ""
+var USER_ID: String = ""
+
 const SAVE_FILE := "user://player.json"
+
 
 func _ready() -> void:
 	loadFromFile()
