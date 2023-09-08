@@ -59,3 +59,6 @@ func show():
 func hide():
 	mapLoader.visible = false
 	playerSelectorMenu.visible = false
+
+func getMainPlayerPanel() -> PlayerPanel:
+	return playerSelectorMenu.getMainPlayerPanel()

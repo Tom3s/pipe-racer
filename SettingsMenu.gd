@@ -1,7 +1,6 @@
 extends Control
 class_name SettingsMenu
 
-@onready var elements = %Elements
 @onready var masterVolumeSlider = %MasterVolumeSlider
 @onready var musicVolumeSlider = %MusicVolumeSlider
 @onready var sfxVolumeSlider = %SFXVolumeSlider

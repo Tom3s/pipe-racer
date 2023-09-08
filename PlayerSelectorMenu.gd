@@ -70,17 +70,12 @@ func onBackButton_Pressed():
 	backPressed.emit()
 	pass
 
-
-	
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 func setNumberOfPlayers(number: int):
 	for i in 4:
 		if i < number:
 			panels[i].visible = true
 		else:
 			panels[i].visible = false
+
+func getMainPlayerPanel():
+	return panels[0]

@@ -113,6 +113,7 @@ vertical_alignment = 1
 
 [node name="Nickname" type="LineEdit" parent="MainContent"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -129,6 +130,7 @@ placeholder_text = "Nickname"
 
 [node name="ColorPicker" type="ColorPickerButton" parent="MainContent"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

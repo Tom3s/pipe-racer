@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8mpq5k80nw87"]
+[gd_scene load_steps=9 format=3 uid="uid://c8mpq5k80nw87"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_74pes"]
 [ext_resource type="Script" path="res://PropPropertiesUI.gd" id="1_we2y5"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cdrphd6rbd85y" path="res://Track Props/Chicane right.png" id="4_q45dc"]
 [ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="5_1yls2"]
 [ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="6_fetov"]
+[ext_resource type="Texture2D" uid="uid://c3g2tli8mtuws" path="res://Track Props/champion.png" id="8_jeide"]
 
 [node name="PropPropertiesUI" type="Control"]
 layout_mode = 3
@@ -48,7 +49,7 @@ offset_right = 206.0
 offset_bottom = 451.0
 auto_height = true
 text_overrun_behavior = 0
-item_count = 5
+item_count = 6
 max_columns = 2
 same_column_width = true
 fixed_icon_size = Vector2i(90, 60)
@@ -62,6 +63,8 @@ item_3/text = ""
 item_3/icon = ExtResource("5_1yls2")
 item_4/text = ""
 item_4/icon = ExtResource("6_fetov")
+item_5/text = ""
+item_5/icon = ExtResource("8_jeide")
 
 [node name="Label" type="Label" parent="Panel3"]
 layout_mode = 0

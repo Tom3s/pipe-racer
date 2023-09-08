@@ -1,4 +1,5 @@
 extends Control
+class_name PlayerPanel
 
 @onready var username: LineEdit = %Username
 @onready var password: LineEdit	= %Password
