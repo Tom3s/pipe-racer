@@ -11,6 +11,7 @@ class_name MapLoader
 
 @onready var backButton: Button = %BackButton
 @onready var loadButton: Button = %LoadButton
+@onready var deleteButton: Button = %DeleteButton
 @onready var uploadButton: Button = %UploadButton
 @onready var downloadButton: Button = %DownloadButton
 @onready var newButton: Button = %NewButton
@@ -35,6 +36,7 @@ signal backPressed()
 func _ready():
 	backButton.pressed.connect(onBackButton_pressed)
 	loadButton.pressed.connect(onLoadButton_pressed)
+	deleteButton.pressed.connect(onDeleteButton_pressed)
 	uploadButton.pressed.connect(onUploadButton_pressed)
 	downloadButton.pressed.connect(onDownloadButton_pressed)
 	newButton.pressed.connect(onNewButton_pressed)
@@ -50,6 +52,7 @@ func _ready():
 	visibility_changed.connect(loadLocalTracks)
 
 	loadButton.disabled = true
+	deleteButton.disabled = true
 	uploadButton.disabled = true
 
 	setListVisibility(MODE_SELECT_LOCAL)
@@ -134,6 +137,35 @@ func onLoadButton_pressed() -> void:
 	trackSelected.emit(trackName)
 	print("Selected track: ", trackName)
 
+var selectedTrackForDelete: String = ""
+func onDeleteButton_pressed() -> void:
+	# showAlert("Confirm", "Are you sure you want to delete this track?", "This action cannot be undone", true)
+	var trackName = ""
+	var readableTrackName = ""
+	if selectMode == MODE_SELECT_LOCAL:
+		trackName = "user://tracks/local/" 
+		trackName += localTrackListItems[localTrackList.get_selected_items()[0]]
+		readableTrackName = localTrackList.get_item_text(localTrackList.get_selected_items()[0])
+	elif selectMode == MODE_SELECT_DOWNLOADED:
+		trackName = "user://tracks/downloaded/" 
+		trackName += downloadedTrackListItems[downloadedTrackList.get_selected_items()[0]]
+		readableTrackName = downloadedTrackList.get_item_text(downloadedTrackList.get_selected_items()[0])
+	else:
+		return
+	selectedTrackForDelete = trackName
+	showDeleteAlert(readableTrackName)
+
+	print("Deleting track: ", trackName)
+
+func onDeleteConfirmed():
+	var fileHandler = DirAccess.open("user://")
+	if fileHandler.file_exists(selectedTrackForDelete):
+		fileHandler.remove(selectedTrackForDelete)
+		loadLocalTracks()
+		loadDownloadedTracks()
+
+	selectedTrackForDelete = ""
+
 func onUploadButton_pressed() -> void:
 	var trackName = localTrackListItems[localTrackList.get_selected_items()[0]]
 	uploadTrack(trackName)
@@ -154,12 +186,14 @@ func onLocalButton_pressed():
 	setSelectMode(MODE_SELECT_LOCAL)
 	enableAllButtons()
 	loadButton.disabled = true
+	deleteButton.disabled = true
 	loadLocalTracks()
 
 func onDownloadedButton_pressed():
 	setSelectMode(MODE_SELECT_DOWNLOADED)
 	enableAllButtons()
 	loadButton.disabled = true
+	deleteButton.disabled = true
 	loadDownloadedTracks()
 
 func onFindButton_pressed():
@@ -193,6 +227,7 @@ func hideTabButtons():
 func disableAllButtons():
 	backButton.disabled = true
 	loadButton.disabled = true
+	deleteButton.disabled = true
 	uploadButton.disabled = true
 	newButton.disabled = true
 
@@ -204,9 +239,13 @@ func enableAllButtons():
 func setLoadUploadButtonEnabled():
 	# loadButton.disabled = localTrackList.get_selected_items().size() <= 0
 	if selectMode == MODE_SELECT_LOCAL:
-		loadButton.disabled = localTrackList.get_selected_items().size() <= 0
+		var disabledButtons = localTrackList.get_selected_items().size() <= 0
+		loadButton.disabled = disabledButtons
+		deleteButton.disabled = disabledButtons
 	elif selectMode == MODE_SELECT_DOWNLOADED:
-		loadButton.disabled = downloadedTrackList.get_selected_items().size() <= 0
+		var disabledButtons = downloadedTrackList.get_selected_items().size() <= 0
+		loadButton.disabled = disabledButtons
+		deleteButton.disabled = disabledButtons
 	uploadButton.disabled = localTrackList.get_selected_items().size() <= 0
 
 
@@ -305,7 +344,9 @@ func onDownloadRequest_completed(result: int, responseCode: int, headers: Packed
 	fileHandler.close()
 	downloadingTrack = false
 	lastDownloadedTrackId = ""
-	showAlert("Success", "Track Downloaded Successfully", "Track saved to: " + path)
+
+	var json = JSON.parse_string(body.get_string_from_utf8())
+	showAlert("Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
 
 
 
@@ -318,6 +359,7 @@ func setButtonVisibility(mode: int):
 	loadButton.visible = mode == MODE_SELECT_LOCAL || mode == MODE_SELECT_DOWNLOADED
 	uploadButton.visible = mode == MODE_SELECT_LOCAL && editorSelect
 	downloadButton.visible = mode == MODE_SELECT_SEARCH
+	deleteButton.visible = mode == MODE_SELECT_LOCAL || mode == MODE_SELECT_DOWNLOADED
 
 func setListVisibility(mode: int):
 	localTrackList.visible = mode == MODE_SELECT_LOCAL
@@ -331,5 +373,21 @@ func showAlert(title: String, text: String, response: String):
 	alert.dialog_text = text + "\n"
 	alert.dialog_text += response
 	alert.canceled.connect(alert.queue_free)
+	add_child(alert)
+	alert.popup_centered()
+
+func showDeleteAlert(trackName: String):
+	var alert = AcceptDialog.new()
+	alert.title = "Confirm"
+	alert.dialog_text = "Are you sure you want to delete this track?\n"
+	alert.dialog_text += trackName + "\n"
+	alert.dialog_text += "This action cannot be undone"
+
+	alert.add_cancel_button("No")
+	alert.ok_button_text = "Yes"
+
+	alert.confirmed.connect(onDeleteConfirmed)
+	alert.close_requested.connect(alert.queue_free)
+
 	add_child(alert)
 	alert.popup_centered()
