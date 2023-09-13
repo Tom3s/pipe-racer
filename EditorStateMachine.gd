@@ -22,7 +22,7 @@ var buildMode: int = 0:
 		return buildMode
 
 var currentPlacerNode: Node3D = null
-
+var testing: bool = false
 
 @export 
 var GRID_MAX_HEIGHT: int = 256
@@ -57,6 +57,9 @@ func inEditState() -> bool:
 
 func inDeleteState() -> bool:
 	return editorState == EDITOR_STATE_DELETE
+
+func inPlaytestState() -> bool:
+	return editorState == EDITOR_STATE_PLAYTEST
 
 func canBuild() -> bool:
 	return mouseNotOverUI() and inBuildState()

@@ -17,6 +17,8 @@ var car: CarController
 var carCamera: FollowingCamera
 
 
+
+
 func _ready():
 	# assign nodes
 	editorInputHandler = %EditorInputHandler
@@ -40,6 +42,7 @@ func _ready():
 	carCamera.current = false
 	playerNode.add_child(carCamera)
 
+	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 	onCar_pausePressed()
 
 	prefabPropertiesUI.visible = true
@@ -481,6 +484,8 @@ func onEditorInputHandler_testPressed():
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 
 func onCar_pausePressed(_sink = null, _sink2 = null):
+	if !editorStateMachine.inPlaytestState():
+		return
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_BUILD
 	setVisibleUI(editorStateMachine.editorState)
 	editorShortcutsUI.visible = true
