@@ -14,6 +14,7 @@ var ingameSFX: IngameSFX = null
 
 var nrLaps: int
 
+
 func _init(ingameSFXNode: IngameSFX, initnrLaps: int) -> void:
 	ingameSFX = ingameSFXNode
 	nrLaps = initnrLaps
@@ -27,12 +28,16 @@ func startTimeTrial(startTime: int) -> void:
 
 func finishedLap() -> void:
 	var lapFinishTime = floor(Time.get_unix_time_from_system() * 1000) 
+	collectCheckpoint(lapFinishTime, splits.size() - 1)
 	times.append(lapFinishTime - timeTrialLapEnd)
 	timeTrialLapEnd = lapFinishTime
 	ingameSFX.playFinishLapSFX()
 
-func getTotalTime() -> int:
+func getTime() -> int:
 	return times.reduce(func(accum, number): return accum + number, 0)
+
+func getTotalTime() -> int:
+	return getTime() + getCurrentLapTime()
 
 func getLastLap() -> int:
 	if times.size() <= 0:
@@ -62,7 +67,7 @@ func resumeTimeTrial(timestamp: int) -> void:
 func collectCheckpoint(timestamp: int, lap: int) -> void:
 	if splits.size() <= lap:
 		splits.append([])
-	splits[lap].append(timestamp)
+	splits[lap].append(timestamp - timeTrialLapEnd)
 
 func reset() -> void:
 	times = []

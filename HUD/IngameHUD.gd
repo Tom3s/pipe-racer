@@ -26,9 +26,9 @@ var resetIndicator: Label = %ResetIndicator
 @onready
 var nickname: Label = %Nickname
 
-
 var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
+# var globalPlacement: int = -1
 
 var TOTAL_CARS: int = 0
 
@@ -51,7 +51,7 @@ func _physics_process(_delta: float) -> void:
 	setPositionText(car.state.placement, TOTAL_CARS)
 	setLapText(car.state.currentLap + 1, car.state.nrLaps)
 	setLapTimerText(timeTrialManager.getCurrentLapTime())
-	setStatsText(timeTrialManager.getTotalTime() + timeTrialManager.getCurrentLapTime(), timeTrialManager.getLastLap(), timeTrialManager.getBestLap())
+	setStatsText(timeTrialManager.getTotalTime(), timeTrialManager.getLastLap(), timeTrialManager.getBestLap())
 	# setReadyIndicator(car.incorrectCheckPoint) 
 	setReadyIndicator(!car.state.isReady)
 	setResetIndicator(car.state.isResetting)
@@ -69,13 +69,13 @@ func setLapText(currentLap: int, total: int) -> void:
 	lap.text = "Lap: " + str(min(currentLap, total)) + "/" + str(total)
 
 func setLapTimerText(ticks: int) -> void:
-	lapTimer.text = getTimeStringFromTicks(ticks)
+	lapTimer.text = IngameHUD.getTimeStringFromTicks(ticks)
 
 func setStatsText(totalTick: int, lastLapTicks: int, bestLapTicks: int) -> void:
-	stats.text = "Total:\t" + getTimeStringFromTicks(totalTick) + "\n"
+	stats.text = "Total:\t" + IngameHUD.getTimeStringFromTicks(totalTick) + "\n"
 	stats.text += "-------\t==========\n"
-	stats.text += "Last:\t" + getTimeStringFromTicks(lastLapTicks) + "\n"
-	stats.text += "Best:\t" + getTimeStringFromTicks(bestLapTicks)
+	stats.text += "Last:\t" + IngameHUD.getTimeStringFromTicks(lastLapTicks) + "\n"
+	stats.text += "Best:\t" + IngameHUD.getTimeStringFromTicks(bestLapTicks)
 
 # func setReadyIndicator(needsRespawn: bool) -> void:
 # 	readyIndicator.visible = needsRespawn
@@ -86,7 +86,7 @@ func setReadyIndicator(isReady: bool) -> void:
 func setResetIndicator(isResetting: bool) -> void:
 	resetIndicator.visible = isResetting
 
-func getTimeStringFromTicks(ticks: int) -> String:
+static func getTimeStringFromTicks(ticks: int) -> String:
 	if ticks == -1:
 		return "N/A"
 	var seconds: int = ticks / 1000

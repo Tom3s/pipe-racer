@@ -4,6 +4,7 @@ class_name PlayerPanel
 @onready var username: LineEdit = %Username
 @onready var password: LineEdit	= %Password
 @onready var colorPicker: ColorPickerButton = %ColorPicker
+@onready var guestLabel: Label = %GuestLabel
 @onready var guestTickBox: CheckBox = %GuestTickBox
 @onready var loginButton: Button = %LoginButton
 @onready var logoutButton: Button = %LogoutButton
@@ -43,7 +44,7 @@ func onColorPicker_colorChanged(newColor: Color):
 	pass
 
 func onGuestTickBox_toggled(pressed: bool):
-	pass
+	password.visible = !pressed	
 
 func onLoginButton_pressed():
 	setButtonsLoggingIn()
@@ -166,13 +167,26 @@ func setButtonsLoggingIn():
 	loginButton.disabled = true
 	loginButton.text = "Loading"
 
+	username.editable = false
+	password.editable = false
+
+	guestLabel.visible = false
+	guestTickBox.visible = false
+
 func setButtonsLoggedIn():
 	loginButton.visible = false
 	logoutButton.visible = true
+	username.editable = false
+	password.editable = false
+	password.visible = false
 
 func setButtonsLoggedOut():
 	loginButton.disabled = false
 	loginButton.visible = true
 	loginButton.text = "Log In"
 	logoutButton.visible = false
+	guestLabel.visible = true
+	guestTickBox.visible = true
+	username.editable = true
+	password.editable = true
 

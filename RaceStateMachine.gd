@@ -11,6 +11,8 @@ var pausedBy: int = -1
 
 var raceStarted: bool = false
 
+var ranked: bool = false
+
 signal allPlayersReady()
 signal allPlayersFinished()
 signal allPlayersReset()

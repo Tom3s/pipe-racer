@@ -32,7 +32,7 @@ func onMapLoader_backPressed():
 	playerSelectorMenu.visible = true
 
 func onMapLoader_trackSelected(trackName: String):
-	var raceSettins = RaceSettings.new(trackName)
+	var raceSettins = RaceSettings.new(trackName, trackName.begins_with("user://tracks/downloaded"))
 	for player in players:
 		raceSettins.addPlayer(player)
 	

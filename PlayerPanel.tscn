@@ -59,6 +59,7 @@ layout_mode = 2
 
 [node name="Password" type="LineEdit" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 focus_next = NodePath("../../HBoxContainer/ColorPicker")
@@ -69,6 +70,7 @@ secret = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "Randomize Car Color"
 icon = ExtResource("4_ma6sb")
 icon_alignment = 1
@@ -76,8 +78,10 @@ expand_icon = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 10
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+[node name="GuestLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Guest "
@@ -86,10 +90,11 @@ vertical_alignment = 1
 [node name="GuestTickBox" type="CheckBox" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+disabled = true
 
 [node name="LoginButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Login"
@@ -97,7 +102,7 @@ text = "Login"
 [node name="LogoutButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Logout"

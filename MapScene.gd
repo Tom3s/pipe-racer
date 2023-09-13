@@ -13,6 +13,8 @@ var props: Node3D
 
 var trackName: String = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
 var lapCount: int = 3
+var trackId: String = ""
+var author: String = ""
 
 var autoSaveInterval: float = 12
 
@@ -643,6 +645,11 @@ func loadFromJSON(fileName: String):
 	var path = fileName
 	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
 		path = "user://tracks/local/" + fileName
+	
+	if fileName.begins_with("user://tracks/downloaded/"):
+		trackId = fileName.split("/")[-1].split(".")[0]
+	else:
+		trackId = ""
 
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 
@@ -655,6 +662,11 @@ func loadFromJSON(fileName: String):
 	if trackData == null:
 		print("Error parsing JSON when loading map")
 		return
+	
+	if trackData.has("author"):
+		author = trackData["author"]
+	else:
+		author = ""
 
 	clearMap()
 

@@ -6,6 +6,7 @@ var timeTrialManagers: Array[TimeTrialManager]
 var huds: Array[IngameHUD]
 var cameras: Array[FollowingCamera]
 var map: Map
+var players: Array[PlayerData]
 
 var countdown: Countdown
 var raceInputHandler: RaceInputHandler
@@ -16,27 +17,32 @@ var ingameSFX: IngameSFX
 var paused = -1
 
 @onready var pauseMenu: PauseMenu = %PauseMenu
+@onready var leaderboardUI: LeaderboardUI = %LeaderboardUI
 
 func getTimestamp():
 	return floor(Time.get_unix_time_from_system() * 1000)
 
-func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array, initialMap: Map, initialIngameSFX: IngameSFX):
+func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array, initialMap: Map, initialIngameSFX: IngameSFX, initialPlayers: Array[PlayerData], ranked: bool):
 	cars = initialCars
 	timeTrialManagers = initialTimeTrialManagers
 	huds = initialHuds
 	cameras = initialCameras
 	map = initialMap
 	ingameSFX = initialIngameSFX
+	players = initialPlayers
 
 	countdown = %UniversalCanvas/%Countdown
 	raceInputHandler = %RaceInputHandler
 	state = %RaceStateMachine
 
 	pauseMenu.visible = false
+	leaderboardUI.visible = false
+	leaderboardUI.setHeader(map.trackName, map.author)
 
 	state.nrPlayers = cars.size()
 	state.setupReadyPlayersList()
 	state.setupResettingPlayersList()
+	state.ranked = ranked
 
 	connectSignals()
 
@@ -94,6 +100,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			timeTrialManagers[i].pauseTimeTrial(timestamp)
 		state.pausedBy = playerIndex
 		pauseMenu.visible = true
+		leaderboardUI.visible = false
 
 func forceResumeGame():
 	var timestamp = floor(getTimestamp())
@@ -120,21 +127,27 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 
 func onStart_bodyEnteredStart(car: CarController, start: Start):
 	if car.state.hasCollectedAllCheckpoints():
-		car.state.finishLap()
 		car.setRespawnPositionFromDictionary(start.getStartPosition(car.playerIndex, cars.size()))
 		for checkpoint in map.getCheckpoints():
 			checkpoint.setUncollected()
 		timeTrialManagers[car.playerIndex].finishedLap()
-		state.finishedPlayers += 1
+		# await timeTrialManagers[car.playerIndex].addedTime
+		car.state.finishLap()
+		# state.finishedPlayers += 1
 
 func onState_allPlayersFinished():
 	print("All players finished")
+	if state.ranked:
+		leaderboardUI.fetchTimes(map.trackId)
+		leaderboardUI.visible = true
 
 func onCar_isReady(playerIndex: int):
 	state.setPlayerReady(playerIndex)
 
 func onCar_finishedRace(playerIndex: int):
 	state.newPlayerFinished()
+	if state.ranked:
+		submitTime(timeTrialManagers[playerIndex].splits, timeTrialManagers[playerIndex].getBestLap(), timeTrialManagers[playerIndex].getTotalTime(), playerIndex)
 	print("Player ", cars[playerIndex], " finished")
 	print("Best Lap: ", timeTrialManagers[playerIndex].getBestLap())
 	print("Total time: ", timeTrialManagers[playerIndex].getTotalTime())
@@ -169,6 +182,7 @@ func onState_allPlayersReset():
 
 func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
 	state.setPlayerReset(playerIndex, resetting)
+	leaderboardUI.visible = false
 
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
@@ -178,3 +192,49 @@ func onPauseMenu_exitPressed():
 # func onState_allPlayersReset():
 # 	print("All players reset")
 # 	state.setupReadyPlayersList()
+
+
+func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -> void:
+	if map.trackId == "":
+		print("Can't submit record on a non-downloaded track")
+		return
+	var submitData = {
+		"track": map.trackId,
+		"splits": splits,
+		"time": totalTime,
+		"bestLap": bestLap,
+	}
+
+	print(JSON.stringify(submitData, "\t"))
+
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.request_completed.connect(onSubmitRun_requestCompleted)
+
+	
+	var httpError = request.request(
+		"http://localhost:80/api/leaderboard",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + players[playerIndex].SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(submitData)
+	)
+	if httpError != OK:
+		print("Error submitting time: " + error_string(httpError))
+
+
+func onSubmitRun_requestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+	print(body.get_string_from_utf8())
+	leaderboardUI.fetchTimes(map.trackId)
+	return
+	# var placement = JSON.parse(body.get_string_from_utf8())["placement"] + 1
+	# var data = JSON.parse_string(body.get_string_from_utf8())
+	# var placement = data["placement"] + 1
+	# var userId = data["user"]
+
+	
+
+	# signal globalPlacementChanged(placement: int)
+
