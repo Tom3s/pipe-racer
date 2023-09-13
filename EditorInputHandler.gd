@@ -83,7 +83,7 @@ func _input(event):
 
 	if Input.is_action_just_pressed("editor_place"):
 		placePressed.emit()
-	if Input.is_action_just_pressed("editor_rotate_prefab"):
+	if Input.is_action_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
 	# if Input.is_action_just_pressed("editor_fine_rotate_left"):
 	# 	fineRotatePressed.emit(1)

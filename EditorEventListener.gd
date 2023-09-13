@@ -149,6 +149,8 @@ func connectSignals():
 
 	car.isResetting.connect(onCar_pausePressed)
 
+	camera.mouseCaptureExited.connect(onCamera_mouseCaptureExited)
+
 
 func onPrefabMesher_propertiesUpdated():
 	prefabPropertiesUI.setFromData(prefabMesher)
@@ -490,6 +492,12 @@ func onCar_pausePressed(_sink = null, _sink2 = null):
 	camera.current = true
 	oldSoundVolume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
+
+func onCamera_mouseCaptureExited():
+	# if editorStateMachine.canMovePreview():
+	# 	editorStateMachine.gridCurrentHeight += 1
+	# 	camera.position.y += PrefabConstants.GRID_SIZE
+	editorStateMachine.gridCurrentHeight = max(0, floor(camera.position.y / PrefabConstants.GRID_SIZE - 32))
 
 func onMap_mapLoaded(trackName: String, lapCount: int):
 	trackMetadataUI.setFromData({
