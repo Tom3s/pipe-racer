@@ -58,6 +58,11 @@ func changeBuildMode(mode: int):
 
 func changeEditorMode(mode: int):
 	editorModeSelector.select(mode)
+	buildModeSelector.visible = false
+	if mode == 0:
+		buildModeSelector.select(0)
+		buildModeChanged.emit(0)
+		buildModeSelector.visible = true
 
 func onPropertiesButton_pressed():
 	propertiesPressed.emit()

@@ -4,7 +4,7 @@ class_name PropPropertiesUI
 signal textureIndexChanged(index: int, url: String)
 
 @onready var textureSelector: ItemList = %TextureSelector
-@onready var imageUrl: LineEdit = %ImageUrl
+@onready var imageUrl: TextEdit = %ImageUrl
 @onready var applyButton: Button = %ApplyButton
 
 

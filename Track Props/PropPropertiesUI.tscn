@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c8mpq5k80nw87"]
+[gd_scene load_steps=10 format=3 uid="uid://c8mpq5k80nw87"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_74pes"]
 [ext_resource type="Script" path="res://PropPropertiesUI.gd" id="1_we2y5"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="5_1yls2"]
 [ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="6_fetov"]
 [ext_resource type="Texture2D" uid="uid://c3g2tli8mtuws" path="res://Track Props/champion.png" id="8_jeide"]
+
+[sub_resource type="SystemFont" id="SystemFont_mex8p"]
 
 [node name="PropPropertiesUI" type="Control"]
 layout_mode = 3
@@ -70,12 +72,16 @@ item_6/text = "Custom"
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel3/VBoxContainer"]
 layout_mode = 2
 
-[node name="ImageUrl" type="LineEdit" parent="Panel3/VBoxContainer/HBoxContainer"]
+[node name="ImageUrl" type="TextEdit" parent="Panel3/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
+theme_override_fonts/font = SubResource("SystemFont_mex8p")
+theme_override_font_sizes/font_size = 8
 placeholder_text = "Custom Image Url"
+wrap_mode = 1
 
 [node name="ApplyButton" type="Button" parent="Panel3/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
