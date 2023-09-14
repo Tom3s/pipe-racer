@@ -20,16 +20,6 @@ mouse_filter = 2
 theme = ExtResource("1_74pes")
 script = ExtResource("1_we2y5")
 
-[node name="Safezone" type="Panel" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -237.0
-offset_bottom = 470.0
-grow_horizontal = 0
-
 [node name="Panel3" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 1
@@ -41,15 +31,25 @@ offset_right = -13.0
 offset_bottom = 462.0
 grow_horizontal = 0
 
-[node name="TextureSelector" type="ItemList" parent="Panel3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel3/VBoxContainer"]
+layout_mode = 2
+text = "Texture"
+
+[node name="TextureSelector" type="ItemList" parent="Panel3/VBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_top = 32.0
-offset_right = 206.0
-offset_bottom = 451.0
+layout_mode = 2
+size_flags_vertical = 3
 auto_height = true
 text_overrun_behavior = 0
-item_count = 6
+item_count = 7
 max_columns = 2
 same_column_width = true
 fixed_icon_size = Vector2i(90, 60)
@@ -65,11 +65,19 @@ item_4/text = ""
 item_4/icon = ExtResource("6_fetov")
 item_5/text = ""
 item_5/icon = ExtResource("8_jeide")
+item_6/text = "Custom"
 
-[node name="Label" type="Label" parent="Panel3"]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 6.0
-offset_right = 67.0
-offset_bottom = 32.0
-text = "Texture"
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel3/VBoxContainer"]
+layout_mode = 2
+
+[node name="ImageUrl" type="LineEdit" parent="Panel3/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+placeholder_text = "Custom Image Url"
+
+[node name="ApplyButton" type="Button" parent="Panel3/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"

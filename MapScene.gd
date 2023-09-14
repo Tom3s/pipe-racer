@@ -625,7 +625,8 @@ func saveToJSON(autosave: bool = false):
 			# "rotationY": child.global_rotation.y,
 			# "rotationZ": child.global_rotation.z
 			"rotation": child.global_rotation.y,
-			"textureIndex": child.billboardTextureIndex
+			"textureIndex": child.billboardTextureIndex,
+			"imageUrl": child.billboardTextureUrl 
 		})
 
 	# var fileHandler = FileAccess.new()
@@ -716,7 +717,7 @@ func loadFromJSON(fileName: String):
 
 	if trackData.has("props"):
 		for propData in trackData["props"]:
-			var propObject = propPlacer.getPropObject(propData["textureIndex"])
+			var propObject = propPlacer.getPropObject(propData["textureIndex"], propData["imageUrl"])
 			addPropObject(propObject, Vector3(propData["positionX"], propData["positionY"], propData["positionZ"]), Vector3(0, propData["rotation"], 0))
 	else:
 		print("No props on this track")

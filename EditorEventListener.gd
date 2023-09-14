@@ -366,8 +366,9 @@ func onPrefabPropertiesUI_curveSidewaysChanged(value: int):
 func onPrefabPropertiesUI_roadTypeChanged(value: int):
 	prefabMesher.roadType = value
 
-func onPropPropertiesUI_textureIndexChanged(value: int):
+func onPropPropertiesUI_textureIndexChanged(value: int, imageUrl: String):
 	propPlacer.currentBillboardTexture = value
+	propPlacer.currentImageUrl = imageUrl
 
 func onEditorShortcutsUI_editorModeChanged(newMode: int):
 	if newMode == editorStateMachine.EDITOR_STATE_BUILD:

@@ -33,6 +33,8 @@ const BILLBOARD_TEXTURE_SHARP_RIGHT = 4
 
 var currentBillboardTexture: int = BILLBOARD_TEXTURE_BUMPY_ROAD
 
+var currentImageUrl: String = ""
+
 func onModeChange(value: int) -> int:
 
 	startLinePreview.visible = false
@@ -112,12 +114,14 @@ func rotateFine(amount: int):
 func getCheckPointObject() -> Area3D:
 	return checkPointObject.instantiate()
 
-func getPropObject(textureIndex: int = -1) -> Node3D:
+func getPropObject(textureIndex: int = -1, imageUrl: String = "") -> Node3D:
+	var prop = billboardObject.instantiate()
 	if textureIndex == -1:
 		textureIndex = currentBillboardTexture
-	var prop = billboardObject.instantiate()
-	# prop.billboardTexture = billboardTextures[textureIndex]
-	# prop.billboardTextureIndex = textureIndex
-	prop.setTexture(billboardTextures[textureIndex], textureIndex)
-	# prop.scale = Vector3.ONE * 8.5
+	if imageUrl == "":
+		imageUrl = currentImageUrl
+
+
+	prop.setTexture(billboardTextures[max(0, textureIndex)], textureIndex, currentImageUrl)
+
 	return prop
