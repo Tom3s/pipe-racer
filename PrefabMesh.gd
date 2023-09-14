@@ -545,31 +545,36 @@ func encodeData():
 	data["rotation"] = global_rotation.y
 	return data
 
+func getIfDefined(data: Dictionary, key: String):
+	if data.has(key):
+		return data[key]
+	return get(key)
+
 func decodeData(data: Variant):
-	leftStartHeight = data["leftStartHeight"]
-	leftEndHeight = data["leftEndHeight"]
-	leftSmoothTilt = data["leftSmoothTilt"]
-	rightStartHeight = data["rightStartHeight"]
-	rightEndHeight = data["rightEndHeight"]
-	rightSmoothTilt = data["rightSmoothTilt"]
-	leftWallStart = data["leftWallStart"]
-	leftWallEnd = data["leftWallEnd"]
-	rightWallStart = data["rightWallStart"]
-	rightWallEnd = data["rightWallEnd"]
-	curve = data["curve"]
-	endOffset = data["endOffset"]
-	smoothOffset = data["smoothOffset"]
-	length = data["length"]
-	curveForward = data["curveForward"]
-	curveSideways = data["curveSideways"]
+	leftStartHeight = getIfDefined(data, "leftStartHeight")
+	leftEndHeight = getIfDefined(data, "leftEndHeight")
+	leftSmoothTilt = getIfDefined(data, "leftSmoothTilt")
+	rightStartHeight = getIfDefined(data, "rightStartHeight")
+	rightEndHeight = getIfDefined(data, "rightEndHeight")
+	rightSmoothTilt = getIfDefined(data, "rightSmoothTilt")
+	leftWallStart = getIfDefined(data, "leftWallStart")
+	leftWallEnd = getIfDefined(data, "leftWallEnd")
+	rightWallStart = getIfDefined(data, "rightWallStart")
+	rightWallEnd = getIfDefined(data, "rightWallEnd")
+	curve = getIfDefined(data, "curve")
+	endOffset = getIfDefined(data, "endOffset")
+	smoothOffset = getIfDefined(data, "smoothOffset")
+	length = getIfDefined(data, "length")
+	curveForward = getIfDefined(data, "curveForward")
+	curveSideways = getIfDefined(data, "curveSideways")
 
-	roadType = data["roadType"]
+	roadType = getIfDefined(data, "roadType")
 
-	# global_position = data["position"]
-	# global_rotation = data["rotation"]
-	global_position = Vector3(data["positionX"], data["positionY"], data["positionZ"])
-	# global_rotation = Vector3(data["rotationX"], data["rotationY"], data["rotationZ"])
-	global_rotation = Vector3(0, data["rotation"], 0)
+	if data.has("positionX") && data.has("positionY") && data.has("positionZ"):
+		global_position = Vector3(data["positionX"], data["positionY"], data["positionZ"])
+	
+	if data.has("rotation"):
+		global_rotation = Vector3(0, data["rotation"], 0)
 	refreshMesh()
 
 func objectFromData(data: Variant = null) -> PrefabProperties:
@@ -690,3 +695,12 @@ func tryUpdatingProperties(connectionPoint: Dictionary):
 	clampHeights()
 	refreshMesh()
 	propertiesUpdated.emit()
+
+func getStringName() -> String:
+	var prefabName = ""
+	prefabName += "L" + str(leftStartHeight) + "E" + str(leftEndHeight) + "S" + str(leftSmoothTilt)
+	prefabName += "R" + str(rightStartHeight) + "E" + str(rightEndHeight) + "S" + str(rightSmoothTilt)
+	prefabName += "W" + str(leftWallStart) + str(leftWallEnd) + str(rightWallStart) + str(rightWallEnd)
+	prefabName += "C" + str(curve) + "O" + str(endOffset) + "S" + str(smoothOffset) + "L" + str(length)
+	prefabName += "F" + str(curveForward) + "S" + str(curveSideways)
+	return prefabName

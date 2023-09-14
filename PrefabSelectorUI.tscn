@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnabtcfvm0a4t"]
+
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_kn124"]
+[ext_resource type="Script" path="res://PrefabSelectorUI.gd" id="2_ikhk7"]
+[ext_resource type="PackedScene" uid="uid://dauqm2rwd8yg1" path="res://PrefabIconGenerator.tscn" id="3_bn3kx"]
+
+[node name="PrefabSelectorUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_kn124")
+script = ExtResource("2_ikhk7")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 210.0
+offset_right = 176.0
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Straight" type="ItemList" parent="Panel/TabContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_columns = 2
+same_column_width = true
+fixed_column_width = 74
+icon_mode = 0
+fixed_icon_size = Vector2i(70, 70)
+
+[node name="Curve" type="ItemList" parent="Panel/TabContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+max_columns = 2
+same_column_width = true
+fixed_column_width = 74
+icon_mode = 0
+fixed_icon_size = Vector2i(70, 70)
+
+[node name="PrefabIconGenerator" parent="." instance=ExtResource("3_bn3kx")]
+unique_name_in_owner = true

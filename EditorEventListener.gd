@@ -11,6 +11,9 @@ var prefabPropertiesUI: PrefabPropertiesUI
 var propPropertiesUI: PropPropertiesUI
 var editorShortcutsUI: EditorShortcutsUI
 var trackMetadataUI: TrackMetadataUI
+@onready var prefabSelectorUI: PrefabSelectorUI = %PrefabSelectorUI
+@onready var loading: Control = %Loading
+
 var pauseMenu: PauseMenu
 
 var car: CarController
@@ -51,6 +54,7 @@ func _ready():
 	propPlacer.startLinePreview.visible = false
 	prefabMesher.debug = true
 
+	loading.visible = true
 
 	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
 	editorStateMachine.currentPlacerNode = prefabMesher
@@ -154,9 +158,13 @@ func connectSignals():
 
 	camera.mouseCaptureExited.connect(onCamera_mouseCaptureExited)
 
+	prefabSelectorUI.done.connect(onPrefabSelectorUI_done)
+	prefabSelectorUI.prefabSelected.connect(onPrefabSelectorUI_prefabSelected)
+
+
 
 func onPrefabMesher_propertiesUpdated():
-	prefabPropertiesUI.setFromData(prefabMesher)
+	prefabPropertiesUI.setFromData(prefabMesher.encodeData())
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
 	# print("Mouse moved to: ", worldMousePos)
@@ -164,7 +172,7 @@ func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
 	if worldMousePos != Vector3.INF && editorStateMachine.canMovePreview():
 		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight, map.getConnectionPoints())
 	elif editorStateMachine.mouseOverUI && editorStateMachine.inBuildState():
-		currentPlacerNode.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
+		currentPlacerNode.updatePositionExactCentered(camera.getPositionInFrontOfCamera(100))
 
 func onEditorInputHandler_moveUpGrid():
 	if editorStateMachine.canMovePreview():
@@ -389,7 +397,7 @@ func onTrackMetadataUI_lapCountChanged(newCount: int):
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
 	if editorStateMachine.inBuildState():
-		prefabMesher.updatePositionExactCentered(camera.getPositionInFrontOfCamera(60))
+		prefabMesher.updatePositionExactCentered(camera.getPositionInFrontOfCamera(100))
 	print("Mouse entered prefab properties")
 
 func onEditorInputHandler_mouseExitedUI():
@@ -503,6 +511,14 @@ func onCamera_mouseCaptureExited():
 	# 	editorStateMachine.gridCurrentHeight += 1
 	# 	camera.position.y += PrefabConstants.GRID_SIZE
 	editorStateMachine.gridCurrentHeight = max(0, floor(camera.position.y / PrefabConstants.GRID_SIZE - 32))
+
+func onPrefabSelectorUI_done():
+	loading.visible = false
+
+func onPrefabSelectorUI_prefabSelected(data: Dictionary):
+	# prefabMesher.decodeData(data)
+	prefabPropertiesUI.setFromData(data)
+	# prefabSelectorUI.visible = false
 
 func onMap_mapLoaded(trackName: String, lapCount: int):
 	trackMetadataUI.setFromData({

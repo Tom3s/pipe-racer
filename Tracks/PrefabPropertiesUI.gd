@@ -221,41 +221,67 @@ func onRoadTypeChanged(value: int):
 	roadTypeChanged.emit(value)
 
 func setFromData(data):
-	# func decodeData(data: Variant):
-	# leftStartHeight = data["leftStartHeight"]
-	# leftEndHeight = data["leftEndHeight"]
-	# leftSmoothTilt = data["leftSmoothTilt"]
-	# rightStartHeight = data["rightStartHeight"]
-	# rightEndHeight = data["rightEndHeight"]
-	# rightSmoothTilt = data["rightSmoothTilt"]
-	# curve = data["curve"]
-	# endOffset = data["endOffset"]
-	# smoothOffset = data["smoothOffset"]
-	# length = data["length"]
-	# curveForward = data["curveForward"]
-	# curveSideways = data["curveSideways"]
 
-	leftStart.value = data["leftStartHeight"]
-	leftEnd.value = data["leftEndHeight"]
-	leftSmoothing.selected = data["leftSmoothTilt"]
-	leftSmoothingChanged.emit(data["leftSmoothTilt"])
-	rightStart.value = data["rightStartHeight"]
-	rightEnd.value = data["rightEndHeight"]
-	rightSmoothing.selected = data["rightSmoothTilt"]
-	rightSmoothingChanged.emit(data["rightSmoothTilt"])
-	leftWallStart.button_pressed = data["leftWallStart"]
-	rightWallStart.button_pressed = data["rightWallStart"]
-	leftWallEnd.button_pressed = data["leftWallEnd"]
-	rightWallEnd.button_pressed = data["rightWallEnd"]
-	curvedTickBox.button_pressed = data["curve"]
-	straightOffset.value = data["endOffset"]
-	straightSmoothing.selected = data["smoothOffset"]
-	straightSmoothingChanged.emit(data["smoothOffset"])
-	straightLength.value = data["length"]
-	curveForward.value = data["curveForward"]
-	curveSideways.value = data["curveSideways"]
-	roadTypeSelector.select(data["roadType"])
-	roadTypeChanged.emit(data["roadType"])
+	# leftStart.value = data["leftStartHeight"]
+	# leftEnd.value = data["leftEndHeight"]
+	# leftSmoothing.selected = data["leftSmoothTilt"]
+	# leftSmoothingChanged.emit(data["leftSmoothTilt"])
+	# rightStart.value = data["rightStartHeight"]
+	# rightEnd.value = data["rightEndHeight"]
+	# rightSmoothing.selected = data["rightSmoothTilt"]
+	# rightSmoothingChanged.emit(data["rightSmoothTilt"])
+	# leftWallStart.button_pressed = data["leftWallStart"]
+	# rightWallStart.button_pressed = data["rightWallStart"]
+	# leftWallEnd.button_pressed = data["leftWallEnd"]
+	# rightWallEnd.button_pressed = data["rightWallEnd"]
+	# curvedTickBox.button_pressed = data["curve"]
+	# straightOffset.value = data["endOffset"]
+	# straightSmoothing.selected = data["smoothOffset"]
+	# straightSmoothingChanged.emit(data["smoothOffset"])
+	# straightLength.value = data["length"]
+	# curveForward.value = data["curveForward"]
+	# curveSideways.value = data["curveSideways"]
+	# roadTypeSelector.select(data["roadType"])
+	# roadTypeChanged.emit(data["roadType"])
+	if data.has("leftStartHeight"):
+		leftStart.value = data["leftStartHeight"]
+	if data.has("leftEndHeight"):
+		leftEnd.value = data["leftEndHeight"]
+	if data.has("leftSmoothTilt"):
+		leftSmoothing.selected = data["leftSmoothTilt"]
+		leftSmoothingChanged.emit(data["leftSmoothTilt"])
+	if data.has("rightStartHeight"):
+		rightStart.value = data["rightStartHeight"]
+	if data.has("rightEndHeight"):
+		rightEnd.value = data["rightEndHeight"]
+	if data.has("rightSmoothTilt"):
+		rightSmoothing.selected = data["rightSmoothTilt"]
+		rightSmoothingChanged.emit(data["rightSmoothTilt"])
+	if data.has("leftWallStart"):
+		leftWallStart.button_pressed = data["leftWallStart"]
+	if data.has("rightWallStart"):
+		rightWallStart.button_pressed = data["rightWallStart"]
+	if data.has("leftWallEnd"):
+		leftWallEnd.button_pressed = data["leftWallEnd"]
+	if data.has("rightWallEnd"):
+		rightWallEnd.button_pressed = data["rightWallEnd"]
+	if data.has("curve"):
+		curvedTickBox.button_pressed = data["curve"]
+	if data.has("endOffset"):
+		straightOffset.value = data["endOffset"]
+	if data.has("smoothOffset"):
+		straightSmoothing.selected = data["smoothOffset"]
+		straightSmoothingChanged.emit(data["smoothOffset"])
+	if data.has("length"):
+		straightLength.value = data["length"]
+	if data.has("curveForward"):
+		curveForward.value = data["curveForward"]
+	if data.has("curveSideways"):
+		curveSideways.value = data["curveSideways"]
+	if data.has("roadType"):
+		roadTypeSelector.select(data["roadType"])
+		roadTypeChanged.emit(data["roadType"])
+	
 
 func reset():
 	setFromData({
