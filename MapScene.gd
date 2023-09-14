@@ -24,28 +24,32 @@ var materials = [
 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
 	preload("res://grass2.tres"), # GRASS
 	preload("res://Track Props/DirtMaterial.tres"), # DIRT
-	preload("res://Track Props/BoosterMaterial.tres") # BOOSTER	
+	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
+	preload("res://Track Props/BoosterMaterialReversed.tres") # REVERSE BOOSTER	
 ]
 
 var frictions = [
 	1.0, # ROAD
 	0.3, # GRASS
 	0.3, # DIRT
-	1.0 # BOOSTER
+	1.0, # BOOSTER
+	1.0 # REVERSE BOOSTER
 ]
 
 var accelerationMultipliers = [
 	1.0, # ROAD
 	0.2, # GRASS
 	1.0, # DIRT
-	3.0 # BOOSTER
+	3.0, # BOOSTER
+	3.0 # REVERSE BOOSTER
 ]
 
 var smokeParticles =[
 	true, # ROAD
 	true, # GRASS
 	false, # DIRT
-	true # BOOSTER
+	true, # BOOSTER
+	true # REVERSE BOOSTER
 ]
 
 var operationStack: Array = []
