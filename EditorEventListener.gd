@@ -538,9 +538,11 @@ const EDITOR_UI_PROP_PROPERTIES: int = 3
 
 func setVisibleUI(visibleUI: int):
 	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
+	prefabSelectorUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
 	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES
 
 func hideUI():
 	prefabPropertiesUI.visible = false
 	propPropertiesUI.visible = false
 	editorShortcutsUI.visible = false
+	prefabSelectorUI.visible = false

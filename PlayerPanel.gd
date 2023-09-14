@@ -189,4 +189,5 @@ func setButtonsLoggedOut():
 	guestTickBox.visible = true
 	username.editable = true
 	password.editable = true
+	password.visible = true
 

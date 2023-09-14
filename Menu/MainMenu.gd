@@ -30,6 +30,8 @@ func connectSignals():
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
 	exitButton.pressed.connect(get_tree().quit)
 
+	websiteButton.pressed.connect(onWebsiteButton_pressed)
+
 	nickname.text_changed.connect(onTextChanged)
 	colorPicker.color_changed.connect(onColorChanged)
 
@@ -68,6 +70,9 @@ func onEditorMapLoader_backPressed():
 func refreshPlayerData():
 	nickname.text = Playerstats.PLAYER_NAME
 	colorPicker.color = Playerstats.PLAYER_COLOR
+
+func onWebsiteButton_pressed():
+	OS.shell_open("http://localhost:3000")
 
 func onTextChanged(newText: String) -> void:
 	if newText != "":
