@@ -50,10 +50,16 @@ var curveSidewaysRange = [endOffsetSize, endOffsetSize * 2, endOffsetSize * 3]
 var started: int = 3
 var curve: bool = false
 
+var fresh: bool = true
+
 func _ready():
 	var dir = DirAccess.open("user://")
 	if dir.dir_exists("user://prefabIcons"):
-		pass
+		fresh = false
+	else:
+		dir.make_dir("user://prefabIcons")
+		fresh = true
+
 
 var length
 var endOffset
@@ -154,8 +160,13 @@ func incrementCurveIndeces():
 		done.emit()
 		queue_free()
 		visible = false
+		doneGenerating = true
 
+var doneGenerating: bool = false
 func _process(_delta):
+	if !fresh:
+		while !doneGenerating:
+			getNextIcon()
 	if (started > 0):
 		prepareVariables()
 		var dict = {
@@ -184,7 +195,7 @@ func preparePicture(dict: Dictionary):
 	camera.look_at(Vector3(0, 0, 0))
 	prefabMesher.global_position = -prefabMesher.getCenteringOffset()
 
-func getNextIcon(fresh: bool = false):
+func getNextIcon():
 	var category = 0
 	var dict = {}
 	if (rightHeightIndex == 1 && leftHeightIndex == 1):
@@ -202,8 +213,14 @@ func getNextIcon(fresh: bool = false):
 		category = 1
 		incrementCurveIndeces()
 	
-	preparePicture(dict)
-	await RenderingServer.frame_post_draw
-	newPrefab.emit(category, prefabMesher.getStringName(), dict, ImageTexture.create_from_image(subViewport.get_texture().get_image()))
+	if fresh:
+		preparePicture(dict)
+		await RenderingServer.frame_post_draw
+		newPrefab.emit(category, prefabMesher.getStringName(), dict, ImageTexture.create_from_image(subViewport.get_texture().get_image()))
+		subViewport.get_texture().get_image().save_png("user://prefabIcons/" + prefabMesher.getStringName() + ".png")
+	else:
+		var stringName = prefabMesher.getStringNameFromData(dict)
+		newPrefab.emit(category, stringName, dict, ImageTexture.create_from_image(Image.load_from_file("user://prefabIcons/" + stringName + ".png")))
+
 
 

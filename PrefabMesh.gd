@@ -551,6 +551,10 @@ func getIfDefined(data: Dictionary, key: String):
 	return get(key)
 
 func decodeData(data: Variant):
+	noRefreshDecode(data)
+	refreshMesh()
+
+func noRefreshDecode(data: Variant):
 	leftStartHeight = getIfDefined(data, "leftStartHeight")
 	leftEndHeight = getIfDefined(data, "leftEndHeight")
 	leftSmoothTilt = getIfDefined(data, "leftSmoothTilt")
@@ -575,7 +579,7 @@ func decodeData(data: Variant):
 	
 	if data.has("rotation"):
 		global_rotation = Vector3(0, data["rotation"], 0)
-	refreshMesh()
+
 
 func objectFromData(data: Variant = null) -> PrefabProperties:
 	if data != null:
@@ -704,3 +708,7 @@ func getStringName() -> String:
 	prefabName += "C" + str(curve) + "O" + str(endOffset) + "S" + str(smoothOffset) + "L" + str(length)
 	prefabName += "F" + str(curveForward) + "S" + str(curveSideways)
 	return prefabName
+
+func getStringNameFromData(data: Variant) -> String:
+	noRefreshDecode(data)
+	return getStringName()
