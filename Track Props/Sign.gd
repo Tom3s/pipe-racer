@@ -19,10 +19,11 @@ var billboardTextureUrl: String = ""
 func isProp():
 	pass
 
-func setTexture(texture: Texture, index: int, url: String = "") -> void:
+func setTexture(texture: Texture, index: int, url: String = "none") -> void:
 	billboardTexture = texture
 	billboardTextureIndex = index
-	billboardTextureUrl = url
+	if url != "none":
+		billboardTextureUrl = url
 
 	if is_node_ready():
 		board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
@@ -75,4 +76,4 @@ func onLoadTexture_RequestCompleted(result: int, responseCode: int, headers: Pac
 		print("JPG loaded successfully")
 
 	var texture = ImageTexture.create_from_image(image)
-	setTexture(texture, billboardTextureIndex)
+	setTexture(texture, billboardTextureIndex, "none")

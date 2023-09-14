@@ -397,16 +397,17 @@ func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
 	# var propObject = propPlacer.getPropObject()
 	# flipping order, because the old object is the one that is already in the scene
 	var index = propPlacer.currentBillboardTexture
-	var texture = propPlacer.billboardTextures[index]
-	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture)
-	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture)
+	var texture = propPlacer.billboardTextures[max(0, index)]
+	var url = propPlacer.currentImageUrl
+	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture, url)
+	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture, url)
 
-func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture):
+func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture, url: String):
 	propObject.global_position = propPos
 	propObject.global_rotation = propRotation
-	propObject.setTexture(texture, index)
+	propObject.setTexture(texture, index, url)
 
-func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture):
+func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture, url: String):
 	safeResizeStack()
 
 	operationStack.append({
@@ -415,10 +416,12 @@ func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: V
 		"oldRotation": propObject.global_rotation,
 		"oldTextureIndex": propObject.billboardTextureIndex,
 		"oldTexture": propObject.billboardTexture,
+		"oldImageUrl": propObject.billboardTextureUrl,
 		"newPosition": propPos,
 		"newRotation": propRotation,
 		"newTextureIndex": index,
 		"newTexture": texture,
+		"newImageUrl": url,
 		"operation": UPDATED_PROP
 	})
 	lastOperationIndex += 1
@@ -510,7 +513,7 @@ func undo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		addPropObject(lastOperation["propObject"], lastOperation["position"], lastOperation["rotation"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"], lastOperation["oldTextureIndex"], lastOperation["oldTexture"])
+		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"], lastOperation["oldTextureIndex"], lastOperation["oldTexture"], lastOperation["oldImageUrl"])
 
 	else:
 		return
@@ -548,7 +551,7 @@ func redo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		removePropObject(lastOperation["propObject"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"], lastOperation["newTextureIndex"], lastOperation["newTexture"])
+		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"], lastOperation["newTextureIndex"], lastOperation["newTexture"], lastOperation["newImageUrl"])
 
 	else:
 		lastOperationIndex -= 1
@@ -717,7 +720,8 @@ func loadFromJSON(fileName: String):
 
 	if trackData.has("props"):
 		for propData in trackData["props"]:
-			var propObject = propPlacer.getPropObject(propData["textureIndex"], propData["imageUrl"])
+			var imageUrl = propData["imageUrl"] if propData.has("imageUrl") else ""
+			var propObject = propPlacer.getPropObject(propData["textureIndex"], imageUrl)
 			addPropObject(propObject, Vector3(propData["positionX"], propData["positionY"], propData["positionZ"]), Vector3(0, propData["rotation"], 0))
 	else:
 		print("No props on this track")

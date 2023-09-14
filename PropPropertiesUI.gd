@@ -12,6 +12,11 @@ func _ready():
 	textureSelector.select(0)
 	textureIndexChanged.emit(0)
 
+	applyButton.disabled = true
+	applyButton.visible = false
+	imageUrl.visible = false
+
+
 	textureSelector.item_selected.connect(onTextureSelector_itemSelected)
 	applyButton.pressed.connect(onApplyButton_pressed)
 

@@ -122,6 +122,6 @@ func getPropObject(textureIndex: int = -1, imageUrl: String = "") -> Node3D:
 		imageUrl = currentImageUrl
 
 
-	prop.setTexture(billboardTextures[max(0, textureIndex)], textureIndex, currentImageUrl)
+	prop.setTexture(billboardTextures[max(0, textureIndex)], textureIndex, imageUrl)
 
 	return prop
