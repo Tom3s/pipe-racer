@@ -70,7 +70,7 @@ func disconnectedFromServer() -> void:
 func deletePortMappings() -> void:
 	if portsMapped:
 		var upnp = UPNP.new()
-		var discoverResult = upnp.discover()
+		var _discoverResult = upnp.discover()
 
 		upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
 		upnp.delete_port_mapping(DEFAULT_PORT, "TCP")

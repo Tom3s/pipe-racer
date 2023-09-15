@@ -31,7 +31,7 @@ func _ready():
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
 	set_physics_process(true)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if shouldCountdown:
 		playCountdown()
 		shouldCountdown = false

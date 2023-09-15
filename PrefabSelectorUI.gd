@@ -17,7 +17,7 @@ func _ready():
 	curve.item_selected.connect(onCurveSelected)
 	prefabIconGenerator.done.connect(onDone)
 
-func addNewPrefab(_category: int, name: String, data: Dictionary, icon: Texture):
+func addNewPrefab(_category: int, _name: String, data: Dictionary, icon: Texture):
 	prefabs.append(data)
 	icons.append(icon)
 	# prefabSelector.add_item(name, icon)

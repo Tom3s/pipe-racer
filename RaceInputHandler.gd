@@ -12,7 +12,11 @@ func setup(nrPlayers: int):
 	for i in range(nrPlayers):
 		playerPrefixes.append("p" + str(i + 1) + "_")
 
-func _input(event):
+func _ready():
+	set_physics_process(true)
+
+# func _input(_event):
+func _physics_process(_delta):
 	if Input.is_action_just_pressed("p1_ready"):
 		forceStartRace.emit()
 

@@ -9,8 +9,8 @@ class_name LeaderboardUI
 func _ready():
 	closeButton.pressed.connect(onCloseButton_Pressed)
 
-func setHeader(trackName: String, author: String):
-	self.trackName.text = trackName + " - by " + author
+func setHeader(newTrackName: String, author: String):
+	trackName.text = newTrackName + " - by " + author
 
 func onCloseButton_Pressed():
 	visible = false
@@ -41,7 +41,7 @@ func fetchBestTimes(trackId: String):
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
-func onBestLaps_RequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if result != OK:
 		print("Error: " + error_string(result))
 		return
@@ -59,7 +59,7 @@ func onBestLaps_RequestCompleted(result: int, responseCode: int, headers: Packed
 		placement += 1
 	
 
-func onBestTimes_RequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if result != OK:
 		print("Error: " + error_string(result))
 		return

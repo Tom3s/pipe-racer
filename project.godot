@@ -17,7 +17,6 @@ config/features=PackedStringArray("4.0", "Forward Plus")
 [autoload]
 
 Playerstats="*res://Playerstats.gd"
-Network="*res://Network.gd"
 Leaderboard="*res://Leaderboard.gd"
 PrefabConstants="*res://PrefabConstants.gd"
 Backend="*res://Backend.gd"

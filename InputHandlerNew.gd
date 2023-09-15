@@ -39,7 +39,7 @@ var pausedState = false
 
 # 	if respawnInput:
 # 		car.respawn()
-func _physics_process(delta):
+func _physics_process(_delta):
 	if Input.is_action_just_pressed(playerPrefix + "ready"):
 		car.state.setReadyTrue()
 	if Input.is_action_just_pressed(playerPrefix + "reset"):

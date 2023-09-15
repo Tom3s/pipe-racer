@@ -68,8 +68,8 @@ func equals(other) -> bool:
 # 	topRight = Vector3(0, rightEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE - PrefabConstants.TRACK_WIDTH)
 # 	topLeft = Vector3(0, leftEndHeight * PrefabConstants.GRID_SIZE, curveForward * PrefabConstants.GRID_SIZE)
 
-func rotateCorner(corner: Vector3, rotation: float) -> Vector3:
-	var rotatedCorner = corner.rotated(Vector3.UP, rotation)
+func rotateCorner(corner: Vector3, newRotation: float) -> Vector3:
+	var rotatedCorner = corner.rotated(Vector3.UP, newRotation)
 	return rotatedCorner
 
 func calculateCorners():

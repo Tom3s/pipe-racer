@@ -13,7 +13,7 @@ signal done()
 
 # var done: bool = false
 
-var endOffsetSize: int = PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE
+var endOffsetSize: int = floori(PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 
 
 

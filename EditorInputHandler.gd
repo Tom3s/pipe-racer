@@ -45,6 +45,9 @@ var mouseOverUI: bool = false:
 var propertiesOpen: bool = false
 var paused: bool = false
 
+func _ready():
+	set_physics_process(true)
+
 func mouseOverUIChanged(value: bool) -> bool:
 	if value != mouseOverUI:
 		if value:
@@ -53,7 +56,8 @@ func mouseOverUIChanged(value: bool) -> bool:
 			mouseExitedUI.emit()
 	return value
 
-func _input(event):
+# func _input(_event: InputEvent):
+func _physics_process(_delta):
 
 	if Input.is_action_just_pressed("editor_save"):
 		savePressed.emit()
@@ -72,19 +76,19 @@ func _input(event):
 		mouseMovedTo.emit(screenPointToRay())
 
 
-	if Input.is_action_just_pressed("editor_fine_rotate_left"):
+	if Input.is_action_just_released("editor_fine_rotate_left"):
 		fineRotatePressed.emit(-1)
-	elif Input.is_action_just_pressed("editor_grid_down"):
+	elif Input.is_action_just_released("editor_grid_down"):
 		moveDownGrid.emit()
 	
-	if Input.is_action_just_pressed("editor_fine_rotate_right"):
+	if Input.is_action_just_released("editor_fine_rotate_right"):
 		fineRotatePressed.emit(+1)
-	elif Input.is_action_just_pressed("editor_grid_up"):
+	elif Input.is_action_just_released("editor_grid_up"):
 		moveUpGrid.emit()
 
 	if Input.is_action_just_pressed("editor_place"):
 		placePressed.emit()
-	if Input.is_action_pressed("editor_rotate_prefab"):
+	if Input.is_action_just_pressed("editor_rotate_prefab"):
 		rotatePressed.emit()
 	# if Input.is_action_just_pressed("editor_fine_rotate_left"):
 	# 	fineRotatePressed.emit(1)
@@ -129,7 +133,7 @@ func isMouseOverShortcutUI() -> bool:
 	return mousePos2D.x < shortcutSafeZone.x && mousePos2D.y < shortcutSafeZone.y
 
 func isMouseOverUndoRedoUI() -> bool:
-	return mousePos2D.y < undoRedoSafeZone.y && (mousePos2D.x > (windowSize.x / 2) - (undoRedoSafeZone.x / 2) && mousePos2D.x < (windowSize.x / 2) + (undoRedoSafeZone.x / 2))
+	return mousePos2D.y < undoRedoSafeZone.y && (mousePos2D.x > (windowSize.x / 2.0) - (undoRedoSafeZone.x / 2.0) && mousePos2D.x < (windowSize.x / 2.0) + (undoRedoSafeZone.x / 2.0))
 
 func isMouseOverPrefabSelectorUI() -> bool:
 	return mousePos2D.x < prefabSelectorSafeZone.x
