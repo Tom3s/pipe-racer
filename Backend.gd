@@ -3,7 +3,7 @@ extends Node
 const SAVE_FILE := "user://network-config.json"
 
 @export
-var BACKEND_IP_ADRESS: String = "http://localhost:80":
+var BACKEND_IP_ADRESS: String = "http://34.159.46.241":
 	set(newAddress):
 		BACKEND_IP_ADRESS = newAddress
 		saveToFile()
@@ -11,7 +11,7 @@ var BACKEND_IP_ADRESS: String = "http://localhost:80":
 		return BACKEND_IP_ADRESS
 
 @export
-var FRONTEND_IP_ADRESS: String = "http://localhost:3000":
+var FRONTEND_IP_ADRESS: String = "http://pipe-racer.surge.sh/":
 	set(newAddress):
 		FRONTEND_IP_ADRESS = newAddress
 		saveToFile()
@@ -37,6 +37,10 @@ func loadFromFile() -> void:
 		var file = FileAccess.open(SAVE_FILE, FileAccess.READ)
 		var jsonText = file.get_as_text()
 		var jsonData = JSON.parse_string(jsonText)
+
+		if !jsonData.has("OVERWRITE"):
+			saveToFile()
+			return
 
 		BACKEND_IP_ADRESS = jsonData["BACKEND_IP_ADRESS"]
 		FRONTEND_IP_ADRESS = jsonData["FRONTEND_IP_ADRESS"]
