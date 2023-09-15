@@ -221,7 +221,7 @@ func applyDownforce(groundedTireCount: float):
 func get_point_velocity (point: Vector3) -> Vector3:
 	return linear_velocity + angular_velocity.cross(point - global_transform.origin)
 
-func applySuspension(raycastDistance: float, springDirection: Vector3, tireVelocity: Vector3, suspensionPoint: Vector3, delta: float):
+func applySuspension(raycastDistance: float, springDirection: Vector3, tireVelocity: Vector3, suspensionPoint: Vector3, _delta: float):
 	
 	var forcePosition = suspensionPoint - global_position
 #	if raycastDistance - tireRadius <= springBottomOut:
@@ -244,7 +244,7 @@ func applySuspension(raycastDistance: float, springDirection: Vector3, tireVeloc
 
 	apply_force(force, forcePosition)
 
-func applyBottomedOutSuspension(raycastDistance: float, springDirection: Vector3, tireVelocity: Vector3, suspensionPoint: Vector3, delta: float):
+func applyBottomedOutSuspension(raycastDistance: float, springDirection: Vector3, tireVelocity: Vector3, suspensionPoint: Vector3, _delta: float):
 	var offset = (springBottomOut) - (raycastDistance)
 #	if offset < 0:
 #		return

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=18 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
@@ -17,12 +17,6 @@
 [ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="6_rxs3p"]
 [ext_resource type="PackedScene" uid="uid://cc0ysp05m4ati" path="res://Loading.tscn" id="8_xhoba"]
-[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="13_867gm"]
-[ext_resource type="Texture2D" uid="uid://dvxlqb8ty68ye" path="res://Track Props/Chicane left.png" id="14_cl3gv"]
-[ext_resource type="Texture2D" uid="uid://cdrphd6rbd85y" path="res://Track Props/Chicane right.png" id="15_fk63j"]
-[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="16_dxxpf"]
-[ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="17_3uy7r"]
-[ext_resource type="Texture2D" uid="uid://c3g2tli8mtuws" path="res://Track Props/champion.png" id="18_knln5"]
 
 [node name="MapEditor" type="Node3D"]
 script = ExtResource("1_h77wk")
@@ -72,7 +66,6 @@ unique_name_in_owner = true
 
 [node name="PropPlacer" parent="." instance=ExtResource("6_gdrqn")]
 unique_name_in_owner = true
-billboardTextures = Array[Texture]([ExtResource("13_867gm"), ExtResource("14_cl3gv"), ExtResource("15_fk63j"), ExtResource("16_dxxpf"), ExtResource("17_3uy7r"), ExtResource("18_knln5")])
 
 [node name="EditorInputHandler" type="Node3D" parent="."]
 unique_name_in_owner = true

@@ -3,7 +3,7 @@ extends AudioStreamPlayer
 var targetVolume = -60.0
 var changeSpeed = 0.2
 
-func _process(delta):
+func _process(_delta):
 	if abs(targetVolume - volume_db) > changeSpeed:
 		volume_db += changeSpeed * sign(targetVolume - volume_db)
 	else:

@@ -18,7 +18,7 @@ var mode: int = MODE_START_LINE:
 		return mode
 
 @onready
-var checkPointObject: PackedScene = preload("res://CheckPoint.tscn")
+var checkPointObject: PackedScene = preload("res://Checkpoint.tscn")
 
 var billboardObject: PackedScene = preload("res://Track Props/Sign.tscn")
 

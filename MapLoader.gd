@@ -125,13 +125,13 @@ func searchTracks() -> void:
 	loadTrackListItems()
 
 
-func onLocalTrackList_itemSelected(index: int) -> void:
+func onLocalTrackList_itemSelected(_index: int) -> void:
 	setLoadUploadButtonEnabled()
 
-func onDownloadedTrackList_itemSelected(index: int) -> void:
+func onDownloadedTrackList_itemSelected(_index: int) -> void:
 	setLoadUploadButtonEnabled()
 
-func onOnlineTrackList_itemSelected(index: int) -> void:
+func onOnlineTrackList_itemSelected(_index: int) -> void:
 	downloadButton.disabled = onlineTrackList.get_selected_items().size() <= 0 && !downloadingTrack
 
 
@@ -284,7 +284,7 @@ func uploadTrack(trackFileName: String):
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
-func onUploadRequest_completed(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onUploadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 
 	if (responseCode != 200):
 		setLoadUploadButtonEnabled()
@@ -309,7 +309,7 @@ func loadTrackListItems():
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
-func onLoadTracksRequest_completed(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onLoadTracksRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
 		showAlert("Error", "Failed to load tracks", body.get_string_from_utf8()) 
 		return
@@ -343,7 +343,7 @@ func downloadTrack(trackId: String):
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
-func onDownloadRequest_completed(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onDownloadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
 		showAlert("Error", "Failed to download track", body.get_string_from_utf8()) 
 		downloadingTrack = false

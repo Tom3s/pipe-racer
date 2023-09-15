@@ -36,13 +36,13 @@ func connectSignals():
 
 
 
-func onUsername_textChanged(newText: String):
+func onUsername_textChanged(_newText: String):
 	pass
 
-func onPassword_textChanged(newText: String):
+func onPassword_textChanged(_newText: String):
 	pass
 
-func onColorPicker_colorChanged(newColor: Color):
+func onColorPicker_colorChanged(_newColor: Color):
 	pass
 
 func onGuestTickBox_toggled(pressed: bool):
@@ -92,7 +92,7 @@ func onLogoutButton_pressed():
 	setRandomPlayerData()
 	pass
 
-func onLoginRequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 
 	if responseCode != 200:
 		setButtonsLoggedOut()
@@ -165,7 +165,7 @@ func loadProfilePicture(imageUrl: String):
 	if httpError != OK:
 		print("Error: " + str(httpError))
 
-func onLoadProfilePictureRequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onLoadProfilePictureRequestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	var image = Image.new()
 	var imageError = image.load_jpg_from_buffer(body)
 	if imageError != OK:

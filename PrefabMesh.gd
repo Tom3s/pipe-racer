@@ -92,12 +92,12 @@ const SMOOTH_BOTH = 3
 		refreshMesh()
 
 @export_group("Curved Prefab Properties")
-@export var curveForward: int = PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE:
+@export var curveForward: int = floori(PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE):
 	set(value):
 		curveForward = max(value, PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 		refreshMesh()
 
-@export var curveSideways: int = PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE:
+@export var curveSideways: int = floori(PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE):
 	set(value):
 		curveSideways = max(value, PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)
 		refreshMesh()

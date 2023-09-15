@@ -60,7 +60,7 @@ func fetchImage(imageUrl: String) -> void:
 	if httpError != OK:
 		print("Error: " + str(httpError))
 
-func onLoadTexture_RequestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onLoadTexture_RequestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	var image = Image.new()
 	var imageError = image.load_jpg_from_buffer(body)
 	if imageError != OK:

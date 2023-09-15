@@ -225,7 +225,7 @@ func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -
 		print("Error submitting time: " + error_string(httpError))
 
 
-func onSubmitRun_requestCompleted(result: int, responseCode: int, headers: PackedStringArray, body: PackedByteArray):
+func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	print(body.get_string_from_utf8())
 	leaderboardUI.fetchTimes(map.trackId)
 	return

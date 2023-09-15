@@ -89,8 +89,8 @@ func setResetIndicator(isResetting: bool) -> void:
 static func getTimeStringFromTicks(ticks: int) -> String:
 	if ticks == -1:
 		return "N/A"
-	var seconds: int = ticks / 1000
-	var minutes: int = seconds / 60
+	var seconds: int = floori(float(ticks) / 1000)
+	var minutes: int = floori(float(seconds) / 60)
 
 	return "%02d:%02d:" % [minutes % 60, seconds % 60] + ("%.3f" % ((ticks % 1000) / float(1000))).split(".")[1]
 

@@ -137,7 +137,7 @@ func add(prefabMesher: PrefabMesher):
 	addPrefab(prefab)
 	storeAddPrefab(prefab)
 
-func addPrefab(prefab: PrefabProperties, prefabPosition: Vector3 = Vector3.INF, prefabRotation: Vector3 = Vector3.INF):
+func addPrefab(prefab: PrefabProperties, _prefabPosition: Vector3 = Vector3.INF, _prefabRotation: Vector3 = Vector3.INF):
 	trackPieces.add_child(prefab)
 	var prefabData = prefab.prefabData
 	# if prefabPosition != Vector3.INF:
