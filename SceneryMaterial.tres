@@ -17,6 +17,8 @@ data = {
 
 [sub_resource type="ImageTexture" id="ImageTexture_fqnln"]
 image = SubResource("Image_ki5b7")
+[sub_resource type="ImageTexture" id="ImageTexture_g751p"]
+image = SubResource("Image_wcllj")
 
 [resource]
 render_priority = 0
