@@ -7,6 +7,7 @@ class_name PlayerPanel
 @onready var guestLabel: Label = %GuestLabel
 @onready var guestTickBox: CheckBox = %GuestTickBox
 @onready var loginButton: Button = %LoginButton
+@onready var asGuestButton: Button = %AsGuestButton
 @onready var logoutButton: Button = %LogoutButton
 @onready var randomColorButton: Button = %RandomColorButton
 
@@ -29,6 +30,7 @@ func connectSignals():
 	colorPicker.color_changed.connect(onColorPicker_colorChanged)
 	guestTickBox.toggled.connect(onGuestTickBox_toggled)
 	loginButton.pressed.connect(onLoginButton_pressed)
+	asGuestButton.pressed.connect(asGuestButton_pressed)
 	logoutButton.pressed.connect(onLogoutButton_pressed)
 	randomColorButton.pressed.connect(onRandomColorButton_pressed)
 
@@ -45,6 +47,8 @@ func onColorPicker_colorChanged(newColor: Color):
 
 func onGuestTickBox_toggled(pressed: bool):
 	password.visible = !pressed	
+	loginButton.visible = !pressed
+	asGuestButton.visible = pressed
 
 func onLoginButton_pressed():
 	setButtonsLoggingIn()
@@ -56,7 +60,25 @@ func onLoginButton_pressed():
 	loginRequest.request_completed.connect(onLoginRequestCompleted)
 
 	var httpError = loginRequest.request(
-		"http://localhost:80/api/auth/login",
+		Backend.BACKEND_IP_ADRESS + "/api/auth/login",
+		["Content-Type: application/json"],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(loginData)
+	)
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+
+func asGuestButton_pressed():
+	setButtonsLoggingIn()
+
+	var loginData = getLoginData()
+	var loginRequest = HTTPRequest.new()
+	add_child(loginRequest)
+
+	loginRequest.request_completed.connect(onLoginRequestCompleted)
+
+	var httpError = loginRequest.request(
+		Backend.BACKEND_IP_ADRESS + "/api/auth/guest",
 		["Content-Type: application/json"],
 		HTTPClient.METHOD_POST,
 		JSON.stringify(loginData)
@@ -167,6 +189,9 @@ func setButtonsLoggingIn():
 	loginButton.disabled = true
 	loginButton.text = "Loading"
 
+	asGuestButton.disabled = true
+	asGuestButton.text = "Loading"
+
 	username.editable = false
 	password.editable = false
 
@@ -175,6 +200,7 @@ func setButtonsLoggingIn():
 
 func setButtonsLoggedIn():
 	loginButton.visible = false
+	asGuestButton.visible = false
 	logoutButton.visible = true
 	username.editable = false
 	password.editable = false
@@ -182,12 +208,16 @@ func setButtonsLoggedIn():
 
 func setButtonsLoggedOut():
 	loginButton.disabled = false
-	loginButton.visible = true
+	loginButton.visible = !guestTickBox.button_pressed
 	loginButton.text = "Log In"
+	asGuestButton.disabled = false
+	asGuestButton.visible = guestTickBox.button_pressed
+	asGuestButton.text = "As Guest"
+
 	logoutButton.visible = false
 	guestLabel.visible = true
 	guestTickBox.visible = true
 	username.editable = true
 	password.editable = true
-	password.visible = true
+	password.visible = !guestTickBox.button_pressed
 

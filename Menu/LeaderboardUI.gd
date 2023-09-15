@@ -25,7 +25,7 @@ func fetchBestLaps(trackId: String):
 	bestLapsRequest.request_completed.connect(onBestLaps_RequestCompleted)
 
 	var httpError = bestLapsRequest.request(
-		"http://localhost:80/api/leaderboard/" + trackId + "?sortByLap=true"
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=true"
 	)
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
@@ -36,7 +36,7 @@ func fetchBestTimes(trackId: String):
 	bestTimesRequest.request_completed.connect(onBestTimes_RequestCompleted)
 
 	var httpError = bestTimesRequest.request(
-		"http://localhost:80/api/leaderboard/" + trackId + "?sortByLap=false"
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=false"
 	)
 	if httpError != OK:
 		print("Error: " + error_string(httpError))

@@ -213,7 +213,7 @@ func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -
 
 	
 	var httpError = request.request(
-		"http://localhost:80/api/leaderboard",
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard",
 		[
 			"Content-Type: application/json",
 			"Session-Token: " + players[playerIndex].SESSION_TOKEN,

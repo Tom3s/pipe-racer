@@ -72,7 +72,7 @@ func refreshPlayerData():
 	colorPicker.color = Playerstats.PLAYER_COLOR
 
 func onWebsiteButton_pressed():
-	OS.shell_open("http://localhost:3000")
+	OS.shell_open(Backend.FRONTEND_IP_ADRESS)
 
 func onTextChanged(newText: String) -> void:
 	if newText != "":

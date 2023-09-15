@@ -61,7 +61,20 @@ func _ready():
 
 	setEditorSelect(false)
 
+	setupFolders()
+
 	loadLocalTracks()
+
+func setupFolders():
+	var dir = DirAccess.open("user://")
+	if !dir.dir_exists("user://tracks"):
+		dir.make_dir("user://tracks")
+	if !dir.dir_exists("user://tracks/autosave"):
+		dir.make_dir("user://tracks/autosave")
+	if !dir.dir_exists("user://tracks/downloaded"):
+		dir.make_dir("user://tracks/downloaded")
+	if !dir.dir_exists("user://tracks/local"):
+		dir.make_dir("user://tracks/local")
 
 
 func loadLocalTracks() -> void:
@@ -260,7 +273,7 @@ func uploadTrack(trackFileName: String):
 	uploadRequest.request_completed.connect(onUploadRequest_completed)
 
 	var httpError = uploadRequest.request(
-		"http://localhost:80/api/tracks/upload",
+		Backend.BACKEND_IP_ADRESS + "/api/tracks/upload",
 		[
 			"Content-Type: application/json",
 			"Session-Token: " + Playerstats.SESSION_TOKEN
@@ -287,7 +300,7 @@ func loadTrackListItems():
 	add_child(loadTracksRequest)
 	loadTracksRequest.request_completed.connect(onLoadTracksRequest_completed)
 	var httpError = loadTracksRequest.request(
-		"http://localhost:80/api/tracks",
+		Backend.BACKEND_IP_ADRESS + "/api/tracks",
 		[
 			"Content-Type: application/json"
 		],
@@ -319,7 +332,7 @@ func downloadTrack(trackId: String):
 	downloadingTrack = true
 	lastDownloadedTrackId = trackId
 	var httpError = downloadRequest.request(
-		"http://localhost:80/api/tracks/download/" + trackId,
+		Backend.BACKEND_IP_ADRESS + "/api/tracks/download/" + trackId,
 		[
 			"Content-Type: application/json",
 			"Session-Token: " + Playerstats.SESSION_TOKEN

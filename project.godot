@@ -20,6 +20,7 @@ Playerstats="*res://Playerstats.gd"
 Network="*res://Network.gd"
 Leaderboard="*res://Leaderboard.gd"
 PrefabConstants="*res://PrefabConstants.gd"
+Backend="*res://Backend.gd"
 
 [debug]
 

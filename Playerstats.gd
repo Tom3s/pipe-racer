@@ -111,6 +111,8 @@ func loadFromFile() -> void:
 		MUSIC_VOLUME = float(jsonData["MUSIC_VOLUME"])
 		SFX_VOLUME = float(jsonData["SFX_VOLUME"])
 		FULLSCREEN = bool(jsonData["FULLSCREEN"])
+	else:
+		saveToFile()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
