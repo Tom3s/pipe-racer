@@ -55,48 +55,147 @@ var shouldRespawn: bool = false
 var jumpingForceReduction: float = 0.02
 
 @export
-var lowerSpeedLimit: float = 1.0
+var lowerSpeedLimit: float = 3.0
 
 # input vars
 var accelerationInput: float = 0.0
 var steeringInput: float = 0.0
 var driftInput: float = 0.0
 
-var groundedTires: Array = [false, false, false, false]
+var inputHandler: InputHandlerNew
 
-var aboutToJump = false
+var pauseLinearVelocity: Vector3
+var pauseAngularVelocity: Vector3
+
+var paused: bool = false
+
+var shouldPause: bool = false
+
+var initialRespawn: bool = false
+
+# ingameData
+var playerName: String = ""
+@export
+var playerIndex: int = 0:
+	set(newIndex):
+		playerIndex = onInputPlayerIndexChanged(newIndex)
+	get:
+		return playerIndex
+
+func onInputPlayerIndexChanged(newIndex: int) -> int:
+	%InputHandler.setInputPlayer(newIndex + 1)
+	return newIndex
+
+@export
+var frameColor: Color = Color.PINK:
+	set(newColor):
+		frameColor = onFrameColorChanged(newColor)
+	get:
+		return frameColor
+
+func onFrameColorChanged(newColor: Color) -> Color:
+	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
+	return newColor
+
+var state: CarStateMachine
+
+# SIGNALS
+
+signal respawned(playerIndex: int)
+signal finishedRace(playerIndex: int)
+signal isReady(playerIndex: int)
+signal isResetting(playerIndex: int, resetting: bool)
+signal changeCameraMode()
+
+
+
+
+
+
+func setup(
+		playerData: PlayerData, 
+		newPlayerIndex: int, 
+		startingPosition: Dictionary, 
+		checkpointCount: int, 
+		nrLaps: int
+):
+	playerIndex = newPlayerIndex
+	playerName = playerData.PLAYER_NAME
+	frameColor = playerData.PLAYER_COLOR
+
+	state.prepareCheckpointList(checkpointCount)
+	state.nrLaps = nrLaps
+	state.placement = playerIndex + 1
+
+	setRespawnPositionFromDictionary(startingPosition)
+	respawn(true)
+
+func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
+	state.reset(checkpointCount, playerIndex)
+
+	setRespawnPositionFromDictionary(startingPosition)
+	respawn(true)
 
 func _ready():
+	inputHandler = %InputHandler
+	state = %CarStateMachine
 	set_physics_process(true)
 
 func _physics_process(_delta):
-	var groundedTireCount: float = 0.0
-	for grounded in groundedTires:
-		if grounded:
-			groundedTireCount += 1
-	applyDownforce(groundedTireCount)
+	applyDownforce(state.getGroundedTireCount())
 	
-	var aboutToJumpForward = !groundedTires[0] && !groundedTires[1] && (groundedTires[2] || groundedTires[3])
-	var aboutToJumpBackward = (groundedTires[0] || groundedTires[1]) && !groundedTires[2] && !groundedTires[3]
-	aboutToJump = aboutToJumpForward || aboutToJumpBackward
-	
-	if groundedTireCount == 0:
+	if state.isAirborne():
 		applyAirPitch()
 		applyAirSteering()
-		slidingFactor = 1
+		slidingFactor = 0.9
 		
-		
+	# if getSpeed() < lowerSpeedLimit && !accelerationInput:
+	# 	linear_velocity *= Vector3.UP
 	
-	if getSpeed() < lowerSpeedLimit && !accelerationInput:
-		linear_velocity *= Vector3.UP
 	
-	if shouldRespawn:
-		global_position = respawnPosition
-		rotation = respawnRotation
+	
+	if shouldPause && !paused:
+		pauseLinearVelocity = linear_velocity
+		pauseAngularVelocity = angular_velocity
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
-		shouldRespawn = false
 
+		if initialRespawn:
+			global_position = respawnPosition
+			global_rotation = respawnRotation
+			pauseLinearVelocity = Vector3.ZERO
+			pauseAngularVelocity = Vector3.ZERO
+			respawned.emit(playerIndex)
+			initialRespawn = false
+		paused = true
+		freeze = true
+	elif !shouldPause && paused:
+		freeze = false
+		linear_velocity = pauseLinearVelocity
+		angular_velocity = pauseAngularVelocity
+		paused = false
+
+
+func _integrate_forces(physicsState):
+	if shouldRespawn:
+		physicsState.linear_velocity = Vector3.ZERO
+		physicsState.angular_velocity = Vector3.ZERO
+		physicsState.transform = createRespawnTransform3D()
+		shouldRespawn = false
+		if initialRespawn:
+			# initialRespawn = false
+			pauseMovement()
+		respawned.emit(playerIndex)
+
+func createRespawnTransform3D():
+	var tempTransform = Transform3D()
+	tempTransform = tempTransform.rotated(Vector3.UP, respawnRotation.y)
+	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.x)
+	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.z)
+	tempTransform.origin = respawnPosition
+	return tempTransform
 @export
 var airPitchControl: float = 8
 
@@ -139,9 +238,9 @@ func applySuspension(raycastDistance: float, springDirection: Vector3, tireVeloc
 	var forceMagnitude = (offset * springConstant * mass) - (velocity * springDamping )
 	var force = forceMagnitude * springDirection #* mass
 	
-	if aboutToJump:
-		force *= jumpingForceReduction
-#	DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
+	# if state.aboutToJump():
+	# 	force *= jumpingForceReduction
+	# DebugDraw.draw_arrow_ray(suspensionPoint, force, force.length(), Color.DARK_CYAN, 0.02)
 
 	apply_force(force, forcePosition)
 
@@ -198,10 +297,10 @@ func calculate_tire_grip(slipAngle: float):
 	
 	return tireGrip * driftMultiplier * skidMultiplier
 
-func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: float, contactPoint: Vector3):
+func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: float, contactPoint: Vector3, frictionMultiplier: float):
 	var steeringVelocity = steeringDirection.dot(tireVelocity)
 #	var tireGripFactor = calculate_tire_grip(getTireSkidRatio(contactPoint, steeringDirection))
-	var tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2)))
+	var tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2))) * frictionMultiplier
 
 	
 	var desiredVelocityChange = -steeringVelocity * tireGripFactor
@@ -210,14 +309,14 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 
 	var force = steeringDirection * desiredAcceleration * tireMass
 	
-	DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
+	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
 	
-	if aboutToJump:
+	if state.aboutToJump():
 		force *= jumpingForceReduction
 	
 	apply_force(force, contactPoint - global_position)
 
-func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3):
+func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3, accelerationMultiplier: float):
 	if accelerationInput == 0:
 		var tireAxisVelocity = accelerationDirection.dot(tireVelocity)
 		var desiredVelocityChange = - tireAxisVelocity * passiveBraking
@@ -226,17 +325,17 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 
 		var force = accelerationDirection * desiredAcceleration #* mass
 		
-		DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
+		# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
 		
 		apply_force(force, contactPoint - global_position)
 		return
 
-	var force = accelerationDirection * accelerationInput * acceleration * mass
+	var force = accelerationDirection * accelerationInput * acceleration * mass * accelerationMultiplier
 
 	if force.dot(linear_velocity) < 0:
 		force *= brakingMultiplier
 	
-	DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
+	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
 	
 	
 	apply_force(force, contactPoint - global_position)
@@ -247,9 +346,19 @@ func getSpeed() -> float:
 
 	return Vector2(velocityForward, velocityRight).length()
 
+# func getSteeringFactor() -> float:
+# 	var g = func(x): return (- x / 150) + 1
+# 	var f = func(x): return max(g.call(x), 0.25)
+
+# 	return f.call(getSpeed()) * maxSteeringAngle
 func getSteeringFactor() -> float:
-	var g = func(x): return (- x / 150) + 1
-	var f = func(x): return max(g.call(x), 0.25)
+	var g = func(x): return (- x / 150) + 1.07
+	# var f = func(x): return min(max(g.call(x), 0.25), 1.0)
+	var h = func(x): return (- x / 60) + 1.2
+	var f = func(x): return max(max(g.call(x), 0.25), h.call(x))
+
+	# var l = func(x): return -log(x / 18 + 0.7) + 1.15
+	# var f = func(x): return max(l.call(x), 0.25)
 
 	return f.call(getSpeed()) * maxSteeringAngle
 
@@ -261,8 +370,20 @@ func getForwardSpeed() -> float:
 	
 	return speed
 
-func respawn():
+func setRespawnPosition(newPosition: Vector3, newRotation: Vector3):
+	respawnPosition = newPosition
+	respawnRotation = newRotation
+
+func setRespawnPositionFromDictionary(newPosition: Dictionary):
+	respawnPosition = newPosition["position"]
+	respawnRotation = newPosition["rotation"]
+
+func respawn(initial: bool = false):
 	shouldRespawn = true
+	pauseAngularVelocity = Vector3.ZERO
+	pauseLinearVelocity = Vector3.ZERO
+	print('Reset paused velocity')
+	initialRespawn = initial
 
 func getSkiddingRatio():
 	var skiddinForward = linear_velocity.dot(global_transform.basis.z)
@@ -295,6 +416,24 @@ func getPitchScale():
 func getPlayingIdle():
 	return getSpeed() < soundSpeedLimit
 
+func pauseMovement():
+	shouldPause = true
+	print('pause movement')
+
+func resumeMovement():
+	shouldPause = false
+	print('unpause movement')
+
+func startRace():
+	resumeMovement()
+	state.currentLap = 0
+	state.hasControl = true
+
+
+func resetInputs():
+	accelerationInput = 0.0
+	steeringInput = 0.0
+	driftInput = 0.0
 
 # DEBUG FUNCTIONS
 

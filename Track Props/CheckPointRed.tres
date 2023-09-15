@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://byndbys7sguwh"]
+
+[ext_resource type="Shader" uid="uid://cf00oa4xifmry" path="res://cp.tres" id="1_7yj0u"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_7yj0u")
+shader_parameter/ring_color1 = Color(1, 0.133333, 0, 1)
+shader_parameter/Segments_Main_Rings = 6
+shader_parameter/ring_speed1 = 6.4
+shader_parameter/ring_offset1 = 1.0
+shader_parameter/ring_color2 = Color(1, 0.1, 0, 1)
+shader_parameter/ring_speed2 = 7.0
+shader_parameter/ring_offset2 = 3.7
+shader_parameter/ring_color3 = Color(1, 0, 0.133333, 1)
+shader_parameter/ring_speed3 = 9.6
+shader_parameter/ring_offset3 = 0.0
+shader_parameter/outside_ring_color = Color(0.290196, 0.34902, 0.333333, 1)

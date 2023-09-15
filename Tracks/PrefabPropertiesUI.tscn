@@ -1,0 +1,564 @@
+[gd_scene load_steps=8 format=3 uid="uid://dekkh255k7tti"]
+
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_h1vys"]
+[ext_resource type="Script" path="res://Tracks/PrefabPropertiesUI.gd" id="1_oof12"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3wny"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nguf1"]
+bg_color = Color(0.878431, 0, 0.501961, 0.392157)
+corner_radius_top_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i0jaf"]
+bg_color = Color(0.878431, 0, 0, 0.392157)
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocjib"]
+bg_color = Color(0, 0, 0.878431, 0.392157)
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1ano"]
+bg_color = Color(0.419608, 0.419608, 0.419608, 0.392157)
+corner_radius_bottom_right = 10
+
+[node name="PrefabPropertiesUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme = ExtResource("1_h1vys")
+script = ExtResource("1_oof12")
+
+[node name="Safezone" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -237.0
+offset_bottom = 470.0
+grow_horizontal = 0
+
+[node name="Panel" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -227.0
+offset_top = 11.0
+offset_right = -13.0
+offset_bottom = 304.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k3wny")
+
+[node name="Panel" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_right = 107.0
+offset_bottom = 146.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nguf1")
+
+[node name="Panel2" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_left = 108.0
+offset_right = 213.0
+offset_bottom = 146.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i0jaf")
+
+[node name="Panel3" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_top = 147.0
+offset_right = 107.0
+offset_bottom = 292.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ocjib")
+
+[node name="Panel4" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 147.0
+offset_right = 213.0
+offset_bottom = 292.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n1ano")
+
+[node name="VSeparator" type="VSeparator" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftEnd" type="VSlider" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 9.0
+offset_top = 11.0
+offset_right = 31.0
+offset_bottom = 140.0
+min_value = -10.0
+max_value = 10.0
+rounded = true
+tick_count = 21
+
+[node name="LeftEndSpinbox" type="SpinBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 43.0
+offset_top = 67.0
+offset_right = 126.063
+offset_bottom = 98.0
+scale = Vector2(0.5, 0.5)
+min_value = -10.0
+max_value = 10.0
+rounded = true
+alignment = 1
+
+[node name="RightEnd" type="VSlider" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 175.0
+offset_top = 11.0
+offset_right = 197.0
+offset_bottom = 140.0
+min_value = -10.0
+max_value = 10.0
+rounded = true
+tick_count = 21
+
+[node name="RightEndSpinbox" type="SpinBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 133.0
+offset_top = 67.0
+offset_right = 216.063
+offset_bottom = 98.0
+scale = Vector2(0.5, 0.5)
+min_value = -10.0
+max_value = 10.0
+rounded = true
+alignment = 1
+
+[node name="LeftStart" type="VSlider" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 9.0
+offset_top = 150.0
+offset_right = 31.0
+offset_bottom = 279.0
+min_value = -10.0
+max_value = 10.0
+rounded = true
+tick_count = 21
+
+[node name="LeftStartSpinbox" type="SpinBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 43.0
+offset_top = 196.0
+offset_right = 126.063
+offset_bottom = 227.0
+scale = Vector2(0.5, 0.5)
+min_value = -10.0
+max_value = 10.0
+rounded = true
+alignment = 1
+
+[node name="RightStart" type="VSlider" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 175.0
+offset_top = 150.0
+offset_right = 197.0
+offset_bottom = 279.0
+min_value = -10.0
+max_value = 10.0
+rounded = true
+tick_count = 21
+
+[node name="RightStartSpinbox" type="SpinBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 133.0
+offset_top = 196.0
+offset_right = 216.063
+offset_bottom = 227.0
+scale = Vector2(0.5, 0.5)
+min_value = -10.0
+max_value = 10.0
+rounded = true
+alignment = 1
+
+[node name="LeftSmoothing" type="OptionButton" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 43.0
+offset_top = 129.0
+offset_right = 128.0
+offset_bottom = 160.0
+scale = Vector2(0.5, 0.5)
+item_count = 4
+selected = 3
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Start"
+popup/item_1/id = 1
+popup/item_2/text = "End"
+popup/item_2/id = 2
+popup/item_3/text = "Both"
+popup/item_3/id = 3
+
+[node name="RightSmoothing" type="OptionButton" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 133.0
+offset_top = 129.0
+offset_right = 218.0
+offset_bottom = 160.0
+scale = Vector2(0.5, 0.5)
+item_count = 4
+selected = 3
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Start"
+popup/item_1/id = 1
+popup/item_2/text = "End"
+popup/item_2/id = 2
+popup/item_3/text = "Both"
+popup/item_3/id = 3
+
+[node name="WallLabel" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 88.0
+offset_right = 126.0
+offset_bottom = 114.0
+scale = Vector2(0.5, 0.5)
+text = "Wall"
+
+[node name="LeftWallEnd" type="CheckBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 61.0
+offset_top = 83.0
+offset_right = 85.0
+offset_bottom = 107.0
+
+[node name="WallLabel2" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 217.0
+offset_right = 126.0
+offset_bottom = 243.0
+scale = Vector2(0.5, 0.5)
+text = "Wall"
+
+[node name="LeftWallStart" type="CheckBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 61.0
+offset_top = 212.0
+offset_right = 85.0
+offset_bottom = 236.0
+
+[node name="WallLabel3" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 88.0
+offset_right = 215.0
+offset_bottom = 114.0
+scale = Vector2(0.5, 0.5)
+text = "Wall"
+
+[node name="RightWallEnd" type="CheckBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 150.0
+offset_top = 83.0
+offset_right = 174.0
+offset_bottom = 107.0
+
+[node name="WallLabel4" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 217.0
+offset_right = 215.0
+offset_bottom = 243.0
+scale = Vector2(0.5, 0.5)
+text = "Wall"
+
+[node name="RightWallStart" type="CheckBox" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 150.0
+offset_top = 212.0
+offset_right = 174.0
+offset_bottom = 236.0
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 49.0
+offset_right = 126.0
+offset_bottom = 75.0
+scale = Vector2(0.5, 0.5)
+text = "End Height"
+
+[node name="Label2" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 49.0
+offset_right = 215.0
+offset_bottom = 75.0
+scale = Vector2(0.5, 0.5)
+text = "End Height"
+
+[node name="Label5" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 112.0
+offset_right = 128.0
+offset_bottom = 138.0
+scale = Vector2(0.5, 0.5)
+text = "Smoothing"
+
+[node name="Label6" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 132.0
+offset_top = 112.0
+offset_right = 217.0
+offset_bottom = 138.0
+scale = Vector2(0.5, 0.5)
+text = "Smoothing"
+
+[node name="Label3" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 178.0
+offset_right = 126.0
+offset_bottom = 204.0
+scale = Vector2(0.5, 0.5)
+text = "Start Height"
+
+[node name="Label4" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 178.0
+offset_right = 218.0
+offset_bottom = 204.0
+scale = Vector2(0.5, 0.5)
+text = "Start Height"
+
+[node name="Label7" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 11.0
+offset_right = 83.0
+offset_bottom = 37.0
+text = "LEFT
+"
+
+[node name="Label8" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 11.0
+offset_right = 173.0
+offset_bottom = 37.0
+text = "RIGHT
+"
+
+[node name="Panel2" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -227.0
+offset_top = 314.0
+offset_right = -13.0
+offset_bottom = 382.0
+grow_horizontal = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0607477
+anchor_top = 0.0775862
+anchor_right = 0.0607477
+anchor_bottom = 0.0775862
+offset_top = -0.189655
+offset_right = 86.0
+offset_bottom = 35.8103
+scale = Vector2(0.5, 0.5)
+
+[node name="Label" type="Label" parent="Panel2/HBoxContainer"]
+layout_mode = 2
+text = "Curved"
+
+[node name="CurvedTickBox" type="CheckBox" parent="Panel2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Snap" type="Label" parent="Panel2/HBoxContainer"]
+layout_mode = 2
+text = "Snapping"
+
+[node name="SnapTickBox" type="CheckBox" parent="Panel2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="ResetButton" type="Button" parent="Panel2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset"
+
+[node name="CurveProperties" type="HBoxContainer" parent="Panel2"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0607477
+anchor_top = 0.375
+anchor_right = 0.0700935
+anchor_bottom = 0.375
+offset_right = 51.0
+offset_bottom = 35.0
+scale = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel2/CurveProperties"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel2/CurveProperties/VBoxContainer"]
+layout_mode = 2
+text = "Curve Forward"
+
+[node name="CurveForward" type="SpinBox" parent="Panel2/CurveProperties/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 16.0
+max_value = 512.0
+value = 16.0
+rounded = true
+alignment = 1
+custom_arrow_step = 16.0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel2/CurveProperties"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel2/CurveProperties/VBoxContainer2"]
+layout_mode = 2
+text = "Curve Sideways"
+
+[node name="CurveSideways" type="SpinBox" parent="Panel2/CurveProperties/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 16.0
+max_value = 512.0
+value = 16.0
+rounded = true
+alignment = 1
+custom_arrow_step = 16.0
+
+[node name="StraightProperties" type="HBoxContainer" parent="Panel2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0607477
+anchor_top = 0.375
+anchor_right = 0.0700935
+anchor_bottom = 0.436
+offset_right = 51.0
+offset_bottom = 35.0
+scale = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel2/StraightProperties"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel2/StraightProperties/VBoxContainer"]
+layout_mode = 2
+text = "Length"
+
+[node name="StraightLength" type="SpinBox" parent="Panel2/StraightProperties/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 16.0
+value = 1.0
+rounded = true
+alignment = 1
+custom_arrow_step = 1.0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel2/StraightProperties"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel2/StraightProperties/VBoxContainer2"]
+layout_mode = 2
+text = "Offset"
+
+[node name="StraightOffset" type="SpinBox" parent="Panel2/StraightProperties/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -64.0
+max_value = 64.0
+rounded = true
+alignment = 1
+custom_arrow_step = 1.0
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Panel2/StraightProperties"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel2/StraightProperties/VBoxContainer3"]
+layout_mode = 2
+text = "Smoothing"
+
+[node name="StraightSmoothing" type="OptionButton" parent="Panel2/StraightProperties/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+selected = 3
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Start"
+popup/item_1/id = 1
+popup/item_2/text = "End"
+popup/item_2/id = 2
+popup/item_3/text = "Both"
+popup/item_3/id = 3
+
+[node name="Panel3" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -227.0
+offset_top = 394.0
+offset_right = -13.0
+offset_bottom = 462.0
+grow_horizontal = 0
+
+[node name="RoadTypeSelector" type="ItemList" parent="Panel3"]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 6.0
+offset_top = 59.0
+offset_right = 59.0
+offset_bottom = 259.0
+rotation = -1.57079
+theme_override_font_sizes/font_size = 10
+item_count = 5
+item_0/text = "Road"
+item_1/text = "Grass"
+item_2/text = "Dirt"
+item_3/text = "Booster"
+item_4/text = "RBooster"

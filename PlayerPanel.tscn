@@ -1,0 +1,114 @@
+[gd_scene load_steps=5 format=3 uid="uid://dl5836ibbaqbg"]
+
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_wnj65"]
+[ext_resource type="Script" path="res://PlayerPanel.gd" id="2_pun37"]
+[ext_resource type="Texture2D" uid="uid://bcqoo8rmadyxo" path="res://Menu/image-solid.svg" id="3_sq1jl"]
+[ext_resource type="Texture2D" uid="uid://2dhuomwfub31" path="res://Menu/shuffle-solid.svg" id="4_ma6sb"]
+
+[node name="PlayerPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 375.0
+offset_bottom = 130.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_wnj65")
+script = ExtResource("2_pun37")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 375.0
+offset_bottom = 130.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 372.0
+offset_bottom = 126.0
+
+[node name="ProfilePicture" type="TextureRect" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+texture = ExtResource("3_sq1jl")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Username" type="LineEdit" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 2
+focus_next = NodePath("../../HBoxContainer2/Password")
+placeholder_text = "Username"
+
+[node name="ColorPicker" type="ColorPickerButton" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_next = NodePath("../../HBoxContainer2/RandomColorButton")
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Password" type="LineEdit" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+focus_next = NodePath("../../HBoxContainer/ColorPicker")
+placeholder_text = "Password"
+secret = true
+
+[node name="RandomColorButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Randomize Car Color"
+icon = ExtResource("4_ma6sb")
+icon_alignment = 1
+expand_icon = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="GuestLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Guest "
+vertical_alignment = 1
+
+[node name="GuestTickBox" type="CheckBox" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LoginButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Login"
+
+[node name="AsGuestButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "As Guest"
+
+[node name="LogoutButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Logout"

@@ -1,4 +1,4 @@
-extends AudioStreamPlayer3D
+extends Node3D
 
 @export
 var GEAR_STAGE: float = 1
@@ -24,7 +24,8 @@ func _ready():
 	car = get_parent()
 	
 	set_physics_process(true)
-	gearPlayers = [GEAR2, GEAR3, GEAR4, GEAR5, GEAR6]
+	# gearPlayers = [GEAR2, GEAR3, GEAR4, GEAR5, GEAR6]
+	gearPlayers = [GEAR1, GEAR2, GEAR3, GEAR4, GEAR5]
 	# GEAR2.play()
 	pass # Replace with function body.
 

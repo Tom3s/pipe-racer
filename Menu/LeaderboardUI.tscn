@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://wgcae8ei5xn5"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_iw064"]
-[ext_resource type="Script" path="res://List.gd" id="1_qmjdn"]
+[ext_resource type="Script" path="res://Menu/LeaderboardUI.gd" id="2_pm2x8"]
 
 [node name="LeaderboardUI" type="Control"]
 layout_mode = 3
@@ -11,81 +11,81 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_iw064")
+script = ExtResource("2_pm2x8")
 
-[node name="List" type="Control" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_qmjdn")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="List"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -274.0
-offset_bottom = 232.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="List/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="Button" type="Button" parent="List/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-mouse_filter = 2
-button_mask = 0
-text = "Best Lap Times"
-
-[node name="BestLapsList" type="ItemList" parent="List/HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-clip_contents = false
-custom_minimum_size = Vector2(500, 450)
-layout_mode = 2
-auto_height = true
-item_count = 1
-item_0/text = "Loading..."
-item_0/selectable = false
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="List/HBoxContainer"]
-layout_mode = 2
-
-[node name="Button2" type="Button" parent="List/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-mouse_filter = 2
-button_mask = 0
-text = "Best Total Times"
-
-[node name="TotalTimesList" type="ItemList" parent="List/HBoxContainer/VBoxContainer2"]
-unique_name_in_owner = true
-clip_contents = false
-custom_minimum_size = Vector2(500, 450)
-layout_mode = 2
-auto_height = true
-item_count = 1
-item_0/text = "Loading..."
-item_0/selectable = false
-
-[node name="CloseButton" type="Button" parent="List"]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -34.0
-offset_top = 252.0
-offset_right = 34.0
-offset_bottom = 294.0
+offset_left = -501.5
+offset_top = -263.0
+offset_right = 501.5
+offset_bottom = 263.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TrackName" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 25
+text = "<track name> - by: <author>"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button3" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0.909804, 0.909804, 0.909804, 1)
+disabled = true
+button_mask = 0
+text = "Best Lap Times"
+
+[node name="BestLapsList" type="ItemList" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(500, 450)
+layout_mode = 2
+auto_height = true
+item_count = 1
+item_0/text = "Loading..."
+item_0/selectable = false
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0.909804, 0.909804, 0.909804, 1)
+disabled = true
+button_mask = 0
+text = "Best Total Times"
+
+[node name="BestTimesList" type="ItemList" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(500, 450)
+layout_mode = 2
+auto_height = true
+item_count = 1
+item_0/text = "Loading..."
+item_0/selectable = false
+
+[node name="CloseButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 4
 text = "Close"

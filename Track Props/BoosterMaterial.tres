@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://2i0p3tddq4mn"]
+
+[ext_resource type="Shader" uid="uid://b3wq1n7bq8qj7" path="res://Track Props/BoosterShader.tres" id="1_5xc5t"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5xc5t")

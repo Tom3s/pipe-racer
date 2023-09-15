@@ -10,9 +10,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if is_colliding():
+	if !car.paused && is_colliding():
 		
-		var contactPoint = get_collision_point()
+		# var contactPoint = get_collision_point()
 		var raycastDistance = (get_collision_point() - global_position).length()
 		
 		var tireVelocitySuspension = car.get_point_velocity(global_position)

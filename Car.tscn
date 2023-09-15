@@ -4,7 +4,7 @@
 [ext_resource type="PhysicsMaterial" uid="uid://bjm334ebiwq52" path="res://car_physics.tres" id="1_qwj5j"]
 [ext_resource type="Script" path="res://tireRaycast.gd" id="2_4ug8g"]
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="2_bvmt0"]
-[ext_resource type="Script" path="res://tire.gd" id="3_hj1pj"]
+[ext_resource type="Script" path="res://Tire.gd" id="3_hj1pj"]
 [ext_resource type="Material" uid="uid://qi7cksv7xac8" path="res://debug_material.tres" id="4_3vuwg"]
 [ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_bbs70"]
 [ext_resource type="Script" path="res://InputHandler.gd" id="6_56wu2"]

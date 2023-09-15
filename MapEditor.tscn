@@ -1,0 +1,87 @@
+[gd_scene load_steps=24 format=3 uid="uid://cobk7xdv3vypr"]
+
+[ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
+[ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
+[ext_resource type="Script" path="res://MapEditor.gd" id="1_h77wk"]
+[ext_resource type="PackedScene" uid="uid://dekkh255k7tti" path="res://Tracks/PrefabPropertiesUI.tscn" id="1_oo1hv"]
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="2_l42gs"]
+[ext_resource type="Script" path="res://EditorInputHandler.gd" id="2_nlp2q"]
+[ext_resource type="PackedScene" uid="uid://c8mpq5k80nw87" path="res://Track Props/PropPropertiesUI.tscn" id="2_p5lab"]
+[ext_resource type="Script" path="res://EditorCamera.gd" id="3_ciak8"]
+[ext_resource type="PackedScene" uid="uid://0u42v7u8akxk" path="res://EditorShortcutsUI.tscn" id="3_gtd2l"]
+[ext_resource type="PackedScene" uid="uid://xwrlnq5s5gin" path="res://TrackMetadataUI.tscn" id="4_jppls"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="5_atlqn"]
+[ext_resource type="PackedScene" uid="uid://brl2uu62fx8nm" path="res://PrefabGenerator.tscn" id="6_ayac0"]
+[ext_resource type="PackedScene" uid="uid://bnabtcfvm0a4t" path="res://PrefabSelectorUI.tscn" id="6_b5djn"]
+[ext_resource type="PackedScene" uid="uid://bf1ljjah7ojpp" path="res://PropPlacer.tscn" id="6_gdrqn"]
+[ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
+[ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="6_rxs3p"]
+[ext_resource type="PackedScene" uid="uid://cc0ysp05m4ati" path="res://Loading.tscn" id="8_xhoba"]
+[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="13_867gm"]
+[ext_resource type="Texture2D" uid="uid://dvxlqb8ty68ye" path="res://Track Props/Chicane left.png" id="14_cl3gv"]
+[ext_resource type="Texture2D" uid="uid://cdrphd6rbd85y" path="res://Track Props/Chicane right.png" id="15_fk63j"]
+[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="16_dxxpf"]
+[ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="17_3uy7r"]
+[ext_resource type="Texture2D" uid="uid://c3g2tli8mtuws" path="res://Track Props/champion.png" id="18_knln5"]
+
+[node name="MapEditor" type="Node3D"]
+script = ExtResource("1_h77wk")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PrefabPropertiesUI" parent="CanvasLayer" instance=ExtResource("1_oo1hv")]
+unique_name_in_owner = true
+
+[node name="PropPropertiesUI" parent="CanvasLayer" instance=ExtResource("2_p5lab")]
+unique_name_in_owner = true
+
+[node name="EditorShortcutsUI" parent="CanvasLayer" instance=ExtResource("3_gtd2l")]
+unique_name_in_owner = true
+
+[node name="TrackMetadataUI" parent="CanvasLayer" instance=ExtResource("4_jppls")]
+unique_name_in_owner = true
+visible = false
+
+[node name="PrefabSelectorUI" parent="CanvasLayer" instance=ExtResource("6_b5djn")]
+unique_name_in_owner = true
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("6_rxs3p")]
+unique_name_in_owner = true
+
+[node name="Loading" parent="CanvasLayer" instance=ExtResource("8_xhoba")]
+unique_name_in_owner = true
+
+[node name="Player" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CarController" parent="Player" instance=ExtResource("5_atlqn")]
+unique_name_in_owner = true
+
+[node name="Map" parent="." instance=ExtResource("1_d0rt7")]
+unique_name_in_owner = true
+
+[node name="TestTrackEnv" parent="." instance=ExtResource("2_l42gs")]
+
+[node name="EditorCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+current = true
+script = ExtResource("3_ciak8")
+
+[node name="PrefabGenerator" parent="." instance=ExtResource("6_ayac0")]
+unique_name_in_owner = true
+
+[node name="PropPlacer" parent="." instance=ExtResource("6_gdrqn")]
+unique_name_in_owner = true
+billboardTextures = Array[Texture]([ExtResource("13_867gm"), ExtResource("14_cl3gv"), ExtResource("15_fk63j"), ExtResource("16_dxxpf"), ExtResource("17_3uy7r"), ExtResource("18_knln5")])
+
+[node name="EditorInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_nlp2q")
+
+[node name="EditorStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_lmcfs")
+
+[node name="EditorEventListener" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_f0b2n")

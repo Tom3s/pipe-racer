@@ -36,3 +36,7 @@ func playIngameMusic():
 	# var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	# tween.tween_property(menuMusic, "volume_db", -60.0, FADE_TIME)
 	# tween.parallel().tween_property(ingameMusic, "volume_db", 0.0, FADE_TIME)
+
+func stopMusic():
+	menuMusic.fadeTo(-60.0, FADE_TIME)
+	ingameMusic.fadeTo(-60.0, FADE_TIME)

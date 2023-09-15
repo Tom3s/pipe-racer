@@ -1,49 +1,68 @@
-@tool
 extends Camera3D
-
 class_name FollowingCamera
-
-# @onready
-# var car1: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car/%CarRigidBody")
-# @onready
-# var car2: CarRigidBody = get_parent().get_parent().get_parent().get_parent().get_node("Car2/%CarRigidBody")
 
 var car = null
 
-# @export
-# var playerIndex = 1
+var shouldUpdatePosition = false
+
+@export
+var mode: int = 0
+
+@export
+var insideX: float = 0.0
+
+@export
+var insideY: float = 1.13
+
+@export
+var insideZ: float = 0.15
+
+@export
+var insideTilt: float = 1.12
 
 func _init(carReference):
-	# playerIndex = initialPlayerIndex
 	car = carReference
+	car.changeCameraMode.connect(changeMode)
+
+func setup(carReference):
+	car = carReference
+	car.changeCameraMode.connect(changeMode)
 
 func _ready():
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
+	fov = 65
 	set_physics_process(true)
-# 	pass
 
 func _physics_process(delta):
-	if car == null:
-		# if playerIndex == 1:
-		# 	car = car1
-		# else:
-		# 	car = car2
-		pass
-	else:
-		var car_pos = car.global_transform.origin
-		var car_y = car.global_transform.basis.y
-		var car_z = car.global_transform.basis.z
+	if car.paused && !shouldUpdatePosition:
+		return
+
+	var car_pos = car.global_transform.origin
+	var car_y = car.global_transform.basis.y
+	var car_z = car.global_transform.basis.z
+	if mode == 0:
 
 		var target = car_pos + car_y * 3 + car_z * -4
 
-		# position = target
-		# tween.tween_property(self, "position", target, 0.2)
+		# if shouldUpdatePosition:
+		# 	print("Force update camera position")
+		# 	global_position = target
+		# 	look_at(car_pos + Vector3.UP * 2, Vector3.UP)
+		# 	# shouldUpdatePosition = false
+		# 	return
 
-		position = lerp(position, target, 20 * delta)
+		global_position = lerp(global_position, target, 25 * delta if !shouldUpdatePosition else 1)
 
 		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
-		# var fromSelfToCar = car_pos - position
+	if mode == 1:
+		global_position = car_pos + car_y * insideY + car_z * insideZ 
+		look_at(car_pos + car_y * insideTilt + car_z, car_y)
 
-		# var targetRotation = fromSelfToCar.orthonormalized()
+	shouldUpdatePosition = false
 
-		# rotation = lerp(rotation, fromSelfToCar, 10 * delta)
+func forceUpdatePosition():
+	shouldUpdatePosition = true
+
+func changeMode():
+	mode = (mode + 1) % 2
+	shouldUpdatePosition = true

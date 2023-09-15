@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://bf023ng2nrvk2"]
+[gd_scene load_steps=5 format=3 uid="uid://bf023ng2nrvk2"]
 
-[ext_resource type="Script" path="res://DebugDraw3D.gd" id="1_6bey7"]
 [ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="2_43vtq"]
 [ext_resource type="Script" path="res://Countdown.gd" id="2_vrpsj"]
 
@@ -24,16 +23,6 @@ default_font_size = 400
 unique_name_in_owner = true
 root_path = NodePath("../Countdown")
 replication_config = SubResource("SceneReplicationConfig_jyalr")
-
-[node name="DebugDraw3D" type="Control" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_6bey7")
-metadata/_edit_use_anchors_ = true
 
 [node name="Countdown" type="Label" parent="."]
 unique_name_in_owner = true

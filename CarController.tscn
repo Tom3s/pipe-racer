@@ -1,16 +1,20 @@
-[gd_scene load_steps=26 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=22 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
 [ext_resource type="Script" path="res://InputHandlerNew.gd" id="3_kfdpd"]
 [ext_resource type="Script" path="res://Tire.gd" id="3_qi2cw"]
 [ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
-[ext_resource type="Shader" uid="uid://tfdck0ea3rd4" path="res://carMaterial/SmokeMaterialBillboard.tres" id="5_7q8eh"]
+[ext_resource type="Shader" uid="uid://ddhtdhtpsdk5r" path="res://Track Props/dirtParticleShader.tres" id="5_0o4p6"]
+[ext_resource type="Material" uid="uid://db2jkyqdfgrng" path="res://Track Props/SMokeParticles.tres" id="5_myblr"]
 [ext_resource type="Script" path="res://BottomOut.gd" id="5_rud3q"]
+[ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
+[ext_resource type="PlaneMesh" uid="uid://dvof0mms3yhd8" path="res://Track Props/smokeParticleMAterial.tres" id="6_obe7c"]
 [ext_resource type="Script" path="res://CarSoundEffects.gd" id="9_n17k7"]
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
 [ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
+[ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
 friction = 0.05
@@ -28,56 +32,18 @@ height = 4.15
 radius = 0.634647
 height = 1.99853
 
-[sub_resource type="Gradient" id="Gradient_phovb"]
-colors = PackedColorArray(0.623057, 0.709816, 0.773414, 1, 0.623529, 0.709804, 0.772549, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_a8a45"]
-gradient = SubResource("Gradient_phovb")
-
-[sub_resource type="Curve" id="Curve_4xdyt"]
-max_value = 31.12
-_data = [Vector2(0, 5.37527), 0.0, 0.0, 0, 0, Vector2(1, 24.0473), 4.62529, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_og40x"]
-curve = SubResource("Curve_4xdyt")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k33ti"]
-lifetime_randomness = 0.3
-emission_shape = 3
-emission_box_extents = Vector3(0.3, 0.1, 0.1)
-spread = 0.0
-flatness = 1.0
-gravity = Vector3(0, 25, 0)
-scale_max = 1.2
-scale_curve = SubResource("CurveTexture_og40x")
-color_ramp = SubResource("GradientTexture1D_a8a45")
-turbulence_enabled = true
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
 render_priority = 0
-shader = ExtResource("5_7q8eh")
+shader = ExtResource("5_0o4p6")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_lk12m"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_lagfo"]
 material = SubResource("ShaderMaterial_ggqdx")
 size = Vector2(0.2, 0.2)
 orientation = 2
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s4xv3"]
-direction = Vector3(0, 0, 1)
-gravity = Vector3(0, 0, 0)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5uti"]
-use_particle_trails = true
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_hntb3"]
-material = SubResource("StandardMaterial3D_f5uti")
-shape = 0
-section_segments = 16
-
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 11
 mass = 700.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.1, 0)
@@ -132,6 +98,9 @@ shape = SubResource("CapsuleShape3D_e0f4h")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
 target_position = Vector3(0, -0.6, 0)
+collision_mask = 9
+debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
+debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 steeringSpeed = 0.1
 
@@ -143,14 +112,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
 amount = 32
 lifetime = 0.71
-randomness = 0.05
-process_material = SubResource("ParticleProcessMaterial_k33ti")
-draw_pass_1 = SubResource("PlaneMesh_lk12m")
+process_material = ExtResource("5_myblr")
+draw_pass_1 = ExtResource("6_obe7c")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
 target_position = Vector3(0, -0.6, 0)
+collision_mask = 9
+debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
+debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 steeringSpeed = 0.1
 tireIndex = 1
@@ -163,14 +141,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
 amount = 32
 lifetime = 0.71
-randomness = 0.05
-process_material = SubResource("ParticleProcessMaterial_k33ti")
-draw_pass_1 = SubResource("PlaneMesh_lk12m")
+process_material = ExtResource("5_myblr")
+draw_pass_1 = ExtResource("6_obe7c")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
 target_position = Vector3(0, -0.6, 0)
+collision_mask = 9
+debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
+debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 steeringSpeed = 0.1
 tireIndex = 2
@@ -183,14 +170,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
 amount = 32
 lifetime = 0.71
-randomness = 0.05
-process_material = SubResource("ParticleProcessMaterial_k33ti")
-draw_pass_1 = SubResource("PlaneMesh_lk12m")
+process_material = ExtResource("5_myblr")
+draw_pass_1 = ExtResource("6_obe7c")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
 target_position = Vector3(0, -0.6, 0)
+collision_mask = 9
+debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
+debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 steeringSpeed = 0.1
 tireIndex = 3
@@ -203,58 +199,63 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
 amount = 32
 lifetime = 0.71
-randomness = 0.05
-process_material = SubResource("ParticleProcessMaterial_k33ti")
-draw_pass_1 = SubResource("PlaneMesh_lk12m")
+process_material = ExtResource("5_myblr")
+draw_pass_1 = ExtResource("6_obe7c")
+
+[node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+emitting = false
+amount = 32
+process_material = ExtResource("6_clm3g")
+draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="BottomOutFL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
 target_position = Vector3(0, -0.25, 0)
+collision_mask = 9
 script = ExtResource("5_rud3q")
 
 [node name="BottomOutFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
 target_position = Vector3(0, -0.25, 0)
+collision_mask = 9
 script = ExtResource("5_rud3q")
 
 [node name="BottomOutBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
 target_position = Vector3(0, -0.25, 0)
+collision_mask = 9
 script = ExtResource("5_rud3q")
 
 [node name="BottomOutBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
 target_position = Vector3(0, -0.25, 0)
+collision_mask = 9
 script = ExtResource("5_rud3q")
 
 [node name="CarEngineSound" parent="." instance=ExtResource("6_g1nx1")]
-bus = &"Engine Sound"
+unique_name_in_owner = true
 
 [node name="InputHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("3_kfdpd")
 
 [node name="SoundEffects" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.923604, 0)
 script = ExtResource("9_n17k7")
 
-[node name="Impact1" type="AudioStreamPlayer3D" parent="SoundEffects"]
+[node name="Impact1" type="AudioStreamPlayer" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("10_8irg8")
-unit_size = 100.0
 
-[node name="Impact2" type="AudioStreamPlayer3D" parent="SoundEffects"]
+[node name="Impact2" type="AudioStreamPlayer" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("11_ryyl8")
-unit_size = 100.0
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.678018, 0)
-amount = 128
-trail_enabled = true
-trail_lifetime = 3.46
-process_material = SubResource("ParticleProcessMaterial_s4xv3")
-draw_pass_1 = SubResource("RibbonTrailMesh_hntb3")
+[node name="CarStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("12_usspm")

@@ -10,6 +10,9 @@ var startRaceSFX = %StartRace
 @onready
 var finishLapSFX = %FinishLap
 
+@onready
+var checkpoint = %Checkpoint
+
 func playCountdownSFX():
 	countdownSFX.play()
 
@@ -18,3 +21,6 @@ func playStartRaceSFX():
 
 func playFinishLapSFX():
 	finishLapSFX.play(0.1)
+
+func playCheckpointSFX():
+	checkpoint.play()
