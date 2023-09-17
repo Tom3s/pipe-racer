@@ -3,7 +3,7 @@ extends Node
 const SAVE_FILE := "user://network-config.json"
 
 @export
-var BACKEND_IP_ADRESS: String = "https://34.159.46.241:443":
+var BACKEND_IP_ADRESS: String = "http://34.159.46.241:80":
 	set(newAddress):
 		BACKEND_IP_ADRESS = newAddress
 		saveToFile()
