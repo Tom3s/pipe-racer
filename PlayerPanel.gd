@@ -96,7 +96,7 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 
 	if responseCode != 200:
 		setButtonsLoggedOut()
-		print("Error: " + body.get_string_from_utf8())
+		print("Error after login request: " + body.get_string_from_utf8())
 		return
 	
 	setButtonsLoggedIn()
@@ -111,8 +111,15 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 	if isMainPlayer:
 		Playerstats.SESSION_TOKEN = sessionToken
 		Playerstats.USER_ID = userId
+	
+	var profilePictureUrl = json.profilePictureUrl
+	profilePictureUrl = profilePictureUrl.replace("https", "http")
+	profilePictureUrl = profilePictureUrl.replace("443", "80")
 
-	loadProfilePicture(json.profilePictureUrl)
+
+	print("Profile picture url: " + profilePictureUrl)
+
+	loadProfilePicture(profilePictureUrl)
 
 func onRandomColorButton_pressed():
 	colorPicker.color = Color(randf(), randf(), randf(), 1.0)

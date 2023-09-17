@@ -88,9 +88,10 @@ func onState_allPlayersReady():
 func onRaceInputHandler_pausePressed(playerIndex: int):
 	if state.pausedBy == playerIndex:
 		var timestamp = floor(getTimestamp())
-		for i in range(cars.size()):
-			cars[i].resumeMovement()
-			timeTrialManagers[i].resumeTimeTrial(timestamp)
+		if state.raceStarted:
+			for i in range(cars.size()):
+				cars[i].resumeMovement()
+				timeTrialManagers[i].resumeTimeTrial(timestamp)
 		state.pausedBy = -1
 		pauseMenu.visible = false
 	elif state.pausedBy == -1 && state.raceStarted:
@@ -104,9 +105,10 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 
 func forceResumeGame():
 	var timestamp = floor(getTimestamp())
-	for i in range(cars.size()):
-		cars[i].resumeMovement()
-		timeTrialManagers[i].resumeTimeTrial(timestamp)
+	if state.raceStarted:
+		for i in range(cars.size()):
+			cars[i].resumeMovement()
+			timeTrialManagers[i].resumeTimeTrial(timestamp)
 	state.pausedBy = -1
 
 func onCar_respawned(playerIndex: int):
