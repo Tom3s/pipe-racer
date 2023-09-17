@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cqksavnq7whwm" path="res://Track Props/StartLineProp.tscn" id="1_f37g8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h3rnj"]
-size = Vector3(5.1, 20, 64)
+size = Vector3(5.1, 40, 64)
 
 [node name="Start" type="Node3D"]
 script = ExtResource("1_3bpir")
@@ -16,4 +16,5 @@ unique_name_in_owner = true
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StartLine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
 shape = SubResource("BoxShape3D_h3rnj")
