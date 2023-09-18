@@ -103,7 +103,6 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 
 	var json = JSON.parse_string(body.get_string_from_utf8())
 	
-	# loginButton.text = "Log Out"
 	password.text = ""
 	sessionToken = json.sessionToken
 	userId = json.userId
@@ -113,8 +112,6 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 		Playerstats.USER_ID = userId
 	
 	var profilePictureUrl = json.profilePictureUrl
-	profilePictureUrl = profilePictureUrl.replace("https", "http")
-	profilePictureUrl = profilePictureUrl.replace("443", "80")
 
 
 	print("Profile picture url: " + profilePictureUrl)
