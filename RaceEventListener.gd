@@ -5,6 +5,7 @@ var cars: Array[CarController]
 var timeTrialManagers: Array[TimeTrialManager]
 var huds: Array[IngameHUD]
 var cameras: Array[FollowingCamera]
+var raceStats: Array[RaceStats]
 var map: Map
 var players: Array[PlayerData]
 
@@ -22,11 +23,22 @@ var paused = -1
 func getTimestamp():
 	return floor(Time.get_unix_time_from_system() * 1000)
 
-func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Array, initialCameras: Array, initialMap: Map, initialIngameSFX: IngameSFX, initialPlayers: Array[PlayerData], ranked: bool):
+func setup(
+		initialCars: Array, 
+		initialTimeTrialManagers: Array, 
+		initialHuds: Array, 
+		initialCameras: Array, 
+		initialStats: Array,
+		initialMap: Map, 
+		initialIngameSFX: IngameSFX, 
+		initialPlayers: Array[PlayerData], 
+		ranked: bool
+	):
 	cars = initialCars
 	timeTrialManagers = initialTimeTrialManagers
 	huds = initialHuds
 	cameras = initialCameras
+	raceStats = initialStats
 	map = initialMap
 	ingameSFX = initialIngameSFX
 	players = initialPlayers
@@ -42,6 +54,7 @@ func setup(initialCars: Array, initialTimeTrialManagers: Array, initialHuds: Arr
 	state.nrPlayers = cars.size()
 	state.setupReadyPlayersList()
 	state.setupResettingPlayersList()
+	state.setupSubmittedStatsList()
 	state.ranked = ranked
 
 	connectSignals()
@@ -66,6 +79,7 @@ func connectSignals():
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
 	state.allPlayersReset.connect(onState_allPlayersReset)
+	state.allPlayersSubmittedStats.connect(onAllPlayersSubmittedStats)
 
 	pauseMenu.resumePressed.connect(forceResumeGame)
 	pauseMenu.restartPressed.connect(onState_allPlayersReset)
@@ -84,6 +98,8 @@ func onRaceInputHandler_forceStartRace():
 
 func onState_allPlayersReady():
 	countdown.startCountdown()
+	for stats in raceStats:
+		stats.increaseAttempts()
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
 	if state.pausedBy == playerIndex:
@@ -148,11 +164,19 @@ func onCar_isReady(playerIndex: int):
 
 func onCar_finishedRace(playerIndex: int):
 	state.newPlayerFinished()
+	raceStats[playerIndex].increaseFinishes()
+
+	var bestLap = timeTrialManagers[playerIndex].getBestLap()
+	var totalTime = timeTrialManagers[playerIndex].getTotalTime()
+
+	raceStats[playerIndex].setBestLap(bestLap)
+	raceStats[playerIndex].setBestTime(totalTime)
+
 	if state.ranked:
-		submitTime(timeTrialManagers[playerIndex].splits, timeTrialManagers[playerIndex].getBestLap(), timeTrialManagers[playerIndex].getTotalTime(), playerIndex)
+		submitTime(timeTrialManagers[playerIndex].splits, bestLap, totalTime, playerIndex)
 	print("Player ", cars[playerIndex], " finished")
-	print("Best Lap: ", timeTrialManagers[playerIndex].getBestLap())
-	print("Total time: ", timeTrialManagers[playerIndex].getTotalTime())
+	print("Best Lap: ", bestLap)
+	print("Total time: ", totalTime)
 
 func onRaceInputHandler_fullScreenPressed():
 	Playerstats.FULLSCREEN = !Playerstats.FULLSCREEN
@@ -189,11 +213,13 @@ func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	musicPlayer.playMenuMusic()
-	get_parent().exitPressed.emit()
+	if state.ranked:
+		for i in raceStats.size():
+			submitRaceStats(raceStats[i].getObject(), i) 
 
-# func onState_allPlayersReset():
-# 	print("All players reset")
-# 	state.setupReadyPlayersList()
+func onAllPlayersSubmittedStats():
+	print("All players submitted stats")
+	get_parent().exitPressed.emit()
 
 
 func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -> void:
@@ -231,6 +257,7 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 	print(body.get_string_from_utf8())
 	leaderboardUI.fetchTimes(map.trackId)
 	return
+
 	# var placement = JSON.parse(body.get_string_from_utf8())["placement"] + 1
 	# var data = JSON.parse_string(body.get_string_from_utf8())
 	# var placement = data["placement"] + 1
@@ -240,3 +267,24 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 
 	# signal globalPlacementChanged(placement: int)
 
+func submitRaceStats(stats: Dictionary, playerIndex: int) -> void:
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.request_completed.connect(onSubmitRaceStats_requestCompleted)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/stats",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + players[playerIndex].SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(stats)
+	)
+	if httpError != OK:
+		print("Error submitting time: " + error_string(httpError))
+
+func onSubmitRaceStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+	print("Stat Submit Response: ", body.get_string_from_utf8())
+	state.newPlayerSubmittedStats()
+	return

@@ -5,6 +5,7 @@ var nrPlayers: int
 var finishedPlayers: int = 0
 var readyPlayers: Array[bool] = []
 var resettingPlayers: Array[bool] = []
+var submittedStats: int = 0
 var nrResetPlayers: int = 0
 
 var pausedBy: int = -1
@@ -16,6 +17,7 @@ var ranked: bool = false
 signal allPlayersReady()
 signal allPlayersFinished()
 signal allPlayersReset()
+signal allPlayersSubmittedStats()
 
 func newPlayerFinished():
 	finishedPlayers += 1
@@ -26,6 +28,14 @@ func setPlayerReset(playerId: int, resetting: bool):
 	resettingPlayers[playerId] = resetting
 	if areAllPlayersResetting():
 		allPlayersReset.emit()
+
+func newPlayerSubmittedStats():
+	submittedStats += 1
+	if didAllPlayersSubmit():
+		allPlayersSubmittedStats.emit()
+
+func didAllPlayersSubmit():
+	return submittedStats >= nrPlayers
 
 func areAllPlayersResetting():
 	for resettingPlayer in resettingPlayers:
@@ -42,6 +52,9 @@ func setupResettingPlayersList():
 	resettingPlayers.clear()
 	for i in nrPlayers:
 		resettingPlayers.append(false)
+
+func setupSubmittedStatsList():
+	submittedStats = 0
 
 func setPlayerReady(playerId: int):
 	if readyPlayers[playerId]:
