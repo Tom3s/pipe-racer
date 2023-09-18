@@ -57,6 +57,9 @@ var jumpingForceReduction: float = 0.02
 @export
 var lowerSpeedLimit: float = 3.0
 
+@export
+var driftingBonusMultiplier: float = 2.0
+
 # input vars
 var accelerationInput: float = 0.0
 var steeringInput: float = 0.0
@@ -332,8 +335,15 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 
 	var force = accelerationDirection * accelerationInput * acceleration * mass * accelerationMultiplier
 
-	if force.dot(linear_velocity) < 0:
+
+	var dotForce = force.normalized().dot(linear_velocity.normalized())
+	if dotForce < 0:
 		force *= brakingMultiplier
+	elif driftInput:
+		print('dotForce: ', dotForce)
+		var driftingBonus = remap(dotForce, 1, 0, 1, driftingBonusMultiplier)
+		driftingBonus = clampf(driftingBonus, 1.0, driftingBonusMultiplier)
+		force *= driftingBonus 
 	
 	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_GREEN, 0.02)
 	

@@ -58,16 +58,17 @@ springDamping = 5500.0
 springBottomOut = 0.25
 maxSteeringAngle = 0.13
 tireGrip = 1.0
-driftFactor = 0.2
+driftFactor = 0.05
 acceleration = 7.7
 passiveBraking = 0.05
 downforceMaximumSpeed = 70.0
 downForce = 100.0
+driftingBonusMultiplier = 15.0
 airPitchControl = 1.5
 airYawControl = 1.5
 skiddingTreshold = 0.1
-gripDecayRate = 0.8
-regripFactor = 0.02
+gripDecayRate = 0.5
+regripFactor = 0.5
 
 [node name="CarModel" parent="." instance=ExtResource("1_onavb")]
 unique_name_in_owner = true
