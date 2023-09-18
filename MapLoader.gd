@@ -266,6 +266,7 @@ func uploadTrack(trackFileName: String):
 	print("Uploading track: ", trackFileName)
 	var uploadRequest = HTTPRequest.new()
 	add_child(uploadRequest)
+	uploadRequest.timeout = 30
 
 	var path = "user://tracks/local/" + trackFileName
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
@@ -298,6 +299,7 @@ func onUploadRequest_completed(_result: int, responseCode: int, _headers: Packed
 func loadTrackListItems():
 	var loadTracksRequest = HTTPRequest.new()
 	add_child(loadTracksRequest)
+	loadTracksRequest.timeout = 30
 	loadTracksRequest.request_completed.connect(onLoadTracksRequest_completed)
 	var httpError = loadTracksRequest.request(
 		Backend.BACKEND_IP_ADRESS + "/api/tracks",
@@ -328,6 +330,7 @@ var lastDownloadedTrackId: String = ""
 func downloadTrack(trackId: String):
 	var downloadRequest = HTTPRequest.new()
 	add_child(downloadRequest)
+	downloadRequest.timeout = 30
 	downloadRequest.request_completed.connect(onDownloadRequest_completed)
 	downloadingTrack = true
 	lastDownloadedTrackId = trackId

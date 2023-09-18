@@ -216,6 +216,8 @@ func onPauseMenu_exitPressed():
 	if state.ranked:
 		for i in raceStats.size():
 			submitRaceStats(raceStats[i].getObject(), i) 
+	else:
+		get_parent().exitPressed.emit()
 
 func onAllPlayersSubmittedStats():
 	print("All players submitted stats")
@@ -237,6 +239,7 @@ func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -
 
 	var request = HTTPRequest.new()
 	add_child(request)
+	request.timeout = 10
 	request.request_completed.connect(onSubmitRun_requestCompleted)
 
 	
@@ -270,6 +273,7 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 func submitRaceStats(stats: Dictionary, playerIndex: int) -> void:
 	var request = HTTPRequest.new()
 	add_child(request)
+	request.timeout = 10
 	request.request_completed.connect(onSubmitRaceStats_requestCompleted)
 
 	var httpError = request.request(
@@ -283,6 +287,7 @@ func submitRaceStats(stats: Dictionary, playerIndex: int) -> void:
 	)
 	if httpError != OK:
 		print("Error submitting time: " + error_string(httpError))
+		state.newPlayerSubmittedStats()
 
 func onSubmitRaceStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	print("Stat Submit Response: ", body.get_string_from_utf8())

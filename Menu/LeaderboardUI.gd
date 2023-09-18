@@ -22,6 +22,7 @@ func fetchTimes(trackId: String):
 func fetchBestLaps(trackId: String):
 	var bestLapsRequest = HTTPRequest.new()
 	add_child(bestLapsRequest)
+	bestLapsRequest.timeout = 25
 	bestLapsRequest.request_completed.connect(onBestLaps_RequestCompleted)
 
 	var httpError = bestLapsRequest.request(
@@ -33,6 +34,7 @@ func fetchBestLaps(trackId: String):
 func fetchBestTimes(trackId: String):
 	var bestTimesRequest = HTTPRequest.new()
 	add_child(bestTimesRequest)
+	bestTimesRequest.timeout = 25
 	bestTimesRequest.request_completed.connect(onBestTimes_RequestCompleted)
 
 	var httpError = bestTimesRequest.request(

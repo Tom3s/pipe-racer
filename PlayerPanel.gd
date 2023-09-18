@@ -56,6 +56,7 @@ func onLoginButton_pressed():
 	var loginData = getLoginData()
 	var loginRequest = HTTPRequest.new()
 	add_child(loginRequest)
+	loginRequest.timeout = 10
 
 	loginRequest.request_completed.connect(onLoginRequestCompleted)
 
@@ -74,6 +75,7 @@ func asGuestButton_pressed():
 	var loginData = getLoginData()
 	var loginRequest = HTTPRequest.new()
 	add_child(loginRequest)
+	loginRequest.timeout = 10
 
 	loginRequest.request_completed.connect(onLoginRequestCompleted)
 
@@ -96,7 +98,8 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 
 	if responseCode != 200:
 		setButtonsLoggedOut()
-		print("Error after login request: " + body.get_string_from_utf8())
+		print("Error after login request: ", body.get_string_from_utf8())
+		print("Result: ", error_string(_result))
 		return
 	
 	setButtonsLoggedIn()
@@ -163,6 +166,7 @@ func getLoginData() -> Dictionary:
 func loadProfilePicture(imageUrl: String):
 	var httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
+	httpRequest.timeout = 15
 	httpRequest.request_completed.connect(onLoadProfilePictureRequestCompleted)
 
 	var httpError = httpRequest.request(imageUrl)

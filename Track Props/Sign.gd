@@ -54,6 +54,7 @@ func _ready():
 func fetchImage(imageUrl: String) -> void:
 	var httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
+	httpRequest.timeout = 60
 	httpRequest.request_completed.connect(onLoadTexture_RequestCompleted)
 
 	var httpError = httpRequest.request(imageUrl)
