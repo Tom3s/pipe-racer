@@ -59,8 +59,11 @@ func setup(newRaceSettings: RaceSettings):
 
 	setupViewports(timeTrialManagers, huds, cameras)
 
+	var stats: Array[RaceStats] = []
+	for i in raceSettings.nrPlayers:
+		stats.append(RaceStats.new(map.trackId))
 
-	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, map, %IngameSFX, raceSettings.players, raceSettings.ranked)
+	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, stats, map, %IngameSFX, raceSettings.players, raceSettings.ranked)
 
 
 func setupCars(cars: Array[CarController]):
