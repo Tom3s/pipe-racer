@@ -46,22 +46,23 @@ collision_layer = 2
 collision_mask = 11
 mass = 700.0
 center_of_mass_mode = 1
-center_of_mass = Vector3(0, 0.1, 0)
+center_of_mass = Vector3(0, 0.1, -0.25)
 physics_material_override = SubResource("PhysicsMaterial_nb3em")
 continuous_cd = true
 max_contacts_reported = 16
 contact_monitor = true
 angular_damp = 0.5
 script = ExtResource("1_wde5o")
-springConstant = 180.0
+springConstant = 250.0
 springDamping = 5500.0
-springBottomOut = 0.25
+springRestLength = 0.22
+springBottomOut = 0.22
 maxSteeringAngle = 0.13
 tireGrip = 1.0
 driftFactor = 0.2
 acceleration = 7.7
 passiveBraking = 0.05
-downforceMaximumSpeed = 70.0
+downforceMaximumSpeed = 120.0
 downForce = 100.0
 airPitchControl = 1.5
 airYawControl = 1.5
@@ -96,7 +97,7 @@ shape = SubResource("CapsuleShape3D_e0f4h")
 
 [node name="TireFL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0.375467, 1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
@@ -105,7 +106,7 @@ script = ExtResource("3_qi2cw")
 steeringSpeed = 0.1
 
 [node name="tire-new good normals" parent="Tires/TireFL" instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
@@ -124,7 +125,7 @@ draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.075, 0.375, 1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
@@ -153,7 +154,7 @@ draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0.375467, -1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
@@ -163,7 +164,7 @@ steeringSpeed = 0.1
 tireIndex = 2
 
 [node name="tire-new good normals" parent="Tires/TireBL" instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
@@ -182,7 +183,7 @@ draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
 [node name="TireBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.075, 0.375, -1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)

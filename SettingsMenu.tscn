@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_rvs7i"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
+
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_3kgnw"]
 
 [node name="SettingsMenu" type="Control"]

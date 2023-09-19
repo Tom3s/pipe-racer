@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cw4aask4xyoy0" path="res://Menu/controller-layout.png" id="4_oyfbc"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="5_g2bx5"]
 
+
 [node name="ControlsMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15

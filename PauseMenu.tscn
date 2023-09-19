@@ -3,7 +3,9 @@
 [ext_resource type="Script" path="res://PauseMenu.gd" id="1_o61t1"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_otsnw"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="3_xy0ob"]
+
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="4_q22yb"]
+
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
