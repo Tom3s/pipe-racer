@@ -123,7 +123,6 @@ func setup(
 		nrLaps: int
 ):
 	playerIndex = newPlayerIndex
-	%InputHandler.setInputPlayers(inputDevices)
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
 
@@ -133,6 +132,8 @@ func setup(
 
 	setRespawnPositionFromDictionary(startingPosition)
 	respawn(true)
+	%InputHandler.setInputPlayers(inputDevices)
+
 
 func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
 	state.reset(checkpointCount, playerIndex)

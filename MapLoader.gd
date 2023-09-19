@@ -52,8 +52,12 @@ func _ready():
 	localTrackList.item_selected.connect(onLocalTrackList_itemSelected)
 	downloadedTrackList.item_selected.connect(onDownloadedTrackList_itemSelected)
 	onlineTrackList.item_selected.connect(onOnlineTrackList_itemSelected)
+	localTrackList.item_activated.connect(onLoadButton_pressed)
+	downloadedTrackList.item_activated.connect(onLoadButton_pressed)
+	onlineTrackList.item_activated.connect(onDownloadButton_pressed)
 
 	visibility_changed.connect(onVisibilityChanged)
+	backButton.grab_focus()
 
 	loadButton.disabled = true
 	deleteButton.disabled = true
@@ -61,6 +65,7 @@ func _ready():
 	leaderboardButton.disabled = true
 
 	leaderboardUI.visible = false
+	leaderboardUI.closePressed.connect(onLeaderboardUI_closePressed)
 
 	setListVisibility(MODE_SELECT_LOCAL)
 	setButtonVisibility(MODE_SELECT_LOCAL)
@@ -149,14 +154,22 @@ func onVisibilityChanged() -> void:
 	setButtonVisibility(selectMode)
 	if selectMode == MODE_SELECT_LOCAL:
 		loadLocalTracks()
+		loadButton.grab_focus()
 	elif selectMode == MODE_SELECT_DOWNLOADED:
 		loadDownloadedTracks()
+		loadButton.grab_focus()
 	elif selectMode == MODE_SELECT_SEARCH:
 		searchTracks()
+		downloadButton.grab_focus()
 	setLoadUploadButtonEnabled()	
 
+func onLeaderboardUI_closePressed() -> void:
+	if selectMode == MODE_SELECT_DOWNLOADED:
+		downloadedTrackList.grab_focus()
+	elif selectMode == MODE_SELECT_SEARCH:
+		onlineTrackList.grab_focus()
 
-func onLoadButton_pressed() -> void:
+func onLoadButton_pressed(_sink = null) -> void:
 	var trackName = ""
 	if selectMode == MODE_SELECT_LOCAL:
 		trackName = "user://tracks/local/" 

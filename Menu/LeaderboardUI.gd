@@ -6,14 +6,18 @@ class_name LeaderboardUI
 @onready var bestTimesList: ItemList = %BestTimesList
 @onready var closeButton: Button = %CloseButton
 
+signal closePressed()
+
 func _ready():
 	closeButton.pressed.connect(onCloseButton_Pressed)
+	visibility_changed.connect(closeButton.grab_focus)
 
 func setHeader(newTrackName: String, author: String):
 	trackName.text = newTrackName + " - by " + author
 
 func onCloseButton_Pressed():
 	visible = false
+	closePressed.emit()
 
 func fetchTimes(trackId: String):
 	fetchBestLaps(trackId)

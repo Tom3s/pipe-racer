@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://q0icvxyovnsr"]
+[gd_scene load_steps=4 format=3 uid="uid://q0icvxyovnsr"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_rvs7i"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
+[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_3kgnw"]
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3
@@ -65,6 +66,8 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../../CloseButton")
+focus_neighbor_bottom = NodePath("../../Music/MusicVolumeSlider")
 value = 100.0
 
 [node name="Music" type="HBoxContainer" parent="Panel/VBoxContainer"]
@@ -80,6 +83,8 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../Master/MasterVolumeSlider")
+focus_neighbor_bottom = NodePath("../../SFX/SFXVolumeSlider")
 value = 100.0
 
 [node name="SFX" type="HBoxContainer" parent="Panel/VBoxContainer"]
@@ -95,6 +100,8 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../Music/MusicVolumeSlider")
+focus_neighbor_bottom = NodePath("../../HBoxContainer/FullscreenButton")
 value = 100.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
@@ -104,11 +111,17 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
+focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
+focus_neighbor_right = NodePath("../RenderQuality")
+focus_neighbor_bottom = NodePath("../../../../CloseButton")
 text = "Toggle Fullscreen"
 
 [node name="RenderQuality" type="OptionButton" parent="Panel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_neighbor_left = NodePath("../FullscreenButton")
+focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
+focus_neighbor_bottom = NodePath("../../../../CloseButton")
 
 [node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true
@@ -126,4 +139,7 @@ offset_bottom = 135.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../Panel/VBoxContainer/HBoxContainer/FullscreenButton")
+focus_neighbor_bottom = NodePath("../Panel/VBoxContainer/Master/MasterVolumeSlider")
+shortcut = ExtResource("3_3kgnw")
 text = "Close"

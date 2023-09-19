@@ -5,7 +5,7 @@ var groundedTires: Array[bool] = [false, false, false, false]
 var collectedCheckpoints: Array[bool]
 var collectedCheckpointCount: int = 0
 
-var hasControl: bool = true
+var hasControl: bool = false
 
 var currentLap: int = -1
 var nrLaps: int
@@ -82,7 +82,7 @@ func reset(checkpointCount: int, playerIndex: int):
 	placement = playerIndex + 1
 	isReady = false
 	isResetting = false
-	hasControl = true
+	# hasControl = true
 
 func setResetting():
 	if !isReady:

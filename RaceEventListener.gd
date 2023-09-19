@@ -108,6 +108,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			for i in range(cars.size()):
 				cars[i].resumeMovement()
 				timeTrialManagers[i].resumeTimeTrial(timestamp)
+				cars[i].state.hasControl = true
 		state.pausedBy = -1
 		pauseMenu.visible = false
 	elif state.pausedBy == -1 && state.raceStarted:
@@ -115,6 +116,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 		for i in range(cars.size()):
 			cars[i].pauseMovement()
 			timeTrialManagers[i].pauseTimeTrial(timestamp)
+			cars[i].state.hasControl = false
 		state.pausedBy = playerIndex
 		pauseMenu.visible = true
 		leaderboardUI.visible = false
@@ -125,6 +127,7 @@ func forceResumeGame():
 		for i in range(cars.size()):
 			cars[i].resumeMovement()
 			timeTrialManagers[i].resumeTimeTrial(timestamp)
+			cars[i].state.hasControl = true
 	state.pausedBy = -1
 
 func onCar_respawned(playerIndex: int):
@@ -207,7 +210,7 @@ func onState_allPlayersReset():
 	state.reset()
 
 func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
-	if !state.raceStarted:
+	if !state.raceStarted || state.pausedBy != -1:
 		return
 	state.setPlayerReset(playerIndex, resetting)
 	leaderboardUI.visible = false

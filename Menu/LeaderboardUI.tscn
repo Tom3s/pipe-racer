@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://wgcae8ei5xn5"]
+[gd_scene load_steps=6 format=3 uid="uid://wgcae8ei5xn5"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_iw064"]
 [ext_resource type="Script" path="res://Menu/LeaderboardUI.gd" id="2_pm2x8"]
+[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_oro7l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16htv"]
 bg_color = Color(0, 0, 0, 0.803922)
@@ -96,4 +97,5 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+shortcut = ExtResource("3_oro7l")
 text = "Close"

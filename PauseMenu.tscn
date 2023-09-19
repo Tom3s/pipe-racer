@@ -39,18 +39,24 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../RestartButton")
 text = "Resume"
 
 [node name="RestartButton" type="Button" parent="MainElements/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../SettingsButton")
 text = "Restart"
 
 [node name="SettingsButton" type="Button" parent="MainElements/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../RestartButton")
+focus_neighbor_bottom = NodePath("../ControlsButton")
 text = "Settings
 "
 
@@ -58,12 +64,16 @@ text = "Settings
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
 text = "View Controls"
 
 [node name="ExitButton" type="Button" parent="MainElements/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../ControlsButton")
+focus_neighbor_bottom = NodePath("../ResumeButton")
 text = "Exit
 "
 
@@ -74,4 +84,5 @@ layout_mode = 1
 
 [node name="ControlsMenu" parent="." instance=ExtResource("4_q22yb")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1

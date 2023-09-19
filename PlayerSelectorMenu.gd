@@ -41,6 +41,10 @@ func _ready():
 	nextButton.pressed.connect(onNextButton_Pressed)
 	backButton.pressed.connect(onBackButton_Pressed)
 
+	nextButton.grab_focus()
+
+	visibility_changed.connect(nextButton.grab_focus)
+
 func onButton1_Pressed():
 	setNumberOfPlayers(1)
 	# nrPlayers = 1

@@ -50,7 +50,7 @@ func handleSingleInput(playerPrefix):
 	
 	car.accelerationInput = -Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
 
-	if Input.is_action_just_pressed(playerPrefix + "respawn"):
+	if Input.is_action_just_pressed(playerPrefix + "respawn") && car.state.hasControl:
 		car.respawn()
 
 var multiReady = false
@@ -107,7 +107,7 @@ func handleMultiInput():
 	
 	car.accelerationInput = multiAccelerationInput
 
-	if multiRespawnInput:
+	if multiRespawnInput && car.state.hasControl:
 		car.respawn()
 
 func setInputPlayers(players: Array[int]):
