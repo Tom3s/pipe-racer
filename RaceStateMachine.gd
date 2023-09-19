@@ -14,6 +14,9 @@ var raceStarted: bool = false
 
 var ranked: bool = false
 
+# var countdownStarted: bool = false
+# var countdownFinished: bool = false
+
 signal allPlayersReady()
 signal allPlayersFinished()
 signal allPlayersReset()

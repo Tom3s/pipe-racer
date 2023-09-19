@@ -85,5 +85,7 @@ func reset(checkpointCount: int, playerIndex: int):
 	hasControl = true
 
 func setResetting():
+	if !isReady:
+		return
 	isResetting = !isResetting
 	get_parent().isResetting.emit(get_parent().playerIndex, isResetting)

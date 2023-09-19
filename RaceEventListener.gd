@@ -90,7 +90,7 @@ func onCountdown_countdownFinished(timestamp: int):
 		cars[i].startRace()
 		timeTrialManagers[i].startTimeTrial(timestamp)
 		huds[i].startTimer()
-		state.raceStarted = true
+	state.raceStarted = true
 
 func onRaceInputHandler_forceStartRace():
 	# countdown.startCountdown()
@@ -98,6 +98,8 @@ func onRaceInputHandler_forceStartRace():
 
 func onState_allPlayersReady():
 	countdown.startCountdown()
+	# state.countdownStarted = true
+	# state.countdownFinished	= false
 	for stats in raceStats:
 		stats.increaseAttempts()
 
@@ -207,6 +209,8 @@ func onState_allPlayersReset():
 	state.reset()
 
 func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
+	if !state.raceStarted:
+		return
 	state.setPlayerReset(playerIndex, resetting)
 	leaderboardUI.visible = false
 
