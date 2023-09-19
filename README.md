@@ -1,5 +1,5 @@
-# Official Github repo for [Pipe Racer](http://pipe-racer.surge.sh)
+# Official Github repo for [Pipe Racer](https://pipe-racer.pro)
 
-> - stuff here, like [website](http://pipe-racer.surge.sh)
+> - stuff here, like [website](https://pipe-racer.pro)
 > - for backend, go [here](https://github.com/Tom3s/pipe-racer-backend)
 > - for frontend, go [here](https://github.com/Tom3s/pipe-racer-frontend)
