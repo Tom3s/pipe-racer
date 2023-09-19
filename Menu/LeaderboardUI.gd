@@ -20,6 +20,8 @@ func fetchTimes(trackId: String):
 	fetchBestTimes(trackId)
 
 func fetchBestLaps(trackId: String):
+	bestLapsList.clear()
+	bestLapsList.add_item("Loading...")
 	var bestLapsRequest = HTTPRequest.new()
 	add_child(bestLapsRequest)
 	bestLapsRequest.timeout = 25
@@ -32,6 +34,8 @@ func fetchBestLaps(trackId: String):
 		print("Error: " + error_string(httpError))
 
 func fetchBestTimes(trackId: String):
+	bestTimesList.clear()
+	bestTimesList.add_item("Loading...")
 	var bestTimesRequest = HTTPRequest.new()
 	add_child(bestTimesRequest)
 	bestTimesRequest.timeout = 25
@@ -51,6 +55,9 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 	var data = JSON.parse_string(body.get_string_from_utf8())
 
 	bestLapsList.clear()
+	if data.size() == 0:
+		bestLapsList.add_item("No records yet")
+		return
 	var placement = 1
 	for record in data:
 		var item: String = str(placement) + ". "
@@ -69,6 +76,9 @@ func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: Pac
 	var data = JSON.parse_string(body.get_string_from_utf8())
 
 	bestTimesList.clear()
+	if data.size() == 0:
+		bestTimesList.add_item("No records yet")
+		return
 	var placement = 1
 	for record in data:
 		var item: String = str(placement) + ". "
