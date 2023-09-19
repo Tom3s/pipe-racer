@@ -66,7 +66,7 @@ var FULLSCREEN: bool = false:
 		return FULLSCREEN
 
 @export
-var RENDER_QUALITY: float = 0.5:
+var RENDER_QUALITY: float = 1.0:
 	set(newQuality):
 		RENDER_QUALITY = newQuality
 		if is_equal_approx(newQuality, 1.0):
