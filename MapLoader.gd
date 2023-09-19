@@ -53,11 +53,12 @@ func _ready():
 	downloadedTrackList.item_selected.connect(onDownloadedTrackList_itemSelected)
 	onlineTrackList.item_selected.connect(onOnlineTrackList_itemSelected)
 
-	visibility_changed.connect(loadLocalTracks)
+	visibility_changed.connect(onVisibilityChanged)
 
 	loadButton.disabled = true
 	deleteButton.disabled = true
 	uploadButton.disabled = true
+	leaderboardButton.disabled = true
 
 	leaderboardUI.visible = false
 
@@ -141,6 +142,18 @@ func onOnlineTrackList_itemSelected(_index: int) -> void:
 	setLoadUploadButtonEnabled()
 	# downloadButton.disabled = onlineTrackList.get_selected_items().size() <= 0 && !downloadingTrack
 
+func onVisibilityChanged() -> void:
+	if !visible:
+		return
+	setListVisibility(selectMode)
+	setButtonVisibility(selectMode)
+	if selectMode == MODE_SELECT_LOCAL:
+		loadLocalTracks()
+	elif selectMode == MODE_SELECT_DOWNLOADED:
+		loadDownloadedTracks()
+	elif selectMode == MODE_SELECT_SEARCH:
+		searchTracks()
+	setLoadUploadButtonEnabled()	
 
 
 func onLoadButton_pressed() -> void:
@@ -228,6 +241,7 @@ func onLocalButton_pressed():
 	enableAllButtons()
 	loadButton.disabled = true
 	deleteButton.disabled = true
+	leaderboardButton.disabled = true
 	loadLocalTracks()
 
 func onDownloadedButton_pressed():
@@ -235,6 +249,7 @@ func onDownloadedButton_pressed():
 	enableAllButtons()
 	loadButton.disabled = true
 	deleteButton.disabled = true
+	leaderboardButton.disabled = true
 	loadDownloadedTracks()
 
 func onFindButton_pressed():
@@ -269,6 +284,7 @@ func disableAllButtons():
 	backButton.disabled = true
 	loadButton.disabled = true
 	deleteButton.disabled = true
+	leaderboardButton.disabled = true
 	uploadButton.disabled = true
 	newButton.disabled = true
 

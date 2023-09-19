@@ -87,12 +87,6 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 text = "Load Track"
 
-[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-text = "Delete"
-
 [node name="UploadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
@@ -118,8 +112,15 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Leaderboard"
 
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Delete"
+
 [node name="LeaderboardUI" parent="." instance=ExtResource("3_88426")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
