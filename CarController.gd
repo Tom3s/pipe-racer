@@ -83,7 +83,7 @@ var playerIndex: int = 0:
 		return playerIndex
 
 func onInputPlayerIndexChanged(newIndex: int) -> int:
-	%InputHandler.setInputPlayer(newIndex + 1)
+	# %InputHandler.setInputPlayer(newIndex + 1)
 	return newIndex
 
 @export
@@ -117,11 +117,13 @@ signal changeCameraMode()
 func setup(
 		playerData: PlayerData, 
 		newPlayerIndex: int, 
+		inputDevices: Array[int],
 		startingPosition: Dictionary, 
 		checkpointCount: int, 
 		nrLaps: int
 ):
 	playerIndex = newPlayerIndex
+	%InputHandler.setInputPlayers(inputDevices)
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
 

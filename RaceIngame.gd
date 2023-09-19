@@ -74,7 +74,13 @@ func setupCars(cars: Array[CarController]):
 		var car: CarController = Car.instantiate()
 		playersNode.add_child(car)
 
-		car.setup(raceSettings.players[i], i, spawnPoint, checkpointCount, raceSettings.nrLaps)
+		var inputDevices: Array[int] = []
+		if raceSettings.nrPlayers == 1:
+			inputDevices.append_array([1, 2, 3, 4])
+		else:
+			inputDevices.append(i + 1)
+
+		car.setup(raceSettings.players[i], i, inputDevices, spawnPoint, checkpointCount, raceSettings.nrLaps)
 		cars.append(car)
 
 func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):

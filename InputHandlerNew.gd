@@ -3,7 +3,8 @@ extends Node
 class_name InputHandlerNew
 
 var car: CarController
-var playerPrefix: String = "p1_"
+# var playerPrefix: String = "p1_"
+var allowedPrefixes: Array = ["p1_", "p2_", "p3_", "p4_"]
 var tires: Array = []
 
 #@onready
@@ -22,24 +23,13 @@ var respawnInput = false
 
 var pausedState = false
 
-# func _physics_process(delta):
-# 	car.driftInput = driftInput
-# 	car.steeringInput = steerInput
-# 	for tire in tires:
-# 		var targetRotation = steerInput * car.getSteeringFactor()
-# 		tire.targetRotation = targetRotation
-	
-# 	car.accelerationInput = -accelerationInput
-
-# func _unhandled_input(event):
-# 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")
-# 	accelerationInput = Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
-# 	respawnInput = event.is_action_pressed(playerPrefix + "respawn")
-# 	driftInput = Input.get_action_strength(playerPrefix + "drift")
-
-# 	if respawnInput:
-# 		car.respawn()
 func _physics_process(_delta):
+	if allowedPrefixes.size() == 1:
+		handleSingleInput(allowedPrefixes[0])
+	else:
+		handleMultiInput()
+
+func handleSingleInput(playerPrefix):
 	if Input.is_action_just_pressed(playerPrefix + "ready"):
 		car.state.setReadyTrue()
 	if Input.is_action_just_pressed(playerPrefix + "reset"):
@@ -63,16 +53,66 @@ func _physics_process(_delta):
 	if Input.is_action_just_pressed(playerPrefix + "respawn"):
 		car.respawn()
 
-# func _unhandled_input(event):
-# 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")
-# 	accelerationInput = Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
-# 	respawnInput = event.is_action_pressed(playerPrefix + "respawn")
-# 	driftInput = Input.get_action_strength(playerPrefix + "drift")
+var multiReady = false
+var multiReset = false
+var multiChangeCameraMode = false
+var multiSteerInput = 0
+var multidriftInput = 0
+var multiAccelerationInput = 0
+var multiRespawnInput = false
 
-# 	if respawnInput:
-# 		car.respawn()
+func handleMultiInput():
+	multiReady = false
+	multiReset = false
+	multiChangeCameraMode = false
+	multiSteerInput = 0
+	multidriftInput = 0
+	multiAccelerationInput = 0
+	multiRespawnInput = false
 
+	for prefix in allowedPrefixes:
+		multiReady = multiReady || Input.is_action_just_pressed(prefix + "ready")
+		multiReset = multiReset || Input.is_action_just_pressed(prefix + "reset")
+		multiChangeCameraMode = multiChangeCameraMode || Input.is_action_just_pressed(prefix + "change_camera_mode")
 
-func setInputPlayer(player: int):
-	playerPrefix = "p" + str(player) + "_"
+		steerInput = Input.get_axis(prefix + "turn_right", prefix + "turn_left")
+		if abs(multiSteerInput) < abs(steerInput):
+			multiSteerInput = steerInput
+		
+		multidriftInput = max(multidriftInput, Input.get_action_strength(prefix + "drift"))
+		
+		accelerationInput = -Input.get_axis(prefix + "accelerate", prefix + "break")
+		if abs(multiAccelerationInput) < abs(accelerationInput):
+			multiAccelerationInput = accelerationInput
+		
+		multiRespawnInput = multiRespawnInput || Input.is_action_just_pressed(prefix + "respawn")
+	
+	if multiReady:
+		car.state.setReadyTrue()
+	if multiReset:
+		car.state.setResetting()
+	if multiChangeCameraMode:
+		car.changeCameraMode.emit()
+
+	if !car.state.hasControl:
+		tires[0].targetRotation = 0
+		tires[1].targetRotation = 0
+		return
+
+	car.driftInput = multidriftInput
+	car.steeringInput = multiSteerInput
+	for tire in tires:
+		var targetRotation = multiSteerInput * car.getSteeringFactor()
+		tire.targetRotation = targetRotation
+	
+	car.accelerationInput = multiAccelerationInput
+
+	if multiRespawnInput:
+		car.respawn()
+
+func setInputPlayers(players: Array[int]):
+	# playerPrefix = "p" + str(player) + "_"
+	allowedPrefixes.clear()
+	for player in players:
+		allowedPrefixes.append("p" + str(player) + "_")
 
