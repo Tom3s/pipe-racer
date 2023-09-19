@@ -54,7 +54,6 @@ func setup(
 	state.nrPlayers = cars.size()
 	state.setupReadyPlayersList()
 	state.setupResettingPlayersList()
-	state.setupSubmittedStatsList()
 	state.ranked = ranked
 
 	connectSignals()
@@ -79,7 +78,6 @@ func connectSignals():
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
 	state.allPlayersReset.connect(onState_allPlayersReset)
-	state.allPlayersSubmittedStats.connect(onAllPlayersSubmittedStats)
 
 	pauseMenu.resumePressed.connect(forceResumeGame)
 	pauseMenu.restartPressed.connect(onState_allPlayersReset)
@@ -218,13 +216,13 @@ func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	musicPlayer.playMenuMusic()
 	if state.ranked:
+		var callbackSignals: Array[Signal] = []
 		for i in raceStats.size():
-			submitRaceStats(raceStats[i].getObject(), i) 
-	else:
-		get_parent().exitPressed.emit()
-
-func onAllPlayersSubmittedStats():
-	print("All players submitted stats")
+			callbackSignals.append(submitRaceStats(raceStats[i].getObject(), i))
+		
+		for callback in callbackSignals:
+			await callback
+		
 	get_parent().exitPressed.emit()
 
 
@@ -265,16 +263,7 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 	leaderboardUI.fetchTimes(map.trackId)
 	return
 
-	# var placement = JSON.parse(body.get_string_from_utf8())["placement"] + 1
-	# var data = JSON.parse_string(body.get_string_from_utf8())
-	# var placement = data["placement"] + 1
-	# var userId = data["user"]
-
-	
-
-	# signal globalPlacementChanged(placement: int)
-
-func submitRaceStats(stats: Dictionary, playerIndex: int) -> void:
+func submitRaceStats(stats: Dictionary, playerIndex: int) -> Signal:
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.timeout = 10
@@ -291,9 +280,9 @@ func submitRaceStats(stats: Dictionary, playerIndex: int) -> void:
 	)
 	if httpError != OK:
 		print("Error submitting time: " + error_string(httpError))
-		state.newPlayerSubmittedStats()
+	
+	return request.request_completed
 
 func onSubmitRaceStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	print("Stat Submit Response: ", body.get_string_from_utf8())
-	state.newPlayerSubmittedStats()
 	return
