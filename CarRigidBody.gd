@@ -80,7 +80,7 @@ const FRICTION = 0.34
 @onready
 var synchronizer = %MultiplayerSynchronizer
 
-var playerName: String = Playerstats.PLAYER_NAME
+var playerName: String = GlobalProperties.PLAYER_NAME
 
 var pauseLinearVelocity: Vector3
 var pauseAngularVelocity: Vector3
@@ -114,7 +114,7 @@ func _ready():
 	if respawnPosition == null:
 		respawnPosition = global_transform.origin
 
-	if playerIndex != 1 && playerName == Playerstats.PLAYER_NAME:
+	if playerIndex != 1 && playerName == GlobalProperties.PLAYER_NAME:
 		playerName += "_" + str(playerIndex)
 
 	set_physics_process(true)

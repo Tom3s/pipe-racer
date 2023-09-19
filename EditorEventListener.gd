@@ -478,7 +478,7 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 	editorShortcutsUI.changeBuildMode(newMode)
 
 func onEditorInputHandler_fullScreenPressed():
-	Playerstats.FULLSCREEN = !Playerstats.FULLSCREEN
+	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 var oldSoundVolume: float = 0
 func onEditorInputHandler_testPressed():

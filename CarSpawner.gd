@@ -35,8 +35,8 @@ func spawnForLocalGame(nrOfCars: int):
 
 	for i in nrOfCars:
 		var color = Color(randf(), randf(), randf())
-		if i == 0 && playernames[i] != Playerstats.PLAYER_NAME:
-			color = Playerstats.PLAYER_COLOR
+		if i == 0 && playernames[i] != GlobalProperties.PLAYER_NAME:
+			color = GlobalProperties.PLAYER_COLOR
 		var car: CarRigidBody = CarObjectScene.instantiate()
 		car.frameColor = color
 		car.playerIndex = i + 1
@@ -105,7 +105,7 @@ func spawnForLocalGame(nrOfCars: int):
 
 
 func spawnCar(peer_id: int):
-	var color = Playerstats.PLAYER_COLOR
+	var color = GlobalProperties.PLAYER_COLOR
 	if peer_id == -1:
 		peer_id = get_tree().get_multiplayer().get_unique_id()
 	# else:

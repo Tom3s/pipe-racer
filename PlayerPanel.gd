@@ -111,8 +111,8 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 	userId = json.userId
 
 	if isMainPlayer:
-		Playerstats.SESSION_TOKEN = sessionToken
-		Playerstats.USER_ID = userId
+		GlobalProperties.SESSION_TOKEN = sessionToken
+		GlobalProperties.USER_ID = userId
 	
 	var profilePictureUrl = json.profilePictureUrl
 
@@ -126,11 +126,11 @@ func onRandomColorButton_pressed():
 
 func setMainPlayerData():
 	isMainPlayer = true
-	username.text = Playerstats.PLAYER_NAME
+	username.text = GlobalProperties.PLAYER_NAME
 	username.text_changed.connect(onTextChanged)
-	password.text = Playerstats.PLAYER_PASSWORD
+	password.text = GlobalProperties.PLAYER_PASSWORD
 	password.text_changed.connect(onPasswordTextChanged)
-	colorPicker.color = Playerstats.PLAYER_COLOR
+	colorPicker.color = GlobalProperties.PLAYER_COLOR
 	colorPicker.color_changed.connect(onColorChanged)
 
 	onLoginButton_pressed()
@@ -145,14 +145,14 @@ func setRandomPlayerData():
 
 func onTextChanged(newText: String) -> void:
 	if newText != "":
-		Playerstats.PLAYER_NAME = newText
+		GlobalProperties.PLAYER_NAME = newText
 
 func onPasswordTextChanged(newText: String) -> void:
 	if newText != "":
-		Playerstats.PLAYER_PASSWORD = newText
+		GlobalProperties.PLAYER_PASSWORD = newText
 
 func onColorChanged(new_color):
-	Playerstats.PLAYER_COLOR = new_color
+	GlobalProperties.PLAYER_COLOR = new_color
 
 func getPlayerData() -> PlayerData:
 	return PlayerData.new(userId, username.text, colorPicker.color, sessionToken)
