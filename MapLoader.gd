@@ -15,6 +15,9 @@ class_name MapLoader
 @onready var uploadButton: Button = %UploadButton
 @onready var downloadButton: Button = %DownloadButton
 @onready var newButton: Button = %NewButton
+@onready var leaderboardButton: Button = %LeaderboardButton
+
+@onready var leaderboardUI: LeaderboardUI = %LeaderboardUI
 
 var localTrackListItems: Array = []
 var downloadedTrackListItems: Array = []
@@ -40,6 +43,7 @@ func _ready():
 	uploadButton.pressed.connect(onUploadButton_pressed)
 	downloadButton.pressed.connect(onDownloadButton_pressed)
 	newButton.pressed.connect(onNewButton_pressed)
+	leaderboardButton.pressed.connect(onLeaderboardButton_pressed)
 
 	localButton.pressed.connect(onLocalButton_pressed)
 	downloadedButton.pressed.connect(onDownloadedButton_pressed)
@@ -54,6 +58,8 @@ func _ready():
 	loadButton.disabled = true
 	deleteButton.disabled = true
 	uploadButton.disabled = true
+
+	leaderboardUI.visible = false
 
 	setListVisibility(MODE_SELECT_LOCAL)
 	setButtonVisibility(MODE_SELECT_LOCAL)
@@ -132,7 +138,8 @@ func onDownloadedTrackList_itemSelected(_index: int) -> void:
 	setLoadUploadButtonEnabled()
 
 func onOnlineTrackList_itemSelected(_index: int) -> void:
-	downloadButton.disabled = onlineTrackList.get_selected_items().size() <= 0 && !downloadingTrack
+	setLoadUploadButtonEnabled()
+	# downloadButton.disabled = onlineTrackList.get_selected_items().size() <= 0 && !downloadingTrack
 
 
 
@@ -194,6 +201,27 @@ func onBackButton_pressed() -> void:
 func onNewButton_pressed() -> void:
 	visible = false
 	trackSelected.emit("")
+
+func onLeaderboardButton_pressed() -> void:
+	var trackId = ""
+	var trackName = ""
+	var trackAuthor = ""
+	if selectMode == MODE_SELECT_DOWNLOADED:
+		trackId = downloadedTrackListItems[downloadedTrackList.get_selected_items()[0]].split(".")[0]
+		var trackListName = downloadedTrackList.get_item_text(downloadedTrackList.get_selected_items()[0])
+		trackName = trackListName.split(" - by: ")[0]
+		trackAuthor = trackListName.split(" - by: ")[1]
+	elif selectMode == MODE_SELECT_SEARCH:
+		var track = onlineTrackListItems[onlineTrackList.get_selected_items()[0]]
+		trackId = track._id
+		trackName = track.name
+		trackAuthor = track.author.username
+
+
+
+	leaderboardUI.visible = true
+	leaderboardUI.fetchTimes(trackId)
+	leaderboardUI.setHeader(trackName, trackAuthor)
 
 func onLocalButton_pressed():
 	setSelectMode(MODE_SELECT_LOCAL)
@@ -259,6 +287,11 @@ func setLoadUploadButtonEnabled():
 		var disabledButtons = downloadedTrackList.get_selected_items().size() <= 0
 		loadButton.disabled = disabledButtons
 		deleteButton.disabled = disabledButtons
+		leaderboardButton.disabled = disabledButtons
+	elif selectMode == MODE_SELECT_SEARCH:
+		var disabledButtons = onlineTrackList.get_selected_items().size() <= 0
+		downloadButton.disabled = disabledButtons
+		leaderboardButton.disabled = disabledButtons
 	uploadButton.disabled = localTrackList.get_selected_items().size() <= 0
 
 
@@ -376,6 +409,7 @@ func setButtonVisibility(mode: int):
 	uploadButton.visible = mode == MODE_SELECT_LOCAL && editorSelect
 	downloadButton.visible = mode == MODE_SELECT_SEARCH
 	deleteButton.visible = mode == MODE_SELECT_LOCAL || mode == MODE_SELECT_DOWNLOADED
+	leaderboardButton.visible = mode == MODE_SELECT_DOWNLOADED || mode == MODE_SELECT_SEARCH
 
 func setListVisibility(mode: int):
 	localTrackList.visible = mode == MODE_SELECT_LOCAL

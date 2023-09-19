@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://wgcae8ei5xn5"]
+[gd_scene load_steps=5 format=3 uid="uid://wgcae8ei5xn5"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_iw064"]
 [ext_resource type="Script" path="res://Menu/LeaderboardUI.gd" id="2_pm2x8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16htv"]
+bg_color = Color(0, 0, 0, 0.803922)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e2wm0"]
+bg_color = Color(0, 0, 0, 0.803922)
 
 [node name="LeaderboardUI" type="Control"]
 layout_mode = 3
@@ -40,6 +46,28 @@ horizontal_alignment = 1
 layout_mode = 2
 alignment = 1
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_disabled_color = Color(0.909804, 0.909804, 0.909804, 1)
+disabled = true
+button_mask = 0
+text = "Best Total Times"
+
+[node name="BestTimesList" type="ItemList" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(500, 450)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_16htv")
+auto_height = true
+item_count = 1
+item_0/text = "Loading..."
+item_0/selectable = false
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -57,27 +85,7 @@ unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(500, 450)
 layout_mode = 2
-auto_height = true
-item_count = 1
-item_0/text = "Loading..."
-item_0/selectable = false
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_disabled_color = Color(0.909804, 0.909804, 0.909804, 1)
-disabled = true
-button_mask = 0
-text = "Best Total Times"
-
-[node name="BestTimesList" type="ItemList" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
-unique_name_in_owner = true
-clip_contents = false
-custom_minimum_size = Vector2(500, 450)
-layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e2wm0")
 auto_height = true
 item_count = 1
 item_0/text = "Loading..."
