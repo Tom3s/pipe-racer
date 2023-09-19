@@ -597,7 +597,7 @@ func saveToJSON(autosave: bool = false):
 		},
 		"checkPoints": [],
 		"props": []
-		# "author": Playerstats.PLAYER_NAME
+		# "author": GlobalProperties.PLAYER_NAME
 	}
 
 	for child in trackPieces.get_children():

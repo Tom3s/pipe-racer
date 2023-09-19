@@ -16,10 +16,10 @@ config/features=PackedStringArray("4.0", "Forward Plus")
 
 [autoload]
 
-Playerstats="*res://Playerstats.gd"
-Leaderboard="*res://Leaderboard.gd"
+Leaderboard="*res://GlobalProperties.gd"
 PrefabConstants="*res://PrefabConstants.gd"
 Backend="*res://Backend.gd"
+GlobalProperties="*res://GlobalProperties.gd"
 
 [debug]
 
@@ -380,3 +380,7 @@ p4_change_camera_mode={
 common/physics_ticks_per_second=120
 3d/physics_engine="GodotPhysics3D"
 3d/default_gravity=30.0
+
+[rendering]
+
+scaling_3d/fsr_sharpness=0.2

@@ -65,6 +65,19 @@ var FULLSCREEN: bool = false:
 	get:
 		return FULLSCREEN
 
+@export
+var RENDER_QUALITY: float = 0.5:
+	set(newQuality):
+		RENDER_QUALITY = newQuality
+		if is_equal_approx(newQuality, 1.0):
+			ProjectSettings.set_setting("rendering/scaling_3d/mode", Viewport.SCALING_3D_MODE_BILINEAR)
+		else:
+			ProjectSettings.set_setting("rendering/scaling_3d/mode", Viewport.SCALING_3D_MODE_FSR)
+		ProjectSettings.set_setting("rendering/scaling_3d/scale", newQuality)
+		saveToFile()		
+	get:
+		return RENDER_QUALITY
+
 var SESSION_TOKEN: String = ""
 var USER_ID: String = ""
 
@@ -91,6 +104,7 @@ func saveToFile() -> void:
 		"MUSIC_VOLUME": MUSIC_VOLUME,
 		"SFX_VOLUME": SFX_VOLUME,
 		"FULLSCREEN": FULLSCREEN,
+		"RENDER_QUALITY": RENDER_QUALITY
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -104,13 +118,22 @@ func loadFromFile() -> void:
 		var jsonText = file.get_as_text()
 		var jsonData = JSON.parse_string(jsonText)
 
-		PLAYER_NAME = jsonData["PLAYER_NAME"]
-		PLAYER_PASSWORD = jsonData["PLAYER_PASSWORD"]
-		PLAYER_COLOR = Color.html(jsonData["PLAYER_COLOR"])
-		MASTER_VOLUME = float(jsonData["MASTER_VOLUME"])
-		MUSIC_VOLUME = float(jsonData["MUSIC_VOLUME"])
-		SFX_VOLUME = float(jsonData["SFX_VOLUME"])
-		FULLSCREEN = bool(jsonData["FULLSCREEN"])
+		if jsonData.has("PLAYER_NAME"):
+			PLAYER_NAME = jsonData["PLAYER_NAME"]
+		if jsonData.has("PLAYER_PASSWORD"):
+			PLAYER_PASSWORD = jsonData["PLAYER_PASSWORD"]
+		if jsonData.has("PLAYER_COLOR"):
+			PLAYER_COLOR = Color.html(jsonData["PLAYER_COLOR"])
+		if jsonData.has("MASTER_VOLUME"):
+			MASTER_VOLUME = float(jsonData["MASTER_VOLUME"])
+		if jsonData.has("MUSIC_VOLUME"):
+			MUSIC_VOLUME = float(jsonData["MUSIC_VOLUME"])
+		if jsonData.has("SFX_VOLUME"):
+			SFX_VOLUME = float(jsonData["SFX_VOLUME"])
+		if jsonData.has("FULLSCREEN"):
+			FULLSCREEN = bool(jsonData["FULLSCREEN"])
+		if jsonData.has("RENDER_QUALITY"):
+			RENDER_QUALITY = float(jsonData["RENDER_QUALITY"])
 	else:
 		saveToFile()
 

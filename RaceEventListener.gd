@@ -179,7 +179,7 @@ func onCar_finishedRace(playerIndex: int):
 	print("Total time: ", totalTime)
 
 func onRaceInputHandler_fullScreenPressed():
-	Playerstats.FULLSCREEN = !Playerstats.FULLSCREEN
+	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 func onState_allPlayersReset():
 	# reset cars

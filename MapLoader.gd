@@ -277,7 +277,7 @@ func uploadTrack(trackFileName: String):
 		Backend.BACKEND_IP_ADRESS + "/api/tracks/upload",
 		[
 			"Content-Type: application/json",
-			"Session-Token: " + Playerstats.SESSION_TOKEN
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
 		],
 		HTTPClient.METHOD_POST,
 		fileHandler.get_as_text()
@@ -338,7 +338,7 @@ func downloadTrack(trackId: String):
 		Backend.BACKEND_IP_ADRESS + "/api/tracks/download/" + trackId,
 		[
 			"Content-Type: application/json",
-			"Session-Token: " + Playerstats.SESSION_TOKEN
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
 		],
 		HTTPClient.METHOD_GET
 	)

@@ -97,11 +97,18 @@ size_flags_horizontal = 10
 size_flags_vertical = 4
 value = 100.0
 
-[node name="FullscreenButton" type="Button" parent="Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="FullscreenButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 2
 text = "Toggle Fullscreen"
+
+[node name="RenderQuality" type="OptionButton" parent="Panel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true

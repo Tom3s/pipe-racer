@@ -17,8 +17,8 @@ extends Control
 @onready var musicPlayer: MusicPlayer = %MusicPlayer
 
 func _ready():
-	nickname.text = Playerstats.PLAYER_NAME
-	colorPicker.color = Playerstats.PLAYER_COLOR
+	nickname.text = GlobalProperties.PLAYER_NAME
+	colorPicker.color = GlobalProperties.PLAYER_COLOR
 	raceMapLoader.hide()
 	editorMapLoader.hide()
 	connectSignals()
@@ -68,18 +68,18 @@ func onEditorMapLoader_backPressed():
 	# editorMapLoader.hide()
 
 func refreshPlayerData():
-	nickname.text = Playerstats.PLAYER_NAME
-	colorPicker.color = Playerstats.PLAYER_COLOR
+	nickname.text = GlobalProperties.PLAYER_NAME
+	colorPicker.color = GlobalProperties.PLAYER_COLOR
 
 func onWebsiteButton_pressed():
 	OS.shell_open(Backend.FRONTEND_IP_ADRESS)
 
 func onTextChanged(newText: String) -> void:
 	if newText != "":
-		Playerstats.PLAYER_NAME = newText
+		GlobalProperties.PLAYER_NAME = newText
 
 func onColorChanged(new_color):
-	Playerstats.PLAYER_COLOR = new_color
+	GlobalProperties.PLAYER_COLOR = new_color
 
 func onEditorMapLoader_enteredMapEditor():
 	%Background.visible = false
