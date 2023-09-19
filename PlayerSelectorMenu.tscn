@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=4 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_10c83"]
+[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_c0x38"]
 
 [node name="PlayerSelectorMenu" type="Control"]
 layout_mode = 3
@@ -128,6 +129,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
+shortcut = ExtResource("3_c0x38")
 text = "Back"
 
 [node name="NextButton" type="Button" parent="HBoxContainer"]

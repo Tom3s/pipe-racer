@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://crwi3brrbj2mm"]
+[gd_scene load_steps=6 format=3 uid="uid://crwi3brrbj2mm"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_mxmc3"]
 [ext_resource type="Texture2D" uid="uid://fk1rrr356g74" path="res://Menu/keyboard-layout.png" id="2_f4elt"]
 [ext_resource type="Script" path="res://Menu/ControlsMenu.gd" id="2_ne2jj"]
 [ext_resource type="Texture2D" uid="uid://cw4aask4xyoy0" path="res://Menu/controller-layout.png" id="4_oyfbc"]
+[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="5_g2bx5"]
 
 [node name="ControlsMenu" type="Control"]
 layout_mode = 3
@@ -36,6 +37,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../CloseButton")
 text = "Keyboard"
 
 [node name="ControllerButton" type="Button" parent="VBoxContainer/VBoxContainer"]
@@ -43,6 +45,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../CloseButton")
 text = "Controller"
 
 [node name="KeyboardDiagram" type="TextureRect" parent="VBoxContainer"]
@@ -65,4 +68,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+focus_neighbor_bottom = NodePath("../VBoxContainer/KeyboardButton")
+shortcut = ExtResource("5_g2bx5")
 text = "Close"

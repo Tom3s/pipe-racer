@@ -21,6 +21,9 @@ func _ready():
 	colorPicker.color = GlobalProperties.PLAYER_COLOR
 	raceMapLoader.hide()
 	editorMapLoader.hide()
+
+	playButton.grab_focus()
+
 	connectSignals()
 
 func connectSignals():
@@ -40,6 +43,8 @@ func connectSignals():
 	editorMapLoader.enteredMapEditor.connect(onEditorMapLoader_enteredMapEditor)
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 
+	# mainContent.visibility_changed.connect(race)
+
 
 func onPlayButton_pressed():
 	raceMapLoader.show()
@@ -55,15 +60,18 @@ func onSettingsButton_pressed():
 
 func onSettingsMenu_backPressed():
 	mainContent.visible = true
+	settingsButton.grab_focus()
 	# settingsMenu.visible = false
 
 func onRaceMapLoader_backPressed():
 	mainContent.visible = true
+	playButton.grab_focus()
 	refreshPlayerData()
 	# raceMapLoader.hide()
 
 func onEditorMapLoader_backPressed():
 	mainContent.visible = true
+	editButton.grab_focus()
 	refreshPlayerData()
 	# editorMapLoader.hide()
 

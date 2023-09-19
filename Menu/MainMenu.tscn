@@ -64,18 +64,24 @@ grow_vertical = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../EditButton")
 text = "Race!"
 
 [node name="EditButton" type="Button" parent="MainContent/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../PlayButton")
+focus_neighbor_bottom = NodePath("../PlayOnlineButton")
 text = "Edit"
 
 [node name="PlayOnlineButton" type="Button" parent="MainContent/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../EditButton")
+focus_neighbor_bottom = NodePath("../WebsiteButton")
 disabled = true
 text = "Online"
 
@@ -83,18 +89,24 @@ text = "Online"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../PlayOnlineButton")
+focus_neighbor_bottom = NodePath("../SettingsButton")
 text = "Website"
 
 [node name="SettingsButton" type="Button" parent="MainContent/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../WebsiteButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
 text = "Settings"
 
 [node name="ExitButton" type="Button" parent="MainContent/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../PlayButton")
 text = "Exit"
 
 [node name="Title" type="Label" parent="MainContent"]

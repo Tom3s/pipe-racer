@@ -33,6 +33,10 @@ func _ready():
 		index += 1
 
 	closeButton.button_up.connect(onCloseButton_pressed)
+	closeButton.grab_focus()
+
+	visibility_changed.connect(onVisibilityChanged)
+
 	masterVolumeSlider.value = GlobalProperties.MASTER_VOLUME
 	musicVolumeSlider.value = GlobalProperties.MUSIC_VOLUME
 	sfxVolumeSlider.value = GlobalProperties.SFX_VOLUME
@@ -53,11 +57,11 @@ func onCloseButton_pressed():
 	closePressed.emit()
 	visible = false
 
-# def percent_to_db(percent, min_dB=-80, max_dB=0):
-#     return min_dB + (max_dB - min_dB) * math.log10(percent / 100)
+func onVisibilityChanged():
+	if visible:
+		closeButton.grab_focus()
 
 func remapVolume(value: float):
-	# return -80 - 80 * (log(value) / log(10))
 	return max((log(value) / log(10) - 2) * 20, -80)
 	
 func onFullscreenButton_pressed():

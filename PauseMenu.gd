@@ -28,6 +28,8 @@ func _ready():
 	settingsMenu.visible = false
 	controlsMenu.visible = false
 
+	resumeButton.grab_focus()
+
 	connectSignals()
 
 func connectSignals():
@@ -38,13 +40,15 @@ func connectSignals():
 	exitButton.pressed.connect(onExitButton_pressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_closePressed)
 	controlsMenu.closePressed.connect(onControlsMenu_closePressed)
+	mainElements.visibility_changed.connect(onVisibilityChanged)
 
 func onSettingsButton_pressed():
-	settingsMenu.visible = true
 	mainElements.visible = false
+	settingsMenu.visible = true
 
 func onSettingsMenu_closePressed():
 	mainElements.visible = true
+	settingsButton.grab_focus()
 
 func onResumeButton_pressed():
 	visible = false
@@ -59,8 +63,13 @@ func onExitButton_pressed():
 	exitPressed.emit()
 
 func onControlsButton_pressed():
-	controlsMenu.visible = true
 	mainElements.visible = false
+	controlsMenu.visible = true
 
 func onControlsMenu_closePressed():
 	mainElements.visible = true
+	controlsButton.grab_focus()
+
+func onVisibilityChanged():
+	if visible:
+		resumeButton.grab_focus()
