@@ -76,6 +76,7 @@ func _ready():
 	setupFolders()
 
 	loadLocalTracks()
+	loadDownloadedTracks()
 
 func setupFolders():
 	var dir = DirAccess.open("user://")
@@ -217,8 +218,18 @@ func onUploadButton_pressed() -> void:
 	uploadTrack(trackName)
 
 func onDownloadButton_pressed() -> void:
-	var trackId = onlineTrackListItems[onlineTrackList.get_selected_items()[0]]._id
+	var trackId: String = onlineTrackListItems[onlineTrackList.get_selected_items()[0]]._id as String
+	var downloadedTracks = getDownloadedTrackIds()
+	if trackId in downloadedTracks:
+		showAlert("Error", "Track Already Downloaded", "Check your downloaded tracks list at the top") 
+		return
 	downloadTrack(trackId)
+
+func getDownloadedTrackIds() -> Array[String]:
+	var ids: Array[String] = []
+	for track in downloadedTrackListItems:
+		ids.append(track.split(".")[0])
+	return ids
 
 func onBackButton_pressed() -> void:
 	visible = false
