@@ -24,7 +24,7 @@ var lengthIndex = 0
 var lengthRange = range(2, 3 + 1)
 
 var endOffsetIndex = 0
-var endOffsetRange = [-endOffsetSize, 0, endOffsetSize]
+var endOffsetRange = [0, -endOffsetSize, endOffsetSize]
 
 var leftHeightIndex = 0
 var leftHeightRange = range(0, 3 + 1, 3)
@@ -99,24 +99,25 @@ func getStraightDict():
 	}
 
 func incrementStraigthIndeces():
-	rightHeightIndex += 1
-	if rightHeightIndex >= rightHeightRange.size():
-		rightHeightIndex = 0
-		leftHeightIndex += 1
-	if leftHeightIndex >= leftHeightRange.size():
-		leftHeightIndex = 0
+	
+	lengthIndex += 1
+	if lengthIndex >= lengthRange.size(): # || curveIndex == 0:
+		lengthIndex = 0
+		endOffsetIndex += 1
+	if endOffsetIndex >= endOffsetRange.size(): # || curveIndex == 0:
+		endOffsetIndex = 0
 		endWallIndex += 1
 	if endWallIndex >= endWallRange.size():
 		endWallIndex = 0
 		startWallIndex += 1
 	if startWallIndex >= startWallRange.size():
 		startWallIndex = 0
-		lengthIndex += 1
-	if lengthIndex >= lengthRange.size(): # || curveIndex == 0:
-		lengthIndex = 0
-		endOffsetIndex += 1
-	if endOffsetIndex >= endOffsetRange.size(): # || curveIndex == 0:
-		endOffsetIndex = 0
+		rightHeightIndex += 1
+	if rightHeightIndex >= rightHeightRange.size():
+		rightHeightIndex = 0
+		leftHeightIndex += 1
+	if leftHeightIndex >= leftHeightRange.size():
+		leftHeightIndex = 0
 		curve = true
 
 func getCurveDict():
@@ -138,24 +139,24 @@ func getCurveDict():
 	}
 
 func incrementCurveIndeces():
-	rightHeightIndex += 1
-	if rightHeightIndex >= rightHeightRange.size():
-		rightHeightIndex = 0
-		leftHeightIndex += 1
-	if leftHeightIndex >= leftHeightRange.size():
-		leftHeightIndex = 0
+	curveSidewaysIndex += 1
+	if curveSidewaysIndex >= curveSidewaysRange.size(): # || curveIndex == 1:
+		curveSidewaysIndex = 0
+		curveForwardIndex += 1
+	if curveForwardIndex >= curveForwardRange.size(): # || curveIndex == 1:
+		curveForwardIndex = 0
 		endWallIndex += 1
 	if endWallIndex >= endWallRange.size():
 		endWallIndex = 0
 		startWallIndex += 1
 	if startWallIndex >= startWallRange.size():
 		startWallIndex = 0
-		curveSidewaysIndex += 1
-	if curveSidewaysIndex >= curveSidewaysRange.size(): # || curveIndex == 1:
-		curveSidewaysIndex = 0
-		curveForwardIndex += 1
-	if curveForwardIndex >= curveForwardRange.size(): # || curveIndex == 1:
-		curveForwardIndex = 0
+		rightHeightIndex += 1
+	if rightHeightIndex >= rightHeightRange.size():
+		rightHeightIndex = 0
+		leftHeightIndex += 1
+	if leftHeightIndex >= leftHeightRange.size():
+		leftHeightIndex = 0
 		print("done")
 		done.emit()
 		queue_free()
