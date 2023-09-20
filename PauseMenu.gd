@@ -7,6 +7,7 @@ class_name PauseMenu
 @onready var restartButton: Button = %RestartButton
 @onready var settingsButton: Button = %SettingsButton
 @onready var controlsButton: Button = %ControlsButton
+@onready var editorGuide: Button = %EditorGuide
 @onready var exitButton: Button = %ExitButton
 
 @onready var settingsMenu: SettingsMenu = %SettingsMenu
@@ -25,6 +26,8 @@ func _ready():
 	# settingsButton = %SettingsButton
 	# exitButton = %ExitButton
 
+	editorGuide.visible = false
+
 	settingsMenu.visible = false
 	controlsMenu.visible = false
 
@@ -37,6 +40,7 @@ func connectSignals():
 	restartButton.pressed.connect(onRestartButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
 	controlsButton.pressed.connect(onControlsButton_pressed)
+	editorGuide.pressed.connect(editorGuide_pressed)
 	exitButton.pressed.connect(onExitButton_pressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_closePressed)
 	controlsMenu.closePressed.connect(onControlsMenu_closePressed)
@@ -65,6 +69,9 @@ func onExitButton_pressed():
 func onControlsButton_pressed():
 	mainElements.visible = false
 	controlsMenu.visible = true
+
+func editorGuide_pressed():
+	OS.shell_open("https://github.com/Tom3s/pipe-racer-frontend/blob/main/src/StaticPages/EditorGuideMarkdown.md")
 
 func onControlsMenu_closePressed():
 	mainElements.visible = true

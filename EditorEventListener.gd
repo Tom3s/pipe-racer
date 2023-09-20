@@ -55,6 +55,7 @@ func _ready():
 	prefabMesher.debug = true
 	pauseMenu.visible = false
 	pauseMenu.restartButton.visible = false
+	pauseMenu.editorGuide.visible = true
 
 	loading.visible = true
 

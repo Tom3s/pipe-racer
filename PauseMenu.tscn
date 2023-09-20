@@ -68,6 +68,14 @@ focus_neighbor_top = NodePath("../SettingsButton")
 focus_neighbor_bottom = NodePath("../ExitButton")
 text = "View Controls"
 
+[node name="EditorGuide" type="Button" parent="MainElements/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+text = "Editor Guide"
+
 [node name="ExitButton" type="Button" parent="MainElements/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
