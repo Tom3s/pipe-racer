@@ -15,8 +15,6 @@ point_count = 2
 curve = SubResource("Curve_4xdyt")
 
 [resource]
-emission_shape = 3
-emission_box_extents = Vector3(0.3, 0.1, 0.1)
 spread = 0.0
 flatness = 1.0
 gravity = Vector3(0, 25, 0)

@@ -108,9 +108,9 @@ steeringSpeed = 0.1
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 emitting = false
-amount = 32
+amount = 28
 lifetime = 0.71
 process_material = ExtResource("5_myblr")
 draw_pass_1 = ExtResource("6_obe7c")
@@ -118,7 +118,7 @@ draw_pass_1 = ExtResource("6_obe7c")
 [node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
-amount = 32
+amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
@@ -137,9 +137,9 @@ tireIndex = 1
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 emitting = false
-amount = 32
+amount = 28
 lifetime = 0.71
 process_material = ExtResource("5_myblr")
 draw_pass_1 = ExtResource("6_obe7c")
@@ -147,7 +147,7 @@ draw_pass_1 = ExtResource("6_obe7c")
 [node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
-amount = 32
+amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
@@ -166,9 +166,9 @@ tireIndex = 2
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 emitting = false
-amount = 32
+amount = 28
 lifetime = 0.71
 process_material = ExtResource("5_myblr")
 draw_pass_1 = ExtResource("6_obe7c")
@@ -176,7 +176,7 @@ draw_pass_1 = ExtResource("6_obe7c")
 [node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
-amount = 32
+amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
@@ -195,9 +195,9 @@ tireIndex = 3
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 emitting = false
-amount = 32
+amount = 28
 lifetime = 0.71
 process_material = ExtResource("5_myblr")
 draw_pass_1 = ExtResource("6_obe7c")
@@ -205,7 +205,7 @@ draw_pass_1 = ExtResource("6_obe7c")
 [node name="DirtEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.3, -0.3)
 emitting = false
-amount = 32
+amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
