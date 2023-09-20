@@ -53,6 +53,7 @@ func _ready():
 
 	propPlacer.startLinePreview.visible = false
 	prefabMesher.debug = true
+	pauseMenu.visible = false
 
 	loading.visible = true
 
@@ -486,6 +487,8 @@ func onEditorInputHandler_testPressed():
 	car.setRespawnPositionFromDictionary(map.start.getStartPosition(0, 1))
 	car.respawn()
 	car.visible = true
+	car.state.hasControl = true
+	car.state.isReady = true
 	carCamera.current = true
 	camera.current = false
 	hideUI()

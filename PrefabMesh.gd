@@ -690,15 +690,19 @@ func trySnappingToTile(connectionPoints: Array[Dictionary]):
 	return null
 
 func tryUpdatingProperties(connectionPoint: Dictionary):
+	var oldProperties = getStringName()
 	if canConnectOnFront(connectionPoint):
 		updateFrontParameters(connectionPoint)
 
 	elif canConnectOnBack(connectionPoint):
 		updateBackParameters(connectionPoint)
 	
-	clampHeights()
-	refreshMesh()
-	propertiesUpdated.emit()
+	var newProperties = getStringName()
+
+	if oldProperties != newProperties:
+		clampHeights()
+		refreshMesh()
+		propertiesUpdated.emit()
 
 func getStringName() -> String:
 	var prefabName = ""
