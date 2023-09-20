@@ -54,6 +54,7 @@ func _ready():
 	propPlacer.startLinePreview.visible = false
 	prefabMesher.debug = true
 	pauseMenu.visible = false
+	pauseMenu.restartButton.visible = false
 
 	loading.visible = true
 
