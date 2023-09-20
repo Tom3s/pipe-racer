@@ -269,11 +269,11 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 func submitRaceStats(stats: Dictionary, playerIndex: int) -> Signal:
 	var request = HTTPRequest.new()
 	add_child(request)
-	request.timeout = 10
+	request.timeout = 5
 	request.request_completed.connect(onSubmitRaceStats_requestCompleted)
 
 	var httpError = request.request(
-		Backend.BACKEND_IP_ADRESS + "/api/stats",
+		Backend.BACKEND_IP_ADRESS + "/api/stats/track",
 		[
 			"Content-Type: application/json",
 			"Session-Token: " + players[playerIndex].SESSION_TOKEN,
@@ -286,6 +286,6 @@ func submitRaceStats(stats: Dictionary, playerIndex: int) -> Signal:
 	
 	return request.request_completed
 
-func onSubmitRaceStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	print("Stat Submit Response: ", body.get_string_from_utf8())
+func onSubmitRaceStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
+	print("Race stat Submit Response: ", _responseCode)
 	return

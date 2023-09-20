@@ -30,8 +30,6 @@ func getObject() -> Dictionary:
 		"bestTime": bestTime,
 	}
 
-	print("[RaceStats.gd] Returning object: " + JSON.stringify(obj, "\t"))
-
 	return obj
 
 func increaseAttempts():

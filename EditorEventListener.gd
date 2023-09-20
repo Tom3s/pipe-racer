@@ -19,6 +19,7 @@ var pauseMenu: PauseMenu
 var car: CarController
 var carCamera: FollowingCamera
 
+var editorStats: EditorStats
 
 
 
@@ -34,6 +35,7 @@ func _ready():
 	editorShortcutsUI = %EditorShortcutsUI
 	trackMetadataUI = %TrackMetadataUI
 	pauseMenu = %PauseMenu
+	editorStats = EditorStats.new()
 	trackMetadataUI.visible = false
 
 	propPlacer = %PropPlacer
@@ -199,12 +201,15 @@ func onEditorInputHandler_placePressed():
 	if editorStateMachine.canBuild():
 		if editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
 			map.add(prefabMesher)
+			editorStats.increasePlacedTrackPieces()
 		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_START:
 			map.addStart(propPlacer)
 		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_CHECKPOINT:
 			map.addCheckPoint(propPlacer)
+			editorStats.increasePlacedCheckpoints()
 		elif editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PROP:
 			map.addProp(propPlacer)
+			editorStats.increasePlacedProps()
 
 func onEditorInputHandler_rotatePressed():
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
@@ -493,6 +498,7 @@ func onEditorInputHandler_testPressed():
 	car.state.isReady = true
 	carCamera.current = true
 	camera.current = false
+	editorStats.increaseNrTests()
 	hideUI()
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
@@ -534,6 +540,8 @@ func onMap_mapLoaded(trackName: String, lapCount: int):
 
 func onEditorExited():
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
+	var signalResponse = submitEditorStats(editorStats.getObject())
+	await signalResponse
 	get_parent().editorExited.emit()
 
 const EDITOR_UI_PREFAB_PROPERTIES: int = 0
@@ -551,3 +559,27 @@ func hideUI():
 	propPropertiesUI.visible = false
 	editorShortcutsUI.visible = false
 	prefabSelectorUI.visible = false
+
+func submitEditorStats(stats: Dictionary) -> Signal:
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 5
+	request.request_completed.connect(onSubmitEditorStats_requestCompleted)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/stats/editor",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(stats)
+	)
+	if httpError != OK:
+		print("Error submitting time: " + error_string(httpError))
+	
+	return request.request_completed
+
+func onSubmitEditorStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
+	print("Editor stat Submit Response: ", _responseCode)
+	return
