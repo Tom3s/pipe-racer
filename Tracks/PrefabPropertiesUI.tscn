@@ -106,10 +106,10 @@ offset_left = 9.0
 offset_top = 11.0
 offset_right = 31.0
 offset_bottom = 140.0
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
-tick_count = 21
+tick_count = 41
 
 [node name="LeftEndSpinbox" type="SpinBox" parent="Panel"]
 unique_name_in_owner = true
@@ -119,8 +119,8 @@ offset_top = 67.0
 offset_right = 126.063
 offset_bottom = 98.0
 scale = Vector2(0.5, 0.5)
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
 alignment = 1
 
@@ -131,10 +131,10 @@ offset_left = 175.0
 offset_top = 11.0
 offset_right = 197.0
 offset_bottom = 140.0
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
-tick_count = 21
+tick_count = 41
 
 [node name="RightEndSpinbox" type="SpinBox" parent="Panel"]
 unique_name_in_owner = true
@@ -144,8 +144,8 @@ offset_top = 67.0
 offset_right = 216.063
 offset_bottom = 98.0
 scale = Vector2(0.5, 0.5)
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
 alignment = 1
 
@@ -156,10 +156,10 @@ offset_left = 9.0
 offset_top = 150.0
 offset_right = 31.0
 offset_bottom = 279.0
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
-tick_count = 21
+tick_count = 41
 
 [node name="LeftStartSpinbox" type="SpinBox" parent="Panel"]
 unique_name_in_owner = true
@@ -169,8 +169,8 @@ offset_top = 196.0
 offset_right = 126.063
 offset_bottom = 227.0
 scale = Vector2(0.5, 0.5)
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
 alignment = 1
 
@@ -181,10 +181,10 @@ offset_left = 175.0
 offset_top = 150.0
 offset_right = 197.0
 offset_bottom = 279.0
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
-tick_count = 21
+tick_count = 41
 
 [node name="RightStartSpinbox" type="SpinBox" parent="Panel"]
 unique_name_in_owner = true
@@ -194,8 +194,8 @@ offset_top = 196.0
 offset_right = 216.063
 offset_bottom = 227.0
 scale = Vector2(0.5, 0.5)
-min_value = -10.0
-max_value = 10.0
+min_value = -20.0
+max_value = 20.0
 rounded = true
 alignment = 1
 

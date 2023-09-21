@@ -634,7 +634,7 @@ func updateBackParameters(connectionPoint: Dictionary):
 	leftStartHeight += rightOffset
 	rightStartHeight += leftOffset
 
-const MAX_HEIGHT = 10
+const MAX_HEIGHT = 20
 func clampHeights():
 	leftStartHeight = clamp(leftStartHeight, -MAX_HEIGHT, MAX_HEIGHT)
 	leftEndHeight = clamp(leftEndHeight, -MAX_HEIGHT, MAX_HEIGHT)
