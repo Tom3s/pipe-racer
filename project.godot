@@ -25,10 +25,6 @@ GlobalProperties="*res://GlobalProperties.gd"
 
 gdscript/warnings/onready_with_export=1
 
-[display]
-
-window/vsync/vsync_mode=0
-
 [input]
 
 ui_accept={
