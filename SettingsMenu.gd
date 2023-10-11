@@ -7,6 +7,7 @@ class_name SettingsMenu
 @onready var closeButton: Button = %CloseButton
 @onready var fullscreenButton: Button = %FullscreenButton
 @onready var renderQuality: OptionButton = %RenderQuality
+@onready var fixPedalInput: CheckBox = %FixPedalInput
 
 var renderQualities = [
 	['Tometo (x0.25)', 0.25],
@@ -32,6 +33,8 @@ func _ready():
 			renderQuality.selected = index
 		index += 1
 
+	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
+
 	closeButton.button_up.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
 
@@ -40,6 +43,8 @@ func _ready():
 	masterVolumeSlider.value = GlobalProperties.MASTER_VOLUME
 	musicVolumeSlider.value = GlobalProperties.MUSIC_VOLUME
 	sfxVolumeSlider.value = GlobalProperties.SFX_VOLUME
+
+	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
 
 func onMasterVolumeSlider_valueChanged(value: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), remapVolume(value))
@@ -52,6 +57,51 @@ func onMusicVolumeSlider_valueChanged(value: float):
 func onSFXVolumeSlider_valueChanged(value: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), remapVolume(value))
 	GlobalProperties.SFX_VOLUME = value
+
+
+const p1Accel: String = "p1_accelerate"
+const p1Break: String = "p1_break"
+
+@export
+var fixedPedalAccelAxis: int = 7
+@export
+var fixedPedalBreakAxis: int = 8
+
+func onFixPedalInput_toggled(fix: bool):
+
+	InputMap.action_erase_events(p1Accel)
+	var accelEvent = InputEventKey.new()
+	accelEvent.physical_keycode = KEY_UP
+	InputMap.action_add_event(p1Accel, accelEvent)
+
+	InputMap.action_erase_events(p1Break)
+	var breakEvent = InputEventKey.new()
+	breakEvent.physical_keycode = KEY_DOWN
+	InputMap.action_add_event(p1Break, breakEvent)
+
+	if !fix:
+		var accelJoypadEvent = InputEventJoypadMotion.new()
+		accelJoypadEvent.axis = JOY_AXIS_TRIGGER_RIGHT
+		accelJoypadEvent.device = 0
+		InputMap.action_add_event(p1Accel, accelJoypadEvent)
+
+		var breakJoypadEvent = InputEventJoypadMotion.new()
+		breakJoypadEvent.axis = JOY_AXIS_TRIGGER_LEFT
+		breakJoypadEvent.device = 0
+		InputMap.action_add_event(p1Break, breakJoypadEvent)
+	else:
+		var accelJoypadEvent = InputEventJoypadMotion.new()
+		accelJoypadEvent.axis = fixedPedalAccelAxis
+		accelJoypadEvent.device = 0
+		InputMap.action_add_event(p1Accel, accelJoypadEvent)
+
+		var breakJoypadEvent = InputEventJoypadMotion.new()
+		breakJoypadEvent.axis = fixedPedalBreakAxis
+		breakJoypadEvent.device = 0
+		InputMap.action_add_event(p1Break, breakJoypadEvent)
+
+
+	GlobalProperties.FIX_PEDAL_INPUT = fix
 
 func onCloseButton_pressed():
 	closePressed.emit()
