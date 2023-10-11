@@ -38,7 +38,10 @@ var collider: Node3D = null
 var useSmokeParticles: bool = true
 func _physics_process(delta):
 	if !car.paused:
-		rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
+		if GlobalProperties.PRECISE_INPUT:
+			rotation.y = targetRotation
+		else:
+			rotation.y = lerp(rotation.y, targetRotation, steeringSpeed)
 	#	tireModel.rotation = tireModel.rotation * Vector3(1, 0, 1) + Vector3(0, rotation.y, 0)
 		
 		if is_colliding():
