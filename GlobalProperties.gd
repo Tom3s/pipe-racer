@@ -86,6 +86,14 @@ var FIX_PEDAL_INPUT: bool = false:
 	get:
 		return FIX_PEDAL_INPUT
 
+@export
+var PRECISE_INPUT: bool = false:
+	set(newPrecise):
+		PRECISE_INPUT = newPrecise
+		saveToFile()
+	get:
+		return PRECISE_INPUT
+
 var SESSION_TOKEN: String = ""
 var USER_ID: String = ""
 
@@ -113,7 +121,8 @@ func saveToFile() -> void:
 		"SFX_VOLUME": SFX_VOLUME,
 		"FULLSCREEN": FULLSCREEN,
 		"RENDER_QUALITY": RENDER_QUALITY,
-		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT
+		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT,
+		"PRECISE_INPUT": PRECISE_INPUT
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -145,6 +154,8 @@ func loadFromFile() -> void:
 			RENDER_QUALITY = float(jsonData["RENDER_QUALITY"])
 		if jsonData.has("FIX_PEDAL_INPUT"):
 			FIX_PEDAL_INPUT = bool(jsonData["FIX_PEDAL_INPUT"])
+		if jsonData.has("PRECISE_INPUT"):
+			PRECISE_INPUT = bool(jsonData["PRECISE_INPUT"])
 	else:
 		saveToFile()
 

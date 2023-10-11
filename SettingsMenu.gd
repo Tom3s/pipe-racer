@@ -8,6 +8,7 @@ class_name SettingsMenu
 @onready var fullscreenButton: Button = %FullscreenButton
 @onready var renderQuality: OptionButton = %RenderQuality
 @onready var fixPedalInput: CheckBox = %FixPedalInput
+@onready var preciseInput: CheckBox = %PreciseInput
 
 var renderQualities = [
 	['Tometo (x0.25)', 0.25],
@@ -35,6 +36,8 @@ func _ready():
 
 	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
 
+	preciseInput.toggled.connect(onPreciseInput_toggled)
+
 	closeButton.button_up.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
 
@@ -45,6 +48,8 @@ func _ready():
 	sfxVolumeSlider.value = GlobalProperties.SFX_VOLUME
 
 	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
+
+	preciseInput.button_pressed = GlobalProperties.PRECISE_INPUT
 
 func onMasterVolumeSlider_valueChanged(value: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), remapVolume(value))
@@ -102,6 +107,12 @@ func onFixPedalInput_toggled(fix: bool):
 
 
 	GlobalProperties.FIX_PEDAL_INPUT = fix
+
+func onPreciseInput_toggled(preciseInput: bool):
+	InputMap.action_set_deadzone("p1_turn_left", 0.0 if preciseInput else 0.1)
+	InputMap.action_set_deadzone("p1_turn_right", 0.0 if preciseInput else 0.1)
+
+	GlobalProperties.PRECISE_INPUT = preciseInput
 
 func onCloseButton_pressed():
 	closePressed.emit()

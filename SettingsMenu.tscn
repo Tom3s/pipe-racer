@@ -25,9 +25,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -199.0
-offset_top = -89.0
+offset_top = -113.0
 offset_right = 199.0
-offset_bottom = 89.0
+offset_bottom = 113.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -138,6 +138,19 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Precise Input"
+
+[node name="PreciseInput" type="CheckBox" parent="Panel/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+
 [node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
@@ -148,9 +161,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -50.0
-offset_top = 103.0
+offset_top = 127.0
 offset_right = 50.0
-offset_bottom = 135.0
+offset_bottom = 159.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
