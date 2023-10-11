@@ -170,7 +170,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 17
-text = "Version: v0.30"
+text = "Version: v0.31"
 
 [node name="SettingsMenu" parent="." instance=ExtResource("4_fogf1")]
 unique_name_in_owner = true

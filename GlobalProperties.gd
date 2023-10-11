@@ -78,6 +78,14 @@ var RENDER_QUALITY: float = 1.0:
 	get:
 		return RENDER_QUALITY
 
+@export
+var FIX_PEDAL_INPUT: bool = false:
+	set(newFix):
+		FIX_PEDAL_INPUT = newFix
+		saveToFile()
+	get:
+		return FIX_PEDAL_INPUT
+
 var SESSION_TOKEN: String = ""
 var USER_ID: String = ""
 
@@ -104,7 +112,8 @@ func saveToFile() -> void:
 		"MUSIC_VOLUME": MUSIC_VOLUME,
 		"SFX_VOLUME": SFX_VOLUME,
 		"FULLSCREEN": FULLSCREEN,
-		"RENDER_QUALITY": RENDER_QUALITY
+		"RENDER_QUALITY": RENDER_QUALITY,
+		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -134,6 +143,8 @@ func loadFromFile() -> void:
 			FULLSCREEN = bool(jsonData["FULLSCREEN"])
 		if jsonData.has("RENDER_QUALITY"):
 			RENDER_QUALITY = float(jsonData["RENDER_QUALITY"])
+		if jsonData.has("FIX_PEDAL_INPUT"):
+			FIX_PEDAL_INPUT = bool(jsonData["FIX_PEDAL_INPUT"])
 	else:
 		saveToFile()
 

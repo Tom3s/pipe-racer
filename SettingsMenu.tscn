@@ -14,6 +14,8 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_rvs7i")
 script = ExtResource("2_7exx8")
+fixedPedalAccelAxis = 4
+fixedPedalBreakAxis = 1
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -122,6 +124,19 @@ layout_mode = 2
 focus_neighbor_left = NodePath("../FullscreenButton")
 focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
 focus_neighbor_bottom = NodePath("../../../../CloseButton")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fix Pedal Input"
+
+[node name="FixPedalInput" type="CheckBox" parent="Panel/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
 
 [node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true

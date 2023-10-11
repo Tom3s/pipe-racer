@@ -48,7 +48,11 @@ func handleSingleInput(playerPrefix):
 		var targetRotation = steerInput * car.getSteeringFactor()
 		tire.targetRotation = targetRotation
 	
-	car.accelerationInput = -Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
+	if !GlobalProperties.FIX_PEDAL_INPUT || playerPrefix != "p1_":
+		car.accelerationInput = -Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
+	else:
+		car.accelerationInput = remap(Input.get_action_strength(playerPrefix + "accelerate"), 1, -1, 1, 0) \
+			- remap(Input.get_action_strength(playerPrefix + "break"), 1, -1, 1, 0)  
 
 	if Input.is_action_just_pressed(playerPrefix + "respawn") && car.state.hasControl:
 		car.respawn()
