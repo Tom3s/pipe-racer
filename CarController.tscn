@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
 [ext_resource type="Shader" uid="uid://ddhtdhtpsdk5r" path="res://Track Props/dirtParticleShader.tres" id="5_0o4p6"]
 [ext_resource type="Material" uid="uid://db2jkyqdfgrng" path="res://Track Props/SMokeParticles.tres" id="5_myblr"]
-[ext_resource type="Script" path="res://BottomOut.gd" id="5_rud3q"]
 [ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
 [ext_resource type="PlaneMesh" uid="uid://dvof0mms3yhd8" path="res://Track Props/smokeParticleMAterial.tres" id="6_obe7c"]
@@ -17,11 +16,11 @@
 [ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
-friction = 0.05
-bounce = 0.01
+friction = 0.0
+rough = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_52nqf"]
-radius = 0.161
+radius = 0.286
 height = 2.6
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t31ly"]
@@ -31,6 +30,10 @@ height = 4.15
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e0f4h"]
 radius = 0.634647
 height = 1.99853
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tiwy3"]
+radius = 0.293
+height = 1.721
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
 render_priority = 0
@@ -73,12 +76,14 @@ regripFactor = 0.02
 unique_name_in_owner = true
 
 [node name="FrontAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.505, 1.5)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, 1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
+disabled = true
 
 [node name="RearAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.505, -1.5)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, -1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
+disabled = true
 
 [node name="CarBodyCapsule" type="CollisionShape3D" parent="."]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.675, 0)
@@ -92,6 +97,10 @@ shape = SubResource("CapsuleShape3D_t31ly")
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0.942996, -0.271399)
 shape = SubResource("CapsuleShape3D_e0f4h")
 
+[node name="CarBodyCapsule4" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 1.06581e-14, 1, -4.37114e-08, 0, 4.02341e-21, 1.06581e-14, 1, 0, 1.47777, -2.14732)
+shape = SubResource("CapsuleShape3D_tiwy3")
+
 [node name="Tires" type="Node3D" parent="."]
 
 [node name="TireFL" type="RayCast3D" parent="Tires"]
@@ -102,7 +111,6 @@ collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
-steeringSpeed = 0.1
 
 [node name="tire-new good normals" parent="Tires/TireFL" instance=ExtResource("4_k78f3")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
@@ -130,7 +138,6 @@ collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
-steeringSpeed = 0.1
 tireIndex = 1
 
 [node name="tire-new good normals" parent="Tires/TireFR" instance=ExtResource("4_k78f3")]
@@ -159,7 +166,6 @@ collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
-steeringSpeed = 0.1
 tireIndex = 2
 
 [node name="tire-new good normals" parent="Tires/TireBL" instance=ExtResource("4_k78f3")]
@@ -188,7 +194,6 @@ collision_mask = 9
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
-steeringSpeed = 0.1
 tireIndex = 3
 
 [node name="tire-new good normals" parent="Tires/TireBR" instance=ExtResource("4_k78f3")]
@@ -214,28 +219,24 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
 target_position = Vector3(0, -0.25, 0)
 collision_mask = 9
-script = ExtResource("5_rud3q")
 
 [node name="BottomOutFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
 target_position = Vector3(0, -0.25, 0)
 collision_mask = 9
-script = ExtResource("5_rud3q")
 
 [node name="BottomOutBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
 target_position = Vector3(0, -0.25, 0)
 collision_mask = 9
-script = ExtResource("5_rud3q")
 
 [node name="BottomOutBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
 target_position = Vector3(0, -0.25, 0)
 collision_mask = 9
-script = ExtResource("5_rud3q")
 
 [node name="CarEngineSound" parent="." instance=ExtResource("6_g1nx1")]
 unique_name_in_owner = true

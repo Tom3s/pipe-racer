@@ -141,23 +141,38 @@ func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
 	setRespawnPositionFromDictionary(startingPosition)
 	respawn(true)
 
+var tires: Array[Tire] = []
+var bottomOuts: Array[RayCast3D] = []
+
 func _ready():
 	inputHandler = %InputHandler
 	state = %CarStateMachine
+
+	tires.push_back(%TireFL)
+	tires.push_back(%TireFR)
+	tires.push_back(%TireBL)
+	tires.push_back(%TireBR)
+
+	bottomOuts.push_back(%BottomOutFL)
+	bottomOuts.push_back(%BottomOutFR)
+	bottomOuts.push_back(%BottomOutBL)
+	bottomOuts.push_back(%BottomOutBR)
+
 	set_physics_process(true)
 
 func _physics_process(_delta):
+	if !paused:
+		for tire in tires:
+			calculateTirePhysics(tire, _delta)
+		for bottomOut in bottomOuts:
+			calculateBottomOutPhysics(bottomOut, _delta)
+	
 	applyDownforce(state.getGroundedTireCount())
 	
 	if state.isAirborne():
 		applyAirPitch()
 		applyAirSteering()
 		slidingFactor = 0.9
-		
-	# if getSpeed() < lowerSpeedLimit && !accelerationInput:
-	# 	linear_velocity *= Vector3.UP
-	
-	
 	
 	if shouldPause && !paused:
 		pauseLinearVelocity = linear_velocity
@@ -191,6 +206,69 @@ func _integrate_forces(physicsState):
 			# initialRespawn = false
 			pauseMovement()
 		respawned.emit(playerIndex)
+
+@export
+var steeringSpeed: float = 0.05
+
+func calculateTirePhysics(tire: Tire, delta):
+	if GlobalProperties.PRECISE_INPUT:
+		tire.rotation.y = tire.targetRotation
+	else:
+		tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
+	
+	if tire.is_colliding():
+		state.groundedTires[tire.tireIndex] = 1
+
+		var contactPoint = tire.get_collision_point()
+		var raycastDistance = (contactPoint - tire.global_position).length()
+
+		tire.tireModel.position.y = -raycastDistance + 0.375
+
+		var tireVelocitySuspension = get_point_velocity(tire.global_position)
+
+		applySuspension(raycastDistance, tire.global_transform.basis.y, tireVelocitySuspension, tire.global_position, delta)
+
+		var tireVelocityActual = get_point_velocity(contactPoint)
+
+		var collider: Node3D = tire.get_collider().get_parent()
+		var frictionMultiplier: float = 1.0
+		var accelerationMultiplier: float = 0.0
+		var useSmokeParticles: bool = true
+
+
+		if collider.has_method("getFriction"):
+			frictionMultiplier = collider.getFriction()
+			accelerationMultiplier = collider.getAccelerationMultiplier()
+			useSmokeParticles = collider.getSmokeParticles()
+		else:
+			frictionMultiplier = 1.0
+			accelerationMultiplier = 1.0
+			useSmokeParticles = true
+		
+		applyFriction(tire.global_transform.basis.x, tireVelocityActual, tire.tireMass, contactPoint, frictionMultiplier)
+
+		applyAcceleration(tire.global_transform.basis.z, tireVelocityActual, contactPoint, accelerationMultiplier)
+
+		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(tire.global_transform.basis.z)
+
+		tire.tireModel.rotate_x(tireDistanceTravelled / 0.375)
+
+		tire.smokeEmitter.emitting = slidingFactor > 0.1 && getSpeed() > 15 && useSmokeParticles
+		tire.dirtEmitter.emitting = getSpeed() > 15 && !useSmokeParticles
+	else:
+		state.groundedTires[tire.tireIndex] = 0		
+		tire.tireModel.position.y = tire.target_position.y + 0.375
+		tire.smokeEmitter.emitting = false
+		tire.dirtEmitter.emitting = false
+
+func calculateBottomOutPhysics(bottomOut: RayCast3D, delta):
+	if bottomOut.is_colliding():
+		var contactPoint = bottomOut.get_collision_point()
+		var raycastDistance = (contactPoint - bottomOut.global_position).length()
+
+		var tireVelocitySuspension = get_point_velocity(bottomOut.global_position)
+
+		applyBottomedOutSuspension(raycastDistance, bottomOut.global_transform.basis.y, tireVelocitySuspension, bottomOut.global_position, delta)
 
 func createRespawnTransform3D():
 	var tempTransform = Transform3D()

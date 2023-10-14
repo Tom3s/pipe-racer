@@ -389,7 +389,7 @@ p4_change_camera_mode={
 [physics]
 
 common/physics_ticks_per_second=120
-3d/physics_engine="GodotPhysics3D"
+common/physics_jitter_fix=0.0
 3d/default_gravity=30.0
 
 [rendering]
