@@ -78,12 +78,10 @@ unique_name_in_owner = true
 [node name="FrontAxle2" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, 1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
-disabled = true
 
 [node name="RearAxle2" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, -1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
-disabled = true
 
 [node name="CarBodyCapsule" type="CollisionShape3D" parent="."]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.675, 0)
