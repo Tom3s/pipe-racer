@@ -94,6 +94,18 @@ properties/14/sync = true
 properties/15/path = NodePath("..:playerIndex")
 properties/15/spawn = true
 properties/15/sync = false
+properties/16/path = NodePath("../Tires/TireFL/tire-new good normals:rotation")
+properties/16/spawn = true
+properties/16/sync = true
+properties/17/path = NodePath("../Tires/TireFR/tire-new good normals:rotation")
+properties/17/spawn = true
+properties/17/sync = true
+properties/18/path = NodePath("../Tires/TireBL/tire-new good normals:rotation")
+properties/18/spawn = true
+properties/18/sync = true
+properties/19/path = NodePath("../Tires/TireBR/tire-new good normals:rotation")
+properties/19/spawn = true
+properties/19/sync = true
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2

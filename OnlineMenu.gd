@@ -56,7 +56,7 @@ func onHostButton_pressed():
 		GlobalProperties.PLAYER_COLOR,
 	)
 
-	Network.localData = [playerdata]
+	Network.localData = [playerdata, playerdata]
 
 	Network.hostServer(Callable(self, "changeToIngame"))
 	statusLabel.text = "STATUS: Hosting server"
