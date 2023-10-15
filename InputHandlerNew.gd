@@ -24,10 +24,11 @@ var respawnInput = false
 var pausedState = false
 
 func _physics_process(_delta):
-	if allowedPrefixes.size() == 1:
-		handleSingleInput(allowedPrefixes[0])
-	else:
-		handleMultiInput()
+	if car.is_multiplayer_authority():
+		if allowedPrefixes.size() == 1:
+			handleSingleInput(allowedPrefixes[0])
+		else:
+			handleMultiInput()
 
 func handleSingleInput(playerPrefix):
 	if Input.is_action_just_pressed(playerPrefix + "ready"):

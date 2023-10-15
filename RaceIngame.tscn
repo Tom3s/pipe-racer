@@ -17,9 +17,12 @@ unique_name_in_owner = true
 
 [node name="LeaderboardUI" parent="UniversalCanvas" instance=ExtResource("3_xvyrp")]
 unique_name_in_owner = true
+visible = false
+mouse_filter = 2
 
 [node name="PauseMenu" parent="UniversalCanvas" instance=ExtResource("3_uan4p")]
 unique_name_in_owner = true
+visible = false
 
 [node name="HorizontalSplit" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -29,18 +32,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="VerticalSplitTop" type="HBoxContainer" parent="HorizontalSplit"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="VerticalSplitBottom" type="HBoxContainer" parent="HorizontalSplit"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="IngameSFX" parent="." instance=ExtResource("5_tnrfk")]
 unique_name_in_owner = true
@@ -59,3 +65,7 @@ script = ExtResource("6_nt5ye")
 [node name="RaceEventListener" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_c5cfr")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://CarController.tscn")
+spawn_path = NodePath("../Players")

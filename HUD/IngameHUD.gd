@@ -30,6 +30,7 @@ var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
 # var globalPlacement: int = -1
 
+# TODO: make this a static after updating to Godot 4.2
 var TOTAL_CARS: int = 0
 
 func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:

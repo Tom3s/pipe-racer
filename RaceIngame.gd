@@ -40,7 +40,7 @@ func setup(newRaceSettings: RaceSettings):
 	raceEventListener = %RaceEventListener
 	raceInputHandler = %RaceInputHandler
 
-	raceInputHandler.setup(raceSettings.nrPlayers)
+	raceInputHandler.setup(raceSettings.nrLocalPlayers)
 
 	environment = MapEnvironment.instantiate()
 	add_child(environment)
@@ -52,7 +52,7 @@ func setup(newRaceSettings: RaceSettings):
 	setupCars(cars)
 	
 	var timeTrialManagers: Array[TimeTrialManager] = []
-	for i in raceSettings.nrPlayers:
+	for i in raceSettings.nrLocalPlayers:
 		timeTrialManagers.append(TimeTrialManager.new(%IngameSFX, raceSettings.nrLaps))
 	var huds: Array[IngameHUD] = []
 	var cameras: Array[FollowingCamera] = []
@@ -60,32 +60,43 @@ func setup(newRaceSettings: RaceSettings):
 	setupViewports(timeTrialManagers, huds, cameras)
 
 	var stats: Array[RaceStats] = []
-	for i in raceSettings.nrPlayers:
+	for i in raceSettings.nrLocalPlayers:
 		stats.append(RaceStats.new(map.trackId))
 
-	raceEventListener.setup(cars, timeTrialManagers, huds, cameras, stats, map, %IngameSFX, raceSettings.players, raceSettings.ranked)
+	raceEventListener.setup(
+		cars, 
+		timeTrialManagers, 
+		huds, 
+		cameras, 
+		stats, 
+		map, 
+		%IngameSFX, 
+		raceSettings.localPlayers, 
+		raceSettings.ranked,
+		raceSettings.online
+	)
 
 
 func setupCars(cars: Array[CarController]):
 	var playersNode = %Players
 	var checkpointCount = map.getCheckpointCount()
-	for i in raceSettings.nrPlayers:
-		var spawnPoint = map.start.getStartPosition(i, raceSettings.nrPlayers)
+	for i in raceSettings.nrLocalPlayers:
+		var spawnPoint = map.start.getStartPosition(i, raceSettings.nrLocalPlayers)
 		var car: CarController = Car.instantiate()
 		playersNode.add_child(car)
 
 		var inputDevices: Array[int] = []
-		if raceSettings.nrPlayers == 1:
+		if raceSettings.nrLocalPlayers == 1:
 			inputDevices.append_array([1, 2, 3, 4])
 		else:
 			inputDevices.append(i + 1)
 
-		car.setup(raceSettings.players[i], i, inputDevices, spawnPoint, checkpointCount, raceSettings.nrLaps)
+		car.setup(raceSettings.localPlayers[i], i, inputDevices, spawnPoint, checkpointCount, raceSettings.nrLaps)
 		cars.append(car)
 
 func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[IngameHUD], cameras: Array[FollowingCamera]):
 	var index = 0
-	if raceSettings.nrPlayers == 1:
+	if raceSettings.nrLocalPlayers == 1:
 		%VerticalSplitBottom.visible = false
 	for car in %Players.get_children():
 		var camera = FollowingCamera.new(car)
@@ -97,7 +108,7 @@ func setupViewports(timeTrialManagers: Array[TimeTrialManager], huds: Array[Inga
 		canvasLayer.follow_viewport_enabled = true
 
 		var hud: IngameHUD = HudScene.instantiate()
-		hud.init(car, timeTrialManagers[index], raceSettings.nrPlayers)
+		hud.init(car, timeTrialManagers[index], raceSettings.nrLocalPlayers)
 
 		huds.append(hud)
 

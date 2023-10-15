@@ -73,6 +73,8 @@ var shouldPause: bool = false
 
 var initialRespawn: bool = false
 
+@onready var carSynchronizer: CarSynchronizer = %CarSynchronizer
+var networkId: int = -1
 # ingameData
 var playerName: String = ""
 @export
@@ -116,30 +118,32 @@ signal changeCameraMode()
 
 func setup(
 		playerData: PlayerData, 
-		newPlayerIndex: int, 
+		# newPlayerIndex: int, 
 		inputDevices: Array[int],
-		startingPosition: Dictionary, 
 		checkpointCount: int, 
 		nrLaps: int
 ):
-	playerIndex = newPlayerIndex
+	# playerIndex = newPlayerIndex
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
+
+	# set_multiplayer_authority(playerData.NETWORK_ID)
 
 	state.prepareCheckpointList(checkpointCount)
 	state.nrLaps = nrLaps
 	state.placement = playerIndex + 1
 
-	setRespawnPositionFromDictionary(startingPosition)
-	respawn(true)
 	%InputHandler.setInputPlayers(inputDevices)
+
+	state.hasControl = true
 
 
 func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
 	state.reset(checkpointCount, playerIndex)
 
 	setRespawnPositionFromDictionary(startingPosition)
-	respawn(true)
+	respawn()
+	# respawn(true)
 
 var tires: Array[Tire] = []
 var bottomOuts: Array[RayCast3D] = []
@@ -158,42 +162,56 @@ func _ready():
 	bottomOuts.push_back(%BottomOutBL)
 	bottomOuts.push_back(%BottomOutBR)
 
+	networkId = name.split('_')[0].to_int()
+
+	set_multiplayer_authority(networkId)
+
+	state.hasControl = true
+
 	set_physics_process(true)
 
 func _physics_process(_delta):
-	if !paused:
-		for tire in tires:
-			calculateTirePhysics(tire, _delta)
-		for bottomOut in bottomOuts:
-			calculateBottomOutPhysics(bottomOut, _delta)
-	
-	applyDownforce(state.getGroundedTireCount())
-	
-	if state.isAirborne():
-		applyAirPitch()
-		applyAirSteering()
-		slidingFactor = 0.9
-	
-	if shouldPause && !paused:
-		pauseLinearVelocity = linear_velocity
-		pauseAngularVelocity = angular_velocity
-		linear_velocity = Vector3.ZERO
-		angular_velocity = Vector3.ZERO
+	if is_multiplayer_authority():
+		if !paused:
+			for tire in tires:
+				calculateTirePhysics(tire, _delta)
+			for bottomOut in bottomOuts:
+				calculateBottomOutPhysics(bottomOut, _delta)
+		
+		applyDownforce(state.getGroundedTireCount())
+		
+		if state.isAirborne():
+			applyAirPitch()
+			applyAirSteering()
+			slidingFactor = 0.9
+		
+		if shouldPause && !paused:
+			pauseLinearVelocity = linear_velocity
+			pauseAngularVelocity = angular_velocity
+			linear_velocity = Vector3.ZERO
+			angular_velocity = Vector3.ZERO
 
-		if initialRespawn:
-			global_position = respawnPosition
-			global_rotation = respawnRotation
-			pauseLinearVelocity = Vector3.ZERO
-			pauseAngularVelocity = Vector3.ZERO
-			respawned.emit(playerIndex)
-			initialRespawn = false
-		paused = true
-		freeze = true
-	elif !shouldPause && paused:
-		freeze = false
-		linear_velocity = pauseLinearVelocity
-		angular_velocity = pauseAngularVelocity
-		paused = false
+			if initialRespawn:
+				global_position = respawnPosition
+				global_rotation = respawnRotation
+				pauseLinearVelocity = Vector3.ZERO
+				pauseAngularVelocity = Vector3.ZERO
+				respawned.emit(playerIndex)
+				initialRespawn = false
+			paused = true
+			freeze = true
+		elif !shouldPause && paused:
+			freeze = false
+			linear_velocity = pauseLinearVelocity
+			angular_velocity = pauseAngularVelocity
+			paused = false
+		
+		carSynchronizer.linear_velocity = linear_velocity
+		carSynchronizer.angular_velocity = angular_velocity
+		carSynchronizer.global_position = global_position
+		carSynchronizer.global_rotation = global_rotation
+		carSynchronizer.respawnPosition = respawnPosition
+		carSynchronizer.respawnRotation = respawnRotation
 
 
 func _integrate_forces(physicsState):

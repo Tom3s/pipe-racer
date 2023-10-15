@@ -32,7 +32,8 @@ func setup(
 		initialMap: Map, 
 		initialIngameSFX: IngameSFX, 
 		initialPlayers: Array[PlayerData], 
-		ranked: bool
+		ranked: bool,
+		online: bool
 	):
 	cars = initialCars
 	timeTrialManagers = initialTimeTrialManagers
@@ -55,6 +56,7 @@ func setup(
 	state.setupReadyPlayersList()
 	state.setupResettingPlayersList()
 	state.ranked = ranked
+	state.online = online
 
 	connectSignals()
 
@@ -82,6 +84,8 @@ func connectSignals():
 	pauseMenu.resumePressed.connect(forceResumeGame)
 	pauseMenu.restartPressed.connect(onState_allPlayersReset)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
+
+	# get_tree().get_multiplayer().peer_connected.connect(onPeer_connected)
 
 func onCountdown_countdownFinished(timestamp: int):
 	for i in range(cars.size()):
@@ -192,7 +196,8 @@ func onState_allPlayersReset():
 	# reset state machine
 
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
-	musicPlayer.playMenuMusic()
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()
 
 	for car in cars:
 		car.resumeMovement()
@@ -217,7 +222,8 @@ func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
 
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
-	musicPlayer.playMenuMusic()
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()
 	if state.ranked:
 		var callbackSignals: Array[Signal] = []
 		for i in raceStats.size():
@@ -227,6 +233,30 @@ func onPauseMenu_exitPressed():
 			await callback
 		
 	get_parent().exitPressed.emit()
+
+# func onPeer_connected(id: int) -> void:
+# 	# cars
+# 	# players
+# 	var carScene = preload("res://CarController.tscn")
+# 	var peerCar: CarController = carScene.instantiate()
+# 	%Players.add_child(peerCar)
+
+# 	var peerPlayerData = PlayerData.new(\
+# 		id, \
+# 		Network.playerNames[id], \
+# 		Network.playerColors[id]\
+# 	)
+
+# 	state.nrPlayers += 1
+# 	state.setupReadyPlayersList()
+# 	state.setupResettingPlayersList()
+
+
+# 	var spawnPoint = map.start.getStartPosition(cars.size(), state.nrPlayers)
+
+# 	peerCar.setup(peerPlayerData, cars.size(), [1], spawnPoint, map.getCheckpointCount(), map.lapCount)
+# 	cars.append(peerCar)
+
 
 
 func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -> void:

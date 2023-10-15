@@ -95,4 +95,5 @@ func onEditorMapLoader_enteredMapEditor():
 
 func onEditorMapLoader_exitedMapEditor():
 	%Background.visible = true
-	musicPlayer.playMenuMusic()
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()

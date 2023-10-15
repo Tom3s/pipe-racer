@@ -5,6 +5,7 @@ var groundedTires: Array[bool] = [false, false, false, false]
 var collectedCheckpoints: Array[bool]
 var collectedCheckpointCount: int = 0
 
+@export
 var hasControl: bool = false
 
 var currentLap: int = -1

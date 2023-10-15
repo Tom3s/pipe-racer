@@ -20,6 +20,7 @@ Leaderboard="*res://GlobalProperties.gd"
 PrefabConstants="*res://PrefabConstants.gd"
 Backend="*res://Backend.gd"
 GlobalProperties="*res://GlobalProperties.gd"
+Network="*res://Global/Network.gd"
 
 [debug]
 
