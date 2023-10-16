@@ -101,5 +101,6 @@ func setNickname(newName: String) -> void:
 func startTimer():
 	%HUDContainer.show()
 
-func reset():
+func reset(newNrPlayers: int):
 	%HUDContainer.hide()
+	TOTAL_CARS = newNrPlayers

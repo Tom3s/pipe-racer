@@ -11,6 +11,7 @@ var localPlayerDatas: Array[PlayerData] = []
 var huds: Array[IngameHUD] = []
 var timeTrialManagers = {}
 var raceStats: Dictionary = {}
+var localCameras: Dictionary = {}
 
 # node in scene
 var map: Map:
@@ -86,10 +87,16 @@ func onRaceInputHandler_fullScreenPressed():
 
 func onCar_respawned(playerIndex: int, networkId: int):
 	# this in unneccessary i guess
-	# cameras[playerIndex].forceUpdatePosition()
-	pass
+	if networkId != Network.userId:
+		return
+	var playerIdentifer = players.get_child(playerIndex).name
+	localCameras[playerIdentifer].forceUpdatePosition()
 
 func onCar_isReady(playerIndex: int, networkId: int):
+	rpc("broadcastReady", playerIndex, networkId)
+
+@rpc("any_peer", "call_local", "reliable")
+func broadcastReady(playerIndex: int, networkId: int):
 	state.setPlayerReady(playerIndex)
 
 func onCar_finishedRace(playerIndex: int, networkId: int):
@@ -110,11 +117,16 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
 
-func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
+func onCar_isResetting(playerIndex: int, resetting: bool, networkId: int) -> void:
+	rpc("broadcastReset", playerIndex, resetting, networkId)
+
+@rpc("any_peer", "call_local", "reliable")
+func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
 	if !state.raceStarted || state.pausedBy != -1:
 		return
 	state.setPlayerReset(playerIndex, resetting)
-	leaderboardUI.visible = false
+	if networkId == Network.userId:
+		leaderboardUI.visible = false
 
 func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
 	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
@@ -219,10 +231,10 @@ func spawnPlayer(
 		map.lapCount
 	)
 
-	car.respawned.connect(onCar_respawned)
-	car.isReady.connect(onCar_isReady)
-	car.finishedRace.connect(onCar_finishedRace)
-	car.isResetting.connect(onCar_isResetting)
+	# car.respawned.connect(onCar_respawned)
+	# car.isReady.connect(onCar_isReady)
+	# car.finishedRace.connect(onCar_finishedRace)
+	# car.isResetting.connect(onCar_isResetting)
 
 	# timeTrialManagers.append(TimeTrialManager.new(%IngameSFX, map.lapCount))
 
@@ -264,6 +276,9 @@ func addLocalCamera(car: CarController) -> void:
 		verticalSplitBottom.visible = true
 	
 	var camera := FollowingCamera.new(car)
+
+	localCameras[car.name] = camera
+
 	var viewPortContainer = getNewViewportContainer()
 	var viewPort = getNewViewport()
 	var canvasLayer = CanvasLayer.new()
@@ -285,6 +300,11 @@ func addLocalCamera(car: CarController) -> void:
 	newCamerPosition.add_child(viewPortContainer)
 
 	raceStats[car.name] = RaceStats.new(map.trackId)
+
+	car.respawned.connect(onCar_respawned)
+	car.isReady.connect(onCar_isReady)
+	car.finishedRace.connect(onCar_finishedRace)
+	car.isResetting.connect(onCar_isResetting)
 
 func getNewViewportContainer() -> SubViewportContainer:
 	var viewPortContainer = SubViewportContainer.new()
@@ -314,7 +334,7 @@ func recalculate() -> void:
 		car.resumeMovement()
 		car.playerIndex = index
 		index += 1
-		car.reset(map.start.getStartPosition(car.playerIndex, players.get_child_count()), map.getCheckpointCount())
+		car.reset(map.start.getStartPosition(car.playerIndex, players.get_child_count()), map.getCheckpointCount(), map.lapCount)
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.reset()
@@ -323,7 +343,7 @@ func recalculate() -> void:
 		timeTrialManagers[timeTrialManager].reset()
 	
 	for hud in huds:
-		hud.reset()
+		hud.reset(players.get_child_count())
 	
 	state.reset(players.get_child_count())
 	# reset everything else

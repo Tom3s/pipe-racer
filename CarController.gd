@@ -138,12 +138,12 @@ func setup(
 	# state.hasControl = true
 
 
-func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
-	state.reset(checkpointCount, playerIndex)
+func reset(startingPosition: Dictionary, checkpointCount: int, newLapCount: int = 1) -> void:
+	state.reset(checkpointCount, playerIndex, newLapCount)
 
 	setRespawnPositionFromDictionary(startingPosition)
-	respawn()
-	# respawn(true)
+	# respawn()
+	respawn(true)
 
 var tires: Array[Tire] = []
 var bottomOuts: Array[RayCast3D] = []

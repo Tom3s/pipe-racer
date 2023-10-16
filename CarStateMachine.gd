@@ -78,8 +78,9 @@ func setReadyTrue():
 	isReady = true
 	get_parent().isReady.emit(get_parent().playerIndex, get_parent().networkId)
 
-func reset(checkpointCount: int, playerIndex: int):
+func reset(checkpointCount: int, playerIndex: int, newLapCount: int):
 	prepareCheckpointList(checkpointCount)
+	nrLaps = newLapCount
 	placement = playerIndex + 1
 	isReady = false
 	isResetting = false
