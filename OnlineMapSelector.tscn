@@ -1,0 +1,114 @@
+[gd_scene load_steps=3 format=3 uid="uid://e7y2w3cui1v8"]
+
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ss633"]
+[ext_resource type="Script" path="res://OnlineMapSelector.gd" id="2_6jqqd"]
+
+[node name="OnlineMapSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_ss633")
+script = ExtResource("2_6jqqd")
+metadata/_edit_use_anchors_ = true
+
+[node name="MainContent" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MainContent"]
+layout_mode = 2
+text = "Select Track"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="MainContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 1
+
+[node name="DownloadedTracks" type="ItemList" parent="MainContent/TabContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="OnlineTracks" type="ItemList" parent="MainContent/TabContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="MainContent"]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" type="Button" parent="MainContent/ButtonRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Back"
+
+[node name="SelectButton" type="Button" parent="MainContent/ButtonRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play Track"
+
+[node name="HSeparator" type="HSeparator" parent="MainContent"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="MainContent"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MainContent/VBoxContainer"]
+layout_mode = 2
+text = "Ip Address:"
+
+[node name="IpAddress" type="Label" parent="MainContent/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(hidden)"
+
+[node name="ShowIpButton" type="Button" parent="MainContent/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Show"
+
+[node name="CopyIpButton" type="Button" parent="MainContent/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Copy"
+
+[node name="ClientLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.70001
+offset_top = -11.7
+offset_right = 3.70001
+offset_bottom = 11.7
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 38
+text = "Waiting for host..."

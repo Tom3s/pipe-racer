@@ -12,6 +12,8 @@ signal exitPressed()
 
 func setup(
 	mapName: String,
+	ranked: bool = false,
+	online: bool = false,
 
 ) -> void:
 	# load map
@@ -24,37 +26,18 @@ func setup(
 
 	%GameEventListener.map = map
 
-	%GameEventListener.state.online = true
-	%GameEventListener.state.ranked = true
+	%GameEventListener.state.ranked = ranked
+	%GameEventListener.state.online = online
 
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()
 	add_child(environment)
 
-func testingHost():
-	var playerdata = PlayerData.new(
-		1,
-		GlobalProperties.PLAYER_NAME,
-		GlobalProperties.PLAYER_COLOR,
-	)
+	if !online:
+		initializePlayers()
 
-	# %GameEventListener.localPlayerDatas = [playerdata] as Array[PlayerData]
-	%GameEventListener.addPlayers([playerdata] as Array[PlayerData], 1)
-
-func testingClient():
-	var playerdata = PlayerData.new(
-		1,
-		GlobalProperties.PLAYER_NAME,
-		GlobalProperties.PLAYER_COLOR,
-	)
-
-	# %GameEventListener.localPlayerDatas = [playerdata] as Array[PlayerData]
-
-
-
-func _ready():
-	setup("user://tracks/downloaded/65072958793b0c04ae9aaee6.json")
+func initializePlayers():
 	if Network.userId == 1:
-		# for data in Network.localData:
-		%GameEventListener.addPlayers(Network.localData, Network.userId)
+		for key in Network.playerDatas:
+			%GameEventListener.addPlayers(Network.playerDatas[key], key.to_int())
 

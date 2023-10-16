@@ -293,7 +293,7 @@ func spawnPlayer(
 
 	# timeTrialManagers.append(TimeTrialManager.new(%IngameSFX, map.lapCount))
 
-	if networkId == Network.userId || Network.userId == -1:
+	if networkId == Network.userId:
 		addLocalCamera(car, getInputDevices(networkId))
 	else:
 		# addRemoteCamera(car.name)

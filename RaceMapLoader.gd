@@ -1,9 +1,9 @@
 extends Node
 class_name RaceMapLoader
 
-var raceIngame = preload("res://RaceIngame.tscn")
+var raceIngame = preload("res://GameScene.tscn")
 
-var raceNode: RaceIngame
+var raceNode: GameScene
 
 @onready var mapLoader: MapLoader = %MapLoader
 @onready var playerSelectorMenu: PlayerSelectorMenu = %PlayerSelectorMenu
@@ -32,20 +32,27 @@ func onMapLoader_backPressed():
 	playerSelectorMenu.visible = true
 
 func onMapLoader_trackSelected(trackName: String):
-	var raceSettins = RaceSettings.new(trackName, trackName.begins_with("user://tracks/downloaded"))
-	for player in players:
-		raceSettins.addPlayer(player)
+	# var raceSettins = RaceSettings.new(trackName, trackName.begins_with("user://tracks/downloaded"))
+
+	# for player in players:
+		# raceSettins.addPlayer(player)
 	
-	startRace(raceSettins)
+	# startRace(raceSettins)
+	Network.localData = players
+
+	raceNode = raceIngame.instantiate()
+	add_child(raceNode)
+	raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	raceNode.exitPressed.connect(onRace_exited)
 
 func onPlayerSelectorMenu_backPressed():
 	backPressed.emit()
 
-func startRace(settings: RaceSettings):
-	raceNode = raceIngame.instantiate()
-	add_child(raceNode)
-	raceNode.setup(settings)
-	raceNode.exitPressed.connect(onRace_exited)
+# func startRace(settings: RaceSettings):
+# 	raceNode = raceIngame.instantiate()
+# 	add_child(raceNode)
+# 	raceNode.setup(settings)
+# 	raceNode.exitPressed.connect(onRace_exited)
 
 
 func onRace_exited():

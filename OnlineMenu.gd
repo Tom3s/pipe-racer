@@ -5,9 +5,13 @@ class_name OnlineMenu
 @onready var ipAddress: LineEdit = %IpAddress
 @onready var joinButton: Button = %JoinButton
 @onready var hostButton: Button = %HostButton
+@onready var backButton: Button = %BackButton
 @onready var statusLabel: Label = %StatusLabel
 
 var selectedTrack: String = "user://tracks/downloaded/650c73d0c3b8efa6383dde32.json"
+
+signal connectionEstablished()
+signal backPressed()
 
 func _ready():
 	username.text = GlobalProperties.PLAYER_NAME
@@ -17,22 +21,16 @@ func _ready():
 func connectSignals():
 	joinButton.pressed.connect(onJoinButton_pressed)
 	hostButton.pressed.connect(onHostButton_pressed)
+	backButton.pressed.connect(onBackButton_pressed)
+
+	visibility_changed.connect(onVisibilityChanged)
 
 	get_tree().get_multiplayer().connection_failed.connect(onConnectionFailed)
-	get_tree().get_multiplayer().connected_to_server.connect(changeToIngame)
-	get_tree().get_multiplayer().server_disconnected.connect(changeToOnlineMenu)
+	# get_tree().get_multiplayer().connected_to_server.connect(changeToIngame)
+	# get_tree().get_multiplayer().server_disconnected.connect(changeToOnlineMenu)
 
 
 func onJoinButton_pressed():
-	var playerdata = PlayerData.new(
-		69,
-		"Client",
-		GlobalProperties.PLAYER_COLOR,
-		"client_token"
-	)
-
-	Network.localData = [playerdata, playerdata]
-
 	var client := ENetMultiplayerPeer.new()
 	client.create_client(ipAddress.text, Network.DEFAULT_PORT)
 	# TODO: this sets global client
@@ -46,21 +44,13 @@ func onJoinButton_pressed():
 	hostButton.disabled = true
 
 	statusLabel.text = "STATUS: Connecting to server - " + ipAddress.text
-	# Network.username = username.text
 	Network.userId = get_tree().get_multiplayer().get_unique_id()
+
+	visible = false
 
 
 func onHostButton_pressed():
-	var playerdata = PlayerData.new(
-		12,
-		"Host",
-		GlobalProperties.PLAYER_COLOR,
-		"host_token"
-	)
-
-	Network.localData = [playerdata]
-
-	Network.hostServer(Callable(self, "changeToIngame"))
+	Network.hostServer(onServerCreated)
 	statusLabel.text = "STATUS: Hosting server"
 	# Network.username = username.text
 
@@ -68,8 +58,14 @@ func onHostButton_pressed():
 
 	Network.userId = id
 	Network.playerDatas[str(id)] = Network.localData
-	# Network.playerNames[str(id)] = GlobalProperties.PLAYER_NAME
-	# Network.playerColors[str(id)] = GlobalProperties.PLAYER_COLOR
+
+func onBackButton_pressed():
+	visible = false
+	backPressed.emit()
+
+func onServerCreated():
+	visible = false
+	connectionEstablished.emit()
 
 func onConnectionFailed():
 	print("[OnlineMenu.gd] Connection failed")
@@ -78,16 +74,21 @@ func onConnectionFailed():
 	joinButton.disabled = false
 	hostButton.disabled = false
 
-var gameScene := preload("res://GameScene.tscn")
-var game: GameScene
-func changeToIngame():
-	%OnlineMenu.visible = false
-	game = gameScene.instantiate()
-	add_child(game)
-
-func changeToOnlineMenu():
-	game.queue_free()
-	%OnlineMenu.visible = true
+func onVisibilityChanged():
 	joinButton.disabled = false
 	hostButton.disabled = false
+
+
+var gameScene := preload("res://GameScene.tscn")
+var game: GameScene
+# func changeToIngame():
+# 	visible = false
+# 	game = gameScene.instantiate()
+# 	add_child(game)
+
+# func changeToOnlineMenu():
+# 	game.queue_free()
+# 	visible = true
+# 	joinButton.disabled = false
+# 	hostButton.disabled = false
 
