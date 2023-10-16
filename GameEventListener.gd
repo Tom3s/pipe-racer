@@ -10,21 +10,176 @@ var playerDatas: Array[PlayerData] = []
 var localPlayerDatas: Array[PlayerData] = []
 var huds: Array[IngameHUD] = []
 var timeTrialManagers = {}
+var raceStats: Dictionary = {}
 
 # node in scene
-var map: Map
+var map: Map:
+	set(newMap):
+		map = newMap
+		for checkpoint in map.getCheckpoints():
+			checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
+		map.start.bodyEnteredStart.connect(onStart_bodyEnteredStart)
+		leaderboardUI.setHeader(map.trackName, map.author)
+
 @onready var players: Node3D = %Players
 @onready var state: GameStateMachine = %GameStateMachine
 @onready var verticalSplitTop: HBoxContainer = %VerticalSplitTop
 @onready var verticalSplitBottom: HBoxContainer = %VerticalSplitBottom
+@onready var countdown = %UniversalCanvas/%Countdown
+@onready var raceInputHandler = %RaceInputHandler
+@onready var leaderboardUI = %LeaderboardUI
+@onready var ingameSFX = %IngameSFX
+@onready var pauseMenu = %PauseMenu
 
 func _ready():
 	verticalSplitBottom.visible = false
+	pauseMenu.visible = false
+	leaderboardUI.visible = false
 	connectSignals()
 
 func connectSignals():
-	# get_tree().get_multiplayer().peer_connected.connect(onPeerConnected)
+	countdown.countdownFinished.connect(onCountdown_countdownFinished)
+
+	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
+	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+
+	# for player in players.get_children():
+	# 	player = player as CarController
+	# 	player.respawned.connect(onCar_respawned)
+	# 	player.isReady.connect(onCar_isReady)
+	# 	player.finishedRace.connect(onCar_finishedRace)
+	# 	player.isResetting.connect(onCar_isResetting)
+	
+
+
+	state.allPlayersReady.connect(onState_allPlayersReady)
+	state.allPlayersFinished.connect(onState_allPlayersFinished)
+	state.allPlayersReset.connect(recalculate)
+
+	pauseMenu.resumePressed.connect(forceResumeGame)
+	pauseMenu.restartPressed.connect(recalculate)
+	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
+
 	Network.userListNeedsUpdate.connect(onUserListNeedsUpdate)
+
+# Singaled functions
+
+func onCountdown_countdownFinished(timestamp: int):
+	for player in players.get_children():
+		player = player as CarController
+		player.startRace()
+	
+	for hud in huds:
+		hud.startTimer()
+	
+	for key in timeTrialManagers:
+		timeTrialManagers[key].startTimeTrial(timestamp)
+
+	state.raceStarted = true
+
+func onRaceInputHandler_pausePressed(playerIndex: int):
+	# TODO: little different logic for online compatibility
+	pass
+
+func onRaceInputHandler_fullScreenPressed():
+	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+
+func onCar_respawned(playerIndex: int, networkId: int):
+	# this in unneccessary i guess
+	# cameras[playerIndex].forceUpdatePosition()
+	pass
+
+func onCar_isReady(playerIndex: int, networkId: int):
+	state.setPlayerReady(playerIndex)
+
+func onCar_finishedRace(playerIndex: int, networkId: int):
+	state.newPlayerFinished()
+	var playerIdentifier = players.get_child(playerIndex).name
+	var bestLap = timeTrialManagers[playerIdentifier].getBestLap()
+	var totalTime = timeTrialManagers[playerIdentifier].getTotalTime()
+
+
+	if networkId == Network.userId:
+		raceStats[playerIdentifier].increaseFinishes()
+		raceStats[playerIdentifier].setBestLap(bestLap)
+		raceStats[playerIdentifier].setBestTime(totalTime)
+
+		if state.ranked:
+			submitTime(timeTrialManagers[playerIdentifier].splits, bestLap, totalTime, playerIndex)
+			# TODO: broadcast info to host/other players maybe
+		print("Best Lap: ", bestLap)
+		print("Total time: ", totalTime)
+
+func onCar_isResetting(playerIndex: int, resetting: bool) -> void:
+	if !state.raceStarted || state.pausedBy != -1:
+		return
+	state.setPlayerReset(playerIndex, resetting)
+	leaderboardUI.visible = false
+
+func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
+	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
+
+	var alreadyCollected = car.state.collectCheckpoint(checkpoint.index)
+
+	if !alreadyCollected:
+		if car.networkId == Network.userId:
+			# var playerIndex = car.playerIndex
+			timeTrialManagers[car.name].collectCheckpoint(getTimestamp(), car.state.currentLap)
+			car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(car.playerIndex, players.get_child_count()))
+			checkpoint.collect()
+		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
+		ingameSFX.playCheckpointSFX()
+
+func onStart_bodyEnteredStart(car: CarController, start: Start):
+	if car.state.hasCollectedAllCheckpoints():
+		car.setRespawnPositionFromDictionary(start.getStartPosition(car.playerIndex, players.get_child_count()))
+		if car.networkId == Network.userId:
+			for checkpoint in map.getCheckpoints():
+				checkpoint.setUncollected()
+			timeTrialManagers[car.name].finishedLap()
+		# await timeTrialManagers[car.playerIndex].addedTime
+		car.state.finishLap()
+
+func onState_allPlayersReady():
+	countdown.startCountdown()
+	# state.countdownStarted = true
+	# state.countdownFinished	= false
+	for key in raceStats:
+		raceStats[key].increaseAttempts()
+
+func onState_allPlayersFinished():
+	print("All players finished")
+	if state.ranked:
+		leaderboardUI.fetchTimes(map.trackId)
+		leaderboardUI.visible = true
+
+func forceResumeGame():
+	var timestamp = floor(getTimestamp())
+	if state.raceStarted:
+		for car in players.get_children():
+			car.resumeMovement()
+			car.state.hasControl = true
+		# timeTrialManagers[i].resumeTimeTrial(timestamp)
+		for key in timeTrialManagers:
+			timeTrialManagers[key].resumeTimeTrial(timestamp)
+
+	state.pausedBy = -1
+
+func onPauseMenu_exitPressed():
+	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()
+	
+	# TODO: submit times elsewhere, to avoid waiting for exit
+	# if state.ranked:
+	# 	var callbackSignals: Array[Signal] = []
+	# 	for key in raceStats:
+	# 		callbackSignals.append(submitRaceStats(raceStats[key].getObject(), i))
+		
+	# 	for callback in callbackSignals:
+	# 		await callback
+		
+	get_parent().exitPressed.emit()
 
 func onUserListNeedsUpdate(id: int) -> void:
 	if id == -1 || Network.userId != 1:
@@ -36,6 +191,7 @@ func onUserListNeedsUpdate(id: int) -> void:
 				spawnPlayer(playerData, id) 
 
 
+# helper functions
 
 func getTimestamp():
 	return floor(Time.get_unix_time_from_system() * 1000)
@@ -62,6 +218,11 @@ func spawnPlayer(
 		map.getCheckpointCount(),
 		map.lapCount
 	)
+
+	car.respawned.connect(onCar_respawned)
+	car.isReady.connect(onCar_isReady)
+	car.finishedRace.connect(onCar_finishedRace)
+	car.isResetting.connect(onCar_isResetting)
 
 	# timeTrialManagers.append(TimeTrialManager.new(%IngameSFX, map.lapCount))
 
@@ -123,6 +284,8 @@ func addLocalCamera(car: CarController) -> void:
 
 	newCamerPosition.add_child(viewPortContainer)
 
+	raceStats[car.name] = RaceStats.new(map.trackId)
+
 func getNewViewportContainer() -> SubViewportContainer:
 	var viewPortContainer = SubViewportContainer.new()
 	viewPortContainer.stretch = true
@@ -162,8 +325,10 @@ func recalculate() -> void:
 	for hud in huds:
 		hud.reset()
 	
-	state.reset()
+	state.reset(players.get_child_count())
 	# reset everything else
 	# respawn players
 	pass
 
+func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -> void:
+	pass

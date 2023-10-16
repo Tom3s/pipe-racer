@@ -105,10 +105,10 @@ var state: CarStateMachine
 
 # SIGNALS
 
-signal respawned(playerIndex: int)
-signal finishedRace(playerIndex: int)
-signal isReady(playerIndex: int)
-signal isResetting(playerIndex: int, resetting: bool)
+signal respawned(playerIndex: int, networkId: int)
+signal finishedRace(playerIndex: int, networkId: int)
+signal isReady(playerIndex: int, networkId: int)
+signal isResetting(playerIndex: int, resetting: bool, networkId: int)
 signal changeCameraMode()
 
 
@@ -135,7 +135,7 @@ func setup(
 
 	%InputHandler.setInputPlayers(inputDevices)
 
-	state.hasControl = true
+	# state.hasControl = true
 
 
 func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
@@ -166,7 +166,7 @@ func _ready():
 
 	set_multiplayer_authority(networkId)
 
-	state.hasControl = true
+	# state.hasControl = true
 
 	set_physics_process(true)
 
@@ -196,7 +196,7 @@ func _physics_process(_delta):
 				global_rotation = respawnRotation
 				pauseLinearVelocity = Vector3.ZERO
 				pauseAngularVelocity = Vector3.ZERO
-				respawned.emit(playerIndex)
+				respawned.emit(playerIndex, networkId)
 				initialRespawn = false
 			paused = true
 			freeze = true
@@ -223,7 +223,7 @@ func _integrate_forces(physicsState):
 		if initialRespawn:
 			# initialRespawn = false
 			pauseMovement()
-		respawned.emit(playerIndex)
+		respawned.emit(playerIndex, networkId)
 
 @export
 var steeringSpeed: float = 0.05

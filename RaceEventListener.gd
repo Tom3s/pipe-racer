@@ -65,7 +65,6 @@ func connectSignals():
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
 	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
-	# raceInputHandler.resetRacePressed.connect(onRaceInputHandler_resetRacePressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)

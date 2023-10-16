@@ -50,7 +50,7 @@ func testingClient():
 
 
 func _ready():
-	setup("user://tracks/downloaded/64fb19f35e616ef56517dfd0.json")
+	setup("user://tracks/downloaded/65072958793b0c04ae9aaee6.json")
 	if Network.userId == 1:
 		# for data in Network.localData:
 		%GameEventListener.addPlayers(Network.localData, Network.userId)
