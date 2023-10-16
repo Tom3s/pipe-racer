@@ -49,7 +49,7 @@ func connectSignals():
 	state.allPlayersReset.connect(recalculate)
 
 	pauseMenu.resumePressed.connect(forceResumeGame)
-	pauseMenu.restartPressed.connect(recalculate)
+	pauseMenu.restartPressed.connect(onPauseMenu_restartPressed)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
 
 	Network.userListNeedsUpdate.connect(onUserListNeedsUpdate)
@@ -70,8 +70,43 @@ func onCountdown_countdownFinished(timestamp: int):
 	state.raceStarted = true
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
-	# TODO: little different logic for online compatibility
-	pass
+	if state.online:
+		if state.pausedBy == playerIndex:
+			for player in players.get_children():
+				player = player as CarController
+				if player.networkId == Network.userId:
+					player.state.hasControl = true
+			state.pausedBy = -1
+			pauseMenu.visible = false
+		elif state.pauseBy == -1 && state.raceStarted:
+			for player in players.get_children():
+				player = player as CarController
+				if player.networkId == Network.userId:
+					player.state.hasControl = false
+			state.pausedBy = playerIndex
+			pauseMenu.visible = true
+			leaderboardUI.visible = false
+	else:
+		if state.pausedBy == playerIndex:
+			var timestamp = floor(getTimestamp())
+			if state.raceStarted:
+				for player in players.get_children():
+					player = player as CarController
+					player.resumeMovement()
+					timeTrialManagers[player.name].resumeTimeTrial(timestamp)
+					player.state.hasControl = true
+			state.pausedBy = -1
+			pauseMenu.visible = false
+		elif state.pausedBy == -1 && state.raceStarted:
+			var timestamp = floor(getTimestamp())
+			for player in players.get_children():
+				player = player as CarController
+				player.pauseMovement()
+				timeTrialManagers[player.name].pauseTimeTrial(timestamp)
+				player.state.hasControl = false
+			state.pausedBy = playerIndex
+			pauseMenu.visible = true
+			leaderboardUI.visible = false
 
 func onRaceInputHandler_fullScreenPressed():
 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
@@ -92,7 +127,8 @@ func broadcastReady(playerIndex: int, networkId: int):
 
 func onCar_finishedRace(playerIndex: int, networkId: int):
 	state.newPlayerFinished()
-	var playerIdentifier = players.get_child(playerIndex).name
+	var car: CarController = players.get_child(playerIndex)
+	var playerIdentifier = car.name
 	var bestLap = timeTrialManagers[playerIdentifier].getBestLap()
 	var totalTime = timeTrialManagers[playerIdentifier].getTotalTime()
 
@@ -102,6 +138,8 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		raceStats[playerIdentifier].setBestLap(bestLap)
 		raceStats[playerIdentifier].setBestTime(totalTime)
 
+		var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
+
 		if state.ranked:
 			# submitTime(timeTrialManagers[playerIdentifier].splits, bestLap, totalTime, playerIndex)
 			Leaderboard.submitTime(
@@ -109,7 +147,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 				bestLap,
 				totalTime,
 				map.trackId,
-				playerDatas[playerIndex].SESSION_TOKEN,
+				sessionToken, # FIX
 				onSubmitRun_requestCompleted
 			)
 			# TODO: broadcast info to host/other players maybe
@@ -176,6 +214,15 @@ func forceResumeGame():
 
 	state.pausedBy = -1
 
+func onPauseMenu_restartPressed():
+	if state.online:
+		for player in players.get_children():
+			player = player as CarController
+			if player.networkId == Network.userId:
+				onCar_isResetting(player.playerIndex, true, Network.userId)
+	else:
+		recalculate()
+
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	if musicPlayer != null:
@@ -183,17 +230,13 @@ func onPauseMenu_exitPressed():
 	
 	# TODO: submit times elsewhere, to avoid waiting for exit
 	if state.ranked:
-		# var callbackSignals: Array[Signal] = []
-		# for key in raceStats:
-		# 	callbackSignals.append(submitRaceStats(raceStats[key].getObject(), i))
-		
-		# for callback in callbackSignals:
-		# 	await callback
 		for key in raceStats:
 			var car := players.get_node(key)
+			var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
+
 			Leaderboard.submitRaceStats(
 				raceStats[key].getObject(),
-				playerDatas[car.playerIndex].SESSION_TOKEN
+				sessionToken # FIX
 			)
 		
 	get_parent().exitPressed.emit()
@@ -231,7 +274,7 @@ func spawnPlayer(
 	car.setup(
 		data,
 		# playerDatas.size(), # player's index
-		getInputDevices(networkId), # TODO: add local input devices
+		# getInputDevices(networkId), # TODO: add local input devices
 		map.getCheckpointCount(),
 		map.lapCount
 	)
@@ -244,10 +287,10 @@ func spawnPlayer(
 	# timeTrialManagers.append(TimeTrialManager.new(%IngameSFX, map.lapCount))
 
 	if networkId == Network.userId || Network.userId == -1:
-		addLocalCamera(car)
+		addLocalCamera(car, getInputDevices(networkId))
 	else:
 		# addRemoteCamera(car.name)
-		rpc_id(networkId, "addRemoteCamera", car.name)
+		rpc_id(networkId, "addRemoteCamera", car.name, getInputDevices(networkId))
 
 	playerDatas.append(data)
 
@@ -255,23 +298,24 @@ func spawnPlayer(
 	rpc("recalculate")
 
 func getInputDevices(networkId: int) -> Array[int]:
-	# var inputDevices: Array[int] = []
+	# var inputDevices: Array = []
 	var localPlayerCount = 0
 	for player in players.get_children():
 		player = player as CarController
 		if player.networkId == networkId:
 			localPlayerCount += 1
-	
+	if localPlayerCount == 1:
+		return [1, 2]
 	return [localPlayerCount]
 	
 @rpc("authority", "call_remote", "reliable")
-func addRemoteCamera(nodeName: String):
+func addRemoteCamera(nodeName: String, inputDevices: Array):
 	for player in players.get_children():
 		if player.name == nodeName:
-			addLocalCamera(player)
+			addLocalCamera(player,inputDevices)
 			return
 
-func addLocalCamera(car: CarController) -> void:
+func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	var newCamerPosition: HBoxContainer = \
 		verticalSplitTop \
 		if verticalSplitTop.get_child_count() <= verticalSplitBottom.get_child_count() \
@@ -305,6 +349,10 @@ func addLocalCamera(car: CarController) -> void:
 	newCamerPosition.add_child(viewPortContainer)
 
 	raceStats[car.name] = RaceStats.new(map.trackId)
+
+	var typedArray: Array[int] 
+	typedArray.assign(inputDevices)
+	car.inputHandler.setInputPlayers(typedArray)
 
 	car.respawned.connect(onCar_respawned)
 	car.isReady.connect(onCar_isReady)
@@ -351,6 +399,8 @@ func recalculate() -> void:
 		hud.reset(players.get_child_count())
 	
 	state.reset(players.get_child_count())
+
+	raceInputHandler.setup(localCameras.size())
 	# reset everything else
 	# respawn players
 	pass

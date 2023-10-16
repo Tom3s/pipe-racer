@@ -26,7 +26,7 @@ func onConnectedToServer():
 	var id = get_tree().get_multiplayer().get_unique_id()
 	var jsonData = []
 	for data in localData:
-		jsonData.append(data.toJson())
+		jsonData.append(data.toJson(true))
 	var clientData = [str(id), JSON.stringify(jsonData)]
 	rpc_id(1, "setUserData", clientData)
 	# changeToIngameScene()
@@ -44,9 +44,12 @@ func setUserData(jsonData):
 
 	var updatedJsonList = {}
 	for playerData in playerDatas:
+		# if playerData == str(userId):
+		# 	updatedJsonList[playerData] = localData
+		# 	continue
 		var jsonList = []
 		for singleData in playerDatas[playerData]:
-			jsonList.append(singleData.toJson())
+			jsonList.append(singleData.toJson(true))
 		updatedJsonList[playerData] = jsonList
 	rpc("updateUserList", updatedJsonList)
 
@@ -56,6 +59,9 @@ func updateUserList(updatedUserList):
 	# var jsonList = JSON.parse_string(updatedUserList)
 	var newUserList = {}
 	for playerData in updatedUserList:
+		if playerData == str(userId):
+			newUserList[playerData] = localData
+			continue
 		var decodedData: Array[PlayerData] = []
 		for singleData in updatedUserList[playerData]:
 			decodedData.append(PlayerData.fromJson(singleData))

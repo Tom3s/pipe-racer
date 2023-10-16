@@ -114,18 +114,19 @@ signal changeCameraMode()
 
 
 
-
+var sessionToken: String = ""
 
 func setup(
 		playerData: PlayerData, 
 		# newPlayerIndex: int, 
-		inputDevices: Array[int],
+		# inputDevices: Array[int],
 		checkpointCount: int, 
 		nrLaps: int
 ):
 	# playerIndex = newPlayerIndex
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
+	sessionToken = playerData.SESSION_TOKEN
 
 	# set_multiplayer_authority(playerData.NETWORK_ID)
 
@@ -133,7 +134,7 @@ func setup(
 	state.nrLaps = nrLaps
 	state.placement = playerIndex + 1
 
-	%InputHandler.setInputPlayers(inputDevices)
+	# %InputHandler.setInputPlayers(inputDevices)
 
 	# state.hasControl = true
 
@@ -534,9 +535,13 @@ func resetInputs():
 	steeringInput = 0.0
 	driftInput = 0.0
 
+func getLocalIndex():
+	return inputHandler.allowedPrefixes[0][1].to_int() - 1
+
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
 	var text = "Sliding Factor: "
 	text += str(slidingFactor)
 	return text
+

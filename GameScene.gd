@@ -24,6 +24,9 @@ func setup(
 
 	%GameEventListener.map = map
 
+	%GameEventListener.state.online = true
+	%GameEventListener.state.ranked = true
+
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()
 	add_child(environment)

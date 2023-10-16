@@ -9,6 +9,7 @@ signal resetRacePressed()
 var playerPrefixes = []
 
 func setup(nrPlayers: int):
+	playerPrefixes.clear()
 	for i in range(nrPlayers):
 		playerPrefixes.append("p" + str(i + 1) + "_")
 

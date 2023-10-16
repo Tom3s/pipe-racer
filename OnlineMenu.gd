@@ -28,9 +28,10 @@ func onJoinButton_pressed():
 		69,
 		"Client",
 		GlobalProperties.PLAYER_COLOR,
+		"client_token"
 	)
 
-	Network.localData = [playerdata]
+	Network.localData = [playerdata, playerdata]
 
 	var client := ENetMultiplayerPeer.new()
 	client.create_client(ipAddress.text, Network.DEFAULT_PORT)
@@ -54,6 +55,7 @@ func onHostButton_pressed():
 		12,
 		"Host",
 		GlobalProperties.PLAYER_COLOR,
+		"host_token"
 	)
 
 	Network.localData = [playerdata]

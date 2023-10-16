@@ -22,12 +22,12 @@ func _init(playerId, playerName, playerColor, sessionToken = ""):
 	# NETWORK_ID = networkId
 	SESSION_TOKEN = sessionToken
 
-func toJson() -> String:
+func toJson(safe: bool = false) -> String:
 	var data = {
 		"playerId": PLAYER_ID,
 		"playerName": PLAYER_NAME,
 		"playerColor": PLAYER_COLOR.to_html(),
-		"sessionToken": SESSION_TOKEN
+		"sessionToken": "" if safe else SESSION_TOKEN
 	}
 	return JSON.stringify(data)
 
