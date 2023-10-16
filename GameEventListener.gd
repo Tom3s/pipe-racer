@@ -78,11 +78,12 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 					player.state.hasControl = true
 			state.pausedBy = -1
 			pauseMenu.visible = false
-		elif state.pauseBy == -1 && state.raceStarted:
+		elif state.pausedBy == -1 && state.raceStarted:
 			for player in players.get_children():
 				player = player as CarController
 				if player.networkId == Network.userId:
 					player.state.hasControl = false
+					player.resetInputs()
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
 			leaderboardUI.visible = false
@@ -159,7 +160,7 @@ func onCar_isResetting(playerIndex: int, resetting: bool, networkId: int) -> voi
 
 @rpc("any_peer", "call_local", "reliable")
 func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
-	if !state.raceStarted || state.pausedBy != -1:
+	if !state.raceStarted || (state.pausedBy != -1 && !state.online):
 		return
 	state.setPlayerReset(playerIndex, resetting)
 	if networkId == Network.userId:
@@ -203,25 +204,31 @@ func onState_allPlayersFinished():
 		leaderboardUI.visible = true
 
 func forceResumeGame():
+	state.pausedBy = -1
+	
 	var timestamp = floor(getTimestamp())
 	if state.raceStarted:
 		for car in players.get_children():
 			car.resumeMovement()
 			car.state.hasControl = true
 		# timeTrialManagers[i].resumeTimeTrial(timestamp)
-		for key in timeTrialManagers:
-			timeTrialManagers[key].resumeTimeTrial(timestamp)
+		if !state.online:
+			for key in timeTrialManagers:
+				timeTrialManagers[key].resumeTimeTrial(timestamp)
 
-	state.pausedBy = -1
 
 func onPauseMenu_restartPressed():
 	if state.online:
 		for player in players.get_children():
 			player = player as CarController
 			if player.networkId == Network.userId:
-				onCar_isResetting(player.playerIndex, true, Network.userId)
+				player.state.setResetting()
+				player.state.hasControl = true
+				# onCar_isResetting(player.playerIndex, true, Network.userId)
 	else:
 		recalculate()
+	
+	state.pausedBy = -1
 
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")

@@ -12,18 +12,6 @@
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_4deyh")
 
-[node name="UniversalCanvas" parent="." instance=ExtResource("2_m124p")]
-unique_name_in_owner = true
-
-[node name="LeaderboardUI" parent="UniversalCanvas" instance=ExtResource("3_6e8rj")]
-unique_name_in_owner = true
-visible = false
-mouse_filter = 2
-
-[node name="PauseMenu" parent="UniversalCanvas" instance=ExtResource("4_ose2u")]
-unique_name_in_owner = true
-visible = false
-
 [node name="HorizontalSplit" type="VBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,6 +34,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
+
+[node name="UniversalCanvas" parent="." instance=ExtResource("2_m124p")]
+unique_name_in_owner = true
+
+[node name="LeaderboardUI" parent="UniversalCanvas" instance=ExtResource("3_6e8rj")]
+unique_name_in_owner = true
+visible = false
+
+[node name="PauseMenu" parent="UniversalCanvas" instance=ExtResource("4_ose2u")]
+unique_name_in_owner = true
+visible = false
 
 [node name="RaceInputHandler" type="Node3D" parent="."]
 unique_name_in_owner = true

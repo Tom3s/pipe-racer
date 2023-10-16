@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://s8bipelmf0t6"]
+[gd_scene load_steps=3 format=3 uid="uid://s8bipelmf0t6"]
 
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_0cgdm"]
 [ext_resource type="Script" path="res://OnlineMenu.gd" id="1_ttbc7"]
 
 [node name="Node" type="Node"]
@@ -15,6 +16,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_0cgdm")
 script = ExtResource("1_ttbc7")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/OnlineMenu"]
