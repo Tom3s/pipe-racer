@@ -44,15 +44,6 @@ func connectSignals():
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
 	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
-	# for player in players.get_children():
-	# 	player = player as CarController
-	# 	player.respawned.connect(onCar_respawned)
-	# 	player.isReady.connect(onCar_isReady)
-	# 	player.finishedRace.connect(onCar_finishedRace)
-	# 	player.isResetting.connect(onCar_isResetting)
-	
-
-
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
 	state.allPlayersReset.connect(recalculate)
@@ -112,7 +103,15 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		raceStats[playerIdentifier].setBestTime(totalTime)
 
 		if state.ranked:
-			submitTime(timeTrialManagers[playerIdentifier].splits, bestLap, totalTime, playerIndex)
+			# submitTime(timeTrialManagers[playerIdentifier].splits, bestLap, totalTime, playerIndex)
+			Leaderboard.submitTime(
+				timeTrialManagers[playerIdentifier].splits,
+				bestLap,
+				totalTime,
+				map.trackId,
+				playerDatas[playerIndex].SESSION_TOKEN,
+				onSubmitRun_requestCompleted
+			)
 			# TODO: broadcast info to host/other players maybe
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
@@ -183,13 +182,19 @@ func onPauseMenu_exitPressed():
 		musicPlayer.playMenuMusic()
 	
 	# TODO: submit times elsewhere, to avoid waiting for exit
-	# if state.ranked:
-	# 	var callbackSignals: Array[Signal] = []
-	# 	for key in raceStats:
-	# 		callbackSignals.append(submitRaceStats(raceStats[key].getObject(), i))
+	if state.ranked:
+		# var callbackSignals: Array[Signal] = []
+		# for key in raceStats:
+		# 	callbackSignals.append(submitRaceStats(raceStats[key].getObject(), i))
 		
-	# 	for callback in callbackSignals:
-	# 		await callback
+		# for callback in callbackSignals:
+		# 	await callback
+		for key in raceStats:
+			var car := players.get_node(key)
+			Leaderboard.submitRaceStats(
+				raceStats[key].getObject(),
+				playerDatas[car.playerIndex].SESSION_TOKEN
+			)
 		
 	get_parent().exitPressed.emit()
 
@@ -350,5 +355,7 @@ func recalculate() -> void:
 	# respawn players
 	pass
 
-func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -> void:
-	pass
+func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+	print(body.get_string_from_utf8())
+	leaderboardUI.fetchTimes(map.trackId)
+	return
