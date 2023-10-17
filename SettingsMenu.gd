@@ -8,7 +8,10 @@ class_name SettingsMenu
 @onready var fullscreenButton: Button = %FullscreenButton
 @onready var renderQuality: OptionButton = %RenderQuality
 @onready var fixPedalInput: CheckBox = %FixPedalInput
-@onready var preciseInput: CheckBox = %PreciseInput
+@onready var deadzoneSlider: HSlider = %DeadzoneSlider
+@onready var deadzoneSpinbox: SpinBox = %DeadzoneSpinbox
+@onready var smoothSteeringSlider: HSlider = %SmoothSteeringSlider
+@onready var smoothSteeringSpinbox: SpinBox = %SmoothSteeringSpinbox
 
 var renderQualities = [
 	['Tometo (x0.25)', 0.25],
@@ -36,7 +39,11 @@ func _ready():
 
 	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
 
-	preciseInput.toggled.connect(onPreciseInput_toggled)
+	# preciseInput.toggled.connect(onPreciseInput_toggled)
+	deadzoneSlider.value_changed.connect(deadzoneSlider_valueChanged)
+	deadzoneSpinbox.value_changed.connect(deadzoneSpinbox_valueChanged)
+	smoothSteeringSlider.value_changed.connect(smoothSteeringSlider_valueChanged)
+	smoothSteeringSpinbox.value_changed.connect(smoothSteeringSpinbox_valueChanged)
 
 	closeButton.button_up.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
@@ -49,7 +56,12 @@ func _ready():
 
 	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
 
-	preciseInput.button_pressed = GlobalProperties.PRECISE_INPUT
+	deadzoneSlider.value = GlobalProperties.DEADZONE
+	deadzoneSpinbox.value = GlobalProperties.DEADZONE
+	smoothSteeringSlider.value = GlobalProperties.SMOOTH_STEERING
+	smoothSteeringSpinbox.value = GlobalProperties.SMOOTH_STEERING
+
+	# preciseInput.button_pressed = GlobalProperties.PRECISE_INPUT
 
 func onMasterVolumeSlider_valueChanged(value: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), remapVolume(value))
@@ -108,11 +120,37 @@ func onFixPedalInput_toggled(fix: bool):
 
 	GlobalProperties.FIX_PEDAL_INPUT = fix
 
-func onPreciseInput_toggled(preciseInput: bool):
-	InputMap.action_set_deadzone("p1_turn_left", 0.0 if preciseInput else 0.1)
-	InputMap.action_set_deadzone("p1_turn_right", 0.0 if preciseInput else 0.1)
+# func onPreciseInput_toggled(preciseInput: bool):
+# 	InputMap.action_set_deadzone("p1_turn_left", 0.0 if preciseInput else 0.1)
+# 	InputMap.action_set_deadzone("p1_turn_right", 0.0 if preciseInput else 0.1)
 
-	GlobalProperties.PRECISE_INPUT = preciseInput
+# 	GlobalProperties.PRECISE_INPUT = preciseInput
+
+func deadzoneSlider_valueChanged(value: float):
+	deadzoneSpinbox.value = value
+	changeDeadzone(value)
+
+func deadzoneSpinbox_valueChanged(value: float):
+	deadzoneSlider.value = value
+	changeDeadzone(value)
+
+func changeDeadzone(value):
+	for i in 4:
+		InputMap.action_set_deadzone("p" + str(i + 1) + "_turn_left", value)
+		InputMap.action_set_deadzone("p" + str(i + 1) + "_turn_right", value)
+	GlobalProperties.DEADZONE = value
+
+func smoothSteeringSlider_valueChanged(value: float):
+	smoothSteeringSpinbox.value = value
+	changeSmoothSteering(value)
+
+func smoothSteeringSpinbox_valueChanged(value: float):
+	smoothSteeringSlider.value = value
+	changeSmoothSteering(value)
+
+func changeSmoothSteering(value):
+	GlobalProperties.SMOOTH_STEERING = value
+
 
 func onCloseButton_pressed():
 	closePressed.emit()

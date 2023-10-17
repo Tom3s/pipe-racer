@@ -24,10 +24,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -199.0
-offset_top = -113.0
-offset_right = 199.0
-offset_bottom = 113.0
+offset_left = -213.0
+offset_top = -147.0
+offset_right = 213.0
+offset_bottom = 147.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -60,13 +60,14 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer/Master"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Master Volume"
 
 [node name="MasterVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/Master"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
 size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../../../CloseButton")
 focus_neighbor_bottom = NodePath("../../Music/MusicVolumeSlider")
@@ -144,12 +145,60 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Precise Input"
+text = "Deadzone"
 
-[node name="PreciseInput" type="CheckBox" parent="Panel/VBoxContainer/HBoxContainer3"]
+[node name="DeadzoneSlider" type="HSlider" parent="Panel/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+max_value = 0.5
+step = 0.01
+value = 0.1
+
+[node name="DeadzoneSpinbox" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+max_value = 0.5
+step = 0.01
+value = 0.1
+custom_arrow_step = 0.05
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Will make the front wheels turn smoothly.
+Recommended value for Keyboard: 0.75
+For Gamepad, lower values (0.0-0.2) correspond to a more precise experience 
+"
+mouse_filter = 1
+text = "Smooth Steering"
+
+[node name="SmoothSteeringSlider" type="HSlider" parent="Panel/VBoxContainer/HBoxContainer4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+tooltip_text = "Will make the front wheels turn smoothly.
+Recommended value for Keyboard: 0.75
+For Gamepad, lower values (0.0-0.2) correspond to a more precise experience 
+"
+max_value = 1.0
+step = 0.01
+value = 0.1
+
+[node name="SmoothSteeringSpinbox" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Will make the front wheels turn smoothly.
+Recommended value for Keyboard: 0.75
+For Gamepad, lower values (0.0-0.2) correspond to a more precise experience 
+"
+max_value = 1.0
+step = 0.01
+value = 0.1
+custom_arrow_step = 0.05
 
 [node name="CloseButton" type="Button" parent="."]
 unique_name_in_owner = true
@@ -161,9 +210,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -50.0
-offset_top = 127.0
+offset_top = 157.0
 offset_right = 50.0
-offset_bottom = 159.0
+offset_bottom = 189.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
