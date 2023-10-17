@@ -183,7 +183,10 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
 		ingameSFX.playCheckpointSFX()
 		# var placementDict = car.getPositionDict()
-		rpc_id(1, "broadcastPlacement", car.name, car.state.placement)
+		if Network.userId == 1:
+			broadcastPlacement(car.name, car.state.placement)
+		else:
+			rpc_id(1, "broadcastPlacement", car.name, car.state.placement)
 
 @rpc("any_peer", "call_remote", "reliable")
 func broadcastPlacement(carName: String, placement: int):
