@@ -135,8 +135,9 @@ func deadzoneSpinbox_valueChanged(value: float):
 	changeDeadzone(value)
 
 func changeDeadzone(value):
-	InputMap.action_set_deadzone("p1_turn_left", value)
-	InputMap.action_set_deadzone("p1_turn_right", value)
+	for i in 4:
+		InputMap.action_set_deadzone("p" + str(i + 1) + "_turn_left", value)
+		InputMap.action_set_deadzone("p" + str(i + 1) + "_turn_right", value)
 	GlobalProperties.DEADZONE = value
 
 func smoothSteeringSlider_valueChanged(value: float):
