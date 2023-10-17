@@ -440,6 +440,10 @@ func recalculate() -> void:
 		car.playerIndex = index
 		index += 1
 		car.reset(map.start.getStartPosition(car.playerIndex, players.get_child_count()), map.getCheckpointCount(), map.lapCount)
+		# Network.localData[car.getLocalIndex()].SESSION_TOKEN
+		if Network.userId == car.networkId:
+			car.playerName = Network.localData[car.getLocalIndex()].PLAYER_NAME
+			car.frameColor = Network.localData[car.getLocalIndex()].PLAYER_COLOR
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.reset()

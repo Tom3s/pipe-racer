@@ -112,6 +112,9 @@ properties/20/sync = true
 properties/21/path = NodePath("..:playerName")
 properties/21/spawn = true
 properties/21/sync = true
+properties/22/path = NodePath("..:frameColor")
+properties/22/spawn = true
+properties/22/sync = true
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2

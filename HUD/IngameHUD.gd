@@ -56,6 +56,8 @@ func _physics_process(_delta: float) -> void:
 	# setReadyIndicator(car.incorrectCheckPoint) 
 	setReadyIndicator(!car.state.isReady)
 	setResetIndicator(car.state.isResetting)
+	setNickname(car.playerName)
+
 
 
 func setSpeedText(speed: float) -> void:
