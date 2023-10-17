@@ -125,7 +125,7 @@ func connectSignals():
 	trackMetadataUI.trackNameChanged.connect(onTrackMetadataUI_trackNameChanged)
 	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
 	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
-	trackMetadataUI.applyPressed.connect(onTrackMetadataUI_closePressed)
+	trackMetadataUI.applyPressed.connect(onTrackMetadataUI_applyPressed)
 
 	pauseMenu.resumePressed.connect(onEditorInputHandler_pausePressed)
 	pauseMenu.exitPressed.connect(onEditorExited)
@@ -397,11 +397,18 @@ func onTrackMetadataUI_closePressed():
 	# trackMetadataUI.visible = false
 	editorInputHandler.propertiesOpen = false
 
+func onTrackMetadataUI_applyPressed(newName: String, newCount: int):
+	map.trackName = newName
+	map.lapCount = newCount
+	map.save()
+
 func onTrackMetadataUI_trackNameChanged(newName: String):
 	map.trackName = newName
+	map.save()
 
 func onTrackMetadataUI_lapCountChanged(newCount: int):
 	map.lapCount = newCount
+	map.save()
 
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
@@ -501,9 +508,10 @@ func onEditorInputHandler_testPressed():
 	editorStats.increaseNrTests()
 	hideUI()
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
+	camera.inputEnabled = false
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 
-func onCar_pausePressed(_sink = null, _sink2 = null):
+func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	if !editorStateMachine.inPlaytestState():
 		return
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_BUILD
@@ -515,8 +523,10 @@ func onCar_pausePressed(_sink = null, _sink2 = null):
 	car.visible = false
 	carCamera.current = false
 	camera.current = true
+	camera.inputEnabled = true
 	oldSoundVolume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
+
 
 func onCamera_mouseCaptureExited():
 	# if editorStateMachine.canMovePreview():

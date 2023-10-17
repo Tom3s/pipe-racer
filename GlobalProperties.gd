@@ -102,6 +102,8 @@ const SAVE_FILE := "user://player.json"
 
 func _ready() -> void:
 	loadFromFile()
+	playerSelectorNode = playerSelectorMenu.instantiate()
+	add_child(playerSelectorNode)
 
 func onPlayerNameChanged(newName: String) -> String:
 	# saveToFile()
@@ -162,3 +164,41 @@ func loadFromFile() -> void:
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		saveToFile()
+
+var settingsMenuNode: Node
+var settingsMenuOwner: Node
+var settingsMenuClosePressed: Callable
+func setOriginalSettingsMenu(parent: Node, menu: Node, closePressed: Callable):
+	settingsMenuNode = menu
+	settingsMenuOwner = parent
+	settingsMenuClosePressed = closePressed
+
+func borrowSettingsMenu(newOwner: Node, closePressed: Callable) -> Node:
+	settingsMenuNode.reparent(newOwner)
+	settingsMenuNode.closePressed.disconnect(settingsMenuClosePressed)
+	settingsMenuNode.closePressed.connect(closePressed)
+	return settingsMenuNode
+
+func returnSettingsMenu(closePressed: Callable) -> void:
+	settingsMenuNode.closePressed.disconnect(closePressed)
+	settingsMenuNode.closePressed.connect(settingsMenuClosePressed)
+	settingsMenuNode.reparent(settingsMenuOwner)
+
+
+var playerSelectorMenu = preload("res://PlayerSelectorMenu.tscn")
+
+var playerSelectorNode: Node 
+# var playerSelectorOwner: Node
+func borrowPlayerSelectorMenu(newOwner: Node, backPressed: Callable, nextPressed: Callable) -> Node:
+	playerSelectorNode.reparent(newOwner)
+	# newOwner.add_child(playerSelectorNode)
+	playerSelectorNode.backPressed.connect(backPressed)
+	playerSelectorNode.nextPressed.connect(nextPressed)
+	return playerSelectorNode
+
+func returnPlayerSelectorMenu(backPressed: Callable, nextPressed: Callable) -> void:
+	playerSelectorNode.backPressed.disconnect(backPressed)
+	playerSelectorNode.nextPressed.disconnect(nextPressed)
+	# if playerSelectorNode.get_parent() != null:
+	# 	playerSelectorNode.get_parent().remove_child(playerSelectorNode)
+	playerSelectorNode.reparent(self)

@@ -24,38 +24,39 @@ var respawnInput = false
 var pausedState = false
 
 func _physics_process(_delta):
-	if allowedPrefixes.size() == 1:
-		handleSingleInput(allowedPrefixes[0])
-	else:
-		handleMultiInput()
+	if car.is_multiplayer_authority():
+		# if allowedPrefixes.size() == 1:
+		# 	handleSingleInput(allowedPrefixes[0])
+		# else:
+			handleMultiInput()
 
-func handleSingleInput(playerPrefix):
-	if Input.is_action_just_pressed(playerPrefix + "ready"):
-		car.state.setReadyTrue()
-	if Input.is_action_just_pressed(playerPrefix + "reset"):
-		car.state.setResetting()
-	if Input.is_action_just_pressed(playerPrefix + "change_camera_mode"):
-		car.changeCameraMode.emit()
+# func handleSingleInput(playerPrefix):
+# 	if Input.is_action_just_pressed(playerPrefix + "ready"):
+# 		car.state.setReadyTrue()
+# 	if Input.is_action_just_pressed(playerPrefix + "reset"):
+# 		car.state.setResetting()
+# 	if Input.is_action_just_pressed(playerPrefix + "change_camera_mode"):
+# 		car.changeCameraMode.emit()
 
-	if !car.state.hasControl:
-		tires[0].targetRotation = 0
-		tires[1].targetRotation = 0
-		return
-	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")
-	car.driftInput = Input.get_action_strength(playerPrefix + "drift")
-	car.steeringInput = steerInput
-	for tire in tires:
-		var targetRotation = steerInput * car.getSteeringFactor()
-		tire.targetRotation = targetRotation
+# 	if !car.state.hasControl:
+# 		tires[0].targetRotation = 0
+# 		tires[1].targetRotation = 0
+# 		return
+# 	steerInput = Input.get_axis(playerPrefix + "turn_right", playerPrefix + "turn_left")
+# 	car.driftInput = Input.get_action_strength(playerPrefix + "drift")
+# 	car.steeringInput = steerInput
+# 	for tire in tires:
+# 		var targetRotation = steerInput * car.getSteeringFactor()
+# 		tire.targetRotation = targetRotation
 	
-	if !GlobalProperties.FIX_PEDAL_INPUT || playerPrefix != "p1_":
-		car.accelerationInput = -Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
-	# else:
-	# 	car.accelerationInput = remap(Input.get_action_strength(playerPrefix + "accelerate"), 1, -1, 1, 0) \
-	# 		- remap(Input.get_action_strength(playerPrefix + "break"), 1, -1, 1, 0)  
+# 	if !GlobalProperties.FIX_PEDAL_INPUT || playerPrefix != "p1_":
+# 		car.accelerationInput = -Input.get_axis(playerPrefix + "accelerate", playerPrefix + "break")
+# 	# else:
+# 	# 	car.accelerationInput = remap(Input.get_action_strength(playerPrefix + "accelerate"), 1, -1, 1, 0) \
+# 	# 		- remap(Input.get_action_strength(playerPrefix + "break"), 1, -1, 1, 0)  
 
-	if Input.is_action_just_pressed(playerPrefix + "respawn") && car.state.hasControl:
-		car.respawn()
+# 	if Input.is_action_just_pressed(playerPrefix + "respawn") && car.state.hasControl:
+# 		car.respawn()
 
 var multiReady = false
 var multiReset = false

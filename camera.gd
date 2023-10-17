@@ -10,12 +10,12 @@ class_name FollowingCameraScene
 
 var car = null
 
-@export
-var playerIndex = 1
 
-func _init(carReference, initialPlayerIndex = 1):
-	playerIndex = initialPlayerIndex
+
+func _init(carReference, _initialPlayerIndex = 1):
 	car = carReference
+	car.playerIndexChanged.connect(changeCullMask)
+	changeCullMask(car.playerIndex)
 
 func _ready():
 	set_physics_process(true)
@@ -46,3 +46,7 @@ func _physics_process(delta):
 		# var targetRotation = fromSelfToCar.orthonormalized()
 
 		# rotation = lerp(rotation, fromSelfToCar, 10 * delta)
+
+func changeCullMask(playerIndex: int):
+	cull_mask = 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128
+	cull_mask -= 2 ** (playerIndex + 1)

@@ -70,8 +70,10 @@ func reset():
 	text = ""
 
 func onCountdownFinished():
-	musicPlayer.playIngameMusic()
-	ingameSFX.playStartRaceSFX()
+	if musicPlayer != null:
+		musicPlayer.playIngameMusic()
+	if ingameSFX != null:
+		ingameSFX.playStartRaceSFX()
 	countdownFinished.emit(floor(Time.get_unix_time_from_system() * 1000))
 
 func startCountdown():

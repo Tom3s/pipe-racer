@@ -53,9 +53,11 @@ func onGuestTickBox_toggled(pressed: bool):
 func onLoginButton_pressed():
 	setButtonsLoggingIn()
 
+	print("Logging in...")
+
 	var loginData = getLoginData()
 	var loginRequest = HTTPRequest.new()
-	add_child(loginRequest)
+	Network.add_child(loginRequest)
 	loginRequest.timeout = 10
 
 	loginRequest.request_completed.connect(onLoginRequestCompleted)
@@ -68,13 +70,15 @@ func onLoginButton_pressed():
 	)
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
+		setButtonsLoggedOut()
+
 
 func asGuestButton_pressed():
 	setButtonsLoggingIn()
 
 	var loginData = getLoginData()
 	var loginRequest = HTTPRequest.new()
-	add_child(loginRequest)
+	Network.add_child(loginRequest)
 	loginRequest.timeout = 10
 
 	loginRequest.request_completed.connect(onLoginRequestCompleted)
@@ -125,6 +129,8 @@ func onRandomColorButton_pressed():
 	colorPicker.color = Color(randf(), randf(), randf(), 1.0)
 
 func setMainPlayerData():
+	# while !is_node_ready():
+	# 	await get_tree().create_timer(1.0).timeout
 	isMainPlayer = true
 	username.text = GlobalProperties.PLAYER_NAME
 	username.text_changed.connect(onTextChanged)
@@ -165,7 +171,7 @@ func getLoginData() -> Dictionary:
 
 func loadProfilePicture(imageUrl: String):
 	var httpRequest = HTTPRequest.new()
-	add_child(httpRequest)
+	Network.add_child(httpRequest)
 	httpRequest.timeout = 15
 	httpRequest.request_completed.connect(onLoadProfilePictureRequestCompleted)
 

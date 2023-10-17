@@ -5,19 +5,13 @@ var mapName: String
 
 var ranked: bool
 
-var nrPlayers: int
-
-var players: Array[PlayerData]
+var online: bool
 
 var nrLaps: int
 
-func _init(initialMapName, initialRanked = false, initialNrLaps = -1):
+func _init(initialMapName, initialRanked = false, initialOnline = false, initialNrLaps = -1):
 	mapName = initialMapName
 	nrLaps = initialNrLaps
 	ranked = initialRanked
-	players = []
-
-func addPlayer(playerData):
-	players.append(playerData)
-	nrPlayers = players.size()
+	online = initialOnline
 

@@ -7,41 +7,40 @@ extends Control
 @onready var websiteButton: Button = %WebsiteButton
 @onready var settingsButton: Button = %SettingsButton
 @onready var exitButton: Button = %ExitButton
-@onready var nickname: LineEdit = %Nickname
-@onready var colorPicker: ColorPickerButton = %ColorPicker
 @onready var settingsMenu: SettingsMenu = %SettingsMenu
 
 @onready var raceMapLoader: RaceMapLoader = %RaceMapLoader
 @onready var editorMapLoader: EditorMapLoader = %EditorMapLoader
+@onready var onlineMapLoader: OnlineMapLoader = %OnlineMapLoader
 
 @onready var musicPlayer: MusicPlayer = %MusicPlayer
 
 func _ready():
-	nickname.text = GlobalProperties.PLAYER_NAME
-	colorPicker.color = GlobalProperties.PLAYER_COLOR
 	raceMapLoader.hide()
 	editorMapLoader.hide()
+	onlineMapLoader.hide()
 
 	playButton.grab_focus()
 
 	connectSignals()
 
+	GlobalProperties.setOriginalSettingsMenu(self, settingsMenu, onSettingsMenu_backPressed)
+
 func connectSignals():
 	playButton.pressed.connect(onPlayButton_pressed)
 	editButton.pressed.connect(onEditButton_pressed)
+	playOnlineButton.pressed.connect(onPlayOnlineButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
 	exitButton.pressed.connect(get_tree().quit)
 
 	websiteButton.pressed.connect(onWebsiteButton_pressed)
 
-	nickname.text_changed.connect(onTextChanged)
-	colorPicker.color_changed.connect(onColorChanged)
-
 	raceMapLoader.backPressed.connect(onRaceMapLoader_backPressed)
 	editorMapLoader.backPressed.connect(onEditorMapLoader_backPressed)
 	editorMapLoader.enteredMapEditor.connect(onEditorMapLoader_enteredMapEditor)
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
+	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
 
 	# mainContent.visibility_changed.connect(race)
 
@@ -52,6 +51,10 @@ func onPlayButton_pressed():
 
 func onEditButton_pressed():
 	editorMapLoader.show()
+	mainContent.visible = false
+
+func onPlayOnlineButton_pressed():
+	onlineMapLoader.show()
 	mainContent.visible = false
 
 func onSettingsButton_pressed():
@@ -66,18 +69,11 @@ func onSettingsMenu_backPressed():
 func onRaceMapLoader_backPressed():
 	mainContent.visible = true
 	playButton.grab_focus()
-	refreshPlayerData()
-	# raceMapLoader.hide()
 
 func onEditorMapLoader_backPressed():
 	mainContent.visible = true
 	editButton.grab_focus()
-	refreshPlayerData()
-	# editorMapLoader.hide()
 
-func refreshPlayerData():
-	nickname.text = GlobalProperties.PLAYER_NAME
-	colorPicker.color = GlobalProperties.PLAYER_COLOR
 
 func onWebsiteButton_pressed():
 	OS.shell_open(Backend.FRONTEND_IP_ADRESS)
@@ -95,4 +91,9 @@ func onEditorMapLoader_enteredMapEditor():
 
 func onEditorMapLoader_exitedMapEditor():
 	%Background.visible = true
-	musicPlayer.playMenuMusic()
+	if musicPlayer != null:
+		musicPlayer.playMenuMusic()
+
+func onOnlineMapLoader_backPressed():
+	mainContent.visible = true
+	playButton.grab_focus()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=25 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -14,6 +14,8 @@
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
 [ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
 [ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
+[ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
+[ext_resource type="Script" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
 friction = 0.0
@@ -43,6 +45,80 @@ shader = ExtResource("5_0o4p6")
 material = SubResource("ShaderMaterial_ggqdx")
 size = Vector2(0.2, 0.2)
 orientation = 2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vacps"]
+properties/0/path = NodePath(".:linear_velocity")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:angular_velocity")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:global_position")
+properties/2/spawn = true
+properties/2/sync = true
+properties/3/path = NodePath(".:global_rotation")
+properties/3/spawn = true
+properties/3/sync = true
+properties/4/path = NodePath("../Tires/TireFL/SmokeEmitter:emitting")
+properties/4/spawn = true
+properties/4/sync = true
+properties/5/path = NodePath("../Tires/TireFR/SmokeEmitter:emitting")
+properties/5/spawn = true
+properties/5/sync = true
+properties/6/path = NodePath("../Tires/TireBL/SmokeEmitter:emitting")
+properties/6/spawn = true
+properties/6/sync = true
+properties/7/path = NodePath("../Tires/TireBR/SmokeEmitter:emitting")
+properties/7/spawn = true
+properties/7/sync = true
+properties/8/path = NodePath("../Tires/TireFL/DirtEmitter:emitting")
+properties/8/spawn = true
+properties/8/sync = true
+properties/9/path = NodePath("../Tires/TireFR/DirtEmitter:emitting")
+properties/9/spawn = true
+properties/9/sync = true
+properties/10/path = NodePath("../Tires/TireBL/DirtEmitter:emitting")
+properties/10/spawn = true
+properties/10/sync = true
+properties/11/path = NodePath("../Tires/TireBR/DirtEmitter:emitting")
+properties/11/spawn = true
+properties/11/sync = true
+properties/12/path = NodePath("../CarStateMachine:hasControl")
+properties/12/spawn = true
+properties/12/sync = true
+properties/13/path = NodePath(".:respawnPosition")
+properties/13/spawn = true
+properties/13/sync = true
+properties/14/path = NodePath(".:respawnRotation")
+properties/14/spawn = true
+properties/14/sync = true
+properties/15/path = NodePath("..:playerIndex")
+properties/15/spawn = true
+properties/15/sync = false
+properties/16/path = NodePath("../Tires/TireFL/tire-new good normals:rotation")
+properties/16/spawn = true
+properties/16/sync = true
+properties/17/path = NodePath("../Tires/TireFR/tire-new good normals:rotation")
+properties/17/spawn = true
+properties/17/sync = true
+properties/18/path = NodePath("../Tires/TireBL/tire-new good normals:rotation")
+properties/18/spawn = true
+properties/18/sync = true
+properties/19/path = NodePath("../Tires/TireBR/tire-new good normals:rotation")
+properties/19/spawn = true
+properties/19/sync = true
+properties/20/path = NodePath("../CarStateMachine:placement")
+properties/20/spawn = true
+properties/20/sync = true
+properties/21/path = NodePath("..:playerName")
+properties/21/spawn = true
+properties/21/sync = true
+properties/22/path = NodePath("..:frameColor")
+properties/22/spawn = true
+properties/22/sync = true
+properties/23/path = NodePath("../PlayernameLabel:text")
+properties/23/spawn = true
+properties/23/sync = true
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2
@@ -258,3 +334,20 @@ stream = ExtResource("11_ryyl8")
 [node name="CarStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("12_usspm")
+
+[node name="CarSynchronizer" type="MultiplayerSynchronizer" parent="."]
+unique_name_in_owner = true
+root_path = NodePath(".")
+replication_config = SubResource("SceneReplicationConfig_vacps")
+visibility_update_mode = 1
+script = ExtResource("16_d1km7")
+
+[node name="PlayernameLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29219, 0)
+pixel_size = 0.0009
+billboard = 1
+double_sided = false
+fixed_size = true
+text = "PlayerName"
+font = ExtResource("16_crdig")

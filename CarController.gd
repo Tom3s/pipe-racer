@@ -73,12 +73,24 @@ var shouldPause: bool = false
 
 var initialRespawn: bool = false
 
+@onready var carSynchronizer: CarSynchronizer = %CarSynchronizer
+var networkId: int = -1
 # ingameData
-var playerName: String = ""
+@export
+var playerName: String = "":
+	set(newName):
+		playerName = newName
+		%PlayernameLabel.text = newName
+	get:
+		return playerName
+
+signal playerIndexChanged(playerIndex: int)
 @export
 var playerIndex: int = 0:
 	set(newIndex):
 		playerIndex = onInputPlayerIndexChanged(newIndex)
+		%PlayernameLabel.layers = 2 ** (playerIndex + 1)
+		playerIndexChanged.emit(playerIndex)
 	get:
 		return playerIndex
 
@@ -103,42 +115,45 @@ var state: CarStateMachine
 
 # SIGNALS
 
-signal respawned(playerIndex: int)
-signal finishedRace(playerIndex: int)
-signal isReady(playerIndex: int)
-signal isResetting(playerIndex: int, resetting: bool)
+signal respawned(playerIndex: int, networkId: int)
+signal finishedRace(playerIndex: int, networkId: int)
+signal isReady(playerIndex: int, networkId: int)
+signal isResetting(playerIndex: int, resetting: bool, networkId: int)
 signal changeCameraMode()
 
 
 
 
-
+var sessionToken: String = ""
 
 func setup(
 		playerData: PlayerData, 
-		newPlayerIndex: int, 
-		inputDevices: Array[int],
-		startingPosition: Dictionary, 
+		# newPlayerIndex: int, 
+		# inputDevices: Array[int],
 		checkpointCount: int, 
 		nrLaps: int
 ):
-	playerIndex = newPlayerIndex
+	# playerIndex = newPlayerIndex
 	playerName = playerData.PLAYER_NAME
 	frameColor = playerData.PLAYER_COLOR
+	sessionToken = playerData.SESSION_TOKEN
+
+	# set_multiplayer_authority(playerData.NETWORK_ID)
 
 	state.prepareCheckpointList(checkpointCount)
 	state.nrLaps = nrLaps
 	state.placement = playerIndex + 1
 
+	# %InputHandler.setInputPlayers(inputDevices)
+
+	# state.hasControl = true
+
+
+func reset(startingPosition: Dictionary, checkpointCount: int, newLapCount: int = 1) -> void:
+	state.reset(checkpointCount, playerIndex, newLapCount)
+
 	setRespawnPositionFromDictionary(startingPosition)
-	respawn(true)
-	%InputHandler.setInputPlayers(inputDevices)
-
-
-func reset(startingPosition: Dictionary, checkpointCount: int) -> void:
-	state.reset(checkpointCount, playerIndex)
-
-	setRespawnPositionFromDictionary(startingPosition)
+	# respawn()
 	respawn(true)
 
 var tires: Array[Tire] = []
@@ -158,42 +173,59 @@ func _ready():
 	bottomOuts.push_back(%BottomOutBL)
 	bottomOuts.push_back(%BottomOutBR)
 
+	networkId = name.split('_')[0].to_int()
+
+	if networkId == 0:
+		networkId = 1
+
+	set_multiplayer_authority(networkId)
+
+	# state.hasControl = true
+
 	set_physics_process(true)
 
 func _physics_process(_delta):
-	if !paused:
-		for tire in tires:
-			calculateTirePhysics(tire, _delta)
-		for bottomOut in bottomOuts:
-			calculateBottomOutPhysics(bottomOut, _delta)
-	
-	applyDownforce(state.getGroundedTireCount())
-	
-	if state.isAirborne():
-		applyAirPitch()
-		applyAirSteering()
-		slidingFactor = 0.9
-	
-	if shouldPause && !paused:
-		pauseLinearVelocity = linear_velocity
-		pauseAngularVelocity = angular_velocity
-		linear_velocity = Vector3.ZERO
-		angular_velocity = Vector3.ZERO
+	if is_multiplayer_authority():
+		if !paused:
+			for tire in tires:
+				calculateTirePhysics(tire, _delta)
+			for bottomOut in bottomOuts:
+				calculateBottomOutPhysics(bottomOut, _delta)
+		
+		applyDownforce(state.getGroundedTireCount())
+		
+		if state.isAirborne():
+			applyAirPitch()
+			applyAirSteering()
+			slidingFactor = 0.9
+		
+		if shouldPause && !paused:
+			pauseLinearVelocity = linear_velocity
+			pauseAngularVelocity = angular_velocity
+			linear_velocity = Vector3.ZERO
+			angular_velocity = Vector3.ZERO
 
-		if initialRespawn:
-			global_position = respawnPosition
-			global_rotation = respawnRotation
-			pauseLinearVelocity = Vector3.ZERO
-			pauseAngularVelocity = Vector3.ZERO
-			respawned.emit(playerIndex)
-			initialRespawn = false
-		paused = true
-		freeze = true
-	elif !shouldPause && paused:
-		freeze = false
-		linear_velocity = pauseLinearVelocity
-		angular_velocity = pauseAngularVelocity
-		paused = false
+			if initialRespawn:
+				global_position = respawnPosition
+				global_rotation = respawnRotation
+				pauseLinearVelocity = Vector3.ZERO
+				pauseAngularVelocity = Vector3.ZERO
+				respawned.emit(playerIndex, networkId)
+				initialRespawn = false
+			paused = true
+			freeze = true
+		elif !shouldPause && paused:
+			freeze = false
+			linear_velocity = pauseLinearVelocity
+			angular_velocity = pauseAngularVelocity
+			paused = false
+		
+		carSynchronizer.linear_velocity = linear_velocity
+		carSynchronizer.angular_velocity = angular_velocity
+		carSynchronizer.global_position = global_position
+		carSynchronizer.global_rotation = global_rotation
+		carSynchronizer.respawnPosition = respawnPosition
+		carSynchronizer.respawnRotation = respawnRotation
 
 
 func _integrate_forces(physicsState):
@@ -205,7 +237,7 @@ func _integrate_forces(physicsState):
 		if initialRespawn:
 			# initialRespawn = false
 			pauseMovement()
-		respawned.emit(playerIndex)
+		respawned.emit(playerIndex, networkId)
 
 @export
 var steeringSpeed: float = 0.05
@@ -516,9 +548,19 @@ func resetInputs():
 	steeringInput = 0.0
 	driftInput = 0.0
 
+func getLocalIndex():
+	return inputHandler.allowedPrefixes[0][1].to_int() - 1
+
+func getPositionDict() -> Dictionary:
+	return {
+		"lap": state.currentLap,
+		"checkpointCount": state.collectedCheckpointCount, 
+	}
+
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
 	var text = "Sliding Factor: "
 	text += str(slidingFactor)
 	return text
+

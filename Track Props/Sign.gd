@@ -59,7 +59,7 @@ func fetchImage(imageUrl: String) -> void:
 
 	var httpError = httpRequest.request(imageUrl)
 	if httpError != OK:
-		print("Error: " + str(httpError))
+		print("Error: " + error_string(httpError))
 
 func onLoadTexture_RequestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	var image = Image.new()
@@ -71,10 +71,10 @@ func onLoadTexture_RequestCompleted(_result: int, _responseCode: int, _headers: 
 		if imageError != OK:
 			print("Error loading png: " + error_string(imageError))
 			return
-		else:
-			print("PNG loaded successfully")
-	else:
-		print("JPG loaded successfully")
+	# 	else:
+	# 		print("PNG loaded successfully")
+	# else:
+	# 	print("JPG loaded successfully")
 
 	var texture = ImageTexture.create_from_image(image)
 	setTexture(texture, billboardTextureIndex, "none")

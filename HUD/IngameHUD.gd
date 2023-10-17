@@ -30,6 +30,7 @@ var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
 # var globalPlacement: int = -1
 
+# TODO: make this a static after updating to Godot 4.2
 var TOTAL_CARS: int = 0
 
 func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
@@ -55,6 +56,8 @@ func _physics_process(_delta: float) -> void:
 	# setReadyIndicator(car.incorrectCheckPoint) 
 	setReadyIndicator(!car.state.isReady)
 	setResetIndicator(car.state.isResetting)
+	setNickname(car.playerName)
+
 
 
 func setSpeedText(speed: float) -> void:
@@ -100,5 +103,6 @@ func setNickname(newName: String) -> void:
 func startTimer():
 	%HUDContainer.show()
 
-func reset():
+func reset(newNrPlayers: int):
 	%HUDContainer.hide()
+	TOTAL_CARS = newNrPlayers
