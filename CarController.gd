@@ -76,6 +76,7 @@ var initialRespawn: bool = false
 @onready var carSynchronizer: CarSynchronizer = %CarSynchronizer
 var networkId: int = -1
 # ingameData
+@export
 var playerName: String = ""
 @export
 var playerIndex: int = 0:
@@ -537,6 +538,12 @@ func resetInputs():
 
 func getLocalIndex():
 	return inputHandler.allowedPrefixes[0][1].to_int() - 1
+
+func getPositionDict() -> Dictionary:
+	return {
+		"lap": state.currentLap,
+		"checkpointCount": state.collectedCheckpointCount, 
+	}
 
 # DEBUG FUNCTIONS
 

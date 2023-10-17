@@ -11,6 +11,7 @@ var hasControl: bool = false
 var currentLap: int = -1
 var nrLaps: int
 
+@export
 var placement: int = 0
 
 var isReady: bool = false

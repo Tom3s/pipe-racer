@@ -182,6 +182,17 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 			checkpoint.collect()
 		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
 		ingameSFX.playCheckpointSFX()
+		# var placementDict = car.getPositionDict()
+		rpc_id(1, "broadcastPlacement", car.name, car.state.placement)
+
+@rpc("any_peer", "call_remote", "reliable")
+func broadcastPlacement(carName: String, placement: int):
+	for player in players.get_children():
+		if player.name != carName && player.state.placement == placement:
+			player.state.placement += 1
+			# 
+			broadcastPlacement(player.name, player.state.placement)
+			return
 
 func onStart_bodyEnteredStart(car: CarController, start: Start):
 	if car.state.hasCollectedAllCheckpoints():
@@ -303,6 +314,7 @@ func spawnPlayer(
 	var car: CarController = Car.instantiate()
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
+	car.playerName = data.PLAYER_NAME
 	# car.playerIndex = players.get_child_count()
 
 	players.add_child(car)
@@ -339,7 +351,7 @@ func getInputDevices(networkId: int) -> Array[int]:
 		player = player as CarController
 		if player.networkId == networkId:
 			localPlayerCount += 1
-	if localPlayerCount == 1:
+	if localPlayerCount == 1 && Network.localData.size() == 1:
 		return [1, 2]
 	return [localPlayerCount]
 	
