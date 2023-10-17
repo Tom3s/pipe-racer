@@ -51,6 +51,8 @@ func onOnlineMenu_backPressed():
 func onServerClosed():
 	Network.closeConnection()
 	playerSelectorMenu.visible = true
+	onlineMenu.visible = false
+	mapLoader.visible = false
 
 func onMapLoader_backPressed():
 	onlineMenu.visible = true

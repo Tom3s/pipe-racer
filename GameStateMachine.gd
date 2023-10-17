@@ -14,10 +14,13 @@ var raceStarted: bool = false
 var ranked: bool = false
 var online: bool = false
 
+var exitedPlayers: int = 0
+
 signal allPlayersReady()
 signal allPlayersFinished()
 signal allPlayersReset()
 signal allPlayersSubmittedStats()
+signal allPlayersExited()
 
 func reset(newNrPlayers: int):
 	nrPlayers = newNrPlayers
@@ -65,3 +68,14 @@ func setupResettingPlayersList():
 	resettingPlayers.clear()
 	for i in nrPlayers:
 		resettingPlayers[i] = false
+	
+func areAllPlayersExited():
+	return exitedPlayers >= Network.playerCount
+
+func resetExitedPlayers():
+	exitedPlayers = 0
+
+func increaseExitedPlayers():
+	exitedPlayers += 1
+	if exitedPlayers >= Network.playerCount:
+		allPlayersExited.emit()

@@ -36,6 +36,9 @@ func _ready():
 	verticalSplitBottom.visible = false
 	pauseMenu.visible = false
 	leaderboardUI.visible = false
+
+	state.resetExitedPlayers()
+
 	connectSignals()
 
 func connectSignals():
@@ -230,6 +233,7 @@ func onPauseMenu_restartPressed():
 	
 	state.pausedBy = -1
 
+@rpc("authority", "call_remote", "reliable")
 func onPauseMenu_exitPressed():
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	if musicPlayer != null:
@@ -245,8 +249,32 @@ func onPauseMenu_exitPressed():
 				raceStats[key].getObject(),
 				sessionToken # FIX
 			)
+	
+	if state.online:
+		if Network.userId == 1:
+			rpc("onPauseMenu_exitPressed")
+			if !state.areAllPlayersExited():
+				await state.allPlayersExited
+		else:
+			rpc_id(1, "clientExited", Network.userId)
 		
 	get_parent().exitPressed.emit()
+
+@rpc("any_peer", "call_remote", "reliable")
+func clientExited(id: int):
+	await get_tree().create_timer(1.0).timeout
+	state.increaseExitedPlayers()
+	# for player in players.get_children():
+	# 	if player.networkId == id:
+	# 		player.queue_free()
+	removePlayer(id)
+
+func removePlayer(id: int):
+	for player in players.get_children():
+		if player.networkId == id:
+			players.remove_child(player)
+			player.queue_free()
+	recalculate()
 
 func onUserListNeedsUpdate(id: int) -> void:
 	if id == -1 || Network.userId != 1:
@@ -385,6 +413,8 @@ func getNewViewport() -> SubViewport:
 @rpc("authority", "call_local", "reliable")
 func recalculate() -> void:
 	# reset state
+	print("Recalculating", players.get_child_count())
+
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	if musicPlayer != null:
 		musicPlayer.playMenuMusic()
