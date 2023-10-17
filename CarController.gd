@@ -243,10 +243,11 @@ func _integrate_forces(physicsState):
 var steeringSpeed: float = 0.05
 
 func calculateTirePhysics(tire: Tire, delta):
-	if GlobalProperties.PRECISE_INPUT:
-		tire.rotation.y = tire.targetRotation
-	else:
-		tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
+	# if GlobalProperties.PRECISE_INPUT:
+	# 	tire.rotation.y = tire.targetRotation
+	# else:
+	# 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
+	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
 	
 	if tire.is_colliding():
 		state.groundedTires[tire.tireIndex] = 1

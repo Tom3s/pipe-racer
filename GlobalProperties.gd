@@ -86,13 +86,32 @@ var FIX_PEDAL_INPUT: bool = false:
 	get:
 		return FIX_PEDAL_INPUT
 
+# @export
+# var PRECISE_INPUT: bool = false:
+# 	set(newPrecise):
+# 		PRECISE_INPUT = newPrecise
+# 		saveToFile()
+# 	get:
+# 		return PRECISE_INPUT
 @export
-var PRECISE_INPUT: bool = false:
-	set(newPrecise):
-		PRECISE_INPUT = newPrecise
+var DEADZONE: float = 0.1:
+	set(newDeadzone):
+		DEADZONE = clamp(newDeadzone, 0.0, 0.5)
 		saveToFile()
 	get:
-		return PRECISE_INPUT
+		return DEADZONE
+
+@export
+var SMOOTH_STEERING: float = 0.75:
+	set(newSmoothing):
+		# SMOOTH_STEERING = clamp(remap(newSmoothing, 0, 1, 0.99, 0.5), 0.5, 0.99)
+		SMOOTH_STEERING = newSmoothing
+		ingameSmoothSteering = clamp(remap(newSmoothing, 0, 1, 0.275, 0.04), 0.04, 0.275)
+		saveToFile()
+	get:
+		return SMOOTH_STEERING
+
+var ingameSmoothSteering: float = 0.1
 
 var SESSION_TOKEN: String = ""
 var USER_ID: String = ""
@@ -124,7 +143,8 @@ func saveToFile() -> void:
 		"FULLSCREEN": FULLSCREEN,
 		"RENDER_QUALITY": RENDER_QUALITY,
 		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT,
-		"PRECISE_INPUT": PRECISE_INPUT
+		"DEADZONE": DEADZONE,
+		"SMOOTH_STEERING": SMOOTH_STEERING,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -156,8 +176,10 @@ func loadFromFile() -> void:
 			RENDER_QUALITY = float(jsonData["RENDER_QUALITY"])
 		if jsonData.has("FIX_PEDAL_INPUT"):
 			FIX_PEDAL_INPUT = bool(jsonData["FIX_PEDAL_INPUT"])
-		if jsonData.has("PRECISE_INPUT"):
-			PRECISE_INPUT = bool(jsonData["PRECISE_INPUT"])
+		if jsonData.has("DEADZONE"):
+			DEADZONE = float(jsonData["DEADZONE"])
+		if jsonData.has("SMOOTH_STEERING"):
+			SMOOTH_STEERING = float(jsonData["SMOOTH_STEERING"])
 	else:
 		saveToFile()
 
