@@ -125,7 +125,7 @@ func connectSignals():
 	trackMetadataUI.trackNameChanged.connect(onTrackMetadataUI_trackNameChanged)
 	trackMetadataUI.lapCountChanged.connect(onTrackMetadataUI_lapCountChanged)
 	trackMetadataUI.closePressed.connect(onTrackMetadataUI_closePressed)
-	trackMetadataUI.applyPressed.connect(onTrackMetadataUI_closePressed)
+	trackMetadataUI.applyPressed.connect(onTrackMetadataUI_applyPressed)
 
 	pauseMenu.resumePressed.connect(onEditorInputHandler_pausePressed)
 	pauseMenu.exitPressed.connect(onEditorExited)
@@ -397,11 +397,18 @@ func onTrackMetadataUI_closePressed():
 	# trackMetadataUI.visible = false
 	editorInputHandler.propertiesOpen = false
 
+func onTrackMetadataUI_applyPressed(newName: String, newCount: int):
+	map.trackName = newName
+	map.lapCount = newCount
+	map.save()
+
 func onTrackMetadataUI_trackNameChanged(newName: String):
 	map.trackName = newName
+	map.save()
 
 func onTrackMetadataUI_lapCountChanged(newCount: int):
 	map.lapCount = newCount
+	map.save()
 
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true

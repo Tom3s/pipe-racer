@@ -13,7 +13,7 @@ var closeButton: Button
 signal trackNameChanged(name: String)
 signal lapCountChanged(count: int)
 signal closePressed()
-signal applyPressed()
+signal applyPressed(name: String, count: int)
 
 func _ready():
 	trackName = %TrackName
@@ -36,15 +36,21 @@ func connectSignals():
 
 func onSaveTrackNameButton_pressed():
 	trackNameChanged.emit(trackName.text)
+	saveTrackNameButton.disabled = true
+	await get_tree().create_timer(1.0).timeout
+	saveTrackNameButton.disabled = false
 
 func onSaveLapCountButton_pressed():
 	lapCountChanged.emit(lapCount.value)
+	saveLapCountButton.disabled = true
+	await get_tree().create_timer(1.0).timeout
+	saveLapCountButton.disabled = false
 
 func onApplyButton_pressed():
-	onSaveTrackNameButton_pressed()
-	onSaveLapCountButton_pressed()
+	# onSaveTrackNameButton_pressed()
+	# onSaveLapCountButton_pressed()
 	visible = false
-	applyPressed.emit()
+	applyPressed.emit(trackName.text, lapCount.value)
 
 func onCloseButton_pressed():
 	visible = false
