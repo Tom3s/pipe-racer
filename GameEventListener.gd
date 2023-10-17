@@ -138,6 +138,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 
 
 	if networkId == Network.userId:
+		state.newLocalPlayerFinished()
 		raceStats[playerIdentifier].increaseFinishes()
 		raceStats[playerIdentifier].setBestLap(bestLap)
 		raceStats[playerIdentifier].setBestTime(totalTime)
@@ -155,6 +156,11 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 				onSubmitRun_requestCompleted
 			)
 			# TODO: broadcast info to host/other players maybe
+
+			if state.allLocalPlayersFinished():
+				leaderboardUI.fetchTimes(map.trackId)
+				leaderboardUI.visible = true
+
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
 

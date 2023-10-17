@@ -34,10 +34,12 @@ func setup(
 	add_child(environment)
 
 	if !online:
-		initializePlayers()
+		initializeLocalPlayers()
 
 func initializePlayers():
 	if Network.userId == 1:
 		for key in Network.playerDatas:
 			%GameEventListener.addPlayers(Network.playerDatas[key], key.to_int())
 
+func initializeLocalPlayers():
+	%GameEventListener.addPlayers(Network.localData, 1)

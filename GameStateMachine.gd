@@ -2,7 +2,7 @@ extends Node
 class_name GameStateMachine
 
 var nrPlayers: int
-var nrLocalPlayers: int
+# var nrLocalPlayers: int
 var finishedPlayers: int = 0
 var readyPlayers: Dictionary = {}
 var resettingPlayers: Dictionary = {}
@@ -27,6 +27,7 @@ func reset(newNrPlayers: int):
 	finishedPlayers = 0
 	setupReadyPlayersList()
 	setupResettingPlayersList()
+	resetLocalFinishes()
 	raceStarted = false
 	pausedBy = -1
 
@@ -79,3 +80,13 @@ func increaseExitedPlayers():
 	exitedPlayers += 1
 	if exitedPlayers >= Network.playerCount:
 		allPlayersExited.emit()
+	
+var localFinishes: int = 0
+func newLocalPlayerFinished():
+	localFinishes += 1
+
+func resetLocalFinishes():
+	localFinishes = 0
+
+func allLocalPlayersFinished():
+	return localFinishes >= Network.localData.size()
