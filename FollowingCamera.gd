@@ -23,10 +23,14 @@ var insideTilt: float = 1.12
 func _init(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
+	car.playerIndexChanged.connect(changeCullMask)
+	changeCullMask(car.playerIndex)
 
 func setup(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
+	car.playerIndexChanged.connect(changeCullMask)
+	changeCullMask(car.playerIndex)
 
 func _ready():
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
@@ -66,3 +70,7 @@ func forceUpdatePosition():
 func changeMode():
 	mode = (mode + 1) % 2
 	shouldUpdatePosition = true
+
+func changeCullMask(playerIndex: int):
+	cull_mask = 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128
+	cull_mask -= 2 ** (playerIndex + 1)

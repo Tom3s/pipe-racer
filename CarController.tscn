@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=25 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -14,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
 [ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
 [ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
+[ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
 [ext_resource type="Script" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
@@ -115,6 +116,9 @@ properties/21/sync = true
 properties/22/path = NodePath("..:frameColor")
 properties/22/spawn = true
 properties/22/sync = true
+properties/23/path = NodePath("../PlayernameLabel:text")
+properties/23/spawn = true
+properties/23/sync = true
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2
@@ -337,3 +341,13 @@ root_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_vacps")
 visibility_update_mode = 1
 script = ExtResource("16_d1km7")
+
+[node name="PlayernameLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.29219, 0)
+pixel_size = 0.0009
+billboard = 1
+double_sided = false
+fixed_size = true
+text = "PlayerName"
+font = ExtResource("16_crdig")

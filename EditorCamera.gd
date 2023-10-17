@@ -34,7 +34,10 @@ signal mouseCaptureExited()
 func _ready():
 	global_position = Vector3.UP * 128
 
+var inputEnabled = true
 func _unhandled_input(event):
+	if !inputEnabled:
+		return
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative

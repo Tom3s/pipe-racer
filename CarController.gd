@@ -77,11 +77,20 @@ var initialRespawn: bool = false
 var networkId: int = -1
 # ingameData
 @export
-var playerName: String = ""
+var playerName: String = "":
+	set(newName):
+		playerName = newName
+		%PlayernameLabel.text = newName
+	get:
+		return playerName
+
+signal playerIndexChanged(playerIndex: int)
 @export
 var playerIndex: int = 0:
 	set(newIndex):
 		playerIndex = onInputPlayerIndexChanged(newIndex)
+		%PlayernameLabel.layers = 2 ** (playerIndex + 1)
+		playerIndexChanged.emit(playerIndex)
 	get:
 		return playerIndex
 
@@ -165,6 +174,9 @@ func _ready():
 	bottomOuts.push_back(%BottomOutBR)
 
 	networkId = name.split('_')[0].to_int()
+
+	if networkId == 0:
+		networkId = 1
 
 	set_multiplayer_authority(networkId)
 
