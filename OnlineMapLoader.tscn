@@ -16,6 +16,6 @@ visible = false
 
 [node name="PlayerSelectorMenu" parent="CanvasLayer" instance=ExtResource("1_gwgou")]
 unique_name_in_owner = true
-visible = false
 
 [node name="OnlineMenu" parent="CanvasLayer" instance=ExtResource("4_08w4u")]
+visible = false

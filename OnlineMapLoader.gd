@@ -1,4 +1,5 @@
 extends Node
+class_name OnlineMapLoader
 
 var gameScene = preload("res://GameScene.tscn")
 
@@ -21,6 +22,7 @@ func _ready():
 
 func connectSignals():
 	playerSelectorMenu.nextPressed.connect(onPlayerSelectorMenu_nextPressed)
+	playerSelectorMenu.backPressed.connect(onPlayerSelectorMenu_backPressed)
 	onlineMenu.connectionEstablished.connect(onOnlineMenu_connectionEstablished)
 	onlineMenu.backPressed.connect(onOnlineMenu_backPressed)
 	get_tree().get_multiplayer().connected_to_server.connect(onOnlineMenu_connectionEstablished)
@@ -34,6 +36,9 @@ func onPlayerSelectorMenu_nextPressed(selectedPlayers: Array[PlayerData]):
 	players = selectedPlayers
 	Network.localData = players
 	onlineMenu.visible = true
+
+func onPlayerSelectorMenu_backPressed():
+	backPressed.emit()
 
 func onOnlineMenu_connectionEstablished():
 	mapLoader.visible = true
@@ -83,3 +88,11 @@ func increaseReadyPlayers():
 	print("readyPlayers: ", readyPlayers, "/", Network.playerCount)
 	if readyPlayers == Network.playerCount:
 		raceNode.initializePlayers()
+
+func show():
+	playerSelectorMenu.visible = true
+
+func hide():
+	playerSelectorMenu.visible = false
+	mapLoader.visible = false
+	onlineMenu.visible = false
