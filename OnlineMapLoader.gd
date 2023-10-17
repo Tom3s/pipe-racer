@@ -6,7 +6,7 @@ var gameScene = preload("res://GameScene.tscn")
 var raceNode: GameScene
 
 @onready var mapLoader: OnlineMapSelector = %OnlineMapSelector
-@onready var playerSelectorMenu: PlayerSelectorMenu = %PlayerSelectorMenu
+@onready var playerSelectorMenu: PlayerSelectorMenu #= %PlayerSelectorMenu
 @onready var onlineMenu: OnlineMenu = %OnlineMenu
 
 
@@ -15,14 +15,19 @@ var players: Array[PlayerData] = []
 signal backPressed()
 
 func _ready():
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
+	# 	self,
+	# 	onPlayerSelectorMenu_backPressed,
+	# 	onPlayerSelectorMenu_nextPressed
+	# )
+	# playerSelectorMenu.visible = true
 	mapLoader.visible = false
 	onlineMenu.visible = false
 	connectSignals()
 
 func connectSignals():
-	playerSelectorMenu.nextPressed.connect(onPlayerSelectorMenu_nextPressed)
-	playerSelectorMenu.backPressed.connect(onPlayerSelectorMenu_backPressed)
+	# playerSelectorMenu.backPressed.connect(onPlayerSelectorMenu_backPressed)
+	# playerSelectorMenu.nextPressed.connect(onPlayerSelectorMenu_nextPressed)
 	onlineMenu.connectionEstablished.connect(onOnlineMenu_connectionEstablished)
 	onlineMenu.backPressed.connect(onOnlineMenu_backPressed)
 	get_tree().get_multiplayer().connected_to_server.connect(onOnlineMenu_connectionEstablished)
@@ -36,8 +41,16 @@ func onPlayerSelectorMenu_nextPressed(selectedPlayers: Array[PlayerData]):
 	players = selectedPlayers
 	Network.localData = players
 	onlineMenu.visible = true
+	GlobalProperties.returnPlayerSelectorMenu(
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
 
 func onPlayerSelectorMenu_backPressed():
+	GlobalProperties.returnPlayerSelectorMenu(
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
 	backPressed.emit()
 
 func onOnlineMenu_connectionEstablished():
@@ -46,10 +59,21 @@ func onOnlineMenu_connectionEstablished():
 
 func onOnlineMenu_backPressed():
 	# Network.closeConnection()
+
+	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
+		self,
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
 	playerSelectorMenu.visible = true
 
 func onServerClosed():
 	Network.closeConnection()
+	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
+		self,
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
 	playerSelectorMenu.visible = true
 	onlineMenu.visible = false
 	mapLoader.visible = false
@@ -60,6 +84,11 @@ func onMapLoader_backPressed():
 
 func onMapLoader_DownloadFailed():
 	Network.closeConnection()
+	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
+		self,
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
 	playerSelectorMenu.visible = true
 
 func onMapLoader_trackSelected(trackName: String):
@@ -92,9 +121,20 @@ func increaseReadyPlayers():
 		raceNode.initializePlayers()
 
 func show():
+	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
+		self,
+		onPlayerSelectorMenu_backPressed,
+		onPlayerSelectorMenu_nextPressed
+	)
+	
 	playerSelectorMenu.visible = true
 
 func hide():
-	playerSelectorMenu.visible = false
+	if playerSelectorMenu != null:
+		playerSelectorMenu.visible = false
+		GlobalProperties.returnPlayerSelectorMenu(
+			onPlayerSelectorMenu_backPressed,
+			onPlayerSelectorMenu_nextPressed
+		)
 	mapLoader.visible = false
 	onlineMenu.visible = false

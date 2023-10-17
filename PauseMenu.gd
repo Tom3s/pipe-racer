@@ -28,6 +28,8 @@ func _ready():
 
 	editorGuide.visible = false
 
+	# settingsMenu = GlobalProperties.settingsMenu
+
 	settingsMenu.visible = false
 	controlsMenu.visible = false
 
@@ -48,9 +50,13 @@ func connectSignals():
 
 func onSettingsButton_pressed():
 	mainElements.visible = false
+	if GlobalProperties.settingsMenuNode != null:
+		settingsMenu = GlobalProperties.borrowSettingsMenu(self, onSettingsMenu_closePressed)
 	settingsMenu.visible = true
 
+
 func onSettingsMenu_closePressed():
+	GlobalProperties.returnSettingsMenu(onSettingsMenu_closePressed)
 	mainElements.visible = true
 	settingsButton.grab_focus()
 

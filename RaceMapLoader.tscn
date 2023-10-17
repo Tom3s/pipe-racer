@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://d23300714kq52"]
+[gd_scene load_steps=3 format=3 uid="uid://d23300714kq52"]
 
 [ext_resource type="Script" path="res://RaceMapLoader.gd" id="1_gtawm"]
 [ext_resource type="PackedScene" uid="uid://xgu8t5v8d54r" path="res://MapLoader.tscn" id="2_8anye"]
-[ext_resource type="PackedScene" uid="uid://bigmru3rmry2m" path="res://PlayerSelectorMenu.tscn" id="3_kceev"]
 
 [node name="RaceMapLoader" type="Node"]
 script = ExtResource("1_gtawm")
@@ -10,9 +9,5 @@ script = ExtResource("1_gtawm")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MapLoader" parent="CanvasLayer" instance=ExtResource("2_8anye")]
-unique_name_in_owner = true
-visible = false
-
-[node name="PlayerSelectorMenu" parent="CanvasLayer" instance=ExtResource("3_kceev")]
 unique_name_in_owner = true
 visible = false

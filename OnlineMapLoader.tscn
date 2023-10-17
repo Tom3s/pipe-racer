@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://wrv4h1dcsnnu"]
+[gd_scene load_steps=4 format=3 uid="uid://wrv4h1dcsnnu"]
 
 [ext_resource type="Script" path="res://OnlineMapLoader.gd" id="1_6elsr"]
-[ext_resource type="PackedScene" uid="uid://bigmru3rmry2m" path="res://PlayerSelectorMenu.tscn" id="1_gwgou"]
 [ext_resource type="PackedScene" uid="uid://e7y2w3cui1v8" path="res://OnlineMapSelector.tscn" id="2_pvqb8"]
 [ext_resource type="PackedScene" uid="uid://s8bipelmf0t6" path="res://OnlineMenu.tscn" id="4_08w4u"]
 
@@ -13,9 +12,6 @@ script = ExtResource("1_6elsr")
 [node name="OnlineMapSelector" parent="CanvasLayer" instance=ExtResource("2_pvqb8")]
 unique_name_in_owner = true
 visible = false
-
-[node name="PlayerSelectorMenu" parent="CanvasLayer" instance=ExtResource("1_gwgou")]
-unique_name_in_owner = true
 
 [node name="OnlineMenu" parent="CanvasLayer" instance=ExtResource("4_08w4u")]
 visible = false
