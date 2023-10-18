@@ -33,7 +33,8 @@ func connectSignals():
 	get_tree().get_multiplayer().connected_to_server.connect(onOnlineMenu_connectionEstablished)
 	get_tree().get_multiplayer().server_disconnected.connect(onServerClosed)
 	get_tree().get_multiplayer().connection_failed.connect(onServerClosed)
-	get_tree().get_multiplayer().peer_disconnected.connect(increaseReadyPlayers)
+	get_tree().get_multiplayer().peer_connected.connect(broadcastCurrentMap)
+	# get_tree().get_multiplayer().peer_disconnected.connect(increaseReadyPlayers)
 	mapLoader.downloadFailed.connect(onMapLoader_DownloadFailed)
 	mapLoader.backPressed.connect(onMapLoader_backPressed)
 	mapLoader.trackSelected.connect(onMapLoader_trackSelected)
@@ -82,6 +83,15 @@ func onServerClosed():
 	for child in %RaceParent.get_children():
 		child.queue_free()
 
+func broadcastCurrentMap(id: int):
+	if selectedTrack != "":
+		rpc_id(id, "raceOngoing", true)
+
+@rpc("authority", "call_remote", "reliable")
+func raceOngoing(ongoing: bool):
+	# mapLoader.downloadAndPlay(trackName.split("/")[-1].split(".")[0])
+	mapLoader.clientLabel.text = "Race Ongoing..." if ongoing else "Waiting for host..." 
+
 func onMapLoader_backPressed():
 	onlineMenu.visible = true
 	Network.closeConnection()
@@ -106,6 +116,7 @@ func onMapLoader_trackSelected(trackName: String):
 
 	selectedTrack = trackName
 	initializeRace()
+	
 	# if Network.userId != 1:
 	# 	print("Waiting for client")
 		# await get_tree().create_timer(5.0).timeout
@@ -118,6 +129,11 @@ func onRace_exited():
 		child.queue_free()
 	mapLoader.visible = true
 	readyPlayers = 0
+	selectedTrack = ""
+	if Network.userId == 1:
+		rpc("raceOngoing", false)
+
+
 
 @rpc("any_peer", "call_remote", "reliable")
 func increaseReadyPlayers(_sink = null):
@@ -136,7 +152,11 @@ func initializeRace():
 	raceNode.setup(selectedTrack, true, true)
 	raceNode.exitPressed.connect(onRace_exited)
 
+	if Network.playerCount == 0 && Network.userId == 1:
+		raceNode.initializePlayers()
+
 func broadcastReady():
+	await get_tree().create_timer(3).timeout
 	rpc_id(1, "increaseReadyPlayers")
 	
 

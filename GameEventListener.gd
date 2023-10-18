@@ -55,7 +55,10 @@ func connectSignals():
 	pauseMenu.restartPressed.connect(onPauseMenu_restartPressed)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
 
-	Network.userListNeedsUpdate.connect(onUserListNeedsUpdate)
+	get_tree().get_multiplayer().peer_disconnected.connect(clientExited)
+	get_tree().get_multiplayer().peer_connected.connect(clientExited)
+
+	# Network.userListNeedsUpdate.connect(onUserListNeedsUpdate)
 
 # Singaled functions
 
@@ -282,7 +285,7 @@ func onPauseMenu_exitPressed():
 
 @rpc("any_peer", "call_remote", "reliable")
 func clientExited(id: int):
-	await get_tree().create_timer(1.0).timeout
+	# await get_tree().create_timer(1.0).timeout
 	state.increaseExitedPlayers()
 	# for player in players.get_children():
 	# 	if player.networkId == id:
@@ -290,11 +293,14 @@ func clientExited(id: int):
 	removePlayer(id)
 
 func removePlayer(id: int):
+	var change := false
 	for player in players.get_children():
 		if player.networkId == id:
 			players.remove_child(player)
 			player.queue_free()
-	recalculate()
+			change = true
+	if change:
+		recalculate()
 
 func onUserListNeedsUpdate(id: int) -> void:
 	if id == -1 || Network.userId != 1:
@@ -360,7 +366,7 @@ func getInputDevices(networkId: int) -> Array[int]:
 		player = player as CarController
 		if player.networkId == networkId:
 			localPlayerCount += 1
-	if localPlayerCount == 1 && Network.localData.size() == 1:
+	if localPlayerCount == 1 && Network.playerDatas[str(networkId)].size() == 1:
 		return [1, 2]
 	return [localPlayerCount]
 	
@@ -471,3 +477,8 @@ func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: Pa
 	print(body.get_string_from_utf8())
 	leaderboardUI.fetchTimes(map.trackId)
 	return
+
+func clearPlayers():
+	for child in players.get_children():
+		players.remove_child(child)
+		child.queue_free()

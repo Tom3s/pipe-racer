@@ -27,7 +27,7 @@ func _ready():
 	get_tree().get_multiplayer().server_disconnected.connect(onServerDisconnected)
 
 	get_tree().get_multiplayer().peer_connected.connect(updateUserCount)
-	get_tree().get_multiplayer().peer_disconnected.connect(updateUserCount)
+	get_tree().get_multiplayer().peer_disconnected.connect(onPeerDisconnected)
 
 	ipAddress = "localhost"
 
@@ -81,6 +81,10 @@ func updateUserList(updatedUserList):
 
 	
 	userListNeedsUpdate.emit(-1)
+
+func onPeerDisconnected(id: int):
+	playerDatas.erase(str(id))
+	updateUserCount()
 
 func updateUserCount(_sink = null):
 	playerCount = get_tree().get_multiplayer().get_peers().size()
