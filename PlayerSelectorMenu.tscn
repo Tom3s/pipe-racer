@@ -5,6 +5,7 @@
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_c0x38"]
 
 [node name="PlayerSelectorMenu" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -172,11 +172,10 @@ func playButton_pressed(_sink = null) -> void:
 	var pureFileName = downloadedTrackListItems[downloadedTracks.get_selected_items()[0]]
 	trackName += pureFileName
 	visible = false
-	trackSelected.emit(trackName)
 	var trackId: String = pureFileName.split(".")[0]
-
 	if Network.userId == 1:
 		rpc("downloadAndPlay", trackId)
+	trackSelected.emit(trackName)
 	print("Selected track: ", trackName)
 
 func getDownloadedTrackIds() -> Array[String]:

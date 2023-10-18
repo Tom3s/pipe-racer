@@ -26,13 +26,25 @@ func connectSignals():
 	visibility_changed.connect(onVisibilityChanged)
 
 	get_tree().get_multiplayer().connection_failed.connect(onConnectionFailed)
+
+	Network.connectionClosed.connect(resetStatusText)
 	# get_tree().get_multiplayer().connected_to_server.connect(changeToIngame)
 	# get_tree().get_multiplayer().server_disconnected.connect(changeToOnlineMenu)
 
 
 func onJoinButton_pressed():
 	var client := ENetMultiplayerPeer.new()
-	client.create_client(ipAddress.text, Network.DEFAULT_PORT)
+	var clientResult = client.create_client(ipAddress.text, Network.DEFAULT_PORT)
+
+	if clientResult != OK:
+		print("[OnlineMenu.gd] Client creation failed")
+		statusLabel.text = "STATUS: Client creation failed"
+		AlertManager.showAlert(
+			self,
+			"Connection failed",
+			"Could not connect to server"
+		)
+		return
 	# TODO: this sets global client
 	# I could get local client, and so hosting and connecting would be decoupled
 	# I could get hosting and connecting on the same screen
@@ -46,11 +58,12 @@ func onJoinButton_pressed():
 	statusLabel.text = "STATUS: Connecting to server - " + ipAddress.text
 	Network.userId = get_tree().get_multiplayer().get_unique_id()
 
-	visible = false
+	# visible = false
+	get_tree().get_multiplayer().connected_to_server.connect(hide)
 
 
 func onHostButton_pressed():
-	Network.hostServer(onServerCreated)
+	Network.hostServer(onServerCreated, self)
 	statusLabel.text = "STATUS: Hosting server"
 	# Network.username = username.text
 
@@ -60,6 +73,7 @@ func onHostButton_pressed():
 	Network.playerDatas[str(id)] = Network.localData
 
 func onBackButton_pressed():
+	Network.closeConnection()
 	visible = false
 	backPressed.emit()
 
@@ -70,6 +84,11 @@ func onServerCreated():
 func onConnectionFailed():
 	print("[OnlineMenu.gd] Connection failed")
 	statusLabel.text = "STATUS: Connection failed"
+	AlertManager.showAlert(
+		self,
+		"Connection failed",
+		"Could not connect to server"
+	)
 
 	joinButton.disabled = false
 	hostButton.disabled = false
@@ -78,6 +97,8 @@ func onVisibilityChanged():
 	joinButton.disabled = false
 	hostButton.disabled = false
 
+func resetStatusText():
+	statusLabel.text = "STATUS: waiting"
 
 var gameScene := preload("res://GameScene.tscn")
 var game: GameScene

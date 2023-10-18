@@ -31,6 +31,9 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
 text = "Username"
 
 [node name="Username" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
@@ -46,6 +49,9 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
 text = "IP"
 
 [node name="IpAddress" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
@@ -85,4 +91,7 @@ offset_top = -47.0
 offset_right = 69.0
 offset_bottom = -24.0
 grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
 text = "STATUS: waiting..."

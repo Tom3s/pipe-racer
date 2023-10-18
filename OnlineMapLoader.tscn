@@ -15,3 +15,6 @@ visible = false
 
 [node name="OnlineMenu" parent="CanvasLayer" instance=ExtResource("4_08w4u")]
 visible = false
+
+[node name="RaceParent" type="Node3D" parent="."]
+unique_name_in_owner = true
