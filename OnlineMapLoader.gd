@@ -32,6 +32,8 @@ func connectSignals():
 	onlineMenu.backPressed.connect(onOnlineMenu_backPressed)
 	get_tree().get_multiplayer().connected_to_server.connect(onOnlineMenu_connectionEstablished)
 	get_tree().get_multiplayer().server_disconnected.connect(onServerClosed)
+	get_tree().get_multiplayer().connection_failed.connect(onServerClosed)
+	get_tree().get_multiplayer().peer_disconnected.connect(increaseReadyPlayers)
 	mapLoader.downloadFailed.connect(onMapLoader_DownloadFailed)
 	mapLoader.backPressed.connect(onMapLoader_backPressed)
 	mapLoader.trackSelected.connect(onMapLoader_trackSelected)
@@ -77,6 +79,8 @@ func onServerClosed():
 	playerSelectorMenu.visible = true
 	onlineMenu.visible = false
 	mapLoader.visible = false
+	for child in %RaceParent.get_children():
+		child.queue_free()
 
 func onMapLoader_backPressed():
 	onlineMenu.visible = true
@@ -91,34 +95,50 @@ func onMapLoader_DownloadFailed():
 	)
 	playerSelectorMenu.visible = true
 
+var selectedTrack: String
 func onMapLoader_trackSelected(trackName: String):
 
-	raceNode = gameScene.instantiate()
-	raceNode.name = trackName.split("/")[-1].split(".")[0]
-	add_child(raceNode)
-	raceNode.setup(trackName, true, true)
-	raceNode.exitPressed.connect(onRace_exited)
+	# raceNode = gameScene.instantiate()
+	# raceNode.name = trackName.split("/")[-1].split(".")[0]
+	# %RaceParent.add_child(raceNode)
+	# raceNode.setup(trackName, true, true)
+	# raceNode.exitPressed.connect(onRace_exited)
 
-
-	if Network.userId != 1:
-		print("Waiting for client")
-		await get_tree().create_timer(1.0).timeout
-		while !raceNode.is_node_ready():
-			print("Waiting for client")
-			await get_tree().create_timer(1.0).timeout
-		rpc_id(1, "increaseReadyPlayers")
+	selectedTrack = trackName
+	initializeRace()
+	# if Network.userId != 1:
+	# 	print("Waiting for client")
+		# await get_tree().create_timer(5.0).timeout
+		# while !raceNode.is_node_ready():
+		# 	print("Waiting for client")
+		# 	await get_tree().create_timer(1.0).timeout
 
 func onRace_exited():
-	raceNode.queue_free()
+	for child in %RaceParent.get_children():
+		child.queue_free()
 	mapLoader.visible = true
 	readyPlayers = 0
 
 @rpc("any_peer", "call_remote", "reliable")
-func increaseReadyPlayers():
+func increaseReadyPlayers(_sink = null):
 	readyPlayers += 1
 	print("readyPlayers: ", readyPlayers, "/", Network.playerCount)
-	if readyPlayers == Network.playerCount:
+	if readyPlayers >= Network.playerCount:
+		# initializeRace()
 		raceNode.initializePlayers()
+
+func initializeRace():
+	raceNode = gameScene.instantiate()
+	raceNode.name = selectedTrack.split("/")[-1].split(".")[0]
+	%RaceParent.add_child(raceNode)
+	if Network.userId != 1:
+		raceNode.finishedLoading.connect(broadcastReady)
+	raceNode.setup(selectedTrack, true, true)
+	raceNode.exitPressed.connect(onRace_exited)
+
+func broadcastReady():
+	rpc_id(1, "increaseReadyPlayers")
+	
 
 func show():
 	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(

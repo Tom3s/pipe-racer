@@ -8,7 +8,7 @@ class_name GameScene
 var map: Map
 
 signal exitPressed()
-
+signal finishedLoading()
 
 func setup(
 	mapName: String,
@@ -35,6 +35,8 @@ func setup(
 
 	if !online:
 		initializeLocalPlayers()
+	
+	finishedLoading.emit()
 
 func initializePlayers():
 	if Network.userId == 1:

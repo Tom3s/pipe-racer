@@ -27,12 +27,17 @@ func _ready():
 func connectSignals():
 	username.text_changed.connect(onUsername_textChanged)
 	password.text_changed.connect(onPassword_textChanged)
+	username.text_submitted.connect(onLoginButton_pressed)
+	password.text_submitted.connect(onLoginButton_pressed)
+	
 	colorPicker.color_changed.connect(onColorPicker_colorChanged)
 	guestTickBox.toggled.connect(onGuestTickBox_toggled)
 	loginButton.pressed.connect(onLoginButton_pressed)
 	asGuestButton.pressed.connect(asGuestButton_pressed)
 	logoutButton.pressed.connect(onLogoutButton_pressed)
 	randomColorButton.pressed.connect(onRandomColorButton_pressed)
+
+
 
 
 
@@ -50,7 +55,7 @@ func onGuestTickBox_toggled(pressed: bool):
 	loginButton.visible = !pressed
 	asGuestButton.visible = pressed
 
-func onLoginButton_pressed():
+func onLoginButton_pressed(_sink = null):
 	setButtonsLoggingIn()
 
 	print("Logging in...")
@@ -103,6 +108,8 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 	if responseCode != 200:
 		setButtonsLoggedOut()
 		print("Error after login request: ", body.get_string_from_utf8())
+		if GlobalProperties.playerSelectorNode.visible:
+			AlertManager.showAlert(self, "Error logging in", body.get_string_from_utf8())
 		print("Result: ", error_string(_result))
 		return
 	
@@ -119,9 +126,6 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 		GlobalProperties.USER_ID = userId
 	
 	var profilePictureUrl = json.profilePictureUrl
-
-
-	print("Profile picture url: " + profilePictureUrl)
 
 	loadProfilePicture(profilePictureUrl)
 

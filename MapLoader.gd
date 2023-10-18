@@ -221,7 +221,7 @@ func onDownloadButton_pressed() -> void:
 	var trackId: String = onlineTrackListItems[onlineTrackList.get_selected_items()[0]]._id as String
 	var downloadedTracks = getDownloadedTrackIds()
 	if trackId in downloadedTracks:
-		showAlert("Error", "Track Already Downloaded", "Check your downloaded tracks list at the top") 
+		AlertManager.showAlert(self, "Error", "Track Already Downloaded", "Check your downloaded tracks list at the top") 
 		return
 	downloadTrack(trackId)
 
@@ -362,12 +362,12 @@ func onUploadRequest_completed(_result: int, responseCode: int, _headers: Packed
 
 	if (responseCode != 200):
 		setLoadUploadButtonEnabled()
-		showAlert("Error", "Upload Failed", body.get_string_from_utf8()) 
+		AlertManager.showAlert(self, "Error", "Upload Failed", body.get_string_from_utf8()) 
 		return
 	
 	var response = JSON.parse_string(body.get_string_from_utf8())
 
-	showAlert("Success", response.name + " Uploaded Successfully", "Track ID: " + response._id) 
+	AlertManager.showAlert(self, "Success", response.name + " Uploaded Successfully", "Track ID: " + response._id) 
 
 func loadTrackListItems():
 	var loadTracksRequest = HTTPRequest.new()
@@ -386,7 +386,7 @@ func loadTrackListItems():
 
 func onLoadTracksRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
-		showAlert("Error", "Failed to load tracks", body.get_string_from_utf8()) 
+		AlertManager.showAlert(self, "Error", "Failed to load tracks", body.get_string_from_utf8()) 
 		return
 	
 	var response = JSON.parse_string(body.get_string_from_utf8())
@@ -396,7 +396,7 @@ func onLoadTracksRequest_completed(_result: int, responseCode: int, _headers: Pa
 		onlineTrackListItems.append(track)
 		onlineTrackList.add_item(track.name + " - by: " + track.author.username)
 	
-	showAlert("Success", "Tracks Loaded Successfully", "Found " + str(onlineTrackListItems.size()) + " tracks")
+	AlertManager.showAlert(self, "Success", "Tracks Loaded Successfully", "Found " + str(onlineTrackListItems.size()) + " tracks")
 
 var downloadingTrack: bool = false
 var lastDownloadedTrackId: String = ""
@@ -421,7 +421,7 @@ func downloadTrack(trackId: String):
 
 func onDownloadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
-		showAlert("Error", "Failed to download track", body.get_string_from_utf8()) 
+		AlertManager.showAlert(self, "Error", "Failed to download track", body.get_string_from_utf8()) 
 		downloadingTrack = false
 		lastDownloadedTrackId = ""
 		return
@@ -435,7 +435,7 @@ func onDownloadRequest_completed(_result: int, responseCode: int, _headers: Pack
 	lastDownloadedTrackId = ""
 
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	showAlert("Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
+	AlertManager.showAlert(self, "Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
 
 
 
@@ -455,16 +455,6 @@ func setListVisibility(mode: int):
 	localTrackList.visible = mode == MODE_SELECT_LOCAL
 	downloadedTrackList.visible = mode == MODE_SELECT_DOWNLOADED
 	onlineTrackList.visible = mode == MODE_SELECT_SEARCH
-
-
-func showAlert(title: String, text: String, response: String):
-	var alert = AcceptDialog.new()
-	alert.title = title
-	alert.dialog_text = text + "\n"
-	alert.dialog_text += response
-	alert.canceled.connect(alert.queue_free)
-	add_child(alert)
-	alert.popup_centered()
 
 func showDeleteAlert(trackName: String):
 	var alert = AcceptDialog.new()

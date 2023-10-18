@@ -52,6 +52,8 @@ func _ready():
 
 
 func fetchImage(imageUrl: String) -> void:
+	if !is_node_ready():
+		return
 	var httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
 	httpRequest.timeout = 60
