@@ -445,7 +445,19 @@ func onEditorInputHandler_editorModeBuildPressed():
 	editorStateMachine.setEditorStateBuild()
 	var oldSelection = editorStateMachine.currentSelection
 	if oldSelection != null:
-		map.update(oldSelection, prefabMesher)
+		# map.update(oldSelection, prefabMesher)
+		if oldSelection.has_method("select"):
+			map.update(oldSelection, prefabMesher)
+		elif oldSelection.has_method("isStart"):
+			map.addStart(propPlacer)
+		elif oldSelection.has_method("isCheckPoint"):
+			map.updateCheckPoint(oldSelection, propPlacer)
+			oldSelection.visible = true
+			propPlacer.visible = false
+		elif oldSelection.has_method("isProp"):
+			map.updateProp(oldSelection, propPlacer)
+			oldSelection.visible = true
+			propPlacer.visible = false
 		editorStateMachine.clearSelection()
 	# onEditorStateMachine_buildModeChanged(editorStateMachine.buildMode)
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_BUILD)
