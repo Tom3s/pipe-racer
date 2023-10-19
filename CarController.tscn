@@ -326,10 +326,12 @@ script = ExtResource("9_n17k7")
 [node name="Impact1" type="AudioStreamPlayer" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("10_8irg8")
+bus = &"SFX"
 
 [node name="Impact2" type="AudioStreamPlayer" parent="SoundEffects"]
 unique_name_in_owner = true
 stream = ExtResource("11_ryyl8")
+bus = &"SFX"
 
 [node name="CarStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
