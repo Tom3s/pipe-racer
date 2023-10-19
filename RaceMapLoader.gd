@@ -26,6 +26,7 @@ func connectSignals():
 
 func onPlayerSelectorMenu_nextPressed(selectedPlayers: Array[PlayerData]):
 	players = selectedPlayers
+	Network.localData = players
 	mapLoader.visible = true
 	GlobalProperties.returnPlayerSelectorMenu(
 		onPlayerSelectorMenu_backPressed,
@@ -48,7 +49,6 @@ func onMapLoader_trackSelected(trackName: String):
 		# raceSettins.addPlayer(player)
 	
 	# startRace(raceSettins)
-	Network.localData = players
 
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
