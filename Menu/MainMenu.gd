@@ -26,6 +26,8 @@ func _ready():
 
 	GlobalProperties.setOriginalSettingsMenu(self, settingsMenu, onSettingsMenu_backPressed)
 
+	%VersionLabel.text = "Version: " + VersionCheck.currentVersion
+
 func connectSignals():
 	playButton.pressed.connect(onPlayButton_pressed)
 	editButton.pressed.connect(onEditButton_pressed)

@@ -150,14 +150,17 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 
 		if state.ranked:
 			# submitTime(timeTrialManagers[playerIdentifier].splits, bestLap, totalTime, playerIndex)
-			Leaderboard.submitTime(
-				timeTrialManagers[playerIdentifier].splits,
-				bestLap,
-				totalTime,
-				map.trackId,
-				sessionToken, # FIX
-				onSubmitRun_requestCompleted
-			)
+			if VersionCheck.offline:
+				AlertManager.showAlert(self, "Offline", "Please update the game to submit times")
+			else:
+				Leaderboard.submitTime(
+					timeTrialManagers[playerIdentifier].splits,
+					bestLap,
+					totalTime,
+					map.trackId,
+					sessionToken, # FIX
+					onSubmitRun_requestCompleted
+				)
 			# TODO: broadcast info to host/other players maybe
 
 			if state.allLocalPlayersFinished():
@@ -268,10 +271,13 @@ func onPauseMenu_exitPressed():
 			var car := players.get_node(key)
 			var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
 
-			Leaderboard.submitRaceStats(
-				raceStats[key].getObject(),
-				sessionToken # FIX
-			)
+			if VersionCheck.offline:
+				AlertManager.showAlert(self, "Offline", "Please update the game to keep track of your stats")
+			else:
+				Leaderboard.submitRaceStats(
+					raceStats[key].getObject(),
+					sessionToken # FIX
+				)
 	
 	if state.online:
 		if Network.userId == 1:

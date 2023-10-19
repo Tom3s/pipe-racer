@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 const DEFAULT_PORT = 23456
 const MAX_PLAYERS = 8
@@ -23,6 +23,8 @@ signal ipAddressChanged(ip: String)
 signal connectionClosed()
 
 func _ready():
+	theme = load("res://DarkTheme/Dark.theme")
+
 	get_tree().get_multiplayer().connected_to_server.connect(onConnectedToServer)
 	get_tree().get_multiplayer().server_disconnected.connect(onServerDisconnected)
 

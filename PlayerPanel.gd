@@ -56,6 +56,12 @@ func onGuestTickBox_toggled(pressed: bool):
 	asGuestButton.visible = pressed
 
 func onLoginButton_pressed(_sink = null):
+	if VersionCheck.versionCheckComplete == false:
+		await VersionCheck.fetchedNewestVersion
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Offline mode", "You are in offline mode. Please update the game to play online.")
+		return
+
 	setButtonsLoggingIn()
 
 	print("Logging in...")
@@ -79,6 +85,11 @@ func onLoginButton_pressed(_sink = null):
 
 
 func asGuestButton_pressed():
+
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Offline mode", "You are in offline mode. Please update the game to play online.")
+		return
+
 	setButtonsLoggingIn()
 
 	var loginData = getLoginData()

@@ -125,6 +125,11 @@ func searchTracks() -> void:
 func loadTrackListItems():
 	onlineTracks.clear()
 	onlineTrackListItems.clear()
+
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot download tracks in offline mode", "Please connect to the internet and try again") 
+		return
+
 	onlineTracks.add_item("Loading Tracks...")
 	var loadTracksRequest = HTTPRequest.new()
 	add_child(loadTracksRequest)
@@ -187,6 +192,11 @@ func getDownloadedTrackIds() -> Array[String]:
 var downloadingTrack: bool = false
 var lastDownloadedTrackId: String = ""
 func downloadTrack(trackId: String):
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot download tracks in offline mode", "Please connect to the internet and try again") 
+		return
+
+
 	var alreadyDownloadedTracks = getDownloadedTrackIds()
 	if trackId in alreadyDownloadedTracks:
 		showAlert("Error", "Track Already Downloaded", "Check your downloaded tracks list at the top") 
@@ -233,6 +243,11 @@ func onDownloadRequest_completed(_result: int, responseCode: int, _headers: Pack
 
 @rpc("authority", "call_remote", "reliable")
 func downloadAndPlay(trackId: String):
+
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot download tracks in offline mode", "Please connect to the internet and try again") 
+		return
+
 	var alreadyDownloadedTracks = getDownloadedTrackIds()
 	if trackId in alreadyDownloadedTracks:
 		var path = "user://tracks/downloaded/" + trackId + ".json"
