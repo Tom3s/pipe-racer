@@ -562,8 +562,11 @@ func onMap_mapLoaded(trackName: String, lapCount: int):
 
 func onEditorExited():
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
-	var signalResponse = submitEditorStats(editorStats.getObject())
-	await signalResponse
+	if !VersionCheck.offline:
+		var signalResponse = submitEditorStats(editorStats.getObject())
+		await signalResponse
+	else:
+		AlertManager.showAlert(self, "Offline", "Please update the game to keep track of your stats")
 	get_parent().editorExited.emit()
 
 const EDITOR_UI_PREFAB_PROPERTIES: int = 0

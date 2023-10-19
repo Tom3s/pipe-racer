@@ -1,4 +1,7 @@
-extends Node
+extends Control
+
+func _ready():
+	theme = load("res://DarkTheme/Dark.theme")
 
 func showAlert(parent: Node, title: String, text: String, response: String = ""):
 	var alert = AcceptDialog.new()

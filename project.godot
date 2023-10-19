@@ -22,6 +22,7 @@ GlobalProperties="*res://GlobalProperties.gd"
 Network="*res://Global/Network.gd"
 Leaderboard="*res://Global/Leaderboard.gd"
 AlertManager="*res://Global/AlertManager.gd"
+VersionCheck="*res://Global/VersionCheck.gd"
 
 [debug]
 

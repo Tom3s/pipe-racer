@@ -336,6 +336,9 @@ func setLoadUploadButtonEnabled():
 
 
 func uploadTrack(trackFileName: String):
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot upload track in offline mode", "Please connect to the internet and try again") 
+		return
 	print("Uploading track: ", trackFileName)
 	var uploadRequest = HTTPRequest.new()
 	add_child(uploadRequest)
@@ -370,6 +373,9 @@ func onUploadRequest_completed(_result: int, responseCode: int, _headers: Packed
 	AlertManager.showAlert(self, "Success", response.name + " Uploaded Successfully", "Track ID: " + response._id) 
 
 func loadTrackListItems():
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot load tracks in offline mode", "Please connect to the internet and try again") 
+		return
 	var loadTracksRequest = HTTPRequest.new()
 	add_child(loadTracksRequest)
 	loadTracksRequest.timeout = 30
@@ -401,6 +407,9 @@ func onLoadTracksRequest_completed(_result: int, responseCode: int, _headers: Pa
 var downloadingTrack: bool = false
 var lastDownloadedTrackId: String = ""
 func downloadTrack(trackId: String):
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "Error", "Cannot download track in offline mode", "Please connect to the internet and try again") 
+		return
 	var downloadRequest = HTTPRequest.new()
 	add_child(downloadRequest)
 	downloadRequest.timeout = 30
