@@ -20,7 +20,7 @@ var terrainHeight: float = 100.0:
 var valleyDip: float = 1.0:
 	set(value):
 		valleyDip = value
-		get_surface_override_material(0).set_shader_parameter("ValleyDip", value)
+		# get_surface_override_material(0).set_shader_parameter("ValleyDip", value)
 		# calculateCollisionShape()
 	get:
 		return valleyDip
@@ -40,10 +40,12 @@ var noiseSize: float = 5:
 var subdivisions: int = 128:
 	set(value):
 		subdivisions = value
-		mesh.subdivide_depth = value
-		mesh.subdivide_width = value
+		mesh.subdivide_depth = value - 1
+		mesh.subdivide_width = value - 1
 		noiseTexture.width = value + 1
 		noiseTexture.height = value + 1
+		await noiseTexture.changed
+
 		get_surface_override_material(0).set_shader_parameter("NoiseTexture", noiseTexture)
 		# calculateCollisionShape()
 
@@ -77,7 +79,7 @@ func _ready():
 
 	var material = sceneryShaderMaterial
 	material.set_shader_parameter("Terrain_Height", terrainHeight)
-	material.set_shader_parameter("ValleyDip", valleyDip)
+	# material.set_shader_parameter("ValleyDip", valleyDip)
 	material.set_shader_parameter("Noise_Size", noiseSize)
 	# material.set_shader_parameter("NoiseTexture", noiseTexture)
 
@@ -99,24 +101,30 @@ func calculateCollisionShape():
 		heights.append([])
 		for y in subdivisions + 1:
 			heights[x].append(image.get_pixel(x, y).r) #  * terrainHeight
-			# heights[x].append(image.get_pixel(subdivisions - x, subdivisions - y).r * terrainHeight)
 
 			var uv = Vector2(float(x) / subdivisions, float(y) / subdivisions)
 			var value = uv.distance_to(Vector2(0.5, 0.5))
 			value = cos(value * PI)
 			value = clamp(value, 0.0, 1.0)
 
-			heights[x][y] *= 1 - (value * valleyDip)
+			# heights[x][y] *= 1 - (value * valleyDip)
+			var asd = value * valleyDip
+			heights[x][y] = lerp(heights[x][y], 0.0, asd)
 
-			var height = heights[x][y]
+			# heights[x][y] = floor(heights[x][y] * 20) / 20
 
-			heightmap.set_pixel(x, y, Color(height, height, height, 1.0))
-			heights[x][y] *= terrainHeight/ actualSize
-			# heights[x][y] = value * terrainHeight
+			heightmap.set_pixel(x, y, Color(
+				heights[x][y], 
+				heights[x][y], 
+				heights[x][y], 
+				1.0))
+			heights[x][y] *= (terrainHeight / actualSize)
+			heights[x][y] = floor(heights[x][y] * 20) / 20
 	
 	var flatArray = []
 	for array in heights:
 		flatArray.append_array(array)
+	print(flatArray.size())
 	
 	var collisionNode = %Proper
 
