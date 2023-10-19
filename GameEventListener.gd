@@ -366,7 +366,7 @@ func getInputDevices(networkId: int) -> Array[int]:
 		player = player as CarController
 		if player.networkId == networkId:
 			localPlayerCount += 1
-	if localPlayerCount == 1 && Network.playerDatas[str(networkId)].size() == 1:
+	if localPlayerCount == 1 && (Network.playerDatas.size() == 0 || Network.playerDatas[str(networkId)].size() == 1):
 		return [1, 2]
 	return [localPlayerCount]
 	

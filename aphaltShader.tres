@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=32 format=3 uid="uid://bpa7nsn7svg8e"]
+[gd_resource type="VisualShader" load_steps=37 format=3 uid="uid://bpa7nsn7svg8e"]
 
 [ext_resource type="Gradient" uid="uid://bp85hl24r80id" path="res://Track Props/blueCurb.tres" id="1_wdkxm"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/generic2d_fractal.gd" id="2_xltl4"]
@@ -108,6 +108,21 @@ default_input_values = [0, 0.0, 1, 0.25]
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_3j72s"]
 input_name = "uv"
 
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_xl36l"]
+input_name = "vertex"
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_hy7cl"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_rjkya"]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_x5hba"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_u0mth"]
+default_input_values = [0, 0.0, 1, 0.01]
+operator = 2
+
 [resource]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx;
@@ -144,6 +159,35 @@ float _genericNoise2DFBM(vec2 _uv_gnfbm, int _oct_gnfbm, vec2 _per_gnfbm, float 
 		_a *= _persist_gnfbm;
 	}
 	return _v;
+}
+
+void vertex() {
+// Input:2
+	vec3 n_out2p0 = VERTEX;
+
+
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+// FloatOp:6
+	float n_in6p1 = 0.01000;
+	float n_out6p0 = n_out3p0.x * n_in6p1;
+
+
+// VectorCompose:4
+	float n_in4p0 = 0.00000;
+	vec2 n_out4p0 = vec2(n_in4p0, n_out6p0);
+
+
+// VectorOp:5
+	vec3 n_out5p0 = n_out2p0 + vec3(n_out4p0, 0.0);
+
+
+// Output:0
+	VERTEX = n_out5p0;
+
+
 }
 
 void fragment() {
@@ -291,8 +335,19 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-4.38312, 641.788)
+graph_offset = Vector2(-450.28, -49.8756)
 modes/cull = 2
+nodes/vertex/2/node = SubResource("VisualShaderNodeInput_xl36l")
+nodes/vertex/2/position = Vector2(-599.738, 103.436)
+nodes/vertex/3/node = SubResource("VisualShaderNodeInput_hy7cl")
+nodes/vertex/3/position = Vector2(-779.738, 263.436)
+nodes/vertex/4/node = SubResource("VisualShaderNodeVectorCompose_rjkya")
+nodes/vertex/4/position = Vector2(-219.738, 203.436)
+nodes/vertex/5/node = SubResource("VisualShaderNodeVectorOp_x5hba")
+nodes/vertex/5/position = Vector2(-39.738, 83.436)
+nodes/vertex/6/node = SubResource("VisualShaderNodeFloatOp_u0mth")
+nodes/vertex/6/position = Vector2(-419.738, 263.436)
+nodes/vertex/connections = PackedInt32Array(2, 0, 5, 0, 3, 0, 6, 0, 6, 0, 4, 1, 4, 0, 5, 1, 5, 0, 0, 0)
 nodes/fragment/0/position = Vector2(2080, 2240)
 nodes/fragment/2/node = SubResource("VisualShaderNodeStep_txpqf")
 nodes/fragment/2/position = Vector2(-400, 680)
