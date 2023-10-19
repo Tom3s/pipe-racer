@@ -12,10 +12,12 @@ script = ExtResource("1_rsk1f")
 [node name="Countdown" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("1_oc12v")
+bus = &"SFX"
 
 [node name="StartRace" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_ejhrk")
+bus = &"SFX"
 
 [node name="FinishLap" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
