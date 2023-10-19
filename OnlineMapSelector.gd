@@ -40,7 +40,7 @@ func _ready():
 	showIpButton.button_up.connect(hideIpAddress)
 	copyIpButton.pressed.connect(copyIpAddress)
 
-	Network.ipAddressChanged.connect(setIpAddress)
+	# Network.ipAddressChanged.connect(setIpAddress)
 
 	visibility_changed.connect(onVisibilityChanged)
 
@@ -51,9 +51,9 @@ func _ready():
 	loadDownloadedTracks()
 
 
-func setIpAddress(newIp: String):
-	print("New IP: ", newIp)
-	ipAddress.text = newIp
+# func setIpAddress(newIp: String):
+# 	print("New IP: ", newIp)
+# 	ipAddress.text = newIp
 
 func showIpAddress():
 	ipAddress.text = Network.ipAddress
