@@ -134,7 +134,17 @@ func hostServer(callback: Callable, errorParent: Node):
 		)
 		# return
 	
-
+	if !portsMapped:
+	
+		ipAddress = IP.get_local_addresses()[3]
+		ipAddressChanged.emit(ipAddress)
+	
+		for ip in IP.get_local_addresses():
+			print(ip)
+			if ip.begins_with("192.168.") && !ip.ends_with(".1"):
+				ipAddress = ip
+				ipAddressChanged.emit(ipAddress)
+				break
 
 	var server = ENetMultiplayerPeer.new()
 	server.create_server(DEFAULT_PORT, MAX_PLAYERS)
