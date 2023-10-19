@@ -22,6 +22,7 @@ func _init(data, frictionMultiplier = 1.0, accelerationPenaltyFactor = 0.0):
 	prefabData = data
 	friction = frictionMultiplier
 	accelerationPenalty = accelerationPenaltyFactor
+	lod_bias = 128.0
 
 func getFriction() -> float:
 	return friction
