@@ -144,7 +144,7 @@ func hostServer(callback: Callable, errorParent: Node):
 	callback.call()
 
 func closeConnection():
-	get_tree().get_multiplayer().multiplayer_peer = null
+	get_tree().get_multiplayer().multiplayer_peer = OfflineMultiplayerPeer.new()
 	userId = 1
 	playerDatas.clear()
 	connectionClosed.emit()

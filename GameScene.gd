@@ -39,6 +39,7 @@ func setup(
 	finishedLoading.emit()
 
 func initializePlayers():
+	%GameEventListener.clearPlayers()
 	if Network.userId == 1:
 		for key in Network.playerDatas:
 			%GameEventListener.addPlayers(Network.playerDatas[key], key.to_int())
