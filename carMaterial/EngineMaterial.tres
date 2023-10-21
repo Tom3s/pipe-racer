@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bsgfhbc4tvi5c"]
+
+[ext_resource type="Shader" uid="uid://brnomn2rnxqij" path="res://carMaterial/engineBlockShader.tres" id="1_b386r"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_b386r")
+shader_parameter/CoverColor = Color(1, 0, 0, 1)

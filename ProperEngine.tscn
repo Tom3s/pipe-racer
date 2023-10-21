@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://ddswshxysay4a"]
+
+[ext_resource type="PackedScene" uid="uid://e4d2rtk3leu4" path="res://carMaterial/engine.glb" id="1_m38ol"]
+[ext_resource type="Material" uid="uid://bsgfhbc4tvi5c" path="res://carMaterial/EngineMaterial.tres" id="2_iynx4"]
+[ext_resource type="Material" uid="uid://kivs4jx58xn8" path="res://carMaterial/body_shader.tres" id="3_4tnhh"]
+[ext_resource type="Material" uid="uid://d2ps0jkyv48q3" path="res://carMaterial/tire_metal.tres" id="4_p7wio"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yekry"]
+albedo_color = Color(0.0901961, 0.0901961, 0.0901961, 1)
+metallic = 0.85
+roughness = 0.07
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fi1y3"]
+albedo_color = Color(0.0901961, 0.0901961, 0.0901961, 1)
+metallic = 0.85
+roughness = 0.07
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tapme"]
+cull_mode = 2
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="engine" instance=ExtResource("1_m38ol")]
+
+[node name="Block" parent="." index="0"]
+material_override = ExtResource("2_iynx4")
+
+[node name="AirIntake" parent="." index="1"]
+material_override = ExtResource("3_4tnhh")
+
+[node name="Gearbox" parent="." index="2"]
+material_override = ExtResource("3_4tnhh")
+
+[node name="Exhaust" parent="." index="3"]
+material_override = ExtResource("3_4tnhh")
+
+[node name="Drive" parent="." index="4"]
+material_override = SubResource("StandardMaterial3D_yekry")
+
+[node name="Drive001" parent="." index="5"]
+material_override = SubResource("StandardMaterial3D_fi1y3")
+
+[node name="Drive002" parent="." index="6"]
+material_override = ExtResource("4_p7wio")
+
+[node name="Drive004" parent="." index="7"]
+material_override = ExtResource("4_p7wio")
+
+[node name="Drive003" parent="." index="8"]
+material_override = ExtResource("4_p7wio")
+
+[node name="Belt" parent="." index="9"]
+material_override = SubResource("StandardMaterial3D_tapme")

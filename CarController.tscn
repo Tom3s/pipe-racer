@@ -351,5 +351,4 @@ pixel_size = 0.0009
 billboard = 1
 double_sided = false
 fixed_size = true
-text = "PlayerName"
 font = ExtResource("16_crdig")
