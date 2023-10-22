@@ -178,6 +178,7 @@ func onCar_finishedRace(playerIndex: int):
 	raceStats[playerIndex].setBestLap(bestLap)
 	raceStats[playerIndex].setBestTime(totalTime)
 
+	
 	if state.ranked:
 		submitTime(timeTrialManagers[playerIndex].splits, bestLap, totalTime, playerIndex)
 	print("Player ", cars[playerIndex], " finished")

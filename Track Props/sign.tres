@@ -1,6 +1,6 @@
 [gd_resource type="VisualShader" load_steps=39 format=3 uid="uid://b6mmye1k0yxxt"]
 
-[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="1_lllvl"]
+[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://BillboardTextures/BumpyRoadOld.png" id="1_6ir0x"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/generateCircle2.gd" id="2_tdghh"]
 [ext_resource type="Script" path="res://addons/shaderV/uv/tilingNoffset.gd" id="3_jb1xu"]
 [ext_resource type="Script" path="res://addons/shaderV/uv/rotate.gd" id="4_jjdaa"]
@@ -44,7 +44,7 @@ operator = 2
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ailpj"]
 source = 5
-texture = ExtResource("1_lllvl")
+texture = ExtResource("1_6ir0x")
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_i6aga"]
 output_port_for_preview = 0

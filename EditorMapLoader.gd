@@ -28,8 +28,13 @@ func editMap(mapName: String):
 	print("Editing map: ", mapName)
 	editor = editorScene.instantiate()
 	add_child(editor)
+	# editor.loadFailed.connect(unloadMap)
 	if mapName != "":
-		editor.loadMap(mapName)
+		var success = editor.loadMap(mapName)
+		print("================== Map load success: ", success)
+		if !success:
+			unloadMap()
+			return
 	editor.editorExited.connect(unloadMap)
 	mapLoader.visible = false
 	enteredMapEditor.emit()

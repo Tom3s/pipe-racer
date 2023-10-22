@@ -1,7 +1,7 @@
 [gd_resource type="ArrayMesh" load_steps=5 format=3 uid="uid://h53jy2ofkenv"]
 
 [ext_resource type="Shader" uid="uid://b6mmye1k0yxxt" path="res://Track Props/sign.tres" id="1_47yel"]
-[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="2_ayxwn"]
+[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://BillboardTextures/SharpLeftOld.png" id="2_yu7n4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hmfwe"]
 render_priority = 0
@@ -9,7 +9,7 @@ shader = ExtResource("1_47yel")
 shader_parameter/Pixel_Amount = 150
 shader_parameter/Emission = 0.7
 shader_parameter/Mattness = 0.0
-shader_parameter/Texture = ExtResource("2_ayxwn")
+shader_parameter/Texture = ExtResource("2_yu7n4")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_qrb4j"]
 _surfaces = [{

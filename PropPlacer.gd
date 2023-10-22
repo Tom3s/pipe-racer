@@ -22,16 +22,17 @@ var checkPointObject: PackedScene = preload("res://Checkpoint.tscn")
 
 var billboardObject: PackedScene = preload("res://Track Props/Sign.tscn")
 
-@export
-var billboardTextures: Array[Texture] = []
+# @export
+# var billboardTextures: Array[Texture] = []
 
-const BILLBOARD_TEXTURE_BUMPY_ROAD = 0
-const BILLBOARD_TEXTURE_CHICANE_LEFT = 1
-const BILLBOARD_TEXTURE_CHICANE_RIGHT = 2
-const BILLBOARD_TEXTURE_SHARP_LEFT = 3
-const BILLBOARD_TEXTURE_SHARP_RIGHT = 4
+# const BILLBOARD_TEXTURE_BUMPY_ROAD = 0
+# const BILLBOARD_TEXTURE_CHICANE_LEFT = 1
+# const BILLBOARD_TEXTURE_CHICANE_RIGHT = 2
+# const BILLBOARD_TEXTURE_SHARP_LEFT = 3
+# const BILLBOARD_TEXTURE_SHARP_RIGHT = 4
 
-var currentBillboardTexture: int = BILLBOARD_TEXTURE_BUMPY_ROAD
+# var currentBillboardtextureName: int = BILLBOARD_TEXTURE_BUMPY_ROAD
+var currentBillboardTexture: String = ""
 
 var currentImageUrl: String = ""
 
@@ -114,14 +115,23 @@ func rotateFine(amount: int):
 func getCheckPointObject() -> Area3D:
 	return checkPointObject.instantiate()
 
-func getPropObject(textureIndex: int = -1, imageUrl: String = "") -> Node3D:
+func getPropObject(textureName: String = "", imageUrl: String = "") -> Node3D:
 	var prop = billboardObject.instantiate()
-	if textureIndex == -1:
-		textureIndex = currentBillboardTexture
-	if imageUrl == "":
+	if imageUrl == "" && textureName == "":
+		textureName = currentBillboardTexture
+	
+	if textureName == "Custom" && imageUrl == "":
 		imageUrl = currentImageUrl
 
+	var dictKey = textureName + ".png"
 
-	prop.setTexture(billboardTextures[max(0, textureIndex)], textureIndex, imageUrl)
+	if textureName == "":
+		dictKey = "PipeRacerLanguages.png"
+		textureName = "PipeRacerLanguages"
+	
+	if textureName == "Custom":
+		dictKey = "PipeRacerLanguages.png"
+
+	prop.setTexture(BillboardTextureLoader.textures[dictKey], textureName, imageUrl)
 
 	return prop

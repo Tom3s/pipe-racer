@@ -1,7 +1,7 @@
 extends Node3D
 class_name Map
 
-const CURRENT_FORMAT_VERSION = 1
+const CURRENT_FORMAT_VERSION = 2
 
 var StartScene = preload("res://Start.tscn")
 @onready
@@ -73,32 +73,36 @@ signal noOperationToBeUndone()
 signal noOperationToBeRedone()
 signal canUndo(value: bool)
 signal canRedo(value: bool)
+# signal loadFailed()
 
 signal mapLoaded(trackName: String, lapCount: int)
+signal loaded()
+
+var mapLoadSuccess: bool = false
 
 var start: Start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
 const START_OFFSET = Vector3(0, 9.15, 0)
 
-@export_file("*.json")
-var loadFrom: String:
-	set(newFile):
-		loadFrom = loadFromChanged(newFile)
-		print("loadFrom changed to: ", loadFrom)
-		# emit_signal("loadFromChanged", loadFrom)
-		# load(loadFrom
-	get:
-		return loadFrom
+# @export_file("*.json")
+# var loadFrom: String:
+# 	set(newFile):
+# 		loadFrom = loadFromChanged(newFile)
+# 		print("loadFrom changed to: ", loadFrom)
+# 		# emit_signal("loadFromChanged", loadFrom)
+# 		# load(loadFrom
+# 	get:
+# 		return loadFrom
 
-func loadFromChanged(newFile: String) -> String:
-	if newFile == "":
-		return newFile
+# func loadFromChanged(newFile: String) -> String:
+# 	if newFile == "":
+# 		return newFile
 	
-	if is_node_ready():
-		loadMap(newFile)
+# 	if is_node_ready():
+# 		loadMap(newFile)
 		# return newFile
 	
-	return newFile
+	# return newFile
 
 var connectionPoints: Array[Dictionary] = []
 
@@ -116,8 +120,8 @@ func _ready():
 		start.global_position = START_MAGIC_VECTOR
 		start.visible = false
 	
-	if loadFrom != "":
-		loadMap(loadFrom)
+	# if loadFrom != "":
+	# 	loadMap(loadFrom)
 
 	setupAutoSave()
 
@@ -628,7 +632,7 @@ func saveToJSON(autosave: bool = false):
 			# "rotationY": child.global_rotation.y,
 			# "rotationZ": child.global_rotation.z
 			"rotation": child.global_rotation.y,
-			"textureIndex": child.billboardTextureIndex,
+			"textureName": child.billboardTextureName,
 			"imageUrl": child.billboardTextureUrl 
 		})
 
@@ -644,12 +648,13 @@ func saveToJSON(autosave: bool = false):
 
 	fileHandler.store_string(JSON.stringify(trackData, "\t"))
 
-func loadMap(fileName: String):
+func loadMap(fileName: String) -> bool:
 	print(fileName.split(".")[-1])
 	if fileName.split(".")[-1] == "json":
-		loadFromJSON(fileName)
+		return loadFromJSON(fileName)
+	return false
 
-func loadFromJSON(fileName: String):
+func loadFromJSON(fileName: String) -> bool:
 	var path = fileName
 	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
 		path = "user://tracks/local/" + fileName
@@ -663,18 +668,27 @@ func loadFromJSON(fileName: String):
 
 	if fileHandler == null:
 		print("Error opening file to load from", path)
-		return
+		return false
 	
 	var trackData = JSON.parse_string(fileHandler.get_as_text())
 
 	if trackData == null:
 		print("Error parsing JSON when loading map")
-		return
+		return false
+
 	
 	if trackData.has("author"):
 		author = trackData["author"]
 	else:
 		author = ""
+
+
+	if trackData["format"] != CURRENT_FORMAT_VERSION:
+		print("Error loading map: wrong format version")
+		# mapLoadSuccess = false
+		# loaded.emit()
+		print('loaded.emit(false)')
+		return false
 
 	clearMap()
 
@@ -683,7 +697,7 @@ func loadFromJSON(fileName: String):
 
 	if !trackData.has("trackPieces"):
 		print("Error loading map: no trackPieces")
-		return
+		return false
 	
 	var prefabMesher = PrefabMesher.new()
 	add_child(prefabMesher)
@@ -698,14 +712,14 @@ func loadFromJSON(fileName: String):
 
 	if !trackData.has("start"):
 		print("Error loading map: no start")
-		return
+		return false
 	
 	var startPosData = trackData["start"]
 	updateStartPosition(Vector3(startPosData["positionX"], startPosData["positionY"], startPosData["positionZ"]), Vector3(0, startPosData["rotation"], 0))
 
 	if !trackData.has("checkPoints"):
 		print("Error loading map: no checkPoints")
-		return
+		return false
 
 	var propPlacer = PropPlacer.instantiate()
 	add_child(propPlacer)
@@ -721,7 +735,7 @@ func loadFromJSON(fileName: String):
 	if trackData.has("props"):
 		for propData in trackData["props"]:
 			var imageUrl = propData["imageUrl"] if propData.has("imageUrl") else ""
-			var propObject = propPlacer.getPropObject(propData["textureIndex"], imageUrl)
+			var propObject = propPlacer.getPropObject(propData["textureName"], imageUrl)
 			addPropObject(propObject, Vector3(propData["positionX"], propData["positionY"], propData["positionZ"]), Vector3(0, propData["rotation"], 0))
 	else:
 		print("No props on this track")
@@ -730,7 +744,10 @@ func loadFromJSON(fileName: String):
 
 	print("Loaded track: " + trackData["trackName"])
 
+	# mapLoadSuccess = true
+	# loaded.emit()
 	mapLoaded.emit(trackData["trackName"], trackData["lapCount"])
+	return true
 
 func getCheckpoints():
 	return checkPointSystem.get_children()
