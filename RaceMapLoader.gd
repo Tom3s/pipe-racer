@@ -53,7 +53,13 @@ func onMapLoader_trackSelected(trackName: String):
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
 	raceNode.exitPressed.connect(onRace_exited)
-	var _success = raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	var success = raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	if !success:
+		AlertManager.showAlert(
+			self,
+			"Error loading map",
+			"Try updating the map to the new format, or download it again"
+		)
 	# raceNode.initializePlayers()
 
 func onPlayerSelectorMenu_backPressed():

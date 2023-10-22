@@ -152,6 +152,11 @@ func initializeRace():
 	raceNode.exitPressed.connect(onRace_exited)
 	var success = raceNode.setup(selectedTrack, true, true)
 	if !success:
+		AlertManager.showAlert(
+			self,
+			"Error loading map",
+			"Try updating the map to the new format, or download it again"
+		)
 		return
 
 	if Network.playerCount == 0 && Network.userId == 1:
