@@ -52,9 +52,9 @@ func onMapLoader_trackSelected(trackName: String):
 
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
-	raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
-	# raceNode.initializePlayers()
 	raceNode.exitPressed.connect(onRace_exited)
+	var _success = raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	# raceNode.initializePlayers()
 
 func onPlayerSelectorMenu_backPressed():
 	GlobalProperties.returnPlayerSelectorMenu(

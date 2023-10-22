@@ -149,8 +149,10 @@ func initializeRace():
 	%RaceParent.add_child(raceNode)
 	if Network.userId != 1:
 		raceNode.finishedLoading.connect(broadcastReady)
-	raceNode.setup(selectedTrack, true, true)
 	raceNode.exitPressed.connect(onRace_exited)
+	var success = raceNode.setup(selectedTrack, true, true)
+	if !success:
+		return
 
 	if Network.playerCount == 0 && Network.userId == 1:
 		raceNode.initializePlayers()
