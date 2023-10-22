@@ -112,7 +112,7 @@ func connectSignals():
 	prefabPropertiesUI.curveSidewaysChanged.connect(onPrefabPropertiesUI_curveSidewaysChanged)
 	prefabPropertiesUI.roadTypeChanged.connect(onPrefabPropertiesUI_roadTypeChanged)
 
-	propPropertiesUI.textureChanged.connect(onPropPropertiesUI_textureIndexChanged)
+	propPropertiesUI.textureChanged.connect(onPropPropertiesUI_textureNameChanged)
 
 	editorShortcutsUI.editorModeChanged.connect(onEditorShortcutsUI_editorModeChanged)
 	editorShortcutsUI.buildModeChanged.connect(onEditorShortcutsUI_buildModeChanged)
@@ -374,7 +374,7 @@ func onPrefabPropertiesUI_curveSidewaysChanged(value: int):
 func onPrefabPropertiesUI_roadTypeChanged(value: int):
 	prefabMesher.roadType = value
 
-func onPropPropertiesUI_textureIndexChanged(value: String, imageUrl: String):
+func onPropPropertiesUI_textureNameChanged(value: String, imageUrl: String):
 	propPlacer.currentBillboardTexture = value
 	propPlacer.currentImageUrl = imageUrl
 

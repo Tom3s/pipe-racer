@@ -20,7 +20,7 @@ func _ready():
 
 	for key in BillboardTextureLoader.textures:
 		textureSelector.add_item(
-			key.replace(".png", ""),
+			key,
 			BillboardTextureLoader.textures[key]
 		)
 	

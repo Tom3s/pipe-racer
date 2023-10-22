@@ -400,30 +400,31 @@ func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector
 func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
 	# var propObject = propPlacer.getPropObject()
 	# flipping order, because the old object is the one that is already in the scene
-	var index = propPlacer.currentBillboardTexture
-	var texture = propPlacer.billboardTextures[max(0, index)]
+	var textureName = propPlacer.currentBillboardTexture
+	# var texture = propPlacer.billboardTextures[max(0, index)]
+	var texture = BillboardTextureLoader.textures[textureName]
 	var url = propPlacer.currentImageUrl
-	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture, url)
-	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, index, texture, url)
+	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, textureName, texture, url)
+	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, textureName, texture, url)
 
-func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture, url: String):
+func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, textureName: String, texture: Texture, url: String):
 	propObject.global_position = propPos
 	propObject.global_rotation = propRotation
-	propObject.setTexture(texture, index, url)
+	propObject.setTexture(texture, textureName, url)
 
-func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, index: int, texture: Texture, url: String):
+func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, textureName: String, texture: Texture, url: String):
 	safeResizeStack()
 
 	operationStack.append({
 		"propObject": propObject,
 		"oldPosition": propObject.global_position,
 		"oldRotation": propObject.global_rotation,
-		"oldTextureIndex": propObject.billboardTextureIndex,
+		"oldTextureName": propObject.billboardTextureName,
 		"oldTexture": propObject.billboardTexture,
 		"oldImageUrl": propObject.billboardTextureUrl,
 		"newPosition": propPos,
 		"newRotation": propRotation,
-		"newTextureIndex": index,
+		"newTextureName": textureName,
 		"newTexture": texture,
 		"newImageUrl": url,
 		"operation": UPDATED_PROP
@@ -517,7 +518,7 @@ func undo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		addPropObject(lastOperation["propObject"], lastOperation["position"], lastOperation["rotation"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"], lastOperation["oldTextureIndex"], lastOperation["oldTexture"], lastOperation["oldImageUrl"])
+		updatePropObject(lastOperation["propObject"], lastOperation["oldPosition"], lastOperation["oldRotation"], lastOperation["oldTextureName"], lastOperation["oldTexture"], lastOperation["oldImageUrl"])
 
 	else:
 		return
@@ -555,7 +556,7 @@ func redo():
 	elif lastOperation["operation"] == REMOVED_PROP:
 		removePropObject(lastOperation["propObject"])
 	elif lastOperation["operation"] == UPDATED_PROP:
-		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"], lastOperation["newTextureIndex"], lastOperation["newTexture"], lastOperation["newImageUrl"])
+		updatePropObject(lastOperation["propObject"], lastOperation["newPosition"], lastOperation["newRotation"], lastOperation["newTextureName"], lastOperation["newTexture"], lastOperation["newImageUrl"])
 
 	else:
 		lastOperationIndex -= 1
