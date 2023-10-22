@@ -2,7 +2,7 @@ extends Control
 
 var offline = true
 
-var currentVersion = "0.50"
+var currentVersion = "v0.51"
 
 var versionCheckComplete = false
 
@@ -19,7 +19,7 @@ func checkVersion():
 	request.request_completed.connect(onCheckVersion_requestCompleted)
 
 	var result = request.request(
-		"https://github.com/Tom3s/pipe-racer/releases/latest",
+		"https://api.github.com/repos/Tom3s/pipe-racer/releases/latest"
 	)
 
 	if result != OK:
@@ -35,9 +35,23 @@ func checkVersion():
 
 func onCheckVersion_requestCompleted(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	# print(body.get_string_from_ascii())
-	var bodyString = body.get_string_from_ascii()
-	var versionPos = bodyString.find("releases/tag/v") + 14
-	var newestVersion = bodyString.substr(versionPos, 20).split('"')[0]
+	if result != OK:
+		print("Error: ", error_string(result), " (respone code: ", response_code, ")")
+		AlertManager.showAlert(
+			self,
+			"Error",
+			"Error while checking for updates. Playing in offline mode."
+		)
+		fetchedNewestVersion.emit(currentVersion)
+		versionCheckComplete = true
+
+	var bodyString = body.get_string_from_utf8()
+	var bodyJson = JSON.parse_string(bodyString)
+
+	# print(bodyString)
+
+	# var versionPos = bodyString.find("releases/tag/v") + 14
+	var newestVersion = bodyJson["tag_name"]
 
 	print("Newest version: ", newestVersion)
 	print("Current version: ", currentVersion)
