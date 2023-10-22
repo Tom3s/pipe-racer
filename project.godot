@@ -23,6 +23,7 @@ Network="*res://Global/Network.gd"
 Leaderboard="*res://Global/Leaderboard.gd"
 AlertManager="*res://Global/AlertManager.gd"
 VersionCheck="*res://Global/VersionCheck.gd"
+BillboardTextureLoader="*res://Global/BillboardTextureLoader.gd"
 
 [debug]
 

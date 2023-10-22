@@ -15,13 +15,17 @@ func setup(
 	ranked: bool = false,
 	online: bool = false,
 
-) -> void:
+) -> bool:
 	# load map
 	map = Map.instantiate()
 	add_child(map)
 
 	# TODO: check if map exists locally, if not, download it
-	map.loadFrom = mapName
+	var success = map.loadMap(mapName)
+	if !success:
+		print("Failed to load map: " + mapName)
+		exitPressed.emit()
+		return false
 	map.setIngame()
 
 	%GameEventListener.map = map
@@ -37,6 +41,8 @@ func setup(
 		initializeLocalPlayers()
 	
 	finishedLoading.emit()
+
+	return true
 
 func initializePlayers():
 	%GameEventListener.clearPlayers()

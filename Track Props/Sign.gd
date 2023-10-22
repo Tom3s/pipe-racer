@@ -13,23 +13,23 @@ var billboardTexture: Texture
 	# get:
 	# 	return billboardTexture
 
-var billboardTextureIndex: int = 0
+var billboardTextureName: String = ""
 var billboardTextureUrl: String = ""
 
 func isProp():
 	pass
 
-func setTexture(texture: Texture, index: int, url: String = "none") -> void:
+func setTexture(texture: Texture, textureName: String, url: String = "") -> void:
 	billboardTexture = texture
-	billboardTextureIndex = index
-	if url != "none":
+	billboardTextureName = textureName
+	if url != "":
 		billboardTextureUrl = url
 
 	if is_node_ready():
 		board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
+		if url != "" && textureName == "Custom":
+			fetchImage(url)
 	
-	if url != "" && index == -2:
-		fetchImage(url)
 	
 
 func _ready():
@@ -45,7 +45,7 @@ func _ready():
 	newMaterial.set_shader_parameter("Texture", billboardTexture)
 	board.set_surface_override_material(0, newMaterial)
 
-	if billboardTextureUrl != "" && billboardTextureIndex == -2:
+	if billboardTextureUrl != "" && billboardTextureName == "Custom":
 		fetchImage(billboardTextureUrl)
 
 	print("Prop ready")
@@ -78,5 +78,7 @@ func onLoadTexture_RequestCompleted(_result: int, _responseCode: int, _headers: 
 	# else:
 	# 	print("JPG loaded successfully")
 
+	print("Setting custom billboard texture")
+
 	var texture = ImageTexture.create_from_image(image)
-	setTexture(texture, billboardTextureIndex, "none")
+	setTexture(texture, billboardTextureName, "")

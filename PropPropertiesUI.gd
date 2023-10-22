@@ -1,7 +1,7 @@
 extends Control
 class_name PropPropertiesUI
 
-signal textureIndexChanged(index: int, url: String)
+signal textureChanged(fileName: String, url: String)
 
 @onready var textureSelector: ItemList = %TextureSelector
 @onready var imageUrl: TextEdit = %ImageUrl
@@ -9,8 +9,6 @@ signal textureIndexChanged(index: int, url: String)
 
 
 func _ready():
-	textureSelector.select(0)
-	textureIndexChanged.emit(0)
 
 	applyButton.disabled = true
 	applyButton.visible = false
@@ -19,6 +17,18 @@ func _ready():
 
 	textureSelector.item_selected.connect(onTextureSelector_itemSelected)
 	applyButton.pressed.connect(onApplyButton_pressed)
+
+	for key in BillboardTextureLoader.textures:
+		textureSelector.add_item(
+			key.replace(".png", ""),
+			BillboardTextureLoader.textures[key]
+		)
+	
+	textureSelector.add_item("Custom")
+
+	print("defaultTextureIndex ", BillboardTextureLoader.defaultTextureIndex)
+	textureSelector.select(BillboardTextureLoader.defaultTextureIndex)
+	textureChanged.emit("PipeRacerLanguages", "")
 
 func onTextureSelector_itemSelected(index: int):
 	if index == textureSelector.item_count - 1:
@@ -31,10 +41,12 @@ func onTextureSelector_itemSelected(index: int):
 		applyButton.disabled = true
 		applyButton.visible = false
 
-	textureIndexChanged.emit(index, "")
+	textureChanged.emit(
+		textureSelector.get_item_text(index), ""
+	)
 
 func onApplyButton_pressed():
 	var url = imageUrl.text
 
-	textureIndexChanged.emit(-2, url)
+	textureChanged.emit("Custom", url)
 

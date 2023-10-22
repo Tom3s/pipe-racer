@@ -1,17 +1,12 @@
-[gd_scene load_steps=28 format=3 uid="uid://bf1ljjah7ojpp"]
+[gd_scene load_steps=23 format=3 uid="uid://bf1ljjah7ojpp"]
 
 [ext_resource type="Script" path="res://PropPlacer.gd" id="1_fo23j"]
 [ext_resource type="Shader" uid="uid://ckpmxxrqc07mq" path="res://Track Props/StartLineCheckers.tres" id="2_2858g"]
-[ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://Track Props/Bumpy road.png" id="2_f7shh"]
-[ext_resource type="Texture2D" uid="uid://dvxlqb8ty68ye" path="res://Track Props/Chicane left.png" id="3_c18uy"]
 [ext_resource type="Material" uid="uid://bivv07b0tjr36" path="res://Tracks/trackPrefabPreview.tres" id="3_v3u8t"]
 [ext_resource type="Shader" uid="uid://bu8tvn7utd22p" path="res://Track Props/StartLineFlag.tres" id="4_4yq0e"]
-[ext_resource type="Texture2D" uid="uid://cdrphd6rbd85y" path="res://Track Props/Chicane right.png" id="4_bbk7w"]
 [ext_resource type="Texture2D" uid="uid://bscn3vsxbnoae" path="res://Track Props/StartFlag.png" id="5_flmkr"]
-[ext_resource type="Texture2D" uid="uid://dtvuprlxjfi71" path="res://Track Props/Sharp right.png" id="6_l0l3k"]
 [ext_resource type="Shader" uid="uid://b6mmye1k0yxxt" path="res://Track Props/sign.tres" id="6_ueabm"]
-[ext_resource type="Texture2D" uid="uid://c3g2tli8mtuws" path="res://Track Props/champion.png" id="7_aafua"]
-[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://Track Props/Sharp Left.png" id="7_pg45c"]
+[ext_resource type="Texture2D" uid="uid://ch1mnpfancnu0" path="res://BillboardTextures/SharpLeftOld.png" id="7_6uxp6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xv0uc"]
 render_priority = 0
@@ -198,7 +193,7 @@ shader = ExtResource("6_ueabm")
 shader_parameter/Pixel_Amount = 150
 shader_parameter/Emission = 0.4
 shader_parameter/Mattness = 0.0
-shader_parameter/Texture = ExtResource("7_pg45c")
+shader_parameter/Texture = ExtResource("7_6uxp6")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cp8fk"]
 _surfaces = [{
@@ -230,7 +225,6 @@ shadow_mesh = SubResource("ArrayMesh_cp8fk")
 
 [node name="PropPlacer" type="Node3D"]
 script = ExtResource("1_fo23j")
-billboardTextures = Array[Texture]([ExtResource("2_f7shh"), ExtResource("3_c18uy"), ExtResource("4_bbk7w"), ExtResource("7_pg45c"), ExtResource("6_l0l3k"), ExtResource("7_aafua")])
 
 [node name="StartLinePreview" type="Node3D" parent="."]
 unique_name_in_owner = true

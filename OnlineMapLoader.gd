@@ -149,8 +149,15 @@ func initializeRace():
 	%RaceParent.add_child(raceNode)
 	if Network.userId != 1:
 		raceNode.finishedLoading.connect(broadcastReady)
-	raceNode.setup(selectedTrack, true, true)
 	raceNode.exitPressed.connect(onRace_exited)
+	var success = raceNode.setup(selectedTrack, true, true)
+	if !success:
+		AlertManager.showAlert(
+			self,
+			"Error loading map",
+			"Try updating the map to the new format, or download it again"
+		)
+		return
 
 	if Network.playerCount == 0 && Network.userId == 1:
 		raceNode.initializePlayers()
