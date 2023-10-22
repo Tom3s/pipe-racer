@@ -26,7 +26,8 @@ func _ready():
 	
 	textureSelector.add_item("Custom")
 
-	textureSelector.select(0)
+	print("defaultTextureIndex ", BillboardTextureLoader.defaultTextureIndex)
+	textureSelector.select(BillboardTextureLoader.defaultTextureIndex)
 	textureChanged.emit("PipeRacerLanguages", "")
 
 func onTextureSelector_itemSelected(index: int):
