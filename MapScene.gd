@@ -685,10 +685,15 @@ func loadFromJSON(fileName: String) -> bool:
 
 	if trackData["format"] != CURRENT_FORMAT_VERSION:
 		print("Error loading map: wrong format version")
-		# mapLoadSuccess = false
-		# loaded.emit()
-		print('loaded.emit(false)')
-		return false
+
+		if !path.begins_with("user://tracks/downloaded/"):
+			fileHandler.close()
+
+			MapUpdater.updateMap(trackData, path)
+
+			fileHandler = FileAccess.open(path, FileAccess.READ)
+		else:
+			return false
 
 	clearMap()
 
