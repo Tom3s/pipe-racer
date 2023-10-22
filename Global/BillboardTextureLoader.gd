@@ -13,14 +13,14 @@ func _ready():
 		while file_name != "":
 			# localTrackListItems.append(file_name.replace(path, ""))
 
-			if file_name.ends_with(".import"):
+			if file_name.ends_with(".png"):
 				file_name = directory.get_next()
 				continue
 
-			var textureFileName = file_name.replace(path, "")
-			var texture: Texture = load(path + file_name)
+			var textureFileName = file_name.replace(path, "").replace(".png.import", "")
+			var texture: Texture = ResourceLoader.load(path + file_name.replace(".import", ""))
 
-			if textureFileName == "PipeRacerLanguages.png":
+			if textureFileName == "PipeRacerLanguages":
 				defaultTextureIndex = index
 
 			textures[textureFileName] = texture
