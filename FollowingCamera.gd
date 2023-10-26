@@ -1,7 +1,7 @@
 extends Camera3D
 class_name FollowingCamera
 
-var car = null
+var car: CarController = null
 
 var shouldUpdatePosition = false
 

@@ -15,6 +15,12 @@ var springRestLength: float = 0.25
 var springBottomOut: float = 0.1
 
 @export
+var angularTerminalVelocity: float = 0.5
+
+@export
+var angularVelocityDamping: float = 0.95
+
+@export
 var respawnPosition: Vector3 = Vector3.ZERO
 
 @export
@@ -185,6 +191,12 @@ func _ready():
 	set_physics_process(true)
 
 func _physics_process(_delta):
+	# angular_velocity = clamp(angular_velocity, -angularTerminalVelocity * Vector3.ONE, angularTerminalVelocity * Vector3.ONE)
+	if angular_velocity.x > angularTerminalVelocity || angular_velocity.x < -angularTerminalVelocity || \
+		angular_velocity.y > angularTerminalVelocity || angular_velocity.y < -angularTerminalVelocity || \
+		angular_velocity.z > angularTerminalVelocity || angular_velocity.z < -angularTerminalVelocity:
+		angular_velocity *= angularVelocityDamping
+		
 	if is_multiplayer_authority():
 		if !paused:
 			for tire in tires:
@@ -363,7 +375,7 @@ func applyBottomedOutSuspension(raycastDistance: float, springDirection: Vector3
 #	if offset < 0:
 #		return
 	var velocity = springDirection.dot(tireVelocity)
-	var forceMagnitude = (offset * springConstant * 10 * mass) - (velocity * springDamping * 1.5)
+	var forceMagnitude = (offset * springConstant * 8 * mass) - (velocity * springDamping * 1.5)
 	var force = forceMagnitude * springDirection #* mass
 
 	apply_force(force, suspensionPoint - global_position)
@@ -475,6 +487,7 @@ func getSteeringFactor() -> float:
 	# var f = func(x): return max(l.call(x), 0.25)
 
 	return f.call(getSpeed()) * maxSteeringAngle
+	# return max(g.call(getSpeed()), 0.25) * maxSteeringAngle
 
 func getForwardSpeed() -> float:
 	var speed = linear_velocity.dot(global_transform.basis.z)

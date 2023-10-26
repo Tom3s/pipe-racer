@@ -20,10 +20,11 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
 friction = 0.0
 rough = true
+absorbent = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_52nqf"]
-radius = 0.286
-height = 2.6
+radius = 0.200358
+height = 2.49297
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t31ly"]
 radius = 0.375
@@ -130,11 +131,13 @@ physics_material_override = SubResource("PhysicsMaterial_nb3em")
 continuous_cd = true
 max_contacts_reported = 16
 contact_monitor = true
+angular_damp_mode = 1
 angular_damp = 0.5
 script = ExtResource("1_wde5o")
 springConstant = 180.0
-springDamping = 5500.0
-springBottomOut = 0.25
+springDamping = 6800.0
+springBottomOut = 0.28
+angularTerminalVelocity = 4.0
 maxSteeringAngle = 0.13
 tireGrip = 1.0
 driftFactor = 0.2
@@ -152,19 +155,19 @@ regripFactor = 0.02
 unique_name_in_owner = true
 
 [node name="FrontAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, 1.5)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.545655, 1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
 
 [node name="RearAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.617779, -1.5)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.54546, -1.5)
 shape = SubResource("CapsuleShape3D_52nqf")
 
 [node name="CarBodyCapsule" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.675, 0)
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.738555, 0)
 shape = SubResource("CapsuleShape3D_t31ly")
 
 [node name="CarBodyCapsule2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.45, 0.675, 0)
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.45, 0.738555, 0)
 shape = SubResource("CapsuleShape3D_t31ly")
 
 [node name="CarBodyCapsule3" type="CollisionShape3D" parent="."]
@@ -291,25 +294,25 @@ draw_pass_1 = SubResource("PlaneMesh_lagfo")
 [node name="BottomOutFL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
-target_position = Vector3(0, -0.25, 0)
+target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
 
 [node name="BottomOutFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
-target_position = Vector3(0, -0.25, 0)
+target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
 
 [node name="BottomOutBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
-target_position = Vector3(0, -0.25, 0)
+target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
 
 [node name="BottomOutBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
-target_position = Vector3(0, -0.25, 0)
+target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
 
 [node name="CarEngineSound" parent="." instance=ExtResource("6_g1nx1")]
