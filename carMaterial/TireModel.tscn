@@ -8,7 +8,6 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g0kxe"]
 render_priority = 0
 shader = ExtResource("2_b1ihq")
-shader_parameter/BaseColor = Color(0.064697, 0.064697, 0.064696, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ic46"]
 
@@ -107,8 +106,8 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_itvk4")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_twgil"]
-albedo_color = Color(0.501961, 0.501961, 0.501961, 1)
-metallic = 1.0
+albedo_color = Color(0.788235, 0.788235, 0.788235, 1)
+metallic = 0.85
 roughness = 0.08
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stpf8"]
