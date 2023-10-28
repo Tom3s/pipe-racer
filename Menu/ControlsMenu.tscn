@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://crwi3brrbj2mm"]
+[gd_scene load_steps=7 format=3 uid="uid://crwi3brrbj2mm"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_mxmc3"]
 [ext_resource type="Texture2D" uid="uid://fk1rrr356g74" path="res://Menu/keyboard-layout.png" id="2_f4elt"]
 [ext_resource type="Script" path="res://Menu/ControlsMenu.gd" id="2_ne2jj"]
 [ext_resource type="Texture2D" uid="uid://cw4aask4xyoy0" path="res://Menu/controller-layout.png" id="4_oyfbc"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="5_g2bx5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exsl6"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
 
 [node name="ControlsMenu" type="Control"]
 layout_mode = 3
@@ -29,36 +33,21 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
-alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_exsl6")
+tab_alignment = 1
 
-[node name="KeyboardButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+[node name="Keyboard" type="TextureRect" parent="VBoxContainer/TabContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 40)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_neighbor_top = NodePath("../../CloseButton")
-text = "Keyboard"
-
-[node name="ControllerButton" type="Button" parent="VBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 40)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_neighbor_top = NodePath("../../CloseButton")
-text = "Controller"
-
-[node name="KeyboardDiagram" type="TextureRect" parent="VBoxContainer"]
-unique_name_in_owner = true
-visible = false
 layout_mode = 2
 texture = ExtResource("2_f4elt")
 expand_mode = 5
 stretch_mode = 4
 
-[node name="ControllerDiagram" type="TextureRect" parent="VBoxContainer"]
+[node name="Controller" type="TextureRect" parent="VBoxContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 texture = ExtResource("4_oyfbc")
 expand_mode = 5
@@ -69,6 +58,5 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-focus_neighbor_bottom = NodePath("../VBoxContainer/KeyboardButton")
 shortcut = ExtResource("5_g2bx5")
 text = "Close"

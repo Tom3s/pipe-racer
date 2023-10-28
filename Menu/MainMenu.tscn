@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=12 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
+[ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
 [ext_resource type="PackedScene" path="res://MusicPlayer.tscn" id="7_gdorw"]
@@ -93,6 +94,14 @@ focus_neighbor_top = NodePath("../PlayOnlineButton")
 focus_neighbor_bottom = NodePath("../SettingsButton")
 text = "Website"
 
+[node name="ControlsButton" type="Button" parent="MainContent/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+text = "View Controls"
+
 [node name="SettingsButton" type="Button" parent="MainContent/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 40)
@@ -139,6 +148,11 @@ theme_override_font_sizes/font_size = 17
 text = "Version: v0.32"
 
 [node name="SettingsMenu" parent="." instance=ExtResource("4_fogf1")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="ControlsMenu" parent="." instance=ExtResource("5_mlljy")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
