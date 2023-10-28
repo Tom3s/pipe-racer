@@ -401,6 +401,8 @@ func onTrackMetadataUI_applyPressed(newName: String, newCount: int):
 	map.trackName = newName
 	map.lapCount = newCount
 	map.save()
+	editorInputHandler.propertiesOpen = false
+
 
 func onTrackMetadataUI_trackNameChanged(newName: String):
 	map.trackName = newName
