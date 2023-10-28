@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b445g44wmd53e"]
+
+[ext_resource type="Shader" uid="uid://bhl8mjh7jt73u" path="res://GrassShader.tres" id="1_klvin"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_klvin")
+shader_parameter/Noise_Layer_2_Scale = 5.0
+shader_parameter/Noise_Layer_3_Scale = 100.0
+shader_parameter/Noise_Layer_3_Distance = 750.0

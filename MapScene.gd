@@ -22,7 +22,7 @@ var autoSaveInterval: float = 12
 # var roadMaterial = preload("res://Tracks/RacetrackMaterial.tres")
 var materials = [
 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
-	preload("res://grass2.tres"), # GRASS
+	preload("res://Track Props/GrassMaterial.tres"), # GRASS
 	preload("res://Track Props/DirtMaterial.tres"), # DIRT
 	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
 	preload("res://Track Props/BoosterMaterialReversed.tres") # REVERSE BOOSTER	
