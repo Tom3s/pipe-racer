@@ -189,7 +189,9 @@ debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 
-[node name="tire-new good normals" parent="Tires/TireFL" instance=ExtResource("4_k78f3")]
+[node name="VisualRotation" type="Node3D" parent="Tires/TireFL"]
+
+[node name="tire-new good normals" parent="Tires/TireFL/VisualRotation" instance=ExtResource("4_k78f3")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFL"]
@@ -217,7 +219,9 @@ debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 1
 
-[node name="tire-new good normals" parent="Tires/TireFR" instance=ExtResource("4_k78f3")]
+[node name="VisualRotation" type="Node3D" parent="Tires/TireFR"]
+
+[node name="tire-new good normals" parent="Tires/TireFR/VisualRotation" instance=ExtResource("4_k78f3")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFR"]
@@ -245,7 +249,9 @@ debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 2
 
-[node name="tire-new good normals" parent="Tires/TireBL" instance=ExtResource("4_k78f3")]
+[node name="VisualRotation" type="Node3D" parent="Tires/TireBL"]
+
+[node name="tire-new good normals" parent="Tires/TireBL/VisualRotation" instance=ExtResource("4_k78f3")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBL"]
@@ -273,7 +279,9 @@ debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 3
 
-[node name="tire-new good normals" parent="Tires/TireBR" instance=ExtResource("4_k78f3")]
+[node name="VisualRotation" type="Node3D" parent="Tires/TireBR"]
+
+[node name="tire-new good normals" parent="Tires/TireBR/VisualRotation" instance=ExtResource("4_k78f3")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBR"]
