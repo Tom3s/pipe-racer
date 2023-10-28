@@ -3,4 +3,4 @@
 [resource]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.720137)
-colors = PackedColorArray(0, 0.23, 0.00383333, 1, 1, 1, 1, 1)
+colors = PackedColorArray(0, 0.231373, 0.00392157, 1, 1, 1, 1, 1)

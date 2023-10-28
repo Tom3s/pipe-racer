@@ -283,14 +283,62 @@ func getUVArray() -> Array[Vector2]:
 		var larger = max(curveForward, curveSideways)
 		multiplier = round(float(larger) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
 	
+
+	# var fromIndex = 1 if !rightWallStart && !rightWallEnd else 4
+	# var toIndex = PrefabConstants.WIDTH_SEGMENTS if !leftWallStart && !leftWallEnd else PrefabConstants.WIDTH_SEGMENTS - 3
+
+	# push wall vertices
+	# if rightWallStart || rightWallEnd:
+	# 	var newRightMostVertex = lerp(rightMostVertex, leftMostVertex, 0.05)
+	# 	vertices.push_back(rightMostVertex)
+	# 	vertices.push_back(rightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+	# 	vertices.push_back(newRightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+	# 	vertices.push_back(newRightMostVertex)
+	# else:
+	# 	vertices.push_back(rightMostVertex)
+	
+	# for divIndex in range(fromIndex, toIndex):
+	# 	vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS))
+
+	# if leftWallStart || leftWallEnd:
+	# 	var newLeftMostVertex = lerp(leftMostVertex, rightMostVertex, 0.05)
+	# 	vertices.push_back(newLeftMostVertex)
+	# 	vertices.push_back(newLeftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+	# 	vertices.push_back(leftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+	# 	vertices.push_back(leftMostVertex)
+	# else:
+	# 	vertices.push_back(leftMostVertex)
+	
+	# return vertices
+
 	for y in (PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
-		for x in (PrefabConstants.WIDTH_SEGMENTS + 1):
-			var u = 1.0 - (float(x) / PrefabConstants.WIDTH_SEGMENTS)
-			
-#			
-			
-			var v = 1.0 - (float(y * multiplier) / PrefabConstants.LENGTH_SEGMENTS)
-			uvArray.push_back(Vector2(u, v))
+		var v = 1.0 - (float(y * multiplier) / PrefabConstants.LENGTH_SEGMENTS)
+		if !rightWallStart && !rightWallEnd && !leftWallStart && !leftWallEnd:
+			for x in (PrefabConstants.WIDTH_SEGMENTS + 1):
+				var u = 1.0 - (float(x) / PrefabConstants.WIDTH_SEGMENTS)
+				uvArray.push_back(Vector2(u, v))
+		
+		else:
+			var fromIndex = 1 if !rightWallStart && !rightWallEnd else 4
+			var toIndex = PrefabConstants.WIDTH_SEGMENTS if !leftWallStart && !leftWallEnd else PrefabConstants.WIDTH_SEGMENTS - 3
+
+			if rightWallStart || rightWallEnd:
+				uvArray.push_back(Vector2(1.0, v))
+				uvArray.push_back(Vector2(1.0, v))
+				uvArray.push_back(Vector2(0.95, v))
+				uvArray.push_back(Vector2(0.95, v))
+			else:
+				uvArray.push_back(Vector2(1.0, v))
+			for divIndex in range(fromIndex, toIndex):
+				var u = lerp(1.0, 0.0, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS)
+				uvArray.push_back(Vector2(u, v))
+			if leftWallStart || leftWallEnd:
+				uvArray.push_back(Vector2(0.05, v))
+				uvArray.push_back(Vector2(0.05, v))
+				uvArray.push_back(Vector2(0.0, v))
+				uvArray.push_back(Vector2(0.0, v))
+			else:
+				uvArray.push_back(Vector2(0.0, v))
 	
 	return uvArray
 
