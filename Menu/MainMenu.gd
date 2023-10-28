@@ -6,12 +6,14 @@ extends Control
 @onready var playOnlineButton: Button = %PlayOnlineButton
 @onready var websiteButton: Button = %WebsiteButton
 @onready var settingsButton: Button = %SettingsButton
+@onready var controlsButton: Button = %ControlsButton
 @onready var exitButton: Button = %ExitButton
 @onready var settingsMenu: SettingsMenu = %SettingsMenu
 
 @onready var raceMapLoader: RaceMapLoader = %RaceMapLoader
 @onready var editorMapLoader: EditorMapLoader = %EditorMapLoader
 @onready var onlineMapLoader: OnlineMapLoader = %OnlineMapLoader
+@onready var controlsMenu: ControlsMenu = %ControlsMenu
 
 @onready var musicPlayer: MusicPlayer = %MusicPlayer
 
@@ -19,6 +21,8 @@ func _ready():
 	raceMapLoader.hide()
 	editorMapLoader.hide()
 	onlineMapLoader.hide()
+
+	controlsMenu.visible = false
 
 	playButton.grab_focus()
 
@@ -32,7 +36,9 @@ func connectSignals():
 	playButton.pressed.connect(onPlayButton_pressed)
 	editButton.pressed.connect(onEditButton_pressed)
 	playOnlineButton.pressed.connect(onPlayOnlineButton_pressed)
+	controlsButton.pressed.connect(onControlsButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
+	controlsMenu.closePressed.connect(onControlsMenu_closePressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
 	exitButton.pressed.connect(get_tree().quit)
 
@@ -59,9 +65,17 @@ func onPlayOnlineButton_pressed():
 	onlineMapLoader.show()
 	mainContent.visible = false
 
+func onControlsButton_pressed():
+	mainContent.visible = false
+	controlsMenu.visible = true
+
 func onSettingsButton_pressed():
 	mainContent.visible = false
 	settingsMenu.visible = true
+
+func onControlsMenu_closePressed():
+	mainContent.visible = true
+	controlsButton.grab_focus()
 
 func onSettingsMenu_backPressed():
 	mainContent.visible = true
