@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ckgkt4hm7yiyc"
-path="res://.godot/imported/tire-new good normals.glb-a64248d765f2a5d45f571b1ac2b54cad.scn"
+uid="uid://d2mn2li0ltqh0"
+path="res://.godot/imported/tire v3.glb-531c5c0eb6cfb5955a4befe577c12f53.scn"
 
 [deps]
 
-source_file="res://tire-new good normals.glb"
-dest_files=["res://.godot/imported/tire-new good normals.glb-a64248d765f2a5d45f571b1ac2b54cad.scn"]
+source_file="res://carMaterial/tire v3.glb"
+dest_files=["res://.godot/imported/tire v3.glb-531c5c0eb6cfb5955a4befe577c12f53.scn"]
 
 [params]
 

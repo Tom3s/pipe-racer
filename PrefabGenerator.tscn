@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://brl2uu62fx8nm"]
 
 [ext_resource type="Script" path="res://PrefabMesh.gd" id="1_dg2ye"]
-[ext_resource type="Material" uid="uid://b445g44wmd53e" path="res://Track Props/GrassMaterial.tres" id="1_voh0n"]
+[ext_resource type="Material" uid="uid://bivv07b0tjr36" path="res://Tracks/trackPrefabPreview.tres" id="1_ps6xh"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cnq78"]
 _surfaces = [{
@@ -35,7 +35,7 @@ albedo_color = Color(1, 0, 1, 1)
 
 [node name="PrefabMesher" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-material_override = ExtResource("1_voh0n")
+material_override = ExtResource("1_ps6xh")
 lod_bias = 128.0
 mesh = SubResource("ArrayMesh_cnq78")
 script = ExtResource("1_dg2ye")
