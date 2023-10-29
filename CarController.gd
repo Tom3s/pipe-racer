@@ -210,6 +210,7 @@ func _physics_process(_delta):
 			applyAirPitch()
 			applyAirSteering()
 			slidingFactor = 0.9
+			surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
 		
 		if shouldPause && !paused:
 			pauseLinearVelocity = linear_velocity
@@ -254,6 +255,10 @@ func _integrate_forces(physicsState):
 @export
 var steeringSpeed: float = 0.05
 
+@export
+var tireRegripSpeed: float = 0.05
+
+var surfaceFriction: float = 1.0
 func calculateTirePhysics(tire: Tire, delta):
 	# if GlobalProperties.PRECISE_INPUT:
 	# 	tire.rotation.y = tire.targetRotation
@@ -290,7 +295,12 @@ func calculateTirePhysics(tire: Tire, delta):
 			accelerationMultiplier = 1.0
 			useSmokeParticles = true
 		
-		applyFriction(tire.global_transform.basis.x, tireVelocityActual, tire.tireMass, contactPoint, frictionMultiplier)
+		if surfaceFriction < frictionMultiplier:
+			surfaceFriction = lerp(surfaceFriction, frictionMultiplier, tireRegripSpeed)
+		else:
+			surfaceFriction = frictionMultiplier
+		
+		applyFriction(tire.global_transform.basis.x, tireVelocityActual, tire.tireMass, contactPoint, surfaceFriction)
 
 		applyAcceleration(tire.global_transform.basis.z, tireVelocityActual, contactPoint, accelerationMultiplier)
 
