@@ -83,7 +83,7 @@ const defaultKeyboard1Bindings = {
 	ACTION_CHANGE_CAMERA_MODE: KEY_C,
 }
 
-var defaultKeyboard2Bindings = {
+const defaultKeyboard2Bindings = {
 	ACTION_ACCELERATE: KEY_W,
 	ACTION_BREAK: KEY_S,
 	ACTION_TURN_LEFT: KEY_A,

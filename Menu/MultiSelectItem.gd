@@ -38,3 +38,6 @@ func onCheckToggled(button_pressed: bool):
 
 func isToggled() -> bool:
 	return check.button_pressed
+
+func setToggled(toggled: bool):
+	check.button_pressed = toggled

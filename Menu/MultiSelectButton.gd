@@ -46,3 +46,6 @@ func getSelectedItems() -> Array[int]:
 
 func onResized():
 	multiSelectMenu.position = Vector2(size.x, 0)
+
+func setSelectedItems(selectedItems: Array[int]):
+	multiSelectMenu.setSelectedItems(selectedItems)

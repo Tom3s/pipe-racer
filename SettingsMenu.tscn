@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://q0icvxyovnsr"]
+[gd_scene load_steps=7 format=3 uid="uid://q0icvxyovnsr"]
 
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_rvs7i"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_3kgnw"]
+[ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="3_e7j8m"]
+[ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="3_lrfj4"]
+[ext_resource type="PackedScene" uid="uid://m0ulbe340r3v" path="res://Menu/RebindMenu.tscn" id="4_1eqkh"]
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3
@@ -17,70 +20,67 @@ script = ExtResource("2_7exx8")
 fixedPedalAccelAxis = 4
 fixedPedalBreakAxis = 1
 
-[node name="Panel" type="Panel" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -213.0
-offset_top = -147.0
-offset_right = 213.0
-offset_bottom = 147.0
+offset_left = -275.0
+offset_top = -339.5
+offset_right = 275.0
+offset_bottom = 339.5
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -175.0
-offset_top = -65.5
-offset_right = 175.0
-offset_bottom = 65.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 5
 alignment = 1
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="Master" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(550, 560)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_lrfj4")
+tab_alignment = 1
+clip_tabs = false
+
+[node name="Audio" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_e7j8m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Audio"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/Master"]
+[node name="Master" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Master Volume"
 
-[node name="MasterVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/Master"]
+[node name="MasterVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../../../CloseButton")
+focus_neighbor_top = NodePath("../../../../../CloseButton")
 focus_neighbor_bottom = NodePath("../../Music/MusicVolumeSlider")
 value = 100.0
 
-[node name="Music" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="Music" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/Music"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music"]
 layout_mode = 2
 text = "Music"
 
-[node name="MusicVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/Music"]
+[node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -90,64 +90,85 @@ focus_neighbor_top = NodePath("../../Master/MasterVolumeSlider")
 focus_neighbor_bottom = NodePath("../../SFX/SFXVolumeSlider")
 value = 100.0
 
-[node name="SFX" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="SFX" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/SFX"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX"]
 layout_mode = 2
 text = "Sound Effects"
 
-[node name="SFXVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/SFX"]
+[node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../Music/MusicVolumeSlider")
-focus_neighbor_bottom = NodePath("../../HBoxContainer/FullscreenButton")
+focus_neighbor_bottom = NodePath("../../../../Graphics/VBoxContainer/FullscreenButton")
 value = 100.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="Graphics" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_e7j8m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Graphics"]
 layout_mode = 2
 
-[node name="FullscreenButton" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="FullscreenButton" type="Button" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
-focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
-focus_neighbor_right = NodePath("../RenderQuality")
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../../Audio/VBoxContainer/SFX/SFXVolumeSlider")
+focus_neighbor_right = NodePath("../HBoxContainer/RenderQuality")
 focus_neighbor_bottom = NodePath("../../../../CloseButton")
 text = "Toggle Fullscreen"
 
-[node name="RenderQuality" type="OptionButton" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Render Quality"
+
+[node name="RenderQuality" type="OptionButton" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-focus_neighbor_left = NodePath("../FullscreenButton")
-focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
-focus_neighbor_bottom = NodePath("../../../../CloseButton")
+focus_neighbor_left = NodePath("../../FullscreenButton")
+focus_neighbor_top = NodePath("../../../../Audio/VBoxContainer/SFX/SFXVolumeSlider")
+focus_neighbor_bottom = NodePath("../../../../../CloseButton")
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="Misc" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_e7j8m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Misc"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Fix Pedal Input"
 
-[node name="FixPedalInput" type="CheckBox" parent="Panel/VBoxContainer/HBoxContainer2"]
+[node name="FixPedalInput" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Deadzone"
 
-[node name="DeadzoneSlider" type="HSlider" parent="Panel/VBoxContainer/HBoxContainer3"]
+[node name="DeadzoneSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
@@ -155,7 +176,7 @@ max_value = 0.5
 step = 0.01
 value = 0.1
 
-[node name="DeadzoneSpinbox" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer3"]
+[node name="DeadzoneSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.5
@@ -163,10 +184,10 @@ step = 0.01
 value = 0.1
 custom_arrow_step = 0.05
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer4"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -176,7 +197,7 @@ For Gamepad, lower values (0.0-0.2) correspond to a more precise experience
 mouse_filter = 1
 text = "Smooth Steering"
 
-[node name="SmoothSteeringSlider" type="HSlider" parent="Panel/VBoxContainer/HBoxContainer4"]
+[node name="SmoothSteeringSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
@@ -188,7 +209,7 @@ max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="SmoothSteeringSpinbox" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer4"]
+[node name="SmoothSteeringSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -200,23 +221,20 @@ step = 0.01
 value = 0.1
 custom_arrow_step = 0.05
 
-[node name="CloseButton" type="Button" parent="."]
+[node name="Controls" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_e7j8m")
+
+[node name="RebindMenu" parent="VBoxContainer/TabContainer/Controls" instance=ExtResource("4_1eqkh")]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = 157.0
-offset_right = 50.0
-offset_bottom = 189.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_horizontal = 4
-focus_neighbor_top = NodePath("../Panel/VBoxContainer/HBoxContainer/FullscreenButton")
-focus_neighbor_bottom = NodePath("../Panel/VBoxContainer/Master/MasterVolumeSlider")
+focus_neighbor_top = NodePath("../TabContainer/Graphics/VBoxContainer/FullscreenButton")
+focus_neighbor_bottom = NodePath("../TabContainer/Audio/VBoxContainer/Master/MasterVolumeSlider")
 shortcut = ExtResource("3_3kgnw")
 text = "Close"

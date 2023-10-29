@@ -73,3 +73,8 @@ func getSelectedItems() -> Array[int]:
 			if child.isToggled():
 				selectedItems.append(child.index)
 	return selectedItems
+
+func setSelectedItems(selectedItems: Array[int]):
+	for child in container.get_children():
+		if child != emptyLabel:
+			child.setToggled(selectedItems.has(child.index))

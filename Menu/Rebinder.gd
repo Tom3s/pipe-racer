@@ -37,7 +37,7 @@ func _ready():
 	setJoyIcon()
 	joyIcon.expand_mode = TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
 	joyIcon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	joyIcon.custom_minimum_size = Vector2(50, 0)
+	joyIcon.custom_minimum_size = Vector2(35, 0)
 	add_child(joyIcon)
 
 	rebindKBButton = Button.new()
@@ -53,7 +53,7 @@ func _ready():
 	setKBIcon()
 	kbIcon.expand_mode = TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
 	kbIcon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	kbIcon.custom_minimum_size = Vector2(50, 0)
+	kbIcon.custom_minimum_size = Vector2(35, 0)
 	add_child(kbIcon)
 
 func _unhandled_input(event):
@@ -144,21 +144,6 @@ func rebindKB(toggledState: bool):
 	else:
 		rebindKBButton.text = "Rebind KB"
 
-# func hideJoy():
-# 	rebindJoyButton.hide()
-# 	joyIcon.hide()
-
-# func hideKB():
-# 	rebindKBButton.hide()
-# 	kbIcon.hide()
-
-# func showJoy():
-# 	rebindJoyButton.show()
-# 	joyIcon.show()
-
-# func showKB():
-# 	rebindKBButton.show()
-# 	kbIcon.show()
 func setJoyVisible(visible: bool):
 	rebindJoyButton.visible = visible
 	joyIcon.visible = visible
@@ -166,3 +151,27 @@ func setJoyVisible(visible: bool):
 func setKBVisible(visible: bool):
 	rebindKBButton.visible = visible
 	kbIcon.visible = visible
+
+func reset():
+	clearJoypadBindings()
+	if RebindMenu.isAxisAction(actionName):
+		var inputEvent = InputEventJoypadMotion.new()
+		inputEvent.axis = RebindMenu.controllerDefaultBindings[actionName][0]
+		var axisDirection = RebindMenu.controllerDefaultBindings[actionName][1]
+		if axisDirection != 0:
+			inputEvent.axis_value = axisDirection
+		InputMap.action_add_event(actionIdentifier, inputEvent)
+	else:
+		var inputEvent = InputEventJoypadButton.new()
+		inputEvent.button_index = RebindMenu.controllerDefaultBindings[actionName][0]
+		InputMap.action_add_event(actionIdentifier, inputEvent)
+	setJoyIcon()
+
+	clearKBBindings()
+	var inputEvent = InputEventKey.new()
+	if actionIdentifier[1] == '1':
+		inputEvent.physical_keycode = RebindMenu.defaultKeyboard1Bindings[actionName]
+	else:
+		inputEvent.physical_keycode = RebindMenu.defaultKeyboard2Bindings.get(actionName, 0)
+	InputMap.action_add_event(actionIdentifier, inputEvent)
+	setKBIcon()
