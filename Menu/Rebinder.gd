@@ -4,7 +4,10 @@ class_name Rebinder
 var actionName: String = ""
 var actionIdentifier: String = ""
 
-var devices: Array[int] = [1]
+var devices: Array[int] = [1]:
+	set(newValue):
+		devices = newValue
+		setDevices()
 
 var rebindJoyButton: Button
 var joyIcon: TextureRect
@@ -145,28 +148,27 @@ func rebindKB(toggledState: bool):
 		rebindKBButton.text = "Rebind KB"
 
 func setJoyVisible(visible: bool):
+	if visible && !rebindJoyButton.visible:
+		resetJoypadBindings()
 	rebindJoyButton.visible = visible
 	joyIcon.visible = visible
+	if !visible:
+		clearJoypadBindings()
 
 func setKBVisible(visible: bool):
+	if visible && !rebindKBButton.visible:
+		resetKBBindings()
 	rebindKBButton.visible = visible
 	kbIcon.visible = visible
+	if !visible:
+		clearKBBindings()
 
 func reset():
-	clearJoypadBindings()
-	if RebindMenu.isAxisAction(actionName):
-		var inputEvent = InputEventJoypadMotion.new()
-		inputEvent.axis = RebindMenu.controllerDefaultBindings[actionName][0]
-		var axisDirection = RebindMenu.controllerDefaultBindings[actionName][1]
-		if axisDirection != 0:
-			inputEvent.axis_value = axisDirection
-		InputMap.action_add_event(actionIdentifier, inputEvent)
-	else:
-		var inputEvent = InputEventJoypadButton.new()
-		inputEvent.button_index = RebindMenu.controllerDefaultBindings[actionName][0]
-		InputMap.action_add_event(actionIdentifier, inputEvent)
-	setJoyIcon()
+	resetJoypadBindings()
+	resetKBBindings()
+	
 
+func resetKBBindings():
 	clearKBBindings()
 	var inputEvent = InputEventKey.new()
 	if actionIdentifier[1] == '1':
@@ -175,3 +177,30 @@ func reset():
 		inputEvent.physical_keycode = RebindMenu.defaultKeyboard2Bindings.get(actionName, 0)
 	InputMap.action_add_event(actionIdentifier, inputEvent)
 	setKBIcon()
+
+func resetJoypadBindings():
+	clearJoypadBindings()
+	for device in devices:
+		if RebindMenu.isAxisAction(actionName):
+			var inputEvent = InputEventJoypadMotion.new()
+			inputEvent.axis = RebindMenu.controllerDefaultBindings[actionName][0]
+			var axisDirection = RebindMenu.controllerDefaultBindings[actionName][1]
+			if axisDirection != 0:
+				inputEvent.axis_value = axisDirection
+			inputEvent.device = device - 1
+			InputMap.action_add_event(actionIdentifier, inputEvent)
+		else:
+			var inputEvent = InputEventJoypadButton.new()
+			inputEvent.button_index = RebindMenu.controllerDefaultBindings[actionName][0]
+			inputEvent.device = device - 1
+			InputMap.action_add_event(actionIdentifier, inputEvent)
+	setJoyIcon()
+
+func setDevices():
+	setKBVisible(devices.has(0))
+	setJoyVisible(
+		devices.has(1) || \
+		devices.has(2) || \
+		devices.has(3) || \
+		devices.has(4)
+	)

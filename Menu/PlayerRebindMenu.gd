@@ -68,10 +68,11 @@ func onAllowedDevices_itemToggled(index: int, isToggled: bool) -> void:
 	var deviceList = allowedDevices.getSelectedItems()
 
 	for rebinder in rebinders:
-		if index == 0:
-			rebinder.setKBVisible(isToggled)
-		else:
-			rebinder.setJoyVisible(isToggled)
+		# if index == 0:
+		# 	rebinder.setKBVisible(isToggled)
+		# else:
+		# 	rebinder.setJoyVisible(isToggled)
+		# rebinder.devices = deviceList
 		rebinder.devices = deviceList
 
 func setDeviceList():
