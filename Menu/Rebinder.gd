@@ -96,6 +96,7 @@ func _unhandled_input(event):
 			print("KB Key: ", event.physical_keycode)
 			rebindKBButton.text = "Rebind KB"
 			rebindKBButton.button_pressed = false
+			kbInputEvent = event
 			applyKBInputEvent()
 			print("Rebinded KB Action: ", actionName)
 			set_process_input(false)

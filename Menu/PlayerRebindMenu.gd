@@ -126,6 +126,17 @@ func setDeviceList():
 func onDefaultButton_pressed():
 	for rebinder in rebinders:
 		rebinder.reset()
+	GlobalProperties.JOY_CONTROL_OVERWRITES[str(playerIndex)] = {}
+	GlobalProperties.KB_CONTROL_OVERWRITES[str(playerIndex)] = {}
+	var defaultDevices = {
+		"1": [0, 1],
+		"2": [0, 2],
+		"3": [3],
+		"4": [4]
+	}
+	GlobalProperties.CONTROL_DEVICE_OVERWRITES[str(playerIndex)] = defaultDevices[str(playerIndex)]
+	GlobalProperties.saveToFile()
+
 		
 func onJoyOwerwritten(actionName: String, joypadBind: int, isAxis: bool):
 	joyOverrides[actionName] = [joypadBind, isAxis]
