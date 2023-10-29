@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
-[ext_resource type="PackedScene" path="res://MusicPlayer.tscn" id="7_gdorw"]
+[ext_resource type="PackedScene" uid="uid://df1rccijala1n" path="res://MusicPlayer.tscn" id="7_gdorw"]
 [ext_resource type="PackedScene" uid="uid://wrv4h1dcsnnu" path="res://OnlineMapLoader.tscn" id="7_r4ncp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]

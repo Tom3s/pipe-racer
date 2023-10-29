@@ -86,36 +86,37 @@ var fixedPedalBreakAxis: int = 8
 
 func onFixPedalInput_toggled(fix: bool):
 
-	InputMap.action_erase_events(p1Accel)
-	var accelEvent = InputEventKey.new()
-	accelEvent.physical_keycode = KEY_UP
-	InputMap.action_add_event(p1Accel, accelEvent)
+	# TODO: fix this with remapping
+	# InputMap.action_erase_events(p1Accel)
+	# var accelEvent = InputEventKey.new()
+	# accelEvent.physical_keycode = KEY_UP
+	# InputMap.action_add_event(p1Accel, accelEvent)
 
-	InputMap.action_erase_events(p1Break)
-	var breakEvent = InputEventKey.new()
-	breakEvent.physical_keycode = KEY_DOWN
-	InputMap.action_add_event(p1Break, breakEvent)
+	# InputMap.action_erase_events(p1Break)
+	# var breakEvent = InputEventKey.new()
+	# breakEvent.physical_keycode = KEY_DOWN
+	# InputMap.action_add_event(p1Break, breakEvent)
 
-	if !fix:
-		var accelJoypadEvent = InputEventJoypadMotion.new()
-		accelJoypadEvent.axis = JOY_AXIS_TRIGGER_RIGHT
-		accelJoypadEvent.device = 0
-		InputMap.action_add_event(p1Accel, accelJoypadEvent)
+	# if !fix:
+	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
+	# 	accelJoypadEvent.axis = JOY_AXIS_TRIGGER_RIGHT
+	# 	accelJoypadEvent.device = 0
+	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
 
-		var breakJoypadEvent = InputEventJoypadMotion.new()
-		breakJoypadEvent.axis = JOY_AXIS_TRIGGER_LEFT
-		breakJoypadEvent.device = 0
-		InputMap.action_add_event(p1Break, breakJoypadEvent)
-	else:
-		var accelJoypadEvent = InputEventJoypadMotion.new()
-		accelJoypadEvent.axis = fixedPedalAccelAxis
-		accelJoypadEvent.device = 0
-		InputMap.action_add_event(p1Accel, accelJoypadEvent)
+	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
+	# 	breakJoypadEvent.axis = JOY_AXIS_TRIGGER_LEFT
+	# 	breakJoypadEvent.device = 0
+	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
+	# else:
+	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
+	# 	accelJoypadEvent.axis = fixedPedalAccelAxis
+	# 	accelJoypadEvent.device = 0
+	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
 
-		var breakJoypadEvent = InputEventJoypadMotion.new()
-		breakJoypadEvent.axis = fixedPedalBreakAxis
-		breakJoypadEvent.device = 0
-		InputMap.action_add_event(p1Break, breakJoypadEvent)
+	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
+	# 	breakJoypadEvent.axis = fixedPedalBreakAxis
+	# 	breakJoypadEvent.device = 0
+	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
 
 
 	GlobalProperties.FIX_PEDAL_INPUT = fix
