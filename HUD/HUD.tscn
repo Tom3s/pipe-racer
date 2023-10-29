@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://vyw4va1y2j2e"]
+[gd_scene load_steps=5 format=3 uid="uid://vyw4va1y2j2e"]
 
 [ext_resource type="Script" path="res://HUD/IngameHUD.gd" id="1_1uqa5"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_50c7g"]
+[ext_resource type="Texture2D" uid="uid://to1ouubs5rxs" path="res://Sprites/KBPrompts/66.png" id="3_tu0tx"]
+[ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="4_bi0vt"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -118,22 +120,62 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 50
 
-[node name="ReadyIndicator" type="Label" parent="HUDContainer2"]
+[node name="ReadyIndicator" type="VBoxContainer" parent="HUDContainer2"]
 unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="NotReady" type="Label" parent="HUDContainer2/ReadyIndicator"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 0.309804, 0.309804, 1)
 theme_override_colors/font_outline_color = Color(0.301961, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 50
-text = "Press Ready!
-(P/Tab/Select)
-
-
-"
+text = "Not Ready"
 horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUDContainer2/ReadyIndicator"]
+layout_mode = 2
+
+[node name="Press" type="Label" parent="HUDContainer2/ReadyIndicator/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.309804, 0.309804, 1)
+theme_override_colors/font_outline_color = Color(0.301961, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+text = "Press"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters_behavior = 2
+
+[node name="PromptIcon" type="TextureRect" parent="HUDContainer2/ReadyIndicator/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_tu0tx")
+stretch_mode = 4
+
+[node name="Ready" type="Label" parent="HUDContainer2/ReadyIndicator/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.309804, 0.309804, 1)
+theme_override_colors/font_outline_color = Color(0.301961, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+text = "to get ready!"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters_behavior = 2
+
+[node name="Panel" type="Panel" parent="HUDContainer2/ReadyIndicator"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_bi0vt")
 
 [node name="Nickname" type="Label" parent="HUDContainer2"]
 unique_name_in_owner = true

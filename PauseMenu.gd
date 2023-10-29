@@ -10,7 +10,7 @@ class_name PauseMenu
 @onready var editorGuide: Button = %EditorGuide
 @onready var exitButton: Button = %ExitButton
 
-@onready var settingsMenu: SettingsMenu = %SettingsMenu
+@onready var settingsMenu: SettingsMenu
 @onready var controlsMenu: ControlsMenu = %ControlsMenu
 
 signal resumePressed()
@@ -30,7 +30,6 @@ func _ready():
 
 	# settingsMenu = GlobalProperties.settingsMenu
 
-	settingsMenu.visible = false
 	controlsMenu.visible = false
 
 	resumeButton.grab_focus()
@@ -44,7 +43,6 @@ func connectSignals():
 	controlsButton.pressed.connect(onControlsButton_pressed)
 	editorGuide.pressed.connect(editorGuide_pressed)
 	exitButton.pressed.connect(onExitButton_pressed)
-	settingsMenu.closePressed.connect(onSettingsMenu_closePressed)
 	controlsMenu.closePressed.connect(onControlsMenu_closePressed)
 	mainElements.visibility_changed.connect(onVisibilityChanged)
 

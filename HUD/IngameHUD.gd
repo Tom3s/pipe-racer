@@ -18,13 +18,16 @@ var lapTimer: Label = %LapTimer
 var stats: Label = %Stats
 
 @onready
-var readyIndicator: Label = %ReadyIndicator
+var readyIndicator: VBoxContainer = %ReadyIndicator
 
 @onready
 var resetIndicator: Label = %ResetIndicator
 
 @onready
 var nickname: Label = %Nickname
+
+@onready
+var promptIcon: TextureRect = %PromptIcon
 
 var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
@@ -44,6 +47,18 @@ func _ready() -> void:
 	setNickname(car.playerName)
 	setReadyIndicator(false)
 	setResetIndicator(false)
+
+	var inputEvent = InputMap.action_get_events("p" + str(car.playerIndex + 1) + "_ready").front()
+	var texture = null
+	if inputEvent is InputEventJoypadButton:
+		texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS[inputEvent.button_index])
+	elif inputEvent is InputEventJoypadMotion:
+		texture = load(RebindMenu.CONTROLLER_AXIS_ICONS[inputEvent.axis])
+	elif inputEvent is InputEventKey:
+		texture = load("res://Sprites/KBPrompts/" + str(inputEvent.physical_keycode) + ".png")
+	if texture == null:
+		texture = load(RebindMenu.INVALID_KEY_ICON)
+	promptIcon.texture = texture
 
 	set_physics_process(true)
 
