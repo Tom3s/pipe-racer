@@ -9,13 +9,28 @@ var devices: Array[int] = [1]:
 		devices = newValue
 		setDevices()
 
+signal joyOverwritten(actionName: String, joypadBind: int, isAxis: bool)
+
 var rebindJoyButton: Button
 var joyIcon: TextureRect
 var joyInputEvent: InputEvent
+	# set(newValue):
+	# 	joyInputEvent = newValue
+	# 	if newValue is InputEventJoypadButton:
+	# 		joyOverwritten.emit(actionName, newValue.button_index, false)
+	# 	elif newValue is InputEventJoypadMotion:
+	# 		joyOverwritten.emit(actionName, newValue.axis, true)
+
+
+signal kbOverwritten(actionName: String, kbBind: int)
 
 var rebindKBButton: Button
 var kbIcon: TextureRect
 var kbInputEvent: InputEventKey
+	# set(newValue):
+	# 	kbInputEvent = newValue
+	# 	kbOverwritten.emit(actionName, newValue.physical_keycode)
+
 
 func _init(name: String = "accelerate", identifier: String = "p1_accelerate"):
 	actionName = name
@@ -81,13 +96,7 @@ func _unhandled_input(event):
 			print("KB Key: ", event.physical_keycode)
 			rebindKBButton.text = "Rebind KB"
 			rebindKBButton.button_pressed = false
-			clearKBBindings()
-			InputMap.action_add_event(actionIdentifier, event)
-			var texture = load("res://Sprites/KBPrompts/" + str(event.physical_keycode) + ".png")
-			if texture:
-				kbIcon.texture = texture
-			else:
-				kbIcon.texture = load(RebindMenu.INVALID_KEY_ICON)
+			applyKBInputEvent()
 			print("Rebinded KB Action: ", actionName)
 			set_process_input(false)
 
@@ -127,10 +136,22 @@ func applyJoyInputEvent():
 	if joyInputEvent is InputEventJoypadButton:
 		print("Joy Button: ", joyInputEvent.button_index)
 		joyIcon.texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS.get(joyInputEvent.button_index, RebindMenu.INVALID_JOY_ICON))
+		joyOverwritten.emit(actionName, joyInputEvent.button_index, false)
 	elif joyInputEvent is InputEventJoypadMotion:
 		print("Joy Axis: ", joyInputEvent.axis)
 		joyIcon.texture = load(RebindMenu.CONTROLLER_AXIS_ICONS.get(joyInputEvent.axis, RebindMenu.INVALID_JOY_ICON))
+		joyOverwritten.emit(actionName, joyInputEvent.axis, true)
 	print("Rebinded Joy Action: ", actionName)
+
+func applyKBInputEvent():
+	clearKBBindings()
+	InputMap.action_add_event(actionIdentifier, kbInputEvent)
+	var texture = load("res://Sprites/KBPrompts/" + str(kbInputEvent.physical_keycode) + ".png")
+	if texture:
+		kbIcon.texture = texture
+	else:
+		kbIcon.texture = load(RebindMenu.INVALID_KEY_ICON)
+	kbOverwritten.emit(actionName, kbInputEvent.physical_keycode)
 
 func setKBIcon():
 	for event in InputMap.action_get_events(actionIdentifier):
@@ -222,3 +243,20 @@ func setDevices():
 		devices.has(3) || \
 		devices.has(4)
 	)
+	# setJoyVisible(int(devices.has(0)) + 1)
+
+func setJoyOverwrite(joyBind: int, isAxis: bool):
+	if isAxis:
+		joyInputEvent = InputEventJoypadMotion.new()
+		joyInputEvent.axis = joyBind
+	else:
+		joyInputEvent = InputEventJoypadButton.new()
+		joyInputEvent.button_index = joyBind
+	applyJoyInputEvent()
+	setJoyIcon()
+
+func setKeyOverwrite(keyBind: int):
+	kbInputEvent = InputEventKey.new()
+	kbInputEvent.physical_keycode = keyBind
+	applyKBInputEvent()
+	setKBIcon()

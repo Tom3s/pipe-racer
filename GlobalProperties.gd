@@ -111,6 +111,30 @@ var SMOOTH_STEERING: float = 0.75:
 	get:
 		return SMOOTH_STEERING
 
+@export
+var JOY_CONTROL_OVERWRITES = {
+	"1": {},
+	"2": {},
+	"3": {},
+	"4": {},
+}
+
+@export
+var KB_CONTROL_OVERWRITES = {
+	"1": {},
+	"2": {},
+	"3": {},
+	"4": {},
+}
+
+@export
+var CONTROL_DEVICE_OVERWRITES = {
+	"1": [0, 1],
+	"2": [0, 2],
+	"3": [3],
+	"4": [4]
+}
+
 var ingameSmoothSteering: float = 0.1
 
 var SESSION_TOKEN: String = ""
@@ -145,6 +169,9 @@ func saveToFile() -> void:
 		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT,
 		"DEADZONE": DEADZONE,
 		"SMOOTH_STEERING": SMOOTH_STEERING,
+		"JOY_CONTROL_OVERWRITES": JOY_CONTROL_OVERWRITES,
+		"KB_CONTROL_OVERWRITES": KB_CONTROL_OVERWRITES,
+		"CONTROL_DEVICE_OVERWRITES": CONTROL_DEVICE_OVERWRITES,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -180,6 +207,12 @@ func loadFromFile() -> void:
 			DEADZONE = float(jsonData["DEADZONE"])
 		if jsonData.has("SMOOTH_STEERING"):
 			SMOOTH_STEERING = float(jsonData["SMOOTH_STEERING"])
+		if jsonData.has("JOY_CONTROL_OVERWRITES"):
+			JOY_CONTROL_OVERWRITES = jsonData["JOY_CONTROL_OVERWRITES"]
+		if jsonData.has("KB_CONTROL_OVERWRITES"):
+			KB_CONTROL_OVERWRITES = jsonData["KB_CONTROL_OVERWRITES"]
+		if jsonData.has("CONTROL_DEVICE_OVERWRITES"):
+			CONTROL_DEVICE_OVERWRITES = jsonData["CONTROL_DEVICE_OVERWRITES"]
 	else:
 		saveToFile()
 
