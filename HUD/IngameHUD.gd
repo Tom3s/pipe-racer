@@ -48,17 +48,10 @@ func _ready() -> void:
 	setReadyIndicator(false)
 	setResetIndicator(false)
 
-	var inputEvent = InputMap.action_get_events("p" + str(car.playerIndex + 1) + "_ready").front()
-	var texture = null
-	if inputEvent is InputEventJoypadButton:
-		texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS[inputEvent.button_index])
-	elif inputEvent is InputEventJoypadMotion:
-		texture = load(RebindMenu.CONTROLLER_AXIS_ICONS[inputEvent.axis])
-	elif inputEvent is InputEventKey:
-		texture = load("res://Sprites/KBPrompts/" + str(inputEvent.physical_keycode) + ".png")
-	if texture == null:
-		texture = load(RebindMenu.INVALID_KEY_ICON)
-	promptIcon.texture = texture
+	loadReadyIcon()
+
+	car.playerIndexChanged.connect(loadReadyIcon)
+	
 
 	set_physics_process(true)
 
@@ -73,7 +66,27 @@ func _physics_process(_delta: float) -> void:
 	setResetIndicator(car.state.isResetting)
 	setNickname(car.playerName)
 
+var newTexture: Texture = null
+func _input(event):
+	if event is InputEventMouse:
+		return
 
+	if event is InputEventJoypadButton || (event is InputEventJoypadMotion && abs(event.get_axis_value()) > 0.5):
+		for possibleEvent in InputMap.action_get_events("p" + str(car.playerIndex + 1) + "_ready"):
+			if possibleEvent is InputEventJoypadButton:
+				newTexture = load(RebindMenu.CONTROLLER_BUTTON_ICONS[possibleEvent.button_index])
+				break
+			elif possibleEvent is InputEventJoypadMotion:
+				newTexture = load(RebindMenu.CONTROLLER_AXIS_ICONS[possibleEvent.axis])
+				break
+	elif event is InputEventKey:
+		for possibleEvent in InputMap.action_get_events("p" + str(car.playerIndex + 1) + "_ready"):
+			if possibleEvent is InputEventKey:
+				newTexture = load("res://Sprites/KBPrompts/" + str(possibleEvent.physical_keycode) + ".png")
+				break
+	if newTexture == null:
+		newTexture = load(RebindMenu.INVALID_KEY_ICON)
+	promptIcon.texture = newTexture
 
 func setSpeedText(speed: float) -> void:
 	# convert speed from m/s to km/h
@@ -121,3 +134,17 @@ func startTimer():
 func reset(newNrPlayers: int):
 	%HUDContainer.hide()
 	TOTAL_CARS = newNrPlayers
+
+func loadReadyIcon(_sink = null):
+	var inputEvent = InputMap.action_get_events("p" + str(car.playerIndex + 1) + "_ready").front()
+	var texture = null
+	if inputEvent is InputEventJoypadButton:
+		texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS[inputEvent.button_index])
+	elif inputEvent is InputEventJoypadMotion:
+		texture = load(RebindMenu.CONTROLLER_AXIS_ICONS[inputEvent.axis])
+	elif inputEvent is InputEventKey:
+		texture = load("res://Sprites/KBPrompts/" + str(inputEvent.physical_keycode) + ".png")
+	if texture == null:
+		texture = load(RebindMenu.INVALID_KEY_ICON)
+	promptIcon.texture = texture
+	newTexture = texture

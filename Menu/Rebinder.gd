@@ -11,9 +11,11 @@ var devices: Array[int] = [1]:
 
 var rebindJoyButton: Button
 var joyIcon: TextureRect
+var joyInputEvent: InputEvent
 
 var rebindKBButton: Button
 var kbIcon: TextureRect
+var kbInputEvent: InputEventKey
 
 func _init(name: String = "accelerate", identifier: String = "p1_accelerate"):
 	actionName = name
@@ -59,28 +61,21 @@ func _ready():
 	kbIcon.custom_minimum_size = Vector2(35, 0)
 	add_child(kbIcon)
 
+	for event in InputMap.action_get_events(actionIdentifier):
+		if event is InputEventJoypadButton || event is InputEventJoypadMotion:
+			joyInputEvent = event
+		elif event is InputEventKey:
+			kbInputEvent = event
+
 func _unhandled_input(event):
 	if rebindJoyButton.button_pressed:
-		if event is InputEventJoypadButton:
-			print("Joy Button: ", event.button_index)
+		if event is InputEventJoypadButton || (event is InputEventJoypadMotion && abs(event.get_axis_value()) > 0.5):
+			joyInputEvent = event
 			rebindJoyButton.text = "Rebind Joy"
 			rebindJoyButton.button_pressed = false
-			clearJoypadBindings()
-			InputMap.action_add_event(actionIdentifier, event)
-			joyIcon.texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS.get(event.button_index, RebindMenu.INVALID_JOY_ICON))
-			print("Rebinded Joy Action: ", actionName)
+			applyJoyInputEvent()
 			set_process_unhandled_input(false)
-		elif event is InputEventJoypadMotion:
-			if abs(event.get_axis_value()) < 0.5:
-				return
-			print("Joy Axis: ", event.axis)
-			rebindJoyButton.text = "Rebind Joy"
-			rebindJoyButton.button_pressed = false
-			clearJoypadBindings()
-			InputMap.action_add_event(actionIdentifier, event)
-			joyIcon.texture = load(RebindMenu.CONTROLLER_AXIS_ICONS.get(event.axis, RebindMenu.INVALID_JOY_ICON))
-			print("Rebinded Joy Action: ", actionName)
-			set_process_unhandled_input(false)
+		
 	elif rebindKBButton.button_pressed:
 		if event is InputEventKey:
 			print("KB Key: ", event.physical_keycode)
@@ -121,6 +116,22 @@ func rebindJoy(toggledState: bool):
 	else:
 		rebindJoyButton.text = "Rebind Joy"
 
+func applyJoyInputEvent():
+	clearJoypadBindings()
+	for device in devices:
+		if device == 0:
+			continue
+		var newInput = joyInputEvent.duplicate()
+		newInput.device = device - 1
+		InputMap.action_add_event(actionIdentifier, newInput)
+	if joyInputEvent is InputEventJoypadButton:
+		print("Joy Button: ", joyInputEvent.button_index)
+		joyIcon.texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS.get(joyInputEvent.button_index, RebindMenu.INVALID_JOY_ICON))
+	elif joyInputEvent is InputEventJoypadMotion:
+		print("Joy Axis: ", joyInputEvent.axis)
+		joyIcon.texture = load(RebindMenu.CONTROLLER_AXIS_ICONS.get(joyInputEvent.axis, RebindMenu.INVALID_JOY_ICON))
+	print("Rebinded Joy Action: ", actionName)
+
 func setKBIcon():
 	for event in InputMap.action_get_events(actionIdentifier):
 		if event is InputEventKey:
@@ -150,6 +161,9 @@ func rebindKB(toggledState: bool):
 func setJoyVisible(visible: bool):
 	if visible && !rebindJoyButton.visible:
 		resetJoypadBindings()
+	elif visible:
+		applyJoyInputEvent()
+
 	rebindJoyButton.visible = visible
 	joyIcon.visible = visible
 	if !visible:
@@ -181,6 +195,8 @@ func resetKBBindings():
 func resetJoypadBindings():
 	clearJoypadBindings()
 	for device in devices:
+		if device == 0:
+			continue
 		if RebindMenu.isAxisAction(actionName):
 			var inputEvent = InputEventJoypadMotion.new()
 			inputEvent.axis = RebindMenu.controllerDefaultBindings[actionName][0]
@@ -189,11 +205,13 @@ func resetJoypadBindings():
 				inputEvent.axis_value = axisDirection
 			inputEvent.device = device - 1
 			InputMap.action_add_event(actionIdentifier, inputEvent)
+			joyInputEvent = inputEvent
 		else:
 			var inputEvent = InputEventJoypadButton.new()
 			inputEvent.button_index = RebindMenu.controllerDefaultBindings[actionName][0]
 			inputEvent.device = device - 1
 			InputMap.action_add_event(actionIdentifier, inputEvent)
+			joyInputEvent = inputEvent
 	setJoyIcon()
 
 func setDevices():
