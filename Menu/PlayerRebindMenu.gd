@@ -136,6 +136,9 @@ func onDefaultButton_pressed():
 	}
 	GlobalProperties.CONTROL_DEVICE_OVERWRITES[str(playerIndex)] = defaultDevices[str(playerIndex)]
 	GlobalProperties.saveToFile()
+	var intArray: Array[int]
+	intArray.assign(defaultDevices[str(playerIndex)])
+	allowedDevices.setSelectedItems(intArray)
 
 		
 func onJoyOwerwritten(actionName: String, joypadBind: int, isAxis: bool):
