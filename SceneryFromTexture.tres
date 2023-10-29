@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/perlin2d.gd" id="1_4bahc"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/generic2d_fractal.gd" id="2_cnceh"]
-[ext_resource type="Gradient" path="res://Tracks/MountainGradient.tres" id="3_fg80b"]
+[ext_resource type="Gradient" uid="uid://caro1box0tjw4" path="res://Tracks/MountainGradient.tres" id="3_fg80b"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_dsy1e"]
 input_name = "color"

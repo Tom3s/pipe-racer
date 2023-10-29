@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://m0ulbe340r3v"]
+
+[ext_resource type="Script" path="res://Menu/RebindMenu.gd" id="1_jl4m3"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_yw51p"]
+[ext_resource type="Script" path="res://Menu/PlayerRebindMenu.gd" id="3_2qdjx"]
+
+[node name="RebindMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_yw51p")
+script = ExtResource("1_jl4m3")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+
+[node name="Player 1" type="PanelContainer" parent="TabContainer"]
+layout_mode = 2
+script = ExtResource("3_2qdjx")
+
+[node name="Player 2" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_2qdjx")
+playerIndex = 2
+
+[node name="Player 3" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_2qdjx")
+playerIndex = 3
+
+[node name="Player 4" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_2qdjx")
+playerIndex = 4
