@@ -18,6 +18,8 @@ var isReady: bool = false
 
 var isResetting: bool = false
 
+# var finished: bool = false
+
 var groundedTireCount: int = 0
 func getGroundedTireCount() -> int:
 	# return groundedTires[0] + groundedTires[1] + groundedTires[2] + groundedTires[3]

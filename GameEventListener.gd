@@ -103,7 +103,8 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 				for player in players.get_children():
 					player = player as CarController
 					player.resumeMovement()
-					timeTrialManagers[player.name].resumeTimeTrial(timestamp)
+					if !player.state.finisishedRacing():
+						timeTrialManagers[player.name].resumeTimeTrial(timestamp)
 					player.state.hasControl = !player.state.finisishedRacing()
 			state.pausedBy = -1
 			pauseMenu.visible = false
@@ -113,7 +114,8 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			for player in players.get_children():
 				player = player as CarController
 				player.pauseMovement()
-				timeTrialManagers[player.name].pauseTimeTrial(timestamp)
+				if !player.state.finisishedRacing():
+					timeTrialManagers[player.name].pauseTimeTrial(timestamp)
 				player.state.hasControl = false
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
