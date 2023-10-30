@@ -141,6 +141,8 @@ func add(prefabMesher: PrefabMesher):
 	addPrefab(prefab)
 	storeAddPrefab(prefab)
 
+var editing: bool = false
+
 func addPrefab(prefab: PrefabProperties, _prefabPosition: Vector3 = Vector3.INF, _prefabRotation: Vector3 = Vector3.INF):
 	trackPieces.add_child(prefab)
 	var prefabData = prefab.prefabData
@@ -159,6 +161,11 @@ func addPrefab(prefab: PrefabProperties, _prefabPosition: Vector3 = Vector3.INF,
 	prefab.accelerationPenalty = accelerationMultipliers[prefabData["roadType"]]
 	prefab.smokeParticles = smokeParticles[prefabData["roadType"]]
 	prefab.create_trimesh_collision()
+
+	if editing:
+		var collider: CollisionShape3D = prefab.get_child(0).get_child(0)
+		collider.shape.backface_collision = true
+
 
 	prefab.calculateCorners()
 
