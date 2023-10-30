@@ -7,6 +7,7 @@ signal editorExited()
 
 func loadMap(mapName: String) -> bool:
 	map.loaded.connect(printDebug)
+	map.editing = true
 	var success = map.loadMap(mapName)
 	# return await map.loaded
 	# await map.loaded
