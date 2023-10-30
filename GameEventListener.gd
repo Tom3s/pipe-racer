@@ -74,6 +74,7 @@ func onCountdown_countdownFinished(timestamp: int):
 		timeTrialManagers[key].startTimeTrial(timestamp)
 
 	state.raceStarted = true
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
 	if state.online:
@@ -84,6 +85,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 					player.state.hasControl = !player.state.finisishedRacing()
 			state.pausedBy = -1
 			pauseMenu.visible = false
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		elif state.pausedBy == -1 && state.raceStarted:
 			for player in players.get_children():
 				player = player as CarController
@@ -93,6 +95,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
 			leaderboardUI.visible = false
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
 		if state.pausedBy == playerIndex:
 			var timestamp = floor(getTimestamp())
@@ -104,6 +107,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 					player.state.hasControl = !player.state.finisishedRacing()
 			state.pausedBy = -1
 			pauseMenu.visible = false
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		elif state.pausedBy == -1 && state.raceStarted:
 			var timestamp = floor(getTimestamp())
 			for player in players.get_children():
@@ -114,6 +118,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
 			leaderboardUI.visible = false
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func onRaceInputHandler_fullScreenPressed():
 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
@@ -286,7 +291,7 @@ func onPauseMenu_exitPressed():
 				await state.allPlayersExited
 		else:
 			rpc_id(1, "clientExited", Network.userId)
-		
+	
 	get_parent().exitPressed.emit()
 
 @rpc("any_peer", "call_remote", "reliable")
