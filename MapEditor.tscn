@@ -34,7 +34,6 @@ unique_name_in_owner = true
 
 [node name="TrackMetadataUI" parent="CanvasLayer" instance=ExtResource("4_jppls")]
 unique_name_in_owner = true
-visible = false
 
 [node name="PrefabSelectorUI" parent="CanvasLayer" instance=ExtResource("6_b5djn")]
 unique_name_in_owner = true

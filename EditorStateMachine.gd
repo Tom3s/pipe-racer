@@ -66,7 +66,8 @@ func canBuild() -> bool:
 
 func setEditorStateBuild() -> void:
 	editorState = EDITOR_STATE_BUILD
-	buildMode = EDITOR_BUILD_MODE_PREFAB
+	buildModeChanged.emit(buildMode)
+	# buildMode = EDITOR_BUILD_MODE_PREFAB
 
 func setEditorStateEdit() -> void:
 	editorState = EDITOR_STATE_EDIT
