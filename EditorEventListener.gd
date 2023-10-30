@@ -463,6 +463,7 @@ func onEditorInputHandler_editorModeBuildPressed():
 		editorStateMachine.clearSelection()
 	# onEditorStateMachine_buildModeChanged(editorStateMachine.buildMode)
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_BUILD)
+	setVisibleUI(editorStateMachine.buildMode)
 	print("Build mode")
 
 func onEditorInputHandler_editorModeEditPressed():
@@ -470,6 +471,7 @@ func onEditorInputHandler_editorModeEditPressed():
 	prefabMesher.visible = false
 	propPlacer.visible = false
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_EDIT)
+	setVisibleUI(editorStateMachine.buildMode)
 	print("Edit mode")
 
 func onEditorInputHandler_editorModeDeletePressed():
@@ -481,6 +483,7 @@ func onEditorInputHandler_editorModeDeletePressed():
 	prefabMesher.visible = false
 	propPlacer.visible = false
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_DELETE)
+	setVisibleUI(editorStateMachine.buildMode)
 	print("Delete mode")
 
 func onEditorInputHandler_prevBuildModePressed():
@@ -510,7 +513,9 @@ func onEditorInputHandler_fullScreenPressed():
 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 var oldSoundVolume: float = 0
+var prePlaytestState: int = 0
 func onEditorInputHandler_testPressed():
+	onEditorInputHandler_editorModeBuildPressed()
 	car.resumeMovement()
 	car.setRespawnPositionFromDictionary(map.start.getStartPosition(0, 1))
 	car.respawn()
@@ -523,13 +528,15 @@ func onEditorInputHandler_testPressed():
 	hideUI()
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 	camera.inputEnabled = false
+	prePlaytestState = editorStateMachine.editorState
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 
 func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	if !editorStateMachine.inPlaytestState():
 		return
-	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_BUILD
-	setVisibleUI(editorStateMachine.editorState)
+	editorStateMachine.editorState = prePlaytestState
+	prePlaytestState = 0
+	setVisibleUI(editorStateMachine.buildMode)
 	editorShortcutsUI.visible = true
 	car.setRespawnPosition(Vector3(0, -1000, 0), Vector3(0, 0, 0))
 	car.respawn()
@@ -577,9 +584,9 @@ const EDITOR_UI_CHECKPOINT_PROPERTIES: int = 2
 const EDITOR_UI_PROP_PROPERTIES: int = 3
 
 func setVisibleUI(visibleUI: int):
-	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
-	prefabSelectorUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES
-	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES
+	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES && !editorStateMachine.inDeleteState()
+	prefabSelectorUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES && editorStateMachine.inBuildState()
+	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES && !editorStateMachine.inDeleteState()
 
 func hideUI():
 	prefabPropertiesUI.visible = false
