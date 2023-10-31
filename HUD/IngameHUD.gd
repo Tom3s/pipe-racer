@@ -3,7 +3,10 @@ extends Control
 class_name IngameHUD
 
 @onready
-var speedometer: Label = %Speedometer
+var spedometerText: Label = %SpedometerText
+
+@onready
+var spedometerBar: TextureProgressBar = %SpedometerBar
 
 @onready
 var positionLabel: Label = %Position
@@ -56,7 +59,7 @@ func _ready() -> void:
 	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
-	setSpeedText(car.getSpeed())
+	setSpedometer(car.getSpeed())
 	setPositionText(car.state.placement, TOTAL_CARS)
 	setLapText(car.state.currentLap + 1, car.state.nrLaps)
 	setLapTimerText(timeTrialManager.getCurrentLapTime())
@@ -88,10 +91,11 @@ func _input(event):
 		newTexture = load(RebindMenu.INVALID_KEY_ICON)
 	promptIcon.texture = newTexture
 
-func setSpeedText(speed: float) -> void:
+func setSpedometer(speed: float) -> void:
 	# convert speed from m/s to km/h
 	# speedometer.text = str(int(speed)) + " M/s | " + str(int(speed * 1.25)) + " Ku/H" 
-	speedometer.text = str(int(speed * 1.25)) + " KM/H"
+	spedometerText.text = str(int(speed * 1.25))
+	spedometerBar.value = speed * 1.25
 
 func setPositionText(currentPosition: int, total: int) -> void:
 	positionLabel.text = "Pos: " + str(currentPosition) + "/" + str(total)

@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://vyw4va1y2j2e"]
+[gd_scene load_steps=9 format=3 uid="uid://vyw4va1y2j2e"]
 
 [ext_resource type="Script" path="res://HUD/IngameHUD.gd" id="1_1uqa5"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_50c7g"]
+[ext_resource type="Texture2D" uid="uid://dx7atjm48t360" path="res://HUD/SpedometerUnder.png" id="3_0y6y2"]
 [ext_resource type="Texture2D" uid="uid://to1ouubs5rxs" path="res://Sprites/KBPrompts/66.png" id="3_tu0tx"]
 [ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="4_bi0vt"]
+[ext_resource type="Texture2D" uid="uid://6cmibwp7losi" path="res://HUD/SpedometerOver.png" id="4_x86rj"]
+[ext_resource type="Texture2D" uid="uid://hsh44fuv2ygp" path="res://HUD/SpedometerProgress.png" id="5_7hl8i"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="6_kmcpo"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -15,7 +19,7 @@ grow_vertical = 2
 theme = ExtResource("1_50c7g")
 script = ExtResource("1_1uqa5")
 
-[node name="HUDContainer" type="MarginContainer" parent="."]
+[node name="HUDContainer" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -23,26 +27,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 50
-
-[node name="Speedometer" type="Label" parent="HUDContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 40
-text = "135 KM/H"
-horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="Position" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+offset_left = 881.6
+offset_top = 50.0
+offset_right = 1092.0
+offset_bottom = 99.4
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -55,6 +47,10 @@ vertical_alignment = 1
 [node name="Lap" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+offset_left = 60.0
+offset_top = 50.0
+offset_right = 269.4
+offset_bottom = 99.4
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -67,6 +63,10 @@ vertical_alignment = 1
 [node name="LapTimer" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+offset_left = 60.0
+offset_top = 50.0
+offset_right = 1092.0
+offset_bottom = 89.4
 size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
@@ -78,6 +78,10 @@ vertical_alignment = 1
 [node name="Stats" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+offset_left = 60.0
+offset_top = 483.6
+offset_right = 332.4
+offset_bottom = 598.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -92,7 +96,12 @@ vertical_alignment = 1
 
 [node name="ResetIndicator" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+offset_left = 77.0
+offset_top = 216.0
+offset_right = 1073.4
+offset_bottom = 430.4
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.780392, 1, 0.309804, 1)
 theme_override_colors/font_outline_color = Color(0.203922, 0.301961, 0, 1)
@@ -106,6 +115,55 @@ Waiting for other players to reset
 horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 2
+
+[node name="SpedometerBar" type="TextureProgressBar" parent="HUDContainer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -282.0
+offset_top = -226.0
+offset_right = 230.0
+offset_bottom = 286.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.4, 0.4)
+size_flags_horizontal = 8
+size_flags_vertical = 8
+max_value = 320.0
+value = 135.0
+fill_mode = 4
+texture_under = ExtResource("3_0y6y2")
+texture_over = ExtResource("4_x86rj")
+texture_progress = ExtResource("5_7hl8i")
+radial_initial_angle = 210.0
+radial_fill_degrees = 300.0
+
+[node name="SpedometerText" type="Label" parent="HUDContainer/SpedometerBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.7
+offset_top = -136.0
+offset_right = 128.7
+offset_bottom = 81.4
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_kmcpo")
+theme_override_font_sizes/font_size = 189
+text = "135"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HUDContainer2" type="MarginContainer" parent="."]
 unique_name_in_owner = true
