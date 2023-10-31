@@ -17,8 +17,11 @@ var lap: Label = %Lap
 @onready
 var lapTimer: Label = %LapTimer
 
-@onready
-var stats: Label = %Stats
+# @onready
+# var stats: Label = %Stats
+@onready var statsTotal: Label = %StatsTotal
+@onready var statsLast: Label = %StatsLast
+@onready var statsBest: Label = %StatsBest
 
 @onready
 var readyIndicator: VBoxContainer = %ReadyIndicator
@@ -107,10 +110,13 @@ func setLapTimerText(ticks: int) -> void:
 	lapTimer.text = IngameHUD.getTimeStringFromTicks(ticks)
 
 func setStatsText(totalTick: int, lastLapTicks: int, bestLapTicks: int) -> void:
-	stats.text = "Total:\t" + IngameHUD.getTimeStringFromTicks(totalTick) + "\n"
-	stats.text += "-------\t==========\n"
-	stats.text += "Last:\t" + IngameHUD.getTimeStringFromTicks(lastLapTicks) + "\n"
-	stats.text += "Best:\t" + IngameHUD.getTimeStringFromTicks(bestLapTicks)
+	# stats.text = "Total:\t" + IngameHUD.getTimeStringFromTicks(totalTick) + "\n"
+	# stats.text += "-------\t==========\n"
+	# stats.text += "Last:\t" + IngameHUD.getTimeStringFromTicks(lastLapTicks) + "\n"
+	# stats.text += "Best:\t" + IngameHUD.getTimeStringFromTicks(bestLapTicks)
+	statsTotal.text = IngameHUD.getTimeStringFromTicks(totalTick)
+	statsLast.text = IngameHUD.getTimeStringFromTicks(lastLapTicks)
+	statsBest.text = IngameHUD.getTimeStringFromTicks(bestLapTicks)
 
 # func setReadyIndicator(needsRespawn: bool) -> void:
 # 	readyIndicator.visible = needsRespawn
