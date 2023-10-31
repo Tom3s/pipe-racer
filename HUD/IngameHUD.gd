@@ -80,6 +80,9 @@ func _physics_process(_delta: float) -> void:
 	setReadyIndicator(!car.state.isReady)
 	setResetIndicator(car.state.isResetting)
 	setNickname(car.playerName)
+	splitsVisibleFrames -= 1
+	if splitsVisibleFrames <= 0:
+		splits.modulate = Color(1, 1, 1, lerp(splits.modulate.a, 0.0, 0.2))
 
 var newTexture: Texture = null
 func _input(event):
@@ -169,7 +172,10 @@ func loadReadyIcon(_sink = null):
 	newTexture = texture
 
 @onready var splits: VBoxContainer = %Splits
+
 const SPLIT_ALPHA = 117/256.0
+var splitsVisibleFrames: int = 0
+
 func displaySplit(timestamp: int, lastTimestamp: int):
 	var difference = timestamp - lastTimestamp
 	currentSplit.text = IngameHUD.getTimeStringFromTicks(timestamp)
@@ -190,8 +196,9 @@ func displaySplit(timestamp: int, lastTimestamp: int):
 	panel.get_theme_stylebox("panel").bg_color = color
 
 	splits.modulate = Color(1, 1, 1, 1)
+	splitsVisibleFrames = floori(1.5 * 120)
 
-	var tween = create_tween()
+	# var tween = create_tween()
 
-	tween.tween_interval(1.5)
-	tween.tween_property(splits, "modulate", Color(1, 1, 1, 0), 0.2)
+	# tween.tween_interval(1.2)
+	# tween.tween_property(splits, "modulate", Color(1, 1, 1, 0), 0.0)
