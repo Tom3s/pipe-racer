@@ -80,8 +80,6 @@ func collectCheckpoint(timestamp: int, lap: int) -> void:
 		lastTimestamp = bestSplits[splits[lap].size() - 1]
 		bestSplits[splits[lap].size() - 1] = min(bestSplits[splits[lap].size() - 1], currentSplit)
 		
-	# if lap == 0:
-	# 	lastTimestamp = currentSplit
 	checkPointCollected.emit(currentSplit, lastTimestamp)
 
 func reset() -> void:

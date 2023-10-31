@@ -169,7 +169,7 @@ func loadReadyIcon(_sink = null):
 	newTexture = texture
 
 @onready var splits: VBoxContainer = %Splits
-const SPLIT_ALPHA = 117/256
+const SPLIT_ALPHA = 117/256.0
 func displaySplit(timestamp: int, lastTimestamp: int):
 	var difference = timestamp - lastTimestamp
 	currentSplit.text = IngameHUD.getTimeStringFromTicks(timestamp)
@@ -178,14 +178,16 @@ func displaySplit(timestamp: int, lastTimestamp: int):
 
 	if difference > 0:
 		prefix = '+'
-		color = Color(0.2, 0.9, 0.2, SPLIT_ALPHA)
+		color = Color(0.9, 0.2, 0.2, SPLIT_ALPHA)
 	elif difference < 0:
 		prefix = '-'
-		color = Color(0.9, 0.2, 0.2, SPLIT_ALPHA)
+		color = Color(0.2, 0.9, 0.2, SPLIT_ALPHA)
 
 	lastSplit.text = prefix + IngameHUD.getTimeStringFromTicks(abs(difference))
 
-	lastSplit.get_theme_stylebox("panel").bg_color = color
+	# lastSplit.get_theme_stylebox("panel").bg_color = color
+	var panel: PanelContainer = lastSplit.get_parent()
+	panel.get_theme_stylebox("panel").bg_color = color
 
 	splits.modulate = Color(1, 1, 1, 1)
 
