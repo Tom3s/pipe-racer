@@ -173,6 +173,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			if state.allLocalPlayersFinished():
 				leaderboardUI.fetchTimes(map.trackId)
 				leaderboardUI.visible = true
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
