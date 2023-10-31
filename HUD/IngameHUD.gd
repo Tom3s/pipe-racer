@@ -35,6 +35,13 @@ var nickname: Label = %Nickname
 @onready
 var promptIcon: TextureRect = %PromptIcon
 
+
+@onready
+var currentSplit: Label = %CurrentSplit
+
+@onready
+var lastSplit: Label = %LastSplit
+
 var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
 # var globalPlacement: int = -1
@@ -45,6 +52,7 @@ var TOTAL_CARS: int = 0
 func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
 	car = initialCar
 	timeTrialManager = initialTimeTrialManager
+	timeTrialManager.checkPointCollected.connect(displaySplit)
 	TOTAL_CARS = totalCars
 	%HUDContainer.hide()
 
@@ -58,6 +66,7 @@ func _ready() -> void:
 
 	car.playerIndexChanged.connect(loadReadyIcon)
 	
+	splits.modulate = Color(1, 1, 1, 0)
 
 	set_physics_process(true)
 
@@ -158,3 +167,29 @@ func loadReadyIcon(_sink = null):
 		texture = load(RebindMenu.INVALID_KEY_ICON)
 	promptIcon.texture = texture
 	newTexture = texture
+
+@onready var splits: VBoxContainer = %Splits
+const SPLIT_ALPHA = 117/256
+func displaySplit(timestamp: int, lastTimestamp: int):
+	var difference = timestamp - lastTimestamp
+	currentSplit.text = IngameHUD.getTimeStringFromTicks(timestamp)
+	var prefix = ''
+	var color = Color(0, 0, 0, SPLIT_ALPHA)
+
+	if difference > 0:
+		prefix = '+'
+		color = Color(0.2, 0.9, 0.2, SPLIT_ALPHA)
+	elif difference < 0:
+		prefix = '-'
+		color = Color(0.9, 0.2, 0.2, SPLIT_ALPHA)
+
+	lastSplit.text = prefix + IngameHUD.getTimeStringFromTicks(abs(difference))
+
+	lastSplit.get_theme_stylebox("panel").bg_color = color
+
+	splits.modulate = Color(1, 1, 1, 1)
+
+	var tween = create_tween()
+
+	tween.tween_interval(1.5)
+	tween.tween_property(splits, "modulate", Color(1, 1, 1, 0), 0.2)

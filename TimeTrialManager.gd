@@ -14,6 +14,8 @@ var ingameSFX: IngameSFX = null
 
 var nrLaps: int
 
+signal checkPointCollected(timestamp: int, lastTimestamp: int)
+
 
 func _init(ingameSFXNode: IngameSFX, initnrLaps: int) -> void:
 	ingameSFX = ingameSFXNode
@@ -64,10 +66,23 @@ func resumeTimeTrial(timestamp: int) -> void:
 	paused = false
 	timeTrialLapEnd = timestamp - timeTrialLapEnd
 
+var bestSplits: Array = []
+
 func collectCheckpoint(timestamp: int, lap: int) -> void:
 	if splits.size() <= lap:
 		splits.append([])
-	splits[lap].append(timestamp - timeTrialLapEnd)
+	var currentSplit = timestamp - timeTrialLapEnd
+	splits[lap].append(currentSplit)
+	var lastTimestamp = currentSplit
+	if bestSplits.size() < splits[0].size():
+		bestSplits.append(currentSplit)
+	else:
+		lastTimestamp = bestSplits[splits[lap].size() - 1]
+		bestSplits[splits[lap].size() - 1] = min(bestSplits[splits[lap].size() - 1], currentSplit)
+		
+	# if lap == 0:
+	# 	lastTimestamp = currentSplit
+	checkPointCollected.emit(currentSplit, lastTimestamp)
 
 func reset() -> void:
 	times = []

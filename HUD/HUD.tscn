@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://vyw4va1y2j2e"]
+[gd_scene load_steps=15 format=3 uid="uid://vyw4va1y2j2e"]
 
 [ext_resource type="Script" path="res://HUD/IngameHUD.gd" id="1_1uqa5"]
 [ext_resource type="FontFile" uid="uid://8e8uvmh76j1i" path="res://Theme/Evogria.otf" id="1_h3as5"]
@@ -32,6 +32,24 @@ color = Color(0.658824, 0.658824, 0.658824, 1)
 grow_begin = 25.0
 grow_end = -3.0
 thickness = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_umx71"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.458824)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kynxr"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0.290196, 0.678431, 0.14902, 0.458824)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -262,6 +280,39 @@ text = "135"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Splits" type="VBoxContainer" parent="HUDContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(185, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -101.0
+offset_top = 153.0
+offset_right = 101.0
+offset_bottom = 265.0
+grow_horizontal = 2
+
+[node name="CurrentSplitContainer" type="PanelContainer" parent="HUDContainer/Splits"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_umx71")
+
+[node name="CurrentSplit" type="Label" parent="HUDContainer/Splits/CurrentSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:20:459"
+horizontal_alignment = 2
+
+[node name="CurrentSplitContainer2" type="PanelContainer" parent="HUDContainer/Splits"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kynxr")
+
+[node name="LastSplit" type="Label" parent="HUDContainer/Splits/CurrentSplitContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-00:01:459"
+horizontal_alignment = 2
+
 [node name="HUDContainer2" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -277,6 +328,7 @@ theme_override_constants/margin_bottom = 50
 
 [node name="ReadyIndicator" type="VBoxContainer" parent="HUDContainer2"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
