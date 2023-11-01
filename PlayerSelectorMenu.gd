@@ -16,6 +16,11 @@ var nrPlayers: int = 1
 
 @onready var panelHolder: VBoxContainer = %PanelHolder
 
+@onready var leftPanel: PanelContainer = %LeftPanel
+@onready var rightPanel: PanelContainer = %RightPanel
+@onready var menuTitle: Label = %MenuTitle
+@onready var bottomContainer: HBoxContainer = %BottomContainer
+
 
 signal nextPressed(players: Array[PlayerData])
 signal backPressed()
@@ -66,13 +71,14 @@ func onNextButton_Pressed():
 	for panel in panels:
 		if panel.visible:
 			players.append(panel.getPlayerData())
-	visible = false
+	# visible = false
+	await animateOut()
 	nextPressed.emit(players)
 
 func onBackButton_Pressed():
-	visible = false
+	# visible = false
+	await animateOut()
 	backPressed.emit()
-	pass
 
 func setNumberOfPlayers(number: int):
 	for i in 4:
@@ -83,3 +89,47 @@ func setNumberOfPlayers(number: int):
 
 func getMainPlayerPanel():
 	return panels[0]
+
+const ANIMATION_TIME = 0.3
+const ANIMATION_DELAY = 0.05
+func animateIn():
+	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+	var screenSize = get_viewport_rect().size
+
+	tween.tween_property(leftPanel, "position", Vector2(-screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(rightPanel, "position", Vector2(screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(menuTitle, "position", Vector2(0, -screenSize.y), 0.0).as_relative()
+	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), 0.0).as_relative()
+
+	tween.tween_property(self, "visible", true, 0.0)
+
+	tween.set_parallel(true)
+
+	tween.tween_property(leftPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)
+	tween.tween_property(rightPanel, "position", Vector2(-screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(1 * ANIMATION_DELAY)
+	tween.tween_property(menuTitle, "position", Vector2(0, screenSize.y), ANIMATION_TIME).as_relative().set_delay(2 * ANIMATION_DELAY)
+	tween.tween_property(bottomContainer, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
+
+func animateOut():
+	var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	var screenSize = get_viewport_rect().size
+	
+	tween.set_parallel(true)
+
+	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
+	tween.tween_property(menuTitle, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(2 * ANIMATION_DELAY)
+	tween.tween_property(rightPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(1 * ANIMATION_DELAY)
+	tween.tween_property(leftPanel, "position", Vector2(-screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)
+
+	# await tween.finished
+	# tween = create_tween()
+	tween.set_parallel(false)
+	tween.tween_property(self, "visible", false, 0.0)
+
+
+	tween.tween_property(leftPanel, "position", Vector2(screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(rightPanel, "position", Vector2(-screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(menuTitle, "position", Vector2(0, screenSize.y), 0.0).as_relative()
+	tween.tween_property(bottomContainer, "position", Vector2(0, -screenSize.y), 0.0).as_relative()
+
+	return tween.finished

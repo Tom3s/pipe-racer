@@ -80,22 +80,23 @@ func onPlayOnlineButton_pressed():
 
 func onSettingsButton_pressed():
 	await hideMainContentsAnimated()
-	settingsMenu.visible = true
+	# settingsMenu.visible = true
+	settingsMenu.animateIn()
 
 func onSettingsMenu_backPressed():
 	# mainContent.visible = true
-	settingsButton.grab_focus()
 	await showMainContentsAnimated()
+	settingsButton.grab_focus()
 
 func onRaceMapLoader_backPressed():
 	# mainContent.visible = true
-	playButton.grab_focus()
 	await showMainContentsAnimated()
+	playButton.grab_focus()
 
 func onEditorMapLoader_backPressed():
 	# mainContent.visible = true
-	editButton.grab_focus()
 	await showMainContentsAnimated()
+	editButton.grab_focus()
 
 
 func onWebsiteButton_pressed():
@@ -177,6 +178,8 @@ func animateMainContentsIn():
 		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), 0)\
 			.as_relative()
 	# await tween.finished
+	# mainContent.visible = true
+	tween.tween_property(mainContent, "visible", true, 0)
 	tween = create_tween()
 	tween.set_parallel(true)
 	var index = 1
@@ -215,6 +218,6 @@ func hideMainContentsAnimated():
 	resetButtons()
 
 func showMainContentsAnimated():
-	mainContent.visible = true
+	# mainContent.visible = true
 	await animateMainContentsIn()
 	resetButtons()

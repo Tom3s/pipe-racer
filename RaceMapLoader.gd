@@ -39,7 +39,8 @@ func onMapLoader_backPressed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 	
 
 func onMapLoader_trackSelected(trackName: String):
@@ -87,13 +88,15 @@ func show():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 
 
 func hide():
 	mapLoader.visible = false
 	if playerSelectorMenu != null:
-		playerSelectorMenu.visible = false
+		# playerSelectorMenu.visible = false
+		await playerSelectorMenu.animateOut()
 		GlobalProperties.returnPlayerSelectorMenu(
 			onPlayerSelectorMenu_backPressed,
 			onPlayerSelectorMenu_nextPressed

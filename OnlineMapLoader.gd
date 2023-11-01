@@ -68,7 +68,8 @@ func onOnlineMenu_backPressed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 
 func onServerClosed():
 	Network.closeConnection()
@@ -77,7 +78,8 @@ func onServerClosed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 	onlineMenu.visible = false
 	mapLoader.visible = false
 	for child in %RaceParent.get_children():
@@ -103,7 +105,8 @@ func onMapLoader_DownloadFailed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 
 var selectedTrack: String
 func onMapLoader_trackSelected(trackName: String):
@@ -174,11 +177,13 @@ func show():
 		onPlayerSelectorMenu_nextPressed
 	)
 	
-	playerSelectorMenu.visible = true
+	# playerSelectorMenu.visible = true
+	playerSelectorMenu.animateIn()
 
 func hide():
 	if playerSelectorMenu != null:
-		playerSelectorMenu.visible = false
+		# playerSelectorMenu.visible = false
+		await playerSelectorMenu.animateOut()
 		GlobalProperties.returnPlayerSelectorMenu(
 			onPlayerSelectorMenu_backPressed,
 			onPlayerSelectorMenu_nextPressed

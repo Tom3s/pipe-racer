@@ -154,8 +154,10 @@ func changeSmoothSteering(value):
 
 
 func onCloseButton_pressed():
-	closePressed.emit()
+	await animateOut()
 	visible = false
+	closePressed.emit()
+	position = Vector2(0, 0)
 
 func onVisibilityChanged():
 	if visible:
@@ -169,3 +171,40 @@ func onFullscreenButton_pressed():
 
 func onRenderQuality_itemSelected(index: int):
 	GlobalProperties.RENDER_QUALITY = renderQualities[index][1]
+
+const ANIMATE_TIME = 0.3
+func animateIn():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(self, "position", Vector2(0, -windowSize.y), 0.0)\
+		.as_relative()\
+		# .set_ease(Tween.EASE_OUT)\
+		# .set_trans(Tween.TRANS_EXPO)\
+		.finished.connect(show)
+	
+	tween = create_tween()
+
+	tween.tween_property(self, "position", Vector2(0, windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_OUT)\
+		.set_trans(Tween.TRANS_EXPO)
+		# .finished.connect(show)
+	
+	# visible = true
+
+func animateOut():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(self, "position", Vector2(0, -windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_EXPO)
+		# .finished.connect(onAnimateOutFinished)
+	return tween.finished
+
+func onAnimateOutFinished():
+	visible = false

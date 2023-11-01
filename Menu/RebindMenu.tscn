@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://m0ulbe340r3v"]
+[gd_scene load_steps=6 format=3 uid="uid://m0ulbe340r3v"]
 
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_e2ama"]
 [ext_resource type="Script" path="res://Menu/RebindMenu.gd" id="1_jl4m3"]
-[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_yw51p"]
 [ext_resource type="Script" path="res://Menu/PlayerRebindMenu.gd" id="3_2qdjx"]
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="3_5pxdl"]
+
+[sub_resource type="Theme" id="Theme_ccr1s"]
+default_font = ExtResource("1_e2ama")
+default_font_size = 20
 
 [node name="RebindMenu" type="Control"]
 layout_mode = 3
@@ -12,7 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_yw51p")
+theme = SubResource("Theme_ccr1s")
 script = ExtResource("1_jl4m3")
 
 [node name="TabContainer" type="TabContainer" parent="."]

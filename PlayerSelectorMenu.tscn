@@ -1,117 +1,234 @@
-[gd_scene load_steps=4 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=16 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
-[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_10c83"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_curo1"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_c0x38"]
+[ext_resource type="StyleBox" uid="uid://b6m4v27b583s6" path="res://HUD/PanelLeftExtend.tres" id="3_p7lb2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4ewd"]
+bg_color = Color(0.439216, 0.439216, 0.439216, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.129412, 0.129412, 0.129412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnfbv"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.352941, 0.780392, 0.67451, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vuv8h"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dlqso"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aunuk"]
+bg_color = Color(0.4, 0.4, 0.4, 0.65098)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocpm4"]
+bg_color = Color(0.607843, 0.729412, 0.54902, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gm2h7"]
+bg_color = Color(0.866667, 0.298039, 0.305882, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.407843, 0.0980392, 0.109804, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjac4"]
+bg_color = Color(0.498039, 0.901961, 0.352941, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="Theme" id="Theme_67hwj"]
+default_font = ExtResource("1_curo1")
+default_font_size = 26
+Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
+Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
+Button/styles/hover = SubResource("StyleBoxFlat_gnfbv")
+Button/styles/normal = SubResource("StyleBoxFlat_xl3p0")
+Button/styles/pressed = SubResource("StyleBoxFlat_xl3p0")
+CheckBox/icons/checked = SubResource("PlaceholderTexture2D_vuv8h")
+CheckBox/icons/unchecked = SubResource("PlaceholderTexture2D_dlqso")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_aunuk")
+CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
+CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4cnd"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.65098)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_right = 64.0
 
 [node name="PlayerSelectorMenu" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_10c83")
+theme = SubResource("Theme_67hwj")
 script = ExtResource("1_8wdo8")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="LeftPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = 38.0
-offset_top = 43.0
-offset_right = 413.0
-offset_bottom = -43.0
+offset_top = 13.0
+offset_right = 500.0
+offset_bottom = -13.0
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_p7lb2")
 
-[node name="PanelHolder" type="VBoxContainer" parent="Panel"]
+[node name="PanelHolder" type="VBoxContainer" parent="LeftPanel"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 0)
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 0
-alignment = 2
-
-[node name="Panel2" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 121.0
-offset_top = -93.0
-offset_right = 242.0
-offset_bottom = 93.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
+custom_minimum_size = Vector2(470, 148)
 layout_mode = 2
-offset_left = 10.5
-offset_top = 8.5
-offset_right = 110.5
-offset_bottom = 177.5
-grow_horizontal = 2
-grow_vertical = 2
+size_flags_horizontal = 0
 alignment = 1
 
-[node name="Button1" type="Button" parent="Panel2/VBoxContainer"]
+[node name="RightPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -146.0
+offset_top = -135.0
+offset_right = -11.0
+offset_bottom = 135.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m4cnd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer"]
+layout_mode = 2
+text = "Number of
+players"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button1" type="Button" parent="RightPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 text = "1 Player"
 
-[node name="Button2" type="Button" parent="Panel2/VBoxContainer"]
+[node name="Button2" type="Button" parent="RightPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 text = "2 Players"
 
-[node name="Button3" type="Button" parent="Panel2/VBoxContainer"]
+[node name="Button3" type="Button" parent="RightPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 text = "3 Players"
 
-[node name="Button4" type="Button" parent="Panel2/VBoxContainer"]
+[node name="Button4" type="Button" parent="RightPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 text = "4 Players"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel2"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="."]
+[node name="MenuTitle" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -230.0
-offset_top = 26.0
-offset_right = 630.4
-offset_bottom = 198.4
+offset_left = -255.0
+offset_top = 31.0
+offset_right = 605.4
+offset_bottom = 213.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.870588, 0.286275, 0.286275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 25
-theme_override_font_sizes/font_size = 80
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 100
 text = "SELECT
 PLAYERS
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="BottomContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -125,7 +242,7 @@ offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BackButton" type="Button" parent="HBoxContainer"]
+[node name="BackButton" type="Button" parent="BottomContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
@@ -133,7 +250,11 @@ theme_override_font_sizes/font_size = 30
 shortcut = ExtResource("3_c0x38")
 text = "Back"
 
-[node name="NextButton" type="Button" parent="HBoxContainer"]
+[node name="Control" type="Control" parent="BottomContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="NextButton" type="Button" parent="BottomContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
