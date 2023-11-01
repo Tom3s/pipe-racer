@@ -1,16 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=19 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="4_o0xax"]
+[ext_resource type="Script" path="res://Menu/ScaledContainer.gd" id="5_0tsik"]
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
 [ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
 [ext_resource type="PackedScene" uid="uid://df1rccijala1n" path="res://MusicPlayer.tscn" id="7_gdorw"]
 [ext_resource type="PackedScene" uid="uid://wrv4h1dcsnnu" path="res://OnlineMapLoader.tscn" id="7_r4ncp"]
+[ext_resource type="PackedScene" uid="uid://clhi3xhdyb5j8" path="res://Sounds/MenuSFX.tscn" id="12_mhsla"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]
 shader = ExtResource("3_3culy")
@@ -21,7 +23,6 @@ shader = ExtResource("3_3culy")
 
 [sub_resource type="Theme" id="Theme_7r8l0"]
 default_font = ExtResource("4_o0xax")
-default_font_size = 90
 Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
 Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
@@ -44,9 +45,9 @@ Button/styles/normal = SubResource("StyleBoxEmpty_m2y1r")
 Button/styles/pressed = SubResource("StyleBoxEmpty_m2y1r")
 Label/colors/font_color = Color(1, 1, 1, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/constants/outline_size = 6
-Label/constants/shadow_offset_x = 6
-Label/constants/shadow_offset_y = 6
+Label/constants/outline_size = 8
+Label/constants/shadow_offset_x = 12
+Label/constants/shadow_offset_y = 12
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rml2x"]
 
@@ -95,6 +96,7 @@ offset_right = 455.0
 offset_bottom = 217.5
 grow_vertical = 2
 theme = SubResource("Theme_7r8l0")
+script = ExtResource("5_0tsik")
 
 [node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
@@ -112,19 +114,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container/PlayButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -80.7
-offset_top = -48.2
-offset_right = 80.7
-offset_bottom = 48.2
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 356.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(1, 0.470588, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
 text = "Race!"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -145,19 +141,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container2/EditButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.2
-offset_top = -53.7
-offset_right = 90.2
-offset_bottom = 53.7
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 260.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(1, 0.67451, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
 text = "Edit"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -178,19 +168,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container3/PlayOnlineButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.2
-offset_top = -54.2
-offset_right = 90.2
-offset_bottom = 53.2
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 850.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
 text = "Online (Beta)"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -211,19 +195,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container4/WebsiteButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.2
-offset_top = -54.2
-offset_right = 90.2
-offset_bottom = 53.2
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 507.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0.54902, 1, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
 text = "Website"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -244,19 +222,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container6/SettingsButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.2
-offset_top = -53.7
-offset_right = 90.2
-offset_bottom = 53.7
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 568.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0.470588, 0.909804, 1, 1)
+theme_override_font_sizes/font_size = 180
 text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -276,19 +248,13 @@ script = ExtResource("5_r5x1k")
 
 [node name="Label" type="Label" parent="MainContent/ButtonContainer/Container7/ExitButton"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.2
-offset_top = -53.7
-offset_right = 90.2
-offset_bottom = 53.7
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -15.0
+offset_right = 260.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0.858824, 0.470588, 1, 1)
+theme_override_font_sizes/font_size = 180
 text = "EXit"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -343,4 +309,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="MusicPlayer" parent="." instance=ExtResource("7_gdorw")]
+unique_name_in_owner = true
+
+[node name="MenuSFX" parent="." instance=ExtResource("12_mhsla")]
 unique_name_in_owner = true

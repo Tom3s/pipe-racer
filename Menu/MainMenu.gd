@@ -135,7 +135,8 @@ func animateMainContentsOut():
 		# await create_tween().tween_interval(INBETWEEN_TIME).finished
 		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), MOVE_TIME)\
 			.as_relative()\
-			.set_ease(Tween.EASE_OUT)\
+			.set_ease(Tween.EASE_IN)\
+			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
 		index += 1
 	
@@ -183,6 +184,7 @@ func animateMainContentsIn():
 		tween.tween_property(label, "position", Vector2(windowSize.x, 0), MOVE_TIME)\
 			.as_relative()\
 			.set_ease(Tween.EASE_OUT)\
+			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
 		index += 1
 	
