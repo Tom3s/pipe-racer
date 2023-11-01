@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dl5836ibbaqbg"]
+[gd_scene load_steps=26 format=3 uid="uid://dl5836ibbaqbg"]
 
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_277il"]
 [ext_resource type="Script" path="res://PlayerPanel.gd" id="2_pun37"]
@@ -96,6 +96,24 @@ shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
 shadow_size = 1
 shadow_offset = Vector2(2, 2)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ef7yk"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5lrt"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.258824, 0.258824, 0.258824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="Theme" id="Theme_67hwj"]
 default_font = ExtResource("1_277il")
 default_font_size = 26
@@ -111,6 +129,10 @@ CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
 CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
 CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
+LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
+LineEdit/fonts/font = ExtResource("7_ikgoe")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
 [sub_resource type="FontVariation" id="FontVariation_673kc"]
 base_font = ExtResource("5_bnusw")

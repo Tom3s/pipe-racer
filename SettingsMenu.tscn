@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://q0icvxyovnsr"]
+[gd_scene load_steps=20 format=3 uid="uid://q0icvxyovnsr"]
 
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_6foeu"]
+[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_yskjr"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_3kgnw"]
 [ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="3_e7j8m"]
@@ -95,6 +96,24 @@ shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
 shadow_size = 1
 shadow_offset = Vector2(2, 2)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ef7yk"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5lrt"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.258824, 0.258824, 0.258824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="Theme" id="Theme_67hwj"]
 default_font = ExtResource("1_6foeu")
 default_font_size = 26
@@ -110,6 +129,10 @@ CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
 CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
 CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
+LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
+LineEdit/fonts/font = ExtResource("1_yskjr")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3

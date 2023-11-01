@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=19 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_curo1"]
+[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_tap43"]
 [ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_c0x38"]
 [ext_resource type="StyleBox" uid="uid://b6m4v27b583s6" path="res://HUD/PanelLeftExtend.tres" id="3_p7lb2"]
 
@@ -93,6 +94,24 @@ shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
 shadow_size = 1
 shadow_offset = Vector2(2, 2)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ef7yk"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5lrt"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.258824, 0.258824, 0.258824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="Theme" id="Theme_67hwj"]
 default_font = ExtResource("1_curo1")
 default_font_size = 26
@@ -108,6 +127,10 @@ CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
 CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
 CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
+LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
+LineEdit/fonts/font = ExtResource("1_tap43")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4cnd"]
 content_margin_left = 20.0
