@@ -1,10 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=17 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="4_o0xax"]
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
+[ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
 [ext_resource type="PackedScene" uid="uid://df1rccijala1n" path="res://MusicPlayer.tscn" id="7_gdorw"]
@@ -14,6 +16,39 @@
 shader = ExtResource("3_3culy")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_40t0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2y1r"]
+
+[sub_resource type="Theme" id="Theme_7r8l0"]
+default_font = ExtResource("4_o0xax")
+default_font_size = 90
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/h_separation = 2
+Button/constants/outline_size = 0
+Button/styles/disabled = SubResource("StyleBoxEmpty_m2y1r")
+Button/styles/focus = SubResource("StyleBoxEmpty_m2y1r")
+Button/styles/hover = SubResource("StyleBoxEmpty_m2y1r")
+Button/styles/normal = SubResource("StyleBoxEmpty_m2y1r")
+Button/styles/pressed = SubResource("StyleBoxEmpty_m2y1r")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 6
+Label/constants/shadow_offset_y = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rml2x"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -48,77 +83,218 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContent"]
+[node name="ButtonContainer" type="VBoxContainer" parent="MainContent"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 30.0
+offset_top = -217.5
+offset_right = 455.0
+offset_bottom = 217.5
+grow_vertical = 2
+theme = SubResource("Theme_7r8l0")
+
+[node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="PlayButton" type="Button" parent="MainContent/ButtonContainer/Container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(182, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../Container7/ExitButton")
+focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container/PlayButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -80.7
+offset_top = -48.2
+offset_right = 80.7
+offset_bottom = 48.2
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="PlayButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../ExitButton")
-focus_neighbor_bottom = NodePath("../EditButton")
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.470588, 0.470588, 1)
 text = "Race!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="EditButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+[node name="Container2" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../PlayButton")
-focus_neighbor_bottom = NodePath("../PlayOnlineButton")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="EditButton" type="Button" parent="MainContent/ButtonContainer/Container2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container/PlayButton")
+focus_neighbor_bottom = NodePath("../../Container3/PlayOnlineButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container2/EditButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.2
+offset_top = -53.7
+offset_right = 90.2
+offset_bottom = 53.7
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.67451, 0.470588, 1)
 text = "Edit"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="PlayOnlineButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+[node name="Container3" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../EditButton")
-focus_neighbor_bottom = NodePath("../WebsiteButton")
-text = "Online (beta)"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="WebsiteButton" type="Button" parent="MainContent/VBoxContainer"]
+[node name="PlayOnlineButton" type="Button" parent="MainContent/ButtonContainer/Container3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(425, 70)
 layout_mode = 2
-focus_neighbor_top = NodePath("../PlayOnlineButton")
-focus_neighbor_bottom = NodePath("../SettingsButton")
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container2/EditButton")
+focus_neighbor_bottom = NodePath("../../Container4/WebsiteButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container3/PlayOnlineButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.2
+offset_top = -54.2
+offset_right = 90.2
+offset_bottom = 53.2
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
+text = "Online (Beta)"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container4" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="WebsiteButton" type="Button" parent="MainContent/ButtonContainer/Container4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(255, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container3/PlayOnlineButton")
+focus_neighbor_bottom = NodePath("../../Container6/SettingsButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container4/WebsiteButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.2
+offset_top = -54.2
+offset_right = 90.2
+offset_bottom = 53.2
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.54902, 1, 0.470588, 1)
 text = "Website"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="ControlsButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 40)
+[node name="Container6" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../SettingsButton")
-focus_neighbor_bottom = NodePath("../ExitButton")
-text = "View Controls"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="SettingsButton" type="Button" parent="MainContent/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="MainContent/ButtonContainer/Container6"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(285, 70)
 layout_mode = 2
-focus_neighbor_top = NodePath("../WebsiteButton")
-focus_neighbor_bottom = NodePath("../ExitButton")
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container4/WebsiteButton")
+focus_neighbor_bottom = NodePath("../../Container7/ExitButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container6/SettingsButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.2
+offset_top = -53.7
+offset_right = 90.2
+offset_bottom = 53.7
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.470588, 0.909804, 1, 1)
 text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ExitButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+[node name="Container7" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../SettingsButton")
-focus_neighbor_bottom = NodePath("../PlayButton")
-text = "Exit"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="ExitButton" type="Button" parent="MainContent/ButtonContainer/Container7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(145, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container6/SettingsButton")
+focus_neighbor_bottom = NodePath("../../Container/PlayButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container7/ExitButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.2
+offset_top = -53.7
+offset_right = 90.2
+offset_bottom = 53.7
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.858824, 0.470588, 1, 1)
+text = "EXit"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Title" type="Label" parent="MainContent"]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0

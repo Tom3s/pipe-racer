@@ -1,0 +1,89 @@
+[gd_scene load_steps=12 format=3 uid="uid://d1fprh24cp0at"]
+
+[ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="1_myawo"]
+[ext_resource type="Texture2D" uid="uid://dx7atjm48t360" path="res://HUD/SpedometerUnder.png" id="2_5i3jx"]
+[ext_resource type="Texture2D" uid="uid://6cmibwp7losi" path="res://HUD/SpedometerOver.png" id="3_u8qhm"]
+[ext_resource type="Texture2D" uid="uid://hsh44fuv2ygp" path="res://HUD/SpedometerProgress.png" id="4_6kof8"]
+[ext_resource type="Texture2D" uid="uid://d2wjxuk34tecu" path="res://Theme/MenuButtonHover.png" id="6_plkft"]
+[ext_resource type="Texture2D" uid="uid://nxu6a3ioaqgk" path="res://Theme/MenuButtonPressed.png" id="7_cw831"]
+[ext_resource type="Texture2D" uid="uid://sesy4jmdiuo4" path="res://Theme/MenuButtonFocus.png" id="8_uwfui"]
+[ext_resource type="Texture2D" uid="uid://7j1umwnd28p4" path="res://Theme/menuButton.png" id="9_g181l"]
+[ext_resource type="BitMap" uid="uid://pv8rrf7hpk7x" path="res://Theme/Bitmask.png" id="9_xwabv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wy5i1"]
+shader = ExtResource("1_myawo")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_dv7bk"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_wy5i1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("CanvasTexture_dv7bk")
+
+[node name="Spedometer" type="TextureProgressBar" parent="."]
+visible = false
+layout_mode = 1
+offset_right = 64.0
+offset_bottom = 64.0
+value = 100.0
+fill_mode = 4
+texture_under = ExtResource("2_5i3jx")
+texture_over = ExtResource("3_u8qhm")
+texture_progress = ExtResource("4_6kof8")
+radial_initial_angle = 210.0
+radial_fill_degrees = 300.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button3" type="TextureButton" parent="."]
+layout_mode = 1
+offset_right = 512.0
+offset_bottom = 512.0
+texture_normal = ExtResource("9_g181l")
+texture_pressed = ExtResource("7_cw831")
+texture_hover = ExtResource("6_plkft")
+texture_focused = ExtResource("8_uwfui")
+texture_click_mask = ExtResource("9_xwabv")
+
+[node name="Button4" type="TextureButton" parent="."]
+layout_mode = 1
+offset_left = 382.0
+offset_top = 1.0
+offset_right = 894.0
+offset_bottom = 513.0
+texture_normal = ExtResource("9_g181l")
+texture_pressed = ExtResource("7_cw831")
+texture_hover = ExtResource("6_plkft")
+texture_focused = ExtResource("8_uwfui")
+texture_click_mask = ExtResource("9_xwabv")
+
+[node name="Button5" type="TextureButton" parent="."]
+layout_mode = 1
+offset_left = 764.0
+offset_top = 2.0
+offset_right = 1276.0
+offset_bottom = 514.0
+texture_normal = ExtResource("9_g181l")
+texture_pressed = ExtResource("7_cw831")
+texture_hover = ExtResource("6_plkft")
+texture_focused = ExtResource("8_uwfui")
+texture_click_mask = ExtResource("9_xwabv")

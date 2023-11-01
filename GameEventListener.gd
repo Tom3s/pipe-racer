@@ -247,7 +247,7 @@ func forceResumeGame():
 	if state.raceStarted:
 		for car in players.get_children():
 			car.resumeMovement()
-			car.state.hasControl = true
+			car.state.hasControl = !car.state.finisishedRacing()
 		# timeTrialManagers[i].resumeTimeTrial(timestamp)
 		if !state.online:
 			for key in timeTrialManagers:
