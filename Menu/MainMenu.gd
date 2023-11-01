@@ -36,6 +36,7 @@ func _ready():
 
 	%VersionLabel.text = "Version: " + VersionCheck.currentVersion
 
+	set_physics_process(true)
 	
 
 func connectSignals():
@@ -53,6 +54,17 @@ func connectSignals():
 	editorMapLoader.enteredMapEditor.connect(onEditorMapLoader_enteredMapEditor)
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
+
+func _physics_process(delta):
+	if get_viewport().gui_get_focus_owner() == null && mainContent.visible:
+		# playButton.grab_focus()
+		if Input.is_action_just_pressed("ui_left") || \
+			Input.is_action_just_pressed("ui_right") || \
+			Input.is_action_just_pressed("ui_up") || \
+			Input.is_action_just_pressed("ui_down") || \
+			Input.is_action_just_pressed("ui_accept") || \
+			Input.is_action_just_pressed("ui_cancel"):
+			playButton.grab_focus()
 
 func onPlayButton_pressed():
 	await hideMainContentsAnimated()
@@ -72,18 +84,18 @@ func onSettingsButton_pressed():
 
 func onSettingsMenu_backPressed():
 	# mainContent.visible = true
-	await showMainContentsAnimated()
 	settingsButton.grab_focus()
+	await showMainContentsAnimated()
 
 func onRaceMapLoader_backPressed():
 	# mainContent.visible = true
-	await showMainContentsAnimated()
 	playButton.grab_focus()
+	await showMainContentsAnimated()
 
 func onEditorMapLoader_backPressed():
 	# mainContent.visible = true
-	await showMainContentsAnimated()
 	editButton.grab_focus()
+	await showMainContentsAnimated()
 
 
 func onWebsiteButton_pressed():
@@ -107,8 +119,8 @@ func onEditorMapLoader_exitedMapEditor():
 
 func onOnlineMapLoader_backPressed():
 	# mainContent.visible = true
+	playOnlineButton.grab_focus()
 	await showMainContentsAnimated()
-	playButton.grab_focus()
 
 
 const MOVE_TIME = 0.2

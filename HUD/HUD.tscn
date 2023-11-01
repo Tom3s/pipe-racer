@@ -281,41 +281,50 @@ text = "135"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Splits" type="VBoxContainer" parent="HUDContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(185, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="HUDContainer"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 13
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -101.0
-offset_top = -217.0
-offset_right = 101.0
-offset_bottom = -105.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
-[node name="CurrentSplitContainer" type="PanelContainer" parent="HUDContainer/Splits"]
+[node name="Splits" type="VBoxContainer" parent="HUDContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(185, 0)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="CurrentSplitContainer" type="PanelContainer" parent="HUDContainer/VBoxContainer/Splits"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_umx71")
 
-[node name="CurrentSplit" type="Label" parent="HUDContainer/Splits/CurrentSplitContainer"]
+[node name="CurrentSplit" type="Label" parent="HUDContainer/VBoxContainer/Splits/CurrentSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "00:20:459"
 horizontal_alignment = 2
 
-[node name="CurrentSplitContainer2" type="PanelContainer" parent="HUDContainer/Splits"]
+[node name="CurrentSplitContainer2" type="PanelContainer" parent="HUDContainer/VBoxContainer/Splits"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_kynxr")
 
-[node name="LastSplit" type="Label" parent="HUDContainer/Splits/CurrentSplitContainer2"]
+[node name="LastSplit" type="Label" parent="HUDContainer/VBoxContainer/Splits/CurrentSplitContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "-00:01:459"
 horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="HUDContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control2" type="Control" parent="HUDContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="HUDContainer2" type="MarginContainer" parent="."]
 unique_name_in_owner = true
