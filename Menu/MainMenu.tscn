@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=17 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
-[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="4_o0xax"]
+[ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="4_harqg"]
 [ext_resource type="Script" path="res://Menu/ScaledContainer.gd" id="5_0tsik"]
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
 [ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
@@ -18,36 +18,6 @@
 shader = ExtResource("3_3culy")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_40t0c"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2y1r"]
-
-[sub_resource type="Theme" id="Theme_7r8l0"]
-default_font = ExtResource("4_o0xax")
-Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
-Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
-Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/font_outline_color = Color(1, 1, 1, 1)
-Button/colors/font_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
-Button/colors/icon_focus_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_normal_color = Color(1, 1, 1, 1)
-Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
-Button/constants/h_separation = 2
-Button/constants/outline_size = 0
-Button/styles/disabled = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/focus = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/hover = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/normal = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/pressed = SubResource("StyleBoxEmpty_m2y1r")
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/constants/outline_size = 8
-Label/constants/shadow_offset_x = 12
-Label/constants/shadow_offset_y = 12
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rml2x"]
 
@@ -95,7 +65,7 @@ offset_top = -217.5
 offset_right = 455.0
 offset_bottom = 217.5
 grow_vertical = 2
-theme = SubResource("Theme_7r8l0")
+theme = ExtResource("4_harqg")
 script = ExtResource("5_0tsik")
 
 [node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer"]

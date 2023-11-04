@@ -16,9 +16,10 @@ func _ready():
 	menuSFXPlayer = get_tree().root.get_node("MainMenu/MenuSFX")
 	mouse_entered.connect(grab_focus)
 	mouse_exited.connect(release_focus)
-	mouse_entered.connect(menuSFXPlayer.playMenuHover)
-	mouse_exited.connect(menuSFXPlayer.playMenuUnhover)
-	focus_entered.connect(menuSFXPlayer.playMenuHover)
+	if menuSFXPlayer != null:
+		mouse_entered.connect(menuSFXPlayer.playMenuHover)
+		mouse_exited.connect(menuSFXPlayer.playMenuUnhover)
+		focus_entered.connect(menuSFXPlayer.playMenuHover)
 	set_physics_process(true)
 
 var inAnimation: bool = false

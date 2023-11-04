@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=26 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_curo1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Menu/ScaledContainerLeftMiddle.gd" id="5_1uooy"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerY.gd" id="5_6ao42"]
 [ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_trmc8"]
+[ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="7_ogc8f"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerTopMiddle.gd" id="8_nbu4h"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerBottomMiddle.gd" id="9_xmg4x"]
 
@@ -159,36 +160,6 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 expand_margin_right = 64.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2y1r"]
-
-[sub_resource type="Theme" id="Theme_7r8l0"]
-default_font = ExtResource("1_curo1")
-Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
-Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
-Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/font_outline_color = Color(1, 1, 1, 1)
-Button/colors/font_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
-Button/colors/icon_focus_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_normal_color = Color(1, 1, 1, 1)
-Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
-Button/constants/h_separation = 2
-Button/constants/outline_size = 0
-Button/styles/disabled = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/focus = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/hover = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/normal = SubResource("StyleBoxEmpty_m2y1r")
-Button/styles/pressed = SubResource("StyleBoxEmpty_m2y1r")
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/constants/outline_size = 8
-Label/constants/shadow_offset_x = 12
-Label/constants/shadow_offset_y = 12
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oet8e"]
 
 [node name="PlayerSelectorMenu" type="Control"]
@@ -234,7 +205,7 @@ script = ExtResource("5_6ao42")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="RightPanel"]
 layout_mode = 2
-theme = SubResource("Theme_7r8l0")
+theme = ExtResource("7_ogc8f")
 alignment = 1
 
 [node name="Label" type="Label" parent="RightPanel/VBoxContainer"]
@@ -366,12 +337,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 102.345
-offset_top = 5.55556
-offset_right = 962.748
-offset_bottom = 451.556
+offset_left = 66.0903
+offset_top = 7.61806
+offset_right = 926.493
+offset_bottom = 453.618
 grow_horizontal = 2
-scale = Vector2(0.617284, 0.617284)
+scale = Vector2(0.846451, 0.846451)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0.870588, 0.286275, 0.286275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -396,13 +367,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -98.0
-offset_right = 325.0
-offset_bottom = -38.0
+offset_left = 261.791
+offset_top = 291.56
+offset_right = 564.791
+offset_bottom = 351.56
 grow_horizontal = 2
 grow_vertical = 0
-theme = SubResource("Theme_7r8l0")
+scale = Vector2(1.6929, 1.6929)
+theme = ExtResource("7_ogc8f")
 script = ExtResource("9_xmg4x")
 offset = Vector2i(188, -33)
 

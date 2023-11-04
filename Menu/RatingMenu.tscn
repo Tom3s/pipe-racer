@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c5387t1cl0ifm"]
+
+[node name="RatingMenu" type="VBoxContainer"]
+offset_right = 106.0
+offset_bottom = 61.0
+size_flags_horizontal = 0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Rate"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Rating: 5.00/5"
