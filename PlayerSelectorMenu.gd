@@ -50,6 +50,17 @@ func _ready():
 
 	visibility_changed.connect(nextButton.grab_focus)
 
+func _physics_process(delta):
+	if get_viewport().gui_get_focus_owner() == null && visible:
+		# playButton.grab_focus()
+		if Input.is_action_just_pressed("ui_left") || \
+			Input.is_action_just_pressed("ui_right") || \
+			Input.is_action_just_pressed("ui_up") || \
+			Input.is_action_just_pressed("ui_down") || \
+			Input.is_action_just_pressed("ui_accept") || \
+			Input.is_action_just_pressed("ui_cancel"):
+			nextButton.grab_focus()
+
 func onButton1_Pressed():
 	setNumberOfPlayers(1)
 	# nrPlayers = 1
@@ -119,6 +130,7 @@ func animateIn():
 	tween.tween_property(menuTitle, "inAnimation", false, ANIMATION_TIME).set_delay(2 * ANIMATION_DELAY)
 	tween.tween_property(bottomContainer, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
 	tween.tween_property(bottomContainer, "inAnimation", false, ANIMATION_TIME).set_delay(3 * ANIMATION_DELAY)
+	tween.tween_callback(nextButton.grab_focus).set_delay(3 * ANIMATION_DELAY)
 
 func animateOut():
 	var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)

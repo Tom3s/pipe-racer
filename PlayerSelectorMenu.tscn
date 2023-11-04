@@ -192,6 +192,7 @@ Label/constants/shadow_offset_y = 12
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oet8e"]
 
 [node name="PlayerSelectorMenu" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -257,8 +258,9 @@ custom_minimum_size = Vector2(170, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container4/Button4")
+focus_neighbor_bottom = NodePath("../../Container2/Button2")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container/Button1"]
@@ -284,8 +286,9 @@ custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container/Button1")
+focus_neighbor_bottom = NodePath("../../Container3/Button3")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container2/Button2"]
@@ -311,8 +314,9 @@ custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container2/Button2")
+focus_neighbor_bottom = NodePath("../../Container4/Button4")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container3/Button3"]
@@ -338,8 +342,9 @@ custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container3/Button3")
+focus_neighbor_bottom = NodePath("../../../../BottomContainer/Container5/NextButton")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container4/Button4"]
@@ -361,12 +366,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 135.237
-offset_top = 4.70833
-offset_right = 995.64
-offset_bottom = 450.708
+offset_left = 102.345
+offset_top = 5.55556
+offset_right = 962.748
+offset_bottom = 451.556
 grow_horizontal = 2
-scale = Vector2(0.523148, 0.523148)
+scale = Vector2(0.617284, 0.617284)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0.870588, 0.286275, 0.286275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -399,7 +404,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = SubResource("Theme_7r8l0")
 script = ExtResource("9_xmg4x")
-offset = Vector2i(128, -14)
+offset = Vector2i(188, -33)
 
 [node name="Container4" type="PanelContainer" parent="BottomContainer"]
 layout_mode = 2
@@ -411,8 +416,8 @@ custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="BottomContainer/Container4/BackButton"]
@@ -438,8 +443,8 @@ custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-focus_neighbor_top = NodePath("../../Container7/ExitButton")
-focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="BottomContainer/Container5/NextButton"]

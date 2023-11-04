@@ -146,6 +146,7 @@ const SAVE_FILE := "user://player.json"
 func _ready() -> void:
 	loadFromFile()
 	playerSelectorNode = playerSelectorMenu.instantiate()
+	# playerSelectorMenu.visible = false
 	add_child(playerSelectorNode)
 
 func onPlayerNameChanged(newName: String) -> String:
