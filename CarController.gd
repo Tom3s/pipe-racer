@@ -100,6 +100,8 @@ var playerIndex: int = 0:
 	get:
 		return playerIndex
 
+var playerId: String = ""
+
 func onInputPlayerIndexChanged(newIndex: int) -> int:
 	# %InputHandler.setInputPlayer(newIndex + 1)
 	return newIndex

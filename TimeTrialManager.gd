@@ -14,12 +14,18 @@ var ingameSFX: IngameSFX = null
 
 var nrLaps: int
 
-signal checkPointCollected(timestamp: int, lastTimestamp: int)
+var playerId: String = ""
+var trackId: String = ""
+
+signal checkPointCollected(timestamp: int, lastTimestamp: int, currentLapTime: int)
 
 
-func _init(ingameSFXNode: IngameSFX, initnrLaps: int) -> void:
+func _init(ingameSFXNode: IngameSFX, initnrLaps: int, initplayerId: String, inittrackId: String) -> void:
 	ingameSFX = ingameSFXNode
 	nrLaps = initnrLaps
+	playerId = initplayerId
+	trackId = inittrackId
+	loadPersonalBest()
 
 func _ready() -> void:
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
@@ -34,6 +40,8 @@ func finishedLap() -> void:
 	times.append(lapFinishTime - timeTrialLapEnd)
 	timeTrialLapEnd = lapFinishTime
 	ingameSFX.playFinishLapSFX()
+	if times.size() >= nrLaps:
+		replaceSplitsIfBetter()
 
 func getTime() -> int:
 	return times.reduce(func(accum, number): return accum + number, 0)
@@ -73,14 +81,22 @@ func collectCheckpoint(timestamp: int, lap: int) -> void:
 		splits.append([])
 	var currentSplit = timestamp - timeTrialLapEnd
 	splits[lap].append(currentSplit)
+	# var lastTimestamp = currentSplit
+	# if bestSplits.size() < splits[0].size():
+	# 	bestSplits.append(currentSplit)
+	# else:
+	# 	lastTimestamp = bestSplits[splits[lap].size() - 1]
+	# 	bestSplits[splits[lap].size() - 1] = min(bestSplits[splits[lap].size() - 1], currentSplit)
 	var lastTimestamp = currentSplit
-	if bestSplits.size() < splits[0].size():
-		bestSplits.append(currentSplit)
-	else:
-		lastTimestamp = bestSplits[splits[lap].size() - 1]
-		bestSplits[splits[lap].size() - 1] = min(bestSplits[splits[lap].size() - 1], currentSplit)
+	if bestSplits[lap].size() >= splits[lap].size():
+		lastTimestamp = bestSplits[lap][splits[lap].size() - 1]
 		
-	checkPointCollected.emit(currentSplit, lastTimestamp)
+	var currentLapTime = currentSplit
+	for i in lap:
+		currentSplit += splits[i].back()
+		lastTimestamp += bestSplits[i].back()
+
+	checkPointCollected.emit(currentSplit, lastTimestamp, currentLapTime)
 
 func reset() -> void:
 	times = []
@@ -88,3 +104,44 @@ func reset() -> void:
 	for splitList in splits:
 		splitList.clear()
 	splits.clear()
+
+func loadPersonalBest() -> void:
+	var pbRequest = HTTPRequest.new()
+	Leaderboard.add_child(pbRequest)
+	pbRequest.timeout = 5
+	pbRequest.request_completed.connect(onPersonalBestLoaded)
+
+	var httpError = pbRequest.request(
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId,
+	)
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+
+
+func onPersonalBestLoaded(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+	if result != OK:
+		print("Error: " + error_string(result))
+		return
+	
+	var data = JSON.parse_string(body.get_string_from_utf8())
+
+	var found = false
+	for time in data:
+		if time["user"]["_id"] == playerId:
+			bestSplits = time["splits"]
+			found = true
+			return
+	
+	if !found:
+		if data.size() > 0:
+			bestSplits = data.back()["splits"]
+
+func replaceSplitsIfBetter():
+	var totalTime = getTotalTime()
+	var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
+
+	if bestTime >= totalTime:
+		# bestSplits = splits
+		bestSplits.clear()
+		for array in splits:
+			bestSplits.append(array)

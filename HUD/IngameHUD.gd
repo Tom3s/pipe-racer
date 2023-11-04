@@ -176,9 +176,9 @@ func loadReadyIcon(_sink = null):
 const SPLIT_ALPHA = 117/256.0
 var splitsVisibleFrames: int = 0
 
-func displaySplit(timestamp: int, lastTimestamp: int):
+func displaySplit(timestamp: int, lastTimestamp: int, currentLapTime: int):
 	var difference = timestamp - lastTimestamp
-	currentSplit.text = IngameHUD.getTimeStringFromTicks(timestamp)
+	currentSplit.text = IngameHUD.getTimeStringFromTicks(currentLapTime)
 	var prefix = ''
 	var color = Color(0, 0, 0, SPLIT_ALPHA)
 

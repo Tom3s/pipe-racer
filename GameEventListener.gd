@@ -344,6 +344,7 @@ func spawnPlayer(
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
 	car.playerName = data.PLAYER_NAME
+	car.playerId = data.PLAYER_ID
 	# car.playerIndex = players.get_child_count()
 
 	players.add_child(car)
@@ -413,7 +414,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	canvasLayer.follow_viewport_enabled = true
 
 	var hud: IngameHUD = HudScene.instantiate()
-	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount)
+	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId)
 	timeTrialManagers[car.name] = timeTrialManager
 	hud.init(car, timeTrialManager, playerDatas.size())
 
