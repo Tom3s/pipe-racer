@@ -86,6 +86,10 @@ func setNumberOfPlayers(number: int):
 			panels[i].visible = true
 		else:
 			panels[i].visible = false
+	button1.selected = number == 1
+	button2.selected = number == 2
+	button3.selected = number == 3
+	button4.selected = number == 4
 
 func getMainPlayerPanel():
 	return panels[0]
@@ -98,8 +102,11 @@ func animateIn():
 
 	tween.tween_property(leftPanel, "position", Vector2(-screenSize.x, 0), 0.0).as_relative()
 	tween.tween_property(rightPanel, "position", Vector2(screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(rightPanel, "inAnimation", true, 0.0)
 	tween.tween_property(menuTitle, "position", Vector2(0, -screenSize.y), 0.0).as_relative()
+	tween.tween_property(menuTitle, "inAnimation", true, 0.0)
 	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), 0.0).as_relative()
+	tween.tween_property(bottomContainer, "inAnimation", true, 0.0)
 
 	tween.tween_property(self, "visible", true, 0.0)
 
@@ -107,8 +114,11 @@ func animateIn():
 
 	tween.tween_property(leftPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)
 	tween.tween_property(rightPanel, "position", Vector2(-screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(1 * ANIMATION_DELAY)
+	tween.tween_property(rightPanel, "inAnimation", false, ANIMATION_TIME).set_delay(1 * ANIMATION_DELAY)
 	tween.tween_property(menuTitle, "position", Vector2(0, screenSize.y), ANIMATION_TIME).as_relative().set_delay(2 * ANIMATION_DELAY)
+	tween.tween_property(menuTitle, "inAnimation", false, ANIMATION_TIME).set_delay(2 * ANIMATION_DELAY)
 	tween.tween_property(bottomContainer, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
+	tween.tween_property(bottomContainer, "inAnimation", false, ANIMATION_TIME).set_delay(3 * ANIMATION_DELAY)
 
 func animateOut():
 	var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
@@ -116,10 +126,13 @@ func animateOut():
 	
 	tween.set_parallel(true)
 
-	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
-	tween.tween_property(menuTitle, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(2 * ANIMATION_DELAY)
-	tween.tween_property(rightPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(1 * ANIMATION_DELAY)
-	tween.tween_property(leftPanel, "position", Vector2(-screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)
+	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)
+	tween.tween_property(bottomContainer, "inAnimation", true, ANIMATION_TIME).set_delay(0 * ANIMATION_DELAY)
+	tween.tween_property(menuTitle, "position", Vector2(0, -screenSize.y), ANIMATION_TIME).as_relative().set_delay(1 * ANIMATION_DELAY)
+	tween.tween_property(menuTitle, "inAnimation", true, ANIMATION_TIME).set_delay(1 * ANIMATION_DELAY)
+	tween.tween_property(rightPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(2 * ANIMATION_DELAY)
+	tween.tween_property(rightPanel, "inAnimation", true, 0.0).set_delay(2 * ANIMATION_DELAY)
+	tween.tween_property(leftPanel, "position", Vector2(-screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(3 * ANIMATION_DELAY)
 
 	# await tween.finished
 	# tween = create_tween()
@@ -129,7 +142,10 @@ func animateOut():
 
 	tween.tween_property(leftPanel, "position", Vector2(screenSize.x, 0), 0.0).as_relative()
 	tween.tween_property(rightPanel, "position", Vector2(-screenSize.x, 0), 0.0).as_relative()
+	tween.tween_property(rightPanel, "inAnimation", false, 0.0)
 	tween.tween_property(menuTitle, "position", Vector2(0, screenSize.y), 0.0).as_relative()
+	tween.tween_property(menuTitle, "inAnimation", false, 0.0)
 	tween.tween_property(bottomContainer, "position", Vector2(0, -screenSize.y), 0.0).as_relative()
+	tween.tween_property(bottomContainer, "inAnimation", false, 0.0)
 
 	return tween.finished

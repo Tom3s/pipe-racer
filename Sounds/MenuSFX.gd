@@ -5,7 +5,9 @@ class_name MenuSFX
 @onready var menuUnhover: AudioStreamPlayer = %MenuUnhover
 
 func playMenuHover():
-	menuHover.play()
+	if menuHover != null:
+		menuHover.play()
 
 func playMenuUnhover():
-	menuUnhover.play()
+	if menuUnhover != null:
+		menuUnhover.play()
