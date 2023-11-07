@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://boal45wpuj8gv"]
+
+[ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="1_0ouh1"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_mcceo"]
+[ext_resource type="Script" path="res://Menu/CommentsContainer.gd" id="2_yw5rs"]
+[ext_resource type="PackedScene" uid="uid://dhttk31mwa8pn" path="res://Menu/CommentTextField.tscn" id="3_f7o7d"]
+
+[sub_resource type="Theme" id="Theme_ekmeq"]
+default_font = ExtResource("1_mcceo")
+default_font_size = 30
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 4
+Label/constants/shadow_offset_y = 4
+
+[node name="CommentsContainer" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ekmeq")
+theme_override_styles/panel = ExtResource("1_0ouh1")
+script = ExtResource("2_yw5rs")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CommentList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CommentTextField" parent="VBoxContainer" instance=ExtResource("3_f7o7d")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Close"

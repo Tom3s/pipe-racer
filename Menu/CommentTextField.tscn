@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhttk31mwa8pn"]
+
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_3bofa"]
+[ext_resource type="FontFile" path="res://DarkTheme/Fonts/UbuntuFont.res" id="2_0a10s"]
+[ext_resource type="Script" path="res://Menu/CommentTextField.gd" id="2_opea8"]
+
+[sub_resource type="Theme" id="Theme_ekmeq"]
+default_font = ExtResource("1_3bofa")
+default_font_size = 30
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 4
+Label/constants/shadow_offset_y = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flasf"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.14902, 0.14902, 0.14902, 0.737255)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="CommentTextField" type="VBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 213.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_ekmeq")
+script = ExtResource("2_opea8")
+
+[node name="Header" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "ASDASD"
+
+[node name="CommentTextEdit" type="TextEdit" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_0a10s")
+theme_override_styles/normal = SubResource("StyleBoxFlat_flasf")
+theme_override_styles/focus = SubResource("StyleBoxFlat_flasf")
+placeholder_text = "Comment..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="SubmitButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Submit"
+
+[node name="spacer4" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2

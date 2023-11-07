@@ -1,4 +1,3 @@
-@tool
 extends Control
 
 @export
@@ -12,14 +11,18 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var ratingNumber: Label = %RatingNumber
 @onready var uploadDate: Label = %UploadDate
 
-@onready var commentsContainer: Control = %CommentsContainer
+@onready var commentsContainer: CommentsContainer = %CommentsContainer
 @onready var openCommentsButton: Button = %OpenCommentsButton
-@onready var closeCommentsButton: Button = %CloseCommentsButton
+# @onready var closeCommentsButton: Button = %CloseCommentsButton
 
 func _ready():
 	leaderboardMenu.fetchTimes(trackId)
 	openCommentsButton.pressed.connect(commentsContainer.show)
-	closeCommentsButton.pressed.connect(commentsContainer.hide)
+	commentsContainer.init(
+		trackId	
+	)
+	commentsContainer.hide()
+	# closeCommentsButton.pressed.connect(commentsContainer.hide)
 	fetchLevelDetails()
 
 func fetchLevelDetails():

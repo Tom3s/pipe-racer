@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://fg6lfyohw337"]
+[gd_scene load_steps=12 format=3 uid="uid://fg6lfyohw337"]
 
 [ext_resource type="Script" path="res://MapOverviewMenu.gd" id="1_g7a4o"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="2_hcwne"]
@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="3_7i8db"]
 [ext_resource type="PackedScene" uid="uid://bad1ot4qs8cwe" path="res://Menu/LeaderboardMenu.tscn" id="4_r0ddw"]
 [ext_resource type="PackedScene" uid="uid://c5387t1cl0ifm" path="res://Menu/RatingMenu.tscn" id="4_usqq2"]
-[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="7_ssme3"]
+[ext_resource type="PackedScene" uid="uid://boal45wpuj8gv" path="res://Menu/CommentContainer.tscn" id="8_hryn1"]
 
 [sub_resource type="Theme" id="Theme_6pc6w"]
 default_font = ExtResource("3_7i8db")
@@ -28,143 +28,6 @@ Label/constants/shadow_offset_y = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qy7g5"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
-bg_color = Color(0.207843, 0.207843, 0.207843, 1)
-border_width_right = 4
-border_width_bottom = 4
-corner_radius_top_left = 8
-corner_radius_top_right = 5
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 5
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4ewd"]
-bg_color = Color(0.439216, 0.439216, 0.439216, 1)
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.129412, 0.129412, 0.129412, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 5
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 5
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnfbv"]
-bg_color = Color(0.207843, 0.207843, 0.207843, 1)
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.352941, 0.780392, 0.67451, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 5
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 5
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofcni"]
-bg_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
-border_width_right = 4
-border_width_bottom = 4
-corner_radius_top_left = 8
-corner_radius_top_right = 5
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 5
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vuv8h"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dlqso"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aunuk"]
-bg_color = Color(0.4, 0.4, 0.4, 0.65098)
-border_color = Color(0.407843, 0.0980392, 0.109804, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocpm4"]
-bg_color = Color(0.607843, 0.729412, 0.54902, 1)
-border_color = Color(0.407843, 0.0980392, 0.109804, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
-shadow_size = 1
-shadow_offset = Vector2(2, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gm2h7"]
-bg_color = Color(0.866667, 0.298039, 0.305882, 1)
-border_color = Color(0.407843, 0.0980392, 0.109804, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-shadow_color = Color(0.407843, 0.0980392, 0.109804, 1)
-shadow_size = 1
-shadow_offset = Vector2(2, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjac4"]
-bg_color = Color(0.498039, 0.901961, 0.352941, 1)
-border_color = Color(0.407843, 0.0980392, 0.109804, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 8.0
-expand_margin_right = 8.0
-shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
-shadow_size = 1
-shadow_offset = Vector2(2, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ef7yk"]
-content_margin_left = 8.0
-content_margin_right = 8.0
-bg_color = Color(0.392157, 0.392157, 0.392157, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5lrt"]
-content_margin_left = 8.0
-content_margin_right = 8.0
-bg_color = Color(0.258824, 0.258824, 0.258824, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="Theme" id="Theme_67hwj"]
-default_font = ExtResource("3_7i8db")
-default_font_size = 26
-Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
-Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
-Button/styles/hover = SubResource("StyleBoxFlat_gnfbv")
-Button/styles/normal = SubResource("StyleBoxFlat_xl3p0")
-Button/styles/pressed = SubResource("StyleBoxFlat_ofcni")
-CheckBox/icons/checked = SubResource("PlaceholderTexture2D_vuv8h")
-CheckBox/icons/unchecked = SubResource("PlaceholderTexture2D_dlqso")
-CheckBox/styles/focus = SubResource("StyleBoxFlat_aunuk")
-CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
-CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
-CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
-CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
-LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
-LineEdit/fonts/font = ExtResource("7_ssme3")
-LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
-LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
-
 [node name="MapOverviewMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -173,6 +36,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_g7a4o")
+trackId = "64fb19f35e616ef56517dfd0"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -378,39 +242,19 @@ uppercase = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="CommentsContainer" type="MarginContainer" parent="CanvasLayer"]
-unique_name_in_owner = true
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_67hwj")
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 30
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CommentsContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/CommentsContainer/VBoxContainer"]
-layout_mode = 2
-text = "Comments"
-horizontal_alignment = 1
-
-[node name="ItemList" type="ItemList" parent="CanvasLayer/CommentsContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-item_count = 3
-item_0/text = "comment 1"
-item_1/text = "comment 2"
-item_2/text = "comment 3"
-
-[node name="CloseCommentsButton" type="Button" parent="CanvasLayer/CommentsContainer/VBoxContainer"]
+[node name="CommentsContainer" parent="CanvasLayer/MarginContainer" instance=ExtResource("8_hryn1")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-text = "Close"
