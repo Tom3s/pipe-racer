@@ -1,12 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://dm20dvulbphf"]
+[gd_scene load_steps=19 format=3 uid="uid://dfxqrl48lnywu"]
 
-[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_ynbmn"]
-[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_88qo1"]
-[ext_resource type="Script" path="res://Menu/Comment.gd" id="3_dfyi1"]
-[ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="4_4legs"]
-[ext_resource type="Texture2D" uid="uid://dpy6h2kebasv4" path="res://Sprites/logo.png" id="5_xr50h"]
-[ext_resource type="FontFile" path="res://DarkTheme/Fonts/UbuntuFont.res" id="6_dciey"]
-[ext_resource type="PackedScene" uid="uid://dhttk31mwa8pn" path="res://Menu/CommentTextField.tscn" id="7_388y6"]
+[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bnija"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_gw668"]
+[ext_resource type="Script" path="res://Menu/OnlineTracksContainer.gd" id="3_4qftj"]
+[ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="4_2lveh"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="4_m20j4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -125,8 +123,8 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="Theme" id="Theme_kmj3i"]
-default_font = ExtResource("2_88qo1")
+[sub_resource type="Theme" id="Theme_67hwj"]
+default_font = ExtResource("2_gw668")
 default_font_size = 26
 Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
 Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
@@ -141,130 +139,52 @@ CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
 CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
 LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
-LineEdit/fonts/font = ExtResource("1_ynbmn")
+LineEdit/fonts/font = ExtResource("1_bnija")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
-[node name="Comment" type="HBoxContainer"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 175.0
-grow_horizontal = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = SubResource("Theme_kmj3i")
-script = ExtResource("3_dfyi1")
-
-[node name="Indent" type="Control" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
+[node name="OnlineTracksContainer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_4qftj")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_67hwj")
+script = ExtResource("4_m20j4")
+overscale = 1.5
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = ExtResource("4_4legs")
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("4_2lveh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="ProfilePicture" type="TextureRect" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(42, 42)
-layout_mode = 2
-texture = ExtResource("5_xr50h")
-expand_mode = 3
-
-[node name="Username" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="TrackList" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_88qo1")
-theme_override_font_sizes/font_size = 35
-text = "Kutya"
+size_flags_horizontal = 3
 
-[node name="Spacer" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
-text = "Delete"
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 48
+text = "Back"
 
-[node name="spacer4" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="Comment" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("6_dciey")
-theme_override_font_sizes/font_size = 24
-text = "Very cool track :))"
-
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 2
-
-[node name="UpvoteButton" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "+1"
-
-[node name="spacer" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="Rating" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "3"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="spacer2" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="DownvoteButton" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "-1"
-
-[node name="spacer3" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(15, 0)
-layout_mode = 2
-
-[node name="ReplyButton" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-toggle_mode = true
-text = "Reply"
-
-[node name="spacer4" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="ReplyContainer" parent="VBoxContainer" instance=ExtResource("7_388y6")]
-unique_name_in_owner = true
-visible = false
+[node name="spacer" type="Control" parent="VBoxContainer"]
 layout_mode = 2

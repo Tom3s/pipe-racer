@@ -29,6 +29,10 @@ BillboardTextureLoader="*res://Global/BillboardTextureLoader.gd"
 
 gdscript/warnings/onready_with_export=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/fontawesome/plugin.cfg")
+
 [input]
 
 ui_accept={
