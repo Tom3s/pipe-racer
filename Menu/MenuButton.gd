@@ -56,4 +56,8 @@ func _physics_process(_delta):
 		label.add_theme_color_override("font_shadow_color", lerp(label.get_theme_color("font_shadow_color"), labelOriginalColor, .2))
 		label.add_theme_color_override("font_color", lerp(label.get_theme_color("font_color"), Color.WHITE, .2))
 
-
+func setLabelText(text: String):
+	label.text = text
+	label.size.x = text.length() * 19
+	custom_minimum_size.x = label.size.x / 2 + 20
+	label.position = Vector2(0, -10)

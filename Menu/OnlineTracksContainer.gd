@@ -6,9 +6,13 @@ class_name OnlineTracksContainer
 
 @onready var trackPanelScene = preload("res://Menu/TrackPanel.tscn")
 
+signal trackPlayPressed(trackPath: int)
+signal viewPressed(trackId: int)
+signal backPressed()
 
 func _ready():
 	loadTracks()
+	backButton.pressed.connect(onBackButton_Pressed)
 
 func loadTracks():
 	var request = HTTPRequest.new()
@@ -47,3 +51,12 @@ func initializeTrackList(tracks):
 			track.rating,
 			track.uploadDate.split("T")[0],
 		)
+		trackPanel.viewButtonPressed.connect(
+			func(id): 
+				hide()
+				viewPressed.emit(id)
+		)
+
+func onBackButton_Pressed():
+	visible = false
+	backPressed.emit()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://fg6lfyohw337"]
 
-[ext_resource type="Script" path="res://MapOverviewMenu.gd" id="1_g7a4o"]
+[ext_resource type="Script" path="res://Menu/MapOverviewMenu.gd" id="1_wie3d"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="2_hcwne"]
 [ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="2_mw8do"]
 [ext_resource type="Script" path="res://Menu/MenuButton.gd" id="3_2uk0n"]
@@ -35,7 +35,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_g7a4o")
+script = ExtResource("1_wie3d")
 trackId = "64fb19f35e616ef56517dfd0"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -153,7 +153,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
 
 [node name="OpenCommentsButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container4"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 50)
+custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -163,13 +163,42 @@ script = ExtResource("3_2uk0n")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container4/OpenCommentsButton"]
 layout_mode = 1
-offset_right = 183.0
-offset_bottom = 113.0
+offset_top = -10.0
+offset_right = 288.0
+offset_bottom = 103.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0.25098, 0.886275, 1, 1)
 theme_override_font_sizes/font_size = 79
 text = "Comments"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container5" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
+script = ExtResource("3_2uk0n")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container5/DeleteButton"]
+layout_mode = 1
+offset_top = -10.0
+offset_right = 183.0
+offset_bottom = 103.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 79
+text = "Delete"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
