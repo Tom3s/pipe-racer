@@ -32,17 +32,18 @@ func connectSignals():
 	mapOverviewMenu.playPressed.connect(onMapOverviewMenu_trackSelected)
 
 func onOnlineTrackContainer_viewPressed(trackId: String):
-	mapOverviewMenu.visible = true
-	mapOverviewMenu.init(trackId)
+	var shouldWaitForLoad = mapOverviewMenu.init(trackId)
+	if shouldWaitForLoad:
+		await mapOverviewMenu.loaded
+	mapOverviewMenu.animateIn()
 
 func onMapOverviewMenu_backPressed():
-	mapOverviewMenu.visible = false
-	onlineTrackContainer.visible = true
+	onlineTrackContainer.animateIn()
 
 func onPlayerSelectorMenu_nextPressed(selectedPlayers: Array[PlayerData]):
 	players = selectedPlayers
 	Network.localData = players
-	onlineTrackContainer.visible = true
+	onlineTrackContainer.animateIn()
 	GlobalProperties.returnPlayerSelectorMenu(
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
@@ -54,18 +55,10 @@ func onOnlineTrackContainer_backPressed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	# playerSelectorMenu.visible = true
 	playerSelectorMenu.animateIn()
 	
 
 func onMapOverviewMenu_trackSelected(trackName: String):
-	# var raceSettins = RaceSettings.new(trackName, trackName.begins_with("user://tracks/downloaded"))
-
-	# for player in players:
-		# raceSettins.addPlayer(player)
-	
-	# startRace(raceSettins)
-
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
 	raceNode.exitPressed.connect(onRace_exited)
@@ -77,7 +70,6 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 			"Try updating the map to the new format, or download it again"
 		)
 		mapOverviewMenu.show()
-	# raceNode.initializePlayers()
 
 func onPlayerSelectorMenu_backPressed():
 	GlobalProperties.returnPlayerSelectorMenu(
@@ -86,18 +78,9 @@ func onPlayerSelectorMenu_backPressed():
 	)
 	backPressed.emit()
 
-# func startRace(settings: RaceSettings):
-# 	raceNode = raceIngame.instantiate()
-# 	add_child(raceNode)
-# 	raceNode.setup(settings)
-# 	raceNode.exitPressed.connect(onRace_exited)
-
-
 func onRace_exited():
 	raceNode.queue_free()
-	# playerSelectorMenu.visible = true
-	# mapLoader.visible = true
-	mapOverviewMenu.show()
+	mapOverviewMenu.animateIn()
 
 func show():
 	playerSelectorMenu = GlobalProperties.borrowPlayerSelectorMenu(
@@ -105,16 +88,13 @@ func show():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	# playerSelectorMenu.visible = true
 	playerSelectorMenu.animateIn()
 
 
 func hide():
-	# mapLoader.visible = false
 	mapOverviewMenu.visible = false
 	onlineTrackContainer.visible = false
 	if playerSelectorMenu != null:
-		# playerSelectorMenu.visible = false
 		await playerSelectorMenu.animateOut()
 		GlobalProperties.returnPlayerSelectorMenu(
 			onPlayerSelectorMenu_backPressed,

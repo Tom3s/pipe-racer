@@ -19,19 +19,26 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var backButton: Button = %BackButton
 @onready var selectButton: Button = %SelectButton
 
+@onready var mainContents: MarginContainer = %MainContents
+
+
 signal backPressed()
 signal playPressed(trackPath: String)
+
+signal loaded()
 
 func _ready():
 	openCommentsButton.pressed.connect(commentsContainer.show)
 	commentsContainer.hide()
-	backButton.pressed.connect(func(): backPressed.emit())
+	backButton.pressed.connect(animateOut)
 	selectButton.pressed.connect(onSelectButton_Pressed)
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
 
 var downloaded = false
 
-func init(initTrackId: String):
+func init(initTrackId: String) -> bool:
+	if initTrackId == trackId:
+		return false
 	trackId = initTrackId
 	leaderboardMenu.fetchTimes(trackId)
 	commentsContainer.init(
@@ -43,6 +50,7 @@ func init(initTrackId: String):
 	else:
 		selectButton.setLabelText("Download")
 	fetchLevelDetails()
+	return true
 
 func fetchLevelDetails():
 	downloadNumber.text = "0"
@@ -73,9 +81,11 @@ func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers
 
 	uploadDate.text = data.uploadDate.split("T")[0]
 
+	loaded.emit()
+
 func isDownloaded() -> bool:
-	if not visible:
-		return false
+	# if not visible:
+	# 	return false
 	var path = "user://tracks/downloaded/"
 	var directory = DirAccess.open(path)
 	if directory:
@@ -150,3 +160,34 @@ func deleteTrack():
 		fileHandler.remove(selectedTrackForDelete)
 	downloaded = false
 	selectButton.setLabelText("Download")
+
+const ANIMATE_TIME = 0.3
+func animateIn():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(mainContents, "inAnimation", true, 0.0)
+	tween.tween_property(mainContents, "position", Vector2(0, windowSize.y), 0.0)\
+		.as_relative()
+
+	tween.tween_property(self, "visible", true, 0.0)
+	tween.tween_property(mainContents, "position", Vector2(0, -windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_OUT)\
+		.set_trans(Tween.TRANS_EXPO)
+	tween.tween_property(mainContents, "inAnimation", false, 0.0)
+
+func animateOut():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(mainContents, "inAnimation", true, 0.0)
+	tween.tween_property(mainContents, "position", Vector2(0, windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_EXPO)
+	tween.tween_property(mainContents, "inAnimation", false, 0.0)
+	tween.tween_property(self, "visible", false, 0.0)
+	tween.tween_callback(func(): backPressed.emit())

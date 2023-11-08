@@ -148,7 +148,8 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("3_4qftj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MainContents" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -161,24 +162,24 @@ theme = SubResource("Theme_67hwj")
 script = ExtResource("4_m20j4")
 overscale = 1.5
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainContents"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("4_2lveh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContents/PanelContainer"]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContents/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TrackList" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
+[node name="TrackList" type="VBoxContainer" parent="MainContents/PanelContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="MainContents"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -186,5 +187,5 @@ size_flags_vertical = 8
 theme_override_font_sizes/font_size = 48
 text = "Back"
 
-[node name="spacer" type="Control" parent="VBoxContainer"]
+[node name="spacer" type="Control" parent="MainContents"]
 layout_mode = 2

@@ -38,7 +38,8 @@ grow_vertical = 2
 script = ExtResource("1_wie3d")
 trackId = "64fb19f35e616ef56517dfd0"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MainContents" type="MarginContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -48,21 +49,21 @@ theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 20
 script = ExtResource("2_hcwne")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContents"]
 layout_mode = 2
 theme = ExtResource("2_mw8do")
 alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContents/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_6pc6w")
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control" type="Control" parent="MainContents/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="TrackName" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/Control"]
+[node name="TrackName" type="Label" parent="MainContents/VBoxContainer/HBoxContainer2/Control"]
 unique_name_in_owner = true
 layout_mode = 1
 offset_right = 594.0
@@ -70,12 +71,12 @@ offset_bottom = 102.0
 scale = Vector2(0.5, 0.5)
 text = "Trackname"
 
-[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control2" type="Control" parent="MainContents/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Author" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/Control2"]
+[node name="Author" type="Label" parent="MainContents/VBoxContainer/HBoxContainer2/Control2"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
@@ -85,73 +86,73 @@ grow_horizontal = 2
 scale = Vector2(0.5, 0.5)
 text = "by: Author"
 
-[node name="spacer" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="spacer" type="Control" parent="MainContents/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContents/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContents/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="RatingMenu" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer" instance=ExtResource("4_usqq2")]
+[node name="RatingMenu" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer" instance=ExtResource("4_usqq2")]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_4rmyr")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Downloads"
 horizontal_alignment = 1
 
-[node name="DownloadNumber" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="DownloadNumber" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "152"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Rating"
 horizontal_alignment = 1
 
-[node name="RatingNumber" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="RatingNumber" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "3.45/5"
 horizontal_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="Label3" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Uploaded"
 horizontal_alignment = 1
 
-[node name="UploadDate" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
+[node name="UploadDate" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "2021-01-23"
 horizontal_alignment = 1
 
-[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 
-[node name="Container4" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Container4" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
 
-[node name="OpenCommentsButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container4"]
+[node name="OpenCommentsButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container4"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
@@ -161,7 +162,7 @@ focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Butt
 focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("3_2uk0n")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container4/OpenCommentsButton"]
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container4/OpenCommentsButton"]
 layout_mode = 1
 offset_top = -10.0
 offset_right = 288.0
@@ -175,11 +176,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container5" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Container5" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
 
-[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container5"]
+[node name="DeleteButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container5"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
@@ -189,7 +190,7 @@ focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Butt
 focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("3_2uk0n")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer/Container5/DeleteButton"]
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container5/DeleteButton"]
 layout_mode = 1
 offset_top = -10.0
 offset_right = 183.0
@@ -203,23 +204,23 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="LeaderboardMenu" parent="MarginContainer/VBoxContainer/HBoxContainer3" instance=ExtResource("4_r0ddw")]
+[node name="LeaderboardMenu" parent="MainContents/VBoxContainer/HBoxContainer3" instance=ExtResource("4_r0ddw")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContents/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme = ExtResource("2_mw8do")
 alignment = 2
 
-[node name="Container4" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Container4" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
 
-[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Container4"]
+[node name="BackButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer/Container4"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
@@ -229,7 +230,7 @@ focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Butt
 focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("3_2uk0n")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Container4/BackButton"]
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer/Container4/BackButton"]
 layout_mode = 1
 offset_right = 183.0
 offset_bottom = 113.0
@@ -242,11 +243,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container5" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Container5" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
 
-[node name="SelectButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Container5"]
+[node name="SelectButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer/Container5"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
@@ -256,7 +257,7 @@ focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Butt
 focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
 script = ExtResource("3_2uk0n")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Container5/SelectButton"]
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer/Container5/SelectButton"]
 layout_mode = 1
 offset_right = 166.0
 offset_bottom = 113.0
