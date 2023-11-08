@@ -47,7 +47,7 @@ func _ready():
 	smoothSteeringSlider.value_changed.connect(smoothSteeringSlider_valueChanged)
 	smoothSteeringSpinbox.value_changed.connect(smoothSteeringSpinbox_valueChanged)
 
-	closeButton.button_up.connect(onCloseButton_pressed)
+	closeButton.pressed.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
 
 	visibility_changed.connect(onVisibilityChanged)
@@ -64,6 +64,7 @@ func _ready():
 	smoothSteeringSlider.value = GlobalProperties.SMOOTH_STEERING
 	smoothSteeringSpinbox.value = GlobalProperties.SMOOTH_STEERING
 
+	%TabContainer.tab_changed.connect(onTabChanged)
 	# preciseInput.button_pressed = GlobalProperties.PRECISE_INPUT
 
 func onMasterVolumeSlider_valueChanged(value: float):
@@ -128,6 +129,14 @@ func onCloseButton_pressed():
 func onVisibilityChanged():
 	if visible:
 		closeButton.grab_focus()
+
+func onTabChanged(tab: int):
+	if tab == 0:
+		masterVolumeSlider.grab_focus()
+	elif tab == 1:
+		fullscreenButton.grab_focus()
+	elif tab == 2:
+		fixPedalInput.grab_focus()
 
 func remapVolume(value: float):
 	return max((log(value) / log(10) - 2) * 20, -80)

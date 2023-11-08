@@ -76,8 +76,8 @@ func initializeTrackList(tracks):
 		)
 	
 	for i in viewButtons.size():
-		var nextIndex = (i + 1) % viewButtons.size()
-		var prevIndex = (i - 1) % viewButtons.size()
+		var nextIndex = (i + viewButtons.size() + 1) % viewButtons.size()
+		var prevIndex = (i + viewButtons.size() - 1) % viewButtons.size()
 
 		viewButtons[i].focus_neighbor_top = viewButtons[prevIndex].get_path()
 		viewButtons[i].focus_neighbor_bottom = viewButtons[nextIndex].get_path()
