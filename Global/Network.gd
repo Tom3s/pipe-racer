@@ -140,7 +140,6 @@ func hostServer(callback: Callable, errorParent: Node):
 		ipAddressChanged.emit(ipAddress)
 	
 		for ip in IP.get_local_addresses():
-			print(ip)
 			if ip.begins_with("192.168.") && !ip.ends_with(".1"):
 				ipAddress = ip
 				ipAddressChanged.emit(ipAddress)

@@ -148,6 +148,18 @@ func _ready() -> void:
 	playerSelectorNode = playerSelectorMenu.instantiate()
 	# playerSelectorMenu.visible = false
 	add_child(playerSelectorNode)
+	setupFolders()
+
+func setupFolders():
+	var dir = DirAccess.open("user://")
+	if !dir.dir_exists("user://tracks"):
+		dir.make_dir("user://tracks")
+	if !dir.dir_exists("user://tracks/autosave"):
+		dir.make_dir("user://tracks/autosave")
+	if !dir.dir_exists("user://tracks/downloaded"):
+		dir.make_dir("user://tracks/downloaded")
+	if !dir.dir_exists("user://tracks/local"):
+		dir.make_dir("user://tracks/local")
 
 func onPlayerNameChanged(newName: String) -> String:
 	# saveToFile()

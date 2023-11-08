@@ -124,7 +124,6 @@ func calculateCollisionShape():
 	var flatArray = []
 	for array in heights:
 		flatArray.append_array(array)
-	print(flatArray.size())
 	
 	var collisionNode = %Proper
 

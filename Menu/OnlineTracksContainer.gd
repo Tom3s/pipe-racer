@@ -45,8 +45,8 @@ func loadTracks():
 		print("Error loading tracks: " + error_string(httpError))
 
 func onTracksLoaded(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
-	if _result != OK:
-		print("Error loading tracks: " + error_string(_result))
+	if _responseCode != 200:
+		print("Error loading tracks: ", _responseCode)
 		return
 	
 	var tracks = JSON.parse_string(_body.get_string_from_utf8())

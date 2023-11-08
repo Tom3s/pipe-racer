@@ -105,27 +105,12 @@ func onMapLoader_DownloadFailed():
 		onPlayerSelectorMenu_backPressed,
 		onPlayerSelectorMenu_nextPressed
 	)
-	# playerSelectorMenu.visible = true
 	playerSelectorMenu.animateIn()
 
 var selectedTrack: String
 func onMapLoader_trackSelected(trackName: String):
-
-	# raceNode = gameScene.instantiate()
-	# raceNode.name = trackName.split("/")[-1].split(".")[0]
-	# %RaceParent.add_child(raceNode)
-	# raceNode.setup(trackName, true, true)
-	# raceNode.exitPressed.connect(onRace_exited)
-
 	selectedTrack = trackName
 	initializeRace()
-	
-	# if Network.userId != 1:
-	# 	print("Waiting for client")
-		# await get_tree().create_timer(5.0).timeout
-		# while !raceNode.is_node_ready():
-		# 	print("Waiting for client")
-		# 	await get_tree().create_timer(1.0).timeout
 
 func onRace_exited():
 	for child in %RaceParent.get_children():

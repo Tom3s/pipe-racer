@@ -63,8 +63,8 @@ func setBestLapsLoading(loading: bool):
 			label.queue_free()
 
 func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	if result != OK:
-		print("Error: " + error_string(result))
+	if _responseCode != 200:
+		print("Error: ", _responseCode)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -121,8 +121,8 @@ func addBestLapsHeaders():
 	bestLapsGrid.add_child(dateLabel)
 
 func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	if result != OK:
-		print("Error: " + error_string(result))
+	if _responseCode != 200:
+		print("Error: ", _responseCode)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())

@@ -47,8 +47,6 @@ func init(
 	setIndent()
 	deleteButton.visible = userId == GlobalProperties.USER_ID
 
-	print("Initialized comment by " + username)
-
 	replyContainer.init(
 		commentId,
 		username,
@@ -134,7 +132,7 @@ func deleteComment():
 		HTTPClient.METHOD_DELETE
 	)
 	if httpError != OK:
-		print("Error submitting time: " + error_string(httpError))
+		print("Error sending delete request: " + error_string(httpError))
 
 func onCommentDeletedResponse(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	# var title = "Comment deleted"
@@ -180,7 +178,7 @@ func submitRating(newRating: int):
 		JSON.stringify(data)
 	)
 	if httpError != OK:
-		print("Error submitting time: " + error_string(httpError))
+		print("Error submitting rating: " + error_string(httpError))
 
 func onCommentRatingSubmittedResponse(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	# var title = "Rating submitted"

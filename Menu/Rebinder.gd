@@ -93,12 +93,10 @@ func _unhandled_input(event):
 		
 	elif rebindKBButton.button_pressed:
 		if event is InputEventKey:
-			print("KB Key: ", event.physical_keycode)
 			rebindKBButton.text = "Rebind KB"
 			rebindKBButton.button_pressed = false
 			kbInputEvent = event
 			applyKBInputEvent()
-			print("Rebinded KB Action: ", actionName)
 			set_process_input(false)
 
 func setJoyIcon():
@@ -135,14 +133,11 @@ func applyJoyInputEvent():
 		newInput.device = device - 1
 		InputMap.action_add_event(actionIdentifier, newInput)
 	if joyInputEvent is InputEventJoypadButton:
-		print("Joy Button: ", joyInputEvent.button_index)
 		joyIcon.texture = load(RebindMenu.CONTROLLER_BUTTON_ICONS.get(joyInputEvent.button_index, RebindMenu.INVALID_JOY_ICON))
 		joyOverwritten.emit(actionName, joyInputEvent.button_index, false)
 	elif joyInputEvent is InputEventJoypadMotion:
-		print("Joy Axis: ", joyInputEvent.axis)
 		joyIcon.texture = load(RebindMenu.CONTROLLER_AXIS_ICONS.get(joyInputEvent.axis, RebindMenu.INVALID_JOY_ICON))
 		joyOverwritten.emit(actionName, joyInputEvent.axis, true)
-	print("Rebinded Joy Action: ", actionName)
 
 func applyKBInputEvent():
 	clearKBBindings()

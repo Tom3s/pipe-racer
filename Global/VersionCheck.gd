@@ -35,7 +35,7 @@ func checkVersion():
 
 func onCheckVersion_requestCompleted(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	# print(body.get_string_from_ascii())
-	if result != OK:
+	if response_code != 200:
 		print("Error: ", error_string(result), " (respone code: ", response_code, ")")
 		AlertManager.showAlert(
 			self,

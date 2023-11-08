@@ -88,13 +88,14 @@ func collectCheckpoint(timestamp: int, lap: int) -> void:
 	# 	lastTimestamp = bestSplits[splits[lap].size() - 1]
 	# 	bestSplits[splits[lap].size() - 1] = min(bestSplits[splits[lap].size() - 1], currentSplit)
 	var lastTimestamp = currentSplit
-	if bestSplits[lap].size() >= splits[lap].size():
+	if bestSplits.size() >= lap + 1 && bestSplits[lap].size() >= splits[lap].size():
 		lastTimestamp = bestSplits[lap][splits[lap].size() - 1]
 		
 	var currentLapTime = currentSplit
 	for i in lap:
-		currentSplit += splits[i].back()
-		lastTimestamp += bestSplits[i].back()
+		if bestSplits.size() >= i + 1:
+			currentSplit += splits[i].back()
+			lastTimestamp += bestSplits[i].back()
 
 	checkPointCollected.emit(currentSplit, lastTimestamp, currentLapTime)
 
@@ -119,8 +120,8 @@ func loadPersonalBest() -> void:
 
 
 func onPersonalBestLoaded(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	if result != OK:
-		print("Error: " + error_string(result))
+	if _responseCode != 200:
+		print("Response: ", _responseCode)
 		return
 	
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -140,8 +141,11 @@ func replaceSplitsIfBetter():
 	var totalTime = getTotalTime()
 	var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
 
-	if bestTime >= totalTime:
+	if bestTime >= totalTime || bestSplits.size() == 0:
 		# bestSplits = splits
+		print("Setting new PB splits")
 		bestSplits.clear()
 		for array in splits:
-			bestSplits.append(array)
+			var copyArray = []
+			copyArray.append_array(array)
+			bestSplits.append(copyArray)

@@ -81,8 +81,8 @@ func fetchLevelDetails():
 		print("Error: " + error_string(httpError))
 
 func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	if result != OK:
-		print("Error: " + error_string(result))
+	if _responseCode != 200:
+		print("Error: ", _responseCode)
 		return
 	
 	var data = JSON.parse_string(body.get_string_from_utf8())
