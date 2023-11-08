@@ -56,7 +56,7 @@ func connectSignals():
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
 
 func _physics_process(delta):
-	if get_viewport().gui_get_focus_owner() == null && mainContent.visible:
+	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContent.visible:
 		# playButton.grab_focus()
 		if Input.is_action_just_pressed("ui_left") || \
 			Input.is_action_just_pressed("ui_right") || \

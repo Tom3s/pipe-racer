@@ -15,6 +15,18 @@ signal backPressed()
 func _ready():
 	loadTracks()
 	backButton.pressed.connect(onBackButton_Pressed)
+	set_physics_process(true)
+
+func _physics_process(delta):
+	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContents.visible:
+		# playButton.grab_focus()
+		if Input.is_action_just_pressed("ui_left") || \
+			Input.is_action_just_pressed("ui_right") || \
+			Input.is_action_just_pressed("ui_up") || \
+			Input.is_action_just_pressed("ui_down") || \
+			Input.is_action_just_pressed("ui_accept") || \
+			Input.is_action_just_pressed("ui_cancel"):
+			viewButtons.front().grab_focus()
 
 func loadTracks():
 	var request = HTTPRequest.new()
@@ -41,7 +53,9 @@ func onTracksLoaded(_result: int, _responseCode: int, _headers: PackedStringArra
 
 	initializeTrackList(tracks)
 
+var viewButtons: Array[Button] = []
 func initializeTrackList(tracks):
+	viewButtons.clear()
 	for track in tracks:
 		var trackPanel: TrackPanel = trackPanelScene.instantiate()
 		trackList.add_child(trackPanel)
@@ -53,12 +67,21 @@ func initializeTrackList(tracks):
 			track.rating,
 			track.uploadDate.split("T")[0],
 		)
+		viewButtons.push_back(trackPanel.viewButton)
 		# await trackPanel.
 		trackPanel.viewButtonPressed.connect(
 			func(id): 
 				await animateOut()
 				viewPressed.emit(id)
 		)
+	
+	for i in viewButtons.size():
+		var nextIndex = (i + 1) % viewButtons.size()
+		var prevIndex = (i - 1) % viewButtons.size()
+
+		viewButtons[i].focus_neighbor_top = viewButtons[prevIndex].get_path()
+		viewButtons[i].focus_neighbor_bottom = viewButtons[nextIndex].get_path()
+	viewButtons.front().grab_focus()
 
 func onBackButton_Pressed():
 	await animateOut()

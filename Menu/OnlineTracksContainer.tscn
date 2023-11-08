@@ -1,10 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://dfxqrl48lnywu"]
+[gd_scene load_steps=20 format=3 uid="uid://dfxqrl48lnywu"]
 
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bnija"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_gw668"]
 [ext_resource type="Script" path="res://Menu/OnlineTracksContainer.gd" id="3_4qftj"]
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="4_2lveh"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="4_m20j4"]
+[ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="6_qrvnm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -173,6 +174,7 @@ layout_mode = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="MainContents/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
 
 [node name="TrackList" type="VBoxContainer" parent="MainContents/PanelContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
@@ -185,6 +187,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 48
+shortcut = ExtResource("6_qrvnm")
 text = "Back"
 
 [node name="spacer" type="Control" parent="MainContents"]

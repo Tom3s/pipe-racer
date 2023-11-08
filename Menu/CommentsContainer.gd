@@ -20,10 +20,17 @@ func init(initTrackId: String):
 	# )
 	closeButton.pressed.connect(hide)
 	commentTextField.commentSubmitted.connect(loadComments)
+	visibility_changed.connect(onVisibilityChanged)
 
 # func _ready():
 # 	init(trackId)
 
+func onVisibilityChanged():
+	if get_parent() == null:
+		return
+	get_parent().mouse_filter = MOUSE_FILTER_STOP if visible else MOUSE_FILTER_IGNORE
+	if visible:
+		closeButton.grab_focus()
 
 func loadComments(trackId: String = ""):
 	if trackId == "":

@@ -30,9 +30,24 @@ signal loaded()
 func _ready():
 	openCommentsButton.pressed.connect(commentsContainer.show)
 	commentsContainer.hide()
-	backButton.pressed.connect(animateOut)
+	backButton.pressed.connect(func():
+		commentsContainer.hide()
+		animateOut()
+	)
 	selectButton.pressed.connect(onSelectButton_Pressed)
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
+	set_physics_process(true)
+
+func _physics_process(delta):
+	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree())  && mainContents.visible:
+		# playButton.grab_focus()
+		if Input.is_action_just_pressed("ui_left") || \
+			Input.is_action_just_pressed("ui_right") || \
+			Input.is_action_just_pressed("ui_up") || \
+			Input.is_action_just_pressed("ui_down") || \
+			Input.is_action_just_pressed("ui_accept") || \
+			Input.is_action_just_pressed("ui_cancel"):
+			selectButton.grab_focus()
 
 var downloaded = false
 
@@ -177,6 +192,7 @@ func animateIn():
 		.set_ease(Tween.EASE_OUT)\
 		.set_trans(Tween.TRANS_EXPO)
 	tween.tween_property(mainContents, "inAnimation", false, 0.0)
+	tween.tween_callback(selectButton.grab_focus)
 
 func animateOut():
 	var tween = create_tween()
