@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=27 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_curo1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="7_ogc8f"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerTopMiddle.gd" id="8_nbu4h"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerBottomMiddle.gd" id="9_xmg4x"]
+[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="11_tj7v4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -337,12 +338,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 66.0903
-offset_top = 7.61806
-offset_right = 926.493
-offset_bottom = 453.618
+offset_left = 107.815
+offset_top = 5.1875
+offset_right = 968.217
+offset_bottom = 451.188
 grow_horizontal = 2
-scale = Vector2(0.846451, 0.846451)
+scale = Vector2(0.576389, 0.576389)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0.870588, 0.286275, 0.286275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -367,13 +368,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 261.791
-offset_top = 291.56
-offset_right = 564.791
-offset_bottom = 351.56
+offset_left = 241.076
+offset_top = -8.20831
+offset_right = 544.076
+offset_bottom = 51.7917
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(1.6929, 1.6929)
+scale = Vector2(1.15278, 1.15278)
 theme = ExtResource("7_ogc8f")
 script = ExtResource("9_xmg4x")
 offset = Vector2i(188, -33)
@@ -390,6 +391,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
 focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
+shortcut = ExtResource("11_tj7v4")
 script = ExtResource("5_trmc8")
 
 [node name="Label" type="Label" parent="BottomContainer/Container4/BackButton"]

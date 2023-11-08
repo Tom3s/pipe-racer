@@ -56,6 +56,8 @@ func connectSignals():
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("fullscreen"):
+		GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContent.visible:
 		# playButton.grab_focus()
 		if Input.is_action_just_pressed("ui_left") || \
@@ -65,6 +67,7 @@ func _physics_process(delta):
 			Input.is_action_just_pressed("ui_accept") || \
 			Input.is_action_just_pressed("ui_cancel"):
 			playButton.grab_focus()
+	
 
 func onPlayButton_pressed():
 	await hideMainContentsAnimated()

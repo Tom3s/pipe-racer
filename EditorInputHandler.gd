@@ -33,8 +33,6 @@ signal savePressed()
 
 signal pausePressed(paused)
 
-signal fullScreenPressed()
-
 var mousePos2D: Vector2 = Vector2()
 var windowSize: Vector2 = Vector2()
 
@@ -62,8 +60,8 @@ func _physics_process(_delta):
 	if Input.is_action_just_pressed("editor_save"):
 		savePressed.emit()
 
-	if Input.is_action_just_pressed("fullscreen"):
-		fullScreenPressed.emit()
+	# if Input.is_action_just_pressed("fullscreen"):
+	# 	fullScreenPressed.emit()
 
 	if Input.is_action_just_pressed("p1_pause"):
 		# paused = !paused

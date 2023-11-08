@@ -45,7 +45,7 @@ func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
 
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
-	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+	# raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
@@ -122,8 +122,8 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			leaderboardUI.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func onRaceInputHandler_fullScreenPressed():
-	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+# func onRaceInputHandler_fullScreenPressed():
+# 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 func onCar_respawned(playerIndex: int, networkId: int):
 	# this in unneccessary i guess
@@ -451,7 +451,13 @@ func getNewViewport() -> SubViewport:
 	var viewPort = SubViewport.new()
 	viewPort.audio_listener_enable_3d = true
 	viewPort.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-
+	GlobalProperties.renderQualityChanged.connect(func(q):
+		if is_equal_approx(q, 1.0):
+			viewPort.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
+		else:
+			viewPort.scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR
+		viewPort.scaling_3d_scale = q
+	)
 	return viewPort
 
 

@@ -64,7 +64,7 @@ func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
-	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+	# raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
@@ -185,8 +185,8 @@ func onCar_finishedRace(playerIndex: int):
 	print("Best Lap: ", bestLap)
 	print("Total time: ", totalTime)
 
-func onRaceInputHandler_fullScreenPressed():
-	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+# func onRaceInputHandler_fullScreenPressed():
+# 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 func onState_allPlayersReset():
 	# reset cars

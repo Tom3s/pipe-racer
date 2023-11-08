@@ -65,6 +65,8 @@ var FULLSCREEN: bool = false:
 	get:
 		return FULLSCREEN
 
+
+signal renderQualityChanged(newQuality: float)
 @export
 var RENDER_QUALITY: float = 1.0:
 	set(newQuality):
@@ -74,6 +76,7 @@ var RENDER_QUALITY: float = 1.0:
 		else:
 			ProjectSettings.set_setting("rendering/scaling_3d/mode", Viewport.SCALING_3D_MODE_FSR)
 		ProjectSettings.set_setting("rendering/scaling_3d/scale", newQuality)
+		renderQualityChanged.emit(newQuality)
 		saveToFile()		
 	get:
 		return RENDER_QUALITY
