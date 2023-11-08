@@ -8,6 +8,7 @@ class_name SettingsMenu
 @onready var fullscreenButton: Button = %FullscreenButton
 @onready var renderQuality: OptionButton = %RenderQuality
 @onready var fixPedalInput: CheckBox = %FixPedalInput
+@onready var compareAgainstBestLap: CheckBox = %CompareAgainstBestLap
 @onready var deadzoneSlider: HSlider = %DeadzoneSlider
 @onready var deadzoneSpinbox: SpinBox = %DeadzoneSpinbox
 @onready var smoothSteeringSlider: HSlider = %SmoothSteeringSlider
@@ -38,6 +39,7 @@ func _ready():
 		index += 1
 
 	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
+	compareAgainstBestLap.toggled.connect(onCompareAgainstBestLap_toggled)
 
 	# preciseInput.toggled.connect(onPreciseInput_toggled)
 	deadzoneSlider.value_changed.connect(deadzoneSlider_valueChanged)
@@ -55,6 +57,7 @@ func _ready():
 	sfxVolumeSlider.value = GlobalProperties.SFX_VOLUME
 
 	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
+	compareAgainstBestLap.button_pressed = GlobalProperties.COMPARE_AGAINST_BEST_LAP
 
 	deadzoneSlider.value = GlobalProperties.DEADZONE
 	deadzoneSpinbox.value = GlobalProperties.DEADZONE
@@ -85,47 +88,10 @@ var fixedPedalAccelAxis: int = 7
 var fixedPedalBreakAxis: int = 8
 
 func onFixPedalInput_toggled(fix: bool):
-
-	# TODO: fix this with remapping
-	# InputMap.action_erase_events(p1Accel)
-	# var accelEvent = InputEventKey.new()
-	# accelEvent.physical_keycode = KEY_UP
-	# InputMap.action_add_event(p1Accel, accelEvent)
-
-	# InputMap.action_erase_events(p1Break)
-	# var breakEvent = InputEventKey.new()
-	# breakEvent.physical_keycode = KEY_DOWN
-	# InputMap.action_add_event(p1Break, breakEvent)
-
-	# if !fix:
-	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
-	# 	accelJoypadEvent.axis = JOY_AXIS_TRIGGER_RIGHT
-	# 	accelJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
-
-	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
-	# 	breakJoypadEvent.axis = JOY_AXIS_TRIGGER_LEFT
-	# 	breakJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
-	# else:
-	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
-	# 	accelJoypadEvent.axis = fixedPedalAccelAxis
-	# 	accelJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
-
-	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
-	# 	breakJoypadEvent.axis = fixedPedalBreakAxis
-	# 	breakJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
-
-
 	GlobalProperties.FIX_PEDAL_INPUT = fix
 
-# func onPreciseInput_toggled(preciseInput: bool):
-# 	InputMap.action_set_deadzone("p1_turn_left", 0.0 if preciseInput else 0.1)
-# 	InputMap.action_set_deadzone("p1_turn_right", 0.0 if preciseInput else 0.1)
-
-# 	GlobalProperties.PRECISE_INPUT = preciseInput
+func onCompareAgainstBestLap_toggled(compare: bool):
+	GlobalProperties.COMPARE_AGAINST_BEST_LAP = compare
 
 func deadzoneSlider_valueChanged(value: float):
 	deadzoneSpinbox.value = value

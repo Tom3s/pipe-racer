@@ -112,6 +112,14 @@ var SMOOTH_STEERING: float = 0.75:
 		return SMOOTH_STEERING
 
 @export
+var COMPARE_AGAINST_BEST_LAP: bool = true:
+	set(newCompare):
+		COMPARE_AGAINST_BEST_LAP = newCompare
+		saveToFile()
+	get:
+		return COMPARE_AGAINST_BEST_LAP
+
+@export
 var JOY_CONTROL_OVERWRITES = {
 	"1": {},
 	"2": {},
@@ -185,6 +193,7 @@ func saveToFile() -> void:
 		"JOY_CONTROL_OVERWRITES": JOY_CONTROL_OVERWRITES,
 		"KB_CONTROL_OVERWRITES": KB_CONTROL_OVERWRITES,
 		"CONTROL_DEVICE_OVERWRITES": CONTROL_DEVICE_OVERWRITES,
+		"COMPARE_AGAINST_BEST_LAP": COMPARE_AGAINST_BEST_LAP,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -226,6 +235,8 @@ func loadFromFile() -> void:
 			KB_CONTROL_OVERWRITES = jsonData["KB_CONTROL_OVERWRITES"]
 		if jsonData.has("CONTROL_DEVICE_OVERWRITES"):
 			CONTROL_DEVICE_OVERWRITES = jsonData["CONTROL_DEVICE_OVERWRITES"]
+		if jsonData.has("COMPARE_AGAINST_BEST_LAP"):
+			COMPARE_AGAINST_BEST_LAP = bool(jsonData["COMPARE_AGAINST_BEST_LAP"])
 	else:
 		saveToFile()
 

@@ -187,6 +187,7 @@ tab_alignment = 1
 clip_tabs = false
 
 [node name="Audio" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
 
@@ -278,7 +279,6 @@ focus_neighbor_top = NodePath("../../../../Audio/VBoxContainer/SFX/SFXVolumeSlid
 focus_neighbor_bottom = NodePath("../../../../../CloseButton")
 
 [node name="Misc" type="PanelContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
 
@@ -294,6 +294,19 @@ size_flags_horizontal = 3
 text = "Fix Pedal Input"
 
 [node name="FixPedalInput" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Compare Split Against Best Lap"
+
+[node name="CompareAgainstBestLap" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
