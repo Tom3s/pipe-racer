@@ -149,6 +149,35 @@ horizontal_alignment = 1
 [node name="HSeparator3" type="HSeparator" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 
+[node name="Container6" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
+
+[node name="RateButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container6"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_top = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
+focus_neighbor_bottom = NodePath("../../Container4/OpenCommentsButton")
+script = ExtResource("3_2uk0n")
+
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container6/RateButton"]
+layout_mode = 1
+offset_right = 127.0
+offset_bottom = 91.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.72549, 0.25098, 1, 1)
+theme_override_font_sizes/font_size = 79
+text = "Rate"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="Container4" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
@@ -160,7 +189,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
-focus_neighbor_top = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_top = NodePath("../../Container6/RateButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
 focus_neighbor_bottom = NodePath("../../Container5/DeleteButton")
 script = ExtResource("3_2uk0n")
@@ -298,3 +327,18 @@ theme_override_constants/margin_bottom = 16
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+
+[node name="RatingMenu" parent="CanvasLayer" instance=ExtResource("4_usqq2")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.5
+offset_top = -130.5
+offset_right = 201.5
+offset_bottom = 130.5
+grow_horizontal = 2
+grow_vertical = 2

@@ -14,6 +14,8 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 
 @onready var commentsContainer: CommentsContainer = %CommentsContainer
 @onready var openCommentsButton: Button = %OpenCommentsButton
+@onready var rateButton: Button = %RateButton
+@onready var ratingMenu: RatingMenu = %RatingMenu
 @onready var deleteButton: Button = %DeleteButton
 
 @onready var backButton: Button = %BackButton
@@ -29,10 +31,22 @@ signal loaded()
 
 func _ready():
 	openCommentsButton.pressed.connect(commentsContainer.show)
+	rateButton.pressed.connect(ratingMenu.show)
 	commentsContainer.hide()
+	ratingMenu.hide()
 	backButton.pressed.connect(func():
 		commentsContainer.hide()
+		ratingMenu.hide()
 		animateOut()
+	)
+	commentsContainer.closePressed.connect(func():
+		selectButton.grab_focus()
+	)
+	ratingMenu.closePressed.connect(func():
+		selectButton.grab_focus()
+	)
+	ratingMenu.ratingSubmitted.connect(func(x):
+		ratingNumber.text = str(x).pad_decimals(2) + "/5"
 	)
 	selectButton.pressed.connect(onSelectButton_Pressed)
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
@@ -58,6 +72,9 @@ func init(initTrackId: String) -> bool:
 	leaderboardMenu.fetchTimes(trackId)
 	commentsContainer.init(
 		trackId	
+	)
+	ratingMenu.init(
+		trackId
 	)
 	downloaded = isDownloaded()
 	if downloaded:

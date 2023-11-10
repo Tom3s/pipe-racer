@@ -10,6 +10,8 @@ var trackId: String = '64fb19f35e616ef56517dfd0'
 
 @onready var commentScene = preload("res://Menu/Comment.tscn")
 
+signal closePressed()
+
 func init(initTrackId: String):
 	trackId = initTrackId
 	loadComments(trackId)
@@ -18,7 +20,10 @@ func init(initTrackId: String):
 	# 	"",
 	# 	trackId,
 	# )
-	closeButton.pressed.connect(hide)
+	closeButton.pressed.connect(func():
+		hide()
+		closeButton.emit()
+	)
 	commentTextField.commentSubmitted.connect(loadComments)
 	visibility_changed.connect(onVisibilityChanged)
 
