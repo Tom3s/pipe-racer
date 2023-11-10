@@ -22,7 +22,7 @@ func init(initTrackId: String):
 	# )
 	closeButton.pressed.connect(func():
 		hide()
-		closeButton.emit()
+		closePressed.emit()
 	)
 	commentTextField.commentSubmitted.connect(loadComments)
 	visibility_changed.connect(onVisibilityChanged)

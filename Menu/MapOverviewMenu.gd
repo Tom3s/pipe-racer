@@ -79,8 +79,11 @@ func init(initTrackId: String) -> bool:
 	downloaded = isDownloaded()
 	if downloaded:
 		selectButton.setLabelText("Play")
+		deleteButton.show()
 	else:
 		selectButton.setLabelText("Download")
+		deleteButton.hide()
+
 	fetchLevelDetails()
 	return true
 
@@ -173,6 +176,7 @@ func onDownloadRequest_completed(_result: int, responseCode: int, _headers: Pack
 
 	downloaded = true
 	selectButton.setLabelText("Play")
+	deleteButton.show()
 	selectButton.disabled = false
 
 	var json = JSON.parse_string(body.get_string_from_utf8())
@@ -192,6 +196,7 @@ func deleteTrack():
 		fileHandler.remove(selectedTrackForDelete)
 	downloaded = false
 	selectButton.setLabelText("Download")
+	deleteButton.hide()
 
 const ANIMATE_TIME = 0.3
 func animateIn():

@@ -19,6 +19,8 @@ extends Control
 
 @onready var buttonContainer: VBoxContainer = %ButtonContainer
 
+@onready var titleContainer: VBoxContainer = %TitleContainer
+
 var buttons: Array = []
 
 func _ready():
@@ -136,6 +138,7 @@ func animateMainContentsOut():
 
 	var windowSize = get_viewport_rect().size
 
+	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
 
 	var index = 1
 	for child in buttonContainer.get_children():
@@ -155,6 +158,14 @@ func animateMainContentsOut():
 			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
 		index += 1
+	tween.tween_property(titleContainer, "position", Vector2(windowSize.x, 0), MOVE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_EXPO)\
+		.set_delay(INBETWEEN_TIME * index)
+	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
+		.set_delay(INBETWEEN_TIME * index)
+	
 	
 	return tween.finished
 	# var children = buttonContainer.get_children()
@@ -172,6 +183,7 @@ func animateMainContentsIn():
 
 	var windowSize = get_viewport_rect().size
 
+	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
 	for child in buttonContainer.get_children():
 		# child.get_child(0).inAnimation = true
 		var button: Button = child.get_child(0)
@@ -180,6 +192,8 @@ func animateMainContentsIn():
 		var label: Label = child.get_child(0).get_child(0)
 		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), 0)\
 			.as_relative()
+	tween.tween_property(titleContainer, "position", Vector2(windowSize.x, 0), 0)\
+		.as_relative()
 	# await tween.finished
 	# mainContent.visible = true
 	tween.tween_property(mainContent, "visible", true, 0)
@@ -205,7 +219,15 @@ func animateMainContentsIn():
 			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
 		index += 1
-	
+	tween.tween_property(titleContainer, "position", Vector2(-windowSize.x, 0), MOVE_TIME)\
+			.as_relative()\
+			.set_ease(Tween.EASE_OUT)\
+			.set_trans(Tween.TRANS_EXPO)\
+			.set_delay(INBETWEEN_TIME * index)
+	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
+			.set_delay(INBETWEEN_TIME * index)
+
+
 	return tween.finished
 
 func resetButtons():

@@ -3,11 +3,11 @@
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_6foeu"]
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_yskjr"]
 [ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
-[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_3kgnw"]
 [ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="3_e7j8m"]
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="3_lrfj4"]
 [ext_resource type="PackedScene" uid="uid://m0ulbe340r3v" path="res://Menu/RebindMenu.tscn" id="4_1eqkh"]
 [ext_resource type="Script" path="res://Menu/GamepadTabController.gd" id="5_isldy"]
+[ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="8_02jec"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -491,5 +491,5 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../TabContainer/Graphics/VBoxContainer/FullscreenButton")
 focus_neighbor_bottom = NodePath("../TabContainer/Audio/VBoxContainer/Master/MasterVolumeSlider")
-shortcut = ExtResource("3_3kgnw")
+shortcut = ExtResource("8_02jec")
 text = "Close"
