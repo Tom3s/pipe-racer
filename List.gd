@@ -19,7 +19,6 @@ func fetchBestLaps():
 
 func onGetScoresTotalTimes_completed(_result, _response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	# print(json)
 	if json == null:
 		fetchBestTotalTimes()
 		return
@@ -47,7 +46,6 @@ func onGetScoresTotalTimes_completed(_result, _response_code, _headers, body):
 
 func onGetScoresBestLaps_completed(_result, _response_code, _headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	# print(json)
 	if json == null:
 		fetchBestLaps()
 		return

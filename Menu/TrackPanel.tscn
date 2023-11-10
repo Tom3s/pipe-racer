@@ -1,0 +1,187 @@
+[gd_scene load_steps=13 format=3 uid="uid://vuu7ufyg5c7j"]
+
+[ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="1_emvk8"]
+[ext_resource type="Script" path="res://Menu/TrackPanel.gd" id="2_qoiui"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="3_2yalb"]
+[ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="4_n1qql"]
+[ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_vski5"]
+[ext_resource type="FontFile" uid="uid://qbiups1d7p6g" path="res://addons/fontawesome/fonts/fa-solid-900.woff2" id="6_tvvjg"]
+[ext_resource type="Script" path="res://addons/fontawesome/FontAwesome.gd" id="7_vtx7m"]
+
+[sub_resource type="Theme" id="Theme_8gtki"]
+default_font = ExtResource("3_2yalb")
+default_font_size = 64
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.152941, 0.152941, 0.152941, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 6
+Label/constants/shadow_offset_y = 6
+Label/constants/shadow_outline_size = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l365p"]
+
+[sub_resource type="Theme" id="Theme_wsbvk"]
+default_font = ExtResource("3_2yalb")
+default_font_size = 48
+Label/colors/font_shadow_color = Color(0.498039, 0.121569, 0.121569, 1)
+Label/constants/shadow_offset_x = 5
+Label/constants/shadow_offset_y = 5
+Label/constants/shadow_outline_size = 1
+
+[sub_resource type="Theme" id="Theme_usntm"]
+default_font = ExtResource("3_2yalb")
+default_font_size = 48
+Label/colors/font_shadow_color = Color(0.470588, 0.388235, 0.0901961, 1)
+Label/constants/shadow_offset_x = 5
+Label/constants/shadow_offset_y = 5
+Label/constants/shadow_outline_size = 1
+
+[sub_resource type="Theme" id="Theme_5qlu0"]
+default_font = ExtResource("3_2yalb")
+default_font_size = 48
+Label/colors/font_shadow_color = Color(0.172549, 0.443137, 0.133333, 1)
+Label/constants/shadow_offset_x = 5
+Label/constants/shadow_offset_y = 5
+Label/constants/shadow_outline_size = 1
+
+[node name="TrackPanel" type="PanelContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 209.0
+grow_horizontal = 2
+theme_override_styles/panel = ExtResource("1_emvk8")
+script = ExtResource("2_qoiui")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme = SubResource("Theme_8gtki")
+
+[node name="TrackName" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.301961, 0.301961, 0.301961, 1)
+text = "Trackname"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_n1qql")
+
+[node name="Author" type="Label" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.301961, 0.301961, 0.301961, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_font_sizes/font_size = 36
+text = "By: author"
+
+[node name="Container5" type="PanelContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_styles/panel = SubResource("StyleBoxEmpty_l365p")
+
+[node name="ViewButton" type="Button" parent="VBoxContainer/HBoxContainer2/Container5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
+script = ExtResource("5_vski5")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/Container5/ViewButton"]
+layout_mode = 1
+offset_top = -10.0
+offset_right = 193.0
+offset_bottom = 125.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.8, 0.25098, 1, 1)
+theme_override_font_sizes/font_size = 120
+text = "View"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="spacer2" type="Control" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_wsbvk")
+
+[node name="FontAwesome" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_fonts/font = ExtResource("6_tvvjg")
+theme_override_font_sizes/font_size = 32
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("7_vtx7m")
+icon_size = 32
+icon_name = "download"
+
+[node name="DownloadCount" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "123"
+
+[node name="spacer" type="Control" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_usntm")
+
+[node name="FontAwesome" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_fonts/font = ExtResource("6_tvvjg")
+theme_override_font_sizes/font_size = 32
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("7_vtx7m")
+icon_size = 32
+icon_name = "star"
+
+[node name="Rating" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "3.67/5"
+
+[node name="spacer2" type="Control" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_5qlu0")
+
+[node name="FontAwesome" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer3"]
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_fonts/font = ExtResource("6_tvvjg")
+theme_override_font_sizes/font_size = 32
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("7_vtx7m")
+icon_size = 32
+icon_name = "calendar"
+
+[node name="UploadDate" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "2023-09-08"

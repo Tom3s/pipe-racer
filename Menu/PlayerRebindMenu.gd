@@ -53,7 +53,6 @@ func _ready():
 		if GlobalProperties.CONTROL_DEVICE_OVERWRITES[str(playerIndex)].size() > 0:
 			var intArray: Array[int]
 			intArray.assign(GlobalProperties.CONTROL_DEVICE_OVERWRITES[str(playerIndex)])
-			print("OverWritten Devices: ", intArray)
 			rebinder.devices = intArray
 			allowedDevices.setSelectedItems(intArray)
 

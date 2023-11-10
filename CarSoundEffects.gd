@@ -15,7 +15,6 @@ func _ready():
 
 
 func playImpact(_body: Node):
-	print("impact")
 	var sound = impactSounds.pick_random()
 
 	sound.pitch_scale = randf_range(0.8, 1.2)

@@ -657,7 +657,6 @@ func saveToJSON(autosave: bool = false):
 	fileHandler.store_string(JSON.stringify(trackData, "\t"))
 
 func loadMap(fileName: String) -> bool:
-	print(fileName.split(".")[-1])
 	if fileName.split(".")[-1] == "json":
 		return loadFromJSON(fileName)
 	return false

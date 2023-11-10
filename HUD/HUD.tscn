@@ -1,9 +1,55 @@
-[gd_scene load_steps=5 format=3 uid="uid://vyw4va1y2j2e"]
+[gd_scene load_steps=15 format=3 uid="uid://vyw4va1y2j2e"]
 
 [ext_resource type="Script" path="res://HUD/IngameHUD.gd" id="1_1uqa5"]
-[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_50c7g"]
+[ext_resource type="FontFile" uid="uid://8e8uvmh76j1i" path="res://Theme/Evogria.otf" id="1_h3as5"]
+[ext_resource type="Texture2D" uid="uid://dx7atjm48t360" path="res://HUD/SpedometerUnder.png" id="3_0y6y2"]
+[ext_resource type="StyleBox" uid="uid://cr8u7m3hxb8mb" path="res://HUD/PanelRightExtend.tres" id="3_7qay4"]
 [ext_resource type="Texture2D" uid="uid://to1ouubs5rxs" path="res://Sprites/KBPrompts/66.png" id="3_tu0tx"]
 [ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="4_bi0vt"]
+[ext_resource type="StyleBox" uid="uid://b6m4v27b583s6" path="res://HUD/PanelLeftExtend.tres" id="4_gqwn0"]
+[ext_resource type="Texture2D" uid="uid://6cmibwp7losi" path="res://HUD/SpedometerOver.png" id="4_x86rj"]
+[ext_resource type="Texture2D" uid="uid://hsh44fuv2ygp" path="res://HUD/SpedometerProgress.png" id="5_7hl8i"]
+
+[sub_resource type="Theme" id="Theme_600f4"]
+default_font = ExtResource("1_h3as5")
+default_font_size = 32
+Label/colors/font_color = Color(0.890196, 0.890196, 0.890196, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3d07t"]
+content_margin_left = 15.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.65098)
+draw_center = false
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_yuomn"]
+color = Color(0.658824, 0.658824, 0.658824, 1)
+grow_begin = 25.0
+grow_end = -3.0
+thickness = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_umx71"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.458824)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kynxr"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0.290196, 0.678431, 0.14902, 0.458824)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -12,10 +58,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_50c7g")
+theme = SubResource("Theme_600f4")
 script = ExtResource("1_1uqa5")
 
-[node name="HUDContainer" type="MarginContainer" parent="."]
+[node name="HUDContainer" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -23,60 +69,134 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 50
 
-[node name="Speedometer" type="Label" parent="HUDContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 40
-text = "135 KM/H"
-horizontal_alignment = 2
-vertical_alignment = 1
+[node name="PosPanel" type="PanelContainer" parent="HUDContainer"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -235.0
+offset_top = 20.0
+offset_right = -38.0
+offset_bottom = 96.0
+grow_horizontal = 0
+theme_override_styles/panel = ExtResource("3_7qay4")
 
-[node name="Position" type="Label" parent="HUDContainer"]
+[node name="Position" type="Label" parent="HUDContainer/PosPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 42
 text = "Pos: 1/4"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Lap" type="Label" parent="HUDContainer"]
+[node name="LapPanel" type="PanelContainer" parent="HUDContainer"]
+layout_mode = 1
+offset_left = 34.0
+offset_top = 20.0
+offset_right = 224.0
+offset_bottom = 96.0
+theme_override_styles/panel = ExtResource("4_gqwn0")
+
+[node name="Lap" type="Label" parent="HUDContainer/LapPanel"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 42
+text = "Lap: 1/3"
+vertical_alignment = 1
+
+[node name="TimerPanel" type="PanelContainer" parent="HUDContainer"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -93.0
+offset_top = -104.0
+offset_right = 93.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3d07t")
+
+[node name="LapTimer" type="Label" parent="HUDContainer/TimerPanel"]
+unique_name_in_owner = true
+layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 40
-text = "Lap: 1/3"
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 38
+text = "00:34:147"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LapTimer" type="Label" parent="HUDContainer"]
+[node name="StatsPanel" type="PanelContainer" parent="HUDContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -194.0
+offset_right = 315.0
+offset_bottom = -20.0
+grow_vertical = 0
+theme_override_styles/panel = ExtResource("4_gqwn0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUDContainer/StatsPanel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUDContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Total:"
+
+[node name="StatsTotal" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 30
-text = "00:34:147"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "01:24:420"
 
-[node name="Stats" type="Label" parent="HUDContainer"]
+[node name="HSeparator" type="HSeparator" parent="HUDContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_yuomn")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HUDContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Last:"
+
+[node name="StatsLast" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
+layout_mode = 2
+text = "00:42:874"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HUDContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Best:"
+
+[node name="StatsBest" type="Label" parent="HUDContainer/StatsPanel/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:32:897"
+
+[node name="Stats" type="Label" parent="HUDContainer/StatsPanel"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
@@ -92,7 +212,18 @@ vertical_alignment = 1
 
 [node name="ResetIndicator" type="Label" parent="HUDContainer"]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -498.2
+offset_top = -134.0
+offset_right = 498.2
+offset_bottom = 134.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.780392, 1, 0.309804, 1)
 theme_override_colors/font_outline_color = Color(0.203922, 0.301961, 0, 1)
@@ -101,11 +232,104 @@ theme_override_font_sizes/font_size = 50
 text = "Reset pressed
 Waiting for other players to reset
 
-
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters_behavior = 2
+
+[node name="SpedometerBar" type="TextureProgressBar" parent="HUDContainer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -269.0
+offset_top = -251.0
+offset_right = 243.0
+offset_bottom = 261.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.45, 0.45)
+size_flags_horizontal = 8
+size_flags_vertical = 8
+max_value = 320.0
+value = 135.0
+fill_mode = 4
+texture_under = ExtResource("3_0y6y2")
+texture_over = ExtResource("4_x86rj")
+texture_progress = ExtResource("5_7hl8i")
+radial_initial_angle = 210.0
+radial_fill_degrees = 300.0
+
+[node name="SpedometerText" type="Label" parent="HUDContainer/SpedometerBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.7
+offset_top = -136.0
+offset_right = 128.7
+offset_bottom = 81.4
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_h3as5")
+theme_override_font_sizes/font_size = 137
+text = "135"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUDContainer"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Splits" type="VBoxContainer" parent="HUDContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(185, 0)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="CurrentSplitContainer" type="PanelContainer" parent="HUDContainer/VBoxContainer/Splits"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_umx71")
+
+[node name="CurrentSplit" type="Label" parent="HUDContainer/VBoxContainer/Splits/CurrentSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:20:459"
+horizontal_alignment = 2
+
+[node name="CurrentSplitContainer2" type="PanelContainer" parent="HUDContainer/VBoxContainer/Splits"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kynxr")
+
+[node name="LastSplit" type="Label" parent="HUDContainer/VBoxContainer/Splits/CurrentSplitContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-00:01:459"
+horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="HUDContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control2" type="Control" parent="HUDContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="HUDContainer2" type="MarginContainer" parent="."]
 unique_name_in_owner = true
@@ -122,6 +346,7 @@ theme_override_constants/margin_bottom = 50
 
 [node name="ReadyIndicator" type="VBoxContainer" parent="HUDContainer2"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -180,10 +405,10 @@ theme_override_styles/panel = ExtResource("4_bi0vt")
 [node name="Nickname" type="Label" parent="HUDContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 32
 text = "Tom3s"
 horizontal_alignment = 1
 vertical_alignment = 1

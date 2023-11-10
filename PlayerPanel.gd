@@ -121,7 +121,7 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 		print("Error after login request: ", body.get_string_from_utf8())
 		if GlobalProperties.playerSelectorNode.visible:
 			AlertManager.showAlert(self, "Error logging in", body.get_string_from_utf8())
-		print("Result: ", error_string(_result))
+		print("Result: ", responseCode)
 		return
 	
 	setButtonsLoggedIn()

@@ -29,6 +29,10 @@ BillboardTextureLoader="*res://Global/BillboardTextureLoader.gd"
 
 gdscript/warnings/onready_with_export=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/fontawesome/plugin.cfg")
+
 [input]
 
 ui_accept={
@@ -387,6 +391,16 @@ p3_change_camera_mode={
 p4_change_camera_mode={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":3,"button_index":9,"pressure":0.0,"pressed":false,"script":null)
+]
+}
+ui_next_tab={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":10,"pressure":0.0,"pressed":true,"script":null)
+]
+}
+ui_prev_tab={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":9,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 

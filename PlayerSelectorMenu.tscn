@@ -1,8 +1,167 @@
-[gd_scene load_steps=4 format=3 uid="uid://bigmru3rmry2m"]
+[gd_scene load_steps=27 format=3 uid="uid://bigmru3rmry2m"]
 
 [ext_resource type="Script" path="res://PlayerSelectorMenu.gd" id="1_8wdo8"]
-[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_10c83"]
-[ext_resource type="Shortcut" uid="uid://cwm3tyan207wr" path="res://GamepadBackShortcut.tres" id="3_c0x38"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_curo1"]
+[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_tap43"]
+[ext_resource type="StyleBox" uid="uid://b6m4v27b583s6" path="res://HUD/PanelLeftExtend.tres" id="3_p7lb2"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerLeftMiddle.gd" id="5_1uooy"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerY.gd" id="5_6ao42"]
+[ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_trmc8"]
+[ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="7_ogc8f"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerTopMiddle.gd" id="8_nbu4h"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerBottomMiddle.gd" id="9_xmg4x"]
+[ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="11_nocte"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4ewd"]
+bg_color = Color(0.439216, 0.439216, 0.439216, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.129412, 0.129412, 0.129412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnfbv"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.352941, 0.780392, 0.67451, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofcni"]
+bg_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vuv8h"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dlqso"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aunuk"]
+bg_color = Color(0.4, 0.4, 0.4, 0.65098)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocpm4"]
+bg_color = Color(0.607843, 0.729412, 0.54902, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gm2h7"]
+bg_color = Color(0.866667, 0.298039, 0.305882, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.407843, 0.0980392, 0.109804, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjac4"]
+bg_color = Color(0.498039, 0.901961, 0.352941, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ef7yk"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5lrt"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.258824, 0.258824, 0.258824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_67hwj"]
+default_font = ExtResource("1_curo1")
+default_font_size = 26
+Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
+Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
+Button/styles/hover = SubResource("StyleBoxFlat_gnfbv")
+Button/styles/normal = SubResource("StyleBoxFlat_xl3p0")
+Button/styles/pressed = SubResource("StyleBoxFlat_ofcni")
+CheckBox/icons/checked = SubResource("PlaceholderTexture2D_vuv8h")
+CheckBox/icons/unchecked = SubResource("PlaceholderTexture2D_dlqso")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_aunuk")
+CheckBox/styles/hover = SubResource("StyleBoxFlat_aunuk")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
+CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
+LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
+LineEdit/fonts/font = ExtResource("1_tap43")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4cnd"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.65098)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_right = 64.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oet8e"]
 
 [node name="PlayerSelectorMenu" type="Control"]
 visible = false
@@ -12,130 +171,265 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_10c83")
+theme = SubResource("Theme_67hwj")
 script = ExtResource("1_8wdo8")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 38.0
-offset_top = 43.0
-offset_right = 413.0
-offset_bottom = -43.0
-grow_vertical = 2
-
-[node name="PanelHolder" type="VBoxContainer" parent="Panel"]
+[node name="LeftPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 0)
 layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 0
-alignment = 2
-
-[node name="Panel2" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 121.0
-offset_top = -93.0
-offset_right = 242.0
-offset_bottom = 93.0
-grow_horizontal = 2
+offset_top = -311.0
+offset_right = 500.0
+offset_bottom = 311.0
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_p7lb2")
+script = ExtResource("5_1uooy")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
+[node name="PanelHolder" type="VBoxContainer" parent="LeftPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(470, 148)
 layout_mode = 2
-offset_left = 10.5
-offset_top = 8.5
-offset_right = 110.5
-offset_bottom = 177.5
-grow_horizontal = 2
-grow_vertical = 2
+size_flags_horizontal = 0
 alignment = 1
 
-[node name="Button1" type="Button" parent="Panel2/VBoxContainer"]
+[node name="RightPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
+layout_mode = 1
+offset_left = 937.0
+offset_top = 164.0
+offset_right = 1152.0
+offset_bottom = 474.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_m4cnd")
+script = ExtResource("5_6ao42")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightPanel"]
 layout_mode = 2
+theme = ExtResource("7_ogc8f")
+alignment = 1
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 0
+text = "Number of
+players"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Container" type="PanelContainer" parent="RightPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="Button1" type="Button" parent="RightPanel/VBoxContainer/Container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container4/Button4")
+focus_neighbor_bottom = NodePath("../../Container2/Button2")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container/Button1"]
+layout_mode = 1
+offset_right = 312.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.470588, 0.470588, 1)
+theme_override_font_sizes/font_size = 100
 text = "1 Player"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="Button2" type="Button" parent="Panel2/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
+[node name="Container2" type="PanelContainer" parent="RightPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="Button2" type="Button" parent="RightPanel/VBoxContainer/Container2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container/Button1")
+focus_neighbor_bottom = NodePath("../../Container3/Button3")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container2/Button2"]
+layout_mode = 1
+offset_right = 312.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.87451, 0.470588, 1)
+theme_override_font_sizes/font_size = 100
 text = "2 Players"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="Button3" type="Button" parent="Panel2/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
+[node name="Container3" type="PanelContainer" parent="RightPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="Button3" type="Button" parent="RightPanel/VBoxContainer/Container3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container2/Button2")
+focus_neighbor_bottom = NodePath("../../Container4/Button4")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container3/Button3"]
+layout_mode = 1
+offset_right = 312.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.470588, 1, 0.513726, 1)
+theme_override_font_sizes/font_size = 100
 text = "3 Players"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="Button4" type="Button" parent="Panel2/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
+[node name="Container4" type="PanelContainer" parent="RightPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="Button4" type="Button" parent="RightPanel/VBoxContainer/Container4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../BottomContainer/Container5/NextButton")
+focus_neighbor_top = NodePath("../../Container3/Button3")
+focus_neighbor_bottom = NodePath("../../../../BottomContainer/Container5/NextButton")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="RightPanel/VBoxContainer/Container4/Button4"]
+layout_mode = 1
+offset_right = 312.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.470588, 0.796078, 1, 1)
+theme_override_font_sizes/font_size = 100
 text = "4 Players"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel2"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="."]
+[node name="MenuTitle" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -230.0
-offset_top = 26.0
-offset_right = 630.4
-offset_bottom = 198.4
+offset_left = -40.0999
+offset_top = 3.02083
+offset_right = 820.302
+offset_bottom = 449.021
 grow_horizontal = 2
+scale = Vector2(0.335648, 0.335648)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.870588, 0.286275, 0.286275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 25
-theme_override_font_sizes/font_size = 80
+theme_override_constants/shadow_offset_x = 12
+theme_override_constants/shadow_offset_y = 12
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 200
 text = "SELECT
 PLAYERS
 "
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("8_nbu4h")
+offset = Vector2i(272, 9)
+baseScaleFactor = 0.5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="BottomContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = -98.0
-offset_right = 325.0
-offset_bottom = -38.0
+offset_left = 37.5023
+offset_top = -275.431
+offset_right = 340.502
+offset_bottom = -215.431
 grow_horizontal = 2
 grow_vertical = 0
+scale = Vector2(0.671296, 0.671296)
+theme = ExtResource("7_ogc8f")
+script = ExtResource("9_xmg4x")
+offset = Vector2i(188, -33)
 
-[node name="BackButton" type="Button" parent="HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 60)
+[node name="Container4" type="PanelContainer" parent="BottomContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-shortcut = ExtResource("3_c0x38")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="BackButton" type="Button" parent="BottomContainer/Container4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
+shortcut = ExtResource("11_nocte")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="BottomContainer/Container4/BackButton"]
+layout_mode = 1
+offset_right = 183.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.25098, 0.25098, 1)
+theme_override_font_sizes/font_size = 100
 text = "Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="NextButton" type="Button" parent="HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 60)
+[node name="Container5" type="PanelContainer" parent="BottomContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oet8e")
+
+[node name="NextButton" type="Button" parent="BottomContainer/Container5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../../RightPanel/VBoxContainer/Container4/Button4")
+focus_neighbor_bottom = NodePath("../../../RightPanel/VBoxContainer/Container/Button1")
+script = ExtResource("5_trmc8")
+
+[node name="Label" type="Label" parent="BottomContainer/Container5/NextButton"]
+layout_mode = 1
+offset_right = 166.0
+offset_bottom = 113.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.360784, 1, 0.25098, 1)
+theme_override_font_sizes/font_size = 100
 text = "Next"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true

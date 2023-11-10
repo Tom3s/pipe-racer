@@ -33,7 +33,6 @@ func setTexture(texture: Texture, textureName: String, url: String = "") -> void
 	
 
 func _ready():
-	print(self)
 	var newScale = Vector3.ONE * 8.5
 	%Collider1.scale = newScale
 	%Collider2.scale = newScale

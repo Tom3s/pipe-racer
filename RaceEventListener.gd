@@ -64,7 +64,7 @@ func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
 	raceInputHandler.forceStartRace.connect(onRaceInputHandler_forceStartRace)
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
-	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+	# raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
 	for i in cars.size():
 		cars[i].respawned.connect(onCar_respawned)
@@ -185,8 +185,8 @@ func onCar_finishedRace(playerIndex: int):
 	print("Best Lap: ", bestLap)
 	print("Total time: ", totalTime)
 
-func onRaceInputHandler_fullScreenPressed():
-	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+# func onRaceInputHandler_fullScreenPressed():
+# 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 func onState_allPlayersReset():
 	# reset cars
@@ -270,8 +270,6 @@ func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -
 		"bestLap": bestLap,
 	}
 
-	print(JSON.stringify(submitData, "\t"))
-
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.timeout = 10
@@ -292,7 +290,6 @@ func submitTime(splits: Array, bestLap: int, totalTime: int, playerIndex: int) -
 
 
 func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	print(body.get_string_from_utf8())
 	leaderboardUI.fetchTimes(map.trackId)
 	return
 

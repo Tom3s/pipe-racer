@@ -65,6 +65,8 @@ var FULLSCREEN: bool = false:
 	get:
 		return FULLSCREEN
 
+
+signal renderQualityChanged(newQuality: float)
 @export
 var RENDER_QUALITY: float = 1.0:
 	set(newQuality):
@@ -74,6 +76,7 @@ var RENDER_QUALITY: float = 1.0:
 		else:
 			ProjectSettings.set_setting("rendering/scaling_3d/mode", Viewport.SCALING_3D_MODE_FSR)
 		ProjectSettings.set_setting("rendering/scaling_3d/scale", newQuality)
+		renderQualityChanged.emit(newQuality)
 		saveToFile()		
 	get:
 		return RENDER_QUALITY
@@ -112,6 +115,14 @@ var SMOOTH_STEERING: float = 0.75:
 		return SMOOTH_STEERING
 
 @export
+var COMPARE_AGAINST_BEST_LAP: bool = true:
+	set(newCompare):
+		COMPARE_AGAINST_BEST_LAP = newCompare
+		saveToFile()
+	get:
+		return COMPARE_AGAINST_BEST_LAP
+
+@export
 var JOY_CONTROL_OVERWRITES = {
 	"1": {},
 	"2": {},
@@ -146,7 +157,20 @@ const SAVE_FILE := "user://player.json"
 func _ready() -> void:
 	loadFromFile()
 	playerSelectorNode = playerSelectorMenu.instantiate()
+	# playerSelectorMenu.visible = false
 	add_child(playerSelectorNode)
+	setupFolders()
+
+func setupFolders():
+	var dir = DirAccess.open("user://")
+	if !dir.dir_exists("user://tracks"):
+		dir.make_dir("user://tracks")
+	if !dir.dir_exists("user://tracks/autosave"):
+		dir.make_dir("user://tracks/autosave")
+	if !dir.dir_exists("user://tracks/downloaded"):
+		dir.make_dir("user://tracks/downloaded")
+	if !dir.dir_exists("user://tracks/local"):
+		dir.make_dir("user://tracks/local")
 
 func onPlayerNameChanged(newName: String) -> String:
 	# saveToFile()
@@ -172,6 +196,7 @@ func saveToFile() -> void:
 		"JOY_CONTROL_OVERWRITES": JOY_CONTROL_OVERWRITES,
 		"KB_CONTROL_OVERWRITES": KB_CONTROL_OVERWRITES,
 		"CONTROL_DEVICE_OVERWRITES": CONTROL_DEVICE_OVERWRITES,
+		"COMPARE_AGAINST_BEST_LAP": COMPARE_AGAINST_BEST_LAP,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -213,6 +238,8 @@ func loadFromFile() -> void:
 			KB_CONTROL_OVERWRITES = jsonData["KB_CONTROL_OVERWRITES"]
 		if jsonData.has("CONTROL_DEVICE_OVERWRITES"):
 			CONTROL_DEVICE_OVERWRITES = jsonData["CONTROL_DEVICE_OVERWRITES"]
+		if jsonData.has("COMPARE_AGAINST_BEST_LAP"):
+			COMPARE_AGAINST_BEST_LAP = bool(jsonData["COMPARE_AGAINST_BEST_LAP"])
 	else:
 		saveToFile()
 

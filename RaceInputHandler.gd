@@ -2,7 +2,7 @@ extends Node3D
 class_name RaceInputHandler
 
 signal forceStartRace()
-signal fullScreenPressed()
+# signal fullScreenPressed()
 signal pausePressed(playerIndex: int)
 signal resetRacePressed()
 
@@ -21,8 +21,8 @@ func _physics_process(_delta):
 	if Input.is_action_just_pressed("p1_ready"):
 		forceStartRace.emit()
 
-	if Input.is_action_just_pressed("fullscreen"):
-		fullScreenPressed.emit()
+	# if Input.is_action_just_pressed("fullscreen"):
+	# 	fullScreenPressed.emit()
 
 	if Input.is_action_just_pressed("reset_race"):
 		resetRacePressed.emit()

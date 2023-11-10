@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://pv8rrf7hpk7x"
+path="res://.godot/imported/Bitmask.png-851ae3ae0a053f9c918ed48c5cc37a1c.res"
+
+[deps]
+
+source_file="res://Theme/Bitmask.png"
+dest_files=["res://.godot/imported/Bitmask.png-851ae3ae0a053f9c918ed48c5cc37a1c.res"]
+
+[params]
+
+create_from=1
+threshold=0.5

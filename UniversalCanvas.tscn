@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bf023ng2nrvk2"]
 
-[ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="2_43vtq"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_cihrk"]
 [ext_resource type="Script" path="res://Countdown.gd" id="2_vrpsj"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jyalr"]
@@ -32,7 +32,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_ibman")
-theme_override_fonts/font = ExtResource("2_43vtq")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_cihrk")
+theme_override_font_sizes/font_size = 450
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("2_vrpsj")

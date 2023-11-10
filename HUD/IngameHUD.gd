@@ -3,7 +3,10 @@ extends Control
 class_name IngameHUD
 
 @onready
-var speedometer: Label = %Speedometer
+var spedometerText: Label = %SpedometerText
+
+@onready
+var spedometerBar: TextureProgressBar = %SpedometerBar
 
 @onready
 var positionLabel: Label = %Position
@@ -14,8 +17,11 @@ var lap: Label = %Lap
 @onready
 var lapTimer: Label = %LapTimer
 
-@onready
-var stats: Label = %Stats
+# @onready
+# var stats: Label = %Stats
+@onready var statsTotal: Label = %StatsTotal
+@onready var statsLast: Label = %StatsLast
+@onready var statsBest: Label = %StatsBest
 
 @onready
 var readyIndicator: VBoxContainer = %ReadyIndicator
@@ -29,6 +35,13 @@ var nickname: Label = %Nickname
 @onready
 var promptIcon: TextureRect = %PromptIcon
 
+
+@onready
+var currentSplit: Label = %CurrentSplit
+
+@onready
+var lastSplit: Label = %LastSplit
+
 var car: CarController = null
 var timeTrialManager: TimeTrialManager = null
 # var globalPlacement: int = -1
@@ -39,6 +52,7 @@ var TOTAL_CARS: int = 0
 func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, totalCars: int) -> void:
 	car = initialCar
 	timeTrialManager = initialTimeTrialManager
+	timeTrialManager.checkPointCollected.connect(displaySplit)
 	TOTAL_CARS = totalCars
 	%HUDContainer.hide()
 
@@ -52,11 +66,12 @@ func _ready() -> void:
 
 	car.playerIndexChanged.connect(loadReadyIcon)
 	
+	splits.modulate = Color(1, 1, 1, 0)
 
 	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
-	setSpeedText(car.getSpeed())
+	setSpedometer(car.getSpeed())
 	setPositionText(car.state.placement, TOTAL_CARS)
 	setLapText(car.state.currentLap + 1, car.state.nrLaps)
 	setLapTimerText(timeTrialManager.getCurrentLapTime())
@@ -65,6 +80,9 @@ func _physics_process(_delta: float) -> void:
 	setReadyIndicator(!car.state.isReady)
 	setResetIndicator(car.state.isResetting)
 	setNickname(car.playerName)
+	splitsVisibleFrames -= 1
+	if splitsVisibleFrames <= 0:
+		splits.modulate = Color(1, 1, 1, lerp(splits.modulate.a, 0.0, 0.2))
 
 var newTexture: Texture = null
 func _input(event):
@@ -88,10 +106,11 @@ func _input(event):
 		newTexture = load(RebindMenu.INVALID_KEY_ICON)
 	promptIcon.texture = newTexture
 
-func setSpeedText(speed: float) -> void:
+func setSpedometer(speed: float) -> void:
 	# convert speed from m/s to km/h
 	# speedometer.text = str(int(speed)) + " M/s | " + str(int(speed * 1.25)) + " Ku/H" 
-	speedometer.text = str(int(speed * 1.25)) + " KM/H"
+	spedometerText.text = str(int(speed * 1.25))
+	spedometerBar.value = speed * 1.25
 
 func setPositionText(currentPosition: int, total: int) -> void:
 	positionLabel.text = "Pos: " + str(currentPosition) + "/" + str(total)
@@ -103,10 +122,13 @@ func setLapTimerText(ticks: int) -> void:
 	lapTimer.text = IngameHUD.getTimeStringFromTicks(ticks)
 
 func setStatsText(totalTick: int, lastLapTicks: int, bestLapTicks: int) -> void:
-	stats.text = "Total:\t" + IngameHUD.getTimeStringFromTicks(totalTick) + "\n"
-	stats.text += "-------\t==========\n"
-	stats.text += "Last:\t" + IngameHUD.getTimeStringFromTicks(lastLapTicks) + "\n"
-	stats.text += "Best:\t" + IngameHUD.getTimeStringFromTicks(bestLapTicks)
+	# stats.text = "Total:\t" + IngameHUD.getTimeStringFromTicks(totalTick) + "\n"
+	# stats.text += "-------\t==========\n"
+	# stats.text += "Last:\t" + IngameHUD.getTimeStringFromTicks(lastLapTicks) + "\n"
+	# stats.text += "Best:\t" + IngameHUD.getTimeStringFromTicks(bestLapTicks)
+	statsTotal.text = IngameHUD.getTimeStringFromTicks(totalTick)
+	statsLast.text = IngameHUD.getTimeStringFromTicks(lastLapTicks)
+	statsBest.text = IngameHUD.getTimeStringFromTicks(bestLapTicks)
 
 # func setReadyIndicator(needsRespawn: bool) -> void:
 # 	readyIndicator.visible = needsRespawn
@@ -148,3 +170,35 @@ func loadReadyIcon(_sink = null):
 		texture = load(RebindMenu.INVALID_KEY_ICON)
 	promptIcon.texture = texture
 	newTexture = texture
+
+@onready var splits: VBoxContainer = %Splits
+
+const SPLIT_ALPHA = 117/256.0
+var splitsVisibleFrames: int = 0
+
+func displaySplit(timestamp: int, lastTimestamp: int, currentLapTime: int):
+	var difference = timestamp - lastTimestamp
+	currentSplit.text = IngameHUD.getTimeStringFromTicks(currentLapTime)
+	var prefix = ''
+	var color = Color(0, 0, 0, SPLIT_ALPHA)
+
+	if difference > 0:
+		prefix = '+'
+		color = Color(0.9, 0.2, 0.2, SPLIT_ALPHA)
+	elif difference < 0:
+		prefix = '-'
+		color = Color(0.2, 0.9, 0.2, SPLIT_ALPHA)
+
+	lastSplit.text = prefix + IngameHUD.getTimeStringFromTicks(abs(difference))
+
+	# lastSplit.get_theme_stylebox("panel").bg_color = color
+	var panel: PanelContainer = lastSplit.get_parent()
+	panel.get_theme_stylebox("panel").bg_color = color
+
+	splits.modulate = Color(1, 1, 1, 1)
+	splitsVisibleFrames = floori(1.5 * 120)
+
+	# var tween = create_tween()
+
+	# tween.tween_interval(1.2)
+	# tween.tween_property(splits, "modulate", Color(1, 1, 1, 0), 0.0)

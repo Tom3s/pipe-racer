@@ -145,7 +145,7 @@ func connectSignals():
 
 	editorInputHandler.savePressed.connect(onEditorInputHandler_savePressed)
 
-	editorInputHandler.fullScreenPressed.connect(onEditorInputHandler_fullScreenPressed)
+	# editorInputHandler.fullScreenPressed.connect(onEditorInputHandler_fullScreenPressed)
 
 	editorStateMachine.buildModeChanged.connect(onEditorStateMachine_buildModeChanged)
 
@@ -509,8 +509,8 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 	
 	editorShortcutsUI.changeBuildMode(newMode)
 
-func onEditorInputHandler_fullScreenPressed():
-	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+# func onEditorInputHandler_fullScreenPressed():
+# 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 var oldSoundVolume: float = 0
 var prePlaytestState: int = 0

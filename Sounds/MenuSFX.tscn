@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://clhi3xhdyb5j8"]
+
+[ext_resource type="Script" path="res://Sounds/MenuSFX.gd" id="1_hhwih"]
+[ext_resource type="AudioStream" uid="uid://cm6pd8ceh7d4j" path="res://Sounds/SFX/MenuHover.wav" id="2_ky3wl"]
+[ext_resource type="AudioStream" uid="uid://o3rtuc71iqmr" path="res://Sounds/SFX/MenuUnhover.wav" id="3_haesq"]
+
+[node name="MenuSFX" type="Node"]
+script = ExtResource("1_hhwih")
+
+[node name="MenuHover" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_ky3wl")
+bus = &"SFX"
+
+[node name="MenuUnhover" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_haesq")
+bus = &"SFX"

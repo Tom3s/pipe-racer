@@ -31,7 +31,6 @@ func onToggle(toggledState: bool):
 
 func onItemToggled(index: int, toggledState: bool):
 	itemToggled.emit(index, toggledState)
-	print("item toggled ", index, " ", toggledState)
 
 func addItem(item: String):
 	items.append(item)

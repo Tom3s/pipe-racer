@@ -1,19 +1,32 @@
-[gd_scene load_steps=12 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=21 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
+[ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="4_harqg"]
+[ext_resource type="Script" path="res://Menu/ScaledContainer.gd" id="5_0tsik"]
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
+[ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
 [ext_resource type="PackedScene" uid="uid://df1rccijala1n" path="res://MusicPlayer.tscn" id="7_gdorw"]
 [ext_resource type="PackedScene" uid="uid://wrv4h1dcsnnu" path="res://OnlineMapLoader.tscn" id="7_r4ncp"]
+[ext_resource type="Shader" uid="uid://c04k1vssllusx" path="res://Menu/Title.tres" id="7_uhllf"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="8_8rxhx"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerTopRight.gd" id="8_uqvtl"]
+[ext_resource type="PackedScene" uid="uid://clhi3xhdyb5j8" path="res://Sounds/MenuSFX.tscn" id="12_mhsla"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]
 shader = ExtResource("3_3culy")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_40t0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rml2x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5jwp"]
+shader = ExtResource("7_uhllf")
+shader_parameter/IntParameter = 6
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -48,87 +61,178 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContent"]
+[node name="ButtonContainer" type="VBoxContainer" parent="MainContent"]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
+offset_left = 30.0
+offset_top = -217.5
+offset_right = 455.0
+offset_bottom = 217.5
 grow_vertical = 2
+theme = ExtResource("4_harqg")
+script = ExtResource("5_0tsik")
 
-[node name="PlayButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+[node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../ExitButton")
-focus_neighbor_bottom = NodePath("../EditButton")
-text = "Race!"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="EditButton" type="Button" parent="MainContent/VBoxContainer"]
+[node name="PlayButton" type="Button" parent="MainContent/ButtonContainer/Container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(182, 70)
 layout_mode = 2
-focus_neighbor_top = NodePath("../PlayButton")
-focus_neighbor_bottom = NodePath("../PlayOnlineButton")
-text = "Edit"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../Container7/ExitButton")
+focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+script = ExtResource("5_r5x1k")
 
-[node name="PlayOnlineButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../EditButton")
-focus_neighbor_bottom = NodePath("../WebsiteButton")
-text = "Online (beta)"
-
-[node name="WebsiteButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../PlayOnlineButton")
-focus_neighbor_bottom = NodePath("../SettingsButton")
-text = "Website"
-
-[node name="ControlsButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../SettingsButton")
-focus_neighbor_bottom = NodePath("../ExitButton")
-text = "View Controls"
-
-[node name="SettingsButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../WebsiteButton")
-focus_neighbor_bottom = NodePath("../ExitButton")
-text = "Settings"
-
-[node name="ExitButton" type="Button" parent="MainContent/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-focus_neighbor_top = NodePath("../SettingsButton")
-focus_neighbor_bottom = NodePath("../PlayButton")
-text = "Exit"
-
-[node name="Title" type="Label" parent="MainContent"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container/PlayButton"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 179.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 25
-theme_override_font_sizes/font_size = 100
-text = "PIPE RACER"
+offset_top = -15.0
+offset_right = 356.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.470588, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
+text = "Race!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container2" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="EditButton" type="Button" parent="MainContent/ButtonContainer/Container2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container/PlayButton")
+focus_neighbor_bottom = NodePath("../../Container3/PlayOnlineButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container2/EditButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 260.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.67451, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
+text = "Edit"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container3" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="PlayOnlineButton" type="Button" parent="MainContent/ButtonContainer/Container3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(425, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container2/EditButton")
+focus_neighbor_bottom = NodePath("../../Container4/WebsiteButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container3/PlayOnlineButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 850.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
+text = "Online (Beta)"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container4" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="WebsiteButton" type="Button" parent="MainContent/ButtonContainer/Container4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(255, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container3/PlayOnlineButton")
+focus_neighbor_bottom = NodePath("../../Container6/SettingsButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container4/WebsiteButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 507.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.54902, 1, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
+text = "Website"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Container6" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="SettingsButton" type="Button" parent="MainContent/ButtonContainer/Container6"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(285, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container4/WebsiteButton")
+focus_neighbor_bottom = NodePath("../../Container7/ExitButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container6/SettingsButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 568.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.470588, 0.909804, 1, 1)
+theme_override_font_sizes/font_size = 180
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Container7" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="ExitButton" type="Button" parent="MainContent/ButtonContainer/Container7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(145, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container6/SettingsButton")
+focus_neighbor_bottom = NodePath("../../Container/PlayButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container7/ExitButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 260.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.858824, 0.470588, 1, 1)
+theme_override_font_sizes/font_size = 180
+text = "EXit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -144,8 +248,58 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 24
 text = "Version: v0.32"
+
+[node name="TitleContainer" type="VBoxContainer" parent="MainContent"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_k5jwp")
+layout_mode = 1
+offset_right = 600.0
+offset_bottom = 406.0
+mouse_filter = 2
+script = ExtResource("8_uqvtl")
+overscale = 1.8
+offset = Vector2i(961, 54)
+
+[node name="Control" type="Control" parent="MainContent/TitleContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Title2" type="Label" parent="MainContent/TitleContainer/Control"]
+use_parent_material = true
+layout_mode = 2
+offset_top = 2.0
+offset_right = 600.0
+offset_bottom = 65.4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("8_8rxhx")
+theme_override_font_sizes/font_size = 100
+text = "    Welcome to"
+vertical_alignment = 2
+
+[node name="Title" type="Label" parent="MainContent/TitleContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(1200, 680)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 20
+theme_override_constants/shadow_offset_y = 10
+theme_override_constants/outline_size = 12
+theme_override_constants/line_spacing = -134
+theme_override_fonts/font = ExtResource("8_8rxhx")
+theme_override_font_sizes/font_size = 360
+text = "PIPE
+  RACER"
 
 [node name="SettingsMenu" parent="." instance=ExtResource("4_fogf1")]
 unique_name_in_owner = true
@@ -167,4 +321,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="MusicPlayer" parent="." instance=ExtResource("7_gdorw")]
+unique_name_in_owner = true
+
+[node name="MenuSFX" parent="." instance=ExtResource("12_mhsla")]
 unique_name_in_owner = true

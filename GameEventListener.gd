@@ -45,7 +45,7 @@ func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
 
 	raceInputHandler.pausePressed.connect(onRaceInputHandler_pausePressed)
-	raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
+	# raceInputHandler.fullScreenPressed.connect(onRaceInputHandler_fullScreenPressed)
 
 	state.allPlayersReady.connect(onState_allPlayersReady)
 	state.allPlayersFinished.connect(onState_allPlayersFinished)
@@ -122,8 +122,8 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			leaderboardUI.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func onRaceInputHandler_fullScreenPressed():
-	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+# func onRaceInputHandler_fullScreenPressed():
+# 	GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
 
 func onCar_respawned(playerIndex: int, networkId: int):
 	# this in unneccessary i guess
@@ -173,6 +173,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			if state.allLocalPlayersFinished():
 				leaderboardUI.fetchTimes(map.trackId)
 				leaderboardUI.visible = true
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
@@ -246,7 +247,7 @@ func forceResumeGame():
 	if state.raceStarted:
 		for car in players.get_children():
 			car.resumeMovement()
-			car.state.hasControl = true
+			car.state.hasControl = !car.state.finisishedRacing()
 		# timeTrialManagers[i].resumeTimeTrial(timestamp)
 		if !state.online:
 			for key in timeTrialManagers:
@@ -343,6 +344,7 @@ func spawnPlayer(
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
 	car.playerName = data.PLAYER_NAME
+	car.playerId = data.PLAYER_ID
 	# car.playerIndex = players.get_child_count()
 
 	players.add_child(car)
@@ -412,7 +414,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	canvasLayer.follow_viewport_enabled = true
 
 	var hud: IngameHUD = HudScene.instantiate()
-	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount)
+	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId)
 	timeTrialManagers[car.name] = timeTrialManager
 	hud.init(car, timeTrialManager, playerDatas.size())
 
@@ -449,7 +451,13 @@ func getNewViewport() -> SubViewport:
 	var viewPort = SubViewport.new()
 	viewPort.audio_listener_enable_3d = true
 	viewPort.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-
+	GlobalProperties.renderQualityChanged.connect(func(q):
+		if is_equal_approx(q, 1.0):
+			viewPort.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
+		else:
+			viewPort.scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR
+		viewPort.scaling_3d_scale = q
+	)
 	return viewPort
 
 
@@ -490,7 +498,6 @@ func recalculate() -> void:
 	pass
 
 func onSubmitRun_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	print(body.get_string_from_utf8())
 	leaderboardUI.fetchTimes(map.trackId)
 	return
 

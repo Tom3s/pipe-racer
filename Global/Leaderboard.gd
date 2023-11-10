@@ -18,8 +18,6 @@ func submitTime(
 		"bestLap": bestLap,
 	}
 
-	print(JSON.stringify(submitData, "\t"))
-
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.timeout = 10

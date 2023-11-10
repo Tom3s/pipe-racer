@@ -6,7 +6,7 @@ extends Control
 @onready var playOnlineButton: Button = %PlayOnlineButton
 @onready var websiteButton: Button = %WebsiteButton
 @onready var settingsButton: Button = %SettingsButton
-@onready var controlsButton: Button = %ControlsButton
+# @onready var controlsButton: Button = %ControlsButton
 @onready var exitButton: Button = %ExitButton
 @onready var settingsMenu: SettingsMenu = %SettingsMenu
 
@@ -16,6 +16,12 @@ extends Control
 @onready var controlsMenu: ControlsMenu = %ControlsMenu
 
 @onready var musicPlayer: MusicPlayer = %MusicPlayer
+
+@onready var buttonContainer: VBoxContainer = %ButtonContainer
+
+@onready var titleContainer: VBoxContainer = %TitleContainer
+
+var buttons: Array = []
 
 func _ready():
 	raceMapLoader.hide()
@@ -32,13 +38,14 @@ func _ready():
 
 	%VersionLabel.text = "Version: " + VersionCheck.currentVersion
 
+	set_physics_process(true)
+	
+
 func connectSignals():
 	playButton.pressed.connect(onPlayButton_pressed)
 	editButton.pressed.connect(onEditButton_pressed)
 	playOnlineButton.pressed.connect(onPlayOnlineButton_pressed)
-	controlsButton.pressed.connect(onControlsButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
-	controlsMenu.closePressed.connect(onControlsMenu_closePressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
 	exitButton.pressed.connect(get_tree().quit)
 
@@ -50,44 +57,50 @@ func connectSignals():
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
 
-	# mainContent.visibility_changed.connect(race)
-
+func _physics_process(delta):
+	if Input.is_action_just_pressed("fullscreen"):
+		GlobalProperties.FULLSCREEN = !GlobalProperties.FULLSCREEN
+	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContent.visible:
+		# playButton.grab_focus()
+		if Input.is_action_just_pressed("ui_left") || \
+			Input.is_action_just_pressed("ui_right") || \
+			Input.is_action_just_pressed("ui_up") || \
+			Input.is_action_just_pressed("ui_down") || \
+			Input.is_action_just_pressed("ui_accept") || \
+			Input.is_action_just_pressed("ui_cancel"):
+			playButton.grab_focus()
+	
 
 func onPlayButton_pressed():
+	await hideMainContentsAnimated()
 	raceMapLoader.show()
-	mainContent.visible = false
 
 func onEditButton_pressed():
+	await hideMainContentsAnimated()
 	editorMapLoader.show()
-	mainContent.visible = false
 
 func onPlayOnlineButton_pressed():
+	await hideMainContentsAnimated()
 	onlineMapLoader.show()
-	mainContent.visible = false
-
-func onControlsButton_pressed():
-	mainContent.visible = false
-	controlsMenu.visible = true
 
 func onSettingsButton_pressed():
-	mainContent.visible = false
-	settingsMenu.visible = true
-
-func onControlsMenu_closePressed():
-	mainContent.visible = true
-	controlsButton.grab_focus()
+	await hideMainContentsAnimated()
+	# settingsMenu.visible = true
+	settingsMenu.animateIn()
 
 func onSettingsMenu_backPressed():
-	mainContent.visible = true
+	# mainContent.visible = true
+	await showMainContentsAnimated()
 	settingsButton.grab_focus()
-	# settingsMenu.visible = false
 
 func onRaceMapLoader_backPressed():
-	mainContent.visible = true
+	# mainContent.visible = true
+	await showMainContentsAnimated()
 	playButton.grab_focus()
 
 func onEditorMapLoader_backPressed():
-	mainContent.visible = true
+	# mainContent.visible = true
+	await showMainContentsAnimated()
 	editButton.grab_focus()
 
 
@@ -111,5 +124,125 @@ func onEditorMapLoader_exitedMapEditor():
 		musicPlayer.playMenuMusic()
 
 func onOnlineMapLoader_backPressed():
-	mainContent.visible = true
-	playButton.grab_focus()
+	# mainContent.visible = true
+	playOnlineButton.grab_focus()
+	await showMainContentsAnimated()
+
+
+const MOVE_TIME = 0.2
+const INBETWEEN_TIME = 0.05
+# var originalButtonPositions: Array = []
+func animateMainContentsOut():
+	var tween = create_tween()
+	tween.set_parallel(true)
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
+
+	var index = 1
+	for child in buttonContainer.get_children():
+		# child.get_child(0).inAnimation = true
+		var button: Button = child.get_child(0)
+		button.disabled = true
+		button.inAnimation = true
+		var label: Label = child.get_child(0).get_child(0)
+
+		# originalButtonPositions.append(label.position)
+
+		# tween.tween_interval(INBETWEEN_TIME)
+		# await create_tween().tween_interval(INBETWEEN_TIME).finished
+		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), MOVE_TIME)\
+			.as_relative()\
+			.set_ease(Tween.EASE_IN)\
+			.set_trans(Tween.TRANS_EXPO)\
+			.set_delay(INBETWEEN_TIME * index)
+		index += 1
+	tween.tween_property(titleContainer, "position", Vector2(windowSize.x, 0), MOVE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_EXPO)\
+		.set_delay(INBETWEEN_TIME * index)
+	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
+		.set_delay(INBETWEEN_TIME * index)
+	
+	
+	return tween.finished
+	# var children = buttonContainer.get_children()
+	# await tween.chain().tween_interval(0.01).finished
+	# mainContent.visible = false
+	# for i in children.size():
+	# 	var label: Label = children[i].get_child(0).get_child(0)
+	# 	# label.position = Vector2(windowSize.x/2.0, 0.0)
+	# 	tween.chain().tween_property(label, "position", originalButtonPositions[i], 0)
+	
+	# return tween.finished
+
+func animateMainContentsIn():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
+	for child in buttonContainer.get_children():
+		# child.get_child(0).inAnimation = true
+		var button: Button = child.get_child(0)
+		button.disabled = true
+		button.inAnimation = true
+		var label: Label = child.get_child(0).get_child(0)
+		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), 0)\
+			.as_relative()
+	tween.tween_property(titleContainer, "position", Vector2(windowSize.x, 0), 0)\
+		.as_relative()
+	# await tween.finished
+	# mainContent.visible = true
+	tween.tween_property(mainContent, "visible", true, 0)
+	tween = create_tween()
+	tween.set_parallel(true)
+	var index = 1
+	for child in buttonContainer.get_children():
+		# child.get_child(0).inAnimation = true
+		# var button: Button = child.get_child(0)
+		# button.disabled = true
+		# button.inAnimation = true
+		var label: Label = child.get_child(0).get_child(0)
+
+		# originalButtonPositions.append(label.position)
+
+		# tween.tween_interval(INBETWEEN_TIME)
+		# await create_tween().tween_interval(INBETWEEN_TIME).finished
+		
+
+		tween.tween_property(label, "position", Vector2(windowSize.x, 0), MOVE_TIME)\
+			.as_relative()\
+			.set_ease(Tween.EASE_OUT)\
+			.set_trans(Tween.TRANS_EXPO)\
+			.set_delay(INBETWEEN_TIME * index)
+		index += 1
+	tween.tween_property(titleContainer, "position", Vector2(-windowSize.x, 0), MOVE_TIME)\
+			.as_relative()\
+			.set_ease(Tween.EASE_OUT)\
+			.set_trans(Tween.TRANS_EXPO)\
+			.set_delay(INBETWEEN_TIME * index)
+	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
+			.set_delay(INBETWEEN_TIME * index)
+
+
+	return tween.finished
+
+func resetButtons():
+	for child in buttonContainer.get_children():
+		# child.get_child(0).inAnimation = true
+		var button: Button = child.get_child(0)
+		button.disabled = false
+		button.inAnimation = false
+
+func hideMainContentsAnimated():
+	await animateMainContentsOut()
+	mainContent.visible = false
+	resetButtons()
+
+func showMainContentsAnimated():
+	# mainContent.visible = true
+	await animateMainContentsIn()
+	resetButtons()

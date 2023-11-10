@@ -8,6 +8,7 @@ class_name SettingsMenu
 @onready var fullscreenButton: Button = %FullscreenButton
 @onready var renderQuality: OptionButton = %RenderQuality
 @onready var fixPedalInput: CheckBox = %FixPedalInput
+@onready var compareAgainstBestLap: CheckBox = %CompareAgainstBestLap
 @onready var deadzoneSlider: HSlider = %DeadzoneSlider
 @onready var deadzoneSpinbox: SpinBox = %DeadzoneSpinbox
 @onready var smoothSteeringSlider: HSlider = %SmoothSteeringSlider
@@ -38,6 +39,7 @@ func _ready():
 		index += 1
 
 	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
+	compareAgainstBestLap.toggled.connect(onCompareAgainstBestLap_toggled)
 
 	# preciseInput.toggled.connect(onPreciseInput_toggled)
 	deadzoneSlider.value_changed.connect(deadzoneSlider_valueChanged)
@@ -45,7 +47,7 @@ func _ready():
 	smoothSteeringSlider.value_changed.connect(smoothSteeringSlider_valueChanged)
 	smoothSteeringSpinbox.value_changed.connect(smoothSteeringSpinbox_valueChanged)
 
-	closeButton.button_up.connect(onCloseButton_pressed)
+	closeButton.pressed.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
 
 	visibility_changed.connect(onVisibilityChanged)
@@ -55,12 +57,14 @@ func _ready():
 	sfxVolumeSlider.value = GlobalProperties.SFX_VOLUME
 
 	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
+	compareAgainstBestLap.button_pressed = GlobalProperties.COMPARE_AGAINST_BEST_LAP
 
 	deadzoneSlider.value = GlobalProperties.DEADZONE
 	deadzoneSpinbox.value = GlobalProperties.DEADZONE
 	smoothSteeringSlider.value = GlobalProperties.SMOOTH_STEERING
 	smoothSteeringSpinbox.value = GlobalProperties.SMOOTH_STEERING
 
+	%TabContainer.tab_changed.connect(onTabChanged)
 	# preciseInput.button_pressed = GlobalProperties.PRECISE_INPUT
 
 func onMasterVolumeSlider_valueChanged(value: float):
@@ -85,47 +89,10 @@ var fixedPedalAccelAxis: int = 7
 var fixedPedalBreakAxis: int = 8
 
 func onFixPedalInput_toggled(fix: bool):
-
-	# TODO: fix this with remapping
-	# InputMap.action_erase_events(p1Accel)
-	# var accelEvent = InputEventKey.new()
-	# accelEvent.physical_keycode = KEY_UP
-	# InputMap.action_add_event(p1Accel, accelEvent)
-
-	# InputMap.action_erase_events(p1Break)
-	# var breakEvent = InputEventKey.new()
-	# breakEvent.physical_keycode = KEY_DOWN
-	# InputMap.action_add_event(p1Break, breakEvent)
-
-	# if !fix:
-	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
-	# 	accelJoypadEvent.axis = JOY_AXIS_TRIGGER_RIGHT
-	# 	accelJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
-
-	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
-	# 	breakJoypadEvent.axis = JOY_AXIS_TRIGGER_LEFT
-	# 	breakJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
-	# else:
-	# 	var accelJoypadEvent = InputEventJoypadMotion.new()
-	# 	accelJoypadEvent.axis = fixedPedalAccelAxis
-	# 	accelJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Accel, accelJoypadEvent)
-
-	# 	var breakJoypadEvent = InputEventJoypadMotion.new()
-	# 	breakJoypadEvent.axis = fixedPedalBreakAxis
-	# 	breakJoypadEvent.device = 0
-	# 	InputMap.action_add_event(p1Break, breakJoypadEvent)
-
-
 	GlobalProperties.FIX_PEDAL_INPUT = fix
 
-# func onPreciseInput_toggled(preciseInput: bool):
-# 	InputMap.action_set_deadzone("p1_turn_left", 0.0 if preciseInput else 0.1)
-# 	InputMap.action_set_deadzone("p1_turn_right", 0.0 if preciseInput else 0.1)
-
-# 	GlobalProperties.PRECISE_INPUT = preciseInput
+func onCompareAgainstBestLap_toggled(compare: bool):
+	GlobalProperties.COMPARE_AGAINST_BEST_LAP = compare
 
 func deadzoneSlider_valueChanged(value: float):
 	deadzoneSpinbox.value = value
@@ -154,12 +121,22 @@ func changeSmoothSteering(value):
 
 
 func onCloseButton_pressed():
-	closePressed.emit()
+	await animateOut()
 	visible = false
+	closePressed.emit()
+	position = Vector2(0, 0)
 
 func onVisibilityChanged():
 	if visible:
 		closeButton.grab_focus()
+
+func onTabChanged(tab: int):
+	if tab == 0:
+		masterVolumeSlider.grab_focus()
+	elif tab == 1:
+		fullscreenButton.grab_focus()
+	elif tab == 2:
+		fixPedalInput.grab_focus()
 
 func remapVolume(value: float):
 	return max((log(value) / log(10) - 2) * 20, -80)
@@ -169,3 +146,40 @@ func onFullscreenButton_pressed():
 
 func onRenderQuality_itemSelected(index: int):
 	GlobalProperties.RENDER_QUALITY = renderQualities[index][1]
+
+const ANIMATE_TIME = 0.3
+func animateIn():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(self, "position", Vector2(0, -windowSize.y), 0.0)\
+		.as_relative()\
+		# .set_ease(Tween.EASE_OUT)\
+		# .set_trans(Tween.TRANS_EXPO)\
+		.finished.connect(show)
+	
+	tween = create_tween()
+
+	tween.tween_property(self, "position", Vector2(0, windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_OUT)\
+		.set_trans(Tween.TRANS_EXPO)
+		# .finished.connect(show)
+	
+	# visible = true
+
+func animateOut():
+	var tween = create_tween()
+
+	var windowSize = get_viewport_rect().size
+
+	tween.tween_property(self, "position", Vector2(0, -windowSize.y), ANIMATE_TIME)\
+		.as_relative()\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_EXPO)
+		# .finished.connect(onAnimateOutFinished)
+	return tween.finished
+
+func onAnimateOutFinished():
+	visible = false
