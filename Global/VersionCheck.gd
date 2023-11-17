@@ -2,7 +2,7 @@ extends Control
 
 var offline = true
 
-var currentVersion = "v0.61"
+var currentVersion = "v1.0-rc1"
 
 var versionCheckComplete = false
 
