@@ -94,14 +94,14 @@ func handleMultiInput():
 	
 	if multiReady:
 		car.state.setReadyTrue()
+	if multiReset:
+		car.state.setResetting()
 	
 	if !car.state.hasControl:
 		tires[0].targetRotation = 0
 		tires[1].targetRotation = 0
 		return
 
-	if multiReset:
-		car.state.setResetting()
 	if multiChangeCameraMode:
 		car.changeCameraMode.emit()
 
