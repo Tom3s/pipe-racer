@@ -35,7 +35,7 @@ func checkVersion():
 
 func onCheckVersion_requestCompleted(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	# print(body.get_string_from_ascii())
-	if response_code != 200:
+	if response_code != 200 || result != OK:
 		print("Error: ", error_string(result), " (respone code: ", response_code, ")")
 		AlertManager.showAlert(
 			self,
@@ -44,6 +44,7 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 		)
 		fetchedNewestVersion.emit(currentVersion)
 		versionCheckComplete = true
+		return
 
 	var bodyString = body.get_string_from_utf8()
 	var bodyJson = JSON.parse_string(bodyString)
@@ -51,6 +52,7 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 	# print(bodyString)
 
 	# var versionPos = bodyString.find("releases/tag/v") + 14
+	
 	var newestVersion = bodyJson["tag_name"]
 
 	print("Newest version: ", newestVersion)

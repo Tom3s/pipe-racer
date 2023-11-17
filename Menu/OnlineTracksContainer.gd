@@ -4,6 +4,11 @@ class_name OnlineTracksContainer
 @onready var trackList: VBoxContainer = %TrackList
 @onready var backButton: Button = %BackButton
 
+@onready var customTrackId: LineEdit = %CustomTrackId
+@onready var loadFromIdButton: Button = %LoadFromIdButton
+
+@onready var downloadedOnlyButton: CheckBox = %DownloadedOnlyButton
+
 @onready var mainContents: VBoxContainer = %MainContents
 
 @onready var trackPanelScene = preload("res://Menu/TrackPanel.tscn")
@@ -15,6 +20,19 @@ signal backPressed()
 func _ready():
 	loadTracks()
 	backButton.pressed.connect(onBackButton_Pressed)
+	loadFromIdButton.pressed.connect(func():
+		await animateOut()
+		viewPressed.emit(customTrackId.text)
+	)
+	downloadedOnlyButton.toggled.connect(func(newToggleState: bool):
+		# showDownloadedOnly = newToggleState
+		# loadTracks()
+		if newToggleState:
+			initializeTrackList(cachedTracks, true)
+		else:
+			loadTracks()
+	)
+
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -35,7 +53,7 @@ func loadTracks():
 	request.request_completed.connect(onTracksLoaded)
 
 	var httpError = request.request(
-		Backend.BACKEND_IP_ADRESS + "/api/tracks",
+		Backend.BACKEND_IP_ADRESS + "/api/tracks?sortByField=rating&descending=true",
 		[
 			"Content-Type: application/json",
 		],
@@ -50,13 +68,21 @@ func onTracksLoaded(_result: int, _responseCode: int, _headers: PackedStringArra
 		return
 	
 	var tracks = JSON.parse_string(_body.get_string_from_utf8())
+	cachedTracks = tracks
+	initializeTrackList(cachedTracks)
 
-	initializeTrackList(tracks)
-
+var cachedTracks = []
 var viewButtons: Array[Button] = []
-func initializeTrackList(tracks):
+# var showDownloadedOnly: bool = false
+func initializeTrackList(tracks, showDownloadedOnly: bool = false):
+	cacheDownloadedTracks()
 	viewButtons.clear()
+	for child in trackList.get_children():
+		trackList.remove_child(child)
+		child.queue_free()
 	for track in tracks:
+		if showDownloadedOnly && !(track._id in downloadedTracks):
+			continue
 		var trackPanel: TrackPanel = trackPanelScene.instantiate()
 		trackList.add_child(trackPanel)
 		trackPanel.init(
@@ -119,3 +145,19 @@ func animateOut():
 	# tween.tween_callback(func(): backPressed.emit())
 
 	return tween.finished
+
+var downloadedTracks: Array[String] = []
+func cacheDownloadedTracks() -> void:
+	# if not visible:
+	# 	return false
+	downloadedTracks.clear()
+	var path = "user://tracks/downloaded/"
+	var directory = DirAccess.open(path)
+	if directory:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		while file_name != "":
+			# if file_name == trackId + ".json":
+			# 	return true
+			downloadedTracks.append(file_name.split(".")[0])
+			file_name = directory.get_next()

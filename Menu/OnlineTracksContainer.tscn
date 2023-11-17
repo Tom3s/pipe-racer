@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://dfxqrl48lnywu"]
+[gd_scene load_steps=36 format=3 uid="uid://dfxqrl48lnywu"]
 
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bnija"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_gw668"]
 [ext_resource type="Script" path="res://Menu/OnlineTracksContainer.gd" id="3_4qftj"]
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="4_2lveh"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="4_m20j4"]
+[ext_resource type="Texture2D" uid="uid://bvmeiobrh76qw" path="res://Sprites/XboxPrompts/Y.png" id="5_8mf33"]
 [ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="6_qrvnm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
@@ -144,6 +145,141 @@ LineEdit/fonts/font = ExtResource("1_bnija")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7oxl"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15atq"]
+bg_color = Color(0.439216, 0.439216, 0.439216, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.129412, 0.129412, 0.129412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7kl63"]
+bg_color = Color(0.207843, 0.207843, 0.207843, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.352941, 0.780392, 0.67451, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nreuu"]
+bg_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 5
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0hgqr"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_8ye53"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yb18n"]
+bg_color = Color(0.4, 0.4, 0.4, 0.65098)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hohf3"]
+bg_color = Color(0.607843, 0.729412, 0.54902, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m1wyb"]
+bg_color = Color(0.866667, 0.298039, 0.305882, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.407843, 0.0980392, 0.109804, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ipwwl"]
+bg_color = Color(0.498039, 0.901961, 0.352941, 1)
+border_color = Color(0.407843, 0.0980392, 0.109804, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
+shadow_size = 1
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opj4w"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jv5ax"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.258824, 0.258824, 0.258824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_b441n"]
+default_font = ExtResource("2_gw668")
+default_font_size = 26
+Button/styles/disabled = SubResource("StyleBoxFlat_x7oxl")
+Button/styles/focus = SubResource("StyleBoxFlat_15atq")
+Button/styles/hover = SubResource("StyleBoxFlat_7kl63")
+Button/styles/normal = SubResource("StyleBoxFlat_x7oxl")
+Button/styles/pressed = SubResource("StyleBoxFlat_nreuu")
+CheckBox/icons/checked = SubResource("PlaceholderTexture2D_0hgqr")
+CheckBox/icons/unchecked = SubResource("PlaceholderTexture2D_8ye53")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_yb18n")
+CheckBox/styles/hover = SubResource("StyleBoxFlat_yb18n")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_hohf3")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_m1wyb")
+CheckBox/styles/pressed = SubResource("StyleBoxFlat_ipwwl")
+LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
+LineEdit/fonts/font = ExtResource("1_bnija")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_opj4w")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_jv5ax")
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_p3ve5"]
+button_index = 3
+
+[sub_resource type="Shortcut" id="Shortcut_634im"]
+events = [SubResource("InputEventJoypadButton_p3ve5")]
+
 [node name="OnlineTracksContainer" type="Control"]
 layout_mode = 3
 anchors_preset = 0
@@ -163,8 +299,52 @@ theme = SubResource("Theme_67hwj")
 script = ExtResource("4_m20j4")
 overscale = 1.5
 
-[node name="PanelContainer" type="PanelContainer" parent="MainContents"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContents"]
 layout_mode = 2
+theme = SubResource("Theme_b441n")
+alignment = 1
+
+[node name="Label" type="Label" parent="MainContents/HBoxContainer"]
+layout_mode = 2
+text = "Show Downloaded Only"
+
+[node name="DownloadedOnlyButton" type="CheckBox" parent="MainContents/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+shortcut = SubResource("Shortcut_634im")
+
+[node name="TextureRect" type="TextureRect" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("5_8mf33")
+expand_mode = 3
+
+[node name="spacer2" type="Control" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="CustomTrackId" type="LineEdit" parent="MainContents/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "ID"
+
+[node name="spacer" type="Control" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="LoadFromIdButton" type="Button" parent="MainContents/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load From Id"
+
+[node name="PanelContainer" type="PanelContainer" parent="MainContents"]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("4_2lveh")
 

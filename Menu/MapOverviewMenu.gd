@@ -34,11 +34,7 @@ func _ready():
 	rateButton.pressed.connect(ratingMenu.show)
 	commentsContainer.hide()
 	ratingMenu.hide()
-	backButton.pressed.connect(func():
-		commentsContainer.hide()
-		ratingMenu.hide()
-		animateOut()
-	)
+	backButton.pressed.connect(onBackPressed)
 	commentsContainer.closePressed.connect(func():
 		selectButton.grab_focus()
 	)
@@ -64,6 +60,11 @@ func _physics_process(delta):
 			selectButton.grab_focus()
 
 var downloaded = false
+
+func onBackPressed():
+	commentsContainer.hide()
+	ratingMenu.hide()
+	animateOut()
 
 func init(initTrackId: String) -> bool:
 	if initTrackId == trackId:
@@ -103,6 +104,10 @@ func fetchLevelDetails():
 func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
 		print("Error: ", _responseCode)
+
+		if (_responseCode == 404):
+			AlertManager.showAlert(self, "Error", "Track not found", "The track you are looking for does not exist")
+			onBackPressed()
 		return
 	
 	var data = JSON.parse_string(body.get_string_from_utf8())
