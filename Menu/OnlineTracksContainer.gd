@@ -4,6 +4,8 @@ class_name OnlineTracksContainer
 @onready var trackList: VBoxContainer = %TrackList
 @onready var backButton: Button = %BackButton
 
+@onready var refreshButton: Button = %RefreshButton
+
 @onready var customTrackId: LineEdit = %CustomTrackId
 @onready var loadFromIdButton: Button = %LoadFromIdButton
 
@@ -20,6 +22,13 @@ signal backPressed()
 func _ready():
 	loadTracks()
 	backButton.pressed.connect(onBackButton_Pressed)
+
+	refreshButton.pressed.connect(func():
+		loadTracks()
+		downloadedOnlyButton.button_pressed = false
+	)
+
+
 	loadFromIdButton.pressed.connect(func():
 		await animateOut()
 		viewPressed.emit(customTrackId.text)
@@ -36,7 +45,7 @@ func _ready():
 	set_physics_process(true)
 
 func _physics_process(delta):
-	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContents.visible:
+	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && mainContents.is_visible_in_tree():
 		# playButton.grab_focus()
 		if Input.is_action_just_pressed("ui_left") || \
 			Input.is_action_just_pressed("ui_right") || \
