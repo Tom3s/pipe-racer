@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://dfxqrl48lnywu"]
+[gd_scene load_steps=39 format=3 uid="uid://dfxqrl48lnywu"]
 
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bnija"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_gw668"]
@@ -6,7 +6,10 @@
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="4_2lveh"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="4_m20j4"]
 [ext_resource type="Texture2D" uid="uid://bvmeiobrh76qw" path="res://Sprites/XboxPrompts/Y.png" id="5_8mf33"]
+[ext_resource type="FontFile" uid="uid://qbiups1d7p6g" path="res://addons/fontawesome/fonts/fa-solid-900.woff2" id="5_rngwx"]
+[ext_resource type="Script" path="res://addons/fontawesome/FontAwesome.gd" id="6_l3y2w"]
 [ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="6_qrvnm"]
+[ext_resource type="Texture2D" uid="uid://bg2e4x6dt5gi5" path="res://Sprites/XboxPrompts/X.png" id="7_g7d5q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -304,7 +307,39 @@ layout_mode = 2
 theme = SubResource("Theme_b441n")
 alignment = 1
 
-[node name="Label" type="Label" parent="MainContents/HBoxContainer"]
+[node name="RefreshButton" type="Button" parent="MainContents/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+
+[node name="spacer4" type="Control" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+
+[node name="FontAwesome" type="Label" parent="MainContents/HBoxContainer"]
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_fonts/font = ExtResource("5_rngwx")
+theme_override_font_sizes/font_size = 32
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_l3y2w")
+icon_size = 32
+icon_name = "repeat"
+
+[node name="TextureRect" type="TextureRect" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("7_g7d5q")
+expand_mode = 3
+
+[node name="spacer3" type="Control" parent="MainContents/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MainContents/HBoxContainer"]
 layout_mode = 2
 text = "Show Downloaded Only"
 
@@ -316,7 +351,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 shortcut = SubResource("Shortcut_634im")
 
-[node name="TextureRect" type="TextureRect" parent="MainContents/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="MainContents/HBoxContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("5_8mf33")

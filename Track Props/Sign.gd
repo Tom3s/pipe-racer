@@ -33,11 +33,11 @@ func setTexture(texture: Texture, textureName: String, url: String = "") -> void
 	
 
 func _ready():
-	var newScale = Vector3.ONE * 8.5
-	%Collider1.scale = newScale
-	%Collider2.scale = newScale
-	%Frame.scale = newScale
-	%Board.scale = newScale
+	# var newScale = Vector3.ONE * 8.5
+	# %Collider1.scale = newScale
+	# %Collider2.scale = newScale
+	# %Frame.scale = newScale
+	# %Board.scale = newScale
 
 
 	var newMaterial = billboardMaterial.duplicate()
