@@ -165,11 +165,21 @@ func addPrefab(prefab: PrefabProperties, _prefabPosition: Vector3 = Vector3.INF,
 	if editing:
 		var collider: CollisionShape3D = prefab.get_child(0).get_child(0)
 		collider.shape.backface_collision = true
+		setEditorCollision()
+	else:
+		setIngameCollision()
+
 
 
 	prefab.calculateCorners()
 
 	tryAddingConnectionPoints(prefab.topLeft, prefab.topRight, prefab.bottomLeft, prefab.bottomRight)
+
+func setEditorCollision():
+	%Scenery.setEditorCollision()
+
+func setIngameCollision():
+	%Scenery.setIngameCollision()
 
 func tryAddingConnectionPoints(topLeft: Vector3, topRight: Vector3, bottomLeft: Vector3, bottomRight: Vector3):
 	var frontFound = false

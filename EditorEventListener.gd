@@ -530,6 +530,7 @@ func onEditorInputHandler_testPressed():
 	camera.inputEnabled = false
 	prePlaytestState = editorStateMachine.editorState
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
+	map.setIngameCollision()
 
 func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	if !editorStateMachine.inPlaytestState():
@@ -547,6 +548,7 @@ func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	camera.inputEnabled = true
 	oldSoundVolume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
+	map.setEditorCollision()
 
 
 func onCamera_mouseCaptureExited():

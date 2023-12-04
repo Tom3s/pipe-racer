@@ -140,3 +140,7 @@ func calculateCollisionShape():
 func setIngameCollision():
 	%Proper.disabled = false
 	%Flat.disabled = true
+
+func setEditorCollision():
+	%Proper.disabled = true
+	%Flat.disabled = false
