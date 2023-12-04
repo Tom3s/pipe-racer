@@ -10,7 +10,7 @@ func onBodyEntered(body):
 func _ready():
 	%StartLine.body_entered.connect(onBodyEntered)
 
-const RAYCAST_MAX_DISTANCE = 100
+const RAYCAST_MAX_DISTANCE = PrefabConstants.TRACK_WIDTH * 32
 
 var raycastPosition = null
 var raycastNormal = null
