@@ -50,3 +50,15 @@ func onApplyButton_pressed():
 
 	textureChanged.emit("Custom", url)
 
+func selectItem(textureName: String, urlText: String):
+	if textureName == "Custom":
+		imageUrl.text = urlText
+		textureSelector.select(textureSelector.item_count - 1)
+		textureChanged.emit("Custom", urlText)
+		return
+	else:
+		for i in range(textureSelector.item_count):
+			if textureSelector.get_item_text(i) == textureName:
+				textureSelector.select(i)
+				textureChanged.emit(textureName, "")
+				return

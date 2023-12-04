@@ -282,6 +282,8 @@ func onEditorInputHandler_selectPressed(object: Object):
 			object.visible = false
 			propPlacer.visible = true
 
+			propPropertiesUI.selectItem(object.billboardTextureName, object.billboardTextureUrl)
+
 			editorStateMachine.currentPlacerNode = propPlacer
 
 			editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE

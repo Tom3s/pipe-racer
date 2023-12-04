@@ -419,7 +419,8 @@ func updateProp(oldPropObject: Node3D, propPlacer: PropPlacer):
 	# flipping order, because the old object is the one that is already in the scene
 	var textureName = propPlacer.currentBillboardTexture
 	# var texture = propPlacer.billboardTextures[max(0, index)]
-	var texture = BillboardTextureLoader.textures[textureName]
+	
+	var texture = BillboardTextureLoader.textures[textureName if textureName != "Custom" else "PipeRacerLanguages"]
 	var url = propPlacer.currentImageUrl
 	storeUpdatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, textureName, texture, url)
 	updatePropObject(oldPropObject, propPlacer.global_position, propPlacer.global_rotation, textureName, texture, url)
