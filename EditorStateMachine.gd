@@ -120,7 +120,7 @@ func nextBuildMode() -> void:
 		buildMode = (buildMode + 1) % 4
 
 func inPropEditState():
-	return inEditState() and currentSelection != null and (currentSelection.has_method("isStart") || currentSelection.has_method("isCheckPoint"))
+	return inEditState() && currentSelection != null && currentSelection.has_method("isProp")
 
 func canMovePreview():
-	return mouseNotOverUI() && (inBuildState() || inPropEditState())
+	return mouseNotOverUI() && inBuildState()

@@ -72,6 +72,7 @@ func connectSignals():
 	editorInputHandler.mouseMovedTo.connect(onEditorInputHandler_mouseMovedTo)
 	editorInputHandler.moveUpGrid.connect(onEditorInputHandler_moveUpGrid)
 	editorInputHandler.moveDownGrid.connect(onEditorInputHandler_moveDownGrid)
+	editorInputHandler.moveSelectionPressed.connect(onEditorInputHandler_moveSelectionPressed)
 	editorInputHandler.placePressed.connect(onEditorInputHandler_placePressed)
 	editorInputHandler.rotatePressed.connect(onEditorInputHandler_rotatePressed)
 	editorInputHandler.fineRotatePressed.connect(onEditorInputHandler_fineRotatePressed)
@@ -197,6 +198,17 @@ func onEditorInputHandler_moveDownGrid():
 		camera.position.y -= PrefabConstants.GRID_SIZE
 		currentPlacerNode.global_position.y -= PrefabConstants.GRID_SIZE
 
+func onEditorInputHandler_moveSelectionPressed(direction: Vector3):
+	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inEditState():
+		var currentPlacerNode = editorStateMachine.currentPlacerNode
+
+		var cameraBasis: Basis = camera.getGridAlignedBasis()
+
+		var moveAmount: Vector3 = cameraBasis.x * direction.x + cameraBasis.z * direction.z
+
+		currentPlacerNode.global_position += moveAmount * PrefabConstants.GRID_SIZE
+		
+
 func onEditorInputHandler_placePressed():
 	if editorStateMachine.canBuild():
 		if editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
@@ -220,7 +232,8 @@ func onEditorInputHandler_fineRotatePressed(direction: int):
 	if editorStateMachine.buildMode == editorStateMachine.EDITOR_BUILD_MODE_PREFAB:
 		prefabMesher.rotate90(direction)
 	else:
-		propPlacer.rotateFine(direction)
+		var currentPlacerNode = editorStateMachine.currentPlacerNode
+		currentPlacerNode.rotateFine(direction)
 
 func onEditorInputHandler_selectPressed(object: Object):
 	if object == null:
