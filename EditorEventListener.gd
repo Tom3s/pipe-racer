@@ -641,6 +641,10 @@ func onEditorInputHandler_testPressed():
 	camera.inputEnabled = false
 	prePlaytestState = editorStateMachine.editorState
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
+
+	for checkpoint in map.getCheckpoints():
+			checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
+
 	map.setIngameCollision()
 
 	editorPrompts.setDeleteVisible(false)
@@ -680,6 +684,8 @@ func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_EDIT || \
 		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_BUILD
 
+func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
+	car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(0, 1))
 
 func onCamera_mouseCaptureExited():
 	# if editorStateMachine.canMovePreview():
