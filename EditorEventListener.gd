@@ -21,6 +21,8 @@ var carCamera: FollowingCamera
 
 var editorStats: EditorStats
 
+@onready var editorPrompts: EditorPrompts = %EditorPrompts
+
 
 
 func _ready():
@@ -63,6 +65,16 @@ func _ready():
 
 	editorStateMachine.buildMode = editorStateMachine.EDITOR_BUILD_MODE_PREFAB
 	editorStateMachine.currentPlacerNode = prefabMesher
+
+	editorPrompts.setSelectVisible(false)
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setDeleteVisible(false)
+	editorPrompts.setTestingVisible(false)
+
+	editorPrompts.setGenericVisible(true)
+	editorPrompts.setBuildVisible(true)
+	editorPrompts.rotateItemFine.visible = false
+
 
 	connectSignals()
 
@@ -260,7 +272,18 @@ func onEditorInputHandler_selectPressed(object: Object):
 			
 
 			editorStateMachine.clearSelection()
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setEditItemVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
+
+			setVisibleUI(editorStateMachine.buildMode, false)
 			return
+
 
 		if object.has_method("select"):
 			object.select()
@@ -271,6 +294,15 @@ func onEditorInputHandler_selectPressed(object: Object):
 			prefabMesher.visible = true
 			prefabMesher.updatePositionExact(object.global_position, object.global_rotation)
 			setVisibleUI(EDITOR_UI_PREFAB_PROPERTIES)
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+
+			editorPrompts.setEditItemVisible(true)
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
+			editorPrompts.rotateItemFine.visible = false
 		elif object.has_method("isStart"):
 			object.visible = false
 			propPlacer.visible = true
@@ -281,6 +313,14 @@ func onEditorInputHandler_selectPressed(object: Object):
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_START_LINE
 			setVisibleUI(EDITOR_UI_START_PROPERTIES)
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+
+			editorPrompts.setEditItemVisible(true)
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
 		elif object.has_method("isCheckPoint"):
 			object.visible = false
 			propPlacer.visible = true
@@ -291,6 +331,14 @@ func onEditorInputHandler_selectPressed(object: Object):
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_CHECKPOINT
 			setVisibleUI(EDITOR_UI_CHECKPOINT_PROPERTIES)
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+
+			editorPrompts.setEditItemVisible(true)
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
 		elif object.has_method("isProp"):
 			object.visible = false
 			propPlacer.visible = true
@@ -303,6 +351,14 @@ func onEditorInputHandler_selectPressed(object: Object):
 			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_PROP
 			setVisibleUI(EDITOR_UI_PROP_PROPERTIES)
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+
+			editorPrompts.setEditItemVisible(true)
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
 
 
 	if editorStateMachine.mouseNotOverUI() && editorStateMachine.inDeleteState():
@@ -330,6 +386,14 @@ func onEditorInputHandler_deleteSelectedPressed():
 
 			editorStateMachine.clearSelection()
 			prefabMesher.visible = false
+
+			editorPrompts.setBuildVisible(false)
+			editorPrompts.setDeleteVisible(false)
+			editorPrompts.setTestingVisible(false)
+			editorPrompts.setEditItemVisible(false)
+
+			editorPrompts.setSelectVisible(true)
+			editorPrompts.setGenericVisible(true)
 
 func onEditorInputHandler_pausePressed(paused: bool = false):
 	pauseMenu.visible = paused
@@ -479,6 +543,17 @@ func onEditorInputHandler_editorModeBuildPressed():
 	# onEditorStateMachine_buildModeChanged(editorStateMachine.buildMode)
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_BUILD)
 	setVisibleUI(editorStateMachine.buildMode)
+
+	editorPrompts.setDeleteVisible(false)
+	editorPrompts.setTestingVisible(false)
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setSelectVisible(false)
+
+	editorPrompts.rotateItemFine.visible = editorStateMachine.buildMode != editorStateMachine.EDITOR_BUILD_MODE_PREFAB
+
+
+	editorPrompts.setGenericVisible(true)
+	editorPrompts.setBuildVisible(true)
 	print("Build mode")
 
 func onEditorInputHandler_editorModeEditPressed():
@@ -486,7 +561,16 @@ func onEditorInputHandler_editorModeEditPressed():
 	prefabMesher.visible = false
 	propPlacer.visible = false
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_EDIT)
-	setVisibleUI(editorStateMachine.buildMode)
+	setVisibleUI(editorStateMachine.buildMode, false)
+
+	editorPrompts.setDeleteVisible(false)
+	editorPrompts.setTestingVisible(false)
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setBuildVisible(false)
+
+	editorPrompts.setGenericVisible(true)
+	editorPrompts.setSelectVisible(true)
+
 	print("Edit mode")
 
 func onEditorInputHandler_editorModeDeletePressed():
@@ -499,6 +583,15 @@ func onEditorInputHandler_editorModeDeletePressed():
 	propPlacer.visible = false
 	editorShortcutsUI.changeEditorMode(editorStateMachine.EDITOR_STATE_DELETE)
 	setVisibleUI(editorStateMachine.buildMode)
+
+	editorPrompts.setTestingVisible(false)
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setSelectVisible(false)
+	editorPrompts.setBuildVisible(false)
+
+	editorPrompts.setGenericVisible(true)
+	editorPrompts.setDeleteVisible(true)
+
 	print("Delete mode")
 
 func onEditorInputHandler_prevBuildModePressed():
@@ -515,10 +608,13 @@ func onEditorStateMachine_buildModeChanged(newMode: int):
 		prefabMesher.visible = false
 		propPlacer.visible = true
 		editorStateMachine.currentPlacerNode = propPlacer
+		editorPrompts.rotateItemFine.visible = true
 	else:
 		prefabMesher.visible = true
 		propPlacer.visible = false
 		editorStateMachine.currentPlacerNode = prefabMesher
+		editorPrompts.rotateItemFine.visible = false
+
 
 	setVisibleUI(newMode)
 	
@@ -547,6 +643,14 @@ func onEditorInputHandler_testPressed():
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 	map.setIngameCollision()
 
+	editorPrompts.setDeleteVisible(false)
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setSelectVisible(false)
+	editorPrompts.setGenericVisible(false)
+	editorPrompts.setBuildVisible(false)
+
+	editorPrompts.setTestingVisible(true)
+
 func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	if !editorStateMachine.inPlaytestState():
 		return
@@ -564,6 +668,17 @@ func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	oldSoundVolume = AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -80)
 	map.setEditorCollision()
+
+	editorPrompts.setTestingVisible(false)
+
+	editorPrompts.setEditItemVisible(false)
+	editorPrompts.setGenericVisible(false)
+	editorPrompts.setDeleteVisible(editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_DELETE)
+	editorPrompts.setSelectVisible(editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_EDIT)
+	editorPrompts.setBuildVisible(editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_BUILD)
+	editorPrompts.moveItemUpdown.visible = \
+		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_EDIT || \
+		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_BUILD
 
 
 func onCamera_mouseCaptureExited():
@@ -600,10 +715,10 @@ const EDITOR_UI_START_PROPERTIES: int = 1
 const EDITOR_UI_CHECKPOINT_PROPERTIES: int = 2
 const EDITOR_UI_PROP_PROPERTIES: int = 3
 
-func setVisibleUI(visibleUI: int):
-	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES && !editorStateMachine.inDeleteState()
+func setVisibleUI(visibleUI: int, editing: bool = true):
+	prefabPropertiesUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES && !editorStateMachine.inDeleteState() && editing 
 	prefabSelectorUI.visible = visibleUI == EDITOR_UI_PREFAB_PROPERTIES && editorStateMachine.inBuildState()
-	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES && !editorStateMachine.inDeleteState()
+	propPropertiesUI.visible = visibleUI == EDITOR_UI_PROP_PROPERTIES && !editorStateMachine.inDeleteState() && editing
 
 func hideUI():
 	prefabPropertiesUI.visible = false

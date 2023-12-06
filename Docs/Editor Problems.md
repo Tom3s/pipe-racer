@@ -5,11 +5,12 @@
 (complexity/benefit) \<feature\>
 
 - [ ] (1/5 - 5/5) needs sensitivity slider
-- [ ] (1/5 - 5/5) editing a billboard unexpectedly changes texture
+- [x] (1/5 - 5/5) editing a billboard unexpectedly changes texture
 - [ ] (1/5 - 4/5) confirm popup on save
 - [ ] (1/5 - 4/5) toggle all walls
 - [ ] (2/5 - 5/5) make checkpoints work in editor
 - [ ] (2/5 - 5/5) button prompts
+- [ ] (3/5 - 5/5) testing trail in editor
 - [ ] (4/5 - 5/5) walls aren't visible on icons (set wall type and replace icons)
 - [ ] (4/5 - 4/5) move selection
 - [ ] (4/5 - 4/5) control height of preview

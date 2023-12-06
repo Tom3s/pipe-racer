@@ -29,6 +29,9 @@ offset_left = 5.0
 offset_top = 4.0
 offset_right = 214.0
 offset_bottom = 75.0
+tooltip_text = "Build mode: Ctrl + 1
+Edit mode: Ctrl + 2
+Delete mode: Ctrl + 3"
 focus_mode = 0
 auto_height = true
 item_count = 3
@@ -87,6 +90,7 @@ text = "Properties"
 [node name="SaveButton" type="Button" parent="Safezone2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Ctrl + S"
 focus_mode = 0
 text = "Save"
 
@@ -96,6 +100,7 @@ layout_mode = 2
 [node name="UndoButton" type="Button" parent="Safezone2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Ctrl + Z"
 focus_mode = 0
 disabled = true
 text = "Undo"
@@ -103,6 +108,7 @@ text = "Undo"
 [node name="RedoButton" type="Button" parent="Safezone2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Ctrl + Y"
 focus_mode = 0
 disabled = true
 text = "Redo"

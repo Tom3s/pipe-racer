@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=19 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://EditorStateMachine.gd" id="6_lmcfs"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="6_rxs3p"]
 [ext_resource type="PackedScene" uid="uid://cc0ysp05m4ati" path="res://Loading.tscn" id="8_xhoba"]
+[ext_resource type="PackedScene" uid="uid://cp1gmpcvbigio" path="res://Menu/EditorPrompts.tscn" id="9_wms2c"]
 
 [node name="MapEditor" type="Node3D"]
 script = ExtResource("1_h77wk")
@@ -34,14 +35,20 @@ unique_name_in_owner = true
 
 [node name="TrackMetadataUI" parent="CanvasLayer" instance=ExtResource("4_jppls")]
 unique_name_in_owner = true
+visible = false
 
 [node name="PrefabSelectorUI" parent="CanvasLayer" instance=ExtResource("6_b5djn")]
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("6_rxs3p")]
 unique_name_in_owner = true
+visible = false
 
 [node name="Loading" parent="CanvasLayer" instance=ExtResource("8_xhoba")]
+unique_name_in_owner = true
+visible = false
+
+[node name="EditorPrompts" parent="CanvasLayer" instance=ExtResource("9_wms2c")]
 unique_name_in_owner = true
 
 [node name="Player" type="Node3D" parent="."]
