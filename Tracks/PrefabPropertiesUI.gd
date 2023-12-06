@@ -19,6 +19,9 @@ var rightWallEnd: CheckBox
 var leftSmoothing: OptionButton
 var rightSmoothing: OptionButton
 
+@onready var wallsOnButton: Button = %WallsOnButton
+@onready var wallsOffButton: Button = %WallsOffButton
+
 var curvedTickBox: CheckBox
 
 var snapTickBox: CheckBox
@@ -120,6 +123,9 @@ func _ready():
 	leftSmoothing.item_selected.connect(onLeftSmoothingChanged)
 	rightSmoothing.item_selected.connect(onRightSmoothingChanged)
 
+	wallsOnButton.pressed.connect(onWallsOnButtonPressed)
+	wallsOffButton.pressed.connect(onWallsOffButtonPressed)
+
 	curvedTickBox.toggled.connect(onCurvedChanged)
 
 	snapTickBox.toggled.connect(onSnapChanged)
@@ -193,6 +199,26 @@ func onLeftSmoothingChanged(value: int):
 
 func onRightSmoothingChanged(value: int):
 	rightSmoothingChanged.emit(value)
+
+func onWallsOnButtonPressed():
+	leftWallStart.button_pressed = true
+	rightWallStart.button_pressed = true
+	leftWallEnd.button_pressed = true
+	rightWallEnd.button_pressed = true
+	leftWallStartChanged.emit(true)
+	rightWallStartChanged.emit(true)
+	leftWallEndChanged.emit(true)
+	rightWallEndChanged.emit(true)
+
+func onWallsOffButtonPressed():
+	leftWallStart.button_pressed = false
+	rightWallStart.button_pressed = false
+	leftWallEnd.button_pressed = false
+	rightWallEnd.button_pressed = false
+	leftWallStartChanged.emit(false)
+	rightWallStartChanged.emit(false)
+	leftWallEndChanged.emit(false)
+	rightWallEndChanged.emit(false)
 
 func onCurvedChanged(value: bool):
 	%CurveProperties.visible = value
