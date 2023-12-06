@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cobk7xdv3vypr"]
+[gd_scene load_steps=20 format=3 uid="uid://cobk7xdv3vypr"]
 
 [ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="1_d0rt7"]
 [ext_resource type="Script" path="res://EditorEventListener.gd" id="1_f0b2n"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="6_rxs3p"]
 [ext_resource type="PackedScene" uid="uid://cc0ysp05m4ati" path="res://Loading.tscn" id="8_xhoba"]
 [ext_resource type="PackedScene" uid="uid://cp1gmpcvbigio" path="res://Menu/EditorPrompts.tscn" id="9_wms2c"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="10_3p14h"]
 
 [node name="MapEditor" type="Node3D"]
 script = ExtResource("1_h77wk")
@@ -50,6 +51,22 @@ visible = false
 
 [node name="EditorPrompts" parent="CanvasLayer" instance=ExtResource("9_wms2c")]
 unique_name_in_owner = true
+
+[node name="LevelSavedLabel" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -152.2
+offset_top = 95.0
+offset_right = 152.2
+offset_bottom = 178.4
+grow_horizontal = 2
+theme = ExtResource("10_3p14h")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 67
+text = "Level Saved!"
 
 [node name="Player" type="Node3D" parent="."]
 unique_name_in_owner = true
