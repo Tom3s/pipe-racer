@@ -1,0 +1,302 @@
+[gd_scene load_steps=19 format=3 uid="uid://cp1gmpcvbigio"]
+
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_036cf"]
+[ext_resource type="Script" path="res://Menu/EditorPrompts.gd" id="2_roopy"]
+[ext_resource type="Texture2D" uid="uid://dc2wuhn78oua" path="res://Sprites/KBPrompts/Mouse_Middle_Key_Dark.png" id="2_vwk8d"]
+[ext_resource type="Texture2D" uid="uid://chabqrmk2n447" path="res://Sprites/KBPrompts/87.png" id="3_qtinu"]
+[ext_resource type="Texture2D" uid="uid://caemq33sgg13n" path="res://Sprites/KBPrompts/65.png" id="4_n52e7"]
+[ext_resource type="Texture2D" uid="uid://t1i8r5rffw1d" path="res://Sprites/KBPrompts/83.png" id="5_o0dbr"]
+[ext_resource type="Texture2D" uid="uid://dkj4q1qdfgg1y" path="res://Sprites/KBPrompts/68.png" id="6_ajdn4"]
+[ext_resource type="Texture2D" uid="uid://dgdxxhxbjs3k1" path="res://Sprites/KBPrompts/4194320.png" id="7_k44qg"]
+[ext_resource type="Texture2D" uid="uid://cekckr28p3n8m" path="res://Sprites/KBPrompts/4194319.png" id="8_wn4br"]
+[ext_resource type="Texture2D" uid="uid://cjckbtjwfsgr6" path="res://Sprites/KBPrompts/4194322.png" id="9_v51ol"]
+[ext_resource type="Texture2D" uid="uid://bp3s2ryogb305" path="res://Sprites/KBPrompts/4194321.png" id="10_0bqkv"]
+[ext_resource type="Texture2D" uid="uid://bxjxn7isu21bt" path="res://Sprites/KBPrompts/Mouse_Left_Key_Dark.png" id="11_ew0rd"]
+[ext_resource type="Texture2D" uid="uid://bbdj71u1xe2b1" path="res://Sprites/KBPrompts/Mouse_Scroll_Dark.png" id="12_cr28k"]
+[ext_resource type="Texture2D" uid="uid://bq2drn7rdpsrx" path="res://Sprites/KBPrompts/Mouse_Right_Key_Dark.png" id="13_h13cv"]
+[ext_resource type="Texture2D" uid="uid://5jcw0e2h7kdl" path="res://Sprites/KBPrompts/4194325.png" id="13_jgm0b"]
+[ext_resource type="Texture2D" uid="uid://dw3e7blrnsxt6" path="res://Sprites/KBPrompts/4194312.png" id="16_4ef35"]
+[ext_resource type="Texture2D" uid="uid://dfg0rp7hnut6c" path="res://Sprites/KBPrompts/4194308.png" id="17_fnbk5"]
+
+[sub_resource type="Theme" id="Theme_m2b08"]
+default_font_size = 20
+
+[node name="EditorPrompts" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_036cf")
+script = ExtResource("2_roopy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_m2b08")
+
+[node name="LookAround" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/LookAround"]
+layout_mode = 2
+text = "Look Around"
+
+[node name="spacer" type="Control" parent="VBoxContainer/LookAround"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/LookAround"]
+layout_mode = 2
+texture = ExtResource("2_vwk8d")
+expand_mode = 3
+
+[node name="MoveCamera" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MoveCamera"]
+layout_mode = 2
+text = "Move Camera"
+
+[node name="spacer" type="Control" parent="VBoxContainer/MoveCamera"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MoveCamera"]
+layout_mode = 2
+texture = ExtResource("3_qtinu")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MoveCamera"]
+layout_mode = 2
+texture = ExtResource("4_n52e7")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/MoveCamera"]
+layout_mode = 2
+texture = ExtResource("5_o0dbr")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/MoveCamera"]
+layout_mode = 2
+texture = ExtResource("6_ajdn4")
+expand_mode = 3
+
+[node name="PlaceItem" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PlaceItem"]
+layout_mode = 2
+text = "Place Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/PlaceItem"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/PlaceItem"]
+layout_mode = 2
+texture = ExtResource("11_ew0rd")
+expand_mode = 3
+
+[node name="SelectItem" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SelectItem"]
+layout_mode = 2
+text = "Select Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/SelectItem"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SelectItem"]
+layout_mode = 2
+texture = ExtResource("11_ew0rd")
+expand_mode = 3
+
+[node name="MoveSelectedItem" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MoveSelectedItem"]
+layout_mode = 2
+text = "Move Selected Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/MoveSelectedItem"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MoveSelectedItem"]
+layout_mode = 2
+texture = ExtResource("7_k44qg")
+expand_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MoveSelectedItem"]
+layout_mode = 2
+texture = ExtResource("8_wn4br")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/MoveSelectedItem"]
+layout_mode = 2
+texture = ExtResource("9_v51ol")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/MoveSelectedItem"]
+layout_mode = 2
+texture = ExtResource("10_0bqkv")
+expand_mode = 3
+
+[node name="MoveItemUpdown" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MoveItemUpdown"]
+layout_mode = 2
+text = "Move Item UP/Down"
+
+[node name="spacer" type="Control" parent="VBoxContainer/MoveItemUpdown"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MoveItemUpdown"]
+layout_mode = 2
+texture = ExtResource("12_cr28k")
+expand_mode = 3
+
+[node name="RotateItem" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/RotateItem"]
+layout_mode = 2
+text = "Rotate Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/RotateItem"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/RotateItem"]
+layout_mode = 2
+texture = ExtResource("13_h13cv")
+expand_mode = 3
+
+[node name="RotateItemFine" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/RotateItemFine"]
+layout_mode = 2
+text = "Rotate (fine)"
+
+[node name="spacer" type="Control" parent="VBoxContainer/RotateItemFine"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/RotateItemFine"]
+layout_mode = 2
+texture = ExtResource("13_jgm0b")
+expand_mode = 3
+
+[node name="spacer2" type="Control" parent="VBoxContainer/RotateItemFine"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="spacer3" type="Control" parent="VBoxContainer/RotateItemFine"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/RotateItemFine"]
+layout_mode = 2
+text = "+"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/RotateItemFine"]
+layout_mode = 2
+texture = ExtResource("12_cr28k")
+expand_mode = 3
+
+[node name="DeleteSelected" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/DeleteSelected"]
+layout_mode = 2
+text = "Delete Selected"
+
+[node name="spacer" type="Control" parent="VBoxContainer/DeleteSelected"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/DeleteSelected"]
+layout_mode = 2
+texture = ExtResource("16_4ef35")
+expand_mode = 3
+
+[node name="DeleteItem" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/DeleteItem"]
+layout_mode = 2
+text = "Delete Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/DeleteItem"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/DeleteItem"]
+layout_mode = 2
+texture = ExtResource("11_ew0rd")
+expand_mode = 3
+
+[node name="ReturnToEditor" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ReturnToEditor"]
+layout_mode = 2
+text = "Return TO Editor"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ReturnToEditor"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ReturnToEditor"]
+layout_mode = 2
+texture = ExtResource("17_fnbk5")
+expand_mode = 3
