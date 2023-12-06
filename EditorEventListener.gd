@@ -23,6 +23,7 @@ var editorStats: EditorStats
 
 @onready var editorPrompts: EditorPrompts = %EditorPrompts
 
+@onready var levelSavedLabel: Label = %LevelSavedLabel
 
 
 func _ready():
@@ -75,6 +76,8 @@ func _ready():
 	editorPrompts.setBuildVisible(true)
 	editorPrompts.rotateItemFine.visible = false
 
+	levelSavedLabel.modulate.a = 0
+	levelSavedLabel.text = "Level Saved As: " + map.trackName
 
 	connectSignals()
 
@@ -479,17 +482,17 @@ func onTrackMetadataUI_closePressed():
 func onTrackMetadataUI_applyPressed(newName: String, newCount: int):
 	map.trackName = newName
 	map.lapCount = newCount
-	map.save()
+	onEditorInputHandler_savePressed()
 	editorInputHandler.propertiesOpen = false
 
 
 func onTrackMetadataUI_trackNameChanged(newName: String):
 	map.trackName = newName
-	map.save()
+	onEditorInputHandler_savePressed()
 
 func onTrackMetadataUI_lapCountChanged(newCount: int):
 	map.lapCount = newCount
-	map.save()
+	onEditorInputHandler_savePressed()
 
 func onEditorInputHandler_mouseEnteredUI():
 	editorStateMachine.mouseOverUI = true
@@ -509,6 +512,16 @@ func onEditorInputHandler_redoPressed():
 
 func onEditorInputHandler_savePressed():
 	map.save()
+
+	levelSavedLabel.text = "Level Saved As: " + map.trackName
+	
+	var tween = create_tween().set_ease(Tween.EASE_OUT)
+
+	tween.tween_property(levelSavedLabel, "modulate:a", 1, 0)
+	tween.tween_property(levelSavedLabel, "modulate:a", 1, 1.5)
+	tween.tween_property(levelSavedLabel, "modulate:a", 0, 0.3)
+
+
 
 func onMap_undidLastOperation():
 	print("Undid last operation")
