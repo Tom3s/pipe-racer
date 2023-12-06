@@ -152,3 +152,30 @@ func _update_mouselook():
 
 func getPositionInFrontOfCamera(distance: float) -> Vector3:
 	return global_position - global_transform.basis.z * distance
+
+func getGridAlignedBasis() -> Basis:
+	var gridAlignedBasis = global_transform.basis
+	
+	# relative x axis
+	gridAlignedBasis.x.y = 0
+	if abs(gridAlignedBasis.x.x) > abs(gridAlignedBasis.x.z):
+		gridAlignedBasis.x.z = 0
+	else:
+		gridAlignedBasis.x.x = 0
+	gridAlignedBasis.x = gridAlignedBasis.x.normalized()
+
+	# relative z axis
+	# gridAlignedBasis.z.y = 0
+	# if gridAlignedBasis.z.x > gridAlignedBasis.z.z:
+	# 	gridAlignedBasis.z.z = 0
+	# else:
+	# 	gridAlignedBasis.z.x = 0
+	# gridAlignedBasis.z = gridAlignedBasis.z.normalized()
+	# irrelevant, can be calculated from x and y
+
+	# constant y axis
+	gridAlignedBasis.y = Vector3.UP
+
+	gridAlignedBasis.z = gridAlignedBasis.x.cross(gridAlignedBasis.y)
+
+	return gridAlignedBasis

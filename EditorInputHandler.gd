@@ -29,6 +29,8 @@ signal editorModeBuildPressed()
 signal editorModeEditPressed()
 signal editorModeDeletePressed()
 
+signal moveSelectionPressed(direction: Vector3)
+
 signal savePressed()
 
 signal pausePressed(paused)
@@ -54,6 +56,10 @@ func mouseOverUIChanged(value: bool) -> bool:
 			mouseExitedUI.emit()
 	return value
 
+const MOVE_REPEAT_DEFAULT_DELAY: int = 60
+const MOVE_REPEAT_DEFAULT_COOLDOWN: int = 5
+var moveRepeatCooldown: int = 0
+var moveRepeatDelay: int = MOVE_REPEAT_DEFAULT_DELAY
 # func _input(_event: InputEvent):
 func _physics_process(_delta):
 
@@ -110,13 +116,39 @@ func _physics_process(_delta):
 		prevBuildModePressed.emit()
 	if Input.is_action_just_pressed("editor_next_build_mode"):
 		nextBuildModePressed.emit()
+	
+	# if Input.is_action_just_pressed("editor_move_selection_left"):
+	# 	moveSelectionPressed.emit(Vector3.LEFT)
+	# if Input.is_action_just_pressed("editor_move_selection_right"):
+	# 	moveSelectionPressed.emit(Vector3.RIGHT)
+	# if Input.is_action_just_pressed("editor_move_selection_forward"):
+	# 	moveSelectionPressed.emit(Vector3.FORWARD)
+	# if Input.is_action_just_pressed("editor_move_selection_backward"):
+	# 	moveSelectionPressed.emit(Vector3.BACK)
 
+	handleMoveSelectionInput("editor_move_selection_left", Vector3.LEFT)
+	handleMoveSelectionInput("editor_move_selection_right", Vector3.RIGHT)
+	handleMoveSelectionInput("editor_move_selection_forward", Vector3.FORWARD)
+	handleMoveSelectionInput("editor_move_selection_backward", Vector3.BACK)
 	
 
 	windowSize = DisplayServer.window_get_size()
 	mousePos2D = get_viewport().get_mouse_position()
 
 	mouseOverUI = isMouseOverUI()
+
+func handleMoveSelectionInput(actionName: String, direction: Vector3):
+	if Input.is_action_just_pressed(actionName):
+		moveSelectionPressed.emit(direction)
+	elif Input.is_action_pressed(actionName):
+		moveRepeatDelay -= 1
+		if moveRepeatDelay <= 0:
+			moveRepeatCooldown -= 1
+			if moveRepeatCooldown <= 0:
+				moveSelectionPressed.emit(direction)
+				moveRepeatCooldown = MOVE_REPEAT_DEFAULT_COOLDOWN
+	elif Input.is_action_just_released(actionName):
+		moveRepeatDelay = MOVE_REPEAT_DEFAULT_DELAY
 
 func isMouseOverUI() -> bool:
 	return isMouseOverPrefabUI() || \
