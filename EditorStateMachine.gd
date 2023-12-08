@@ -23,6 +23,33 @@ var buildMode: int = 0:
 
 var currentPlacerNode: Node3D = null
 var testing: bool = false
+var wasTesting: bool = false
+
+# Array[Array[CarFrame]]
+var carPath: Array = []
+
+var car: CarController = null
+
+func _ready():
+	set_physics_process(true)
+
+const MAX_CAR_PATH_LENGTH: int = 8192
+const MAX_CAR_PATHS: int = 16
+func _physics_process(delta):
+	if testing && !wasTesting:
+		carPath.clear()
+		carPath.append([])
+		if carPath.size() > MAX_CAR_PATHS:
+			carPath.pop_front()
+	
+	if testing:
+		if car != null:
+			carPath.back().append(car.getCurrentFrame())
+			if carPath.back().size() > MAX_CAR_PATH_LENGTH:
+				carPath.back().pop_front()
+
+	wasTesting = testing
+
 
 @export 
 var GRID_MAX_HEIGHT: int = 256

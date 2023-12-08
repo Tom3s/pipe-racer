@@ -94,3 +94,8 @@ func setResetting():
 		return
 	isResetting = !isResetting
 	get_parent().isResetting.emit(get_parent().playerIndex, isResetting, get_parent().networkId)
+
+const DEFAULT_IMPACT_TIMER = 240
+var impactTimer: int = 0
+func resetImpactTimer():
+	impactTimer = DEFAULT_IMPACT_TIMER

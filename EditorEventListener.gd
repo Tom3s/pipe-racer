@@ -25,6 +25,7 @@ var editorStats: EditorStats
 
 @onready var levelSavedLabel: Label = %LevelSavedLabel
 
+@onready var carPath: Node3D = %CarPath
 
 func _ready():
 	# assign nodes
@@ -44,6 +45,8 @@ func _ready():
 	propPlacer = %PropPlacer
 
 	car = %CarController
+
+	editorStateMachine.car = car
 
 	var playerNode = %Player
 	carCamera = FollowingCamera.new(car)
@@ -176,6 +179,11 @@ func connectSignals():
 	map.mapLoaded.connect(onMap_mapLoaded)
 
 	car.isResetting.connect(onCar_pausePressed)
+	car.respawned.connect(func(_a, _b):
+		if editorStateMachine.inPlaytestState():
+			# editorStateMachine.carPath.back().pop_back()
+			editorStateMachine.carPath.append([])
+	)
 
 	camera.mouseCaptureExited.connect(onCamera_mouseCaptureExited)
 
@@ -654,6 +662,8 @@ func onEditorInputHandler_testPressed():
 	camera.inputEnabled = false
 	prePlaytestState = editorStateMachine.editorState
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
+	editorStateMachine.testing = true
+
 
 	for checkpoint in map.getCheckpoints():
 			checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
@@ -668,10 +678,13 @@ func onEditorInputHandler_testPressed():
 
 	editorPrompts.setTestingVisible(true)
 
+	clearCarPath()
+
 func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	if !editorStateMachine.inPlaytestState():
 		return
 	editorStateMachine.editorState = prePlaytestState
+	editorStateMachine.testing = false
 	prePlaytestState = 0
 	setVisibleUI(editorStateMachine.buildMode)
 	editorShortcutsUI.visible = true
@@ -696,6 +709,8 @@ func onCar_pausePressed(_sink = null, _sink2 = null, _sink3 = null):
 	editorPrompts.moveItemUpdown.visible = \
 		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_EDIT || \
 		editorStateMachine.editorState == editorStateMachine.EDITOR_STATE_BUILD
+	
+	generateCarPath()
 
 func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
 	car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(0, 1))
@@ -768,3 +783,23 @@ func submitEditorStats(stats: Dictionary) -> Signal:
 func onSubmitEditorStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	print("Editor stat Submit Response: ", _responseCode)
 	return
+
+func clearCarPath():
+	for child in carPath.get_children():
+		child.queue_free()
+
+
+@export
+var carPathThickness: float = 0.2
+func generateCarPath():
+	for path in editorStateMachine.carPath:
+		var length = path.size()
+		for i in length - 1:
+			if i <= 2:
+				continue
+			carPath.add_child(PathDrawer3D.get3DLine(
+				path[i].position + Vector3(0, 0.6, 0),
+				path[i + 1].position + Vector3(0, 0.6, 0),
+				path[i].getColor()
+				)
+			)
