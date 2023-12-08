@@ -64,6 +64,7 @@ func _ready():
 	pauseMenu.visible = false
 	pauseMenu.restartButton.visible = false
 	pauseMenu.editorGuide.visible = true
+	pauseMenu.leaderboardButton.visible = false
 
 	loading.visible = true
 
