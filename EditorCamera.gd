@@ -6,7 +6,7 @@ const SHIFT_MULTIPLIER = 3.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
 
 
-@export_range(0.0, 1.0) var sensitivity: float = 0.25
+# @export_range(0.0, 1.0) var sensitivity: float = 0.25
 
 # Mouse state
 var _mouse_position = Vector2(0.0, 0.0)
@@ -137,7 +137,9 @@ func _update_movement(delta):
 func _update_mouselook():
 	# Only rotates mouse if the mouse is captured
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		_mouse_position *= sensitivity
+		# _mouse_position *= sensitivity
+		_mouse_position *= GlobalProperties.MOUSE_SENSITIVITY / 100
+
 		var yaw = _mouse_position.x
 		var pitch = _mouse_position.y
 		_mouse_position = Vector2(0, 0)
