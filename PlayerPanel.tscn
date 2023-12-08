@@ -240,6 +240,7 @@ size_flags_vertical = 10
 
 [node name="GuestLabel" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Guest "
@@ -247,10 +248,18 @@ vertical_alignment = 1
 
 [node name="GuestTickBox" type="CheckBox" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="AsGuestButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Play As Guest"
 
 [node name="LoginButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
@@ -258,14 +267,6 @@ custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Login"
-
-[node name="AsGuestButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(100, 40)
-layout_mode = 2
-size_flags_horizontal = 10
-text = "As Guest"
 
 [node name="LogoutButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true

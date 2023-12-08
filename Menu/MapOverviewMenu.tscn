@@ -204,6 +204,36 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
+[node name="Container7" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
+
+[node name="RefreshButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_top = NodePath("../../Container4/OpenCommentsButton")
+focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
+focus_neighbor_bottom = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+script = ExtResource("3_2uk0n")
+
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container7/RefreshButton"]
+layout_mode = 1
+offset_top = -10.0
+offset_right = 183.0
+offset_bottom = 103.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0, 0.631373, 0.443137, 1)
+theme_override_font_sizes/font_size = 79
+text = "Refresh"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="Container5" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
@@ -321,6 +351,7 @@ theme_override_constants/margin_bottom = 16
 
 [node name="CommentsContainer" parent="CanvasLayer/MarginContainer" instance=ExtResource("8_hryn1")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="RatingMenu" parent="CanvasLayer" instance=ExtResource("4_usqq2")]

@@ -7,6 +7,7 @@ var trackId: String = '64fb19f35e616ef56517dfd0'
 @onready var commentList: VBoxContainer = %CommentList
 @onready var commentTextField: CommentTextField = %CommentTextField
 @onready var closeButton: Button = %CloseButton
+@onready var refreshButton: Button = %RefreshButton
 
 @onready var commentScene = preload("res://Menu/Comment.tscn")
 
@@ -24,6 +25,7 @@ func init(initTrackId: String):
 		hide()
 		closePressed.emit()
 	)
+	refreshButton.pressed.connect(loadComments)
 	commentTextField.commentSubmitted.connect(loadComments)
 	visibility_changed.connect(onVisibilityChanged)
 

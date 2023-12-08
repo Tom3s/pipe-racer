@@ -224,8 +224,8 @@ func setButtonsLoggingIn():
 	username.editable = false
 	password.editable = false
 
-	guestLabel.visible = false
-	guestTickBox.visible = false
+	# guestLabel.visible = false
+	# guestTickBox.visible = false
 
 func setButtonsLoggedIn():
 	loginButton.visible = false
@@ -237,16 +237,16 @@ func setButtonsLoggedIn():
 
 func setButtonsLoggedOut():
 	loginButton.disabled = false
-	loginButton.visible = !guestTickBox.button_pressed
+	loginButton.visible = true
 	loginButton.text = "Log In"
 	asGuestButton.disabled = false
-	asGuestButton.visible = guestTickBox.button_pressed
+	asGuestButton.visible = true
 	asGuestButton.text = "As Guest"
 
 	logoutButton.visible = false
-	guestLabel.visible = true
-	guestTickBox.visible = true
+	# guestLabel.visible = true
+	# guestTickBox.visible = true
 	username.editable = true
 	password.editable = true
-	password.visible = !guestTickBox.button_pressed
+	password.visible = true
 
