@@ -13,6 +13,8 @@ class_name SettingsMenu
 @onready var deadzoneSpinbox: SpinBox = %DeadzoneSpinbox
 @onready var smoothSteeringSlider: HSlider = %SmoothSteeringSlider
 @onready var smoothSteeringSpinbox: SpinBox = %SmoothSteeringSpinbox
+@onready var sensitivitySlider: HSlider = %SensitivitySlider
+@onready var sensitivitySpinbox: SpinBox = %SensitivitySpinbox
 
 var renderQualities = [
 	['Tometo (x0.25)', 0.25],
@@ -46,6 +48,9 @@ func _ready():
 	deadzoneSpinbox.value_changed.connect(deadzoneSpinbox_valueChanged)
 	smoothSteeringSlider.value_changed.connect(smoothSteeringSlider_valueChanged)
 	smoothSteeringSpinbox.value_changed.connect(smoothSteeringSpinbox_valueChanged)
+
+	sensitivitySlider.value_changed.connect(sensitivitySlider_valueChanged)
+	sensitivitySpinbox.value_changed.connect(sensitivitySpinbox_valueChanged)
 
 	closeButton.pressed.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
@@ -118,6 +123,17 @@ func smoothSteeringSpinbox_valueChanged(value: float):
 
 func changeSmoothSteering(value):
 	GlobalProperties.SMOOTH_STEERING = value
+
+func sensitivitySlider_valueChanged(value: float):
+	sensitivitySpinbox.value = value
+	changeSensitivity(value)
+
+func sensitivitySpinbox_valueChanged(value: float):
+	sensitivitySlider.value = value
+	changeSensitivity(value)
+
+func changeSensitivity(value):
+	GlobalProperties.MOUSE_SENSITIVITY = value
 
 
 func onCloseButton_pressed():

@@ -123,6 +123,14 @@ var COMPARE_AGAINST_BEST_LAP: bool = true:
 		return COMPARE_AGAINST_BEST_LAP
 
 @export
+var MOUSE_SENSITIVITY: float = 20.0:
+	set(newSensitivity):
+		MOUSE_SENSITIVITY = newSensitivity
+		saveToFile()
+	get:
+		return MOUSE_SENSITIVITY
+
+@export
 var JOY_CONTROL_OVERWRITES = {
 	"1": {},
 	"2": {},
@@ -197,6 +205,7 @@ func saveToFile() -> void:
 		"KB_CONTROL_OVERWRITES": KB_CONTROL_OVERWRITES,
 		"CONTROL_DEVICE_OVERWRITES": CONTROL_DEVICE_OVERWRITES,
 		"COMPARE_AGAINST_BEST_LAP": COMPARE_AGAINST_BEST_LAP,
+		"MOUSE_SENSITIVITY": MOUSE_SENSITIVITY,
 	}
 
 	var jsonText = JSON.stringify(jsonData)
@@ -240,6 +249,8 @@ func loadFromFile() -> void:
 			CONTROL_DEVICE_OVERWRITES = jsonData["CONTROL_DEVICE_OVERWRITES"]
 		if jsonData.has("COMPARE_AGAINST_BEST_LAP"):
 			COMPARE_AGAINST_BEST_LAP = bool(jsonData["COMPARE_AGAINST_BEST_LAP"])
+		if jsonData.has("MOUSE_SENSITIVITY"):
+			MOUSE_SENSITIVITY = float(jsonData["MOUSE_SENSITIVITY"])
 	else:
 		saveToFile()
 

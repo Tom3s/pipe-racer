@@ -164,6 +164,7 @@ expand_margin_right = 64.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oet8e"]
 
 [node name="PlayerSelectorMenu" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -337,9 +338,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -16.8681
+offset_left = -62.8681
 offset_top = 4.45833
-offset_right = 843.534
+offset_right = 797.534
 offset_bottom = 450.458
 grow_horizontal = 2
 scale = Vector2(0.49537, 0.49537)
@@ -367,9 +368,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 97.6622
+offset_left = 51.6622
 offset_top = -98.1389
-offset_right = 400.662
+offset_right = 354.662
 offset_bottom = -38.1389
 grow_horizontal = 2
 grow_vertical = 0
