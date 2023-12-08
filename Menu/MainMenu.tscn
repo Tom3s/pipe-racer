@@ -109,7 +109,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
 [node name="EditButton" type="Button" parent="MainContent/ButtonContainer/Container2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 70)
+custom_minimum_size = Vector2(175, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../../Container/PlayButton")
@@ -125,7 +125,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(1, 0.67451, 0.470588, 1)
 theme_override_font_sizes/font_size = 180
-text = "Edit"
+text = "Build"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
@@ -152,7 +152,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
 theme_override_font_sizes/font_size = 180
-text = "Online (Beta)"
+text = "Multiplayer"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
@@ -253,6 +253,7 @@ text = "Version: v0.32"
 
 [node name="TitleContainer" type="VBoxContainer" parent="MainContent"]
 unique_name_in_owner = true
+visible = false
 material = SubResource("ShaderMaterial_k5jwp")
 layout_mode = 1
 offset_right = 600.0

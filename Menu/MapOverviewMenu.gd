@@ -16,6 +16,7 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var openCommentsButton: Button = %OpenCommentsButton
 @onready var rateButton: Button = %RateButton
 @onready var ratingMenu: RatingMenu = %RatingMenu
+@onready var refreshButton: Button = %RefreshButton
 @onready var deleteButton: Button = %DeleteButton
 
 @onready var backButton: Button = %BackButton
@@ -45,6 +46,10 @@ func _ready():
 		ratingNumber.text = str(x).pad_decimals(2) + "/5"
 	)
 	selectButton.pressed.connect(onSelectButton_Pressed)
+	refreshButton.pressed.connect(func():
+		leaderboardMenu.fetchTimes(trackId)
+		fetchLevelDetails()
+	)
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
 	set_physics_process(true)
 
