@@ -28,10 +28,10 @@ func setup(
 		return false
 	map.setIngame()
 
-	%GameEventListener.map = map
-
 	%GameEventListener.state.ranked = ranked
 	%GameEventListener.state.online = online
+
+	%GameEventListener.map = map
 
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()

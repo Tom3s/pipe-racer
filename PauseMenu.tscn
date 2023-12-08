@@ -186,14 +186,22 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
 focus_neighbor_top = NodePath("../ResumeButton")
-focus_neighbor_bottom = NodePath("../SettingsButton")
+focus_neighbor_bottom = NodePath("../LeaderboardButton")
 text = "Restart"
+
+[node name="LeaderboardButton" type="Button" parent="MainElements/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+text = "Leaderboard"
 
 [node name="SettingsButton" type="Button" parent="MainElements/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
-focus_neighbor_top = NodePath("../RestartButton")
+focus_neighbor_top = NodePath("../LeaderboardButton")
 focus_neighbor_bottom = NodePath("../ControlsButton")
 text = "Settings
 "

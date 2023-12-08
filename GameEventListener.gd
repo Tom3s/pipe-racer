@@ -21,6 +21,7 @@ var map: Map:
 			checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
 		map.start.bodyEnteredStart.connect(onStart_bodyEnteredStart)
 		leaderboardUI.setHeader(map.trackName, map.author)
+		pauseMenu.leaderboardButton.visible = state.ranked
 
 @onready var players: Node3D = %Players
 @onready var state: GameStateMachine = %GameStateMachine
@@ -53,6 +54,12 @@ func connectSignals():
 
 	pauseMenu.resumePressed.connect(forceResumeGame)
 	pauseMenu.restartPressed.connect(onPauseMenu_restartPressed)
+	pauseMenu.leaderboardPressed.connect(func():
+		forceResumeGame()
+		leaderboardUI.fetchTimes(map.trackId)
+		leaderboardUI.visible = true
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
 
 	get_tree().get_multiplayer().peer_disconnected.connect(clientExited)

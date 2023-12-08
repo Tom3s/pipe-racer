@@ -5,6 +5,7 @@ class_name PauseMenu
 
 @onready var resumeButton: Button = %ResumeButton
 @onready var restartButton: Button = %RestartButton
+@onready var leaderboardButton: Button = %LeaderboardButton
 @onready var settingsButton: Button = %SettingsButton
 @onready var controlsButton: Button = %ControlsButton
 @onready var editorGuide: Button = %EditorGuide
@@ -15,6 +16,7 @@ class_name PauseMenu
 
 signal resumePressed()
 signal restartPressed()
+signal leaderboardPressed()
 signal exitPressed()
 
 
@@ -39,6 +41,7 @@ func _ready():
 func connectSignals():
 	resumeButton.pressed.connect(onResumeButton_pressed)
 	restartButton.pressed.connect(onRestartButton_pressed)
+	leaderboardButton.pressed.connect(onLeaderboardButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
 	controlsButton.pressed.connect(onControlsButton_pressed)
 	editorGuide.pressed.connect(editorGuide_pressed)
@@ -65,6 +68,10 @@ func onResumeButton_pressed():
 func onRestartButton_pressed():
 	visible = false
 	restartPressed.emit()
+
+func onLeaderboardButton_pressed():
+	visible = false
+	leaderboardPressed.emit()
 
 func onExitButton_pressed():
 	visible = false
