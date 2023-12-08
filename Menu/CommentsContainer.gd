@@ -15,11 +15,11 @@ signal closePressed()
 func init(initTrackId: String):
 	trackId = initTrackId
 	loadComments(trackId)
-	# commentTextField.init(
-	# 	null,
-	# 	"",
-	# 	trackId,
-	# )
+	commentTextField.init(
+		null,
+		"",
+		trackId,
+	)
 	closeButton.pressed.connect(func():
 		hide()
 		closePressed.emit()

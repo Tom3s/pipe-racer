@@ -321,7 +321,6 @@ theme_override_constants/margin_bottom = 16
 
 [node name="CommentsContainer" parent="CanvasLayer/MarginContainer" instance=ExtResource("8_hryn1")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="RatingMenu" parent="CanvasLayer" instance=ExtResource("4_usqq2")]
