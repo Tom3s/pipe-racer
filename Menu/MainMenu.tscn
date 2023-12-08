@@ -253,7 +253,6 @@ text = "Version: v0.32"
 
 [node name="TitleContainer" type="VBoxContainer" parent="MainContent"]
 unique_name_in_owner = true
-visible = false
 material = SubResource("ShaderMaterial_k5jwp")
 layout_mode = 1
 offset_right = 600.0
