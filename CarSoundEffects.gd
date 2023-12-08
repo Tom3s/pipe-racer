@@ -11,10 +11,13 @@ func _ready():
 
 	car = get_parent()
 
-	car.body_entered.connect(playImpact)
+	car.body_entered.connect(func(_a):
+		playImpact()
+		car.state.resetImpactTimer()
+	)
 
 
-func playImpact(_body: Node):
+func playImpact(_body: Node = null):
 	var sound = impactSounds.pick_random()
 
 	sound.pitch_scale = randf_range(0.8, 1.2)

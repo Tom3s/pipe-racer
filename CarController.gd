@@ -242,6 +242,7 @@ func _physics_process(_delta):
 		carSynchronizer.respawnPosition = respawnPosition
 		carSynchronizer.respawnRotation = respawnRotation
 
+		state.impactTimer -= 1
 
 func _integrate_forces(physicsState):
 	if shouldRespawn:
@@ -582,6 +583,17 @@ func getPositionDict() -> Dictionary:
 		"lap": state.currentLap,
 		"checkpointCount": state.collectedCheckpointCount, 
 	}
+
+func getCurrentFrame() -> CarFrame:
+	return CarFrame.new(
+		global_position,
+		global_rotation,
+		getSpeed(),
+		accelerationInput < 0,
+		driftInput > 0,
+		state.isAirborne(),
+		state.impactTimer,
+	)
 
 # DEBUG FUNCTIONS
 
