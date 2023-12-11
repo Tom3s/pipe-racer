@@ -1,0 +1,56 @@
+html, body {
+	color: white;
+	background-color: rgb(34, 34, 34);
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.color1 {
+	color: palevioletred;
+	background: linear-gradient(to top, #222222, #550000);
+}
+
+.color2 {
+	color: palegoldenrod;
+	background: linear-gradient(to top, #222222, #555500);
+}
+
+.color3 {
+	color: paleturquoise;
+	background: linear-gradient(to top, #222222, #005555);
+}
+
+.color4 {
+	color: #aaa;
+	background: linear-gradient(to top, #222222, #555555);
+}
+
+.color5 {
+	color: palegreen;
+	background: linear-gradient(to top, #222222, #005500);
+}
+
+.color6 {
+	color: lightblue;
+	background: linear-gradient(to top, #222222, #000055);
+}
+
+.map {
+	display: flex;
+	flex-direction: column;
+	overflow-x: scroll;
+}
+
+.checkpoint {
+	padding: 10px;
+	border-radius: 10px;
+	margin: 10px;
+	width: 450px;
+}
+
+.title {
+	font-weight: bold;
+	color: white;
+	font-size: 40px;
+	-webkit-text-stroke: 1px black;
+	-webkit-text-stroke-width: 1px;
+}
