@@ -32,7 +32,7 @@ func getPlacement(lapNumber: int) -> int:
 func isCheckPoint():
 	pass
 
-const RAYCAST_MAX_DISTANCE = 100
+const RAYCAST_MAX_DISTANCE = 140
 
 var raycastPosition = null
 var raycastNormal = null

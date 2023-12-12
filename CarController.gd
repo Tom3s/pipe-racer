@@ -269,13 +269,15 @@ func calculateTirePhysics(tire: Tire, delta):
 	# 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
 	
+	tire.force_raycast_update()
+
 	if tire.is_colliding():
 		state.groundedTires[tire.tireIndex] = 1
 
 		var contactPoint = tire.get_collision_point()
 		var raycastDistance = (contactPoint - tire.global_position).length()
-
-		tire.tireModel.position.y = -raycastDistance + 0.375
+		# print('Raycast distance: ', raycastDistance)
+		# print('Debug: ', (contactPoint - tire.global_position).dot(-global_transform.basis.y))
 
 		var tireVelocitySuspension = get_point_velocity(tire.global_position)
 
@@ -309,6 +311,7 @@ func calculateTirePhysics(tire: Tire, delta):
 
 		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(tire.global_transform.basis.z)
 
+		tire.tireModel.position.y = -raycastDistance + 0.375
 		tire.tireModel.rotate_x(tireDistanceTravelled / 0.375)
 
 		tire.smokeEmitter.emitting = slidingFactor > 0.1 && getSpeed() > 15 && useSmokeParticles
@@ -320,6 +323,7 @@ func calculateTirePhysics(tire: Tire, delta):
 		tire.dirtEmitter.emitting = false
 
 func calculateBottomOutPhysics(bottomOut: RayCast3D, delta):
+	bottomOut.force_raycast_update()
 	if bottomOut.is_colliding():
 		var contactPoint = bottomOut.get_collision_point()
 		var raycastDistance = (contactPoint - bottomOut.global_position).length()
@@ -485,11 +489,6 @@ func getSpeed() -> float:
 
 	return Vector2(velocityForward, velocityRight).length()
 
-# func getSteeringFactor() -> float:
-# 	var g = func(x): return (- x / 150) + 1
-# 	var f = func(x): return max(g.call(x), 0.25)
-
-# 	return f.call(getSpeed()) * maxSteeringAngle
 func getSteeringFactor() -> float:
 	var g = func(x): return (- x / 150) + 1.07
 	# var f = func(x): return min(max(g.call(x), 0.25), 1.0)
@@ -501,6 +500,7 @@ func getSteeringFactor() -> float:
 
 	return f.call(getSpeed()) * maxSteeringAngle
 	# return max(g.call(getSpeed()), 0.25) * maxSteeringAngle
+
 
 func getForwardSpeed() -> float:
 	var speed = linear_velocity.dot(global_transform.basis.z)
