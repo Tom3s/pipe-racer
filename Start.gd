@@ -36,17 +36,7 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 7.99 # magic number to avoid missing between faces
 
-	var debugShape = MeshInstance3D.new()
-	debugShape.mesh = SphereMesh.new()
-	add_child(debugShape)
-	debugShape.global_position = raycastOrigin
-
 	calculateRaycast(raycastOrigin)
-
-	var debugShape2 = MeshInstance3D.new()
-	debugShape2.mesh = SphereMesh.new()
-	add_child(debugShape2)
-	debugShape2.global_position = raycastPosition
 
 	var spawnPosition = raycastPosition + raycastNormal * 0.35
 

@@ -70,7 +70,7 @@ func _ready() -> void:
 
 	var panel: PanelContainer = lastSplit.get_parent()
 	# panel.get_theme_stylebox("panel").bg_color = color
-	panel.set_theme_stylebox("panel", panel.get_theme_stylebox("panel").duplicate())
+	panel.add_theme_stylebox_override("panel", panel.get_theme_stylebox("panel").duplicate())
 
 	set_physics_process(true)
 
