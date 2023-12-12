@@ -18,7 +18,7 @@
 [ext_resource type="Script" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
-friction = 0.01
+friction = 0.08
 rough = true
 absorbent = true
 
