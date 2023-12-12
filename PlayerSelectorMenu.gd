@@ -121,6 +121,8 @@ func animateIn():
 
 	tween.tween_property(self, "visible", true, 0.0)
 
+	await tween.finished
+	tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 	tween.set_parallel(true)
 
 	tween.tween_property(leftPanel, "position", Vector2(screenSize.x, 0), ANIMATION_TIME).as_relative().set_delay(0 * ANIMATION_DELAY)

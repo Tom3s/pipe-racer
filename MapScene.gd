@@ -221,6 +221,7 @@ func addStart(startObject):
 	var oldRotation = start.global_rotation
 	
 	updateStartPosition(startObject.global_position + START_OFFSET, startObject.global_rotation)
+	# updateStartPosition(startObject.global_position, startObject.global_rotation)
 	storeAddStartObject(oldPosition, oldRotation, start.global_position, start.global_rotation)
 
 func updateStartPosition(newPosition: Vector3, newRotation: Vector3):

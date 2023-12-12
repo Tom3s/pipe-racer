@@ -199,20 +199,39 @@ func _physics_process(_delta):
 		angular_velocity.z > angularTerminalVelocity || angular_velocity.z < -angularTerminalVelocity:
 		angular_velocity *= angularVelocityDamping
 		
+	if !paused && !shouldRespawn:
+		for tire in tires:
+			calculateTirePhysics(tire, _delta)
+		for bottomOut in bottomOuts:
+			calculateBottomOutPhysics(bottomOut, _delta)
+
 	if is_multiplayer_authority():
-		if !paused:
+		
+		if shouldRespawn:
+			linear_velocity = Vector3.ZERO
+			angular_velocity = Vector3.ZERO
+			global_position = respawnPosition
+			global_rotation = respawnRotation
+
 			for tire in tires:
-				calculateTirePhysics(tire, _delta)
-			for bottomOut in bottomOuts:
-				calculateBottomOutPhysics(bottomOut, _delta)
-		
-		applyDownforce(state.getGroundedTireCount())
-		
-		if state.isAirborne():
-			applyAirPitch()
-			applyAirSteering()
-			slidingFactor = 0.9
-			surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
+				tire.tireModel.position.y = tire.target_position.y + 0.375
+				tire.rotation.y = 0
+				tire.smokeEmitter.emitting = false
+				tire.dirtEmitter.emitting = false
+
+			shouldRespawn = false
+			if initialRespawn:
+				# initialRespawn = false
+				pauseMovement()
+			respawned.emit(playerIndex, networkId)
+		else:
+			applyDownforce(state.getGroundedTireCount())
+			
+			if state.isAirborne():
+				applyAirPitch()
+				applyAirSteering()
+				slidingFactor = 0.9
+				surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
 		
 		if shouldPause && !paused:
 			pauseLinearVelocity = linear_velocity
@@ -244,16 +263,16 @@ func _physics_process(_delta):
 
 		state.impactTimer -= 1
 
-func _integrate_forces(physicsState):
-	if shouldRespawn:
-		physicsState.linear_velocity = Vector3.ZERO
-		physicsState.angular_velocity = Vector3.ZERO
-		physicsState.transform = createRespawnTransform3D()
-		shouldRespawn = false
-		if initialRespawn:
-			# initialRespawn = false
-			pauseMovement()
-		respawned.emit(playerIndex, networkId)
+# func _integrate_forces(physicsState):
+# 	if shouldRespawn:
+# 		physicsState.linear_velocity = Vector3.ZERO
+# 		physicsState.angular_velocity = Vector3.ZERO
+# 		physicsState.transform = createRespawnTransform3D()
+# 		shouldRespawn = false
+# 		if initialRespawn:
+# 			# initialRespawn = false
+# 			pauseMovement()
+# 		respawned.emit(playerIndex, networkId)
 
 @export
 var steeringSpeed: float = 0.05
@@ -269,13 +288,15 @@ func calculateTirePhysics(tire: Tire, delta):
 	# 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
 	
+	tire.force_raycast_update()
+
 	if tire.is_colliding():
 		state.groundedTires[tire.tireIndex] = 1
 
 		var contactPoint = tire.get_collision_point()
 		var raycastDistance = (contactPoint - tire.global_position).length()
-
-		tire.tireModel.position.y = -raycastDistance + 0.375
+		# print('Raycast distance: ', raycastDistance)
+		# print('Debug: ', (contactPoint - tire.global_position).dot(-global_transform.basis.y))
 
 		var tireVelocitySuspension = get_point_velocity(tire.global_position)
 
@@ -309,6 +330,7 @@ func calculateTirePhysics(tire: Tire, delta):
 
 		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(tire.global_transform.basis.z)
 
+		tire.tireModel.position.y = -raycastDistance + 0.375
 		tire.tireModel.rotate_x(tireDistanceTravelled / 0.375)
 
 		tire.smokeEmitter.emitting = slidingFactor > 0.1 && getSpeed() > 15 && useSmokeParticles
@@ -320,6 +342,7 @@ func calculateTirePhysics(tire: Tire, delta):
 		tire.dirtEmitter.emitting = false
 
 func calculateBottomOutPhysics(bottomOut: RayCast3D, delta):
+	bottomOut.force_raycast_update()
 	if bottomOut.is_colliding():
 		var contactPoint = bottomOut.get_collision_point()
 		var raycastDistance = (contactPoint - bottomOut.global_position).length()
@@ -328,13 +351,13 @@ func calculateBottomOutPhysics(bottomOut: RayCast3D, delta):
 
 		applyBottomedOutSuspension(raycastDistance, bottomOut.global_transform.basis.y, tireVelocitySuspension, bottomOut.global_position, delta)
 
-func createRespawnTransform3D():
-	var tempTransform = Transform3D()
-	tempTransform = tempTransform.rotated(Vector3.UP, respawnRotation.y)
-	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.x)
-	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.z)
-	tempTransform.origin = respawnPosition
-	return tempTransform
+# func createRespawnTransform3D():
+# 	var tempTransform = Transform3D()
+# 	tempTransform = tempTransform.rotated(Vector3.UP, respawnRotation.y)
+# 	tempTransform = tempTransform.rotated(Vector3.FORWARD, respawnRotation.x)
+# 	tempTransform = tempTransform.rotated(Vector3.RIGHT, respawnRotation.z)
+# 	tempTransform.origin = respawnPosition
+# 	return tempTransform
 @export
 var airPitchControl: float = 8
 
@@ -485,11 +508,6 @@ func getSpeed() -> float:
 
 	return Vector2(velocityForward, velocityRight).length()
 
-# func getSteeringFactor() -> float:
-# 	var g = func(x): return (- x / 150) + 1
-# 	var f = func(x): return max(g.call(x), 0.25)
-
-# 	return f.call(getSpeed()) * maxSteeringAngle
 func getSteeringFactor() -> float:
 	var g = func(x): return (- x / 150) + 1.07
 	# var f = func(x): return min(max(g.call(x), 0.25), 1.0)
@@ -501,6 +519,7 @@ func getSteeringFactor() -> float:
 
 	return f.call(getSpeed()) * maxSteeringAngle
 	# return max(g.call(getSpeed()), 0.25) * maxSteeringAngle
+
 
 func getForwardSpeed() -> float:
 	var speed = linear_velocity.dot(global_transform.basis.z)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=22 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -18,25 +18,12 @@
 [ext_resource type="Script" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nb3em"]
-friction = 0.0
+friction = 0.01
 rough = true
 absorbent = true
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_52nqf"]
-radius = 0.200358
-height = 2.49297
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t31ly"]
-radius = 0.375
-height = 4.15
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e0f4h"]
-radius = 0.634647
-height = 1.99853
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tiwy3"]
-radius = 0.293
-height = 1.721
+[sub_resource type="BoxShape3D" id="BoxShape3D_q5scd"]
+size = Vector3(0.2, 2.15, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggqdx"]
 render_priority = 0
@@ -50,92 +37,92 @@ orientation = 2
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vacps"]
 properties/0/path = NodePath(".:linear_velocity")
 properties/0/spawn = true
-properties/0/sync = true
+properties/0/replication_mode = 1
 properties/1/path = NodePath(".:angular_velocity")
 properties/1/spawn = true
-properties/1/sync = true
+properties/1/replication_mode = 1
 properties/2/path = NodePath(".:global_position")
 properties/2/spawn = true
-properties/2/sync = true
+properties/2/replication_mode = 1
 properties/3/path = NodePath(".:global_rotation")
 properties/3/spawn = true
-properties/3/sync = true
+properties/3/replication_mode = 1
 properties/4/path = NodePath("../Tires/TireFL/SmokeEmitter:emitting")
 properties/4/spawn = true
-properties/4/sync = true
+properties/4/replication_mode = 1
 properties/5/path = NodePath("../Tires/TireFR/SmokeEmitter:emitting")
 properties/5/spawn = true
-properties/5/sync = true
+properties/5/replication_mode = 1
 properties/6/path = NodePath("../Tires/TireBL/SmokeEmitter:emitting")
 properties/6/spawn = true
-properties/6/sync = true
+properties/6/replication_mode = 1
 properties/7/path = NodePath("../Tires/TireBR/SmokeEmitter:emitting")
 properties/7/spawn = true
-properties/7/sync = true
+properties/7/replication_mode = 1
 properties/8/path = NodePath("../Tires/TireFL/DirtEmitter:emitting")
 properties/8/spawn = true
-properties/8/sync = true
+properties/8/replication_mode = 1
 properties/9/path = NodePath("../Tires/TireFR/DirtEmitter:emitting")
 properties/9/spawn = true
-properties/9/sync = true
+properties/9/replication_mode = 1
 properties/10/path = NodePath("../Tires/TireBL/DirtEmitter:emitting")
 properties/10/spawn = true
-properties/10/sync = true
+properties/10/replication_mode = 1
 properties/11/path = NodePath("../Tires/TireBR/DirtEmitter:emitting")
 properties/11/spawn = true
-properties/11/sync = true
+properties/11/replication_mode = 1
 properties/12/path = NodePath("../CarStateMachine:hasControl")
 properties/12/spawn = true
-properties/12/sync = true
+properties/12/replication_mode = 1
 properties/13/path = NodePath(".:respawnPosition")
 properties/13/spawn = true
-properties/13/sync = true
+properties/13/replication_mode = 1
 properties/14/path = NodePath(".:respawnRotation")
 properties/14/spawn = true
-properties/14/sync = true
+properties/14/replication_mode = 1
 properties/15/path = NodePath("..:playerIndex")
 properties/15/spawn = true
-properties/15/sync = false
+properties/15/replication_mode = 0
 properties/16/path = NodePath("../CarStateMachine:placement")
 properties/16/spawn = true
-properties/16/sync = true
+properties/16/replication_mode = 1
 properties/17/path = NodePath("..:playerName")
 properties/17/spawn = true
-properties/17/sync = true
+properties/17/replication_mode = 1
 properties/18/path = NodePath("..:frameColor")
 properties/18/spawn = true
-properties/18/sync = true
+properties/18/replication_mode = 1
 properties/19/path = NodePath("../PlayernameLabel:text")
 properties/19/spawn = true
-properties/19/sync = true
+properties/19/replication_mode = 1
 properties/20/path = NodePath("../Tires/TireFL/VisualRotation/tire-new good normals:rotation")
 properties/20/spawn = true
-properties/20/sync = true
+properties/20/replication_mode = 1
 properties/21/path = NodePath("../Tires/TireFR/VisualRotation/tire-new good normals:rotation")
 properties/21/spawn = true
-properties/21/sync = true
+properties/21/replication_mode = 1
 properties/22/path = NodePath("../Tires/TireBL/VisualRotation/tire-new good normals:rotation")
 properties/22/spawn = true
-properties/22/sync = true
+properties/22/replication_mode = 1
 properties/23/path = NodePath("../Tires/TireBR/VisualRotation/tire-new good normals:rotation")
 properties/23/spawn = true
-properties/23/sync = true
+properties/23/replication_mode = 1
 
 [node name="CarController" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 11
 mass = 700.0
+physics_material_override = SubResource("PhysicsMaterial_nb3em")
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.1, 0)
-physics_material_override = SubResource("PhysicsMaterial_nb3em")
 continuous_cd = true
 max_contacts_reported = 16
 contact_monitor = true
 angular_damp_mode = 1
 angular_damp = 0.5
 script = ExtResource("1_wde5o")
-springConstant = 180.0
-springDamping = 6800.0
+springConstant = 195.0
+springDamping = 5000.0
 springBottomOut = 0.28
 angularTerminalVelocity = 4.0
 maxSteeringAngle = 0.13
@@ -155,29 +142,18 @@ regripFactor = 0.02
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+depth = 1.52
+polygon = PackedVector2Array(-2.16487, 0.531944, -1.50684, 0.395462, 1.49575, 0.380839, 1.82234, 0.751289, 0.866965, 1.51656, -0.0152905, 1.52143, -0.707447, 1.00963, -1.65794, 0.765912)
+
 [node name="FrontAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.545655, 1.5)
-shape = SubResource("CapsuleShape3D_52nqf")
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.45, 1.5)
+shape = SubResource("BoxShape3D_q5scd")
 
 [node name="RearAxle2" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.54546, -1.5)
-shape = SubResource("CapsuleShape3D_52nqf")
-
-[node name="CarBodyCapsule" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.45, 0.738555, 0)
-shape = SubResource("CapsuleShape3D_t31ly")
-
-[node name="CarBodyCapsule2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.45, 0.738555, 0)
-shape = SubResource("CapsuleShape3D_t31ly")
-
-[node name="CarBodyCapsule3" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0.942996, -0.271399)
-shape = SubResource("CapsuleShape3D_e0f4h")
-
-[node name="CarBodyCapsule4" type="CollisionShape3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 1.06581e-14, 1, -4.37114e-08, 0, 4.02341e-21, 1.06581e-14, 1, 0, 1.47777, -2.14732)
-shape = SubResource("CapsuleShape3D_tiwy3")
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.45, -1.5)
+shape = SubResource("BoxShape3D_q5scd")
 
 [node name="Tires" type="Node3D" parent="."]
 
@@ -186,6 +162,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
+hit_back_faces = false
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
@@ -215,6 +192,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
+hit_back_faces = false
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
@@ -245,6 +223,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
+hit_back_faces = false
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
@@ -275,6 +254,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
 target_position = Vector3(0, -0.6, 0)
 collision_mask = 9
+hit_back_faces = false
 debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
@@ -305,24 +285,28 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
 target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
+hit_back_faces = false
 
 [node name="BottomOutFR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
 target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
+hit_back_faces = false
 
 [node name="BottomOutBL" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
 target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
+hit_back_faces = false
 
 [node name="BottomOutBR" type="RayCast3D" parent="Tires"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
 target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
+hit_back_faces = false
 
 [node name="CarEngineSound" parent="." instance=ExtResource("6_g1nx1")]
 unique_name_in_owner = true

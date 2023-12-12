@@ -114,7 +114,7 @@ func handleMultiInput():
 	
 	car.accelerationInput = multiAccelerationInput
 
-	if multiRespawnInput && car.state.hasControl:
+	if multiRespawnInput && car.state.hasControl && !multiReset:
 		car.respawn()
 
 func setInputPlayers(players: Array[int]):

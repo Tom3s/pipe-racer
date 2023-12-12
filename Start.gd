@@ -26,15 +26,15 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var localRight = global_transform.basis.z
 
-	var leftLimit = -localRight * 18
-	var rightLimit = localRight * 18
+	var leftLimit = -localRight * 18.01 # magic number to avoid missing between faces
+	var rightLimit = localRight * 18.02 # magic number to avoid missing between faces
 
 	var playerFraction = remap(playerIndex, 0, nrPlayers - 1, 0, 1)
 
 	if nrPlayers == 1:
 		playerFraction = 0.5
 
-	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 8
+	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 7.99 # magic number to avoid missing between faces
 
 	calculateRaycast(raycastOrigin)
 

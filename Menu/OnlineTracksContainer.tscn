@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dfxqrl48lnywu"]
+[gd_scene load_steps=41 format=3 uid="uid://dfxqrl48lnywu"]
 
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bnija"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_gw668"]
@@ -277,6 +277,13 @@ LineEdit/fonts/font = ExtResource("1_bnija")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_opj4w")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_jv5ax")
 
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_xdm2v"]
+button_index = 2
+pressed = true
+
+[sub_resource type="Shortcut" id="Shortcut_8v2qw"]
+events = [SubResource("InputEventJoypadButton_xdm2v")]
+
 [sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_p3ve5"]
 button_index = 3
 
@@ -310,6 +317,7 @@ alignment = 1
 [node name="RefreshButton" type="Button" parent="MainContents/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+shortcut = SubResource("Shortcut_8v2qw")
 text = "Refresh"
 
 [node name="spacer4" type="Control" parent="MainContents/HBoxContainer"]

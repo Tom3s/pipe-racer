@@ -80,14 +80,14 @@ func _physics_process(_delta):
 		mouseMovedTo.emit(screenPointToRay())
 
 
-	if Input.is_action_just_released("editor_fine_rotate_left"):
+	if Input.is_action_just_pressed("editor_fine_rotate_left"):
 		fineRotatePressed.emit(-1)
-	elif Input.is_action_just_released("editor_grid_down"):
+	elif Input.is_action_just_pressed("editor_grid_down"):
 		moveDownGrid.emit()
 	
-	if Input.is_action_just_released("editor_fine_rotate_right"):
+	if Input.is_action_just_pressed("editor_fine_rotate_right"):
 		fineRotatePressed.emit(+1)
-	elif Input.is_action_just_released("editor_grid_up"):
+	elif Input.is_action_just_pressed("editor_grid_up"):
 		moveUpGrid.emit()
 
 	if Input.is_action_just_pressed("editor_place"):

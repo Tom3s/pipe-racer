@@ -68,6 +68,10 @@ func _ready() -> void:
 	
 	splits.modulate = Color(1, 1, 1, 0)
 
+	var panel: PanelContainer = lastSplit.get_parent()
+	# panel.get_theme_stylebox("panel").bg_color = color
+	panel.add_theme_stylebox_override("panel", panel.get_theme_stylebox("panel").duplicate())
+
 	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
