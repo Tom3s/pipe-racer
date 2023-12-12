@@ -322,7 +322,8 @@ func onEditorInputHandler_selectPressed(object: Object):
 			editorStateMachine.currentPlacerNode = propPlacer
 
 			editorStateMachine.gridCurrentHeight = (object.global_position - map.START_OFFSET).y / PrefabConstants.GRID_SIZE
-			propPlacer.updatePositionExact(object.global_position, object.global_rotation)
+			# editorStateMachine.gridCurrentHeight = object.global_position.y / PrefabConstants.GRID_SIZE
+			propPlacer.updatePositionExact(object.global_position - map.START_OFFSET, object.global_rotation)
 			propPlacer.mode = propPlacer.MODE_START_LINE
 			setVisibleUI(EDITOR_UI_START_PROPERTIES)
 
