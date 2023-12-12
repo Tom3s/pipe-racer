@@ -199,12 +199,13 @@ func _physics_process(_delta):
 		angular_velocity.z > angularTerminalVelocity || angular_velocity.z < -angularTerminalVelocity:
 		angular_velocity *= angularVelocityDamping
 		
+	if !paused:
+		for tire in tires:
+			calculateTirePhysics(tire, _delta)
+		for bottomOut in bottomOuts:
+			calculateBottomOutPhysics(bottomOut, _delta)
+			
 	if is_multiplayer_authority():
-		if !paused:
-			for tire in tires:
-				calculateTirePhysics(tire, _delta)
-			for bottomOut in bottomOuts:
-				calculateBottomOutPhysics(bottomOut, _delta)
 		
 		applyDownforce(state.getGroundedTireCount())
 		

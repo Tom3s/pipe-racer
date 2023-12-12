@@ -179,26 +179,30 @@ func animateMainContentsOut():
 	# return tween.finished
 
 func animateMainContentsIn():
-	var tween = create_tween()
+	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+	tween.set_parallel(true)
 
 	var windowSize = get_viewport_rect().size
 
-	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
+	var ZERO = 0.0
+
+	tween.tween_property(mainContent, "visible", true, ZERO)
+	tween.chain().tween_property(titleContainer, "inAnimation", true, ZERO)
 	for child in buttonContainer.get_children():
 		# child.get_child(0).inAnimation = true
 		var button: Button = child.get_child(0)
 		button.disabled = true
 		button.inAnimation = true
 		var label: Label = child.get_child(0).get_child(0)
-		tween.tween_property(label, "position", Vector2(-windowSize.x, 0), 0)\
+		tween.chain().tween_property(label, "position", Vector2(-windowSize.x, 0), ZERO)\
 			.as_relative()
-	tween.tween_property(titleContainer, "position", Vector2(windowSize.x, 0), 0)\
+	tween.chain().tween_property(titleContainer, "position", Vector2(windowSize.x, 0), ZERO)\
 		.as_relative()
-	# await tween.finished
 	# mainContent.visible = true
-	tween.tween_property(mainContent, "visible", true, 0)
-	tween = create_tween()
-	tween.set_parallel(true)
+
+	# await tween.finished
+	tween.chain()
+	
 	var index = 1
 	for child in buttonContainer.get_children():
 		# child.get_child(0).inAnimation = true
@@ -213,18 +217,14 @@ func animateMainContentsIn():
 		# await create_tween().tween_interval(INBETWEEN_TIME).finished
 		
 
-		tween.tween_property(label, "position", Vector2(windowSize.x, 0), MOVE_TIME)\
+		tween.tween_property(label, "position", Vector2(0, 0), MOVE_TIME)\
 			.as_relative()\
-			.set_ease(Tween.EASE_OUT)\
-			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
 		index += 1
-	tween.tween_property(titleContainer, "position", Vector2(-windowSize.x, 0), MOVE_TIME)\
+	tween.tween_property(titleContainer, "position", Vector2(0, 0), MOVE_TIME)\
 			.as_relative()\
-			.set_ease(Tween.EASE_OUT)\
-			.set_trans(Tween.TRANS_EXPO)\
 			.set_delay(INBETWEEN_TIME * index)
-	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
+	tween.tween_property(titleContainer, "inAnimation", false, MOVE_TIME)\
 			.set_delay(INBETWEEN_TIME * index)
 
 
@@ -239,10 +239,12 @@ func resetButtons():
 
 func hideMainContentsAnimated():
 	await animateMainContentsOut()
+	print('Anim out done')
 	mainContent.visible = false
 	resetButtons()
 
 func showMainContentsAnimated():
 	# mainContent.visible = true
 	await animateMainContentsIn()
+	print('Anim in done')
 	resetButtons()
