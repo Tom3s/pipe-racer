@@ -614,6 +614,10 @@ func getCurrentFrame() -> CarFrame:
 		state.impactTimer,
 	)
 
+func setGhostMode(ghostMode: bool):
+	if ghostMode:
+		%CarModel.setGhostMode(frameColor)
+
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():

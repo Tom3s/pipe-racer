@@ -33,6 +33,8 @@ var map: Map:
 @onready var ingameSFX = %IngameSFX
 @onready var pauseMenu = %PauseMenu
 
+@onready var replayManager: ReplayManager = %ReplayManager
+
 func _ready():
 	verticalSplitBottom.visible = false
 	pauseMenu.visible = false
@@ -70,6 +72,8 @@ func connectSignals():
 # Singaled functions
 
 func onCountdown_countdownFinished(timestamp: int):
+	replayManager.startRecording()
+
 	for player in players.get_children():
 		player = player as CarController
 		player.startRace()
@@ -246,6 +250,12 @@ func onState_allPlayersFinished():
 	if state.ranked:
 		leaderboardUI.fetchTimes(map.trackId)
 		leaderboardUI.visible = true
+	
+	var times: Array[int] = []
+	for key in timeTrialManagers:
+		times.append(timeTrialManagers[key].getTotalTime())
+
+	replayManager.saveRecording(times, map.trackId, map.trackName)
 
 func forceResumeGame():
 	state.pausedBy = -1
@@ -477,6 +487,8 @@ func recalculate() -> void:
 	if musicPlayer != null:
 		musicPlayer.playMenuMusic()
 
+	var cars: Array[CarController] = []
+
 	var index = 0
 	for car in players.get_children():
 		car.resumeMovement()
@@ -487,6 +499,9 @@ func recalculate() -> void:
 		if Network.userId == car.networkId:
 			car.playerName = Network.localData[car.getLocalIndex()].PLAYER_NAME
 			car.frameColor = Network.localData[car.getLocalIndex()].PLAYER_COLOR
+		cars.append(car)
+	
+	replayManager.setCars(cars)
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.reset()

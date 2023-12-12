@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://py3sgavbk1hr"]
+
+[ext_resource type="Script" path="res://ReplayGhost.gd" id="1_3qbu2"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="2_f1e5p"]
+
+[node name="ReplayGhost" type="Node3D"]
+script = ExtResource("1_3qbu2")
+
+[node name="CarController" parent="." instance=ExtResource("2_f1e5p")]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
