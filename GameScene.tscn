@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bw0tsauvupiuc"]
+[gd_scene load_steps=11 format=3 uid="uid://bw0tsauvupiuc"]
 
 [ext_resource type="Script" path="res://GameScene.gd" id="1_4deyh"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_m124p"]
@@ -6,8 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://wgcae8ei5xn5" path="res://Menu/LeaderboardUI.tscn" id="3_6e8rj"]
 [ext_resource type="PackedScene" uid="uid://dgurpytbg7dx6" path="res://Sounds/IngameSFX.tscn" id="3_iemo0"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="4_ose2u"]
+[ext_resource type="PackedScene" uid="uid://py3sgavbk1hr" path="res://ReplayGhost.tscn" id="6_xhgul"]
 [ext_resource type="Script" path="res://GameStateMachine.gd" id="7_yxiqb"]
 [ext_resource type="Script" path="res://GameEventListener.gd" id="8_c3gqs"]
+[ext_resource type="Script" path="res://ReplayManager.gd" id="9_dwb25"]
 
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_4deyh")
@@ -53,6 +55,9 @@ script = ExtResource("2_wmk0g")
 [node name="Players" type="Node3D" parent="."]
 unique_name_in_owner = true
 
+[node name="ReplayGhost" parent="." instance=ExtResource("6_xhgul")]
+unique_name_in_owner = true
+
 [node name="IngameSFX" parent="." instance=ExtResource("3_iemo0")]
 unique_name_in_owner = true
 
@@ -67,3 +72,7 @@ script = ExtResource("8_c3gqs")
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://CarController.tscn")
 spawn_path = NodePath("../Players")
+
+[node name="ReplayManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_dwb25")

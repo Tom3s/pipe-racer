@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://py3sgavbk1hr"]
+
+[ext_resource type="Script" path="res://ReplayGhost.gd" id="1_3qbu2"]
+
+[node name="ReplayGhost" type="Node3D"]
+script = ExtResource("1_3qbu2")

@@ -121,7 +121,10 @@ func _ready():
 		start.visible = false
 	
 	# if loadFrom != "":
-	# 	loadMap(loadFrom)
+	# loadMap("user://tracks/downloaded/65018d2f76dbc79627323b22.json") # hagyma
+	# loadMap("user://tracks/downloaded/6535a6a65e9a84298fc74678.json") # Flat Circuit
+	# loadMap("user://tracks/downloaded/650c73d0c3b8efa6383dde32.json") # Chamption's Track
+	# loadMap("user://tracks/downloaded/657382dee74a38eada2f8d54.json") # Experimental #1
 
 	setupAutoSave()
 

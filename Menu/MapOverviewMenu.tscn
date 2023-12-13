@@ -187,7 +187,7 @@ size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
 focus_neighbor_top = NodePath("../../Container6/RateButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
-focus_neighbor_bottom = NodePath("../../Container5/DeleteButton")
+focus_neighbor_bottom = NodePath("../../Container7/RefreshButton")
 script = ExtResource("3_2uk0n")
 
 [node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container4/OpenCommentsButton"]
@@ -245,7 +245,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
-focus_neighbor_top = NodePath("../../Container4/OpenCommentsButton")
+focus_neighbor_top = NodePath("../../Container7/RefreshButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
 focus_neighbor_bottom = NodePath("../../../../HBoxContainer/Container5/SelectButton")
 script = ExtResource("3_2uk0n")

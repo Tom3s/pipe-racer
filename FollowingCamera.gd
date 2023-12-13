@@ -38,6 +38,8 @@ func _ready():
 	set_physics_process(true)
 
 func _physics_process(delta):
+	if car == null:
+		return
 	if car.paused && !shouldUpdatePosition:
 		return
 
