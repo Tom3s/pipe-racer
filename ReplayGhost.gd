@@ -4,9 +4,30 @@ extends Node3D
 
 var frameData = []
 
+var playing = false
+
+var frame = 0
+
 func _ready():
 	carController.gravity_scale = 0
-	loadReplay("user://replays/hagyma_mogyi-00-14-686_2023-12-12.replay")
+	# loadReplay("user://replays/hagyma_mogyi-00-14-686_2023-12-12.replay")
+	loadReplay("user://replays/Flat Circuit_mogyi-02-15-497_2023-12-12.replay")
+
+	var cam = FollowingCamera.new(carController)
+	cam.current = true
+	add_child(cam)
+
+	set_physics_process(true)
+
+func _physics_process(_delta):
+	if playing:
+		if frame < frameData.size() - 1:
+			carController.global_position = frameData[frame][0]
+			carController.global_rotation = frameData[frame][1]
+			carController.linear_velocity = (frameData[frame + 1][0] - frameData[frame][0]) * (1 / _delta) 
+			frame += 1
+		else:
+			frame = 0
 
 func loadReplay(fileName: String):
 	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
@@ -32,23 +53,23 @@ func loadReplay(fileName: String):
 	if fileHandler.get_line() != "REPLAY_BEGIN":
 		print("Error reading replay file ", fileName)
 		return
-
-	while fileHandler.get_line() != "REPLAY_END":
-		var replayPos = fileHandler.get_csv_line()
-		var replayRot = fileHandler.get_csv_line()
-
+	var replayPosRot = fileHandler.get_csv_line()
+	while replayPosRot[0] != "REPLAY_END":
 		frameData.append([
 			Vector3(
-				replayPos[0].to_float(),
-				replayPos[1].to_float(),
-				replayPos[2].to_float()
+				replayPosRot[0].to_float(),
+				replayPosRot[1].to_float(),
+				replayPosRot[2].to_float()
 			),
 			Vector3(
-				replayRot[0].to_float(),
-				replayRot[1].to_float(),
-				replayRot[2].to_float()
+				replayPosRot[3].to_float(),
+				replayPosRot[4].to_float(),
+				replayPosRot[5].to_float()
 			)
 		])
+			
+		replayPosRot = fileHandler.get_csv_line()
+	playing = true
 	
 	fileHandler.close()
 

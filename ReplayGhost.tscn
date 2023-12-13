@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://py3sgavbk1hr"]
+[gd_scene load_steps=5 format=3 uid="uid://py3sgavbk1hr"]
 
 [ext_resource type="Script" path="res://ReplayGhost.gd" id="1_3qbu2"]
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="2_f1e5p"]
+[ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="3_pwvcr"]
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="4_yaqdi"]
 
 [node name="ReplayGhost" type="Node3D"]
 script = ExtResource("1_3qbu2")
@@ -9,4 +11,6 @@ script = ExtResource("1_3qbu2")
 [node name="CarController" parent="." instance=ExtResource("2_f1e5p")]
 unique_name_in_owner = true
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Map" parent="." instance=ExtResource("3_pwvcr")]
+
+[node name="TestTrackEnv" parent="." instance=ExtResource("4_yaqdi")]
