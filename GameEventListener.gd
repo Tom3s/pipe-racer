@@ -566,9 +566,9 @@ func clearPlayers():
 		players.remove_child(child)
 		child.queue_free()
 
-func addGhosts(fileNames: Array[String]):
-	for fileName in fileNames:
-		# var ghost: ReplayGhost = ReplayGhostScene.instantiate()
-		# ghosts.add_child(ghost)
-		# ghost.loadReplay(fileName, false)
-		replayGhost.loadReplay(fileName, false)
+func addGhosts(localFileNames: Array[String], downloadedFileNames: Array[String]):
+	for fileName in localFileNames:
+		replayGhost.loadReplay("user://replays/" + fileName, false)
+	
+	for fileName in downloadedFileNames:
+		replayGhost.loadReplay("user://replays/downloaded/" + fileName, false)

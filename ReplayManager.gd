@@ -11,6 +11,8 @@ func _ready():
 	var dir = DirAccess.open("user://")
 	if !dir.dir_exists("user://replays"):
 		dir.make_dir("user://replays")
+	if !dir.dir_exists("user://replays/downloaded"):
+		dir.make_dir("user://replays/downloaded")
 
 	set_physics_process(true)
 
