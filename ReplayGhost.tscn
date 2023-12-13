@@ -1,15 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://py3sgavbk1hr"]
+[gd_scene load_steps=2 format=3 uid="uid://py3sgavbk1hr"]
 
 [ext_resource type="Script" path="res://ReplayGhost.gd" id="1_3qbu2"]
-[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="2_f1e5p"]
 
 [node name="ReplayGhost" type="Node3D"]
 script = ExtResource("1_3qbu2")
-
-[node name="CarController" parent="." instance=ExtResource("2_f1e5p")]
-unique_name_in_owner = true
-collision_layer = 0
-collision_mask = 1
-continuous_cd = false
-max_contacts_reported = 6
-contact_monitor = false

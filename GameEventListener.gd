@@ -45,17 +45,16 @@ func _ready():
 
 	state.resetExitedPlayers()
 
-	# var ghost1: ReplayGhost = ReplayGhostScene.instantiate()
-	# ghosts.add_child(ghost1)
-	# ghost1.loadReplay("Champion's Track_mogyi-02-14-925_2023-12-13.replay")
-
-	# var ghost2: ReplayGhost = ReplayGhostScene.instantiate()
-	# ghosts.add_child(ghost2)
-	# ghost2.loadReplay("Champion's Track_mogyi-02-01-569_2023-12-13.replay")
-
-	# var ghost3: ReplayGhost = ReplayGhostScene.instantiate()
-	# ghosts.add_child(ghost3)
-	# ghost3.loadReplay("Champion's Track_mogyi-02-00-129_2023-12-13.replay")
+	addGhosts([
+		# "Champion's Track_mogyi-02-14-925_2023-12-13.replay",
+		# "Champion's Track_mogyi-02-01-569_2023-12-13.replay",
+		# "Champion's Track_mogyi-02-00-129_2023-12-13.replay",
+		# "Champion's Track_mogyi-01-58-884_2023-12-13.replay",
+		"SHortie #1_mogyi-00-52-856_Tometo-01-01-229_2023-12-13.replay",
+		"SHortie #1_mogyi-00-55-165_Tometo-00-49-594_2023-12-13.replay",
+		"SHortie #1_mogyi-00-54-190_Tometo-00-48-843_2023-12-13.replay",
+		"SHortie #1_mogyi-00-51-924_Tometo-00-59-194_2023-12-13.replay",
+	])
 
 	connectSignals()
 
@@ -295,6 +294,9 @@ func forceResumeGame():
 		if !state.online:
 			for key in timeTrialManagers:
 				timeTrialManagers[key].resumeTimeTrial(timestamp)
+
+		for ghost in ghosts.get_children():
+			ghost.playing = true
 
 
 func onPauseMenu_restartPressed():
