@@ -55,6 +55,7 @@ script = ExtResource("2_wmk0g")
 unique_name_in_owner = true
 
 [node name="Ghosts" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="IngameSFX" parent="." instance=ExtResource("3_iemo0")]
 unique_name_in_owner = true

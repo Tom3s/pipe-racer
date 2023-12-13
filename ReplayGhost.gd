@@ -1,4 +1,5 @@
 extends Node3D
+class_name ReplayGhost
 
 @onready var carController: CarController = %CarController
 
@@ -12,16 +13,15 @@ var frame: float = 0.0
 var timeScale: float = 1.0
 
 func _ready():
-	carController.gravity_scale = 0
 	# loadReplay("user://replays/hagyma_mogyi-00-14-686_2023-12-12.replay")
 	# loadReplay("user://replays/Flat Circuit_mogyi-02-15-497_2023-12-12.replay")
 	# loadReplay("user://replays/Champion's Track_mogyi-02-01-288_2023-12-13.replay")
 	# loadReplay("user://replays/Experimental #1_mogyi-00-25-029_2023-12-13.replay")
-	loadReplay("user://replays/Champion's Track_mogyi-02-01-569_2023-12-13.replay")
+	# loadReplay("user://replays/Champion's Track_mogyi-02-01-569_2023-12-13.replay")
 
-	var cam = FollowingCamera.new(carController)
-	cam.current = true
-	add_child(cam)
+	# var cam = FollowingCamera.new(carController)
+	# cam.current = true
+	# add_child(cam)
 
 	set_physics_process(true)
 
@@ -40,13 +40,22 @@ func _physics_process(_delta):
 			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
 			carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
 			frame += timeScale
-		else:
-			frame = 0
+	else:
+		carController.linear_velocity = Vector3.ZERO
+		var currentFrame = frameData[currentIndex]
+		var nextFrame = frameData[currentIndex + 1]
+
+		carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
+		carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
+
+		# else:
+		# 	frame = 0
 
 func loadReplay(fileName: String):
-	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
+	var path = "user://replays/" + fileName
+	var fileHandler = FileAccess.open(path, FileAccess.READ)
 	if fileHandler == null:
-		print("Error opening replay file ", fileName)
+		print("Error opening replay file ", path)
 		return
 	
 	var _mapName = fileHandler.get_line()
@@ -67,7 +76,7 @@ func loadReplay(fileName: String):
 	var nrFrames = fileHandler.get_line().to_int()
 
 	if fileHandler.get_line() != "REPLAY_BEGIN":
-		print("Error reading replay file ", fileName)
+		print("Error reading replay file ", path)
 		return
 	# var replayPosRot = fileHandler.get_csv_line()
 	var pos: Vector3 = Vector3.ZERO
@@ -112,7 +121,18 @@ func loadReplay(fileName: String):
 		print("Error reading replay file ", fileName)
 		return
 	# 	replayPosRot = fileHandler.get_csv_line()
-	playing = true
+	# playing = true
 	
 	fileHandler.close()
 
+func stopReplay():
+	playing = false
+	frame = 0
+	carController.global_position = frameData[0][0]
+	carController.global_rotation = frameData[0][1]
+	carController.linear_velocity = Vector3.ZERO
+	# carController.setGhostMode(false)
+
+func startReplay():
+	playing = true
+	frame = 0
