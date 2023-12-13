@@ -42,11 +42,11 @@ func stopRecording():
 # times (ticks) x nrCars
 # FrameData ('REPLAY_BEGIN', position.xyz, rotation.xyz, 'REPLAY_END') x nrFrames
 
-func saveRecording(times: Array[int], mapId: String, mapName: String):
-	stopRecording()
+func saveRecording(car: CarController, time: int, mapId: String, mapName: String):
+	# stopRecording()
 	var path = "user://replays/" + mapName + "_"
-	for i in cars.size():
-		path += cars[i].playerName + '-' + IngameHUD.getTimeStringFromTicks(times[i]).replace(":", "-") + '_'
+	# for i in cars.size():
+	path += car.playerName + '-' + IngameHUD.getTimeStringFromTicks(time).replace(":", "-") + '_'
 	path += str(Time.get_datetime_string_from_system()).split("T")[0]
 	path += ".replay"
 
@@ -60,17 +60,17 @@ func saveRecording(times: Array[int], mapId: String, mapName: String):
 	fileHandler.store_line(mapId)
 	fileHandler.store_line(str(cars.size()))
 
-	for i in cars.size():
-		fileHandler.store_csv_line([cars[i].playerName, cars[i].frameColor.to_html()])
+	# for i in cars.size():
+	fileHandler.store_csv_line([car.playerName, car.frameColor.to_html()])
 
-	for i in cars.size():
-		fileHandler.store_line(str(times[i]))
+	# for i in cars.size():
+	fileHandler.store_line(str(time))
 	
-	fileHandler.store_line(str(frames[0].size()))
+	fileHandler.store_line(str(frames[car.playerIndex].size()))
 
-	for replay in frames:
-		fileHandler.store_line("REPLAY_BEGIN")
-		for frame in replay:
+	# for replay in frames:
+	fileHandler.store_line("REPLAY_BEGIN")
+	for frame in frames[car.playerIndex]:
 # 			fileHandler.store_csv_line([
 # 				frame.position.x,
 # 				frame.position.y,
@@ -79,13 +79,13 @@ func saveRecording(times: Array[int], mapId: String, mapName: String):
 # 				frame.rotation.y,
 # 				frame.rotation.z
 # 			])
-			fileHandler.store_float(frame.position.x)
-			fileHandler.store_float(frame.position.y)
-			fileHandler.store_float(frame.position.z)
-			fileHandler.store_float(frame.rotation.x)
-			fileHandler.store_float(frame.rotation.y)
-			fileHandler.store_float(frame.rotation.z)
-		fileHandler.store_line("REPLAY_END")
+		fileHandler.store_float(frame.position.x)
+		fileHandler.store_float(frame.position.y)
+		fileHandler.store_float(frame.position.z)
+		fileHandler.store_float(frame.rotation.x)
+		fileHandler.store_float(frame.rotation.y)
+		fileHandler.store_float(frame.rotation.z)
+	fileHandler.store_line("REPLAY_END")
 	
 	fileHandler.close()
 

@@ -26,6 +26,8 @@ func _ready():
 	# cam.current = true
 	# add_child(cam)
 
+	# frameData = []
+
 	set_physics_process(true)
 
 var currentIndex: int = 0
@@ -59,7 +61,7 @@ func _physics_process(_delta):
 		# else:
 		# 	frame = 0
 
-func loadReplay(fileName: String):
+func loadReplay(fileName: String, clearReplays: bool = true):
 	var path = "user://replays/" + fileName
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 	if fileHandler == null:
@@ -96,7 +98,12 @@ func loadReplay(fileName: String):
 
 	var pos: Vector3 = Vector3.ZERO
 	var rot: Vector3 = Vector3.ZERO
-	frameData.clear()
+	if clearReplays:
+		print("=================== Clearing replays ===================")
+		frameData.clear()
+	
+	# print("Loading replay: ", frameData)
+
 	for carIndex in _nrCars:
 		if fileHandler.get_line() != "REPLAY_BEGIN":
 			print("Error reading replay file (no REPLAY_BEGIN) ", path, " index ", carIndex)
@@ -111,13 +118,15 @@ func loadReplay(fileName: String):
 			rot.y = fileHandler.get_float()
 			rot.z = fileHandler.get_float()
 
-			frameData[carIndex].append([pos, rot])
+			frameData.back().append([pos, rot])
 
 		if fileHandler.get_line() != "REPLAY_END":
 			print("Error reading replay file (no REPLAY_END) ", path, " index ", carIndex)
 			return
 	
 	fileHandler.close()
+	print("Replay loaded: ", path)
+	print("Frames: ", frameData.back().size())
 
 func stopReplay():
 	playing = false

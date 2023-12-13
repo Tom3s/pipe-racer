@@ -4,7 +4,7 @@ class_name GameEventListener
 # scenes
 var Car := preload("res://CarController.tscn")
 var HudScene := preload("res://HUD/HUD.tscn")
-var ReplayGhostScene := preload("res://ReplayGhost.tscn")
+# var ReplayGhostScene := preload("res://ReplayGhost.tscn")
 
 # data to care about
 var playerDatas: Array[PlayerData] = []
@@ -36,7 +36,7 @@ var map: Map:
 
 @onready var replayManager: ReplayManager = %ReplayManager
 
-@onready var ghosts: Node3D = %Ghosts
+@onready var replayGhost: ReplayGhost = %ReplayGhost
 
 func _ready():
 	verticalSplitBottom.visible = false
@@ -101,8 +101,9 @@ func onCountdown_countdownFinished(timestamp: int):
 	state.raceStarted = true
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
-	for ghost in ghosts.get_children():
-		ghost.startReplay()
+	# for ghost in ghosts.get_children():
+	# 	ghost.startReplay()
+	replayGhost.startReplay()
 
 func onRaceInputHandler_pausePressed(playerIndex: int):
 	if state.online:
@@ -135,8 +136,9 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 						timeTrialManagers[player.name].resumeTimeTrial(timestamp)
 					player.state.hasControl = !player.state.finisishedRacing()
 
-				for ghost in ghosts.get_children():
-					ghost.playing = true
+				# for ghost in ghosts.get_children():
+				# 	ghost.playing = true
+				replayGhost.playing = true
 			
 			state.pausedBy = -1
 			pauseMenu.visible = false
@@ -150,8 +152,9 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 					timeTrialManagers[player.name].pauseTimeTrial(timestamp)
 				player.state.hasControl = false
 
-			for ghost in ghosts.get_children():
-				ghost.playing = false
+			# for ghost in ghosts.get_children():
+			# 	ghost.playing = false
+			replayGhost.playing = false
 
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
@@ -188,6 +191,8 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		raceStats[playerIdentifier].increaseFinishes()
 		raceStats[playerIdentifier].setBestLap(bestLap)
 		raceStats[playerIdentifier].setBestTime(totalTime)
+
+		replayManager.saveRecording(car, totalTime, map.trackId, map.trackName)
 
 		var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
 
@@ -280,7 +285,7 @@ func onState_allPlayersFinished():
 	for key in timeTrialManagers:
 		times.append(timeTrialManagers[key].getTotalTime())
 
-	replayManager.saveRecording(times, map.trackId, map.trackName)
+	replayManager.stopRecording()
 
 func forceResumeGame():
 	state.pausedBy = -1
@@ -295,8 +300,9 @@ func forceResumeGame():
 			for key in timeTrialManagers:
 				timeTrialManagers[key].resumeTimeTrial(timestamp)
 
-		for ghost in ghosts.get_children():
-			ghost.playing = true
+		# for ghost in ghosts.get_children():
+		# 	ghost.playing = true
+		replayGhost.playing = true
 
 
 func onPauseMenu_restartPressed():
@@ -531,8 +537,9 @@ func recalculate() -> void:
 	
 	replayManager.setCars(cars)
 
-	for ghost in ghosts.get_children():
-		ghost.stopReplay()
+	# for ghost in ghosts.get_children():
+	# 	ghost.stopReplay()
+	replayGhost.stopReplay()
 	
 	for checkpoint in map.getCheckpoints():
 		checkpoint.reset()
@@ -561,6 +568,7 @@ func clearPlayers():
 
 func addGhosts(fileNames: Array[String]):
 	for fileName in fileNames:
-		var ghost: ReplayGhost = ReplayGhostScene.instantiate()
-		ghosts.add_child(ghost)
-		ghost.loadReplay(fileName)
+		# var ghost: ReplayGhost = ReplayGhostScene.instantiate()
+		# ghosts.add_child(ghost)
+		# ghost.loadReplay(fileName, false)
+		replayGhost.loadReplay(fileName, false)
