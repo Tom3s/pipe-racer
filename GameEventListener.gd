@@ -45,16 +45,16 @@ func _ready():
 
 	state.resetExitedPlayers()
 
-	addGhosts([
-		# "Champion's Track_mogyi-02-14-925_2023-12-13.replay",
-		# "Champion's Track_mogyi-02-01-569_2023-12-13.replay",
-		# "Champion's Track_mogyi-02-00-129_2023-12-13.replay",
-		# "Champion's Track_mogyi-01-58-884_2023-12-13.replay",
-		"SHortie #1_mogyi-00-52-856_Tometo-01-01-229_2023-12-13.replay",
-		"SHortie #1_mogyi-00-55-165_Tometo-00-49-594_2023-12-13.replay",
-		"SHortie #1_mogyi-00-54-190_Tometo-00-48-843_2023-12-13.replay",
-		"SHortie #1_mogyi-00-51-924_Tometo-00-59-194_2023-12-13.replay",
-	])
+	# addGhosts([
+	# 	# "Champion's Track_mogyi-02-14-925_2023-12-13.replay",
+	# 	# "Champion's Track_mogyi-02-01-569_2023-12-13.replay",
+	# 	# "Champion's Track_mogyi-02-00-129_2023-12-13.replay",
+	# 	# "Champion's Track_mogyi-01-58-884_2023-12-13.replay",
+	# 	"SHortie #1_mogyi-00-52-856_Tometo-01-01-229_2023-12-13.replay",
+	# 	"SHortie #1_mogyi-00-55-165_Tometo-00-49-594_2023-12-13.replay",
+	# 	"SHortie #1_mogyi-00-54-190_Tometo-00-48-843_2023-12-13.replay",
+	# 	"SHortie #1_mogyi-00-51-924_Tometo-00-59-194_2023-12-13.replay",
+	# ])
 
 	connectSignals()
 
