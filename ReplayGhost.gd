@@ -6,7 +6,10 @@ var frameData = []
 
 var playing = false
 
-var frame = 0
+var frame: float = 0.0
+
+@export_range(0.1, 5.0, 0.1)
+var timeScale: float = 1.0
 
 func _ready():
 	carController.gravity_scale = 0
@@ -19,13 +22,21 @@ func _ready():
 
 	set_physics_process(true)
 
+var currentIndex: int = 0
+var currentFraction: float = 0.0
 func _physics_process(_delta):
 	if playing:
 		if frame < frameData.size() - 1:
-			carController.global_position = frameData[frame][0]
-			carController.global_rotation = frameData[frame][1]
-			carController.linear_velocity = (frameData[frame + 1][0] - frameData[frame][0]) * (1 / _delta) 
-			frame += 1
+			currentIndex = int(frame)
+			currentFraction = frame - currentIndex
+
+			var currentFrame = frameData[currentIndex]
+			var nextFrame = frameData[currentIndex + 1]
+
+			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
+			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
+			carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
+			frame += timeScale
 		else:
 			frame = 0
 

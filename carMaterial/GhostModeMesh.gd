@@ -5,6 +5,7 @@ func getGhostMaterial(color: Color) -> Material:
 	mat.transparency = StandardMaterial3D.TRANSPARENCY_ALPHA
 	mat.albedo_color = color
 	mat.albedo_color.a = 0.45
+	mat.shading_mode = StandardMaterial3D.SHADING_MODE_UNSHADED
 
 	return mat
 
