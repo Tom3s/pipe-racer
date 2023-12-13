@@ -62,7 +62,13 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
 	raceNode.exitPressed.connect(onRace_exited)
-	var success = raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	var success = raceNode.setup(
+		trackName, 
+		trackName.begins_with("user://tracks/downloaded"),
+		false,
+		mapOverviewMenu.localReplays,
+		mapOverviewMenu.downloadedReplays
+	)
 	if !success:
 		AlertManager.showAlert(
 			self,
@@ -70,6 +76,10 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 			"Try updating the map to the new format, or download it again"
 		)
 		mapOverviewMenu.show()
+		return
+	
+	# raceNode.addGhosts(mapOverviewMenu.localReplays, mapOverviewMenu.downloadedReplays)
+
 
 func onPlayerSelectorMenu_backPressed():
 	GlobalProperties.returnPlayerSelectorMenu(

@@ -14,6 +14,8 @@ func setup(
 	mapName: String,
 	ranked: bool = false,
 	online: bool = false,
+	localReplays: Array[String] = [],
+	downloadedReplays: Array[String] = [],
 
 ) -> bool:
 	# load map
@@ -32,6 +34,8 @@ func setup(
 	%GameEventListener.state.online = online
 
 	%GameEventListener.map = map
+
+	%GameEventListener.addGhosts(localReplays, downloadedReplays)
 
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()

@@ -34,6 +34,8 @@ var currentIndex: int = 0
 var currentFraction: float = 0.0
 func _physics_process(_delta):
 	if playing:
+		if frameData.size() <= 0:
+			return
 		if frame < frameData[0].size() - 1:
 			currentIndex = int(frame)
 			currentFraction = frame - currentIndex
@@ -62,10 +64,10 @@ func _physics_process(_delta):
 		# 	frame = 0
 
 func loadReplay(fileName: String, clearReplays: bool = true):
-	var path = "user://replays/" + fileName
-	var fileHandler = FileAccess.open(path, FileAccess.READ)
+	# var path = "user://replays/" + fileName
+	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
 	if fileHandler == null:
-		print("Error opening replay file ", path)
+		print("Error opening replay file ", fileName)
 		return
 	
 	var _mapName = fileHandler.get_line()
@@ -106,7 +108,7 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 
 	for carIndex in _nrCars:
 		if fileHandler.get_line() != "REPLAY_BEGIN":
-			print("Error reading replay file (no REPLAY_BEGIN) ", path, " index ", carIndex)
+			print("Error reading replay file (no REPLAY_BEGIN) ", fileName, " index ", carIndex)
 			return
 		frameData.append([])
 		for i in nrFrames:
@@ -121,11 +123,11 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 			frameData.back().append([pos, rot])
 
 		if fileHandler.get_line() != "REPLAY_END":
-			print("Error reading replay file (no REPLAY_END) ", path, " index ", carIndex)
+			print("Error reading replay file (no REPLAY_END) ", fileName, " index ", carIndex)
 			return
 	
 	fileHandler.close()
-	print("Replay loaded: ", path)
+	print("Replay loaded: ", fileName)
 	print("Frames: ", frameData.back().size())
 
 func stopReplay():
