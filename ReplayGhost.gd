@@ -14,7 +14,10 @@ var timeScale: float = 1.0
 func _ready():
 	carController.gravity_scale = 0
 	# loadReplay("user://replays/hagyma_mogyi-00-14-686_2023-12-12.replay")
-	loadReplay("user://replays/Flat Circuit_mogyi-02-15-497_2023-12-12.replay")
+	# loadReplay("user://replays/Flat Circuit_mogyi-02-15-497_2023-12-12.replay")
+	# loadReplay("user://replays/Champion's Track_mogyi-02-01-288_2023-12-13.replay")
+	# loadReplay("user://replays/Experimental #1_mogyi-00-25-029_2023-12-13.replay")
+	loadReplay("user://replays/Champion's Track_mogyi-02-01-569_2023-12-13.replay")
 
 	var cam = FollowingCamera.new(carController)
 	cam.current = true
@@ -61,25 +64,54 @@ func loadReplay(fileName: String):
 
 	var time = fileHandler.get_line().to_int()
 
+	var nrFrames = fileHandler.get_line().to_int()
+
 	if fileHandler.get_line() != "REPLAY_BEGIN":
 		print("Error reading replay file ", fileName)
 		return
-	var replayPosRot = fileHandler.get_csv_line()
-	while replayPosRot[0] != "REPLAY_END":
-		frameData.append([
-			Vector3(
-				replayPosRot[0].to_float(),
-				replayPosRot[1].to_float(),
-				replayPosRot[2].to_float()
-			),
-			Vector3(
-				replayPosRot[3].to_float(),
-				replayPosRot[4].to_float(),
-				replayPosRot[5].to_float()
-			)
-		])
-			
-		replayPosRot = fileHandler.get_csv_line()
+	# var replayPosRot = fileHandler.get_csv_line()
+	var pos: Vector3 = Vector3.ZERO
+	var rot: Vector3 = Vector3.ZERO
+	frameData.clear()
+	for i in nrFrames:
+		# frameData.append([
+		# 	Vector3(
+		# 		fileHandler.get_float(),
+		# 		fileHandler.get_float(),
+		# 		fileHandler.get_float()
+		# 	),
+		# 	Vector3(
+		# 		fileHandler.get_float(),
+		# 		fileHandler.get_float(),
+		# 		fileHandler.get_float()
+		# 	)
+		# ])
+		pos.x = fileHandler.get_float()
+		pos.y = fileHandler.get_float()
+		pos.z = fileHandler.get_float()
+
+		rot.x = fileHandler.get_float()
+		rot.y = fileHandler.get_float()
+		rot.z = fileHandler.get_float()
+
+		frameData.append([pos, rot])
+	# while replayPosRot[0] != "REPLAY_END":
+	# 	frameData.append([
+	# 		Vector3(
+	# 			replayPosRot[0].to_float(),
+	# 			replayPosRot[1].to_float(),
+	# 			replayPosRot[2].to_float()
+	# 		),
+	# 		Vector3(
+	# 			replayPosRot[3].to_float(),
+	# 			replayPosRot[4].to_float(),
+	# 			replayPosRot[5].to_float()
+	# 		)
+	# 	])
+	if fileHandler.get_line() != "REPLAY_END":
+		print("Error reading replay file ", fileName)
+		return
+	# 	replayPosRot = fileHandler.get_csv_line()
 	playing = true
 	
 	fileHandler.close()

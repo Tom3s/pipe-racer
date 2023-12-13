@@ -7,7 +7,6 @@
 
 [node name="ReplayGhost" type="Node3D"]
 script = ExtResource("1_3qbu2")
-timeScale = 0.2
 
 [node name="CarController" parent="." instance=ExtResource("2_f1e5p")]
 unique_name_in_owner = true

@@ -66,20 +66,27 @@ func saveRecording(times: Array[int], mapId: String, mapName: String):
 	for i in cars.size():
 		fileHandler.store_line(str(times[i]))
 	
-	# fileHandler.store_line(str(frames[0].size()))
+	fileHandler.store_line(str(frames[0].size()))
 
 	for replay in frames:
 		fileHandler.store_line("REPLAY_BEGIN")
 		for frame in replay:
-			fileHandler.store_csv_line([
-				frame.position.x,
-				frame.position.y,
-				frame.position.z,
-				frame.rotation.x,
-				frame.rotation.y,
-				frame.rotation.z
-			])
+# 			fileHandler.store_csv_line([
+# 				frame.position.x,
+# 				frame.position.y,
+# 				frame.position.z,
+# 				frame.rotation.x,
+# 				frame.rotation.y,
+# 				frame.rotation.z
+# 			])
+			fileHandler.store_float(frame.position.x)
+			fileHandler.store_float(frame.position.y)
+			fileHandler.store_float(frame.position.z)
+			fileHandler.store_float(frame.rotation.x)
+			fileHandler.store_float(frame.rotation.y)
+			fileHandler.store_float(frame.rotation.z)
 		fileHandler.store_line("REPLAY_END")
 	
 	fileHandler.close()
+
 		
