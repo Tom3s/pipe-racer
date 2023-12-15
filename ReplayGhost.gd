@@ -49,8 +49,9 @@ func _physics_process(_delta):
 			var carController = get_child(i)
 			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
 			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
-			carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
-		frame += timeScale
+			carController.linear_velocity = (nextFrame[0] - currentFrame[0]) * (1 / _delta) 
+		if frame < getNrFrames() - 1:
+			frame += timeScale
 	else:
 		for i in get_child_count():
 			var carController = get_child(i)
@@ -147,3 +148,15 @@ func stopReplay():
 func startReplay():
 	playing = true
 	frame = 0
+
+func getNrFrames():
+	var maxFrames = 0
+	for i in frameData.size():
+		if frameData[i].size() > maxFrames:
+			maxFrames = frameData[i].size()
+	return maxFrames
+
+func getCar(index: int):
+	if index >= get_child_count():
+		return get_child(0)
+	return get_child(index)
