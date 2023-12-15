@@ -73,7 +73,9 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 	var _mapName = fileHandler.get_line()
 	# var nrCars = fileHandler.get_32()
 	_nrCars = fileHandler.get_line().to_int()
-
+	
+	for i in _nrCars:
+		var time = fileHandler.get_line().to_int()
 
 	for i in _nrCars:
 		var carMetadata = fileHandler.get_csv_line()
@@ -89,10 +91,6 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 		carController.playerName = playerName
 		carController.frameColor = playerColor
 		carController.setGhostMode(true)
-
-
-	for i in _nrCars:
-		var time = fileHandler.get_line().to_int()
 
 	var nrFrames = fileHandler.get_line().to_int()
 
