@@ -464,6 +464,8 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 		verticalSplitBottom.visible = true
 	
 	var camera := FollowingCamera.new(car)
+	if car.playerIndex < 4:
+		camera.mode = GlobalProperties.PREFERED_CAMERAS[car.playerIndex]
 
 	localCameras[car.name] = camera
 

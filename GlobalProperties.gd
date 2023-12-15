@@ -131,6 +131,14 @@ var MOUSE_SENSITIVITY: float = 20.0:
 		return MOUSE_SENSITIVITY
 
 @export
+var PREFERED_CAMERAS: Array = [0, 0, 0, 0]:
+	set(newCameras):
+		PREFERED_CAMERAS = newCameras
+		# saveToFile()
+	get:
+		return PREFERED_CAMERAS
+
+@export
 var JOY_CONTROL_OVERWRITES = {
 	"1": {},
 	"2": {},
