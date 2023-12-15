@@ -3,6 +3,7 @@ extends Control
 @onready var mainContent: Control = %MainContent
 @onready var playButton: Button = %PlayButton
 @onready var editButton: Button = %EditButton
+@onready var replayButton: Button = %ReplayButton
 @onready var playOnlineButton: Button = %PlayOnlineButton
 @onready var websiteButton: Button = %WebsiteButton
 @onready var settingsButton: Button = %SettingsButton
@@ -12,6 +13,7 @@ extends Control
 
 @onready var raceMapLoader: RaceMapLoader = %RaceMapLoader
 @onready var editorMapLoader: EditorMapLoader = %EditorMapLoader
+@onready var replayViewerLoader: ReplayViewerLoader = %ReplayViewerLoader
 @onready var onlineMapLoader: OnlineMapLoader = %OnlineMapLoader
 @onready var controlsMenu: ControlsMenu = %ControlsMenu
 
@@ -44,6 +46,7 @@ func _ready():
 func connectSignals():
 	playButton.pressed.connect(onPlayButton_pressed)
 	editButton.pressed.connect(onEditButton_pressed)
+	replayButton.pressed.connect(onReplayButton_pressed)
 	playOnlineButton.pressed.connect(onPlayOnlineButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
@@ -56,6 +59,7 @@ func connectSignals():
 	editorMapLoader.enteredMapEditor.connect(onEditorMapLoader_enteredMapEditor)
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
+	replayViewerLoader.backPressed.connect(onReplayViewerLoader_backPressed)
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("fullscreen"):
@@ -78,6 +82,10 @@ func onPlayButton_pressed():
 func onEditButton_pressed():
 	await hideMainContentsAnimated()
 	editorMapLoader.show()
+
+func onReplayButton_pressed():
+	await hideMainContentsAnimated()
+	replayViewerLoader.show()
 
 func onPlayOnlineButton_pressed():
 	await hideMainContentsAnimated()
@@ -125,8 +133,14 @@ func onEditorMapLoader_exitedMapEditor():
 
 func onOnlineMapLoader_backPressed():
 	# mainContent.visible = true
-	playOnlineButton.grab_focus()
 	await showMainContentsAnimated()
+	playOnlineButton.grab_focus()
+
+func onReplayViewerLoader_backPressed():
+	# mainContent.visible = true
+	# %Background.visible = true
+	await showMainContentsAnimated()
+	replayButton.grab_focus()
 
 
 const MOVE_TIME = 0.2

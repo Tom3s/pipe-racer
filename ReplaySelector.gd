@@ -10,7 +10,7 @@ class_name ReplaySelector
 signal replaysSelected(local: Array[String], online: Array[String])
 signal cancelPressed()
 
-var trackId: String = "650c73d0c3b8efa6383dde32"
+var trackId: String = ""
 
 var downloadedReplayIds: Array[String] = []
 
@@ -26,6 +26,9 @@ func _ready():
 		for index in downloadedReplays.get_selected_items():
 			online.append(downloadedReplayIds[index])
 		# TODO: handle downloaded replays
+
+		if local.size() == 0 and online.size() == 0:
+			return
 
 		print("[ReplaySelector.gd] selected replays: ", local, online)
 

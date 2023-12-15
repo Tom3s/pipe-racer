@@ -144,6 +144,7 @@ LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
 [node name="ReplayViewerLoader" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

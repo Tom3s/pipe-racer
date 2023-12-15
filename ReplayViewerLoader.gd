@@ -9,6 +9,8 @@ var ReplayViewerScene := preload("res://Menu/ReplayViewer.tscn")
 var trackIds: Array = []
 var currentTrackId: String = ""
 
+signal backPressed()
+
 func _ready():
 	loadMapList()
 
@@ -20,9 +22,12 @@ func _ready():
 	replaySelector.cancelPressed.connect(func():
 		replaySelector.show()
 		hide()
+		backPressed.emit()
 	)
 
 	replaySelector.replaysSelected.connect(func(local: Array[String], online: Array[String]):
+		if local.size() == 0 and online.size() == 0:
+			return
 		replaySelector.show()
 
 		var replayViewer: ReplayViewer = ReplayViewerScene.instantiate()
@@ -34,13 +39,13 @@ func _ready():
 		)
 		replayViewer.exitPressed.connect(func():
 			show()
+			get_tree().root.get_node("MainMenu/Background").show()
 		)
 		hide()
+		get_tree().root.get_node("MainMenu/Background").hide()
 	)
 
 func loadMapList():
-	if not visible:
-		return
 	mapList.clear()
 	trackIds.clear()
 	var path = "user://tracks/downloaded/"
