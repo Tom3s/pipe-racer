@@ -192,7 +192,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		raceStats[playerIdentifier].setBestLap(bestLap)
 		raceStats[playerIdentifier].setBestTime(totalTime)
 
-		replayManager.saveRecording(car, totalTime, map.trackId, map.trackName)
+		var recording = replayManager.saveRecording(car, totalTime, map.trackId, map.trackName)
 
 		var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
 
@@ -202,6 +202,7 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 				AlertManager.showAlert(self, "Offline", "Please update the game to submit times")
 			else:
 				Leaderboard.submitTime(
+					recording,
 					timeTrialManagers[playerIdentifier].splits,
 					bestLap,
 					totalTime,

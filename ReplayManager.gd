@@ -40,11 +40,11 @@ func stopRecording():
 # Replay File Format:
 # mapId
 # nrCars
-# CarMetaData (name, color) x nrCars
 # times (ticks) x nrCars
+# CarMetaData (name, color) x nrCars
 # FrameData ('REPLAY_BEGIN', position.xyz, rotation.xyz, 'REPLAY_END') x nrFrames
 
-func saveRecording(car: CarController, time: int, mapId: String, mapName: String):
+func saveRecording(car: CarController, time: int, mapId: String, mapName: String) -> String:
 	# stopRecording()
 	var path = "user://replays/" + mapName + "_"
 	# for i in cars.size():
@@ -57,16 +57,14 @@ func saveRecording(car: CarController, time: int, mapId: String, mapName: String
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
 	if fileHandler == null:
 		print("Error opening replay file to save into")
-		return
+		return ""
 	
 	fileHandler.store_line(mapId)
 	fileHandler.store_line(str(cars.size()))
 
-	# for i in cars.size():
-	fileHandler.store_csv_line([car.playerName, car.frameColor.to_html()])
-
-	# for i in cars.size():
 	fileHandler.store_line(str(time))
+
+	fileHandler.store_csv_line([car.playerName, car.frameColor.to_html()])
 	
 	fileHandler.store_line(str(frames[car.playerIndex].size()))
 
@@ -90,5 +88,7 @@ func saveRecording(car: CarController, time: int, mapId: String, mapName: String
 	fileHandler.store_line("REPLAY_END")
 	
 	fileHandler.close()
+
+	return path
 
 		

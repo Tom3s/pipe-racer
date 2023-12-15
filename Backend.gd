@@ -18,13 +18,16 @@ var FRONTEND_IP_ADRESS: String = "https://pipe-racer.pro/":
 	get:
 		return FRONTEND_IP_ADRESS
 
+var OVERWRITE: bool = false
+
 func _ready() -> void:
 	loadFromFile()
 
 func saveToFile() -> void:
 	var jsonData = {
 		"BACKEND_IP_ADRESS": BACKEND_IP_ADRESS,
-		"FRONTEND_IP_ADRESS": FRONTEND_IP_ADRESS
+		"FRONTEND_IP_ADRESS": FRONTEND_IP_ADRESS,
+		"OVERWRITE": OVERWRITE
 	}
 
 	var jsonText = JSON.stringify(jsonData, "\t")
@@ -41,9 +44,14 @@ func loadFromFile() -> void:
 		if !jsonData.has("OVERWRITE"):
 			saveToFile()
 			return
+		var overWrite = jsonData["OVERWRITE"]
+
+		if !overWrite:
+			return
 
 		BACKEND_IP_ADRESS = jsonData["BACKEND_IP_ADRESS"]
 		FRONTEND_IP_ADRESS = jsonData["FRONTEND_IP_ADRESS"]
+		OVERWRITE = jsonData["OVERWRITE"]
 	else:
 		saveToFile()
 
