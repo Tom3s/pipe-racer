@@ -54,6 +54,7 @@ func init(newTrackId: String) -> void:
 	refresh()
 
 func loadLocalReplays(trackId: String) -> void:
+	localReplays.deselect_all()
 	localReplays.clear()
 
 	var path = "user://replays/"
@@ -74,7 +75,9 @@ func loadLocalReplays(trackId: String) -> void:
 			fileName = directory.get_next()
 
 func loadDownloadedReplays(trackId: String) -> void:
+	downloadedReplays.deselect_all()
 	downloadedReplays.clear()
+	downloadedReplayIds.clear()
 
 	var path = "user://replays/downloaded/"
 	var directory = DirAccess.open(path)

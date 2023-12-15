@@ -69,7 +69,7 @@ func _physics_process(_delta):
 		# else:
 		# 	frame = 0
 
-func loadReplay(fileName: String, clearReplays: bool = true):
+func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = true):
 	# var path = "user://replays/" + fileName
 	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
 	if fileHandler == null:
@@ -96,7 +96,8 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 		add_child(carController)
 		carController.playerName = playerName
 		carController.frameColor = playerColor
-		carController.setGhostMode(true)
+		if ghostMode:
+			carController.setGhostMode(true)
 
 	var nrFrames = fileHandler.get_line().to_int()
 
@@ -160,3 +161,13 @@ func getCar(index: int):
 	if index >= get_child_count():
 		return get_child(0)
 	return get_child(index)
+
+func clearReplays():
+	frameData.clear()
+	for i in get_child_count():
+		get_child(i).queue_free()
+	
+func setLabelVisibility(visible: bool):
+	for i in get_child_count():
+		var car: CarController = get_child(i)
+		car.setLabelVisibility(visible)

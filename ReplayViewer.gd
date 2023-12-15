@@ -4,8 +4,11 @@ class_name ReplayViewer
 @onready var replayViewerUI: ReplayViewerUI = %ReplayViewerUI
 @onready var replayGhost: ReplayGhost = %ReplayGhost
 @onready var map: Map = %Map
+@onready var freeCam: Camera3D = %FreeCam
 
 var camera: FollowingCamera
+
+signal exitPressed()
 
 func setup(
 	localReplays: Array[String],
@@ -14,11 +17,11 @@ func setup(
 ):
 	for replay in localReplays:
 		var path = "user://replays/" + replay
-		replayGhost.loadReplay(path, false)
+		replayGhost.loadReplay(path, false, false)
 	
 	for replay in downloadedReplays:
 		var path = "user://replays/downloaded/" + replay
-		replayGhost.loadReplay(path, false)
+		replayGhost.loadReplay(path, false, false)
 
 	map.loadMap("user://tracks/downloaded/" + mapId + ".json")
 
@@ -26,6 +29,8 @@ func setup(
 
 	camera = FollowingCamera.new(replayGhost.getCar(0))
 	add_child(camera)
+	camera.current = true
+	freeCam.current = false
 
 	replayViewerUI.changePlayer.connect(func(player: int):
 		currentPlayerIndex = (currentPlayerIndex + player) % replayGhost.get_child_count()
@@ -38,6 +43,11 @@ func setup(
 
 	replayViewerUI.changeCamera.connect(func():
 		camera.changeMode()
+	)
+
+	replayViewerUI.freeCamSelected.connect(func(freeCamSelected: bool):
+		camera.current = !freeCamSelected
+		freeCam.current = freeCamSelected
 	)
 
 var currentPlayerIndex: int = 0
@@ -54,7 +64,14 @@ func _ready():
 		replayGhost.frame = frame
 		replayGhost.currentIndex = frame
 	)
-	
+	replayViewerUI.exitPressed.connect(func():
+		exitPressed.emit()
+		queue_free()
+	)
+	replayViewerUI.hideUI.connect(func(visible: bool):
+		replayGhost.setLabelVisibility(visible)
+	)
+		
 
 	set_physics_process(true)
 

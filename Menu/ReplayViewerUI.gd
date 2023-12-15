@@ -12,17 +12,21 @@ class_name ReplayViewerUI
 @onready var playbackSpeedLabel: Label = %PlaybackSpeedLabel
 @onready var playbackSpeedSlider: HSlider = %PlaybackSpeedSlider
 
+@onready var exitButton: Button = %ExitButton
 @onready var prevPlayerButton: Button = %PrevPlayerButton
 @onready var nextPlayerButton: Button = %NextPlayerButton
 @onready var currentPlayer: Label = %CurrentPlayer
 @onready var changeCameraButton: Button = %ChangeCameraButton
-
+@onready var freeCamButton: Button = %FreeCamButton
 
 signal playPauseToggled(toggled: bool)
 signal newSpeedSet(speed: float)
 signal seekBarChanged(newFrame: int)
 signal changePlayer(player: int)
 signal changeCamera()
+signal freeCamSelected(freeCam: bool)
+signal exitPressed()
+signal hideUI(visible: bool)
 
 func setup(
 	totalFramrCount: int,
@@ -63,6 +67,19 @@ func _ready():
 	changeCameraButton.pressed.connect(func():
 		changeCamera.emit()
 	)
+	exitButton.pressed.connect(func():
+		exitPressed.emit()
+	)
+	freeCamButton.toggled.connect(func(toggled: bool):
+		freeCamSelected.emit(toggled)
+	)
+
+	set_physics_process(true)
+
+func _physics_process(delta: float):
+	if Input.is_action_just_pressed("replay_hide_ui"):
+		visible = !visible
+		hideUI.emit(visible)
 
 
 func setFrame(frame: int) -> void:

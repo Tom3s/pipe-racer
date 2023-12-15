@@ -32,6 +32,9 @@ func _ready():
 			online,
 			currentTrackId
 		)
+		replayViewer.exitPressed.connect(func():
+			show()
+		)
 		hide()
 	)
 
