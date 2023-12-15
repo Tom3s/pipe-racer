@@ -280,7 +280,14 @@ func onState_allPlayersFinished():
 	print("All players finished")
 	if state.ranked:
 		leaderboardUI.fetchTimes(map.trackId)
-		leaderboardUI.visible = true
+		# leaderboardUI.visible = true
+		var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		var windowSize = leaderboardUI.get_viewport_rect().size
+		tween.tween_property(leaderboardUI, "position", Vector2(0, -windowSize.y), 0).as_relative()
+		tween.tween_property(leaderboardUI, "visible", true, 0)
+		tween.tween_property(leaderboardUI, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
+		
+
 	
 	var times: Array[int] = []
 	for key in timeTrialManagers:
