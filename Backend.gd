@@ -52,6 +52,7 @@ func loadFromFile() -> void:
 		BACKEND_IP_ADRESS = jsonData["BACKEND_IP_ADRESS"]
 		FRONTEND_IP_ADRESS = jsonData["FRONTEND_IP_ADRESS"]
 		OVERWRITE = jsonData["OVERWRITE"]
+		saveToFile()
 	else:
 		saveToFile()
 

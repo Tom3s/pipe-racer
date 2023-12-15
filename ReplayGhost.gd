@@ -36,23 +36,28 @@ func _physics_process(_delta):
 	if playing:
 		if frameData.size() <= 0:
 			return
-		if frame < frameData[0].size() - 1:
-			currentIndex = int(frame)
-			currentFraction = frame - currentIndex
+		# if frame < frameData[0].size() - 1:
+		currentIndex = int(frame)
+		currentFraction = frame - currentIndex
 
-			for i in get_child_count():
-				var currentFrame = frameData[i][currentIndex]
-				var nextFrame = frameData[i][currentIndex + 1]
+		for i in get_child_count():
+			if frameData[i].size() <= currentIndex + 2:
+				continue
+			var currentFrame = frameData[i][currentIndex]
+			var nextFrame = frameData[i][currentIndex + 1]
 
-				var carController = get_child(i)
-				carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
-				carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
-				carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
-			frame += timeScale
+			var carController = get_child(i)
+			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
+			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
+			carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
+		frame += timeScale
 	else:
 		for i in get_child_count():
 			var carController = get_child(i)
 			
+			if frameData[i].size() <= currentIndex + 2:
+				continue
+
 			carController.linear_velocity = Vector3.ZERO
 			var currentFrame = frameData[i][currentIndex]
 			var nextFrame = frameData[i][currentIndex + 1]
@@ -73,7 +78,7 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 	var _mapName = fileHandler.get_line()
 	# var nrCars = fileHandler.get_32()
 	_nrCars = fileHandler.get_line().to_int()
-	
+
 	for i in _nrCars:
 		var time = fileHandler.get_line().to_int()
 

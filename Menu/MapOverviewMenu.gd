@@ -68,6 +68,13 @@ func _ready():
 		selectButton.grab_focus()
 	)
 
+	leaderboardMenu.addOnlineGhost.connect(func(ghost: String):
+		downloadedReplays.append(ghost + ".replay")
+	)
+	leaderboardMenu.removeOnlineGhost.connect(func(ghost: String):
+		downloadedReplays.erase(ghost + ".replay")
+	)
+
 
 	set_physics_process(true)
 
