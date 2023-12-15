@@ -49,8 +49,9 @@ func _physics_process(_delta):
 			var carController = get_child(i)
 			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
 			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
-			carController.linear_velocity = (currentFrame[0] - nextFrame[0]) * (1 / _delta) 
-		frame += timeScale
+			carController.linear_velocity = (nextFrame[0] - currentFrame[0]) * (1 / _delta) 
+		if frame < getNrFrames() - 1:
+			frame += timeScale
 	else:
 		for i in get_child_count():
 			var carController = get_child(i)
@@ -68,7 +69,7 @@ func _physics_process(_delta):
 		# else:
 		# 	frame = 0
 
-func loadReplay(fileName: String, clearReplays: bool = true):
+func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = true):
 	# var path = "user://replays/" + fileName
 	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
 	if fileHandler == null:
@@ -95,7 +96,8 @@ func loadReplay(fileName: String, clearReplays: bool = true):
 		add_child(carController)
 		carController.playerName = playerName
 		carController.frameColor = playerColor
-		carController.setGhostMode(true)
+		if ghostMode:
+			carController.setGhostMode(true)
 
 	var nrFrames = fileHandler.get_line().to_int()
 
@@ -147,3 +149,25 @@ func stopReplay():
 func startReplay():
 	playing = true
 	frame = 0
+
+func getNrFrames():
+	var maxFrames = 0
+	for i in frameData.size():
+		if frameData[i].size() > maxFrames:
+			maxFrames = frameData[i].size()
+	return maxFrames
+
+func getCar(index: int):
+	if index >= get_child_count():
+		return get_child(0)
+	return get_child(index)
+
+func clearReplays():
+	frameData.clear()
+	for i in get_child_count():
+		get_child(i).queue_free()
+	
+func setLabelVisibility(visible: bool):
+	for i in get_child_count():
+		var car: CarController = get_child(i)
+		car.setLabelVisibility(visible)

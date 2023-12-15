@@ -620,6 +620,8 @@ func setGhostMode(ghostMode: bool):
 		for tire in tires:
 			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
 
+func setLabelVisibility(visible: bool):
+	%PlayernameLabel.visible = visible
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():

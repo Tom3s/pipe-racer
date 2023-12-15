@@ -1,0 +1,28 @@
+[gd_scene load_steps=7 format=3 uid="uid://buli85uf4lem0"]
+
+[ext_resource type="Script" path="res://ReplayViewer.gd" id="1_lvjwo"]
+[ext_resource type="PackedScene" uid="uid://beoaonnb2plhq" path="res://Menu/ReplayViewerUI.tscn" id="2_8ut7j"]
+[ext_resource type="PackedScene" uid="uid://py3sgavbk1hr" path="res://ReplayGhost.tscn" id="2_dabch"]
+[ext_resource type="PackedScene" uid="uid://dc5nux53vtjie" path="res://MapScene.tscn" id="4_l7mp6"]
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="5_44dmy"]
+[ext_resource type="Script" path="res://FreeCam.gd" id="6_a7wuh"]
+
+[node name="ReplayViewer" type="Node3D"]
+script = ExtResource("1_lvjwo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ReplayViewerUI" parent="CanvasLayer" instance=ExtResource("2_8ut7j")]
+unique_name_in_owner = true
+
+[node name="ReplayGhost" parent="." instance=ExtResource("2_dabch")]
+unique_name_in_owner = true
+
+[node name="Map" parent="." instance=ExtResource("4_l7mp6")]
+unique_name_in_owner = true
+
+[node name="TestTrackEnv" parent="." instance=ExtResource("5_44dmy")]
+
+[node name="FreeCam" type="Camera3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_a7wuh")
