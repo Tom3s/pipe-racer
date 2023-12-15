@@ -75,6 +75,7 @@ func _ready():
 		downloadedReplays.erase(ghost + ".replay")
 	)
 
+	replaySelector.hideDownloaded()
 
 	set_physics_process(true)
 

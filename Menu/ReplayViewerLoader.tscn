@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://q7et66trvhld"]
+[gd_scene load_steps=19 format=3 uid="uid://c0qgayng3g6pc"]
 
-[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_bron4"]
-[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_wvpdx"]
-[ext_resource type="Script" path="res://ReplaySelector.gd" id="3_w8tve"]
-[ext_resource type="StyleBox" path="res://DarkTheme/StyleBox/Panel.stylebox" id="4_3aepw"]
-[ext_resource type="Script" path="res://Menu/GamepadTabController.gd" id="5_6krvp"]
+[ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_cnxy1"]
+[ext_resource type="Script" path="res://ReplayViewerLoader.gd" id="1_lqahb"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_0byft"]
+[ext_resource type="PackedScene" uid="uid://q7et66trvhld" path="res://ReplaySelector.tscn" id="2_2sead"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="4_efa4q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -124,7 +124,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="Theme" id="Theme_67hwj"]
-default_font = ExtResource("2_wvpdx")
+default_font = ExtResource("2_0byft")
 default_font_size = 26
 Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
 Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
@@ -139,12 +139,11 @@ CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_ocpm4")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gm2h7")
 CheckBox/styles/pressed = SubResource("StyleBoxFlat_cjac4")
 LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 1)
-LineEdit/fonts/font = ExtResource("1_bron4")
+LineEdit/fonts/font = ExtResource("1_cnxy1")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
-[node name="ReplaySelector" type="Control"]
-custom_minimum_size = Vector2(644, 0)
+[node name="ReplayViewerLoader" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -152,76 +151,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_67hwj")
-script = ExtResource("3_w8tve")
+script = ExtResource("1_lqahb")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -322.0
-offset_right = 322.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+script = ExtResource("4_efa4q")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
 alignment = 1
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="MapList" type="ItemList" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 480)
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_styles/panel = ExtResource("4_3aepw")
-tab_alignment = 1
-clip_tabs = false
-tab_focus_mode = 0
-script = ExtResource("5_6krvp")
-
-[node name="Local" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
-custom_minimum_size = Vector2(640, 480)
-layout_mode = 2
-
-[node name="LocalReplays" type="ItemList" parent="VBoxContainer/TabContainer/Local"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(640, 480)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-select_mode = 1
-auto_height = true
 item_count = 2
-item_0/text = "hagyma_Player239-00-35-453_2023-12-13.replay"
-item_1/text = ""
+fixed_column_width = 200
+item_0/text = "asd"
+item_1/text = "asd2"
 
-[node name="Downloaded" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(640, 480)
-layout_mode = 2
-
-[node name="DownloadedReplays" type="ItemList" parent="VBoxContainer/TabContainer/Downloaded"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(640, 480)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-select_mode = 1
-auto_height = true
-item_count = 2
-item_0/text = "hagyma_Player239-00-35-453_2023-12-13.replay"
-item_1/text = ""
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
-
-[node name="SelectButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ReplaySelector" parent="MarginContainer/HBoxContainer" instance=ExtResource("2_2sead")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Select"
-
-[node name="CancelButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Cancel"
