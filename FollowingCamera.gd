@@ -67,8 +67,8 @@ func _physics_process(delta):
 		global_position = car_pos + car_y * insideY + car_z * insideZ 
 		look_at(car_pos + car_y * insideTilt + car_z, car_y)
 	elif mode == 2:
-		var direction = (global_position - (car_pos + car_y * 3.0)).normalized()
-		global_position = (car_pos + car_y * 3.0) + direction * (mode3distance + (car.getSpeed() / 120))
+		var direction = (global_position - (car_pos + car_y * 2.75)).normalized()
+		global_position = (car_pos + car_y * 2.75) + direction * (mode3distance + (car.getSpeed() / 120))
 
 		fov += car.getSpeed() / 25
 
@@ -85,6 +85,8 @@ func forceUpdatePosition():
 func changeMode():
 	mode = (mode + 1) % 3
 	shouldUpdatePosition = true
+	if car.playerIndex < 4:
+		GlobalProperties.PREFERED_CAMERAS[car.playerIndex] = mode
 
 func changeCullMask(playerIndex: int):
 	cull_mask = 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128
