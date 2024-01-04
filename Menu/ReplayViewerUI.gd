@@ -19,6 +19,8 @@ class_name ReplayViewerUI
 @onready var changeCameraButton: Button = %ChangeCameraButton
 @onready var freeCamButton: Button = %FreeCamButton
 
+@onready var inputHandler: ReplayViewerInputHandler = %ReplayViewerInputHandler
+
 signal playPauseToggled(toggled: bool)
 signal newSpeedSet(speed: float)
 signal seekBarChanged(newFrame: int)
@@ -42,37 +44,83 @@ func _ready():
 		var newFrame = floori((value * totalFrames.text.to_float()) / 100)
 		seekBarChanged.emit(newFrame)
 	)
+	inputHandler.seekForwardPressed.connect(func():
+		var newFrame = floori((seekBar.value * totalFrames.text.to_float()) / 100) + 180
+		setFrame(newFrame)
+		seekBarChanged.emit(newFrame)
+	)
+	inputHandler.seekBackwardPressed.connect(func():
+		var newFrame = floori((seekBar.value * totalFrames.text.to_float()) / 100) - 180
+		if newFrame < 0:
+			newFrame = 0
+		setFrame(newFrame)
+		seekBarChanged.emit(newFrame)
+	)
+	
 	playPauseButton.toggled.connect(func(toggled: bool):
 		playPauseToggled.emit(toggled)
 	)
+	inputHandler.playPausePressed.connect(func():
+		playPauseButton.button_pressed = !playPauseButton.button_pressed
+	)
+
 	playbackSpeedSlider.value_changed.connect(func(speed: float):
 		playbackSpeedLabel.text = str(speed)
 		newSpeedSet.emit(speed)
 	)
+
 	halfSpeedButton.pressed.connect(func():
 		playbackSpeedSlider.value = playbackSpeedSlider.value / 2
 	)
+	inputHandler.halfSpeedPressed.connect(func():
+		playbackSpeedSlider.value = playbackSpeedSlider.value / 2
+	)
+
 	doubleSpeedButton.pressed.connect(func():
 		playbackSpeedSlider.value = playbackSpeedSlider.value * 2
 	)
+	inputHandler.doubleSpeedPressed.connect(func():
+		playbackSpeedSlider.value = playbackSpeedSlider.value * 2
+	)
+
 	resetSpeedButton.pressed.connect(func():
 		playbackSpeedSlider.value = 1
 	)
+	inputHandler.resetSpeedPressed.connect(func():
+		playbackSpeedSlider.value = 1
+	)
+
 	prevPlayerButton.pressed.connect(func():
 		changePlayer.emit(-1)
 	)
+	inputHandler.prevPlayerPressed.connect(func():
+		changePlayer.emit(-1)
+	)
+
 	nextPlayerButton.pressed.connect(func():
 		changePlayer.emit(1)
 	)
+	inputHandler.nextPlayerPressed.connect(func():
+		changePlayer.emit(1)
+	)
+
 	changeCameraButton.pressed.connect(func():
 		changeCamera.emit()
 	)
+	inputHandler.changeCamPressed.connect(func():
+		changeCamera.emit()
+	)
+
 	exitButton.pressed.connect(func():
 		exitPressed.emit()
 	)
 	freeCamButton.toggled.connect(func(toggled: bool):
 		freeCamSelected.emit(toggled)
 	)
+	inputHandler.freecamPressed.connect(func():
+		freeCamButton.button_pressed = !freeCamButton.button_pressed
+	)
+
 
 	set_physics_process(true)
 

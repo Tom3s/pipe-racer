@@ -60,6 +60,9 @@ func loadLocalReplays(trackId: String) -> void:
 	localReplays.deselect_all()
 	localReplays.clear()
 
+	if trackId == "":
+		return
+
 	var path = "user://replays/"
 	var directory = DirAccess.open(path)
 
