@@ -16,18 +16,6 @@ var timeScale: float = 1.0
 var _nrCars: int = 0
 
 func _ready():
-	# loadReplay("user://replays/hagyma_mogyi-00-14-686_2023-12-12.replay")
-	# loadReplay("user://replays/Flat Circuit_mogyi-02-15-497_2023-12-12.replay")
-	# loadReplay("user://replays/Champion's Track_mogyi-02-01-288_2023-12-13.replay")
-	# loadReplay("user://replays/Experimental #1_mogyi-00-25-029_2023-12-13.replay")
-	# loadReplay("user://replays/Champion's Track_mogyi-02-01-569_2023-12-13.replay")
-
-	# var cam = FollowingCamera.new(carController)
-	# cam.current = true
-	# add_child(cam)
-
-	# frameData = []
-
 	set_physics_process(true)
 
 # currently: frameData[carIndex][frameIndex][0: position, 1: rotation]
@@ -90,13 +78,24 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		print("Error opening replay file ", fileName)
 		return
 	
-	var _mapName = fileHandler.get_line()
-	# var nrCars = fileHandler.get_32()
-	_nrCars = fileHandler.get_line().to_int()
+	var formatVesion = fileHandler.get_8()
+	if formatVesion != ReplayManager.REPLAY_FORMAT_VERSION:
+		print("Error reading replay file (wrong format version) ", fileName)
+		return
 
+	var mapMetadata = fileHandler.get_csv_line()
+	var _mapId = mapMetadata[0]
+	var _nrLaps = mapMetadata[1].to_int()
+	var _nrCheckpoints = mapMetadata[2].to_int()
+
+	_nrCars = fileHandler.get_16()
+
+	var _time = 0
 	for i in _nrCars:
-		var time = fileHandler.get_line().to_int()
-
+		# var _time = fileHandler.get_line().to_int()
+		_time = fileHandler.get_32()
+		
+		
 	for i in _nrCars:
 		var carMetadata = fileHandler.get_csv_line()
 		var playerName = carMetadata[0]
@@ -112,10 +111,35 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		carController.frameColor = playerColor
 		if ghostMode:
 			carController.setGhostMode(true)
+				
+	var nrFrames = 0
+	for i in _nrCars:
+		var _frames = fileHandler.get_32()
+		if _frames > nrFrames:
+			nrFrames = _frames
 
-	var nrFrames = fileHandler.get_line().to_int()
+	var _splitData = []
+	for i in _nrCars:
+		if fileHandler.get_line() != "SPLIT_BEGIN":
+			print("Error reading replay file (no SPLIT_BEGIN) ", fileName, " index ", i)
+			return
+		_splitData.append([])
+		for ii in _nrLaps:
+			if fileHandler.get_line() != "LAP_BEGIN":
+				print("Error reading replay file (no LAP_BEGIN) ", fileName, " index ", i, " lap ", ii)
+				return
+			_splitData.back().append([])
+			for iii in _nrCheckpoints + 1:
+				_splitData.back().back().append(fileHandler.get_32())
+			if fileHandler.get_line() != "LAP_END":
+				print("Error reading replay file (no LAP_END) ", fileName, " index ", i, " lap ", ii)
+				return
+		if fileHandler.get_line() != "SPLIT_END":
+			print("Error reading replay file (no SPLIT_END) ", fileName, " index ", i)
+			return
 
 
+	print("Split data: ", _splitData)
 
 	var pos: Vector3 = Vector3.ZERO
 	var rot: Vector3 = Vector3.ZERO

@@ -74,7 +74,13 @@ func loadLocalReplays(trackId: String) -> void:
 			if fileHandler == null:
 				fileName = directory.get_next()
 				continue
-			var replayTrackId = fileHandler.get_line()
+			var replayFormatVersion = fileHandler.get_8()
+			if replayFormatVersion != ReplayManager.REPLAY_FORMAT_VERSION:
+				fileName = directory.get_next()
+				continue
+			# var replayTrackId = fileHandler.get_line()
+			var mapMetadata = fileHandler.get_csv_line()
+			var replayTrackId = mapMetadata[0]
 			if replayTrackId == trackId:
 				localReplays.add_item(fileName)
 
@@ -96,7 +102,14 @@ func loadDownloadedReplays(trackId: String) -> void:
 			if fileHandler == null:
 				fileName = directory.get_next()
 				continue
-			var replayTrackId = fileHandler.get_line()
+			var replayFormatVersion = fileHandler.get_8()
+			if replayFormatVersion != ReplayManager.REPLAY_FORMAT_VERSION:
+				fileName = directory.get_next()
+				continue
+
+			var mapMetadata = fileHandler.get_csv_line()
+
+			var replayTrackId = mapMetadata[0]
 			if replayTrackId == trackId:
 				# downloadedReplays.add_item(fileName)
 				var _nrCars = fileHandler.get_line().to_int()
