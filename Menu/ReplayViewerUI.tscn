@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://beoaonnb2plhq"]
+[gd_scene load_steps=18 format=3 uid="uid://beoaonnb2plhq"]
 
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_sn6ra"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_8mymn"]
 [ext_resource type="Script" path="res://Menu/ReplayViewerUI.gd" id="3_n7awp"]
+[ext_resource type="Script" path="res://Menu/ReplayViewerInputHandler.gd" id="4_7wxw7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
 bg_color = Color(0.207843, 0.207843, 0.207843, 1)
@@ -318,3 +319,7 @@ layout_mode = 2
 size_flags_horizontal = 10
 toggle_mode = true
 text = "Free Cam"
+
+[node name="ReplayViewerInputHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_7wxw7")

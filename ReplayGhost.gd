@@ -30,6 +30,9 @@ func _ready():
 
 	set_physics_process(true)
 
+# currently: frameData[carIndex][frameIndex][0: position, 1: rotation]
+# SOF format: frameData[frameIndex][carIndex][0: position, 1: rotation]
+
 var currentIndex: int = 0
 var currentFraction: float = 0.0
 func _physics_process(_delta):
@@ -41,10 +44,15 @@ func _physics_process(_delta):
 		currentFraction = frame - currentIndex
 
 		for i in get_child_count():
-			if frameData[i].size() <= currentIndex + 2:
+			if frameData.size() <= currentIndex + 2:
 				continue
-			var currentFrame = frameData[i][currentIndex]
-			var nextFrame = frameData[i][currentIndex + 1]
+			# var currentFrame = frameData[i][currentIndex]
+			# var nextFrame = frameData[i][currentIndex + 1]
+			var currentFrame = frameData[currentIndex][i]
+			var nextFrame = frameData[currentIndex + 1][i]
+
+			if currentFrame[0] == null || nextFrame[0] == null:
+				continue
 
 			var carController = get_child(i)
 			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
@@ -56,12 +64,18 @@ func _physics_process(_delta):
 		for i in get_child_count():
 			var carController = get_child(i)
 			
-			if frameData[i].size() <= currentIndex + 2:
+			if frameData.size() <= currentIndex + 2:
 				continue
 
 			carController.linear_velocity = Vector3.ZERO
-			var currentFrame = frameData[i][currentIndex]
-			var nextFrame = frameData[i][currentIndex + 1]
+			# var currentFrame = frameData[i][currentIndex]
+			# var nextFrame = frameData[i][currentIndex + 1]
+			var currentFrame = frameData[currentIndex][i]
+			var nextFrame = frameData[currentIndex + 1][i]
+
+			if currentFrame[0] == null || nextFrame[0] == null:
+				continue
+
 
 			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
 			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
@@ -115,7 +129,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		if fileHandler.get_line() != "REPLAY_BEGIN":
 			print("Error reading replay file (no REPLAY_BEGIN) ", fileName, " index ", carIndex)
 			return
-		frameData.append([])
+		# frameData.append([])
 		for i in nrFrames:
 			pos.x = fileHandler.get_float()
 			pos.y = fileHandler.get_float()
@@ -125,11 +139,28 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 			rot.y = fileHandler.get_float()
 			rot.z = fileHandler.get_float()
 
-			frameData.back().append([pos, rot])
+			# frameData.back().append([pos, rot])
+
+			if frameData.size() <= i:
+				frameData.append([])
+				if get_child_count() - _nrCars > 0:
+					frameData[i].append([null, null])
+
+
+			frameData[i].append([pos, rot])
 
 		if fileHandler.get_line() != "REPLAY_END":
 			print("Error reading replay file (no REPLAY_END) ", fileName, " index ", carIndex)
 			return
+	
+	# adjust for shorter replays:
+	var maxDataSize = 0
+	for data in frameData:
+		if data.size() > maxDataSize:
+			maxDataSize = data.size()
+		while data.size() < maxDataSize:
+			data.append([null, null])			
+
 	
 	fileHandler.close()
 	print("Replay loaded: ", fileName)
@@ -140,8 +171,10 @@ func stopReplay():
 	frame = 0
 	for i in get_child_count():
 		var carController = get_child(i)
-		carController.global_position = frameData[i][0][0]
-		carController.global_rotation = frameData[i][0][1]
+		# carController.global_position = frameData[i][0][0]
+		# carController.global_rotation = frameData[i][0][1]
+		carController.global_position = frameData[0][i][0]
+		carController.global_rotation = frameData[0][i][1]
 		carController.linear_velocity = Vector3.ZERO
 
 
@@ -151,11 +184,12 @@ func startReplay():
 	frame = 0
 
 func getNrFrames():
-	var maxFrames = 0
-	for i in frameData.size():
-		if frameData[i].size() > maxFrames:
-			maxFrames = frameData[i].size()
-	return maxFrames
+	# var maxFrames = 0
+	# for i in frameData.size():
+	# 	if frameData[i].size() > maxFrames:
+	# 		maxFrames = frameData[i].size()
+	# return maxFrames
+	return frameData.size()
 
 func getCar(index: int):
 	if index >= get_child_count():

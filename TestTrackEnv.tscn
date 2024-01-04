@@ -27,10 +27,8 @@ environment = SubResource("Environment_2xiuk")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
 shadow_enabled = true
-shadow_bias = 0.08
-directional_shadow_split_1 = 0.041
-directional_shadow_split_2 = 0.489
-directional_shadow_split_3 = 1.0
-directional_shadow_blend_splits = true
-directional_shadow_fade_start = 0.984
-directional_shadow_max_distance = 443.2
+shadow_bias = 0.068
+shadow_blur = 0.137
+directional_shadow_split_1 = 0.021
+directional_shadow_fade_start = 0.95
+directional_shadow_max_distance = 768.0
