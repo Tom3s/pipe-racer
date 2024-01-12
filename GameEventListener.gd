@@ -192,7 +192,16 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		raceStats[playerIdentifier].setBestLap(bestLap)
 		raceStats[playerIdentifier].setBestTime(totalTime)
 
-		var recording = replayManager.saveRecording(car, totalTime, map.trackId, map.trackName)
+		var recording = replayManager.saveRecording(
+			car,
+			map.trackId,
+			map.lapCount,
+			map.getCheckpointCount(),
+			totalTime,
+			timeTrialManagers[playerIdentifier].splits,
+			map.trackName,
+		)
+
 
 		var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
 

@@ -38,13 +38,24 @@ func stopRecording():
 	recording = false
 
 # Replay File Format:
-# mapId
+# replayFormatVersion
+# mapId, nrLaps, nrCheckpoints
 # nrCars
-# times (ticks) x nrCars
+# time (ms) x nrCars
 # CarMetaData (name, color) x nrCars
-# FrameData ('REPLAY_BEGIN', position.xyz, rotation.xyz, 'REPLAY_END') x nrFrames
-
-func saveRecording(car: CarController, time: int, mapId: String, mapName: String) -> String:
+# nrFrames x nrCars
+# splitdata ('SPLIT_BEGIN', ('LAP_BEGIN', timestamp x nrCheckpoints, 'LAP_END') x nrLaps,'SPLIT_END') x nrCars
+# FrameData ('REPLAY_BEGIN', (position.xyz, rotation.xyz) x nrFrames, 'REPLAY_END') x nrCars
+const REPLAY_FORMAT_VERSION: int = 1
+func saveRecording(
+	car: CarController, 
+	mapId: String,
+	nrLaps: int,
+	nrCheckpoints: int,
+	time: int,
+	splits: Array, 
+	mapName: String
+) -> String:
 	# stopRecording()
 	var path = "user://replays/" + mapName + "_"
 	# for i in cars.size():
@@ -59,26 +70,29 @@ func saveRecording(car: CarController, time: int, mapId: String, mapName: String
 		print("Error opening replay file to save into")
 		return ""
 	
-	fileHandler.store_line(mapId)
-	fileHandler.store_line(str(cars.size()))
+	fileHandler.store_8(REPLAY_FORMAT_VERSION)
 
-	fileHandler.store_line(str(time))
+	fileHandler.store_csv_line([mapId, nrLaps, nrCheckpoints])
 
+	fileHandler.store_16(cars.size())
+
+	fileHandler.store_32(time)
+	
 	fileHandler.store_csv_line([car.playerName, car.frameColor.to_html()])
 	
-	fileHandler.store_line(str(frames[car.playerIndex].size()))
+	fileHandler.store_32(frames[car.playerIndex].size())
+	
+	fileHandler.store_line("SPLIT_BEGIN")
+	for lap in splits:
+		fileHandler.store_line("LAP_BEGIN")
+		for timestamp in lap:
+			fileHandler.store_32(timestamp)
+		fileHandler.store_line("LAP_END")
+	fileHandler.store_line("SPLIT_END")
 
 	# for replay in frames:
 	fileHandler.store_line("REPLAY_BEGIN")
 	for frame in frames[car.playerIndex]:
-# 			fileHandler.store_csv_line([
-# 				frame.position.x,
-# 				frame.position.y,
-# 				frame.position.z,
-# 				frame.rotation.x,
-# 				frame.rotation.y,
-# 				frame.rotation.z
-# 			])
 		fileHandler.store_float(frame.position.x)
 		fileHandler.store_float(frame.position.y)
 		fileHandler.store_float(frame.position.z)
