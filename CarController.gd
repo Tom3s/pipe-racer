@@ -621,6 +621,9 @@ func setGhostMode(ghostMode: bool):
 
 func setLabelVisibility(visible: bool):
 	%PlayernameLabel.visible = visible
+
+func set2DAudio():
+	%CarEngineSound.set2DAudio()
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
