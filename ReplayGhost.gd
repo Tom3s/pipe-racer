@@ -15,6 +15,11 @@ var timeScale: float = 1.0
 
 var _nrCars: int = 0
 
+var bestGhostTime: int = 0
+var bestGhostSplits: Array = []
+
+# signal loadedGhost(time: int, splits: Array)
+
 func _ready():
 	set_physics_process(true)
 
@@ -95,7 +100,10 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		# var _time = fileHandler.get_line().to_int()
 		_time = fileHandler.get_32()
 		
-		
+	if clearReplays:
+		print("=================== Clearing replays ===================")
+		self.clearReplays()
+
 	for i in _nrCars:
 		var carMetadata = fileHandler.get_csv_line()
 		var playerName = carMetadata[0]
@@ -141,11 +149,14 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 
 	print("Split data: ", _splitData)
 
+	# loadedGhost.emit(_time, _splitData)
+	if _time < bestGhostTime or bestGhostTime == 0:
+		bestGhostTime = _time
+		bestGhostSplits = _splitData[0]
+
 	var pos: Vector3 = Vector3.ZERO
 	var rot: Vector3 = Vector3.ZERO
-	if clearReplays:
-		print("=================== Clearing replays ===================")
-		frameData.clear()
+	
 	
 	# print("Loading replay: ", frameData)
 
@@ -197,6 +208,9 @@ func stopReplay():
 		var carController = get_child(i)
 		# carController.global_position = frameData[i][0][0]
 		# carController.global_rotation = frameData[i][0][1]
+		var currentFrame = frameData[0][i]
+		if currentFrame[0] == null:
+			continue
 		carController.global_position = frameData[0][i][0]
 		carController.global_rotation = frameData[0][i][1]
 		carController.linear_velocity = Vector3.ZERO
@@ -223,7 +237,9 @@ func getCar(index: int):
 func clearReplays():
 	frameData.clear()
 	for i in get_child_count():
-		get_child(i).queue_free()
+		var child = get_child(i)
+		remove_child(child)
+		child.queue_free()
 	
 func setLabelVisibility(visible: bool):
 	for i in get_child_count():

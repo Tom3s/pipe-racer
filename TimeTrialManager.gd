@@ -17,16 +17,20 @@ var nrLaps: int
 var playerId: String = ""
 var trackId: String = ""
 
+var isPB: bool = false
+
 signal checkPointCollected(timestamp: int, lastTimestamp: int, currentLapTime: int)
 
 
-func _init(ingameSFXNode: IngameSFX, initnrLaps: int, initplayerId: String, inittrackId: String) -> void:
+
+func _init(ingameSFXNode: IngameSFX, initnrLaps: int, initplayerId: String, inittrackId: String, loadPB: bool) -> void:
 	ingameSFX = ingameSFXNode
 	nrLaps = initnrLaps
 	playerId = initplayerId
 	trackId = inittrackId
-	loadPersonalBest()
-	loadPersonalBestLap()
+	if loadPB:
+		loadPersonalBest()
+		loadPersonalBestLap()
 
 func _ready() -> void:
 	ingameSFX = get_parent().get_parent().get_node("%IngameSFX")
@@ -114,6 +118,7 @@ func reset() -> void:
 	for splitList in splits:
 		splitList.clear()
 	splits.clear()
+	isPB = false
 
 func loadPersonalBest() -> void:
 	var pbRequest = HTTPRequest.new()
@@ -138,11 +143,14 @@ func onPersonalBestLoaded(result: int, _responseCode: int, _headers: PackedStrin
 	for time in data:
 		if time["user"]["_id"] == playerId:
 			bestSplits = time["splits"]
+			print("[TimeTrialManager.gd] Loaded PB")
 			return
 
 	
 	if data.size() > 0:
 		bestSplits = data.back()["splits"]
+	
+	print("[TimeTrialManager.gd] Loaded PB")
 
 func loadPersonalBestLap() -> void:
 	var pbRequest = HTTPRequest.new()
@@ -166,12 +174,14 @@ func onPersonalBestLapLoaded(result: int, _responseCode: int, _headers: PackedSt
 	for time in data:
 		if time["user"]["_id"] == playerId:
 			setBestLapSplits(time["splits"])
+			print("[TimeTrialManager.gd] Loaded PB lap")
 			return
 
 	
 	if data.size() > 0:
 		# bestSplits = data.back()["splits"]
 		setBestLapSplits(data.back()["splits"])
+	print("[TimeTrialManager.gd] Loaded PB lap")
 
 func setBestLapSplits(loadedBestSplits):
 	# var bestLapTime = loadedBestSplits[0].back()
@@ -186,18 +196,42 @@ func setBestLapSplits(loadedBestSplits):
 			bestLapSplits.clear()
 			bestLapSplits.append_array(array)
 
-func replaceSplitsIfBetter():
-	var totalTime = getTotalTime()
-	var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
+func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
+	
+	if totalTimeData == null && splitData == null:
+		var totalTime = getTotalTime()
+		var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
 
-	if bestTime >= totalTime || bestSplits.size() == 0:
-		# bestSplits = splits
-		print("Setting new PB splits")
-		bestSplits.clear()
-		for array in splits:
-			var copyArray = []
-			copyArray.append_array(array)
-			bestSplits.append(copyArray)
-	setBestLapSplits(splits)
+		if bestTime >= totalTime || bestSplits.size() == 0:
+			# bestSplits = splits
+			print("Setting new PB splits")
+			isPB = true
+			bestSplits.clear()
+			for array in splits:
+				var copyArray = []
+				copyArray.append_array(array)
+				bestSplits.append(copyArray)
+		setBestLapSplits(splits)
+	elif totalTimeData != null && splitData != null:
+		# while !loadedPBLap || !loadedPBTime:
+		# 	print("[TimeTrialManager.gd] waiting for PB to load")
+		# 	await get_tree().create_timer(1.0).timeout
+		
+		print("[TimeTrialManager.gd] trying to replace splits with ghost splits")
 
+		var totalTime = totalTimeData
+		var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
+
+		if bestTime >= totalTime || bestSplits.size() == 0:
+			# bestSplits = splits
+			print("Setting new PB splits")
+			bestSplits.clear()
+			for array in splitData:
+				var copyArray = []
+				copyArray.append_array(array)
+				bestSplits.append(copyArray)
+		setBestLapSplits(splitData)
+	else:
+		print("[TimeTrialManager.gd] replaceSplitsIfBetter: invalid arguments")
+		return
 

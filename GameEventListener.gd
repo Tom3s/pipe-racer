@@ -45,6 +45,8 @@ func _ready():
 
 	state.resetExitedPlayers()
 
+
+
 	# addGhosts([
 	# 	# "Champion's Track_mogyi-02-14-925_2023-12-13.replay",
 	# 	# "Champion's Track_mogyi-02-01-569_2023-12-13.replay",
@@ -77,6 +79,7 @@ func connectSignals():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
+
 
 	get_tree().get_multiplayer().peer_disconnected.connect(clientExited)
 	get_tree().get_multiplayer().peer_connected.connect(clientExited)
@@ -201,6 +204,9 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			timeTrialManagers[playerIdentifier].splits,
 			map.trackName,
 		)
+
+		if timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
+			replayGhost.loadReplay(recording)
 
 
 		var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
@@ -365,6 +371,11 @@ func onPauseMenu_exitPressed():
 	
 	get_parent().exitPressed.emit()
 
+func setSplitsToReplay(time: int, splits: Array):
+	for key in timeTrialManagers:
+		var timeTrialManager: TimeTrialManager = timeTrialManagers[key]
+		timeTrialManager.replaceSplitsIfBetter(time, splits)
+
 @rpc("any_peer", "call_remote", "reliable")
 func clientExited(id: int):
 	# await get_tree().create_timer(1.0).timeout
@@ -402,6 +413,10 @@ func getTimestamp():
 func addPlayers(_playerDatas: Array[PlayerData], networkId: int) -> void:
 	for playerData in _playerDatas:
 		spawnPlayer(playerData, networkId)
+	
+	# TODO: may not be the best place for this
+	if replayGhost.bestGhostTime != 0:
+		setSplitsToReplay(replayGhost.bestGhostTime, replayGhost.bestGhostSplits)
 
 func spawnPlayer(
 	data: PlayerData,
@@ -484,7 +499,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	canvasLayer.follow_viewport_enabled = true
 
 	var hud: IngameHUD = HudScene.instantiate()
-	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId)
+	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId, replayGhost.get_child_count() == 0)
 	timeTrialManagers[car.name] = timeTrialManager
 	hud.init(car, timeTrialManager, playerDatas.size())
 

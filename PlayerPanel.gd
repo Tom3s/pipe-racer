@@ -142,6 +142,9 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 
 func onRandomColorButton_pressed():
 	colorPicker.color = Color(randf(), randf(), randf(), 1.0)
+	# colorPicker.color_changed.emit(colorPicker.color)
+	if isMainPlayer:
+		GlobalProperties.PLAYER_COLOR = colorPicker.color
 
 func setMainPlayerData():
 	# while !is_node_ready():
