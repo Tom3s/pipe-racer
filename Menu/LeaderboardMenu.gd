@@ -9,6 +9,9 @@ var totalTimes: Array = []
 
 var bestLaps: Array = []
 
+signal addOnlineGhost(replayId: String)
+signal removeOnlineGhost(replayId: String)
+
 # func _ready():
 # 	fetchTimes("650c73d0c3b8efa6383dde32")
 
@@ -101,6 +104,61 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 		var dateLabel = Label.new()
 		dateLabel.text = record["date"].split("T")[0]
 		bestLapsGrid.add_child(dateLabel)
+
+		var ghostButton = Button.new()
+		ghostButton.toggle_mode = true
+		if record.has('replay'):
+			ghostButton.text = "Race"
+			ghostButton.toggled.connect(func(toggled: bool):
+				var replayId = record["replay"]
+				if toggled:
+					if isReplayDownloaded(replayId):
+						addOnlineGhost.emit(replayId)
+					else:
+						var replayDownloadRequest = HTTPRequest.new()
+						add_child(replayDownloadRequest)
+						replayDownloadRequest.timeout = 10
+						replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+							if responseCode != 200:
+								print("Error downloading replay: ", body.get_string_from_utf8())
+								ghostButton.disabled = false
+								ghostButton.button_pressed = false
+								return
+							
+							var filePath = "user://replays/downloaded/" + replayId + ".replay"
+							var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
+
+							if fileAccess == null:
+								print("Error opening file: ", filePath)
+								return
+
+							fileAccess.store_buffer(body)
+							fileAccess.close()
+							ghostButton.disabled = false
+							addOnlineGhost.emit(replayId)
+						)
+
+						ghostButton.disabled = true
+
+						var httpError = replayDownloadRequest.request(
+							Backend.BACKEND_IP_ADRESS + "/api/replays/" + replayId,
+							[
+								"Session-Token: " + GlobalProperties.SESSION_TOKEN,
+							]
+						)
+						if httpError != OK:
+							print("Error: " + error_string(httpError))
+							ghostButton.disabled = false
+							ghostButton.button_pressed = false
+
+				else:
+					removeOnlineGhost.emit(replayId)
+			)
+		else:
+			ghostButton.text = "No replay"
+			ghostButton.disabled = true
+		bestLapsGrid.add_child(ghostButton)
+
 		placement += 1
 
 func addBestLapsHeaders():
@@ -119,6 +177,10 @@ func addBestLapsHeaders():
 	var dateLabel = Label.new()
 	dateLabel.text = "Date"
 	bestLapsGrid.add_child(dateLabel)
+
+	var ghostLabel = Label.new()
+	ghostLabel.text = "Ghost"
+	bestLapsGrid.add_child(ghostLabel)
 
 func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
@@ -162,6 +224,61 @@ func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: Pac
 		totalTimesGrid.add_child(dateLabel)
 		placement += 1
 
+		var ghostButton = Button.new()
+		ghostButton.toggle_mode = true
+		if record.has('replay'):
+			ghostButton.text = "Race"
+			ghostButton.toggled.connect(func(toggled: bool):
+				var replayId = record["replay"]
+				if toggled:
+					if isReplayDownloaded(replayId):
+						addOnlineGhost.emit(replayId)
+					else:
+						var replayDownloadRequest = HTTPRequest.new()
+						add_child(replayDownloadRequest)
+						replayDownloadRequest.timeout = 10
+						replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+							if responseCode != 200:
+								print("Error downloading replay: ", body.get_string_from_utf8())
+								ghostButton.disabled = false
+								ghostButton.button_pressed = false
+								return
+							
+							var filePath = "user://replays/downloaded/" + replayId + ".replay"
+							var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
+
+							if fileAccess == null:
+								print("Error opening file: ", filePath)
+								return
+
+							fileAccess.store_buffer(body)
+							fileAccess.close()
+							ghostButton.disabled = false
+							addOnlineGhost.emit(replayId)
+						)
+
+						ghostButton.disabled = true
+
+						var httpError = replayDownloadRequest.request(
+							Backend.BACKEND_IP_ADRESS + "/api/replays/" + replayId,
+							[
+								"Session-Token: " + GlobalProperties.SESSION_TOKEN,
+							]
+						)
+						if httpError != OK:
+							print("Error: " + error_string(httpError))
+							ghostButton.disabled = false
+							ghostButton.button_pressed = false
+
+				else:
+					removeOnlineGhost.emit(replayId)
+			)
+		else:
+			ghostButton.text = "No replay"
+			ghostButton.disabled = true
+		totalTimesGrid.add_child(ghostButton)
+
+
 func addTotalTimesHeaders():
 	var placementLabel = Label.new()
 	placementLabel.text = "#"
@@ -178,3 +295,14 @@ func addTotalTimesHeaders():
 	var dateLabel = Label.new()
 	dateLabel.text = "Date"
 	totalTimesGrid.add_child(dateLabel)
+
+	var ghostLabel = Label.new()
+	ghostLabel.text = "Ghost"
+	totalTimesGrid.add_child(ghostLabel)
+
+func isReplayDownloaded(replayId: String) -> bool:
+	var replayPath = "user://replays/downloaded/" + replayId + ".replay"
+	var dirAccess = DirAccess.open("user://")
+	if dirAccess == null:
+		return false
+	return dirAccess.file_exists(replayPath)

@@ -29,6 +29,16 @@ func _ready():
 	# GEAR2.play()
 	pass # Replace with function body.
 
+func set2DAudio():
+	gearPlayers = [
+		%Gear1_2D,
+		%Gear2_2D,
+		%Gear3_2D,
+		%Gear4_2D,
+		%Gear5_2D,
+	]
+	IDLE = %Idle_2D
+
 @onready
 var IDLE = %Idle
 

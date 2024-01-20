@@ -429,54 +429,50 @@ var slidingFactor: float = 0
 var regripFactor: float = 0.08
 
 func calculateSlipAngle(tireVelocity: Vector3, tireForwardDirection: Vector3):
-	var normalizedTireVelocity = tireVelocity.normalized()
-	var normalizedTireForwardDirection = tireForwardDirection.normalized()
+	# var normalizedTireVelocity = tireVelocity.normalized()
+	# var normalizedTireForwardDirection = tireForwardDirection.normalized()
 	
-	var dotProduct = normalizedTireVelocity.dot(normalizedTireForwardDirection)
+	# var dotProduct = normalizedTireVelocity.dot(normalizedTireForwardDirection)
 	
-	return acos(abs(dotProduct))
+	# return acos(abs(dotProduct))
+	return acos(abs(tireVelocity.normalized().dot(tireForwardDirection.normalized())))
 
 
 func calculate_tire_grip(slipAngle: float):
 	if slidingFactor <= driftInput:
 		slidingFactor = driftInput
 	else:
-		var positiveSlipAngle = abs(slipAngle)
-#		var lerpWeight = -(2 * positiveSlipAngle) / PI + 1 # linear decay according to slip angle
-		var lerpWeight = (-(2 * positiveSlipAngle) / PI + 1) ** 5 # non-linear decay according to slip angle
-#		print('Slip angle: ', positiveSlipAngle)
-#		print('Lerp Weight: ', lerpWeight)
+		# var positiveSlipAngle = abs(slipAngle)
+		# var lerpWeight = (-(2 * positiveSlipAngle) / PI + 1) ** 5 # non-linear decay according to slip angle
+		var lerpWeight = (-(2 * abs(slipAngle)) / PI + 1) ** 5 # non-linear decay according to slip angle
 		slidingFactor = lerp(slidingFactor, driftInput, lerpWeight * regripFactor)
 		if slidingFactor <= skiddingTreshold:
 			slidingFactor = 0
-#		slidingFactor = 0
 	
-	var driftMultiplier = remap(slidingFactor, 0, 1, 1, driftFactor)
-	
-#	var skiddingRatio = getSkiddingRatio()
-#	var skidMultiplier = clampf(1 / (1 - skiddingTreshold + skiddingRatio), 0.0, 1.0)
-	var skidMultiplier = clampf(exp(-gripDecayRate * slipAngle ** 2), 0.0, 1.0)
-	
-	return tireGrip * driftMultiplier * skidMultiplier
+	# var driftMultiplier = remap(slidingFactor, 0, 1, 1, driftFactor)
+	# var skidMultiplier = clampf(exp(-gripDecayRate * slipAngle ** 2), 0.0, 1.0)
+	# return tireGrip * driftMultiplier * skidMultiplier
+	return tireGrip * remap(slidingFactor, 0, 1, 1, driftFactor) * clampf(exp(-gripDecayRate * slipAngle ** 2), 0.0, 1.0)
 
+
+# preallocating values
+var _applyFriction_steeringVelocity: float
+var _applyFriction_tireGripFactor: float
+var _applyFriction_desiredVelocityChange: float
+var _applyFriction_desiredAcceleration: float
+var _applyFriction_force: Vector3
 func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: float, contactPoint: Vector3, frictionMultiplier: float):
-	var steeringVelocity = steeringDirection.dot(tireVelocity)
-#	var tireGripFactor = calculate_tire_grip(getTireSkidRatio(contactPoint, steeringDirection))
-	var tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2))) * frictionMultiplier
-
+	_applyFriction_steeringVelocity = steeringDirection.dot(tireVelocity)
+	_applyFriction_tireGripFactor = calculate_tire_grip(calculateSlipAngle(tireVelocity, steeringDirection.rotated(Vector3.UP, -PI/2))) * frictionMultiplier
+	_applyFriction_desiredVelocityChange = -_applyFriction_steeringVelocity * _applyFriction_tireGripFactor
+	_applyFriction_desiredAcceleration = _applyFriction_desiredVelocityChange * 120 #delta
+	_applyFriction_force = steeringDirection * _applyFriction_desiredAcceleration * tireMass
 	
-	var desiredVelocityChange = -steeringVelocity * tireGripFactor
-
-	var desiredAcceleration = desiredVelocityChange * 120 #delta
-
-	var force = steeringDirection * desiredAcceleration * tireMass
-	
-	# DebugDraw.draw_arrow_ray(contactPoint, force, force.length(), Color.DARK_MAGENTA, 0.02)
 	
 	if state.aboutToJump():
-		force *= jumpingForceReduction
+		_applyFriction_force *= jumpingForceReduction
 	
-	apply_force(force, contactPoint - global_position)
+	apply_force(_applyFriction_force, contactPoint - global_position)
 
 func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3, accelerationMultiplier: float):
 	if accelerationInput == 0:
@@ -502,11 +498,14 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 	
 	apply_force(force, contactPoint - global_position)
 
+# preallocating values
+var _getSpeed_velocityForward: float = 0.0
+var _getSpeed_velocityRight: float = 0.0
 func getSpeed() -> float:
-	var velocityForward = global_transform.basis.z.dot(linear_velocity)
-	var velocityRight = global_transform.basis.x.dot(linear_velocity)
+	_getSpeed_velocityForward = global_transform.basis.z.dot(linear_velocity)
+	_getSpeed_velocityRight = global_transform.basis.x.dot(linear_velocity)
 
-	return Vector2(velocityForward, velocityRight).length()
+	return Vector2(_getSpeed_velocityForward, _getSpeed_velocityRight).length()
 
 func getSteeringFactor() -> float:
 	var g = func(x): return (- x / 150) + 1.07
@@ -614,6 +613,17 @@ func getCurrentFrame() -> CarFrame:
 		state.impactTimer,
 	)
 
+func setGhostMode(ghostMode: bool):
+	if ghostMode:
+		%CarModel.setGhostMode(frameColor)
+		for tire in tires:
+			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
+
+func setLabelVisibility(visible: bool):
+	%PlayernameLabel.visible = visible
+
+func set2DAudio():
+	%CarEngineSound.set2DAudio()
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():

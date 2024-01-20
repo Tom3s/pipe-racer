@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://fg6lfyohw337"]
+[gd_scene load_steps=14 format=3 uid="uid://fg6lfyohw337"]
 
 [ext_resource type="Script" path="res://Menu/MapOverviewMenu.gd" id="1_wie3d"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="2_hcwne"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c5387t1cl0ifm" path="res://Menu/RatingMenu.tscn" id="4_usqq2"]
 [ext_resource type="PackedScene" uid="uid://boal45wpuj8gv" path="res://Menu/CommentContainer.tscn" id="8_hryn1"]
 [ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="8_l6mbf"]
+[ext_resource type="PackedScene" uid="uid://q7et66trvhld" path="res://ReplaySelector.tscn" id="10_0tc10"]
 
 [sub_resource type="Theme" id="Theme_6pc6w"]
 default_font = ExtResource("3_7i8db")
@@ -187,7 +188,7 @@ size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
 focus_neighbor_top = NodePath("../../Container6/RateButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
-focus_neighbor_bottom = NodePath("../../Container5/DeleteButton")
+focus_neighbor_bottom = NodePath("../../Container7/RefreshButton")
 script = ExtResource("3_2uk0n")
 
 [node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container4/OpenCommentsButton"]
@@ -217,7 +218,7 @@ size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
 focus_neighbor_top = NodePath("../../Container4/OpenCommentsButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
-focus_neighbor_bottom = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_bottom = NodePath("../../Container8/SelectGhostsButton")
 script = ExtResource("3_2uk0n")
 
 [node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container7/RefreshButton"]
@@ -234,6 +235,36 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
+[node name="Container8" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
+
+[node name="SelectGhostsButton" type="Button" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container8"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
+focus_neighbor_top = NodePath("../../Container7/RefreshButton")
+focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
+focus_neighbor_bottom = NodePath("../../Container5/DeleteButton")
+script = ExtResource("3_2uk0n")
+
+[node name="Label" type="Label" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer/Container8/SelectGhostsButton"]
+layout_mode = 1
+offset_top = -10.0
+offset_right = 183.0
+offset_bottom = 103.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.776471, 0.439216, 0, 1)
+theme_override_font_sizes/font_size = 79
+text = "Select Ghosts"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="Container5" type="PanelContainer" parent="MainContents/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qy7g5")
@@ -245,7 +276,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_neighbor_left = NodePath("../../../../HBoxContainer/Container5/SelectButton")
-focus_neighbor_top = NodePath("../../Container4/OpenCommentsButton")
+focus_neighbor_top = NodePath("../../Container8/SelectGhostsButton")
 focus_neighbor_right = NodePath("../../../../HBoxContainer/Container4/BackButton")
 focus_neighbor_bottom = NodePath("../../../../HBoxContainer/Container5/SelectButton")
 script = ExtResource("3_2uk0n")
@@ -368,3 +399,7 @@ offset_right = 201.5
 offset_bottom = 130.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ReplaySelector" parent="CanvasLayer" instance=ExtResource("10_0tc10")]
+unique_name_in_owner = true
+visible = false

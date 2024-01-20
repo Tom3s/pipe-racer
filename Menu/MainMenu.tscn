@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=22 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
@@ -16,6 +16,7 @@
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="8_8rxhx"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerTopRight.gd" id="8_uqvtl"]
 [ext_resource type="PackedScene" uid="uid://clhi3xhdyb5j8" path="res://Sounds/MenuSFX.tscn" id="12_mhsla"]
+[ext_resource type="PackedScene" uid="uid://c0qgayng3g6pc" path="res://Menu/ReplayViewerLoader.tscn" id="12_xndm4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]
 shader = ExtResource("3_3culy")
@@ -130,6 +131,33 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
+[node name="Container5" type="PanelContainer" parent="MainContent/ButtonContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="ReplayButton" type="Button" parent="MainContent/ButtonContainer/Container5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../../Container/PlayButton")
+focus_neighbor_bottom = NodePath("../../Container3/PlayOnlineButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container5/ReplayButton"]
+layout_mode = 1
+offset_top = -15.0
+offset_right = 260.4
+offset_bottom = 191.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
+theme_override_font_sizes/font_size = 180
+text = "Replays"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="Container3" type="PanelContainer" parent="MainContent/ButtonContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
@@ -150,7 +178,7 @@ offset_right = 850.4
 offset_bottom = 191.4
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(1, 0.956863, 0.470588, 1)
+theme_override_colors/font_shadow_color = Color(0.54902, 1, 0.470588, 1)
 theme_override_font_sizes/font_size = 180
 text = "Multiplayer"
 horizontal_alignment = 1
@@ -177,7 +205,7 @@ offset_right = 507.4
 offset_bottom = 191.4
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0.54902, 1, 0.470588, 1)
+theme_override_colors/font_shadow_color = Color(0.470588, 0.909804, 1, 1)
 theme_override_font_sizes/font_size = 180
 text = "Website"
 horizontal_alignment = 1
@@ -204,7 +232,7 @@ offset_right = 568.4
 offset_bottom = 191.4
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0.470588, 0.909804, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.690196, 0.580392, 1, 1)
 theme_override_font_sizes/font_size = 180
 text = "Settings"
 horizontal_alignment = 1
@@ -230,7 +258,7 @@ offset_right = 260.4
 offset_bottom = 191.4
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0.858824, 0.470588, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.956863, 0.368627, 1, 1)
 theme_override_font_sizes/font_size = 180
 text = "EXit"
 horizontal_alignment = 1
@@ -309,6 +337,10 @@ layout_mode = 1
 [node name="ControlsMenu" parent="." instance=ExtResource("5_mlljy")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 1
+
+[node name="ReplayViewerLoader" parent="." instance=ExtResource("12_xndm4")]
+unique_name_in_owner = true
 layout_mode = 1
 
 [node name="EditorMapLoader" parent="." instance=ExtResource("5_ybx24")]

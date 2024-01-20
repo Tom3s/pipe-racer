@@ -18,10 +18,10 @@ expand_margin_left = 8.0
 expand_margin_right = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4ewd"]
-bg_color = Color(0.439216, 0.439216, 0.439216, 1)
+bg_color = Color(1, 1, 1, 0.231373)
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.129412, 0.129412, 0.129412, 1)
+border_color = Color(0.8, 0.8, 0.8, 0)
 corner_radius_top_left = 8
 corner_radius_top_right = 5
 corner_radius_bottom_right = 8
@@ -42,9 +42,10 @@ expand_margin_left = 8.0
 expand_margin_right = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofcni"]
-bg_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+bg_color = Color(0.858824, 0.858824, 0.858824, 1)
 border_width_right = 4
 border_width_bottom = 4
+border_color = Color(0.196078, 0.196078, 0.196078, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 5
 corner_radius_bottom_right = 8
@@ -126,6 +127,7 @@ corner_radius_bottom_left = 5
 [sub_resource type="Theme" id="Theme_67hwj"]
 default_font = ExtResource("2_evlut")
 default_font_size = 26
+Button/colors/font_pressed_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
 Button/styles/disabled = SubResource("StyleBoxFlat_xl3p0")
 Button/styles/focus = SubResource("StyleBoxFlat_v4ewd")
 Button/styles/hover = SubResource("StyleBoxFlat_gnfbv")
@@ -184,7 +186,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 35
-columns = 4
+columns = 5
 
 [node name="LoadingLabel" type="Label" parent="MarginContainer/TabContainer/Total Times/Scroll/TotalTimesGrid"]
 layout_mode = 2
@@ -206,7 +208,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 35
-columns = 4
+columns = 5
 
 [node name="LoadingLabel" type="Label" parent="MarginContainer/TabContainer/Best Laps/Scroll/BestLapsGrid"]
 layout_mode = 2

@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://bw0tsauvupiuc"]
+
+[ext_resource type="Script" path="res://GameScene.gd" id="1_4deyh"]
+[ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_m124p"]
+[ext_resource type="Script" path="res://RaceInputHandler.gd" id="2_wmk0g"]
+[ext_resource type="PackedScene" uid="uid://wgcae8ei5xn5" path="res://Menu/LeaderboardUI.tscn" id="3_6e8rj"]
+[ext_resource type="PackedScene" uid="uid://dgurpytbg7dx6" path="res://Sounds/IngameSFX.tscn" id="3_iemo0"]
+[ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="4_ose2u"]
+[ext_resource type="Script" path="res://GameStateMachine.gd" id="7_yxiqb"]
+[ext_resource type="Script" path="res://GameEventListener.gd" id="8_c3gqs"]
+[ext_resource type="Script" path="res://ReplayManager.gd" id="9_dwb25"]
+
+[node name="GameScene" type="Node3D"]
+script = ExtResource("1_4deyh")
+
+[node name="HorizontalSplit" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="VerticalSplitTop" type="HBoxContainer" parent="HorizontalSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="VerticalSplitBottom" type="HBoxContainer" parent="HorizontalSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="UniversalCanvas" parent="." instance=ExtResource("2_m124p")]
+unique_name_in_owner = true
+
+[node name="LeaderboardUI" parent="UniversalCanvas" instance=ExtResource("3_6e8rj")]
+unique_name_in_owner = true
+visible = false
+
+[node name="PauseMenu" parent="UniversalCanvas" instance=ExtResource("4_ose2u")]
+unique_name_in_owner = true
+visible = false
+
+[node name="RaceInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_wmk0g")
+
+[node name="Players" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="IngameSFX" parent="." instance=ExtResource("3_iemo0")]
+unique_name_in_owner = true
+
+[node name="GameStateMachine" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_yxiqb")
+
+[node name="GameEventListener" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("8_c3gqs")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://CarController.tscn")
+spawn_path = NodePath("../Players")
+
+[node name="ReplayManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_dwb25")

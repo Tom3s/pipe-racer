@@ -12,12 +12,15 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var ratingNumber: Label = %RatingNumber
 @onready var uploadDate: Label = %UploadDate
 
-@onready var commentsContainer: CommentsContainer = %CommentsContainer
 @onready var openCommentsButton: Button = %OpenCommentsButton
 @onready var rateButton: Button = %RateButton
-@onready var ratingMenu: RatingMenu = %RatingMenu
 @onready var refreshButton: Button = %RefreshButton
+@onready var selectGhostsButton: Button = %SelectGhostsButton
 @onready var deleteButton: Button = %DeleteButton
+
+@onready var ratingMenu: RatingMenu = %RatingMenu
+@onready var commentsContainer: CommentsContainer = %CommentsContainer
+@onready var replaySelector: ReplaySelector = %ReplaySelector
 
 @onready var backButton: Button = %BackButton
 @onready var selectButton: Button = %SelectButton
@@ -29,6 +32,9 @@ signal backPressed()
 signal playPressed(trackPath: String)
 
 signal loaded()
+
+var localReplays: Array[String] = []
+var downloadedReplays: Array[String] = []
 
 func _ready():
 	openCommentsButton.pressed.connect(commentsContainer.show)
@@ -51,6 +57,26 @@ func _ready():
 		fetchLevelDetails()
 	)
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
+
+	selectGhostsButton.pressed.connect(replaySelector.show)
+	# replaySelector.closePressed.connect(func():
+	# 	selectButton.grab_focus()
+	# )
+	replaySelector.replaysSelected.connect(func(localList: Array[String], downloadedList: Array[String]):
+		localReplays = localList
+		downloadedReplays = downloadedList
+		selectButton.grab_focus()
+	)
+
+	leaderboardMenu.addOnlineGhost.connect(func(ghost: String):
+		downloadedReplays.append(ghost + ".replay")
+	)
+	leaderboardMenu.removeOnlineGhost.connect(func(ghost: String):
+		downloadedReplays.erase(ghost + ".replay")
+	)
+
+	replaySelector.hideDownloaded()
+
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -69,6 +95,7 @@ var downloaded = false
 func onBackPressed():
 	commentsContainer.hide()
 	ratingMenu.hide()
+	replaySelector.hide()
 	animateOut()
 
 func init(initTrackId: String) -> bool:
@@ -82,6 +109,14 @@ func init(initTrackId: String) -> bool:
 	ratingMenu.init(
 		trackId
 	)
+
+	localReplays.clear()
+	downloadedReplays.clear()
+	replaySelector.init(
+		trackId
+	)
+
+
 	downloaded = isDownloaded()
 	if downloaded:
 		selectButton.setLabelText("Play")
