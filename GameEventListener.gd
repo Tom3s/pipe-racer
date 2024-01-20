@@ -412,7 +412,7 @@ func getTimestamp():
 
 func addPlayers(_playerDatas: Array[PlayerData], networkId: int) -> void:
 	for playerData in _playerDatas:
-		spawnPlayer(playerData, networkId)
+		spawnPlayer(playerData, networkId, _playerDatas.size() > 1)
 	
 	# TODO: may not be the best place for this
 	if replayGhost.bestGhostTime != 0:
@@ -420,7 +420,8 @@ func addPlayers(_playerDatas: Array[PlayerData], networkId: int) -> void:
 
 func spawnPlayer(
 	data: PlayerData,
-	networkId: int
+	networkId: int,
+	non3DAudio: bool = false
 ) -> void:
 
 	var car: CarController = Car.instantiate()
@@ -448,6 +449,8 @@ func spawnPlayer(
 
 	if networkId == Network.userId:
 		addLocalCamera(car, getInputDevices(networkId))
+		if non3DAudio:
+			car.set2DAudio()
 	else:
 		# addRemoteCamera(car.name)
 		rpc_id(networkId, "addRemoteCamera", car.name, getInputDevices(networkId))
