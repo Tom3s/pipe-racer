@@ -45,6 +45,12 @@ func _ready():
 		get_tree().root.get_node("MainMenu/Background").hide()
 	)
 
+	visibility_changed.connect(func():
+		if is_visible_in_tree():
+			loadMapList()
+	)
+			
+
 func loadMapList():
 	mapList.clear()
 	trackIds.clear()
