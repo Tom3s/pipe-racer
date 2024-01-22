@@ -35,6 +35,11 @@ func setup(
 	%GameEventListener.state.online = online
 	%GameEventListener.state.validation = validation
 
+	if validation && map.bestTotalReplay != "":
+		localReplays = [
+			map.bestTotalReplay.split("/")[-1],
+		]
+
 	%GameEventListener.map = map
 
 	%GameEventListener.addGhosts(localReplays, downloadedReplays)
