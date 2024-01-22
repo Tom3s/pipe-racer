@@ -257,7 +257,7 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
 
-	var actualLength = 2 if curve else length
+	var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
 	
 	for y in PrefabConstants.LENGTH_SEGMENTS * actualLength:
 		for x in PrefabConstants.WIDTH_SEGMENTS:
@@ -276,40 +276,13 @@ func getIndexArray() -> Array[int]:
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	var actualLength = 2 if curve else length
+	var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
 	
 	var multiplier = 1
-	if curve:
-		var larger = max(curveForward, curveSideways)
-		multiplier = round(float(larger) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
-	
-
-	# var fromIndex = 1 if !rightWallStart && !rightWallEnd else 4
-	# var toIndex = PrefabConstants.WIDTH_SEGMENTS if !leftWallStart && !leftWallEnd else PrefabConstants.WIDTH_SEGMENTS - 3
-
-	# push wall vertices
-	# if rightWallStart || rightWallEnd:
-	# 	var newRightMostVertex = lerp(rightMostVertex, leftMostVertex, 0.05)
-	# 	vertices.push_back(rightMostVertex)
-	# 	vertices.push_back(rightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
-	# 	vertices.push_back(newRightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
-	# 	vertices.push_back(newRightMostVertex)
-	# else:
-	# 	vertices.push_back(rightMostVertex)
-	
-	# for divIndex in range(fromIndex, toIndex):
-	# 	vertices.push_back(lerp(rightMostVertex, leftMostVertex, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS))
-
-	# if leftWallStart || leftWallEnd:
-	# 	var newLeftMostVertex = lerp(leftMostVertex, rightMostVertex, 0.05)
-	# 	vertices.push_back(newLeftMostVertex)
-	# 	vertices.push_back(newLeftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
-	# 	vertices.push_back(leftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
-	# 	vertices.push_back(leftMostVertex)
-	# else:
-	# 	vertices.push_back(leftMostVertex)
-	
-	# return vertices
+	# if curve:
+	# 	var larger = max(curveForward, curveSideways)
+	# 	multiplier = round(float(larger) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
+		
 
 	for y in (PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
 		var v = 1.0 - (float(y * multiplier) / PrefabConstants.LENGTH_SEGMENTS)
@@ -474,8 +447,9 @@ func refreshMesh():
 		leftPositions = generatePositionArrayStraight(PrefabConstants.TRACK_WIDTH)
 		rightPositions = generatePositionArrayStraight(0)
 	else:
-		for index in range(PrefabConstants.LENGTH_SEGMENTS * 2 + 1):
-			lengthDivisionPoints.push_back(float(index) / (PrefabConstants.LENGTH_SEGMENTS * 2))
+		var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
+		for index in range(PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
+			lengthDivisionPoints.push_back(float(index) / (PrefabConstants.LENGTH_SEGMENTS * actualLength))
 		leftPositions = generatePositionArrayCurveOutside()
 #		rightPositions = generatePositionArrayCurveInside(leftPositions)
 		rightPositions = generatePositionArrayCurveInside2()
