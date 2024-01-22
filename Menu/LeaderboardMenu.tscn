@@ -172,7 +172,6 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="Scroll" type="ScrollContainer" parent="TabContainer/Total Times"]
-visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 
