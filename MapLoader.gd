@@ -146,7 +146,7 @@ func uploadTrack(trackFileName: String):
 	if (jsonData == null):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Invalid JSON") 
 		return
-	if (jsonData.validated == false):
+	if (!jsonData.has("validated") || jsonData.validated == false):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Track must be validated (completed) before uploading") 
 		return
 

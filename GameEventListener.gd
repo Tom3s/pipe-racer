@@ -33,6 +33,7 @@ var map: Map:
 @onready var leaderboardUI = %LeaderboardUI
 @onready var ingameSFX = %IngameSFX
 @onready var pauseMenu = %PauseMenu
+@onready var validationFeedbackUI = %ValidationFeedbackUI
 
 @onready var replayManager: ReplayManager = %ReplayManager
 
@@ -42,6 +43,7 @@ func _ready():
 	verticalSplitBottom.visible = false
 	pauseMenu.visible = false
 	leaderboardUI.visible = false
+	validationFeedbackUI.visible = false
 
 	state.resetExitedPlayers()
 
@@ -79,6 +81,11 @@ func connectSignals():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	)
 	pauseMenu.exitPressed.connect(onPauseMenu_exitPressed)
+
+	validationFeedbackUI.improvePressed.connect(func():
+		recalculate()
+	)
+		
 
 
 	get_tree().get_multiplayer().peer_disconnected.connect(clientExited)
@@ -127,6 +134,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
 			leaderboardUI.visible = false
+			validationFeedbackUI.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
 		if state.pausedBy == playerIndex:
@@ -162,6 +170,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
 			leaderboardUI.visible = false
+			validationFeedbackUI.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 # func onRaceInputHandler_fullScreenPressed():
@@ -234,6 +243,15 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 
 		elif state.validation:
 			map.setNewValidationTime(totalTime, bestLap, recording)
+			validationFeedbackUI.setNewTimes(totalTime, bestLap)
+			# validationFeedbackUI.visible = true
+			var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+			var windowSize = validationFeedbackUI.get_viewport_rect().size
+			tween.tween_property(validationFeedbackUI, "position", Vector2(0, -windowSize.y), 0).as_relative()
+			tween.tween_property(validationFeedbackUI, "visible", true, 0)
+			tween.tween_property(validationFeedbackUI, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
+		
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
@@ -248,6 +266,7 @@ func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
 	state.setPlayerReset(playerIndex, resetting)
 	if networkId == Network.userId:
 		leaderboardUI.visible = false
+		validationFeedbackUI.visible = false
 
 func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
 	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
