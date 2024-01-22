@@ -232,6 +232,9 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 				leaderboardUI.visible = true
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+		elif state.validation:
+			map.setNewValidationTime(totalTime, bestLap, recording)
+
 		print("Best Lap: ", bestLap)
 		print("Total time: ", totalTime)
 

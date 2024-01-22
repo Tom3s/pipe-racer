@@ -202,7 +202,7 @@ text = "Edit"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-text = "Play"
+text = "Validate"
 
 [node name="UploadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true

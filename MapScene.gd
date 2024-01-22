@@ -1,7 +1,7 @@
 extends Node3D
 class_name Map
 
-const CURRENT_FORMAT_VERSION = 2
+const CURRENT_FORMAT_VERSION = 3
 
 var StartScene = preload("res://Start.tscn")
 @onready
@@ -139,6 +139,8 @@ func setupAutoSave():
 func autoSave():
 	saveToJSON(true)
 
+# add
+
 func add(prefabMesher: PrefabMesher):
 	var prefab: PrefabProperties = prefabMesher.objectFromData()
 	addPrefab(prefab)
@@ -177,6 +179,8 @@ func addPrefab(prefab: PrefabProperties, _prefabPosition: Vector3 = Vector3.INF,
 	prefab.calculateCorners()
 
 	tryAddingConnectionPoints(prefab.topLeft, prefab.topRight, prefab.bottomLeft, prefab.bottomRight)
+
+	unvalidate()
 
 func setEditorCollision():
 	%Scenery.setEditorCollision()
@@ -233,6 +237,8 @@ func updateStartPosition(newPosition: Vector3, newRotation: Vector3):
 
 	start.visible = start.global_position != START_MAGIC_VECTOR
 
+	unvalidate()
+
 func storeAddStartObject(oldPosition: Vector3, oldRotation: Vector3, newPosition: Vector3, newRotation: Vector3):
 	safeResizeStack()
 
@@ -257,6 +263,9 @@ func addCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, check
 	checkPointObject.global_position = checkPointPos
 	checkPointObject.global_rotation = checkPointRotation
 
+	unvalidate()
+
+
 func storeAddCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
 	safeResizeStack()
 
@@ -279,6 +288,9 @@ func addPropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
 	props.add_child(propObject)
 	propObject.global_position = propPos
 	propObject.global_rotation = propRotation
+
+	unvalidate()
+
 
 func storeAddPropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
 	safeResizeStack()
@@ -308,6 +320,9 @@ func removePrefab(prefab: PrefabProperties):
 
 	recalculateConnectionPoints()
 
+	unvalidate()
+
+
 func storeRemovePrefab(prefab: PrefabProperties):
 	safeResizeStack()
 
@@ -332,6 +347,8 @@ func removeCheckPoint(checkPointObject: Area3D):
 
 func removeCheckPointObject(checkPointObject: Area3D):
 	checkPointSystem.remove_child(checkPointObject)
+	unvalidate()
+
 
 func storeRemoveCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
 	safeResizeStack()
@@ -352,6 +369,8 @@ func removeProp(propObject: Node3D):
 
 func removePropObject(propObject: Node3D):
 	props.remove_child(propObject)
+	unvalidate()
+
 
 func storeRemovePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3):
 	safeResizeStack()
@@ -402,6 +421,8 @@ func updateCheckPoint(oldCheckPointObject: Area3D, propPlacer: PropPlacer):
 func updateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
 	checkPointObject.global_position = checkPointPos
 	checkPointObject.global_rotation = checkPointRotation
+	unvalidate()
+
 
 func storeUpdateCheckPointObject(checkPointObject: Area3D, checkPointPos: Vector3, checkPointRotation: Vector3):
 	safeResizeStack()
@@ -433,6 +454,8 @@ func updatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector
 	propObject.global_position = propPos
 	propObject.global_rotation = propRotation
 	propObject.setTexture(texture, textureName, url)
+	unvalidate()
+
 
 func storeUpdatePropObject(propObject: Node3D, propPos: Vector3, propRotation: Vector3, textureName: String, texture: Texture, url: String):
 	safeResizeStack()
@@ -605,6 +628,19 @@ func clearMap():
 func save():
 	saveToJSON()
 
+var validated: bool = false
+var bestTotalTime: int = -1
+var bestTotalReplay: String = ""
+var bestLapTime: int = -1
+var bestLapReplay: String = ""
+
+func unvalidate():
+	validated = false
+	bestTotalTime = -1
+	bestTotalReplay = ""
+	bestLapTime = -1
+	bestLapReplay = ""
+
 func saveToJSON(autosave: bool = false):
 	var trackData = {
 		"format": CURRENT_FORMAT_VERSION,
@@ -623,7 +659,12 @@ func saveToJSON(autosave: bool = false):
 			"rotation": start.global_rotation.y
 		},
 		"checkPoints": [],
-		"props": []
+		"props": [],
+		"validated": validated,
+		"bestTotalTime": bestTotalTime,
+		"bestTotalReplay": bestTotalReplay,
+		"bestLapTime": bestLapTime,
+		"bestLapReplay": bestLapReplay,
 		# "author": GlobalProperties.PLAYER_NAME
 	}
 
@@ -722,6 +763,8 @@ func loadFromJSON(fileName: String) -> bool:
 	trackName = trackData["trackName"]
 	lapCount = trackData["lapCount"]
 
+	
+
 	if !trackData.has("trackPieces"):
 		print("Error loading map: no trackPieces")
 		return false
@@ -771,6 +814,13 @@ func loadFromJSON(fileName: String) -> bool:
 
 	print("Loaded track: " + trackData["trackName"])
 
+	# load validation details
+	validated = trackData["validated"] 
+	bestTotalTime = trackData["bestTotalTime"]
+	bestTotalReplay = trackData["bestTotalReplay"]
+	bestLapTime = trackData["bestLapTime"]
+	bestLapReplay = trackData["bestLapReplay"]
+
 	# mapLoadSuccess = true
 	# loaded.emit()
 	mapLoaded.emit(trackData["trackName"], trackData["lapCount"])
@@ -793,3 +843,14 @@ func setIngame():
 func emitUndoRedoSignals():
 	canUndo.emit(ableToUndo())
 	canRedo.emit(ableToRedo())
+
+func setNewValidationTime(totalTime: int, bestLap: int, replay: String):
+	validated = true
+	if bestTotalTime == -1 || totalTime < bestTotalTime:
+		bestTotalTime = totalTime
+		bestTotalReplay = replay
+		save()
+	if bestLapTime == -1 || bestLap < bestLapTime:
+		bestLapTime = bestLap
+		bestLapReplay = replay
+		save()
