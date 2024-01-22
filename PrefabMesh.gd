@@ -257,7 +257,7 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 func getIndexArray() -> Array[int]:
 	var indexList: Array[int] = []
 
-	var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
+	var actualLength: int = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
 	
 	for y in PrefabConstants.LENGTH_SEGMENTS * actualLength:
 		for x in PrefabConstants.WIDTH_SEGMENTS:
@@ -276,7 +276,7 @@ func getIndexArray() -> Array[int]:
 func getUVArray() -> Array[Vector2]:
 	var uvArray: Array[Vector2] = []
 	
-	var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
+	var actualLength: int = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
 	
 	var multiplier = 1
 	# if curve:
@@ -447,7 +447,7 @@ func refreshMesh():
 		leftPositions = generatePositionArrayStraight(PrefabConstants.TRACK_WIDTH)
 		rightPositions = generatePositionArrayStraight(0)
 	else:
-		var actualLength = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
+		var actualLength: int = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE))
 		for index in range(PrefabConstants.LENGTH_SEGMENTS * actualLength + 1):
 			lengthDivisionPoints.push_back(float(index) / (PrefabConstants.LENGTH_SEGMENTS * actualLength))
 		leftPositions = generatePositionArrayCurveOutside()
