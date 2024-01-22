@@ -68,7 +68,7 @@ func playMap(trackName: String):
 			GlobalProperties.PLAYER_COLOR,
 		)
 	]
-	var success = raceNode.setup(trackName, trackName.begins_with("user://tracks/downloaded"))
+	var success = raceNode.setup(trackName, false, false, true)
 	if !success:
 		AlertManager.showAlert(
 			self,

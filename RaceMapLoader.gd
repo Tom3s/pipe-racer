@@ -66,6 +66,7 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 		trackName, 
 		trackName.begins_with("user://tracks/downloaded"),
 		false,
+		false,
 		mapOverviewMenu.localReplays,
 		mapOverviewMenu.downloadedReplays
 	)

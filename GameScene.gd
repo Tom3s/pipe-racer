@@ -14,6 +14,7 @@ func setup(
 	mapName: String,
 	ranked: bool = false,
 	online: bool = false,
+	validation: bool = false,
 	localReplays: Array[String] = [],
 	downloadedReplays: Array[String] = [],
 
@@ -32,6 +33,7 @@ func setup(
 
 	%GameEventListener.state.ranked = ranked
 	%GameEventListener.state.online = online
+	%GameEventListener.state.validation = validation
 
 	%GameEventListener.map = map
 

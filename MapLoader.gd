@@ -66,20 +66,6 @@ func loadLocalTracks() -> void:
 	for track in localTrackListItems:
 		localTrackList.add_item(track.replace(".json", ""))
 
-
-# func onLoadButton_pressed(_sink = null) -> void:
-# 	var trackName = ""
-# 	if selectMode == MODE_SELECT_LOCAL:
-# 		trackName = "user://tracks/local/" 
-# 		trackName += localTrackListItems[localTrackList.get_selected_items()[0]]
-# 	elif selectMode == MODE_SELECT_DOWNLOADED:
-# 		trackName = "user://tracks/downloaded/" 
-# 		trackName += downloadedTrackListItems[downloadedTrackList.get_selected_items()[0]]
-# 	else:
-# 		return
-# 	visible = false
-# 	trackSelected.emit(trackName)
-# 	print("Selected track: ", trackName)
 func onEditButton_pressed(_sink = null):
 	var trackName = ""
 	trackName = "user://tracks/local/" 
