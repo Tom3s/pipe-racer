@@ -755,6 +755,7 @@ func loadFromJSON(fileName: String) -> bool:
 			MapUpdater.updateMap(trackData, path)
 
 			fileHandler = FileAccess.open(path, FileAccess.READ)
+			trackData = JSON.parse_string(fileHandler.get_as_text())
 		else:
 			return false
 

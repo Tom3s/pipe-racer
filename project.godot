@@ -490,4 +490,5 @@ common/physics_jitter_fix=0.0
 
 [rendering]
 
+lights_and_shadows/directional_shadow/size=8196
 scaling_3d/fsr_sharpness=0.2
