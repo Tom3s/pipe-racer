@@ -111,11 +111,8 @@ func loadDownloadedReplays(trackId: String) -> void:
 
 			var replayTrackId = mapMetadata[0]
 			if replayTrackId == trackId:
-				# downloadedReplays.add_item(fileName)
-				var _nrCars = fileHandler.get_line().to_int()
-				var time = fileHandler.get_line().to_int()
-				for i in _nrCars - 1:
-					fileHandler.get_line() # skip other times
+				var _nrCars = fileHandler.get_16()
+				var time = fileHandler.get_32()
 				var carMetadata = fileHandler.get_csv_line()
 				var carName = carMetadata[0]
 
