@@ -254,28 +254,30 @@ func generatePositionArrayCurveInside(outsidePositions: Array[Vector2]) -> Array
 	return positions
 
 #def generate_face_list(self) -> list:
-func getIndexArray() -> Array[int]:
+func getIndexArray(vertices: Array[Vector3]) -> Array[int]:
 	var indexList: Array[int] = []
 
 	var actualLength: int = round(float(max(curveForward, curveSideways)) / (PrefabConstants.TRACK_WIDTH / PrefabConstants.GRID_SIZE)) if curve else length
 	
 	var actualWidthSegments: int = PrefabConstants.WIDTH_SEGMENTS
 	if rightWallStart || rightWallEnd:
-		actualWidthSegments += 3
+		actualWidthSegments += 5
 	if leftWallStart || leftWallEnd:
-		actualWidthSegments += 3
+		actualWidthSegments += 5
 
 	for y in PrefabConstants.LENGTH_SEGMENTS * actualLength:
 		for x in actualWidthSegments:
 			var bottomRightIndex = x + y * (actualWidthSegments + 1)
 			var topRightIndex = x + (y + 1) * (actualWidthSegments + 1)
-			indexList.push_back(bottomRightIndex)
-			indexList.push_back(bottomRightIndex + 1)
-			indexList.push_back(topRightIndex)
+			if vertices[bottomRightIndex] != vertices[bottomRightIndex + 1]: 
+				indexList.push_back(bottomRightIndex)
+				indexList.push_back(bottomRightIndex + 1)
+				indexList.push_back(topRightIndex)
 			
-			indexList.push_back(bottomRightIndex + 1)
-			indexList.push_back(topRightIndex + 1)
-			indexList.push_back(topRightIndex)
+			if vertices[topRightIndex] != vertices[topRightIndex + 1]:
+				indexList.push_back(bottomRightIndex + 1)
+				indexList.push_back(topRightIndex + 1)
+				indexList.push_back(topRightIndex)
 
 	return indexList
 
@@ -306,6 +308,8 @@ func getUVArray() -> Array[Vector2]:
 			if rightWallStart || rightWallEnd:
 				uvArray.push_back(Vector2(1.0, v))
 				uvArray.push_back(Vector2(1.0, v))
+				uvArray.push_back(Vector2(1.0, v))
+				uvArray.push_back(Vector2(0.95, v))
 				uvArray.push_back(Vector2(0.95, v))
 				uvArray.push_back(Vector2(0.95, v))
 			else:
@@ -316,6 +320,8 @@ func getUVArray() -> Array[Vector2]:
 			if leftWallStart || leftWallEnd:
 				uvArray.push_back(Vector2(0.05, v))
 				uvArray.push_back(Vector2(0.05, v))
+				uvArray.push_back(Vector2(0.05, v))
+				uvArray.push_back(Vector2(0.0, v))
 				uvArray.push_back(Vector2(0.0, v))
 				uvArray.push_back(Vector2(0.0, v))
 			else:
@@ -329,15 +335,18 @@ func getNormalArray(leftPositions: Array[Vector2], rightPositions: Array[Vector2
 
 	var actualWidthSegments: int = PrefabConstants.WIDTH_SEGMENTS
 	if rightWallStart || rightWallEnd:
-		actualWidthSegments += 3
+		actualWidthSegments += 5
 	if leftWallStart || leftWallEnd:
-		actualWidthSegments += 3
+		actualWidthSegments += 5
 
 	for index in (leftPositions.size() - 1):
 		var a: Vector3 = Vector3(leftPositions[index].x, leftHeights[index], leftPositions[index].y)
 		var b: Vector3 = Vector3(rightPositions[index].x, rightHeights[index], rightPositions[index].y)
 		var c: Vector3 = Vector3(leftPositions[index + 1].x, leftHeights[index + 1], leftPositions[index + 1].y)
 		
+		if a == b || b == c || c == a:
+			continue
+
 		var normal = ((b - a).cross(c - a)).normalized()
 		for _x in (actualWidthSegments + 1): 
 			normalArray.push_back(normal)
@@ -393,6 +402,8 @@ func getVerticesAcross(leftMostVertex: Vector3, rightMostVertex: Vector3, leftHe
 		newRightMostVertex = lerp(rightMostVertex, leftMostVertex, 0.05)
 		vertices.push_back(rightMostVertex)
 		vertices.push_back(rightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+		vertices.push_back(rightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
+		vertices.push_back(newRightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
 		vertices.push_back(newRightMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * rightHeight)
 		vertices.push_back(newRightMostVertex)
 	else:
@@ -410,6 +421,8 @@ func getVerticesAcross(leftMostVertex: Vector3, rightMostVertex: Vector3, leftHe
 		newLeftMostVertex = lerp(leftMostVertex, rightMostVertex, 0.05)
 		vertices.push_back(newLeftMostVertex)
 		vertices.push_back(newLeftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+		vertices.push_back(newLeftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
+		vertices.push_back(leftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
 		vertices.push_back(leftMostVertex + Vector3.UP * PrefabConstants.WALL_HEIGHT * leftHeight)
 		vertices.push_back(leftMostVertex)
 	else:
@@ -446,7 +459,7 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	
 	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertices)
 	
-	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(getIndexArray())
+	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(getIndexArray(vertices))
 	
 	meshData[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array(getUVArray())
 	
