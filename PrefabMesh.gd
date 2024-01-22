@@ -306,26 +306,30 @@ func getUVArray() -> Array[Vector2]:
 			var toIndex = PrefabConstants.WIDTH_SEGMENTS
 
 			if rightWallStart || rightWallEnd:
-				uvArray.push_back(Vector2(1.0, v))
-				uvArray.push_back(Vector2(1.0, v))
-				uvArray.push_back(Vector2(1.0, v))
-				uvArray.push_back(Vector2(0.95, v))
-				uvArray.push_back(Vector2(0.95, v))
-				uvArray.push_back(Vector2(0.95, v))
-				uvArray.push_back(Vector2(0.95, v))
+				# uvArray.push_back(Vector2(1.0, v))
+				# uvArray.push_back(Vector2(1.0, v))
+				# uvArray.push_back(Vector2(1.0, v))
+				# uvArray.push_back(Vector2(0.95, v))
+				# uvArray.push_back(Vector2(0.95, v))
+				# uvArray.push_back(Vector2(0.95, v))
+				# uvArray.push_back(Vector2(0.95, v))
+				for i in range(7):
+					uvArray.push_back(Vector2(lerp(1.0, 0.95, float(i) / 6), v))
 			else:
 				uvArray.push_back(Vector2(1.0, v))
 			for divIndex in range(fromIndex, toIndex):
 				var u = lerp(1.0, 0.0, float(divIndex) / PrefabConstants.WIDTH_SEGMENTS)
 				uvArray.push_back(Vector2(u, v))
 			if leftWallStart || leftWallEnd:
-				uvArray.push_back(Vector2(0.05, v))
-				uvArray.push_back(Vector2(0.05, v))
-				uvArray.push_back(Vector2(0.05, v))
-				uvArray.push_back(Vector2(0.05, v))
-				uvArray.push_back(Vector2(0.0, v))
-				uvArray.push_back(Vector2(0.0, v))
-				uvArray.push_back(Vector2(0.0, v))
+				# uvArray.push_back(Vector2(0.05, v))
+				# uvArray.push_back(Vector2(0.05, v))
+				# uvArray.push_back(Vector2(0.05, v))
+				# uvArray.push_back(Vector2(0.05, v))
+				# uvArray.push_back(Vector2(0.0, v))
+				# uvArray.push_back(Vector2(0.0, v))
+				# uvArray.push_back(Vector2(0.0, v))
+				for i in range(7):
+					uvArray.push_back(Vector2(lerp(0.05, 0.0, float(i) / 6), v))
 			else:
 				uvArray.push_back(Vector2(0.0, v))
 	
@@ -458,12 +462,14 @@ func generateMesh(leftHeights: Array[float], rightHeights: Array[float], leftPos
 	
 	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertices)
 	
-	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(getIndexArray(vertices))
+	var indices = getIndexArray(vertices)
+
+	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(indices)
 	
 	meshData[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array(getUVArray())
 	
 	# meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(leftPositions, rightPositions, leftHeights, rightHeights))
-	meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(getIndexArray(vertices), vertices))
+	meshData[ArrayMesh.ARRAY_NORMAL] = PackedVector3Array(getNormalArray(indices, vertices))
 	
 	mesh = ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
