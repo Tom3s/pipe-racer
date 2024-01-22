@@ -5,13 +5,13 @@ class_name MapUpdater
 
 static func updateMap(jsonData, fileName: String) -> void:
 	var mappings = {
-        0: 'BumpyRoadOld',
-        1: 'ChicaneLeftOld',
-        2: 'ChicaneRightOld',
-        3: 'SharpLeftOld',
-        4: 'SharpRightOld',
-        5: 'TheChampion',
-        -2: 'Custom'
+		0: 'BumpyRoadOld',
+		1: 'ChicaneLeftOld',
+		2: 'ChicaneRightOld',
+		3: 'SharpLeftOld',
+		4: 'SharpRightOld',
+		5: 'TheChampion',
+		-2: 'Custom'
 	}
 	var newProps = []
 
