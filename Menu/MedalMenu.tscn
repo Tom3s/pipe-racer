@@ -1,0 +1,262 @@
+[gd_scene load_steps=7 format=3 uid="uid://bsdocsugbtba7"]
+
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_6fxni"]
+[ext_resource type="Script" path="res://Menu/MedalMenu.gd" id="2_yq7md"]
+
+[sub_resource type="Theme" id="Theme_v25yg"]
+default_font = ExtResource("1_6fxni")
+default_font_size = 24
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 4
+Label/constants/shadow_offset_y = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdhnn"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.356863)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Gradient" id="Gradient_u3a5t"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_84ivm"]
+gradient = SubResource("Gradient_u3a5t")
+
+[node name="MedalMenu" type="VBoxContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = -188.5
+offset_right = 143.0
+offset_bottom = 188.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_v25yg")
+script = ExtResource("2_yq7md")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "MEdals"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdhnn")
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "Total Time:"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="Control2" type="Control" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Chrono Medal"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Gold"
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Silver"
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Bronze"
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="BuilderTotalTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:23:456"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="GoldTotalTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:28:456"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SilverTotalTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:36:856"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BronzeTotalTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:36:856"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2"]
+layout_mode = 2
+text = "Best Lap:"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_84ivm")
+expand_mode = 5
+
+[node name="Control2" type="Control" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Blitz Medal"
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Gold"
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Silver"
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Bronze"
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="BuilderLapTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:23:456"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="GoldLapTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:28:456"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SilverLapTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:36:856"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BronzeLapTime" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer2/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "01:36:856"
+horizontal_alignment = 2
+vertical_alignment = 1

@@ -384,7 +384,7 @@ func getNormalArray(indices: Array[int], vertices: Array[Vector3]) -> Array[Vect
 		normalArray[indices[index + 1]] = normal
 		normalArray[indices[index + 2]] = normal
 
-	print("Indices size:", indices.size(), "Normal array size:", normalArray.size())
+	# print("Indices size:", indices.size(), "Normal array size:", normalArray.size())
 
 	return normalArray
 

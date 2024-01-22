@@ -13,26 +13,27 @@ static func updateMap(jsonData, fileName: String) -> void:
 		5: 'TheChampion',
 		-2: 'Custom'
 	}
-	var newProps = []
+	
+	if jsonData['format'] == 1:
+		var newProps = []
+	
+		if !jsonData.has('props'): # || jsonData['format'] == 2:
+			# return
+			jsonData['props'] = []
+		jsonData['format'] = 2
 
-	if !jsonData.has('props'): # || jsonData['format'] == 2:
-		# return
-		jsonData['props'] = []
 
-	jsonData['format'] = 2
+		for prop in jsonData['props']:
+			var newProp = prop
+			if !newProp.has('textureIndex'):
+				continue
 
+			newProp['textureName'] = mappings[str(newProp['textureIndex']).to_int()]
+			newProp.erase('textureIndex')
 
-	for prop in jsonData['props']:
-		var newProp = prop
-		# if !newProp.has('textureIndex'):
-		# 	return
+			newProps.append(newProp)
 
-		newProp['textureName'] = mappings[str(newProp['textureIndex']).to_int()]
-		newProp.erase('textureIndex')
-
-		newProps.append(newProp)
-
-	jsonData['props'] = newProps
+		jsonData['props'] = newProps
 
 	if jsonData["format"] == 2:
 		# var validated: bool = false

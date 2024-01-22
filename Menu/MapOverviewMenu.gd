@@ -8,6 +8,7 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var trackName: Label = %TrackName
 @onready var author: Label = %Author
 @onready var leaderboardMenu: LeaderboardMenu = %LeaderboardMenu
+@onready var medalMenu: MedalMenu = %MedalMenu
 @onready var downloadNumber: Label = %DownloadNumber
 @onready var ratingNumber: Label = %RatingNumber
 @onready var uploadDate: Label = %UploadDate
@@ -160,6 +161,8 @@ func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers
 	ratingNumber.text = str(data.rating).pad_decimals(2) + "/5"
 
 	uploadDate.text = data.uploadDate.split("T")[0]
+
+	medalMenu.setTimes(data.bestTotalTime, data.bestLapTime)
 
 	loaded.emit()
 
