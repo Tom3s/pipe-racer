@@ -197,6 +197,18 @@ text = "01:36:856"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Show Builder's Ghost"
+
+[node name="ShowGhostButton" type="CheckButton" parent="PanelContainer/VBoxContainer3/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer3/VBoxContainer"]
 layout_mode = 2
 

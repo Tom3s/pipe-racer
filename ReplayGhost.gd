@@ -245,3 +245,23 @@ func setLabelVisibility(visible: bool):
 	for i in get_child_count():
 		var car: CarController = get_child(i)
 		car.setLabelVisibility(visible)
+
+func setTimeMultiplier(multiplier: float, builder: String = ""):
+	timeScale = 1.0 / multiplier
+
+	if multiplier == MedalMenu.GOLD_MULTIPLIER:
+		for i in get_child_count():
+			var car: CarController = get_child(i)
+			car.playerName = "Gold"
+	elif multiplier == MedalMenu.SILVER_MULTIPLIER:
+		for i in get_child_count():
+			var car: CarController = get_child(i)
+			car.playerName = "Silver"
+	elif multiplier == MedalMenu.BRONZE_MULTIPLIER:
+		for i in get_child_count():
+			var car: CarController = get_child(i)
+			car.playerName = "Bronze"
+	elif multiplier == 1.0:
+		for i in get_child_count():
+			var car: CarController = get_child(i)
+			car.playerName = builder

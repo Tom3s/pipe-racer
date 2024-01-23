@@ -68,7 +68,8 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 		false,
 		false,
 		mapOverviewMenu.localReplays,
-		mapOverviewMenu.downloadedReplays
+		mapOverviewMenu.downloadedReplays,
+		mapOverviewMenu.getTimeMultiplier(),
 	)
 	if !success:
 		AlertManager.showAlert(

@@ -17,6 +17,7 @@ func setup(
 	validation: bool = false,
 	localReplays: Array[String] = [],
 	downloadedReplays: Array[String] = [],
+	timeMultiplier: float = 1.0,
 
 ) -> bool:
 	# load map
@@ -42,7 +43,14 @@ func setup(
 
 	%GameEventListener.map = map
 
-	%GameEventListener.addGhosts(localReplays, downloadedReplays)
+	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
+
+	if timeMultiplier != 1.0:
+		%GameEventListener.state.timeMultiplier = timeMultiplier
+		%GameEventListener.addGhosts([] as Array[String], downloadedReplays)
+		%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
+	else:
+		%GameEventListener.addGhosts(localReplays, downloadedReplays)
 
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()

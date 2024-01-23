@@ -214,7 +214,11 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			map.trackName,
 		)
 
-		if timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
+		if timeTrialManagers[playerIdentifier].newTimeMultiplier:
+			replayGhost.setTimeMultiplier(timeTrialManagers[playerIdentifier].timeMultiplier, map.author)
+			state.timeMultiplier = timeTrialManagers[playerIdentifier].timeMultiplier
+
+		elif timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
 			replayGhost.loadReplay(recording)
 
 
@@ -524,7 +528,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	canvasLayer.follow_viewport_enabled = true
 
 	var hud: IngameHUD = HudScene.instantiate()
-	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId, replayGhost.get_child_count() == 0)
+	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId, replayGhost.get_child_count() == 0, state.timeMultiplier)
 	timeTrialManagers[car.name] = timeTrialManager
 	hud.init(car, timeTrialManager, playerDatas.size())
 

@@ -17,12 +17,21 @@ class_name MedalMenu
 @onready var totalTimePBLabel: Label = %TotalTimePBLabel
 @onready var lapTimePBLabel: Label = %LapTimePBLabel
 
+@onready var showGhostButton: Button = %ShowGhostButton
+
 const GOLD_MULTIPLIER = 1.1
 const SILVER_MULTIPLIER = 1.25
 const BRONZE_MULTIPLIER = 1.5
 
 var totalTimeRecord: int = 0
 var lapTimeRecord: int = 0
+
+signal showGhostToggled(checked: bool)
+
+func _ready():
+	showGhostButton.toggled.connect(func(checked: bool):
+		showGhostToggled.emit(checked)
+	)
 
 func setTimes(totalTime: int, lapTime: int):
 	totalTimeRecord = totalTime
@@ -73,3 +82,13 @@ func setVisibleMedalsLap(time: int):
 		lapTimeMedals.get_child(GOLD_MEDAL_INDEX + 1).visible = time > int(lapTimeRecord * GOLD_MULTIPLIER)
 		lapTimeMedals.get_child(SILVER_MEDAL_INDEX + 1).visible = time > int(lapTimeRecord * SILVER_MULTIPLIER)
 		lapTimeMedals.get_child(BRONZE_MEDAL_INDEX + 1).visible = time > int(lapTimeRecord * BRONZE_MULTIPLIER)
+
+func getCurrentMultiplier(time: int) -> float:
+	if time > totalTimeRecord * BRONZE_MULTIPLIER:
+		return BRONZE_MULTIPLIER
+	elif time > totalTimeRecord * SILVER_MULTIPLIER:
+		return SILVER_MULTIPLIER
+	elif time > totalTimeRecord * GOLD_MULTIPLIER:
+		return GOLD_MULTIPLIER
+	else:
+		return 1.0

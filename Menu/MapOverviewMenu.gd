@@ -74,6 +74,14 @@ func _ready():
 		downloadedReplays.erase(ghost + ".replay")
 	)
 
+	medalMenu.showGhostToggled.connect(func(toggled: bool):
+		if toggled:
+			leaderboardMenu.downloadReplay(builderReplayId)
+			downloadedReplays.append(builderReplayId + ".replay")
+		else:
+			downloadedReplays.erase(builderReplayId + ".replay")
+	)
+
 	replaySelector.hideDownloaded()
 
 	set_physics_process(true)
@@ -143,6 +151,8 @@ func fetchLevelDetails():
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
+var builderReplayId: String = ""
+
 func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
 		print("Error: ", _responseCode)
@@ -164,6 +174,8 @@ func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers
 	uploadDate.text = data.uploadDate.split("T")[0]
 
 	medalMenu.setTimes(data.bestTotalTime, data.bestLapTime)
+
+	builderReplayId = data.bestTotalReplay
 
 	loaded.emit()
 
@@ -285,8 +297,8 @@ func animateOut():
 	tween.tween_property(self, "visible", false, 0.0)
 	tween.tween_callback(func(): backPressed.emit())
 
-var personalBestTime: int = -1
-var personalBestLap: int = -1
+var personalBestTime: int = 9223372036854775807
+var personalBestLap: int = 9223372036854775807
 
 func fetchPersonalBestTime():
 	var request = HTTPRequest.new()
@@ -298,6 +310,7 @@ func fetchPersonalBestTime():
 			return
 		var data = JSON.parse_string(body.get_string_from_utf8())
 		if data.has("time"):
+			personalBestTime = data.time
 			medalMenu.setVisibleMedalsTotal(data.time)
 		else:
 			medalMenu.setVisibleMedalsTotal(9223372036854775807)
@@ -326,6 +339,7 @@ func fetchPersonalBestLap():
 		var data = JSON.parse_string(body.get_string_from_utf8())
 
 		if data.has("bestLap"):
+			personalBestLap = data.bestLap
 			medalMenu.setVisibleMedalsLap(data.bestLap)
 		else:
 			medalMenu.setVisibleMedalsLap(9223372036854775807)
@@ -343,3 +357,5 @@ func fetchPersonalBestLap():
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
 
+func getTimeMultiplier() -> float:
+	return medalMenu.getCurrentMultiplier(personalBestTime)

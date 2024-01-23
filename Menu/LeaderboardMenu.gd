@@ -306,3 +306,35 @@ func isReplayDownloaded(replayId: String) -> bool:
 	if dirAccess == null:
 		return false
 	return dirAccess.file_exists(replayPath)
+
+func downloadReplay(replayId: String):
+	if isReplayDownloaded(replayId):
+		return
+
+	var replayDownloadRequest = HTTPRequest.new()
+	add_child(replayDownloadRequest)
+	replayDownloadRequest.timeout = 10
+	replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+		if responseCode != 200:
+			print("Error downloading replay: ", body.get_string_from_utf8())
+			return
+		
+		var filePath = "user://replays/downloaded/" + replayId + ".replay"
+		var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
+
+		if fileAccess == null:
+			print("Error opening file: ", filePath)
+			return
+
+		fileAccess.store_buffer(body)
+		fileAccess.close()
+	)
+
+	var httpError = replayDownloadRequest.request(
+		Backend.BACKEND_IP_ADRESS + "/api/replays/" + replayId,
+		[
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN,
+		]
+	)
+	if httpError != OK:
+		print("Error: " + error_string(httpError))

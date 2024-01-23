@@ -19,15 +19,18 @@ var trackId: String = ""
 
 var isPB: bool = false
 
+var timeMultiplier: float = 1.0
+
 signal checkPointCollected(timestamp: int, lastTimestamp: int, currentLapTime: int)
 
 
 
-func _init(ingameSFXNode: IngameSFX, initnrLaps: int, initplayerId: String, inittrackId: String, loadPB: bool) -> void:
+func _init(ingameSFXNode: IngameSFX, initnrLaps: int, initplayerId: String, inittrackId: String, loadPB: bool, initTimeMultiplier: float = 1.0) -> void:
 	ingameSFX = ingameSFXNode
 	nrLaps = initnrLaps
 	playerId = initplayerId
 	trackId = inittrackId
+	timeMultiplier = initTimeMultiplier
 	if loadPB:
 		loadPersonalBest()
 		loadPersonalBestLap()
@@ -99,16 +102,16 @@ func collectCheckpoint(timestamp: int, lap: int) -> void:
 	# Set lastTimestamp to bestSplit if it exists
 	if GlobalProperties.COMPARE_AGAINST_BEST_LAP:
 		if bestLapSplits.size() >= splits[lap].size():
-			lastTimestamp = bestLapSplits[splits[lap].size() - 1]
+			lastTimestamp = bestLapSplits[splits[lap].size() - 1] * timeMultiplier
 	else:
 		if bestSplits.size() >= lap + 1 && bestSplits[lap].size() >= splits[lap].size():
-			lastTimestamp = bestSplits[lap][splits[lap].size() - 1]
+			lastTimestamp = bestSplits[lap][splits[lap].size() - 1] * timeMultiplier
 
 		# Adjust for total lap times
 		for i in lap:
 			if bestSplits.size() >= i + 1:
-				currentSplit += splits[i].back()
-				lastTimestamp += bestSplits[i].back()
+				currentSplit += splits[i].back() # * timeMultiplier
+				lastTimestamp += bestSplits[i].back() * timeMultiplier
 
 	checkPointCollected.emit(currentSplit, lastTimestamp, currentLapTime)
 
@@ -119,6 +122,7 @@ func reset() -> void:
 		splitList.clear()
 	splits.clear()
 	isPB = false
+	newTimeMultiplier = false
 
 func loadPersonalBest() -> void:
 	var pbRequest = HTTPRequest.new()
@@ -196,8 +200,29 @@ func setBestLapSplits(loadedBestSplits):
 			bestLapSplits.clear()
 			bestLapSplits.append_array(array)
 
+var newTimeMultiplier: bool = false
+
 func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
-	
+	if timeMultiplier != 1.0:
+		var totalTime = getTotalTime()
+		var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
+
+		if totalTime <= bestTime:
+			timeMultiplier = 1.0
+			newTimeMultiplier = true
+		elif totalTime <= bestTime * MedalMenu.GOLD_MULTIPLIER:
+			timeMultiplier = 1.0
+			newTimeMultiplier = true
+		elif totalTime <= bestTime * MedalMenu.SILVER_MULTIPLIER:
+			timeMultiplier = MedalMenu.GOLD_MULTIPLIER
+			newTimeMultiplier = true
+			return
+		elif totalTime <= bestTime * MedalMenu.BRONZE_MULTIPLIER:
+			timeMultiplier = MedalMenu.SILVER_MULTIPLIER
+			newTimeMultiplier = true
+			return
+
+
 	if totalTimeData == null && splitData == null:
 		var totalTime = getTotalTime()
 		var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
