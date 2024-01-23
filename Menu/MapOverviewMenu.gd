@@ -53,10 +53,8 @@ func _ready():
 		ratingNumber.text = str(x).pad_decimals(2) + "/5"
 	)
 	selectButton.pressed.connect(onSelectButton_Pressed)
-	refreshButton.pressed.connect(func():
-		leaderboardMenu.fetchTimes(trackId)
-		fetchLevelDetails()
-	)
+	refreshButton.pressed.connect(refreshMenu)
+
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
 
 	selectGhostsButton.pressed.connect(replaySelector.show)
@@ -127,6 +125,9 @@ func init(initTrackId: String) -> bool:
 		deleteButton.hide()
 
 	fetchLevelDetails()
+	fetchPersonalBestTime()
+	fetchPersonalBestLap()
+	
 	return true
 
 func fetchLevelDetails():
@@ -187,6 +188,12 @@ func onSelectButton_Pressed():
 		playPressed.emit("user://tracks/downloaded/" + trackId + ".json")
 	else:
 		downloadTrack()
+
+func refreshMenu():
+			leaderboardMenu.fetchTimes(trackId)
+			fetchLevelDetails()
+			fetchPersonalBestTime()
+			fetchPersonalBestLap()
 
 func downloadTrack():
 	if VersionCheck.offline:
@@ -277,3 +284,62 @@ func animateOut():
 	tween.tween_property(mainContents, "inAnimation", false, 0.0)
 	tween.tween_property(self, "visible", false, 0.0)
 	tween.tween_callback(func(): backPressed.emit())
+
+var personalBestTime: int = -1
+var personalBestLap: int = -1
+
+func fetchPersonalBestTime():
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 25
+	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+		if responseCode != 200:
+			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			return
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		if data.has("time"):
+			medalMenu.setVisibleMedalsTotal(data.time)
+		else:
+			medalMenu.setVisibleMedalsTotal(9223372036854775807)
+	)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId,
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
+		],
+		HTTPClient.METHOD_GET 
+	)
+
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+
+func fetchPersonalBestLap():
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 25
+	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+		if responseCode != 200:
+			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			return
+		var data = JSON.parse_string(body.get_string_from_utf8())
+
+		if data.has("bestLap"):
+			medalMenu.setVisibleMedalsLap(data.bestLap)
+		else:
+			medalMenu.setVisibleMedalsLap(9223372036854775807)
+	)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId + "?bestLap=true",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
+		],
+		HTTPClient.METHOD_GET 
+	)
+
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+

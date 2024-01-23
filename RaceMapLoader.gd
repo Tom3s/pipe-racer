@@ -91,6 +91,7 @@ func onPlayerSelectorMenu_backPressed():
 
 func onRace_exited():
 	raceNode.queue_free()
+	mapOverviewMenu.refreshMenu()
 	mapOverviewMenu.animateIn()
 
 func show():

@@ -1,0 +1,68 @@
+[gd_resource type="VisualShader" load_steps=7 format=3 uid="uid://bnnnypg6nd2fs"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_k7k63"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorDistance" id="VisualShaderNodeVectorDistance_12l1u"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0.5, 0.5)]
+op_type = 0
+
+[sub_resource type="Curve" id="Curve_ggb7h"]
+_data = [Vector2(0.213992, 0), 0.0, 0.0, 0, 0, Vector2(0.222222, 1), 0.0, 0.0, 0, 0, Vector2(0.382716, 1), 0.0, 0.0, 0, 0, Vector2(0.386831, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_8du8s"]
+curve = SubResource("Curve_ggb7h")
+
+[sub_resource type="VisualShaderNodeCurveTexture" id="VisualShaderNodeCurveTexture_0yhr5"]
+texture = SubResource("CurveTexture_8du8s")
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_prkv5"]
+constant = Color(0.427493, 0.427493, 0.427493, 1)
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform sampler2D curve_frg_4 : repeat_disable;
+
+
+
+void fragment() {
+// ColorConstant:5
+	vec4 n_out5p0 = vec4(0.427493, 0.427493, 0.427493, 1.000000);
+
+
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// Distance:3
+	vec2 n_in3p1 = vec2(0.50000, 0.50000);
+	float n_out3p0 = distance(n_out2p0, n_in3p1);
+
+
+// CurveTexture:4
+	float n_out4p0 = texture(curve_frg_4, vec2(n_out3p0)).r;
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out5p0.xyz);
+	COLOR.a = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-154.467, -4.8429)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(760, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_k7k63")
+nodes/fragment/2/position = Vector2(-340, 100)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorDistance_12l1u")
+nodes/fragment/3/position = Vector2(0, 120)
+nodes/fragment/4/node = SubResource("VisualShaderNodeCurveTexture_0yhr5")
+nodes/fragment/4/position = Vector2(196, 179)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_prkv5")
+nodes/fragment/5/position = Vector2(571.765, 93.3601)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 3, 0, 4, 0, 4, 0, 0, 1, 5, 0, 0, 0)
