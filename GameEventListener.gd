@@ -150,6 +150,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 				# for ghost in ghosts.get_children():
 				# 	ghost.playing = true
 				replayGhost.playing = true
+				replayManager.recording = true
 			
 			state.pausedBy = -1
 			pauseMenu.visible = false
@@ -166,6 +167,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			# for ghost in ghosts.get_children():
 			# 	ghost.playing = false
 			replayGhost.playing = false
+			replayManager.recording = false
 
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
