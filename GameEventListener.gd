@@ -218,6 +218,9 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			replayGhost.setTimeMultiplier(timeTrialManagers[playerIdentifier].timeMultiplier, map.author)
 			state.timeMultiplier = timeTrialManagers[playerIdentifier].timeMultiplier
 
+			if map.bestTotalTime >= totalTime && state.timeMultiplier == 1.0:
+				replayGhost.loadReplay(recording)
+
 		elif timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
 			replayGhost.loadReplay(recording)
 
