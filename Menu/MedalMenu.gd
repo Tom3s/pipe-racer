@@ -92,3 +92,6 @@ func getCurrentMultiplier(time: int) -> float:
 		return GOLD_MULTIPLIER
 	else:
 		return 1.0
+
+func resetGhostToggle():
+	showGhostButton.set_pressed_no_signal(false)

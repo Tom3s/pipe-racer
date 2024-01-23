@@ -131,6 +131,8 @@ func init(initTrackId: String) -> bool:
 	else:
 		selectButton.setLabelText("Download")
 		deleteButton.hide()
+	
+	medalMenu.resetGhostToggle()
 
 	fetchLevelDetails()
 	fetchPersonalBestTime()
