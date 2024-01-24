@@ -1,0 +1,378 @@
+[gd_scene load_steps=11 format=3 uid="uid://5jcye3hd2nrm"]
+
+[ext_resource type="Texture2D" uid="uid://ccn0rkde3jon3" path="res://Sprites/Medals/BronzeMedal.png" id="1_ebcy1"]
+[ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="1_g0mvj"]
+[ext_resource type="Script" path="res://Menu/IngameMedalMenu.gd" id="1_otuec"]
+[ext_resource type="Texture2D" uid="uid://f2qxo4nistek" path="res://Sprites/Medals/SilverMedal.png" id="2_8m1ln"]
+[ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="2_31ldj"]
+[ext_resource type="Texture2D" uid="uid://35aory7p4nfg" path="res://Sprites/Medals/GoldMedal.png" id="3_p0uf4"]
+[ext_resource type="Texture2D" uid="uid://c581j2jbggqsi" path="res://Sprites/Medals/ChronoMedal.png" id="4_wopm0"]
+[ext_resource type="Texture2D" uid="uid://bn001urlc58ay" path="res://Sprites/Medals/BlitzMedal.png" id="6_34esp"]
+
+[sub_resource type="Theme" id="Theme_f5k8e"]
+default_font = ExtResource("2_31ldj")
+default_font_size = 36
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+Label/constants/outline_size = 6
+Label/constants/shadow_offset_x = 4
+Label/constants/shadow_offset_y = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dpfk"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.305882)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="IngameMedalMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_otuec")
+
+[node name="Container" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -167.0
+offset_right = 167.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_f5k8e")
+alignment = 1
+script = ExtResource("1_g0mvj")
+
+[node name="PanelContainer" type="PanelContainer" parent="Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_6dpfk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 40
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(0, 196)
+layout_mode = 2
+theme_override_constants/separation = -150
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="BronzeTotal" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("1_ebcy1")
+expand_mode = 2
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="SilverTotal" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer/Control2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("2_8m1ln")
+expand_mode = 2
+
+[node name="Control3" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="GoldTotal" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer/Control3"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("3_p0uf4")
+expand_mode = 2
+
+[node name="Control4" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="Chrono" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/HBoxContainer/Control4"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("4_wopm0")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "TOtal Time"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "New PB:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00:123"
+horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "(+"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00:123"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = ")"
+horizontal_alignment = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "You've Beaten Gold Medal"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "(-"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "00:00:123"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = ")"
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Next Medal:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00:123"
+horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "(+"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00:123"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = ")"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="Container/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 196)
+layout_mode = 2
+theme_override_constants/separation = -150
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="BronzeLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("1_ebcy1")
+expand_mode = 2
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="SilverLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("2_8m1ln")
+expand_mode = 2
+
+[node name="Control3" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="GoldLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control3"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("3_p0uf4")
+expand_mode = 2
+
+[node name="Control4" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(196, 196)
+layout_mode = 2
+
+[node name="Blitz" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control4"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -98.0
+offset_right = 98.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(98, 98)
+texture = ExtResource("6_34esp")
+expand_mode = 2
