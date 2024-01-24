@@ -1,4 +1,3 @@
-@tool
 extends Control
 class_name IngameMedalMenu
 
@@ -80,16 +79,10 @@ var laptimes: Array = [
 ]
 
 @export
-var currentTime: int = 0:
-	set(value):
-		currentTime = value % times.size()
-		setTotalTimePB(times[currentTime])
+var currentTime: int = 0
 
 @export
-var currentLap: int = 0:
-	set(value):
-		currentLap = value % laptimes.size()
-		setLapTimePB(laptimes[currentLap])
+var currentLap: int = 0
 
 func _ready():
 	chrono.visible = false
@@ -117,7 +110,23 @@ func _ready():
 	chronoTime = 1000
 	blitzTime = 1000
 
+	set_physics_process(true)
+
+func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("replay_pause"):
+		currentTime += 6
+		currentTime %= times.size()
+		setTotalTimePB(times[currentTime])
+
+		currentLap += 6
+		currentLap %= laptimes.size()
+		setLapTimePB(laptimes[currentLap])
+
+const LABEL_ANIMATION_TIME = 0.2
+
 func setTotalTimePB(time: int) -> void:
+	
+
 	if totalTimePB == 9223372036854775807 || time <= totalTimePB:
 		totalPBContainer.visible = true
 		totalPBLabel.text = IngameHUD.getTimeStringFromTicks(time)
@@ -208,15 +217,46 @@ func setTotalMedalText(label: Label, text: String):
 		(label.material as ShaderMaterial).set_shader_parameter("UseColor", true)
 		(label.material as ShaderMaterial).set_shader_parameter("TextColor", Color(0.8, 0.5, 0.2))
 
+const MEDAL_ANIMATION_TIME = 0.6
+const MEDAL_ANIMATION_SCALE = Vector2(1.5, 1.5)
+
+signal totalAnimationFinished()
+var inAnimation: bool = false
+
 func animateInTotalMedals(nrMedals: int) -> void:
 	assert(nrMedals >= 0 && nrMedals <= 4)
 
-	bronzeTotal.visible = nrMedals >= 1 || bronzeTotal.visible
-	silverTotal.visible = nrMedals >= 2 || silverTotal.visible
-	goldTotal.visible = nrMedals >= 3 || goldTotal.visible
-	chrono.visible = nrMedals >= 4 || chrono.visible
+	if nrMedals >= 1:
+		var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT)
 
-	# var tween = create_tween() #.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BOUNCE)
+		if nrMedals >= 1 && !bronzeTotal.visible:
+			inAnimation = true
+			tween.tween_property(bronzeTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(bronzeTotal, "visible", true, 0.0)
+			tween.tween_property(bronzeTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+			inAnimation = true
+		if nrMedals >= 2 && !silverTotal.visible:
+			inAnimation = true
+			tween.chain().tween_property(silverTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(silverTotal, "visible", true, 0.0)
+			tween.tween_property(silverTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		if nrMedals >= 3 && !goldTotal.visible:
+			inAnimation = true
+			tween.chain().tween_property(goldTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(goldTotal, "visible", true, 0.0)
+			tween.tween_property(goldTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		if nrMedals >= 4 && !chrono.visible:
+			inAnimation = true
+			tween.chain().tween_property(chrono, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(chrono, "visible", true, 0.0)
+			tween.tween_property(chrono, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		tween.chain().finished.connect(func():
+			inAnimation = false
+			totalAnimationFinished.emit()
+		)
+
+
+
 
 func setLapTimePB(time: int) -> void:
 	if lapTimePB == 9223372036854775807 || time <= lapTimePB:
@@ -309,7 +349,25 @@ func setLapMedalText(label: Label, text: String):
 func animateInLapMedals(nrMedals: int) -> void:
 	assert(nrMedals >= 0 && nrMedals <= 4)
 
-	bronzeLap.visible = nrMedals >= 1 || bronzeLap.visible
-	silverLap.visible = nrMedals >= 2 || silverLap.visible
-	goldLap.visible = nrMedals >= 3 || goldLap.visible
-	blitz.visible = nrMedals >= 4 || blitz.visible
+	if nrMedals >= 1:
+		if inAnimation:
+			await totalAnimationFinished
+
+		var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT)
+
+		if nrMedals >= 1 && !bronzeLap.visible:
+			tween.tween_property(bronzeLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(bronzeLap, "visible", true, 0.0)
+			tween.tween_property(bronzeLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		if nrMedals >= 2 && !silverLap.visible:
+			tween.chain().tween_property(silverLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(silverLap, "visible", true, 0.0)
+			tween.tween_property(silverLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		if nrMedals >= 3 && !goldLap.visible:
+			tween.chain().tween_property(goldLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(goldLap, "visible", true, 0.0)
+			tween.tween_property(goldLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+		if nrMedals >= 4 && !blitz.visible:
+			tween.chain().tween_property(blitz, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(blitz, "visible", true, 0.0)
+			tween.tween_property(blitz, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
