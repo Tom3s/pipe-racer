@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://5jcye3hd2nrm"]
+[gd_scene load_steps=13 format=3 uid="uid://5jcye3hd2nrm"]
 
 [ext_resource type="Texture2D" uid="uid://ccn0rkde3jon3" path="res://Sprites/Medals/BronzeMedal.png" id="1_ebcy1"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="1_g0mvj"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://35aory7p4nfg" path="res://Sprites/Medals/GoldMedal.png" id="3_p0uf4"]
 [ext_resource type="Texture2D" uid="uid://c581j2jbggqsi" path="res://Sprites/Medals/ChronoMedal.png" id="4_wopm0"]
 [ext_resource type="Texture2D" uid="uid://bn001urlc58ay" path="res://Sprites/Medals/BlitzMedal.png" id="6_34esp"]
+[ext_resource type="Shader" uid="uid://g6mreb3vnfd7" path="res://Menu/MedalLabel.tres" id="8_xni6t"]
 
 [sub_resource type="Theme" id="Theme_f5k8e"]
 default_font = ExtResource("2_31ldj")
@@ -29,6 +30,11 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6dvw"]
+shader = ExtResource("8_xni6t")
+shader_parameter/TextColor = Color(1, 0.8, 0.2, 1)
+shader_parameter/UseColor = false
+
 [node name="IngameMedalMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -37,6 +43,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_otuec")
+currentTime = 7
+currentLap = 8
 
 [node name="Container" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -53,6 +61,7 @@ alignment = 1
 script = ExtResource("1_g0mvj")
 
 [node name="PanelContainer" type="PanelContainer" parent="Container"]
+custom_minimum_size = Vector2(980, 550)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -60,13 +69,13 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_6dpfk")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Container/PanelContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/separation = 40
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 240)
 layout_mode = 2
 theme_override_constants/separation = 30
+alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(0, 196)
@@ -163,7 +172,7 @@ expand_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
-alignment = 1
+size_flags_horizontal = 3
 
 [node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
@@ -173,127 +182,181 @@ horizontal_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="TotalPBContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
 layout_mode = 2
 text = "New PB:"
 
-[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+[node name="TotalPBLabel" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "00:00:123"
+text = "00:01:000"
 horizontal_alignment = 2
 
-[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "(+"
-horizontal_alignment = 2
-
-[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "00:00:123"
-horizontal_alignment = 2
-
-[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = ")"
-horizontal_alignment = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "You've Beaten Gold Medal"
-horizontal_alignment = 1
-
-[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(15, 0)
-layout_mode = 2
-
-[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
 text = "(-"
 horizontal_alignment = 2
 
-[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+[node name="TotalPBDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
-text = "00:00:123"
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "00:00:050"
 horizontal_alignment = 2
 
-[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer2"]
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPBContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
 text = ")"
 horizontal_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="TotalBeatenContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+layout_mode = 2
+text = "You've Beaten "
+horizontal_alignment = 1
+
+[node name="TotalBeatenMedal" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_d6dvw")
+layout_mode = 2
+text = "Chrono"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+layout_mode = 2
+text = " Medal"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "(-"
+horizontal_alignment = 2
+
+[node name="TotalBeatenDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "00:00:000"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalBeatenContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = ")"
+horizontal_alignment = 2
+
+[node name="TotalNextContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
 layout_mode = 2
 text = "Next Medal:"
 
-[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="TotalNextMedal" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "00:00:123"
+text = "00:01:000"
 horizontal_alignment = 2
 
-[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
 text = "(+"
 horizontal_alignment = 2
 
-[node name="Label4" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="TotalNextDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "00:00:123"
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
+text = "00:00:050"
 horizontal_alignment = 2
 
-[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/HBoxContainer"]
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalNextContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
 text = ")"
+horizontal_alignment = 2
+
+[node name="TotalPlacementContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPlacementContainer"]
+layout_mode = 2
+text = "Placement:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPlacementContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="TotalPlacement" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer3/VBoxContainer/TotalPlacementContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "N/A"
 horizontal_alignment = 2
 
 [node name="HSeparator" type="HSeparator" parent="Container/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 196)
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_constants/separation = -150
+alignment = 1
 
-[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(196, 196)
 layout_mode = 2
 
-[node name="BronzeLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control"]
+[node name="BronzeLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Control"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -311,11 +374,11 @@ pivot_offset = Vector2(98, 98)
 texture = ExtResource("1_ebcy1")
 expand_mode = 2
 
-[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(196, 196)
 layout_mode = 2
 
-[node name="SilverLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control2"]
+[node name="SilverLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Control2"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -333,11 +396,11 @@ pivot_offset = Vector2(98, 98)
 texture = ExtResource("2_8m1ln")
 expand_mode = 2
 
-[node name="Control3" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control3" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(196, 196)
 layout_mode = 2
 
-[node name="GoldLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control3"]
+[node name="GoldLap" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Control3"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -355,11 +418,11 @@ pivot_offset = Vector2(98, 98)
 texture = ExtResource("3_p0uf4")
 expand_mode = 2
 
-[node name="Control4" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Control4" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(196, 196)
 layout_mode = 2
 
-[node name="Blitz" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/Control4"]
+[node name="Blitz" type="TextureRect" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Control4"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -376,3 +439,173 @@ grow_vertical = 2
 pivot_offset = Vector2(98, 98)
 texture = ExtResource("6_34esp")
 expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Best Lap"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="LapPBContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+layout_mode = 2
+text = "New PB:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="LapPBLabel" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:00:950"
+horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "(-"
+horizontal_alignment = 2
+
+[node name="LapPBDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "00:00:050"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPBContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = ")"
+horizontal_alignment = 2
+
+[node name="LapBeatenContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+layout_mode = 2
+text = "You've Beaten "
+horizontal_alignment = 1
+
+[node name="LapBeatenMedal" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_d6dvw")
+layout_mode = 2
+text = "Blitz"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+layout_mode = 2
+text = " Medal"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "(-"
+horizontal_alignment = 2
+
+[node name="LapBeatenDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = "00:00:000"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapBeatenContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.556863, 1, 0.239216, 1)
+text = ")"
+horizontal_alignment = 2
+
+[node name="LapNextContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+layout_mode = 2
+text = "Next Medal:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="LapNextMedal" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "00:01:000"
+horizontal_alignment = 2
+
+[node name="Control" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
+text = "(+"
+horizontal_alignment = 2
+
+[node name="LapNextDiff" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
+text = "00:00:050"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapNextContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.290196, 0.239216, 1)
+text = ")"
+horizontal_alignment = 2
+
+[node name="LapPlacementContainer" type="HBoxContainer" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPlacementContainer"]
+layout_mode = 2
+text = "Placement:"
+
+[node name="Control2" type="Control" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPlacementContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="LapPlacement" type="Label" parent="Container/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer/LapPlacementContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "N/A"
+horizontal_alignment = 2
