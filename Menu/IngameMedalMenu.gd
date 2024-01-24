@@ -110,25 +110,35 @@ func _ready():
 	chronoTime = 1000
 	blitzTime = 1000
 
+	totalBeatenMedal.material = totalBeatenMedal.material.duplicate()
+	lapBeatenMedal.material = lapBeatenMedal.material.duplicate()
+
 	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("replay_pause"):
-		currentTime += 6
+		currentTime += 4
 		currentTime %= times.size()
 		setTotalTimePB(times[currentTime])
 
-		currentLap += 6
+		currentLap += 3
 		currentLap %= laptimes.size()
 		setLapTimePB(laptimes[currentLap])
 
 const LABEL_ANIMATION_TIME = 0.2
 
+signal totalLabelAnimationFinished()
+var inLabelAnimation: bool = false
+
 func setTotalTimePB(time: int) -> void:
-	
+	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 
 	if totalTimePB == 9223372036854775807 || time <= totalTimePB:
 		totalPBContainer.visible = true
+		totalPBContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(totalPBContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		inLabelAnimation = true
+
 		totalPBLabel.text = IngameHUD.getTimeStringFromTicks(time)
 		if totalTimePB == 9223372036854775807:
 			totalPBDiff.text = IngameHUD.getTimeStringFromTicks(0)
@@ -143,6 +153,9 @@ func setTotalTimePB(time: int) -> void:
 	if time <= chronoTime:
 		if totalTimePB > chronoTime:
 			totalBeatenContainer.visible = true
+			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Chrono")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(chronoTime - time)
 		else:
@@ -153,6 +166,9 @@ func setTotalTimePB(time: int) -> void:
 	elif time <= chronoTime * MedalMenu.GOLD_MULTIPLIER:
 		if totalTimePB > chronoTime * MedalMenu.GOLD_MULTIPLIER:
 			totalBeatenContainer.visible = true
+			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Gold")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.GOLD_MULTIPLIER) - time)
 		else:
@@ -163,6 +179,9 @@ func setTotalTimePB(time: int) -> void:
 	elif time <= chronoTime * MedalMenu.SILVER_MULTIPLIER:
 		if totalTimePB > chronoTime * MedalMenu.SILVER_MULTIPLIER:
 			totalBeatenContainer.visible = true
+			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Silver")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.SILVER_MULTIPLIER) - time)
 		else:
@@ -172,6 +191,9 @@ func setTotalTimePB(time: int) -> void:
 	elif time <= chronoTime * MedalMenu.BRONZE_MULTIPLIER:
 		if totalTimePB > chronoTime * MedalMenu.BRONZE_MULTIPLIER:
 			totalBeatenContainer.visible = true
+			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Bronze")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER) - time)
 		else:
@@ -188,20 +210,46 @@ func setTotalTimePB(time: int) -> void:
 		totalNextContainer.visible = false
 	elif totalTimePB <= chronoTime * MedalMenu.GOLD_MULTIPLIER:
 		totalNextContainer.visible = true
+		totalNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(chronoTime)
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - chronoTime)
 	elif totalTimePB <= chronoTime * MedalMenu.SILVER_MULTIPLIER:
 		totalNextContainer.visible = true
+		totalNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.GOLD_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.GOLD_MULTIPLIER))
 	elif totalTimePB <= chronoTime * MedalMenu.BRONZE_MULTIPLIER:
 		totalNextContainer.visible = true
+		totalNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.SILVER_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.SILVER_MULTIPLIER))
 	else:
 		totalNextContainer.visible = true
+		totalNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
+	
+	totalPlacementContainer.modulate = Color(1, 1, 1, 0)
+	inLabelAnimation = true
+	tween.tween_property(totalPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+	tween.chain().finished.connect(func():
+		inLabelAnimation = false
+		totalLabelAnimationFinished.emit()
+	)
+
+	# tween.finished.connect(func():
+	# 	inLabelAnimation = false
+	# 	totalLabelAnimationFinished.emit()
+	# )
+
 
 func setTotalMedalText(label: Label, text: String):
 	label.text = text
@@ -259,8 +307,17 @@ func animateInTotalMedals(nrMedals: int) -> void:
 
 
 func setLapTimePB(time: int) -> void:
+	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+	
+	if inLabelAnimation:
+		await totalLabelAnimationFinished
+		tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+
+
 	if lapTimePB == 9223372036854775807 || time <= lapTimePB:
 		lapPBContainer.visible = true
+		lapPBContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(lapPBContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 		lapPBLabel.text = IngameHUD.getTimeStringFromTicks(time)
 		if lapTimePB == 9223372036854775807:
 			lapPBDiff.text = IngameHUD.getTimeStringFromTicks(0)
@@ -274,6 +331,8 @@ func setLapTimePB(time: int) -> void:
 	if time <= blitzTime:
 		if lapTimePB > blitzTime:
 			lapBeatenContainer.visible = true
+			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 			setLapMedalText(lapBeatenMedal, "Blitz")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(blitzTime - time)
 		else:
@@ -283,6 +342,8 @@ func setLapTimePB(time: int) -> void:
 	elif time <= blitzTime * MedalMenu.GOLD_MULTIPLIER:
 		if lapTimePB > blitzTime * MedalMenu.GOLD_MULTIPLIER:
 			lapBeatenContainer.visible = true
+			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 			setLapMedalText(lapBeatenMedal, "Gold")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.GOLD_MULTIPLIER) - time)
 		else:
@@ -292,6 +353,8 @@ func setLapTimePB(time: int) -> void:
 	elif time <= blitzTime * MedalMenu.SILVER_MULTIPLIER:
 		if lapTimePB > blitzTime * MedalMenu.SILVER_MULTIPLIER:
 			lapBeatenContainer.visible = true
+			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 			setLapMedalText(lapBeatenMedal, "Silver")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.SILVER_MULTIPLIER) - time)
 		else:
@@ -301,6 +364,8 @@ func setLapTimePB(time: int) -> void:
 	elif time <= blitzTime * MedalMenu.BRONZE_MULTIPLIER:
 		if lapTimePB > blitzTime * MedalMenu.BRONZE_MULTIPLIER:
 			lapBeatenContainer.visible = true
+			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
+			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 			setLapMedalText(lapBeatenMedal, "Bronze")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER) - time)
 		else:
@@ -317,20 +382,31 @@ func setLapTimePB(time: int) -> void:
 		lapNextContainer.visible = false
 	elif lapTimePB <= blitzTime * MedalMenu.GOLD_MULTIPLIER:
 		lapNextContainer.visible = true
+		lapNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(blitzTime)
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - blitzTime)
 	elif lapTimePB <= blitzTime * MedalMenu.SILVER_MULTIPLIER:
 		lapNextContainer.visible = true
+		lapNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.GOLD_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.GOLD_MULTIPLIER))
 	elif lapTimePB <= blitzTime * MedalMenu.BRONZE_MULTIPLIER:
 		lapNextContainer.visible = true
+		lapNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.SILVER_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.SILVER_MULTIPLIER))
 	else:
 		lapNextContainer.visible = true
+		lapNextContainer.modulate = Color(1, 1, 1, 0)
+		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
+	
+	lapPlacementContainer.modulate = Color(1, 1, 1, 0)
+	tween.tween_property(lapPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 
 func setLapMedalText(label: Label, text: String):
 	label.text = text
