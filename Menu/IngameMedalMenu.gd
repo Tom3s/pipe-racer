@@ -351,34 +351,30 @@ var inAnimation: bool = false
 func animateInTotalMedals(nrMedals: int) -> void:
 	assert(nrMedals >= 0 && nrMedals <= 4)
 
-	if !is_visible_in_tree():
-		setMedalsNoAnim()
-		return
-
 	if nrMedals >= 1:
 		var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT)
 
 		if nrMedals >= 1 && !bronzeTotal.visible:
 			inAnimation = true
-			tween.chain().tween_callback(bronzeMedalSFX.play)
+			tween.chain().tween_callback(playBronzeMedalSFX)
 			tween.tween_property(bronzeTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(bronzeTotal, "visible", true, 0.0)
 			tween.tween_property(bronzeTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 2 && !silverTotal.visible:
 			inAnimation = true
-			tween.chain().tween_callback(silverMedalSFX.play)
+			tween.chain().tween_callback(playSilverMedalSFX)
 			tween.chain().tween_property(silverTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(silverTotal, "visible", true, 0.0)
 			tween.tween_property(silverTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 3 && !goldTotal.visible:
 			inAnimation = true
-			tween.chain().tween_callback(goldMedalSFX.play)
+			tween.chain().tween_callback(playGoldMedalSFX)
 			tween.chain().tween_property(goldTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(goldTotal, "visible", true, 0.0)
 			tween.tween_property(goldTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 4 && !chrono.visible:
 			inAnimation = true
-			tween.chain().tween_callback(specialMedalSFX.play)
+			tween.chain().tween_callback(playSpecialMedalSFX)
 			tween.chain().tween_property(chrono, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(chrono, "visible", true, 0.0)
 			tween.tween_property(chrono, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
@@ -520,10 +516,6 @@ func setLapMedalText(label: Label, text: String):
 func animateInLapMedals(nrMedals: int) -> void:
 	assert(nrMedals >= 0 && nrMedals <= 4)
 
-	if !is_visible_in_tree():
-		setMedalsNoAnim()
-		return
-
 	if nrMedals >= 1:
 		if inAnimation:
 			await totalAnimationFinished
@@ -531,22 +523,22 @@ func animateInLapMedals(nrMedals: int) -> void:
 		var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT)
 
 		if nrMedals >= 1 && !bronzeLap.visible:
-			tween.chain().tween_callback(bronzeMedalSFX.play)
+			tween.chain().tween_callback(playBronzeMedalSFX)
 			tween.tween_property(bronzeLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(bronzeLap, "visible", true, 0.0)
 			tween.tween_property(bronzeLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 2 && !silverLap.visible:
-			tween.chain().tween_callback(silverMedalSFX.play)
+			tween.chain().tween_callback(playSilverMedalSFX)
 			tween.chain().tween_property(silverLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(silverLap, "visible", true, 0.0)
 			tween.tween_property(silverLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 3 && !goldLap.visible:
-			tween.chain().tween_callback(goldMedalSFX.play)
+			tween.chain().tween_callback(playGoldMedalSFX)
 			tween.chain().tween_property(goldLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(goldLap, "visible", true, 0.0)
 			tween.tween_property(goldLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 4 && !blitz.visible:
-			tween.chain().tween_callback(specialMedalSFX.play)
+			tween.chain().tween_callback(playSpecialMedalSFX)
 			tween.chain().tween_property(blitz, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(blitz, "visible", true, 0.0)
 			tween.tween_property(blitz, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
@@ -566,3 +558,19 @@ func setMedalsNoAnim():
 func playClickSFX() -> void:
 	if is_visible_in_tree():
 		clickSFX.play()
+
+func playSpecialMedalSFX() -> void:
+	if is_visible_in_tree():
+		specialMedalSFX.play()
+
+func playGoldMedalSFX() -> void:
+	if is_visible_in_tree():
+		goldMedalSFX.play()
+
+func playSilverMedalSFX() -> void:
+	if is_visible_in_tree():
+		silverMedalSFX.play()
+
+func playBronzeMedalSFX() -> void:
+	if is_visible_in_tree():
+		bronzeMedalSFX.play()
