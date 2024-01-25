@@ -36,6 +36,9 @@ func _ready():
 
 	panels[0].setMainPlayerData()
 
+	GlobalProperties.mainPlayerPanel = panels[0]
+	GlobalProperties.mainPlayerPanelSet.emit()
+
 	setNumberOfPlayers(1)
 
 	button1.pressed.connect(onButton1_Pressed)
@@ -48,7 +51,7 @@ func _ready():
 
 	nextButton.grab_focus()
 
-	visibility_changed.connect(nextButton.grab_focus)
+	visibility_changed.connect(onVisibilityChanged)
 
 func _physics_process(delta):
 	if (get_viewport().gui_get_focus_owner() == null || !get_viewport().gui_get_focus_owner().is_visible_in_tree()) && visible:
@@ -91,6 +94,14 @@ func onBackButton_Pressed():
 	await animateOut()
 	backPressed.emit()
 
+func onVisibilityChanged():
+	if is_visible_in_tree():
+		nextButton.grab_focus()
+
+		GlobalProperties.mainPlayerPanel.reparent(panelHolder)
+		# GlobalProperties.mainPlayerPanel.visible = false
+		panelHolder.move_child(GlobalProperties.mainPlayerPanel, 0)
+
 func setNumberOfPlayers(number: int):
 	for i in 4:
 		if i < number:
@@ -118,6 +129,7 @@ func animateIn():
 	tween.tween_property(menuTitle, "inAnimation", true, 0.0)
 	tween.tween_property(bottomContainer, "position", Vector2(0, screenSize.y), 0.0).as_relative()
 	tween.tween_property(bottomContainer, "inAnimation", true, 0.0)
+	tween.tween_property(GlobalProperties.mainPlayerPanel, "visible", true, 0.0)
 
 	tween.tween_property(self, "visible", true, 0.0)
 
