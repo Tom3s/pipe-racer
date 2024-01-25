@@ -34,6 +34,7 @@ var map: Map:
 @onready var ingameSFX = %IngameSFX
 @onready var pauseMenu = %PauseMenu
 @onready var validationFeedbackUI = %ValidationFeedbackUI
+@onready var ingameMedalMenu: IngameMedalMenu = %IngameMedalMenu
 
 @onready var replayManager: ReplayManager = %ReplayManager
 
@@ -84,6 +85,16 @@ func connectSignals():
 
 	validationFeedbackUI.improvePressed.connect(func():
 		recalculate()
+	)
+
+	ingameMedalMenu.restartPressed.connect(func():
+		recalculate()
+	)
+
+	ingameMedalMenu.leaderboardPressed.connect(func():
+		leaderboardUI.fetchTimes(map.trackId)
+		leaderboardUI.visible = true
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	)
 		
 
@@ -150,6 +161,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 				# for ghost in ghosts.get_children():
 				# 	ghost.playing = true
 				replayGhost.playing = true
+				replayManager.recording = true
 			
 			state.pausedBy = -1
 			pauseMenu.visible = false
@@ -166,6 +178,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			# for ghost in ghosts.get_children():
 			# 	ghost.playing = false
 			replayGhost.playing = false
+			replayManager.recording = false
 
 			state.pausedBy = playerIndex
 			pauseMenu.visible = true
@@ -214,7 +227,14 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			map.trackName,
 		)
 
-		if timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
+		if timeTrialManagers[playerIdentifier].newTimeMultiplier:
+			replayGhost.setTimeMultiplier(timeTrialManagers[playerIdentifier].timeMultiplier, map.author)
+			state.timeMultiplier = timeTrialManagers[playerIdentifier].timeMultiplier
+
+			if map.bestTotalTime >= totalTime && state.timeMultiplier == 1.0:
+				replayGhost.loadReplay(recording)
+
+		elif timeTrialManagers[playerIdentifier].isPB || replayGhost.get_child_count() == 0:
 			replayGhost.loadReplay(recording)
 
 
@@ -237,8 +257,8 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 			# TODO: broadcast info to host/other players maybe
 
 			if state.allLocalPlayersFinished():
-				leaderboardUI.fetchTimes(map.trackId)
-				leaderboardUI.visible = true
+				# leaderboardUI.fetchTimes(map.trackId)
+				# leaderboardUI.visible = true
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 		elif state.validation:
@@ -316,13 +336,29 @@ func onState_allPlayersReady():
 func onState_allPlayersFinished():
 	print("All players finished")
 	if state.ranked:
-		leaderboardUI.fetchTimes(map.trackId)
-		# leaderboardUI.visible = true
 		var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-		var windowSize = leaderboardUI.get_viewport_rect().size
-		tween.tween_property(leaderboardUI, "position", Vector2(0, -windowSize.y), 0).as_relative()
-		tween.tween_property(leaderboardUI, "visible", true, 0)
-		tween.tween_property(leaderboardUI, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
+		var windowSize = ingameMedalMenu.get_viewport_rect().size
+		tween.tween_property(ingameMedalMenu, "position", Vector2(0, -windowSize.y), 0).as_relative()
+		tween.tween_property(ingameMedalMenu, "visible", true, 0)
+		tween.tween_property(ingameMedalMenu, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
+		
+		state.allPlayersReset.connect(func():
+
+			# tween.kill()
+			ingameMedalMenu.position = Vector2(0, 0)
+			ingameMedalMenu.visible = false
+		)
+
+
+		tween.chain().finished.connect(func():
+			var firstCar = players.get_child(0) as CarController
+			var timeTrialManager = timeTrialManagers[firstCar.name]
+
+			ingameMedalMenu.setTotalTimePB(timeTrialManager.getTotalTime())
+			ingameMedalMenu.setLapTimePB(timeTrialManager.getBestLap())
+
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		)
 		
 
 	
@@ -524,7 +560,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 	canvasLayer.follow_viewport_enabled = true
 
 	var hud: IngameHUD = HudScene.instantiate()
-	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId, replayGhost.get_child_count() == 0)
+	var timeTrialManager = TimeTrialManager.new(%IngameSFX, map.lapCount, car.playerId, map.trackId, replayGhost.get_child_count() == 0, state.timeMultiplier)
 	timeTrialManagers[car.name] = timeTrialManager
 	hud.init(car, timeTrialManager, playerDatas.size())
 

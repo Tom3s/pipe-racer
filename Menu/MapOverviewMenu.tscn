@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://fg6lfyohw337"]
+[gd_scene load_steps=15 format=3 uid="uid://fg6lfyohw337"]
 
 [ext_resource type="Script" path="res://Menu/MapOverviewMenu.gd" id="1_wie3d"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerFullscreen.gd" id="2_hcwne"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="3_7i8db"]
 [ext_resource type="PackedScene" uid="uid://bad1ot4qs8cwe" path="res://Menu/LeaderboardMenu.tscn" id="4_r0ddw"]
 [ext_resource type="PackedScene" uid="uid://c5387t1cl0ifm" path="res://Menu/RatingMenu.tscn" id="4_usqq2"]
+[ext_resource type="PackedScene" uid="uid://bsdocsugbtba7" path="res://Menu/MedalMenu.tscn" id="7_mv0j1"]
 [ext_resource type="PackedScene" uid="uid://boal45wpuj8gv" path="res://Menu/CommentContainer.tscn" id="8_hryn1"]
 [ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="8_l6mbf"]
 [ext_resource type="PackedScene" uid="uid://q7et66trvhld" path="res://ReplaySelector.tscn" id="10_0tc10"]
@@ -300,6 +301,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="MedalMenu" parent="MainContents/VBoxContainer/HBoxContainer3" instance=ExtResource("7_mv0j1")]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainContents/VBoxContainer"]
 layout_mode = 2

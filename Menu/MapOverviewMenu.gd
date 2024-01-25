@@ -8,6 +8,7 @@ var trackId: String = "650c73d0c3b8efa6383dde32"
 @onready var trackName: Label = %TrackName
 @onready var author: Label = %Author
 @onready var leaderboardMenu: LeaderboardMenu = %LeaderboardMenu
+@onready var medalMenu: MedalMenu = %MedalMenu
 @onready var downloadNumber: Label = %DownloadNumber
 @onready var ratingNumber: Label = %RatingNumber
 @onready var uploadDate: Label = %UploadDate
@@ -52,10 +53,8 @@ func _ready():
 		ratingNumber.text = str(x).pad_decimals(2) + "/5"
 	)
 	selectButton.pressed.connect(onSelectButton_Pressed)
-	refreshButton.pressed.connect(func():
-		leaderboardMenu.fetchTimes(trackId)
-		fetchLevelDetails()
-	)
+	refreshButton.pressed.connect(refreshMenu)
+
 	deleteButton.pressed.connect(onDeleteButton_Pressed)
 
 	selectGhostsButton.pressed.connect(replaySelector.show)
@@ -73,6 +72,14 @@ func _ready():
 	)
 	leaderboardMenu.removeOnlineGhost.connect(func(ghost: String):
 		downloadedReplays.erase(ghost + ".replay")
+	)
+
+	medalMenu.showGhostToggled.connect(func(toggled: bool):
+		if toggled:
+			leaderboardMenu.downloadReplay(builderReplayId)
+			downloadedReplays.append(builderReplayId + ".replay")
+		else:
+			downloadedReplays.erase(builderReplayId + ".replay")
 	)
 
 	replaySelector.hideDownloaded()
@@ -124,8 +131,13 @@ func init(initTrackId: String) -> bool:
 	else:
 		selectButton.setLabelText("Download")
 		deleteButton.hide()
+	
+	medalMenu.resetGhostToggle()
 
 	fetchLevelDetails()
+	fetchPersonalBestTime()
+	fetchPersonalBestLap()
+	
 	return true
 
 func fetchLevelDetails():
@@ -140,6 +152,8 @@ func fetchLevelDetails():
 	)
 	if httpError != OK:
 		print("Error: " + error_string(httpError))
+
+var builderReplayId: String = ""
 
 func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
@@ -160,6 +174,10 @@ func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers
 	ratingNumber.text = str(data.rating).pad_decimals(2) + "/5"
 
 	uploadDate.text = data.uploadDate.split("T")[0]
+
+	medalMenu.setTimes(data.bestTotalTime, data.bestLapTime)
+
+	builderReplayId = data.bestTotalReplay
 
 	loaded.emit()
 
@@ -184,6 +202,12 @@ func onSelectButton_Pressed():
 		playPressed.emit("user://tracks/downloaded/" + trackId + ".json")
 	else:
 		downloadTrack()
+
+func refreshMenu():
+			leaderboardMenu.fetchTimes(trackId)
+			fetchLevelDetails()
+			fetchPersonalBestTime()
+			fetchPersonalBestLap()
 
 func downloadTrack():
 	if VersionCheck.offline:
@@ -274,3 +298,68 @@ func animateOut():
 	tween.tween_property(mainContents, "inAnimation", false, 0.0)
 	tween.tween_property(self, "visible", false, 0.0)
 	tween.tween_callback(func(): backPressed.emit())
+
+var personalBestTime: int = 9223372036854775807
+var personalBestLap: int = 9223372036854775807
+
+func fetchPersonalBestTime():
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 25
+	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+		if responseCode != 200:
+			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			return
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		if data.has("time"):
+			personalBestTime = data.time
+			medalMenu.setVisibleMedalsTotal(data.time)
+		else:
+			personalBestTime = 9223372036854775807
+			medalMenu.setVisibleMedalsTotal(9223372036854775807)
+	)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId,
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
+		],
+		HTTPClient.METHOD_GET 
+	)
+
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+
+func fetchPersonalBestLap():
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 25
+	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
+		if responseCode != 200:
+			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			return
+		var data = JSON.parse_string(body.get_string_from_utf8())
+
+		if data.has("bestLap"):
+			personalBestLap = data.bestLap
+			medalMenu.setVisibleMedalsLap(data.bestLap)
+		else:
+			personalBestLap = 9223372036854775807
+			medalMenu.setVisibleMedalsLap(9223372036854775807)
+	)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId + "?bestLap=true",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
+		],
+		HTTPClient.METHOD_GET 
+	)
+
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+
+func getTimeMultiplier() -> float:
+	return medalMenu.getCurrentMultiplier(personalBestTime)

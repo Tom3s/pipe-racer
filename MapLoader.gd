@@ -199,6 +199,7 @@ func uploadTrack(trackFileName: String):
 				AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading lap replay")
 		else:
 			jsonData.bestTotalReplay = replayId
+			jsonData.bestLapReplay = replayId
 			sendUploadRequest(jsonData)
 
 	)
