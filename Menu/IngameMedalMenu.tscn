@@ -796,21 +796,21 @@ bus = &"SFX"
 [node name="SpecialMedalSFX" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("11_j5iq4")
-pitch_scale = 1.25
+pitch_scale = 1.3
 max_polyphony = 8
 bus = &"SFX"
 
 [node name="GoldMedalSFX" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("11_j5iq4")
-pitch_scale = 1.13
+pitch_scale = 1.22
 max_polyphony = 8
 bus = &"SFX"
 
 [node name="SilverMedalSFX" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("11_j5iq4")
-pitch_scale = 1.06
+pitch_scale = 1.1
 max_polyphony = 8
 bus = &"SFX"
 
