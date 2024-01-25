@@ -70,6 +70,8 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 		mapOverviewMenu.localReplays,
 		mapOverviewMenu.downloadedReplays,
 		mapOverviewMenu.getTimeMultiplier(),
+		mapOverviewMenu.personalBestTime,
+		mapOverviewMenu.personalBestLap,
 	)
 	if !success:
 		AlertManager.showAlert(

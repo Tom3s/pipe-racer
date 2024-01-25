@@ -18,6 +18,8 @@ func setup(
 	localReplays: Array[String] = [],
 	downloadedReplays: Array[String] = [],
 	timeMultiplier: float = 1.0,
+	totalTimePB: int = 9223372036854775807,
+	lapTimePB: int = 9223372036854775807,
 
 ) -> bool:
 	# load map
@@ -42,6 +44,17 @@ func setup(
 		]
 
 	%GameEventListener.map = map
+
+	# %GameEventListener.ingameMedalMenu.chronoTime = map.bestTotalTime
+	# %GameEventListener.ingameMedalMenu.blitzTime = map.bestLapTime
+	# %GameEventListener.ingameMedalMenu.totalTimePB = totalTimePB
+	# %GameEventListener.ingameMedalMenu.lapTimePB = lapTimePB
+	%GameEventListener.ingameMedalMenu.setup(
+		map.bestTotalTime,
+		map.bestLapTime,
+		totalTimePB,
+		lapTimePB,
+	)
 
 	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
 

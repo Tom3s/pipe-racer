@@ -46,6 +46,21 @@ class_name IngameMedalMenu
 @onready var lapPlacement: Label = %LapPlacement
 
 
+# SFX
+
+@onready var clickSFX: AudioStreamPlayer = %ClickSFX
+
+@onready var specialMedalSFX: AudioStreamPlayer = %SpecialMedalSFX
+@onready var goldMedalSFX: AudioStreamPlayer = %GoldMedalSFX
+@onready var silverMedalSFX: AudioStreamPlayer = %SilverMedalSFX
+@onready var bronzeMedalSFX: AudioStreamPlayer = %BronzeMedalSFX
+
+# Buttons
+
+@onready var closeButton: Button = %CloseButton
+@onready var restartButton: Button = %RestartButton
+@onready var leaderboardButton: Button = %LeaderboardButton
+
 var chronoTime: int = 0
 var blitzTime: int = 0
 
@@ -84,6 +99,10 @@ var currentTime: int = 0
 @export
 var currentLap: int = 0
 
+signal closePressed()
+signal restartPressed()
+signal leaderboardPressed()
+
 func _ready():
 	chrono.visible = false
 	goldTotal.visible = false
@@ -113,17 +132,57 @@ func _ready():
 	totalBeatenMedal.material = totalBeatenMedal.material.duplicate()
 	lapBeatenMedal.material = lapBeatenMedal.material.duplicate()
 
+	closeButton.pressed.connect(func():
+		hide()
+		closePressed.emit()
+	)
+		
+	restartButton.pressed.connect(func():
+		hide()
+		restartPressed.emit()
+	)
+		
+	leaderboardButton.pressed.connect(func():
+		hide()
+		leaderboardPressed.emit()
+	)
+
+	visibility_changed.connect(func():
+		if visible && is_visible_in_tree(): 
+			restartButton.grab_focus()
+	)
+
 	set_physics_process(true)
 
-func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("replay_pause"):
-		currentTime += 4
-		currentTime %= times.size()
-		setTotalTimePB(times[currentTime])
+func setup(initChronoTime: int, initBlitzTime: int, initTotalTimePB: int, initLapTimePB: int) -> void:
+	chronoTime = initChronoTime
+	blitzTime = initBlitzTime
+	totalTimePB = initTotalTimePB
+	lapTimePB = initLapTimePB
 
-		currentLap += 3
-		currentLap %= laptimes.size()
-		setLapTimePB(laptimes[currentLap])
+	totalPBContainer.visible = false
+	totalBeatenContainer.visible = false
+	totalNextContainer.visible = false
+	totalPlacementContainer.visible = true
+
+	totalPlacement.text = "N/A"
+
+	lapPBContainer.visible = false
+	lapBeatenContainer.visible = false
+	lapNextContainer.visible = false
+	lapPlacementContainer.visible = true
+
+	setMedalsNoAnim()	
+
+# func _physics_process(delta: float) -> void:
+# 	if Input.is_action_just_pressed("replay_pause"):
+# 		currentTime += 4
+# 		currentTime %= times.size()
+# 		setTotalTimePB(times[currentTime])
+
+# 		currentLap += 3
+# 		currentLap %= laptimes.size()
+# 		setLapTimePB(laptimes[currentLap])
 
 const LABEL_ANIMATION_TIME = 0.2
 
@@ -137,6 +196,7 @@ func setTotalTimePB(time: int) -> void:
 		totalPBContainer.visible = true
 		totalPBContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(totalPBContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
 		inLabelAnimation = true
 
 		totalPBLabel.text = IngameHUD.getTimeStringFromTicks(time)
@@ -155,6 +215,8 @@ func setTotalTimePB(time: int) -> void:
 			totalBeatenContainer.visible = true
 			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
+
 			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Chrono")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(chronoTime - time)
@@ -168,6 +230,8 @@ func setTotalTimePB(time: int) -> void:
 			totalBeatenContainer.visible = true
 			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
+
 			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Gold")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.GOLD_MULTIPLIER) - time)
@@ -181,6 +245,8 @@ func setTotalTimePB(time: int) -> void:
 			totalBeatenContainer.visible = true
 			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
+
 			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Silver")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.SILVER_MULTIPLIER) - time)
@@ -193,6 +259,8 @@ func setTotalTimePB(time: int) -> void:
 			totalBeatenContainer.visible = true
 			totalBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(totalBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
+
 			inLabelAnimation = true
 			setTotalMedalText(totalBeatenMedal, "Bronze")
 			totalBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER) - time)
@@ -212,6 +280,8 @@ func setTotalTimePB(time: int) -> void:
 		totalNextContainer.visible = true
 		totalNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
+
 		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(chronoTime)
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - chronoTime)
@@ -219,6 +289,8 @@ func setTotalTimePB(time: int) -> void:
 		totalNextContainer.visible = true
 		totalNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
+
 		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.GOLD_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.GOLD_MULTIPLIER))
@@ -226,6 +298,8 @@ func setTotalTimePB(time: int) -> void:
 		totalNextContainer.visible = true
 		totalNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
+
 		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.SILVER_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.SILVER_MULTIPLIER))
@@ -233,6 +307,8 @@ func setTotalTimePB(time: int) -> void:
 		totalNextContainer.visible = true
 		totalNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(totalNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
+
 		inLabelAnimation = true
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
@@ -240,6 +316,7 @@ func setTotalTimePB(time: int) -> void:
 	totalPlacementContainer.modulate = Color(1, 1, 1, 0)
 	inLabelAnimation = true
 	tween.tween_property(totalPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+	tween.tween_callback(clickSFX.play)
 	tween.chain().finished.connect(func():
 		inLabelAnimation = false
 		totalLabelAnimationFinished.emit()
@@ -279,22 +356,25 @@ func animateInTotalMedals(nrMedals: int) -> void:
 
 		if nrMedals >= 1 && !bronzeTotal.visible:
 			inAnimation = true
+			tween.chain().tween_callback(bronzeMedalSFX.play)
 			tween.tween_property(bronzeTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(bronzeTotal, "visible", true, 0.0)
 			tween.tween_property(bronzeTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
-			inAnimation = true
 		if nrMedals >= 2 && !silverTotal.visible:
 			inAnimation = true
+			tween.chain().tween_callback(silverMedalSFX.play)
 			tween.chain().tween_property(silverTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(silverTotal, "visible", true, 0.0)
 			tween.tween_property(silverTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 3 && !goldTotal.visible:
 			inAnimation = true
+			tween.chain().tween_callback(goldMedalSFX.play)
 			tween.chain().tween_property(goldTotal, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(goldTotal, "visible", true, 0.0)
 			tween.tween_property(goldTotal, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 4 && !chrono.visible:
 			inAnimation = true
+			tween.chain().tween_callback(specialMedalSFX.play)
 			tween.chain().tween_property(chrono, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(chrono, "visible", true, 0.0)
 			tween.tween_property(chrono, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
@@ -318,6 +398,8 @@ func setLapTimePB(time: int) -> void:
 		lapPBContainer.visible = true
 		lapPBContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(lapPBContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
+
 		lapPBLabel.text = IngameHUD.getTimeStringFromTicks(time)
 		if lapTimePB == 9223372036854775807:
 			lapPBDiff.text = IngameHUD.getTimeStringFromTicks(0)
@@ -333,6 +415,7 @@ func setLapTimePB(time: int) -> void:
 			lapBeatenContainer.visible = true
 			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
 			setLapMedalText(lapBeatenMedal, "Blitz")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(blitzTime - time)
 		else:
@@ -344,6 +427,7 @@ func setLapTimePB(time: int) -> void:
 			lapBeatenContainer.visible = true
 			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
 			setLapMedalText(lapBeatenMedal, "Gold")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.GOLD_MULTIPLIER) - time)
 		else:
@@ -355,6 +439,7 @@ func setLapTimePB(time: int) -> void:
 			lapBeatenContainer.visible = true
 			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
 			setLapMedalText(lapBeatenMedal, "Silver")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.SILVER_MULTIPLIER) - time)
 		else:
@@ -366,6 +451,7 @@ func setLapTimePB(time: int) -> void:
 			lapBeatenContainer.visible = true
 			lapBeatenContainer.modulate = Color(1, 1, 1, 0)
 			tween.tween_property(lapBeatenContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+			tween.tween_callback(clickSFX.play)
 			setLapMedalText(lapBeatenMedal, "Bronze")
 			lapBeatenDiff.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER) - time)
 		else:
@@ -384,29 +470,34 @@ func setLapTimePB(time: int) -> void:
 		lapNextContainer.visible = true
 		lapNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(blitzTime)
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - blitzTime)
 	elif lapTimePB <= blitzTime * MedalMenu.SILVER_MULTIPLIER:
 		lapNextContainer.visible = true
 		lapNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.GOLD_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.GOLD_MULTIPLIER))
 	elif lapTimePB <= blitzTime * MedalMenu.BRONZE_MULTIPLIER:
 		lapNextContainer.visible = true
 		lapNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.SILVER_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.SILVER_MULTIPLIER))
 	else:
 		lapNextContainer.visible = true
 		lapNextContainer.modulate = Color(1, 1, 1, 0)
 		tween.tween_property(lapNextContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+		tween.tween_callback(clickSFX.play)
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
 	
 	lapPlacementContainer.modulate = Color(1, 1, 1, 0)
 	tween.tween_property(lapPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
+	tween.tween_callback(clickSFX.play)
 
 func setLapMedalText(label: Label, text: String):
 	label.text = text
@@ -432,18 +523,34 @@ func animateInLapMedals(nrMedals: int) -> void:
 		var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT)
 
 		if nrMedals >= 1 && !bronzeLap.visible:
+			tween.chain().tween_callback(bronzeMedalSFX.play)
 			tween.tween_property(bronzeLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(bronzeLap, "visible", true, 0.0)
 			tween.tween_property(bronzeLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 2 && !silverLap.visible:
+			tween.chain().tween_callback(silverMedalSFX.play)
 			tween.chain().tween_property(silverLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(silverLap, "visible", true, 0.0)
 			tween.tween_property(silverLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 3 && !goldLap.visible:
+			tween.chain().tween_callback(goldMedalSFX.play)
 			tween.chain().tween_property(goldLap, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(goldLap, "visible", true, 0.0)
 			tween.tween_property(goldLap, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
 		if nrMedals >= 4 && !blitz.visible:
+			tween.chain().tween_callback(specialMedalSFX.play)
 			tween.chain().tween_property(blitz, "scale", Vector2(1.0, 1.0), MEDAL_ANIMATION_TIME).from(MEDAL_ANIMATION_SCALE).set_trans(Tween.TRANS_BOUNCE)
 			tween.tween_property(blitz, "visible", true, 0.0)
 			tween.tween_property(blitz, "modulate", Color(1, 1, 1, 1), MEDAL_ANIMATION_TIME).from(Color(1, 1, 1, 0)).set_trans(Tween.TRANS_EXPO)
+
+
+func setMedalsNoAnim():
+	bronzeTotal.visible = totalTimePB <= chronoTime * MedalMenu.BRONZE_MULTIPLIER
+	silverTotal.visible = totalTimePB <= chronoTime * MedalMenu.SILVER_MULTIPLIER
+	goldTotal.visible = totalTimePB <= chronoTime * MedalMenu.GOLD_MULTIPLIER
+	chrono.visible = totalTimePB <= chronoTime
+
+	bronzeLap.visible = lapTimePB <= blitzTime * MedalMenu.BRONZE_MULTIPLIER
+	silverLap.visible = lapTimePB <= blitzTime * MedalMenu.SILVER_MULTIPLIER
+	goldLap.visible = lapTimePB <= blitzTime * MedalMenu.GOLD_MULTIPLIER
+	blitz.visible = lapTimePB <= blitzTime
