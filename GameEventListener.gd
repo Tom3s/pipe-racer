@@ -343,7 +343,9 @@ func onState_allPlayersFinished():
 		tween.tween_property(ingameMedalMenu, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
 		
 		state.allPlayersReset.connect(func():
-			tween.kill()
+
+			# tween.kill()
+			ingameMedalMenu.position = Vector2(0, 0)
 			ingameMedalMenu.visible = false
 		)
 

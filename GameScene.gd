@@ -58,6 +58,7 @@ func setup(
 
 	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
 
+	print("Time Multiplier: ", timeMultiplier)
 	if timeMultiplier != 1.0:
 		%GameEventListener.state.timeMultiplier = timeMultiplier
 		%GameEventListener.addGhosts([] as Array[String], downloadedReplays)

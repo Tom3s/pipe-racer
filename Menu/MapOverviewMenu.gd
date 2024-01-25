@@ -315,6 +315,7 @@ func fetchPersonalBestTime():
 			personalBestTime = data.time
 			medalMenu.setVisibleMedalsTotal(data.time)
 		else:
+			personalBestTime = 9223372036854775807
 			medalMenu.setVisibleMedalsTotal(9223372036854775807)
 	)
 
@@ -344,6 +345,7 @@ func fetchPersonalBestLap():
 			personalBestLap = data.bestLap
 			medalMenu.setVisibleMedalsLap(data.bestLap)
 		else:
+			personalBestLap = 9223372036854775807
 			medalMenu.setVisibleMedalsLap(9223372036854775807)
 	)
 
