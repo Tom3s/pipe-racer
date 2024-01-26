@@ -66,20 +66,6 @@ func loadLocalTracks() -> void:
 	for track in localTrackListItems:
 		localTrackList.add_item(track.replace(".json", ""))
 
-
-# func onLoadButton_pressed(_sink = null) -> void:
-# 	var trackName = ""
-# 	if selectMode == MODE_SELECT_LOCAL:
-# 		trackName = "user://tracks/local/" 
-# 		trackName += localTrackListItems[localTrackList.get_selected_items()[0]]
-# 	elif selectMode == MODE_SELECT_DOWNLOADED:
-# 		trackName = "user://tracks/downloaded/" 
-# 		trackName += downloadedTrackListItems[downloadedTrackList.get_selected_items()[0]]
-# 	else:
-# 		return
-# 	visible = false
-# 	trackSelected.emit(trackName)
-# 	print("Selected track: ", trackName)
 func onEditButton_pressed(_sink = null):
 	var trackName = ""
 	trackName = "user://tracks/local/" 
@@ -148,12 +134,100 @@ func uploadTrack(trackFileName: String):
 		AlertManager.showAlert(self, "Error", "Cannot upload track in offline mode", "Please connect to the internet and try again") 
 		return
 	print("Uploading track: ", trackFileName)
-	var uploadRequest = HTTPRequest.new()
-	add_child(uploadRequest)
-	uploadRequest.timeout = 30
+	
 
 	var path = "user://tracks/local/" + trackFileName
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
+
+	var fileText = fileHandler.get_as_text()
+
+	var jsonData = JSON.parse_string(fileText)
+
+	if (jsonData == null):
+		AlertManager.showAlert(self, "Error", "Upload Failed", "Invalid JSON") 
+		return
+	if (!jsonData.has("validated") || jsonData.validated == false):
+		AlertManager.showAlert(self, "Error", "Upload Failed", "Track must be validated (completed) before uploading") 
+		return
+
+	# upload replay
+
+	var replayRequest = HTTPRequest.new()
+	add_child(replayRequest)
+	replayRequest.timeout = 10
+	replayRequest.request_completed.connect(func(_result, response_code, _headers, _body):
+		if response_code != 200:
+			print(_body.get_string_from_utf8())
+			return
+		
+		var replayId = JSON.parse_string(_body.get_string_from_utf8())._id
+
+		if jsonData.bestTotalReplay != jsonData.bestLapReplay:
+			# upload lap replay
+			var lapReplayRequest = HTTPRequest.new()
+			add_child(lapReplayRequest)
+			lapReplayRequest.timeout = 10
+			lapReplayRequest.request_completed.connect(func(_result, response_code, _headers, _body):
+				if response_code != 200:
+					print(_body.get_string_from_utf8())
+					return
+				
+				var lapReplayId = JSON.parse_string(_body.get_string_from_utf8())._id
+
+				jsonData.bestLapReplay = lapReplayId
+				jsonData.bestTotalReplay = replayId
+
+				sendUploadRequest(jsonData)
+			)
+
+			var lapReplayData = FileAccess.open(jsonData.bestLapReplay, FileAccess.READ)
+			var lapReplayBytes = lapReplayData.get_buffer(lapReplayData.get_length())
+			lapReplayData.close()
+
+			var httpError = lapReplayRequest.request_raw(
+				Backend.BACKEND_IP_ADRESS + "/api/replays/validation",
+				[
+					"Content-Type: application/octet-stream",
+					"Session-Token: " + GlobalProperties.SESSION_TOKEN
+				],
+				HTTPClient.METHOD_POST,
+				lapReplayBytes
+			)
+
+			if httpError != OK:
+				print("Error: " + error_string(httpError))
+				AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading lap replay")
+		else:
+			jsonData.bestTotalReplay = replayId
+			jsonData.bestLapReplay = replayId
+			sendUploadRequest(jsonData)
+
+	)
+
+	var replayData = FileAccess.open(jsonData.bestTotalReplay, FileAccess.READ)
+	var replayBytes = replayData.get_buffer(replayData.get_length())
+	replayData.close()
+
+	var httpError = replayRequest.request_raw(
+		Backend.BACKEND_IP_ADRESS + "/api/replays/validation",
+		[
+			"Content-Type: application/octet-stream",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN
+		],
+		HTTPClient.METHOD_POST,
+		replayBytes
+	)
+
+	if httpError != OK:
+		print("Error: " + error_string(httpError))
+		AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading replay")
+
+
+func sendUploadRequest(jsonData):
+
+	var uploadRequest = HTTPRequest.new()
+	add_child(uploadRequest)
+	uploadRequest.timeout = 30
 
 	uploadRequest.request_completed.connect(onUploadRequest_completed)
 
@@ -164,7 +238,7 @@ func uploadTrack(trackFileName: String):
 			"Session-Token: " + GlobalProperties.SESSION_TOKEN
 		],
 		HTTPClient.METHOD_POST,
-		fileHandler.get_as_text()
+		JSON.stringify(jsonData)
 	)
 	if httpError != OK:
 		print("Error: " + error_string(httpError))

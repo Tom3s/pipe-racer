@@ -13,8 +13,11 @@ var raceStarted: bool = false
 
 var ranked: bool = false
 var online: bool = false
+var validation: bool = false
 
 var exitedPlayers: int = 0
+
+var timeMultiplier: float = 1.0
 
 signal allPlayersReady()
 signal allPlayersFinished()

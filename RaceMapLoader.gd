@@ -66,8 +66,12 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 		trackName, 
 		trackName.begins_with("user://tracks/downloaded"),
 		false,
+		false,
 		mapOverviewMenu.localReplays,
-		mapOverviewMenu.downloadedReplays
+		mapOverviewMenu.downloadedReplays,
+		mapOverviewMenu.getTimeMultiplier(),
+		mapOverviewMenu.personalBestTime,
+		mapOverviewMenu.personalBestLap,
 	)
 	if !success:
 		AlertManager.showAlert(
@@ -90,6 +94,7 @@ func onPlayerSelectorMenu_backPressed():
 
 func onRace_exited():
 	raceNode.queue_free()
+	mapOverviewMenu.refreshMenu()
 	mapOverviewMenu.animateIn()
 
 func show():

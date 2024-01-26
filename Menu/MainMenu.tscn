@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene load_steps=24 format=3 uid="uid://c0bjc4qk7b5e1"]
 
 [ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
@@ -15,8 +15,10 @@
 [ext_resource type="Shader" uid="uid://c04k1vssllusx" path="res://Menu/Title.tres" id="7_uhllf"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="8_8rxhx"]
 [ext_resource type="Script" path="res://Menu/ScaledContainerTopRight.gd" id="8_uqvtl"]
+[ext_resource type="PackedScene" uid="uid://dl5836ibbaqbg" path="res://PlayerPanel.tscn" id="10_px2jc"]
 [ext_resource type="PackedScene" uid="uid://clhi3xhdyb5j8" path="res://Sounds/MenuSFX.tscn" id="12_mhsla"]
 [ext_resource type="PackedScene" uid="uid://c0qgayng3g6pc" path="res://Menu/ReplayViewerLoader.tscn" id="12_xndm4"]
+[ext_resource type="PackedScene" uid="uid://c34y44hyr84x8" path="res://Menu/PlayerStatsUI.tscn" id="14_02ch5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nj34w"]
 shader = ExtResource("3_3culy")
@@ -329,6 +331,50 @@ theme_override_font_sizes/font_size = 360
 text = "PIPE
   RACER"
 
+[node name="StatsContainer" type="HBoxContainer" parent="MainContent"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -592.0
+offset_top = -152.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Container" type="PanelContainer" parent="MainContent/StatsContainer"]
+layout_mode = 2
+theme = ExtResource("4_harqg")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
+
+[node name="StatsButton" type="Button" parent="MainContent/StatsContainer/Container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../Container7/ExitButton")
+focus_neighbor_bottom = NodePath("../../Container2/EditButton")
+script = ExtResource("5_r5x1k")
+
+[node name="Label" type="Label" parent="MainContent/StatsContainer/Container/StatsButton"]
+layout_mode = 1
+offset_right = 203.4
+offset_bottom = 116.4
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0.494118, 0.729412, 0.776471, 1)
+theme_override_font_sizes/font_size = 100
+text = "Stats"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PlayerPanel" parent="MainContent/StatsContainer" instance=ExtResource("10_px2jc")]
+layout_mode = 2
+
 [node name="SettingsMenu" parent="." instance=ExtResource("4_fogf1")]
 unique_name_in_owner = true
 visible = false
@@ -341,6 +387,11 @@ layout_mode = 1
 
 [node name="ReplayViewerLoader" parent="." instance=ExtResource("12_xndm4")]
 unique_name_in_owner = true
+layout_mode = 1
+
+[node name="PlayerStatsUI" parent="." instance=ExtResource("14_02ch5")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
 [node name="EditorMapLoader" parent="." instance=ExtResource("5_ybx24")]

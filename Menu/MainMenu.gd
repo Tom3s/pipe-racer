@@ -7,9 +7,11 @@ extends Control
 @onready var playOnlineButton: Button = %PlayOnlineButton
 @onready var websiteButton: Button = %WebsiteButton
 @onready var settingsButton: Button = %SettingsButton
+@onready var statsButton: Button = %StatsButton
 # @onready var controlsButton: Button = %ControlsButton
 @onready var exitButton: Button = %ExitButton
 @onready var settingsMenu: SettingsMenu = %SettingsMenu
+@onready var playerStatsUI: PlayerStatsUI = %PlayerStatsUI
 
 @onready var raceMapLoader: RaceMapLoader = %RaceMapLoader
 @onready var editorMapLoader: EditorMapLoader = %EditorMapLoader
@@ -22,6 +24,8 @@ extends Control
 @onready var buttonContainer: VBoxContainer = %ButtonContainer
 
 @onready var titleContainer: VBoxContainer = %TitleContainer
+
+@onready var statsContainer: HBoxContainer = %StatsContainer
 
 var buttons: Array = []
 
@@ -38,6 +42,13 @@ func _ready():
 
 	GlobalProperties.setOriginalSettingsMenu(self, settingsMenu, onSettingsMenu_backPressed)
 
+	statsContainer.remove_child(statsContainer.get_child(1))
+
+	if GlobalProperties.mainPlayerPanel == null:
+		await GlobalProperties.mainPlayerPanelSet
+	
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
+
 	%VersionLabel.text = "Version: " + VersionCheck.currentVersion
 
 	set_physics_process(true)
@@ -50,6 +61,8 @@ func connectSignals():
 	playOnlineButton.pressed.connect(onPlayOnlineButton_pressed)
 	settingsButton.pressed.connect(onSettingsButton_pressed)
 	settingsMenu.closePressed.connect(onSettingsMenu_backPressed)
+	statsButton.pressed.connect(onStatsButton_pressed)
+	playerStatsUI.closePressed.connect(onStats_closePressed)
 	exitButton.pressed.connect(get_tree().quit)
 
 	websiteButton.pressed.connect(onWebsiteButton_pressed)
@@ -100,16 +113,25 @@ func onSettingsMenu_backPressed():
 	# mainContent.visible = true
 	await showMainContentsAnimated()
 	settingsButton.grab_focus()
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
+
+func onStatsButton_pressed():
+	playerStatsUI.show()
+
+func onStats_closePressed():
+	statsButton.grab_focus()
 
 func onRaceMapLoader_backPressed():
 	# mainContent.visible = true
 	await showMainContentsAnimated()
 	playButton.grab_focus()
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
 
 func onEditorMapLoader_backPressed():
 	# mainContent.visible = true
 	await showMainContentsAnimated()
 	editButton.grab_focus()
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
 
 
 func onWebsiteButton_pressed():
@@ -135,12 +157,14 @@ func onOnlineMapLoader_backPressed():
 	# mainContent.visible = true
 	await showMainContentsAnimated()
 	playOnlineButton.grab_focus()
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
 
 func onReplayViewerLoader_backPressed():
 	# mainContent.visible = true
 	# %Background.visible = true
 	await showMainContentsAnimated()
 	replayButton.grab_focus()
+	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
 
 
 const MOVE_TIME = 0.2
@@ -153,6 +177,8 @@ func animateMainContentsOut():
 	var windowSize = get_viewport_rect().size
 
 	tween.tween_property(titleContainer, "inAnimation", true, 0.0)
+
+	tween.tween_property(statsContainer, "visible", false, 0.0)
 
 	var index = 1
 	for child in buttonContainer.get_children():
@@ -179,7 +205,8 @@ func animateMainContentsOut():
 		.set_delay(INBETWEEN_TIME * index)
 	tween.tween_property(titleContainer, "inAnimation", false, 0.0)\
 		.set_delay(INBETWEEN_TIME * index)
-	
+	tween.tween_property(statsContainer, "visible", true, 0.0)\
+		.set_delay(INBETWEEN_TIME * (index + 4))
 	
 	return tween.finished
 	# var children = buttonContainer.get_children()
@@ -201,6 +228,7 @@ func animateMainContentsIn():
 	var ZERO = 0.0
 
 	tween.tween_property(mainContent, "visible", true, ZERO)
+	tween.tween_property(statsContainer, "visible", false, ZERO)
 	tween.chain().tween_property(titleContainer, "inAnimation", true, ZERO)
 	for child in buttonContainer.get_children():
 		# child.get_child(0).inAnimation = true
@@ -240,7 +268,8 @@ func animateMainContentsIn():
 			.set_delay(INBETWEEN_TIME * index)
 	tween.tween_property(titleContainer, "inAnimation", false, MOVE_TIME)\
 			.set_delay(INBETWEEN_TIME * index)
-
+	tween.tween_property(statsContainer, "visible", true, 0.0)\
+			.set_delay(INBETWEEN_TIME * (index + 4))
 
 	return tween.finished
 

@@ -14,8 +14,12 @@ func setup(
 	mapName: String,
 	ranked: bool = false,
 	online: bool = false,
+	validation: bool = false,
 	localReplays: Array[String] = [],
 	downloadedReplays: Array[String] = [],
+	timeMultiplier: float = 1.0,
+	totalTimePB: int = 9223372036854775807,
+	lapTimePB: int = 9223372036854775807,
 
 ) -> bool:
 	# load map
@@ -32,10 +36,35 @@ func setup(
 
 	%GameEventListener.state.ranked = ranked
 	%GameEventListener.state.online = online
+	%GameEventListener.state.validation = validation
+
+	if validation && map.bestTotalReplay != "":
+		localReplays = [
+			map.bestTotalReplay.split("/")[-1],
+		]
 
 	%GameEventListener.map = map
 
-	%GameEventListener.addGhosts(localReplays, downloadedReplays)
+	# %GameEventListener.ingameMedalMenu.chronoTime = map.bestTotalTime
+	# %GameEventListener.ingameMedalMenu.blitzTime = map.bestLapTime
+	# %GameEventListener.ingameMedalMenu.totalTimePB = totalTimePB
+	# %GameEventListener.ingameMedalMenu.lapTimePB = lapTimePB
+	%GameEventListener.ingameMedalMenu.setup(
+		map.bestTotalTime,
+		map.bestLapTime,
+		totalTimePB,
+		lapTimePB,
+	)
+
+	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
+
+	print("Time Multiplier: ", timeMultiplier)
+	if timeMultiplier != 1.0:
+		%GameEventListener.state.timeMultiplier = timeMultiplier
+		%GameEventListener.addGhosts([] as Array[String], downloadedReplays)
+		%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
+	else:
+		%GameEventListener.addGhosts(localReplays, downloadedReplays)
 
 	# load environment
 	var environment: WorldEnvironment = MapEnvironment.instantiate()

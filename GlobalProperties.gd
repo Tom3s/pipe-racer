@@ -303,3 +303,8 @@ func returnPlayerSelectorMenu(backPressed: Callable, nextPressed: Callable) -> v
 	# if playerSelectorNode.get_parent() != null:
 	# 	playerSelectorNode.get_parent().remove_child(playerSelectorNode)
 	playerSelectorNode.reparent(self)
+
+
+var mainPlayerPanel: PlayerPanel = null
+
+signal mainPlayerPanelSet()

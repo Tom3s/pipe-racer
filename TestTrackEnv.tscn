@@ -19,7 +19,6 @@ glow_enabled = true
 fog_light_color = Color(0.611765, 0.643137, 0.698039, 1)
 fog_sun_scatter = 2.16
 fog_density = 0.0
-adjustment_enabled = true
 
 [node name="TestTrackEnv" type="WorldEnvironment"]
 environment = SubResource("Environment_2xiuk")
@@ -29,6 +28,8 @@ transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
 shadow_enabled = true
 shadow_bias = 0.068
 shadow_blur = 0.137
-directional_shadow_split_1 = 0.021
+directional_shadow_split_1 = 0.05
+directional_shadow_split_2 = 0.165
+directional_shadow_split_3 = 0.4
 directional_shadow_fade_start = 0.95
-directional_shadow_max_distance = 768.0
+directional_shadow_max_distance = 640.0
