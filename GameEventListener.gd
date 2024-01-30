@@ -322,8 +322,8 @@ func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoi
 			timeTrialManagers[car.name].collectCheckpoint(getTimestamp(), car.state.currentLap)
 			car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(car.playerIndex, players.get_child_count()))
 			checkpoint.collect()
+			ingameSFX.playCheckpointSFX()
 		car.state.placement = checkpoint.getPlacement(car.state.currentLap)
-		ingameSFX.playCheckpointSFX()
 		# var placementDict = car.getPositionDict()
 		if Network.userId == 1:
 			broadcastPlacement(car.name, car.state.placement)
@@ -346,6 +346,7 @@ func onStart_bodyEnteredStart(car: CarController, start: Start):
 			for checkpoint in map.getCheckpoints():
 				checkpoint.setUncollected()
 			timeTrialManagers[car.name].finishedLap()
+			ingameSFX.playFinishLapSFX()
 		# await timeTrialManagers[car.playerIndex].addedTime
 		car.state.finishLap()
 
