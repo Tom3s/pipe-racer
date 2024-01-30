@@ -24,6 +24,7 @@ func _ready():
 	defaultPicture = profilePicture.texture
 	connectSignals()
 
+
 func connectSignals():
 	username.text_changed.connect(onUsername_textChanged)
 	password.text_changed.connect(onPassword_textChanged)
@@ -133,8 +134,8 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 	userId = json.userId
 
 	if isMainPlayer:
-		GlobalProperties.SESSION_TOKEN = sessionToken
 		GlobalProperties.USER_ID = userId
+		GlobalProperties.SESSION_TOKEN = sessionToken
 	
 	var profilePictureUrl = json.profilePictureUrl
 
@@ -161,11 +162,18 @@ func setMainPlayerData():
 
 
 func setRandomPlayerData():
-	username.text = "Player" + str(randi() % 1000)
+	username.text = UsernameGenerator.getUsername()
 	colorPicker.color = Color(randf(), randf(), randf(), 1.0)
 	sessionToken = ""
 	userId = ""
 	profilePicture.texture = defaultPicture
+
+	if isMainPlayer:
+		GlobalProperties.PLAYER_NAME = username.text
+		GlobalProperties.PLAYER_COLOR = colorPicker.color
+		GlobalProperties.PLAYER_PASSWORD = password.text
+		GlobalProperties.USER_ID = ""
+		GlobalProperties.SESSION_TOKEN = ""
 
 func onTextChanged(newText: String) -> void:
 	if newText != "":

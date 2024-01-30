@@ -39,7 +39,11 @@ func _ready():
 			closeButton.grab_focus()
 	)
 
-	fetchPlayerStats()
+	# fetchPlayerStats()
+	GlobalProperties.loginStatusChanged.connect(func(newStatus: bool):
+		if newStatus:
+			fetchPlayerStats()
+	)
 
 func getHourStringFromMinutes(playetimeMinutes: int) -> String:
 	var hours = playetimeMinutes / 60
@@ -49,6 +53,14 @@ func getHourStringFromMinutes(playetimeMinutes: int) -> String:
 
 
 func fetchPlayerStats():
+	if VersionCheck.offline:
+		AlertManager.showAlert(self, "You are offline", "You can't view your stats while offline.")
+		return
+	
+	if GlobalProperties.loggedIn == false:
+		AlertManager.showAlert(self, "Not logged in", "You can't view your stats while not logged in.")
+		return
+
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.timeout = 15
