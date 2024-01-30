@@ -360,29 +360,30 @@ func onState_allPlayersReady():
 func onState_allPlayersFinished():
 	print("All players finished")
 	if state.ranked:
-		var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-		var windowSize = ingameMedalMenu.get_viewport_rect().size
-		tween.tween_property(ingameMedalMenu, "position", Vector2(0, -windowSize.y), 0).as_relative()
-		tween.tween_property(ingameMedalMenu, "visible", true, 0)
-		tween.tween_property(ingameMedalMenu, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
+		# var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		# var windowSize = ingameMedalMenu.get_viewport_rect().size
+		# tween.tween_property(ingameMedalMenu, "position", Vector2(0, -windowSize.y), 0).as_relative()
+		# tween.tween_property(ingameMedalMenu, "visible", true, 0)
+		# tween.tween_property(ingameMedalMenu, "position", Vector2(0, 0), 0.5).as_relative().set_delay(1.5)
 		
-		state.allPlayersReset.connect(func():
+		# state.allPlayersReset.connect(func():
 
-			# tween.kill()
-			ingameMedalMenu.position = Vector2(0, 0)
-			ingameMedalMenu.visible = false
-		)
+		# 	# tween.kill()
+		# 	ingameMedalMenu.position = Vector2(0, 0)
+		# 	ingameMedalMenu.visible = false
+		# )
 
 
-		tween.chain().finished.connect(func():
-			var firstCar = players.get_child(0) as CarController
-			var timeTrialManager = timeTrialManagers[firstCar.name]
+		# tween.chain().finished.connect(func():
+		# 	var firstCar = players.get_child(0) as CarController
+		# 	var timeTrialManager = timeTrialManagers[firstCar.name]
 
-			ingameMedalMenu.setTotalTimePB(timeTrialManager.getTotalTime())
-			ingameMedalMenu.setLapTimePB(timeTrialManager.getBestLap())
+		# 	ingameMedalMenu.setTotalTimePB(timeTrialManager.getTotalTime())
+		# 	ingameMedalMenu.setLapTimePB(timeTrialManager.getBestLap())
 
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		)
+		# 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		# )
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		
 
 	

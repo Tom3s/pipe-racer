@@ -57,8 +57,8 @@ visible = false
 [node name="IngameMedalMenu" parent="UniversalCanvas" instance=ExtResource("6_64ltm")]
 unique_name_in_owner = true
 visible = false
-currentTime = null
-currentLap = null
+currentTime = 0
+currentLap = 0
 
 [node name="RaceInputHandler" type="Node3D" parent="."]
 unique_name_in_owner = true
