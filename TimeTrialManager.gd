@@ -47,7 +47,7 @@ func finishedLap() -> void:
 	collectCheckpoint(lapFinishTime, splits.size() - 1)
 	times.append(lapFinishTime - timeTrialLapEnd)
 	timeTrialLapEnd = lapFinishTime
-	ingameSFX.playFinishLapSFX()
+	# ingameSFX.playFinishLapSFX()
 	if times.size() >= nrLaps:
 		replaceSplitsIfBetter()
 
