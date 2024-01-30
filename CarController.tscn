@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dvesbfub7s22l"]
+[gd_scene load_steps=20 format=3 uid="uid://dvesbfub7s22l"]
 
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="1_onavb"]
 [ext_resource type="Script" path="res://CarController.gd" id="1_wde5o"]
@@ -10,9 +10,7 @@
 [ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
 [ext_resource type="PlaneMesh" uid="uid://dvof0mms3yhd8" path="res://Track Props/smokeParticleMAterial.tres" id="6_obe7c"]
-[ext_resource type="Script" path="res://CarSoundEffects.gd" id="9_n17k7"]
-[ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="10_8irg8"]
-[ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="11_ryyl8"]
+[ext_resource type="PackedScene" uid="uid://bjnvfde7d8cwk" path="res://CarSoundEffects.tscn" id="11_vb0oa"]
 [ext_resource type="Script" path="res://CarStateMachine.gd" id="12_usspm"]
 [ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
 [ext_resource type="Script" path="res://CarSynchronizer.gd" id="16_d1km7"]
@@ -323,19 +321,8 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 script = ExtResource("3_kfdpd")
 
-[node name="SoundEffects" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.923604, 0)
-script = ExtResource("9_n17k7")
-
-[node name="Impact1" type="AudioStreamPlayer" parent="SoundEffects"]
-unique_name_in_owner = true
-stream = ExtResource("10_8irg8")
-bus = &"SFX"
-
-[node name="Impact2" type="AudioStreamPlayer" parent="SoundEffects"]
-unique_name_in_owner = true
-stream = ExtResource("11_ryyl8")
-bus = &"SFX"
+[node name="CarSoundEffects" parent="." instance=ExtResource("11_vb0oa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.806566, 0)
 
 [node name="CarStateMachine" type="Node" parent="."]
 unique_name_in_owner = true

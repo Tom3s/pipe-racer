@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjnvfde7d8cwk"]
+
+[ext_resource type="Script" path="res://CarSoundEffects.gd" id="1_4kerv"]
+[ext_resource type="AudioStream" uid="uid://b7ok77i5av7ki" path="res://Sounds/Car/Impact1.mp3" id="1_av2hc"]
+[ext_resource type="AudioStream" uid="uid://bbufcmqpovk3k" path="res://Sounds/Car/Impact2.wav" id="2_ju5so"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8jtuq"]
+random_pitch = 1.2
+streams_count = 2
+stream_0/stream = ExtResource("1_av2hc")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_ju5so")
+stream_1/weight = 1.0
+
+[node name="CarSoundEffects" type="Node3D"]
+script = ExtResource("1_4kerv")
+
+[node name="Impact_2D" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_8jtuq")
+max_polyphony = 2
+bus = &"SFX"
+
+[node name="Impact" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_8jtuq")
+max_polyphony = 2
+bus = &"SFX"

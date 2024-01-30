@@ -624,6 +624,7 @@ func setLabelVisibility(visible: bool):
 
 func set2DAudio():
 	%CarEngineSound.set2DAudio()
+	%CarSoundEffects.set2DAudio()
 # DEBUG FUNCTIONS
 
 func debugSkiddingRatio():
