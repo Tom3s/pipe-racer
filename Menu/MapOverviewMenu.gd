@@ -350,7 +350,7 @@ func fetchPersonalBestLap():
 	)
 
 	var httpError = request.request(
-		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId + "?bestLap=true",
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/pb/" + trackId + "?sortByLap=true",
 		[
 			"Content-Type: application/json",
 			"Session-Token: " + GlobalProperties.SESSION_TOKEN
