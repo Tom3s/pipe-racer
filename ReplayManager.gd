@@ -74,7 +74,8 @@ func saveRecording(
 
 	fileHandler.store_csv_line([mapId, nrLaps, nrCheckpoints])
 
-	fileHandler.store_16(cars.size())
+	# fileHandler.store_16(cars.size())
+	fileHandler.store_16(1)
 
 	fileHandler.store_32(time)
 	
