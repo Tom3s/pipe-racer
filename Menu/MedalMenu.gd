@@ -84,6 +84,9 @@ func setVisibleMedalsLap(time: int):
 		lapTimeMedals.get_child(BRONZE_MEDAL_INDEX + 1).visible = time > int(lapTimeRecord * BRONZE_MULTIPLIER)
 
 func getCurrentMultiplier(time: int) -> float:
+	if !showGhostButton.button_pressed:
+		return 1.0
+	
 	if time > totalTimeRecord * BRONZE_MULTIPLIER:
 		return BRONZE_MULTIPLIER
 	elif time > totalTimeRecord * SILVER_MULTIPLIER:
