@@ -51,6 +51,8 @@ func _ready():
 
 	%VersionLabel.text = "Version: " + VersionCheck.currentVersion
 
+	statsButton.visible = false
+
 	set_physics_process(true)
 	
 
@@ -73,6 +75,10 @@ func connectSignals():
 	editorMapLoader.exitedMapEditor.connect(onEditorMapLoader_exitedMapEditor)
 	onlineMapLoader.backPressed.connect(onOnlineMapLoader_backPressed)
 	replayViewerLoader.backPressed.connect(onReplayViewerLoader_backPressed)
+
+	GlobalProperties.loginStatusChanged.connect(func(loggedIn: bool):
+		statsButton.visible = loggedIn
+	)
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("fullscreen"):

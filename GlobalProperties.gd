@@ -164,8 +164,23 @@ var CONTROL_DEVICE_OVERWRITES = {
 
 var ingameSmoothSteering: float = 0.1
 
-var SESSION_TOKEN: String = ""
-var USER_ID: String = ""
+var loggedIn: bool = false
+
+signal loginStatusChanged(newStatus: bool)
+
+var SESSION_TOKEN: String = "":
+	set(newToken):
+		SESSION_TOKEN = newToken
+		loggedIn = SESSION_TOKEN != ""
+		loginStatusChanged.emit(loggedIn)
+
+var USER_ID: String = "":
+	set(newId):
+		USER_ID = newId
+		loggedIn = USER_ID != ""
+
+
+
 
 const SAVE_FILE := "user://player.json"
 
