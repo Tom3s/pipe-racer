@@ -99,6 +99,8 @@ var currentTime: int = 0
 @export
 var currentLap: int = 0
 
+var trackId: String = ""
+
 signal closePressed()
 signal restartPressed()
 signal leaderboardPressed()
@@ -154,11 +156,18 @@ func _ready():
 
 	set_physics_process(true)
 
-func setup(initChronoTime: int, initBlitzTime: int, initTotalTimePB: int, initLapTimePB: int) -> void:
+func setup(
+	initChronoTime: int, 
+	initBlitzTime: int, 
+	initTotalTimePB: int, 
+	initLapTimePB: int,
+	initTrackId: String
+) -> void:
 	chronoTime = initChronoTime
 	blitzTime = initBlitzTime
 	totalTimePB = initTotalTimePB
 	lapTimePB = initLapTimePB
+	trackId = initTrackId
 
 	totalPBContainer.visible = false
 	totalBeatenContainer.visible = false
@@ -190,6 +199,21 @@ signal totalLabelAnimationFinished()
 var inLabelAnimation: bool = false
 
 func setTotalTimePB(time: int) -> void:
+	RequestHandler.sendRequest(
+		"IngameMedalMenu.gd",
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/placement/" + trackId,
+		[
+			'Session-Token: ' + GlobalProperties.SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_GET,
+		"",
+		5,
+		func(body: PackedByteArray) -> void:
+			totalPlacement.text = body.get_string_from_utf8()
+	)
+
+	totalPlacementContainer.modulate = Color(1, 1, 1, 0)
+
 	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 
 	if totalTimePB == 9223372036854775807 || time <= totalTimePB:
@@ -313,7 +337,6 @@ func setTotalTimePB(time: int) -> void:
 		totalNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
 		totalNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(chronoTime * MedalMenu.BRONZE_MULTIPLIER))
 	
-	totalPlacementContainer.modulate = Color(1, 1, 1, 0)
 	inLabelAnimation = true
 	tween.tween_property(totalPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 	tween.tween_callback(playClickSFX)
@@ -387,6 +410,21 @@ func animateInTotalMedals(nrMedals: int) -> void:
 
 
 func setLapTimePB(time: int) -> void:
+	RequestHandler.sendRequest(
+		"IngameMedalMenu.gd",
+		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/placement/" + trackId + "?sortByLap=true",
+		[
+			'Session-Token: ' + GlobalProperties.SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_GET,
+		"",
+		5,
+		func(body: PackedByteArray) -> void:
+			lapPlacement.text = body.get_string_from_utf8()
+	)
+
+	lapPlacementContainer.modulate = Color(1, 1, 1, 0)
+
 	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 	
 	if inLabelAnimation:
@@ -495,7 +533,6 @@ func setLapTimePB(time: int) -> void:
 		lapNextMedal.text = IngameHUD.getTimeStringFromTicks(floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
 		lapNextDiff.text = IngameHUD.getTimeStringFromTicks(time - floori(blitzTime * MedalMenu.BRONZE_MULTIPLIER))
 	
-	lapPlacementContainer.modulate = Color(1, 1, 1, 0)
 	tween.tween_property(lapPlacementContainer, "modulate", Color(1, 1, 1, 1), LABEL_ANIMATION_TIME)
 	tween.tween_callback(playClickSFX)
 

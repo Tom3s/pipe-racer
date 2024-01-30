@@ -54,6 +54,7 @@ func setup(
 		map.bestLapTime,
 		totalTimePB,
 		lapTimePB,
+		map.trackId
 	)
 
 	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
