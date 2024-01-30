@@ -816,7 +816,9 @@ func loadFromJSON(fileName: String) -> bool:
 	print("Loaded track: " + trackData["trackName"])
 
 	# load validation details
-	validated = trackData["validated"] 
+	validated = false
+	if trackData.has("validated"):
+		validated = trackData["validated"] 
 	bestTotalTime = trackData["bestTotalTime"]
 	bestTotalReplay = trackData["bestTotalReplay"]
 	bestLapTime = trackData["bestLapTime"]
