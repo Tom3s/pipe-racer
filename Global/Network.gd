@@ -93,10 +93,10 @@ func updateUserCount(_sink = null):
 
 func onServerDisconnected():
 	print("[Network.gd] Server closed connection")
-	# OS.alert("Server closed connection", "Error")
 	AlertManager.showAlert(self, "Disconnected", "Server closed connection")
 	userId = 1
-	# changeToOnlineMenu() 
+
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func hostServer(callback: Callable, errorParent: Node):
 	var upnp = UPNP.new()

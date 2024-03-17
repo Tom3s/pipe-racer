@@ -54,6 +54,7 @@ func setup(
 		map.bestLapTime,
 		totalTimePB,
 		lapTimePB,
+		map.trackId
 	)
 
 	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
@@ -61,7 +62,7 @@ func setup(
 	print("Time Multiplier: ", timeMultiplier)
 	if timeMultiplier != 1.0:
 		%GameEventListener.state.timeMultiplier = timeMultiplier
-		%GameEventListener.addGhosts([] as Array[String], downloadedReplays)
+		%GameEventListener.addGhosts([] as Array[String], [map.bestTotalReplay + '.replay'] as Array[String])
 		%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
 	else:
 		%GameEventListener.addGhosts(localReplays, downloadedReplays)
