@@ -40,6 +40,8 @@ output_port_for_preview = 0
 
 [resource]
 code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
 
 
 
@@ -59,7 +61,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-500.565, -14.9662)
+graph_offset = Vector2(-263.341, 72.0334)
 nodes/vertex/0/position = Vector2(560, 160)
 nodes/fragment/0/position = Vector2(680, 120)
 nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_4hb6w")

@@ -63,10 +63,22 @@
     - same as before
 - __Not shown__: inside/outside pipe
 
+## functional
+
+- start line
+  - current
+  - circular
+  - rally type
+- checkpoints
+  - current 
+  - current, but only top half 
+  - similar to finish line
+  - rally type
 
 ## Scenery
 
 - Terraformable heightmap
+- colorable texture for road
 - Select surface type
 - custom gradient color
 - wheater
@@ -114,6 +126,7 @@
     - oil
     - mud
   - shape (prolly simple cuboid, maybe cillinder)
+- waterfalls
 - particle emitters
   - type
 	- smoke
@@ -125,3 +138,46 @@
 	- music
 	- ambient
 	- sfx
+- simple shapes with custom textures
+
+
+## notes from other games
+
+![alt text](pictures/revolt-museum2.png)
+- glass bridges (glass surface, guard rails, no support, water under)
+
+![alt text](pictures/revolt-museum2-2.png)
+- bridge inside pipe
+
+![alt text](<pictures/revolt-toyworld (1).png>)
+- animals 
+
+![alt text](<pictures/revolt-toyworld (2).png>)
+- wide/narrow roads
+
+![alt text](<pictures/lego-racers (1).png>)
+- road with guard rails, vehicle props, simple shapes in sky
+
+![alt text](<pictures/lego-racers (2).png>)
+- briddge inside pipe + lava + poles
+
+![alt text](<pictures/lego-racers (3).png>)
+- large pipe as cave, road with runoff, simple pipes/shapes as support
+
+![alt text](<pictures/lego-racers (4).png>)
+- support on side, insie pipe as tunnel, waterfall, etc.
+
+![alt text](<pictures/lego-racers (5).png>)
+- pillars, simple shapes, road with walls
+
+![alt text](<pictures/lego-racers (6).png>)
+- road with fence, pillars, simple shapes, lava
+  
+![alt text](<pictures/lego-racers-2 (1).png>)
+- terraformed surface, wallride should be possible with prefab
+
+![alt text](<pictures/lego-racers-2 (3).png>)
+- pipe as tunnel, road with walls, shapes for crystals
+
+![alt text](<pictures/lego-racers-2 (4).png>)
+- tunnel etc + waterfall + water
