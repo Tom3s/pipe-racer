@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://cn8i70vd7ngwn"]
+
+[ext_resource type="PackedScene" uid="uid://ytjub2heokq0" path="res://Editor/Scenery/EditableScenery.tscn" id="1_4oodl"]
+[ext_resource type="Script" path="res://Editor/scenery_edit_test.gd" id="1_55neb"]
+[ext_resource type="Script" path="res://EditorCamera.gd" id="2_liqn5"]
+[ext_resource type="Script" path="res://EditorInputHandler.gd" id="4_vmhp0"]
+
+[node name="SceneryEditTest" type="Node3D"]
+script = ExtResource("1_55neb")
+
+[node name="EditableScenery" parent="." instance=ExtResource("1_4oodl")]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+script = ExtResource("2_liqn5")
+
+[node name="EditorInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_vmhp0")

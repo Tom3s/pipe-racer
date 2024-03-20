@@ -53,14 +53,14 @@ script = ExtResource("1_csme5")
 environment = SubResource("Environment_bh1jy")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.820008, 0.213048, 0.531224, -0.56471, 0.452339, 0.690284, -0.09323, -0.866025, 0.491231, 0, 0, 0)
+transform = Transform3D(0.820008, 0.213047, 0.531224, -0.56471, 0.452339, 0.690284, -0.0932301, -0.866025, 0.491231, 0, 0, 0)
 rotation_order = 4
 shadow_enabled = true
 shadow_opacity = 0.75
 shadow_blur = 5.0
 
 [node name="Moon" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.849961, 0.0226778, -0.526356, -0.526808, 0.0481491, -0.848619, 0.00609876, 0.998582, 0.0528717, 0, 0, 0)
+transform = Transform3D(0.849961, 0.0226777, -0.526356, -0.526808, 0.048149, -0.848619, 0.00609876, 0.998582, 0.0528717, 0, 0, 0)
 rotation_order = 4
 light_color = Color(1, 1, 0.6, 1)
 light_energy = 0.0
@@ -68,6 +68,3 @@ shadow_enabled = true
 shadow_opacity = 0.25
 shadow_blur = 5.0
 directional_shadow_fade_start = 0.1
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 3, 6)
