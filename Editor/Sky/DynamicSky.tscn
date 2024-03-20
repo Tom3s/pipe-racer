@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://bjjceeyq3csc3"]
+
+[ext_resource type="Script" path="res://Editor/Sky/dynamicSky.gd" id="1_csme5"]
+[ext_resource type="Shader" path="res://Editor/Sky/sky.gdshader" id="2_ghyuj"]
+[ext_resource type="Texture2D" uid="uid://bankhnmexuifx" path="res://Editor/Sky/stars.png" id="3_y4iwd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_msgkm"]
+shader = ExtResource("2_ghyuj")
+shader_parameter/day_top_color = Color(0.1, 0.6, 1, 1)
+shader_parameter/day_bottom_color = Color(0.4, 0.8, 1, 1)
+shader_parameter/sunset_top_color = Color(0.7, 0.75, 1, 1)
+shader_parameter/sunset_bottom_color = Color(1, 0.5, 0.7, 1)
+shader_parameter/night_top_color = Color(0.02, 0, 0.04, 1)
+shader_parameter/night_bottom_color = Color(0.0666667, 0.0392157, 0.101961, 1)
+shader_parameter/horizon_color = Color(0, 0.329412, 0.384314, 1)
+shader_parameter/horizon_blur = 0.14
+shader_parameter/sun_color = Color(10, 8, 1, 1)
+shader_parameter/sun_sunset_color = Color(10, 0, 0, 1)
+shader_parameter/sun_size = 0.2
+shader_parameter/sun_blur = 10.0
+shader_parameter/moon_color = Color(1, 0.95, 0.7, 1)
+shader_parameter/moon_size = 0.06
+shader_parameter/moon_blur = 0.1
+shader_parameter/clouds_edge_color = Color(0.8, 0.8, 0.98, 1)
+shader_parameter/clouds_top_color = Color(1, 1, 1, 1)
+shader_parameter/clouds_middle_color = Color(0.92, 0.92, 0.98, 1)
+shader_parameter/clouds_bottom_color = Color(0.83, 0.83, 0.94, 1)
+shader_parameter/clouds_speed = 2.0
+shader_parameter/clouds_direction = 0.2
+shader_parameter/clouds_scale = 1.0
+shader_parameter/clouds_cutoff = 0.6
+shader_parameter/clouds_fuzziness = 0.5
+shader_parameter/clouds_weight = 0.0
+shader_parameter/clouds_blur = 0.25
+shader_parameter/stars_speed = 1.0
+shader_parameter/stars_scale = 1.0
+shader_parameter/stars_opacity = 1.0
+shader_parameter/stars_texture = ExtResource("3_y4iwd")
+shader_parameter/overwritten_time = 0.0
+
+[sub_resource type="Sky" id="Sky_q13r3"]
+sky_material = SubResource("ShaderMaterial_msgkm")
+
+[sub_resource type="Environment" id="Environment_bh1jy"]
+background_mode = 2
+sky = SubResource("Sky_q13r3")
+ambient_light_source = 3
+
+[node name="DynamicSky" type="Node3D"]
+script = ExtResource("1_csme5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bh1jy")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.820008, 0.213048, 0.531224, -0.56471, 0.452339, 0.690284, -0.09323, -0.866025, 0.491231, 0, 0, 0)
+rotation_order = 4
+shadow_enabled = true
+shadow_opacity = 0.75
+shadow_blur = 5.0
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.849961, 0.0226778, -0.526356, -0.526808, 0.0481491, -0.848619, 0.00609876, 0.998582, 0.0528717, 0, 0, 0)
+rotation_order = 4
+light_color = Color(1, 1, 0.6, 1)
+light_energy = 0.0
+shadow_enabled = true
+shadow_opacity = 0.25
+shadow_blur = 5.0
+directional_shadow_fade_start = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 3, 6)
