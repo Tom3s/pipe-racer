@@ -67,15 +67,16 @@ func setMesh() -> void:
 	var meshData = []
 	meshData.resize(ArrayMesh.ARRAY_MAX)
 
-	meshData[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array(vertexHeights.vertices)
-	meshData[ArrayMesh.ARRAY_INDEX] = PackedInt32Array(getVertexIndexArray())
-	meshData[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array(getUVArray())
+	meshData[ArrayMesh.ARRAY_VERTEX] = vertexHeights.vertices
+	var indices := getVertexIndexArray()
+	meshData[ArrayMesh.ARRAY_INDEX] = indices
+	meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray()
+	meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertexHeights.vertices)
 
 
 	groundMesh.mesh = ArrayMesh.new()
 	groundMesh.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 	groundMesh.position = Vector3(PrefabConstants.TRACK_WIDTH / 2, 0, PrefabConstants.TRACK_WIDTH / 2)
-
 
 
 func getVertexIndexArray() -> PackedInt32Array:
@@ -100,6 +101,22 @@ func getUVArray() -> PackedVector2Array:
 			uvList.push_back(Vector2(float(i) / (groundSize - 1), float(j) / (groundSize - 1)))
 	
 	return uvList
+
+func getNormalArray(indices: PackedInt32Array, vertices: PackedVector3Array) -> PackedVector3Array:
+	var normalArray: PackedVector3Array = []
+	normalArray.resize(vertices.size())
+
+	for index in range(0, indices.size(), 3):
+		var a: Vector3 = vertices[indices[index]]
+		var b: Vector3 = vertices[indices[index + 2]]
+		var c: Vector3 = vertices[indices[index + 1]]
+		
+		var normal = ((b - a).cross(c - a)).normalized()
+		normalArray[indices[index]] = normal
+		normalArray[indices[index + 1]] = normal
+		normalArray[indices[index + 2]] = normal
+
+	return normalArray
 
 func getClosestVertex(worldPos: Vector3) -> Vector2i:
 	var x := roundi((worldPos.x + (groundSize / 2) * (PrefabConstants.TRACK_WIDTH)) \
