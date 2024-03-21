@@ -61,15 +61,15 @@ var gloomyness : float = 0.0 :
 		_update_clouds()
 ## If on, the sum of day_of_year and day_time will be passed to the sky shadader to use instead of TIME from the engine
 # @export 
-var use_day_time_for_shader : bool = false :
-	set( value ) :
-		use_day_time_for_shader = value
-		_update_shader()
+# var use_day_time_for_shader : bool = false :
+# 	set( value ) :
+# 		use_day_time_for_shader = value
+# 		_update_shader()
 ## Multiplier of the elapsed time in the running game.
 ## If 0.0 - day time will not be changed automatically.
 ## If 1.0 - one hour will take one second.
 # @export_range( 0.0, 1.0, 0.0001 ) 
-var time_scale : float = 0.01 :
+var time_scale : float = 2.00 :
 	set( value ) :
 		time_scale = value
 ## If 0, the value will set from the sun object, but as the script runs in the editor, it may set the wrong value, so it is best to set it manually.
@@ -104,9 +104,12 @@ func _ready() -> void :
 			moon_base_enegry = moon.light_energy
 	_update()
 
+
+var current_time: float = 0.0
 func _process( delta: float ) -> void :
-	if not Engine.is_editor_hint() : # We don't want a time lapse in the editor
-		day_time += delta * time_scale
+	# if not Engine.is_editor_hint() : # We don't want a time lapse in the editor
+	current_time += delta * time_scale
+	_update_shader()
 
 func _update() -> void :
 	_update_sun()
@@ -154,5 +157,5 @@ func _update_shader() -> void :
 	if is_instance_valid( environment ) :
 		environment.environment.sky.sky_material.set_shader_parameter(
 			"overwritten_time",
-			( day_of_year * HOURS_IN_DAY + day_time ) * 100.0 if use_day_time_for_shader else 0.0
+			current_time
 		)

@@ -76,6 +76,7 @@ func setMesh() -> void:
 
 	groundMesh.mesh = ArrayMesh.new()
 	groundMesh.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
+
 	groundMesh.position = Vector3(PrefabConstants.TRACK_WIDTH / 2, 0, PrefabConstants.TRACK_WIDTH / 2)
 
 
@@ -119,19 +120,48 @@ func getNormalArray(indices: PackedInt32Array, vertices: PackedVector3Array) -> 
 	return normalArray
 
 func getClosestVertex(worldPos: Vector3) -> Vector2i:
-	var x := roundi((worldPos.x + (groundSize / 2) * (PrefabConstants.TRACK_WIDTH)) \
+	var x := roundi((worldPos.x + (float(groundSize - 1) / 2) * (PrefabConstants.TRACK_WIDTH)) \
 		/ PrefabConstants.TRACK_WIDTH) 
-	var z := roundi((worldPos.z + (groundSize / 2) * (PrefabConstants.TRACK_WIDTH)) \
+	var z := roundi((worldPos.z + (float(groundSize - 1) / 2) * (PrefabConstants.TRACK_WIDTH)) \
 		/ PrefabConstants.TRACK_WIDTH)
+
 
 
 	return Vector2i(x, z)
 
-func moveVertex(indices: Vector2i, direction: int) -> void:
+func moveVertex(indices: Vector2i, direction: int, radius: int) -> void:
 	if direction == 0:
 		return
 	direction /= abs(direction)
 
-	vertexHeights.moveHeight(indices.y, indices.x, direction * PrefabConstants.GRID_SIZE)
+	var verticesToMove: PackedVector2Array = []
+
+	print("Selection Size: ", (radius * 0.75))
+
+	for i in range(indices.x - radius, indices.x + radius + 1):
+		for j in range(indices.y - radius, indices.y + radius + 1):
+			if i < 0 or i >= groundSize or j < 0 or j >= groundSize:
+				continue
+			# var distance = sqrt(pow(i - indices.x, 2) + pow(j - indices.y, 2))
+			if Vector2(indices).distance_to((Vector2(i, j))) > (radius * 0.75):
+				continue
+			# vertexHeights.moveHeight(indices.y, indices.x, direction * PrefabConstants.GRID_SIZE)
+			verticesToMove.push_back(Vector2(i, j))
+	
+	for vertex in verticesToMove:
+		vertexHeights.moveHeight(vertex.y, vertex.x, direction * PrefabConstants.GRID_SIZE)
+
 	setCollider()
 	setMesh()
+
+func setSelection(selected: bool, indices: Vector2i, radius: int) -> void:
+	var material: ShaderMaterial = groundMesh.material_override
+
+	var actualRadius: float = getRadius(radius)
+
+	material.set_shader_parameter("SelectionVisible", selected)
+	material.set_shader_parameter("SelectionPosition", Vector2(indices) / (groundSize - 1))
+	material.set_shader_parameter("SelectionRadius", actualRadius)
+
+func getRadius(radius: int) -> float:
+	return (float(radius) * 0.75) / (groundSize - 1)

@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=28 format=3 uid="uid://bia47weuc0by0"]
+[gd_resource type="VisualShader" load_steps=36 format=3 uid="uid://bia47weuc0by0"]
 
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/generic2d_fractal.gd" id="1_7vuwp"]
 [ext_resource type="Gradient" uid="uid://caro1box0tjw4" path="res://Tracks/MountainGradient.tres" id="2_xo8ge"]
@@ -42,11 +42,6 @@ default_input_values = [1, 6, 2, Vector3(2, 2, 0), 3, 2.0, 4, 0.8, 5, 0.5, 6, 0.
 initialized = true
 script = ExtResource("1_7vuwp")
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jm7gw"]
-parameter_name = "Noise_Size"
-default_value_enabled = true
-default_value = 20.0
-
 [sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_vb75y"]
 default_input_values = [1, 1.0, 2, 0.0, 3, 0.1, 4, 0.0]
 
@@ -64,6 +59,26 @@ default_input_values = [1, 0.0, 2, 1.0, 3, 0.25, 4, 0.8]
 [sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_w6riw"]
 default_input_values = [1, 0.0, 2, 1.0, 3, 0.05, 4, 0.6]
 
+[sub_resource type="VisualShaderNodeBooleanParameter" id="VisualShaderNodeBooleanParameter_cycpp"]
+parameter_name = "SelectionVisible"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_m7iju"]
+parameter_name = "SelectionRadius"
+default_value_enabled = true
+default_value = 0.02
+
+[sub_resource type="VisualShaderNodeVec2Parameter" id="VisualShaderNodeVec2Parameter_vsbir"]
+parameter_name = "SelectionPosition"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeVectorDistance" id="VisualShaderNodeVectorDistance_qjjei"]
+output_port_for_preview = 0
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_542jw"]
+input_name = "uv"
+
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_1cwqd"]
 gradient = ExtResource("2_xo8ge")
 
@@ -71,6 +86,22 @@ gradient = ExtResource("2_xo8ge")
 output_port_for_preview = 0
 source = 5
 texture = SubResource("GradientTexture1D_1cwqd")
+
+[sub_resource type="VisualShaderNodeStep" id="VisualShaderNodeStep_b0v08"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jl4i7"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_xqjf5"]
+default_input_values = [0, 0.0, 1, 0.2]
+operator = 2
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_7i2om"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_swr46"]
+constant = Color(0.00839999, 0.50736, 0.84, 1)
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_v6n02"]
 default_input_values = [0, 0.0, 1, 256.0]
@@ -88,12 +119,6 @@ default_input_values = [1, Vector3(0, 0, 0), 2, 100.0, 3, Vector3(0, 0, 0)]
 initialized = true
 script = ExtResource("3_w76iu")
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_mchqa"]
-parameter_name = "ExtraNoiseLayer"
-hint = 1
-default_value_enabled = true
-default_value = 0.3
-
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_n2sr7"]
 input_name = "vertex"
 
@@ -105,6 +130,9 @@ uniform float Noise_Layer_2_Scale = 100;
 uniform float Noise_Layer_3_Scale = 1000;
 uniform float Noise_Layer_3_Distance = 750;
 uniform sampler2D ColorMap : filter_linear, repeat_disable;
+uniform vec2 SelectionPosition = vec2(0.000000, 0.000000);
+uniform float SelectionRadius = 0.01999999955297;
+uniform bool SelectionVisible;
 
 
 // PerlinNoise2D
@@ -295,6 +323,47 @@ void fragment() {
 	n_out3p0 = texture(ColorMap, vec2(n_out12p0));
 
 
+// ColorConstant:34
+	vec4 n_out34p0 = vec4(0.008400, 0.507360, 0.840000, 1.000000);
+
+
+// Vector2Parameter:27
+	vec2 n_out27p0 = SelectionPosition;
+
+
+// Input:29
+	vec2 n_out29p0 = UV;
+
+
+// Distance:28
+	float n_out28p0 = distance(n_out27p0, n_out29p0);
+
+
+// FloatParameter:26
+	float n_out26p0 = SelectionRadius;
+
+
+// Step:30
+	float n_out30p0 = step(n_out28p0, n_out26p0);
+
+
+// BooleanParameter:25
+	bool n_out25p0 = SelectionVisible;
+
+
+// FloatOp:31
+	float n_out31p0 = n_out30p0 * (n_out25p0 ? 1.0 : 0.0);
+
+
+// FloatOp:32
+	float n_in32p1 = 0.20000;
+	float n_out32p0 = n_out31p0 * n_in32p1;
+
+
+// Mix:33
+	vec3 n_out33p0 = mix(vec3(n_out3p0.xyz), vec3(n_out34p0.xyz), vec3(n_out32p0));
+
+
 	float n_out23p0;
 // Remap:23
 	float n_in23p1 = 0.00000;
@@ -322,20 +391,18 @@ void fragment() {
 
 
 // Output:0
-	ALBEDO = vec3(n_out3p0.xyz);
+	ALBEDO = n_out33p0;
 	ROUGHNESS = n_out23p0;
 	SPECULAR = n_out24p0;
 
 
 }
 "
-graph_offset = Vector2(-609.96, -183.584)
+graph_offset = Vector2(-1.96936, -226.165)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_n2sr7")
 nodes/vertex/2/position = Vector2(-60, 100)
 nodes/vertex/connections = PackedInt32Array(2, 0, 0, 6)
-nodes/fragment/0/position = Vector2(560, 60)
-nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_jm7gw")
-nodes/fragment/2/position = Vector2(-1165.99, 196.95)
+nodes/fragment/0/position = Vector2(1680, 280)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_o6kx7")
 nodes/fragment/3/position = Vector2(240, -100)
 nodes/fragment/4/node = SubResource("VisualShaderNodeFloatOp_v6n02")
@@ -346,8 +413,6 @@ nodes/fragment/6/node = SubResource("VisualShaderNodeInput_cvl0p")
 nodes/fragment/6/position = Vector2(-1165.99, 36.9497)
 nodes/fragment/8/node = SubResource("VisualShaderNodeCustom_4yr71")
 nodes/fragment/8/position = Vector2(-625.988, 216.95)
-nodes/fragment/9/node = SubResource("VisualShaderNodeFloatParameter_mchqa")
-nodes/fragment/9/position = Vector2(-1485.99, 356.95)
 nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_wnvm7")
 nodes/fragment/10/position = Vector2(-465.988, 176.95)
 nodes/fragment/11/node = SubResource("VisualShaderNodeFloatOp_s3nyb")
@@ -378,4 +443,24 @@ nodes/fragment/23/node = SubResource("VisualShaderNodeRemap_x1vo2")
 nodes/fragment/23/position = Vector2(240, 280)
 nodes/fragment/24/node = SubResource("VisualShaderNodeRemap_w6riw")
 nodes/fragment/24/position = Vector2(194.012, 476.95)
-nodes/fragment/connections = PackedInt32Array(5, 1, 4, 0, 6, 0, 5, 0, 12, 0, 3, 0, 13, 0, 8, 2, 4, 0, 11, 0, 8, 0, 10, 0, 10, 0, 11, 1, 16, 0, 15, 1, 15, 0, 12, 0, 11, 0, 15, 0, 18, 0, 17, 0, 19, 0, 16, 0, 17, 0, 20, 0, 20, 0, 16, 1, 14, 0, 21, 0, 14, 0, 21, 1, 21, 0, 19, 2, 22, 0, 3, 2, 12, 0, 23, 0, 12, 0, 24, 0, 3, 0, 0, 0, 23, 0, 0, 3, 24, 0, 0, 4)
+nodes/fragment/25/node = SubResource("VisualShaderNodeBooleanParameter_cycpp")
+nodes/fragment/25/position = Vector2(960, -80)
+nodes/fragment/26/node = SubResource("VisualShaderNodeFloatParameter_m7iju")
+nodes/fragment/26/position = Vector2(700, -140)
+nodes/fragment/27/node = SubResource("VisualShaderNodeVec2Parameter_vsbir")
+nodes/fragment/27/position = Vector2(500, -700)
+nodes/fragment/28/node = SubResource("VisualShaderNodeVectorDistance_qjjei")
+nodes/fragment/28/position = Vector2(800, -440)
+nodes/fragment/29/node = SubResource("VisualShaderNodeInput_542jw")
+nodes/fragment/29/position = Vector2(120, -520)
+nodes/fragment/30/node = SubResource("VisualShaderNodeStep_b0v08")
+nodes/fragment/30/position = Vector2(1120, -240)
+nodes/fragment/31/node = SubResource("VisualShaderNodeFloatOp_jl4i7")
+nodes/fragment/31/position = Vector2(1300, -80)
+nodes/fragment/32/node = SubResource("VisualShaderNodeFloatOp_xqjf5")
+nodes/fragment/32/position = Vector2(1480, 0)
+nodes/fragment/33/node = SubResource("VisualShaderNodeMix_7i2om")
+nodes/fragment/33/position = Vector2(1400, 160)
+nodes/fragment/34/node = SubResource("VisualShaderNodeColorConstant_swr46")
+nodes/fragment/34/position = Vector2(980, 220)
+nodes/fragment/connections = PackedInt32Array(5, 1, 4, 0, 6, 0, 5, 0, 12, 0, 3, 0, 13, 0, 8, 2, 4, 0, 11, 0, 8, 0, 10, 0, 10, 0, 11, 1, 16, 0, 15, 1, 15, 0, 12, 0, 11, 0, 15, 0, 18, 0, 17, 0, 19, 0, 16, 0, 17, 0, 20, 0, 20, 0, 16, 1, 14, 0, 21, 0, 14, 0, 21, 1, 21, 0, 19, 2, 22, 0, 3, 2, 12, 0, 23, 0, 12, 0, 24, 0, 23, 0, 0, 3, 24, 0, 0, 4, 27, 0, 28, 0, 29, 0, 28, 1, 28, 0, 30, 0, 26, 0, 30, 1, 30, 0, 31, 0, 25, 0, 31, 1, 31, 0, 32, 0, 3, 0, 33, 0, 33, 0, 0, 0, 32, 0, 33, 2, 34, 0, 33, 1)
