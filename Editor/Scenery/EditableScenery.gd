@@ -34,6 +34,9 @@ class VertexHeight:
 	func moveHeight(x: int, z: int, y: int):
 		vertices[z * size + x].y += y
 
+	func getHeight(x: int, z: int) -> float:
+		return vertices[z * size + x].y
+
 var vertexHeights: VertexHeight = VertexHeight.new()
 
 @export_range(2, 150, 1)
@@ -134,9 +137,33 @@ func moveVertex(indices: Vector2i, direction: int, radius: int) -> void:
 		return
 	direction /= abs(direction)
 
-	var verticesToMove: PackedVector2Array = []
+	var verticesToMove: PackedVector2Array = getVerticesInRadius(indices, radius)
+	
+	for vertex in verticesToMove:
+		vertexHeights.moveHeight(vertex.y, vertex.x, direction * PrefabConstants.GRID_SIZE)
 
-	print("Selection Size: ", (radius * 0.75))
+	setCollider()
+	setMesh()
+
+func flattenAtVertex(indices: Vector2i, flattenHeight: float, radius: int) -> void:
+	var verticesToMove: PackedVector2Array = getVerticesInRadius(indices, radius)
+	
+	for vertex in verticesToMove:
+		var direction = 0
+
+		if vertexHeights.getHeight(vertex.y, vertex.x) < flattenHeight:
+			direction = 1
+		elif vertexHeights.getHeight(vertex.y, vertex.x) > flattenHeight:
+			direction = -1
+		
+		vertexHeights.moveHeight(vertex.y, vertex.x, direction * PrefabConstants.GRID_SIZE)
+
+	setCollider()
+	setMesh()
+
+
+func getVerticesInRadius(indices: Vector2i, radius: int) -> PackedVector2Array:
+	var verticesToMove: PackedVector2Array = []
 
 	for i in range(indices.x - radius, indices.x + radius + 1):
 		for j in range(indices.y - radius, indices.y + radius + 1):
@@ -148,11 +175,7 @@ func moveVertex(indices: Vector2i, direction: int, radius: int) -> void:
 			# vertexHeights.moveHeight(indices.y, indices.x, direction * PrefabConstants.GRID_SIZE)
 			verticesToMove.push_back(Vector2(i, j))
 	
-	for vertex in verticesToMove:
-		vertexHeights.moveHeight(vertex.y, vertex.x, direction * PrefabConstants.GRID_SIZE)
-
-	setCollider()
-	setMesh()
+	return verticesToMove
 
 func setSelection(selected: bool, indices: Vector2i, radius: int) -> void:
 	var material: ShaderMaterial = groundMesh.material_override

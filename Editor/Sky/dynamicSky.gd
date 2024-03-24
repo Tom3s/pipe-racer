@@ -1,5 +1,6 @@
 @tool
 extends Node3D
+class_name DynamicSky
 
 ## This is not a simulation of the actual model but only a extremely simplified version.
 ## I don't know if I made some mistakes in my assumptions. I haven't found a similar solution anywhere.

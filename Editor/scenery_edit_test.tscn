@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cn8i70vd7ngwn"]
+[gd_scene load_steps=9 format=3 uid="uid://cn8i70vd7ngwn"]
 
 [ext_resource type="PackedScene" uid="uid://ytjub2heokq0" path="res://Editor/Scenery/EditableScenery.tscn" id="1_4oodl"]
 [ext_resource type="Script" path="res://Editor/scenery_edit_test.gd" id="1_55neb"]
 [ext_resource type="Script" path="res://EditorCamera.gd" id="2_liqn5"]
 [ext_resource type="Script" path="res://EditorInputHandler.gd" id="4_vmhp0"]
+[ext_resource type="Script" path="res://Editor/Scenery/SceneryEditorInputHandler.gd" id="5_dqno6"]
 [ext_resource type="PackedScene" uid="uid://bjjceeyq3csc3" path="res://Editor/Sky/DynamicSky.tscn" id="5_putmv"]
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="6_x38oy"]
+[ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="7_2m82m"]
 
 [node name="SceneryEditTest" type="Node3D"]
 script = ExtResource("1_55neb")
@@ -22,9 +24,19 @@ script = ExtResource("2_liqn5")
 unique_name_in_owner = true
 script = ExtResource("4_vmhp0")
 
+[node name="SceneryEditorInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_dqno6")
+
 [node name="DynamicSky" parent="." instance=ExtResource("5_putmv")]
+unique_name_in_owner = true
 
 [node name="Player" type="Node3D" parent="."]
 
 [node name="Car" parent="Player" instance=ExtResource("6_x38oy")]
+unique_name_in_owner = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SceneryEditorUI" parent="CanvasLayer" instance=ExtResource("7_2m82m")]
 unique_name_in_owner = true

@@ -31,6 +31,11 @@ RequestHandler="*res://Global/RequestHandler.gd"
 
 gdscript/warnings/onready_with_export=1
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/fontawesome/plugin.cfg")
