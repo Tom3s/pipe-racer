@@ -37,6 +37,26 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 alignment = 1
 
+[node name="HBoxContainer2" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Ground Size"
+horizontal_alignment = 1
+
+[node name="SizeSpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 20.0
+max_value = 256.0
+value = 64.0
+alignment = 1
+
+[node name="VSeparator4" type="VSeparator" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
 [node name="NormalModeButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -79,7 +99,7 @@ alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Brush Size: "
+text = "Brush Size"
 
 [node name="BrushSizeSpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -102,19 +122,23 @@ tick_count = 15
 [node name="VSeparator3" type="VSeparator" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
-text = "Time of day:"
+text = "Time of day"
 
-[node name="TimeSpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="TimeSpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 24.0
@@ -122,7 +146,7 @@ step = 0.1
 value = 10.0
 alignment = 1
 
-[node name="TimeSlider" type="HSlider" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="TimeSlider" type="HSlider" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -131,3 +155,61 @@ max_value = 24.0
 step = 0.1
 value = 10.0
 tick_count = 240
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+layout_mode = 2
+text = "Cloudiness"
+
+[node name="CloudSpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.4
+alignment = 1
+
+[node name="CloudSlider" type="HSlider" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.05
+value = 0.4
+tick_count = 20
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+text = "Gloomyness"
+
+[node name="GloomySpinbox" type="SpinBox" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer4/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+alignment = 1
+
+[node name="GloomySlider" type="HSlider" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.05
+tick_count = 20

@@ -82,6 +82,14 @@ func _ready():
 		dynamicSky.day_time = time
 	)
 
+	sceneryEditorUI.cloudChanged.connect(func(cloud: float):
+		dynamicSky.cloudiness = cloud
+	)
+
+	sceneryEditorUI.gloomyChanged.connect(func(gloomy: float):
+		dynamicSky.gloomyness = gloomy
+	)
+
 	sceneryEditorUI.brushSizeChanged.connect(func(size: int):
 		selectionSize = size
 		if lastVertexIndex != Vector2i(-1, -1):
@@ -94,6 +102,10 @@ func _ready():
 
 	sceneryEditorUI.modeChanged.connect(func(_mode: int):
 		mode = _mode
+	)
+
+	sceneryEditorUI.groundSizeChanged.connect(func(size: float):
+		scenery.groundSize = size
 	)
 
 
