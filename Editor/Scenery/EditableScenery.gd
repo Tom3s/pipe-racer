@@ -17,8 +17,6 @@ class VertexHeight:
 				var x = i * PrefabConstants.TRACK_WIDTH - size * PrefabConstants.TRACK_WIDTH / 2
 				var z = j * PrefabConstants.TRACK_WIDTH - size * PrefabConstants.TRACK_WIDTH / 2
 
-				# TODO: remove in production
-				# var y = randi_range(0, 30) * PrefabConstants.GRID_SIZE
 				var y = 0
 
 				vertices[i * size + j] = Vector3(x, y, z)

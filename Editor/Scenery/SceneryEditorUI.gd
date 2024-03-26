@@ -43,12 +43,18 @@ func _ready():
 		modeChanged.emit(NORMAL_MODE)
 		flattenModeButton.button_pressed = false
 		normalModeButton.button_pressed = true
+
+		raiseButton.visible = true
+		lowerButton.visible = true
 	)
 
 	flattenModeButton.pressed.connect(func():
 		modeChanged.emit(FLATTEN_MODE)
 		normalModeButton.button_pressed = false
 		flattenModeButton.button_pressed = true
+
+		raiseButton.visible = false
+		lowerButton.visible = false
 	)
 
 	raiseButton.pressed.connect(func():
