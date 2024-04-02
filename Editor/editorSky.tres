@@ -1,0 +1,66 @@
+[gd_resource type="VisualShader" load_steps=9 format=3 uid="uid://b53tmtekf0atq"]
+
+[ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="1_8bjxk"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_yawkn"]
+input_name = "light0_direction"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_tase1"]
+parameter_name = "sun_texture"
+texture_repeat = 2
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_oky8l"]
+output_port_for_preview = 0
+source = 5
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_ixlrk"]
+default_input_values = [1, Vector3(0, 0, 0), 2, Vector3(15, 15, 0), 3, Vector3(0.5, 0.5, 0), 4, 0.0, 5, Vector3(0.5, 0.5, 0)]
+initialized = true
+script = ExtResource("1_8bjxk")
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_aqo1o"]
+parameter_name = "time_of_day"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeVectorDistance" id="VisualShaderNodeVectorDistance_hjau6"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_kghkb"]
+input_name = "eyedir"
+
+[resource]
+code = "shader_type sky;
+
+
+
+void sky() {
+// Input:2
+	vec3 n_out2p0 = LIGHT0_DIRECTION;
+
+
+// Output:0
+	COLOR = n_out2p0;
+
+
+}
+"
+mode = 3
+flags/use_half_res_pass = false
+flags/use_quarter_res_pass = false
+flags/disable_fog = false
+flags/use_debanding = false
+nodes/sky/0/position = Vector2(640, 160)
+nodes/sky/2/node = SubResource("VisualShaderNodeInput_yawkn")
+nodes/sky/2/position = Vector2(-520, -80)
+nodes/sky/4/node = SubResource("VisualShaderNodeTexture2DParameter_tase1")
+nodes/sky/4/position = Vector2(-240, 280)
+nodes/sky/5/node = SubResource("VisualShaderNodeTexture_oky8l")
+nodes/sky/5/position = Vector2(300, 200)
+nodes/sky/6/node = SubResource("VisualShaderNodeCustom_ixlrk")
+nodes/sky/6/position = Vector2(-400, 100)
+nodes/sky/7/node = SubResource("VisualShaderNodeFloatParameter_aqo1o")
+nodes/sky/7/position = Vector2(-820, 20)
+nodes/sky/8/node = SubResource("VisualShaderNodeVectorDistance_hjau6")
+nodes/sky/8/position = Vector2(200, -100)
+nodes/sky/9/node = SubResource("VisualShaderNodeInput_kghkb")
+nodes/sky/9/position = Vector2(-200, 40)
+nodes/sky/connections = PackedInt32Array(4, 0, 5, 2, 6, 0, 5, 0, 2, 0, 0, 0, 2, 0, 8, 0, 9, 0, 8, 1)

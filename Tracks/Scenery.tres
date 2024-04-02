@@ -1,10 +1,10 @@
-[gd_resource type="VisualShader" load_steps=46 format=3 uid="uid://mu6ff6lb7ykw"]
+[gd_resource type="VisualShader" load_steps=45 format=3 uid="uid://mu6ff6lb7ykw"]
 
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/perlin2d.gd" id="1_vheb3"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/worley2d.gd" id="1_vnuwk"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/generic2d_fractal.gd" id="2_28k7d"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/generateCircle.gd" id="2_bdkfy"]
-[ext_resource type="Gradient" path="res://Tracks/MountainGradient.tres" id="3_vtqan"]
+[ext_resource type="Gradient" uid="uid://caro1box0tjw4" path="res://Tracks/MountainGradient.tres" id="3_vtqan"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7luys"]
 input_name = "color"
@@ -16,12 +16,6 @@ parameter_name = "Terrain_Height"
 default_input_values = [1, Vector3(0, 0, 0), 2, 100.0, 3, Vector3(0, 0, 0)]
 initialized = true
 script = ExtResource("1_vheb3")
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_3iwjo"]
-parameter_name = "ExtraNoiseLayer"
-hint = 1
-default_value_enabled = true
-default_value = 0.3
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_0ao1c"]
 default_input_values = [0, 0.0, 1, 0.1]
@@ -517,7 +511,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(388.159, -154.789)
 nodes/vertex/0/position = Vector2(900, 100)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_6ed0o")
 nodes/vertex/2/position = Vector2(-480, 40)
@@ -558,11 +551,11 @@ nodes/vertex/18/expression = "float pi = 3.141592;
 //value = (cos(x * pi * 2.0) + 1.0) / 2.0;
 value = cos(x * pi);"
 nodes/vertex/connections = PackedInt32Array(2, 0, 3, 0, 5, 0, 4, 2, 4, 0, 6, 0, 7, 0, 6, 1, 8, 0, 3, 1, 10, 0, 11, 1, 6, 0, 11, 0, 11, 0, 8, 1, 12, 0, 10, 0, 13, 0, 12, 1, 3, 0, 0, 0, 3, 0, 0, 6, 15, 0, 14, 0, 14, 0, 18, 0, 18, 0, 17, 0, 17, 0, 12, 0)
-nodes/fragment/0/position = Vector2(1120, -20)
+nodes/fragment/0/position = Vector2(1680, -20)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatParameter_slii5")
 nodes/fragment/3/position = Vector2(-580, 140)
 nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_eiqgy")
-nodes/fragment/4/position = Vector2(760, -100)
+nodes/fragment/4/position = Vector2(940, -80)
 nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_pkb2f")
 nodes/fragment/7/position = Vector2(60, -20)
 nodes/fragment/9/node = SubResource("VisualShaderNodeVectorDecompose_u1h24")
@@ -573,8 +566,6 @@ nodes/fragment/11/node = SubResource("VisualShaderNodeParameterRef_vqttf")
 nodes/fragment/11/position = Vector2(-580, 800)
 nodes/fragment/13/node = SubResource("VisualShaderNodeCustom_g7yek")
 nodes/fragment/13/position = Vector2(-40, 160)
-nodes/fragment/15/node = SubResource("VisualShaderNodeFloatParameter_3iwjo")
-nodes/fragment/15/position = Vector2(-900, 300)
 nodes/fragment/16/node = SubResource("VisualShaderNodeFloatOp_0ao1c")
 nodes/fragment/16/position = Vector2(120, 120)
 nodes/fragment/17/node = SubResource("VisualShaderNodeFloatOp_ej2tk")
