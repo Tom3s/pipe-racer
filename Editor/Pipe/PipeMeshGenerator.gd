@@ -45,13 +45,7 @@ class VertexCollection:
 		for i in vertices.size():
 			var vertex = vertices[i]
 
-			var vertex3D = Vector3(vertex.x, vertex.y, 0)
-
-			# var currentBasis = lerp(startBasis, endBasis, t)
-
-			vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
-
-			vertex3D = currentBasis * vertex3D
+			var vertex3D = VertexCollection.getRotatedVertex(vertex, currentBasis)
 
 			result.push_back(vertex3D + offset)
 
@@ -71,10 +65,7 @@ class VertexCollection:
 		)
 
 		var firstVertex = vertices[vertices.size() - 1]
-		var firstVertex3D = Vector3(firstVertex.x, firstVertex.y, 0)
-		
-		firstVertex3D = firstVertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
-		firstVertex3D = currentBasis * firstVertex3D
+		var firstVertex3D = VertexCollection.getRotatedVertex(firstVertex, currentBasis)
 
 		result.push_back(firstVertex3D + offset)
 
@@ -83,75 +74,125 @@ class VertexCollection:
 
 			vertex = vertex.normalized() * (vertex.length() + PrefabConstants.GRID_SIZE)
 
-			var vertex3D = Vector3(vertex.x, vertex.y, 0)
-
-			# var currentBasis = lerp(startBasis, endBasis, t)
-
-			vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
-
-			vertex3D = currentBasis * vertex3D
+			var vertex3D = VertexCollection.getRotatedVertex(vertex, currentBasis)
 
 			result.push_back(vertex3D + offset)
 			if i == 0 || i == vertices.size() - 1:
 				result.push_back(vertex3D + offset)
 		
 		var lastVertex = vertices[0]
-		var lastVertex3D = Vector3(lastVertex.x, lastVertex.y, 0)
-
-		lastVertex3D = lastVertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
-		lastVertex3D = currentBasis * lastVertex3D
+		var lastVertex3D = VertexCollection.getRotatedVertex(lastVertex, currentBasis)
 
 		result.push_back(lastVertex3D + offset)
 
 		return result
 
+	static func getRotatedVertex(
+		vertex: Vector2,
+		basis: Basis
+	) -> Vector3:
+		var vertex3D = Vector3(vertex.x, vertex.y, 0)
+
+		vertex3D = vertex3D.rotated(Vector3.BACK, basis.get_euler().z)
+
+		vertex3D = basis * vertex3D
+
+		return vertex3D
+
 class ProceduralMesh:
-	var meshData = []
-	var vertices: PackedVector3Array = []
+	# var meshData = []
+	# var vertices: PackedVector3Array = []
 
-	func _init():
-		meshData.resize(ArrayMesh.ARRAY_MAX)
+	# func reset():
+		# meshData.resize(ArrayMesh.ARRAY_MAX)
 	
-	func addMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
+	func addMeshTo(
+		node: MeshInstance3D, 
+		vertices: PackedVector3Array,
+		widthSegments: int,
+		lengthSegments: int,
+		lengthMultiplier: float = 1,
+		clockwise: bool = true,
+		clear: bool = true
+	) -> void:
+		var meshData = []
+		meshData.resize(ArrayMesh.ARRAY_MAX)
 		meshData[ArrayMesh.ARRAY_VERTEX] = vertices
-		var indices := getVertexIndexArray(lengthMultiplier)
+		var indices := getVertexIndexArray(
+			widthSegments,
+			lengthSegments,
+			lengthMultiplier,
+			clockwise
+		)
 		meshData[ArrayMesh.ARRAY_INDEX] = indices
-		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier)
+		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(
+			widthSegments,
+			lengthSegments,
+			lengthMultiplier
+		)
 		meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
 
-		node.mesh = ArrayMesh.new()
+		if clear:
+			node.mesh = ArrayMesh.new()
 		node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 
-	func addOutsideMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
-		meshData[ArrayMesh.ARRAY_VERTEX] = vertices
-		var indices := getVertexIndexArray(lengthMultiplier, 4)
-		meshData[ArrayMesh.ARRAY_INDEX] = indices
-		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier, 4)
-		meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
+	# func addOutsideMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
+	# 	meshData[ArrayMesh.ARRAY_VERTEX] = vertices
+	# 	var indices := getVertexIndexArray(lengthMultiplier, 4)
+	# 	meshData[ArrayMesh.ARRAY_INDEX] = indices
+	# 	meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier, 4)
+	# 	meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
 
-		node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
+	# 	node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 
-	func getVertexIndexArray(lengthMultiplier: float = 1, extraWidth: int = 0) -> PackedInt32Array:
+	# func addCapMesh(vertices: PackedVector3Array):
+	# 	var meshData = []
+	# 	meshData.resize(ArrayMesh.ARRAY_MAX)
+	# 	meshData[ArrayMesh.ARRAY_VERTEX] = vertices
+		
+
+	func getVertexIndexArray(
+		widthSegments: int,
+		lengthSegments: int,
+		lengthMultiplier: float = 1,
+		clockwise: bool = true
+	) -> PackedInt32Array:
 		var indexList: PackedInt32Array = []
-		for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1:
-			for j in (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) - 1:
-				var index = i * (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) + j
-				indexList.push_back(index)
-				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth)))
-				indexList.push_back(index + 1)
+		if clockwise:
+			for i in (lengthSegments * lengthMultiplier) - 1:
+				for j in widthSegments - 1:
+					var index = i * widthSegments + j
+					indexList.push_back(index)
+					indexList.push_back(index + (widthSegments))
+					indexList.push_back(index + 1)
 
-				indexList.push_back(index + 1)
-				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth))) 
-				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth)) + 1)
+					indexList.push_back(index + 1)
+					indexList.push_back(index + (widthSegments)) 
+					indexList.push_back(index + (widthSegments) + 1)
+		else:
+			for i in (lengthSegments * lengthMultiplier) - 1:
+				for j in widthSegments - 1:
+					var index = i * widthSegments + j
+					indexList.push_back(index)
+					indexList.push_back(index + 1)
+					indexList.push_back(index + (widthSegments))
+
+					indexList.push_back(index + 1)
+					indexList.push_back(index + (widthSegments) + 1)
+					indexList.push_back(index + (widthSegments)) 
 		
 		return indexList
 
-	func getUVArray(lengthMultiplier: float = 1, extraWidth: int = 0) -> PackedVector2Array:
+	func getUVArray(
+		widthSegments: int,
+		lengthSegments: int,
+		lengthMultiplier: float = 1
+	) -> PackedVector2Array:
 		var uvList: PackedVector2Array = []
-		for j in PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier:
-			for i in (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth):
-				var v = float(i) / ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) - 1)
-				var u = float(j) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1) * lengthMultiplier
+		for j in lengthSegments * lengthMultiplier:
+			for i in widthSegments:
+				var v = float(i) / (widthSegments - 1)
+				var u = float(j) / ((lengthSegments * lengthMultiplier) - 1) * lengthMultiplier
 
 				uvList.push_back(Vector2(v, u))
 
@@ -246,9 +287,15 @@ func refreshMesh() -> void:
 		)
 		vertexList.append_array(interpolatedVertices)
 	
-	var mesh = ProceduralMesh.new()
-	mesh.vertices = vertexList
-	mesh.addMeshTo(%Mesh, lengthMultiplier)
+	var mesh: ProceduralMesh = ProceduralMesh.new()
+
+	mesh.addMeshTo(
+		%Mesh,
+		vertexList,
+		PrefabConstants.PIPE_WIDTH_SEGMENTS,
+		PrefabConstants.PIPE_LENGTH_SEGMENTS,
+		lengthMultiplier
+	) 
 
 	# Outside part
 
@@ -264,10 +311,50 @@ func refreshMesh() -> void:
 		)
 		vertexList.append_array(interpolatedVertices)
 
-	mesh.vertices = vertexList
-	mesh.addOutsideMeshTo(%Mesh, lengthMultiplier)
+	mesh.addMeshTo(
+		%Mesh,
+		vertexList,
+		PrefabConstants.PIPE_WIDTH_SEGMENTS + 4,
+		PrefabConstants.PIPE_LENGTH_SEGMENTS,
+		lengthMultiplier,
+		true,
+		false
+	)
 
-		
+	if startNode.cap:
+		var startCapVertices = startNode.getCapVertices()
+		var vertices3D: PackedVector3Array = []
+
+		for vertex in startCapVertices:
+			vertices3D.push_back(VertexCollection.getRotatedVertex(vertex, startNode.basis) + startNode.global_position)
+
+		mesh.addMeshTo(
+			%Mesh,
+			vertices3D,
+			PrefabConstants.PIPE_WIDTH_SEGMENTS,
+			2,
+			1,
+			false,
+			false
+		)
+	
+	if endNode.cap:
+		var endCapVertices = endNode.getCapVertices()
+		var vertices3D: PackedVector3Array = []
+
+		for vertex in endCapVertices:
+			vertices3D.push_back(VertexCollection.getRotatedVertex(vertex, endNode.basis) + endNode.global_position)
+
+		mesh.addMeshTo(
+			%Mesh,
+			vertices3D,
+			PrefabConstants.PIPE_WIDTH_SEGMENTS,
+			2,
+			1,
+			true,
+			false
+		)
+
 func getCurveLerp(
 	start: Vector3, 
 	startTangent: Vector3, 

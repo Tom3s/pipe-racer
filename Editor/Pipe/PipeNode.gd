@@ -62,9 +62,11 @@ func getCapVertices() -> PackedVector2Array:
 		getCircleVertices(
 			global_rotation.z,
 			profile,
-			radius
+			radius + PrefabConstants.GRID_SIZE
 		)
 	)
+
+	vertices.reverse()
 
 	return vertices
 
