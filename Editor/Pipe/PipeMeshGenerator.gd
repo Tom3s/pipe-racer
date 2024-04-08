@@ -43,10 +43,14 @@ class VertexCollection:
 
 
 			var vertex3D = Vector3(vertex.x, vertex.y, 0)
+			# var vertex3D = Vector3(0, vertex.y, vertex.x)
 			
 			var currentBasis = lerp(startBasis, endBasis, t)
 
-			vertex3D = vertex3D * currentBasis
+			# vertex3D = vertex3D * currentBasis
+			vertex3D = currentBasis * vertex3D
+
+			# vertex3D = vertex3D.rotated(Vector3.UP, PI / 4)
 
 			result.push_back(vertex3D + offset)
 
@@ -71,24 +75,24 @@ class ProceduralMesh:
 
 	func getVertexIndexArray() -> PackedInt32Array:
 		var indexList: PackedInt32Array = []
-		for i in PIPE_LENGTH_SEGMENTS - 1:
-			for j in PIPE_WIDTH_SEGMENTS - 1:
-				var index = i * PIPE_WIDTH_SEGMENTS + j
+		for i in PrefabConstants.PIPE_LENGTH_SEGMENTS - 1:
+			for j in PrefabConstants.PIPE_WIDTH_SEGMENTS - 1:
+				var index = i * PrefabConstants.PIPE_WIDTH_SEGMENTS + j
 				indexList.push_back(index)
-				indexList.push_back(index + PIPE_LENGTH_SEGMENTS)
+				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS)
 				indexList.push_back(index + 1)
 
 				indexList.push_back(index + 1)
-				indexList.push_back(index + PIPE_LENGTH_SEGMENTS) 
-				indexList.push_back(index + PIPE_LENGTH_SEGMENTS + 1)
+				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS) 
+				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS + 1)
 		
 		return indexList
 
 	func getUVArray() -> PackedVector2Array:
 		var uvList: PackedVector2Array = []
-		for i in PIPE_WIDTH_SEGMENTS:
-			for j in PIPE_LENGTH_SEGMENTS:
-				uvList.push_back(Vector2(float(i) / (PIPE_WIDTH_SEGMENTS - 1), float(j) / (PIPE_LENGTH_SEGMENTS - 1)))
+		for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
+			for j in PrefabConstants.PIPE_LENGTH_SEGMENTS:
+				uvList.push_back(Vector2(float(i) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1), float(j) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)))
 		
 		return uvList
 
@@ -108,42 +112,41 @@ class ProceduralMesh:
 
 		return normalArray
 
-const PIPE_WIDTH_SEGMENTS = 17
-const PIPE_LENGTH_SEGMENTS = 17
+@onready var startNode: PipeNode = %Start
+@onready var endNode: PipeNode = %End
 
 func _ready():
-	var circleVertices: PackedVector2Array = []
 
-	for i in PIPE_WIDTH_SEGMENTS:
-		var angle = i * 2 * PI / (PIPE_WIDTH_SEGMENTS - 1)
-		var x = cos(angle)
-		var y = sin(angle)
-		circleVertices.push_back(Vector2(x, y))
-	
-	var circleVertices2: PackedVector2Array = []
+	# startNode.positionChanged.connect(refreshMesh)
+	# endNode.positionChanged.connect(refreshMesh)
+	# startNode.rotationChanged.connect(refreshMesh)
+	# endNode.rotationChanged.connect(refreshMesh)
+	startNode.dataChanged.connect(refreshMesh)
+	endNode.dataChanged.connect(refreshMesh)
 
-	for i in PIPE_WIDTH_SEGMENTS:
-		var angle = (i * PI / 2 / (PIPE_WIDTH_SEGMENTS - 1)) + (PI * 0.99)
-		var x = cos(angle)
-		var y = sin(angle)
-		circleVertices2.push_back(Vector2(x, y))
 
+
+func refreshMesh() -> void:
 	var vertexCollection = VertexCollection.new()\
-		.withStart(circleVertices, Basis(Vector3(1,0,0), Vector3.UP, Vector3(0,0,1)))\
-		.withEnd(circleVertices2, Basis(Vector3(0,0,1), Vector3.UP, Vector3(-1,0,0)))
-
+		.withStart(startNode.getCircleVertices(), startNode.basis)\
+		.withEnd(endNode.getCircleVertices(), endNode.basis)
+		# .withStart(startNode.getCircleVertices(), Basis(Vector3(1,0,0), Vector3.UP, Vector3(0,0,1)))\
+		# .withEnd(endNode.getCircleVertices(), Basis(Vector3(0,0,1), Vector3.UP, Vector3(-1,0,0)))
+	
 	var vertexList: PackedVector3Array = []
 
-	for i in PIPE_LENGTH_SEGMENTS:
-		var t = float(i) / (PIPE_LENGTH_SEGMENTS - 1)
+	for i in PrefabConstants.PIPE_LENGTH_SEGMENTS:
+		var t = float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
 			getCircleLerp(
-				Vector3(0, 0, 0),
-				Vector3(5, 0, 5),
-				Vector3(0, 0, 1),
-				Vector3(1, 0, 0),
+				startNode.global_position,
+				endNode.global_position,
+				# Vector3(0, 0, 1),
+				# Vector3(1, 0, 0),
+				startNode.basis.z,
+				endNode.basis.z,
 				t
 			)
 		)
@@ -154,8 +157,7 @@ func _ready():
 	mesh.vertices = vertexList
 	mesh.addMeshTo(%Mesh)
 
-
-
+		
 
 func getCircleLerp(
 	start: Vector3, 
@@ -197,4 +199,6 @@ func getCircleLerp(
 	print("T: ", t, " - lerpPoint: ", lerpPoint)
 
 	return Vector3(lerpPoint.x, 0, lerpPoint.y)
+
+
 
