@@ -3,49 +3,87 @@ extends Node3D
 class_name PipeMeshGenerator
 
 class VertexCollection:
-	var startVertices: PackedVector2Array = []
-	var endVertices: PackedVector2Array = []
+	# var startVertices: PackedVector2Array = []
+	# var endVertices: PackedVector2Array = []
+
+	var startNode: PipeNode = null
+	var endNode: PipeNode = null
 
 	var startBasis: Basis = Basis()
 	var endBasis: Basis = Basis()
 
 
 	func withStart(
-		vertices: PackedVector2Array,
+		node: PipeNode,
 		basis: Basis
 	) -> VertexCollection:
-		startVertices = []
-		startVertices.append_array(vertices)
+		startNode = node
 		startBasis = basis
 		return self
 	
 	func withEnd(
-		vertices: PackedVector2Array,
+		node: PipeNode,
 		basis: Basis
 	) -> VertexCollection:
-		endVertices = []
-		endVertices.append_array(vertices)
+		endNode = node
 		endBasis = basis
 		return self
 	
 	func getInterpolation(t: float, offset: Vector3 = Vector3.ZERO) -> PackedVector3Array:
+		# var result: PackedVector3Array = []
+
+		# for i in startVertices.size():
+		# 	# var start: Vector2 = startVertices[i]
+		# 	# var end: Vector2 = endVertices[i]
+
+		# 	# var vertex = lerp(start, end, t) # * lerp(start.length(), end.length(), t)
+			
+
+		# 	# var angle: float = start.angle_to(end) / 2
+		# 	# if clockwise:
+		# 	# 	angle = end.angle_to(start) / 2
+		# 	# var clockwise: bool = startBasis.get_euler().z < endBasis.get_euler().z
+		# 	# var angle = lerp(start.angle() + PI, end.angle() + PI, t) + PI
+
+		# 	# if clockwise:
+		# 	# 	angle = lerp(end.angle() + PI, start.angle() + PI, 1 - t) - PI
+
+		# 	var angle = lerp(startBasis.get_euler().z, endBasis.get_euler().z, t)
+
+		# 	var vertex = Vector2.RIGHT.rotated(angle) * lerp(start.length(), end.length(), t)
+
+
+
+		# 	var vertex3D = Vector3(vertex.x, vertex.y, 0)
+		# 	# var vertex3D = Vector3(0, vertex.y, vertex.x)
+			
+		# 	var currentBasis = lerp(startBasis, endBasis, t)
+
+		# 	vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
+
+		# 	vertex3D = currentBasis * vertex3D
+
+		# 	result.push_back(vertex3D + offset)
+
+		# return result
+
 		var result: PackedVector3Array = []
 
-		for i in startVertices.size():
-			var start: Vector2 = startVertices[i]
-			var end: Vector2 = endVertices[i]
+		var currentBasis = startBasis.slerp(endBasis, t)
 
-			# var vertex = lerp(start, end, t) # * lerp(start.length(), end.length(), t)
+		var vertices := PipeNode.getCircleVertices(
+			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
+			currentBasis.get_euler().z,
+			lerp(startNode.profile, endNode.profile, t),
+			lerp(startNode.radius, endNode.radius, t)
+		)
 
-			var angle = lerp_angle(start.angle(), end.angle(), t)
-			var vertex = Vector2.RIGHT.rotated(angle) * lerp(start.length(), end.length(), t)
-
-
+		for i in vertices.size():
+			var vertex = vertices[i]
 
 			var vertex3D = Vector3(vertex.x, vertex.y, 0)
-			# var vertex3D = Vector3(0, vertex.y, vertex.x)
-			
-			var currentBasis = lerp(startBasis, endBasis, t)
+
+			# var currentBasis = lerp(startBasis, endBasis, t)
 
 			vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
 
@@ -65,7 +103,6 @@ class ProceduralMesh:
 	func addMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
 		meshData[ArrayMesh.ARRAY_VERTEX] = vertices
 		var indices := getVertexIndexArray(lengthMultiplier)
-		# print("Vertices.length: ", vertices.size())
 		meshData[ArrayMesh.ARRAY_INDEX] = indices
 		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier)
 		meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
@@ -100,9 +137,6 @@ class ProceduralMesh:
 			for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
 				var v = float(i) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1)
 				var u = float(j) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1) * lengthMultiplier
-				if u > 1:
-					u = u - floorf(u)
-				print("U: ", u)
 
 				uvList.push_back(Vector2(v, u))
 
@@ -140,8 +174,8 @@ var lengthMultiplier: float = 1
 
 func refreshMesh() -> void:
 	var vertexCollection = VertexCollection.new()\
-		.withStart(startNode.getCircleVertices(), startNode.basis)\
-		.withEnd(endNode.getCircleVertices(), endNode.basis)
+		.withStart(startNode, startNode.basis)\
+		.withEnd(endNode, endNode.basis)
 		# .withStart(startNode.getCircleVertices(), Basis(Vector3(1,0,0), Vector3.UP, Vector3(0,0,1)))\
 		# .withEnd(endNode.getCircleVertices(), Basis(Vector3(0,0,1), Vector3.UP, Vector3(-1,0,0)))
 	
@@ -150,7 +184,6 @@ func refreshMesh() -> void:
 	var curveOffsets: PackedVector3Array = []
 
 	var distance = startNode.global_position.distance_to(endNode.global_position)
-	# print("Distance: ", distance)
 	# if distance > PrefabConstants.TRACK_WIDTH:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
@@ -187,12 +220,10 @@ func refreshMesh() -> void:
 				t
 			)
 		)
-		# print("Interpolated vertices length: ", interpolatedVertices.size())
 		vertexList.append_array(interpolatedVertices)
 	
 	var mesh = ProceduralMesh.new()
 	mesh.vertices = vertexList
-	# print("lengthMultiplier: ", lengthMultiplier)
 	mesh.addMeshTo(%Mesh, lengthMultiplier)
 
 		
@@ -216,7 +247,6 @@ func getCurveLerp(
 	)
 
 	if intersection == null:
-		# print("No intersection found")
 
 		var endPerpenicular = Vector2(-endTangent2D.y, endTangent2D.x)
 		intersection = Geometry2D.line_intersects_line(
@@ -271,7 +301,6 @@ func getHeightLerp(
 	)
 
 	if intersection == null:
-		# print("No intersection found")
 		var endPerpenicular = Vector2(-endTangent.y, endTangent.x)
 		intersection = Geometry2D.line_intersects_line(
 			startPos, 
@@ -299,7 +328,6 @@ func getHeightLerp(
 		var p3: Vector2 = lerp(p1, p2, t)
 
 		if intersection.x < 0 or intersection.x > length:
-			# print("Intersection out of bounds")
 			return Vector3(0, p3.y, 0)
 		
 		var expectedPoint: float = length * t
@@ -315,7 +343,6 @@ func getHeightLerp(
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
 
-		# print("Height: ", p3)
 		return Vector3(0, p3.y, 0)
 
 

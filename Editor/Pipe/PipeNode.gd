@@ -32,14 +32,38 @@ func _physics_process(_delta):
 		dataChanged.emit()
 	oldRot = global_rotation
 
-func getCircleVertices() -> PackedVector2Array:
+func getStartCircleVertices() -> PackedVector2Array:
 	var vertices: PackedVector2Array = []
 
 	for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
-		var angle = i * profile / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1) - global_rotation.z + PI
-		var x = cos(angle) * radius
-		var y = sin(angle) * radius
+		var angle = (PrefabConstants.PIPE_WIDTH_SEGMENTS - i - 1) \
+			* profile \
+			/ (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1) \
+			- global_rotation.z \
+			- PI / 2 \
+			- profile / 2
+		var x = cos(angle) #* radius
+		var y = sin(angle) #* radius
 		vertices.push_back(Vector2(x, y) * radius)
 
 	return vertices
 		
+static func getCircleVertices(
+	rotation: float,
+	profile: float,
+	radius: float
+) -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+
+	for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
+		var angle = (PrefabConstants.PIPE_WIDTH_SEGMENTS - i - 1) \
+			* profile \
+			/ (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1) \
+			- rotation \
+			- PI / 2 \
+			- profile / 2
+		var x = cos(angle) #* radius
+		var y = sin(angle) #* radius
+		vertices.push_back(Vector2(x, y) * radius)
+
+	return vertices
