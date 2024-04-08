@@ -91,7 +91,7 @@ class ProceduralMesh:
 		var uvList: PackedVector2Array = []
 		for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
 			for j in PrefabConstants.PIPE_LENGTH_SEGMENTS:
-				uvList.push_back(Vector2(float(i) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1), float(j) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)))
+				uvList.push_back(Vector2(float(j) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1), float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)))
 		
 		return uvList
 
@@ -134,16 +134,37 @@ func refreshMesh() -> void:
 	
 	var vertexList: PackedVector3Array = []
 
+	var curveOffsets: PackedVector3Array = []
+	var curveLength: float = 0
+
 	for i in PrefabConstants.PIPE_LENGTH_SEGMENTS:
 		var t = float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)
-		
-		var interpolatedVertices = vertexCollection.getInterpolation(
-			t, 
+
+		curveOffsets.push_back(
 			getCurveLerp(
 				startNode.global_position,
 				startNode.basis.z,
 				endNode.global_position,
 				endNode.basis.z,
+				t
+			)
+		)
+
+		if i != 0:
+			curveLength += curveOffsets[i].distance_to(curveOffsets[i - 1])
+
+	for i in PrefabConstants.PIPE_LENGTH_SEGMENTS:
+		var t = float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)
+		
+		var interpolatedVertices = vertexCollection.getInterpolation(
+			t, 
+			curveOffsets[i] + 
+			getHeightLerp(
+				curveLength,
+				startNode.global_position.y,
+				startNode.global_rotation.x,
+				endNode.global_position.y,
+				endNode.global_rotation.x,
 				t
 			)
 		)
@@ -155,48 +176,6 @@ func refreshMesh() -> void:
 	mesh.addMeshTo(%Mesh)
 
 		
-
-func getCircleLerp(
-	start: Vector3, 
-	end: Vector3, 
-	startTangent: Vector3, 
-	endTangent: Vector3,
-	t: float
-) -> Vector3:
-	var start2D = Vector2(start.x, start.z)
-	var end2D = Vector2(end.x, end.z)
-	var startTangent2D = Vector2(startTangent.x, startTangent.z).normalized()
-	var endTangent2D = Vector2(endTangent.x, endTangent.z).normalized()
-
-	# Calculate the center of the circle
-	var perpendicularStart = Vector2(-startTangent2D.y, startTangent2D.x)
-	var perpendicularEnd = Vector2(-endTangent2D.y, endTangent2D.x)
-	var center2D = Geometry2D.line_intersects_line(
-		start2D, 
-		perpendicularStart, 
-		end2D,
-		perpendicularEnd
-	)
-	if center2D == null:
-		print("No intersection found")
-		return Vector3.ZERO
-	# Calculate the radius of the circle
-	var radius = center2D.distance_to(start2D)
-
-	# Calculate the angles for the start, end and the interpolated point
-	var startAngle = (start2D - center2D).angle()
-	var endAngle = (end2D - center2D).angle()
-	var lerpAngle = lerp_angle(startAngle, endAngle, t)
-	print("T: ", t, " - lerpAngle: ", lerpAngle)
-
-
-	# Calculate the x and y (in this case z) coordinates of the interpolated point
-	var lerpPoint = Vector2(cos(lerpAngle), sin(lerpAngle)) * radius + center2D
-
-	print("T: ", t, " - lerpPoint: ", lerpPoint)
-
-	return Vector3(lerpPoint.x, 0, lerpPoint.y)
-
 func getCurveLerp(
 	start: Vector3, 
 	startTangent: Vector3, 
@@ -247,5 +226,76 @@ func getCurveLerp(
 
 		return Vector3(p3.x, 0, p3.y)
 
+
+const HAX_HEIGHT_ERROR: float = 0.001
+
+func getHeightLerp(
+	length: float,
+	startHeight: float,
+	startAngle: float,
+	endHeight: float,
+	endAngle: float,
+	t: float
+) -> Vector3:
+	var startPos: Vector2 = Vector2(0, startHeight)
+	var endPos: Vector2 = Vector2(length, endHeight)
+
+	var startTangent: Vector2 = Vector2.RIGHT.rotated(-startAngle)
+	var endTangent: Vector2 = Vector2.RIGHT.rotated(-endAngle)
+
+	var intersection = Geometry2D.line_intersects_line(
+		startPos, 
+		startTangent, 
+		endPos,
+		endTangent
+	)
+
+	if intersection == null:
+		print("No intersection found")
+		var endPerpenicular = Vector2(-endTangent.y, endTangent.x)
+		intersection = Geometry2D.line_intersects_line(
+			startPos, 
+			startTangent, 
+			endPos,
+			endPerpenicular
+		)
+		var node1 = lerp(startPos, intersection, 0.5)
+		var node2 = (startPos - node1) + endPos
+
+		var p1: Vector2 = lerp(startPos, node1, t)
+		var p2: Vector2 = lerp(node1, node2, t)
+		var p3: Vector2 = lerp(node2, endPos, t)
+
+		var p4: Vector2 = lerp(p1, p2, t)
+		var p5: Vector2 = lerp(p2, p3, t)
+
+		var p6: Vector2 = lerp(p4, p5, t)
+
+		return Vector3(0, p6.y, 0)
+	else:
+		# bezier curve
+		var p1: Vector2 = lerp(startPos, intersection, t)
+		var p2: Vector2 = lerp(intersection, endPos, t)
+		var p3: Vector2 = lerp(p1, p2, t)
+
+		if intersection.x < 0 or intersection.x > length:
+			print("Intersection out of bounds")
+			return Vector3(0, p3.y, 0)
+		
+		var expectedPoint: float = length * t
+		var heightError: float = abs(p3.x - expectedPoint)
+		
+		var iter: int = 0
+		while heightError > HAX_HEIGHT_ERROR || iter < 100:
+			var newT = t + (expectedPoint - p3.x) / length
+			p1 = lerp(startPos, intersection, newT)
+			p2 = lerp(intersection, endPos, newT)
+			p3 = lerp(p1, p2, newT)
+			t = newT
+			heightError = abs(p3.x - expectedPoint)
+			iter += 1
+
+		print("Height: ", p3)
+		return Vector3(0, p3.y, 0)
 
 
