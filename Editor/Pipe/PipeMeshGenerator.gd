@@ -62,37 +62,50 @@ class ProceduralMesh:
 	func _init():
 		meshData.resize(ArrayMesh.ARRAY_MAX)
 	
-	func addMeshTo(node: MeshInstance3D):
+	func addMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
 		meshData[ArrayMesh.ARRAY_VERTEX] = vertices
-		var indices := getVertexIndexArray()
+		var indices := getVertexIndexArray(lengthMultiplier)
+		# print("Vertices.length: ", vertices.size())
 		meshData[ArrayMesh.ARRAY_INDEX] = indices
-		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray()
+		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier)
 		meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
 
 		node.mesh = ArrayMesh.new()
 		node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 
-	func getVertexIndexArray() -> PackedInt32Array:
+	func getVertexIndexArray(lengthMultiplier: float = 1) -> PackedInt32Array:
 		var indexList: PackedInt32Array = []
-		for i in PrefabConstants.PIPE_LENGTH_SEGMENTS - 1:
+		var maxIndex: int = -1
+		for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1:
 			for j in PrefabConstants.PIPE_WIDTH_SEGMENTS - 1:
 				var index = i * PrefabConstants.PIPE_WIDTH_SEGMENTS + j
 				indexList.push_back(index)
-				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS)
+				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS))
 				indexList.push_back(index + 1)
 
 				indexList.push_back(index + 1)
-				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS) 
-				indexList.push_back(index + PrefabConstants.PIPE_LENGTH_SEGMENTS + 1)
+				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS)) 
+				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1)
 		
+				if index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1 > maxIndex:
+					maxIndex = index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1
+
+
+		# print("Max index: ", maxIndex)
 		return indexList
 
-	func getUVArray() -> PackedVector2Array:
+	func getUVArray(lengthMultiplier: float = 1) -> PackedVector2Array:
 		var uvList: PackedVector2Array = []
-		for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
-			for j in PrefabConstants.PIPE_LENGTH_SEGMENTS:
-				uvList.push_back(Vector2(float(j) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1), float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)))
-		
+		for j in PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier:
+			for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
+				var v = float(i) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1)
+				var u = float(j) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1) * lengthMultiplier
+				if u > 1:
+					u = u - floorf(u)
+				print("U: ", u)
+
+				uvList.push_back(Vector2(v, u))
+
 		return uvList
 
 	func getNormalArray(indices: PackedInt32Array, vertices: PackedVector3Array) -> PackedVector3Array:
@@ -123,7 +136,7 @@ func _ready():
 	startNode.dataChanged.connect(refreshMesh)
 	endNode.dataChanged.connect(refreshMesh)
 
-
+var lengthMultiplier: float = 1
 
 func refreshMesh() -> void:
 	var vertexCollection = VertexCollection.new()\
@@ -135,10 +148,16 @@ func refreshMesh() -> void:
 	var vertexList: PackedVector3Array = []
 
 	var curveOffsets: PackedVector3Array = []
+
+	var distance = startNode.global_position.distance_to(endNode.global_position)
+	# print("Distance: ", distance)
+	# if distance > PrefabConstants.TRACK_WIDTH:
+	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
+
 	var curveLength: float = 0
 
-	for i in PrefabConstants.PIPE_LENGTH_SEGMENTS:
-		var t = float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)
+	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 
 		curveOffsets.push_back(
 			getCurveLerp(
@@ -153,8 +172,8 @@ func refreshMesh() -> void:
 		if i != 0:
 			curveLength += curveOffsets[i].distance_to(curveOffsets[i - 1])
 
-	for i in PrefabConstants.PIPE_LENGTH_SEGMENTS:
-		var t = float(i) / (PrefabConstants.PIPE_LENGTH_SEGMENTS - 1)
+	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
@@ -168,12 +187,13 @@ func refreshMesh() -> void:
 				t
 			)
 		)
-
+		# print("Interpolated vertices length: ", interpolatedVertices.size())
 		vertexList.append_array(interpolatedVertices)
 	
 	var mesh = ProceduralMesh.new()
 	mesh.vertices = vertexList
-	mesh.addMeshTo(%Mesh)
+	# print("lengthMultiplier: ", lengthMultiplier)
+	mesh.addMeshTo(%Mesh, lengthMultiplier)
 
 		
 func getCurveLerp(
@@ -251,7 +271,7 @@ func getHeightLerp(
 	)
 
 	if intersection == null:
-		print("No intersection found")
+		# print("No intersection found")
 		var endPerpenicular = Vector2(-endTangent.y, endTangent.x)
 		intersection = Geometry2D.line_intersects_line(
 			startPos, 
@@ -279,7 +299,7 @@ func getHeightLerp(
 		var p3: Vector2 = lerp(p1, p2, t)
 
 		if intersection.x < 0 or intersection.x > length:
-			print("Intersection out of bounds")
+			# print("Intersection out of bounds")
 			return Vector3(0, p3.y, 0)
 		
 		var expectedPoint: float = length * t
@@ -295,7 +315,7 @@ func getHeightLerp(
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
 
-		print("Height: ", p3)
+		# print("Height: ", p3)
 		return Vector3(0, p3.y, 0)
 
 

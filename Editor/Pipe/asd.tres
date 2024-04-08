@@ -1,0 +1,35 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://cuqbrwu8l346c"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_36v5j"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_7ekwt"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(1, 0)]
+op_type = 0
+operator = 2
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx;
+
+
+
+
+void fragment() {
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0, 0.0);
+
+
+}
+"
+graph_offset = Vector2(-177, 78)
+modes/cull = 2
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_36v5j")
+nodes/fragment/2/position = Vector2(-160, 140)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorOp_7ekwt")
+nodes/fragment/3/position = Vector2(200, 160)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 0, 2, 0, 0, 0)
