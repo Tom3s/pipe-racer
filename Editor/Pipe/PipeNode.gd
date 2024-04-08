@@ -66,7 +66,6 @@ func getCapVertices() -> PackedVector2Array:
 		)
 	)
 
-	vertices.reverse()
 
 	return vertices
 
