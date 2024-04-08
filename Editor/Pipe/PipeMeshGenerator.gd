@@ -30,42 +30,6 @@ class VertexCollection:
 		return self
 	
 	func getInterpolation(t: float, offset: Vector3 = Vector3.ZERO) -> PackedVector3Array:
-		# var result: PackedVector3Array = []
-
-		# for i in startVertices.size():
-		# 	# var start: Vector2 = startVertices[i]
-		# 	# var end: Vector2 = endVertices[i]
-
-		# 	# var vertex = lerp(start, end, t) # * lerp(start.length(), end.length(), t)
-			
-
-		# 	# var angle: float = start.angle_to(end) / 2
-		# 	# if clockwise:
-		# 	# 	angle = end.angle_to(start) / 2
-		# 	# var clockwise: bool = startBasis.get_euler().z < endBasis.get_euler().z
-		# 	# var angle = lerp(start.angle() + PI, end.angle() + PI, t) + PI
-
-		# 	# if clockwise:
-		# 	# 	angle = lerp(end.angle() + PI, start.angle() + PI, 1 - t) - PI
-
-		# 	var angle = lerp(startBasis.get_euler().z, endBasis.get_euler().z, t)
-
-		# 	var vertex = Vector2.RIGHT.rotated(angle) * lerp(start.length(), end.length(), t)
-
-
-
-		# 	var vertex3D = Vector3(vertex.x, vertex.y, 0)
-		# 	# var vertex3D = Vector3(0, vertex.y, vertex.x)
-			
-		# 	var currentBasis = lerp(startBasis, endBasis, t)
-
-		# 	vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
-
-		# 	vertex3D = currentBasis * vertex3D
-
-		# 	result.push_back(vertex3D + offset)
-
-		# return result
 
 		var result: PackedVector3Array = []
 
@@ -92,6 +56,54 @@ class VertexCollection:
 			result.push_back(vertex3D + offset)
 
 		return result
+	
+	func getOutsideInterpolation(t: float, offset: Vector3 = Vector3.ZERO) -> PackedVector3Array:
+
+		var result: PackedVector3Array = []
+
+		var currentBasis = startBasis.slerp(endBasis, t)
+
+		var vertices := PipeNode.getCircleVertices(
+			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
+			currentBasis.get_euler().z,
+			lerp(startNode.profile, endNode.profile, t),
+			lerp(startNode.radius, endNode.radius, t)
+		)
+
+		var firstVertex = vertices[vertices.size() - 1]
+		var firstVertex3D = Vector3(firstVertex.x, firstVertex.y, 0)
+		
+		firstVertex3D = firstVertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
+		firstVertex3D = currentBasis * firstVertex3D
+
+		result.push_back(firstVertex3D + offset)
+
+		for i in vertices.size():
+			var vertex = vertices[vertices.size() - i - 1]
+
+			vertex = vertex.normalized() * (vertex.length() + PrefabConstants.GRID_SIZE)
+
+			var vertex3D = Vector3(vertex.x, vertex.y, 0)
+
+			# var currentBasis = lerp(startBasis, endBasis, t)
+
+			vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
+
+			vertex3D = currentBasis * vertex3D
+
+			result.push_back(vertex3D + offset)
+			if i == 0 || i == vertices.size() - 1:
+				result.push_back(vertex3D + offset)
+		
+		var lastVertex = vertices[0]
+		var lastVertex3D = Vector3(lastVertex.x, lastVertex.y, 0)
+
+		lastVertex3D = lastVertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
+		lastVertex3D = currentBasis * lastVertex3D
+
+		result.push_back(lastVertex3D + offset)
+
+		return result
 
 class ProceduralMesh:
 	var meshData = []
@@ -110,32 +122,35 @@ class ProceduralMesh:
 		node.mesh = ArrayMesh.new()
 		node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 
-	func getVertexIndexArray(lengthMultiplier: float = 1) -> PackedInt32Array:
+	func addOutsideMeshTo(node: MeshInstance3D, lengthMultiplier: float = 1):
+		meshData[ArrayMesh.ARRAY_VERTEX] = vertices
+		var indices := getVertexIndexArray(lengthMultiplier, 4)
+		meshData[ArrayMesh.ARRAY_INDEX] = indices
+		meshData[ArrayMesh.ARRAY_TEX_UV] = getUVArray(lengthMultiplier, 4)
+		meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
+
+		node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
+
+	func getVertexIndexArray(lengthMultiplier: float = 1, extraWidth: int = 0) -> PackedInt32Array:
 		var indexList: PackedInt32Array = []
-		var maxIndex: int = -1
 		for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1:
-			for j in PrefabConstants.PIPE_WIDTH_SEGMENTS - 1:
-				var index = i * PrefabConstants.PIPE_WIDTH_SEGMENTS + j
+			for j in (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) - 1:
+				var index = i * (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) + j
 				indexList.push_back(index)
-				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS))
+				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth)))
 				indexList.push_back(index + 1)
 
 				indexList.push_back(index + 1)
-				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS)) 
-				indexList.push_back(index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1)
+				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth))) 
+				indexList.push_back(index + ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth)) + 1)
 		
-				if index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1 > maxIndex:
-					maxIndex = index + (PrefabConstants.PIPE_WIDTH_SEGMENTS) + 1
-
-
-		# print("Max index: ", maxIndex)
 		return indexList
 
-	func getUVArray(lengthMultiplier: float = 1) -> PackedVector2Array:
+	func getUVArray(lengthMultiplier: float = 1, extraWidth: int = 0) -> PackedVector2Array:
 		var uvList: PackedVector2Array = []
 		for j in PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier:
-			for i in PrefabConstants.PIPE_WIDTH_SEGMENTS:
-				var v = float(i) / (PrefabConstants.PIPE_WIDTH_SEGMENTS - 1)
+			for i in (PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth):
+				var v = float(i) / ((PrefabConstants.PIPE_WIDTH_SEGMENTS + extraWidth) - 1)
 				var u = float(j) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1) * lengthMultiplier
 
 				uvList.push_back(Vector2(v, u))
@@ -183,6 +198,8 @@ func refreshMesh() -> void:
 
 	var curveOffsets: PackedVector3Array = []
 
+	var heights: PackedVector3Array = []
+
 	var distance = startNode.global_position.distance_to(endNode.global_position)
 	# if distance > PrefabConstants.TRACK_WIDTH:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
@@ -208,9 +225,7 @@ func refreshMesh() -> void:
 	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
 		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		
-		var interpolatedVertices = vertexCollection.getInterpolation(
-			t, 
-			curveOffsets[i] + 
+		heights.push_back(
 			getHeightLerp(
 				curveLength,
 				startNode.global_position.y,
@@ -220,11 +235,37 @@ func refreshMesh() -> void:
 				t
 			)
 		)
+
+	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		
+		var interpolatedVertices = vertexCollection.getInterpolation(
+			t, 
+			curveOffsets[i] + 
+			heights[i]
+		)
 		vertexList.append_array(interpolatedVertices)
 	
 	var mesh = ProceduralMesh.new()
 	mesh.vertices = vertexList
 	mesh.addMeshTo(%Mesh, lengthMultiplier)
+
+	# Outside part
+
+	vertexList = PackedVector3Array()
+
+	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		
+		var interpolatedVertices = vertexCollection.getOutsideInterpolation(
+			t, 
+			curveOffsets[i] + 
+			heights[i] 
+		)
+		vertexList.append_array(interpolatedVertices)
+
+	mesh.vertices = vertexList
+	mesh.addOutsideMeshTo(%Mesh, lengthMultiplier)
 
 		
 func getCurveLerp(

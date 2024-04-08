@@ -21,6 +21,12 @@ var radius: float = PrefabConstants.GRID_SIZE:
 		radius = newValue
 		dataChanged.emit()
 
+@export
+var cap: bool = false:
+	set(newValue):
+		cap = newValue
+		dataChanged.emit()
+
 func _physics_process(_delta):
 	if oldPos != global_position:
 		# positionChanged.emit(global_position)
@@ -47,7 +53,21 @@ func getStartCircleVertices() -> PackedVector2Array:
 		vertices.push_back(Vector2(x, y) * radius)
 
 	return vertices
-		
+
+func getCapVertices() -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+
+	vertices.append_array(getStartCircleVertices())
+	vertices.append_array(
+		getCircleVertices(
+			global_rotation.z,
+			profile,
+			radius
+		)
+	)
+
+	return vertices
+
 static func getCircleVertices(
 	rotation: float,
 	profile: float,
