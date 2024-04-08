@@ -47,10 +47,9 @@ class VertexCollection:
 			
 			var currentBasis = lerp(startBasis, endBasis, t)
 
-			# vertex3D = vertex3D * currentBasis
-			vertex3D = currentBasis * vertex3D
+			vertex3D = vertex3D.rotated(Vector3.BACK, currentBasis.get_euler().z)
 
-			# vertex3D = vertex3D.rotated(Vector3.UP, PI / 4)
+			vertex3D = currentBasis * vertex3D
 
 			result.push_back(vertex3D + offset)
 
@@ -140,12 +139,10 @@ func refreshMesh() -> void:
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			getCircleLerp(
+			getCurveLerp(
 				startNode.global_position,
-				endNode.global_position,
-				# Vector3(0, 0, 1),
-				# Vector3(1, 0, 0),
 				startNode.basis.z,
+				endNode.global_position,
 				endNode.basis.z,
 				t
 			)
@@ -199,6 +196,56 @@ func getCircleLerp(
 	print("T: ", t, " - lerpPoint: ", lerpPoint)
 
 	return Vector3(lerpPoint.x, 0, lerpPoint.y)
+
+func getCurveLerp(
+	start: Vector3, 
+	startTangent: Vector3, 
+	end: Vector3,
+	endTangent: Vector3,
+	t: float
+) -> Vector3:
+	var start2D: Vector2 = Vector2(start.x, start.z)
+	var end2D: Vector2 = Vector2(end.x, end.z)
+	var startTangent2D: Vector2 = Vector2(startTangent.x, startTangent.z).normalized()
+	var endTangent2D: Vector2 = Vector2(endTangent.x, endTangent.z).normalized()
+
+	var intersection = Geometry2D.line_intersects_line(
+		start2D, 
+		startTangent2D, 
+		end2D,
+		endTangent2D
+	)
+
+	if intersection == null:
+		# print("No intersection found")
+
+		var endPerpenicular = Vector2(-endTangent2D.y, endTangent2D.x)
+		intersection = Geometry2D.line_intersects_line(
+			start2D, 
+			startTangent2D, 
+			end2D,
+			endPerpenicular
+		)
+		var node1 = lerp(start2D, intersection, 0.5)
+		var node2 = (start2D - node1) + end2D
+
+		var p1: Vector2 = lerp(start2D, node1, t)
+		var p2: Vector2 = lerp(node1, node2, t)
+		var p3: Vector2 = lerp(node2, end2D, t)
+
+		var p4: Vector2 = lerp(p1, p2, t)
+		var p5: Vector2 = lerp(p2, p3, t)
+
+		var p6: Vector2 = lerp(p4, p5, t)
+
+		return Vector3(p6.x, 0, p6.y)
+	else:
+		# bezier curve
+		var p1: Vector2 = lerp(start2D, intersection, t)
+		var p2: Vector2 = lerp(intersection, end2D, t)
+		var p3: Vector2 = lerp(p1, p2, t)
+
+		return Vector3(p3.x, 0, p3.y)
 
 
 
