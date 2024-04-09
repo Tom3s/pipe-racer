@@ -2,6 +2,10 @@
 extends Node3D
 class_name PipeMeshGenerator
 
+func easeInOutSine(x: float) -> float:
+	return -(cos(PI * x) - 1) / 2;
+
+
 class VertexCollection:
 	# var startVertices: PackedVector2Array = []
 	# var endVertices: PackedVector2Array = []
@@ -39,7 +43,7 @@ class VertexCollection:
 			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			lerp(startNode.radius, endNode.radius, t)
+			lerp(startNode.radius, endNode.radius, ease(t, -2.0))
 		)
 
 		for i in vertices.size():
@@ -61,7 +65,7 @@ class VertexCollection:
 			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			lerp(startNode.radius, endNode.radius, t)
+			lerp(startNode.radius, endNode.radius, ease(t, -2.0))
 		)
 
 		var firstVertex = vertices[vertices.size() - 1]
@@ -247,6 +251,8 @@ var surfaceType: SurfaceType = SurfaceType.ROAD:
 @export
 var swapStartEnd: bool = false:
 	set(newValue):
+		if startNode == null or endNode == null:
+			return
 		var tempProps = startNode.getProperties()
 		startNode.setProperties(endNode.getProperties())
 		endNode.setProperties(tempProps)
@@ -273,6 +279,8 @@ func _ready():
 	startNode.dataChanged.connect(refreshMesh)
 	endNode.dataChanged.connect(refreshMesh)
 
+	refreshMesh()
+
 var lengthMultiplier: float = 1
 
 func refreshMesh() -> void:
@@ -293,6 +301,7 @@ func refreshMesh() -> void:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
 	var curveLength: float = 0
+	var curveSteps: PackedFloat32Array = [0.0]
 
 	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
 		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
@@ -308,10 +317,17 @@ func refreshMesh() -> void:
 		)
 
 		if i != 0:
-			curveLength += curveOffsets[i].distance_to(curveOffsets[i - 1])
+			var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
+			curveLength += distanceStep
+			curveSteps.push_back(curveLength)
 
 	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var oldT = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
+
+		print("[PipeMeshGenerator.gd] T difference: ", oldT - t)
+
+		# print("[PipeMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
 		
 		heights.push_back(
 			getHeightLerp(
@@ -520,7 +536,7 @@ func getHeightLerp(
 			t = newT
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
-		print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
+		# print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
 		return Vector3(0, p3.y, 0)
 
 func convertToPhysicsObject() -> void:
