@@ -44,42 +44,6 @@ class RoadVertexCollection:
 			result.push_back(vertex3D + offset)
 
 		return result
-	
-	# func getOutsideInterpolation(t: float, offset: Vector3 = Vector3.ZERO) -> PackedVector3Array:
-
-	# 	var result: PackedVector3Array = []
-
-	# 	var currentBasis = startBasis.slerp(endBasis, t)
-
-	# 	var vertices := PipeNode.getCircleVertices(
-	# 		# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
-	# 		currentBasis.get_euler().z,
-	# 		lerp(startNode.profile, endNode.profile, t),
-	# 		lerp(startNode.radius, endNode.radius, ease(t, -2.0))
-	# 	)
-
-	# 	var firstVertex = vertices[vertices.size() - 1]
-	# 	var firstVertex3D = RoadVertexCollection.getRotatedVertex(firstVertex, currentBasis)
-
-	# 	result.push_back(firstVertex3D + offset)
-
-	# 	for i in vertices.size():
-	# 		var vertex = vertices[vertices.size() - i - 1]
-
-	# 		vertex = vertex.normalized() * (vertex.length() + PrefabConstants.GRID_SIZE)
-
-	# 		var vertex3D = RoadVertexCollection.getRotatedVertex(vertex, currentBasis)
-
-	# 		result.push_back(vertex3D + offset)
-	# 		if i == 0 || i == vertices.size() - 1:
-	# 			result.push_back(vertex3D + offset)
-		
-	# 	var lastVertex = vertices[0]
-	# 	var lastVertex3D = RoadVertexCollection.getRotatedVertex(lastVertex, currentBasis)
-
-	# 	result.push_back(lastVertex3D + offset)
-
-	# 	return result
 
 	static func getRotatedVertex(
 		vertex: Vector2,
@@ -126,9 +90,9 @@ func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
 		return type
 
 	pipeMesh.set_surface_override_material(0, materials[type])
-	# pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
-	# pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
-	# pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
 
 	return type
 
@@ -224,65 +188,69 @@ func refreshMesh() -> void:
 		vertexList,
 		PrefabConstants.ROAD_WIDTH_SEGMENTS,
 		PrefabConstants.ROAD_LENGTH_SEGMENTS,
-		lengthMultiplier
+		lengthMultiplier,
+		false
 	) 
 
-	# # Outside part
+	# Outside part
 
-	# vertexList = PackedVector3Array()
+	vertexList = PackedVector3Array()
 
-	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-	# 	var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+	vertexCollection.startVertices = startNode.getOutsideVertices()
+	vertexCollection.endVertices = endNode.getOutsideVertices()
+
+	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		
-	# 	var interpolatedVertices = vertexCollection.getOutsideInterpolation(
-	# 		t, 
-	# 		curveOffsets[i] + 
-	# 		heights[i] 
-	# 	)
-	# 	vertexList.append_array(interpolatedVertices)
+		var interpolatedVertices = vertexCollection.getInterpolation(
+			t, 
+			curveOffsets[i] + 
+			heights[i] 
+		)
+		vertexList.append_array(interpolatedVertices)
 
-	# mesh.addMeshTo(
-	# 	pipeMesh,
-	# 	vertexList,
-	# 	PrefabConstants.ROAD_WIDTH_SEGMENTS + 4,
-	# 	PrefabConstants.ROAD_LENGTH_SEGMENTS,
-	# 	lengthMultiplier,
-	# 	true,
-	# 	false
-	# )
+	mesh.addMeshTo(
+		pipeMesh,
+		vertexList,
+		6,
+		PrefabConstants.ROAD_LENGTH_SEGMENTS,
+		lengthMultiplier,
+		true,
+		false
+	)
 
-	# if startNode.cap:
-	# 	var startCapVertices = startNode.getCapVertices()
-	# 	var vertices3D: PackedVector3Array = []
+	if startNode.cap:
+		var startCapVertices = startNode.getCapVertices()
+		var vertices3D: PackedVector3Array = []
 
-	# 	for vertex in startCapVertices:
-	# 		vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, startNode.basis) + startNode.global_position)
+		for vertex in startCapVertices:
+			vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, startNode.basis) + startNode.global_position)
 
-	# 	mesh.addMeshTo(
-	# 		pipeMesh,
-	# 		vertices3D,
-	# 		PrefabConstants.ROAD_WIDTH_SEGMENTS,
-	# 		2,
-	# 		1,
-	# 		false,
-	# 		false
-	# 	)
+		mesh.addMeshTo(
+			pipeMesh,
+			vertices3D,
+			PrefabConstants.ROAD_WIDTH_SEGMENTS,
+			2,
+			1,
+			true,
+			false
+		)
 	
-	# if endNode.cap:
-	# 	var endCapVertices = endNode.getCapVertices()
-	# 	var vertices3D: PackedVector3Array = []
+	if endNode.cap:
+		var endCapVertices = endNode.getCapVertices()
+		var vertices3D: PackedVector3Array = []
 
-	# 	for vertex in endCapVertices:
-	# 		vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, endNode.basis) + endNode.global_position)
+		for vertex in endCapVertices:
+			vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, endNode.basis) + endNode.global_position)
 
-	# 	mesh.addMeshTo(
-	# 		pipeMesh,
-	# 		vertices3D,
-	# 		PrefabConstants.ROAD_WIDTH_SEGMENTS,
-	# 		2,
-	# 		1,
-	# 		true,
-	# 		false
-	# 	)
+		mesh.addMeshTo(
+			pipeMesh,
+			vertices3D,
+			PrefabConstants.ROAD_WIDTH_SEGMENTS,
+			2,
+			1,
+			false,
+			false
+		)
 	
 	setSurfaceMaterial(surfaceType)

@@ -64,19 +64,48 @@ func getStartVertices() -> PackedVector2Array:
 
 	return vertices
 
-# func getCapVertices() -> PackedVector2Array:
-# 	var vertices: PackedVector2Array = []
+func getOutsideVertices() -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
 
-# 	vertices.append_array(getStartVertices())
-# 	vertices.append_array(
-# 		getCircleVertices(
-# 			global_rotation.z,
-# 			profile,
-# 			radius + PrefabConstants.GRID_SIZE
-# 		)
-# 	)
+	vertices.push_back(
+		Vector2(float(-width) / 2, profile.sample(0) * profileHeight)
+	)
+	
+	vertices.push_back(
+		Vector2(float(-width) / 2, -PrefabConstants.GRID_SIZE)
+	)
+	vertices.push_back(
+		Vector2(float(-width) / 2, -PrefabConstants.GRID_SIZE)
+	)
 
-# 	return vertices
+	vertices.push_back(
+		Vector2(float(width) / 2, -PrefabConstants.GRID_SIZE)
+	)
+	vertices.push_back(
+		Vector2(float(width) / 2, -PrefabConstants.GRID_SIZE)
+	)
+
+	vertices.push_back(
+		Vector2(float(width) / 2, profile.sample(1) * profileHeight)
+	)
+
+	return vertices
+
+
+func getCapVertices() -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+
+	vertices.append_array(getStartVertices())
+	
+	for i in PrefabConstants.ROAD_WIDTH_SEGMENTS:
+		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
+		var x = lerp(float(-width) / 2, float(width) / 2, t)
+
+		var y = -PrefabConstants.GRID_SIZE
+
+		vertices.push_back(Vector2(x, y))
+
+	return vertices
 
 
 
