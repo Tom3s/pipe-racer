@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dgn3nqmny5wm2"]
+
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="1_sy8uq"]
+[ext_resource type="PackedScene" uid="uid://bjjceeyq3csc3" path="res://Editor/Sky/DynamicSky.tscn" id="2_kjh1u"]
+[ext_resource type="PackedScene" uid="uid://ncmkn8se0wbp" path="res://Track Props/Sign.tscn" id="3_tjkvm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c40dk"]
+size = Vector3(30, 30, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7l1ik"]
+cull_mode = 1
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 1.0
+roughness = 0.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CarController" parent="." instance=ExtResource("1_sy8uq")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000363827, -0.0337157, -0.000429153)
+mesh = SubResource("BoxMesh_c40dk")
+surface_material_override/0 = SubResource("StandardMaterial3D_7l1ik")
+
+[node name="DynamicSky" parent="." instance=ExtResource("2_kjh1u")]
+day_time = 10.6991
+
+[node name="Sign" parent="." instance=ExtResource("3_tjkvm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.1021, 0, 0)
+
+[editable path="Sign"]

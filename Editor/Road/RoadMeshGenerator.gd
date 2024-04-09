@@ -158,7 +158,7 @@ func refreshMesh() -> void:
 		var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 
-		print("[roadMeshGenerator.gd] T difference: ", oldT - t)
+		# print("[roadMeshGenerator.gd] T difference: ", oldT - t)
 
 		# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
 		

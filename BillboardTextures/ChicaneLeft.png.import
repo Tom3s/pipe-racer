@@ -15,12 +15,12 @@ dest_files=["res://.godot/imported/ChicaneLeft.png-40e57f722c7986c1c324c7966b71a
 
 [params]
 
-compress/mode=0
+compress/mode=3
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
-compress/channel_pack=0
+compress/channel_pack=1
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

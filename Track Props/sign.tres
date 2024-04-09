@@ -1,9 +1,9 @@
-[gd_resource type="VisualShader" load_steps=33 format=3 uid="uid://b6mmye1k0yxxt"]
+[gd_resource type="VisualShader" load_steps=36 format=3 uid="uid://b6mmye1k0yxxt"]
 
 [ext_resource type="Texture2D" uid="uid://bqqrldp52vd3x" path="res://BillboardTextures/BumpyRoadOld.png" id="1_6ir0x"]
 [ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/generateCircle2.gd" id="2_tdghh"]
 [ext_resource type="Script" path="res://addons/shaderV/uv/tilingNoffset.gd" id="3_jb1xu"]
-[ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/gridShape.gd" id="5_acmtq"]
+[ext_resource type="Script" path="res://addons/shaderV/rgba/normalFromHeightmap.gd" id="4_d8aw5"]
 [ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="5_gen5u"]
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_2hlsp"]
@@ -16,7 +16,6 @@ default_input_values = [0, 0.0, 1, 1.7]
 operator = 2
 
 [sub_resource type="VisualShaderNodeBooleanConstant" id="VisualShaderNodeBooleanConstant_g564m"]
-constant = true
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_v2yw5"]
 parameter_name = "Mattness"
@@ -86,12 +85,6 @@ default_input_values = [0, 25.0, 1, 100.0]
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_68xvy"]
 constant = 0.1
 
-[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_i862v"]
-output_port_for_preview = 1
-default_input_values = [1, Vector3(1, 1, 0), 2, Vector3(0.17, 0.17, 0), 3, Vector3(0.15, 0.15, 0), 4, Vector3(1, 1, 1), 5, 0.0, 6, Vector3(0, 0, 0), 7, 1.0]
-initialized = true
-script = ExtResource("5_acmtq")
-
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_ravp4"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
 op_type = 3
@@ -100,7 +93,22 @@ op_type = 3
 operator = 2
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_0t1ql"]
-constant = 0.8
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_47o70"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ps875"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_5e0e2"]
+default_input_values = [2, Vector3(64, 64, 0), 3, 0.4, 4, false, 5, false, 6, false]
+initialized = true
+script = ExtResource("4_d8aw5")
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_1g36g"]
+parameter_name = "Heightmap"
+texture_filter = 2
 
 [sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_bsej8"]
 default_input_values = [1, Vector3(0, 0, 0), 2, Vector3(1, 1.7, 0), 3, Vector3(0, 0, 0), 4, 0.0, 5, Vector3(0.5, 0.5, 0)]
@@ -134,8 +142,8 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform int Pixel_Amount : hint_range(1, 1000) = 150;
 uniform sampler2D Texture : filter_linear, repeat_disable;
-uniform float Emission : hint_range(0, 1, 0.10000000149012) = 0.69999998807907;
 uniform float Mattness : hint_range(0, 1, 0.10000000149012) = 0;
+uniform float Emission : hint_range(0, 1, 0.10000000149012) = 0.69999998807907;
 
 
 // TransformUV
@@ -204,6 +212,10 @@ void fragment() {
 	n_out2p0 = texture(Texture, n_out10p0);
 
 
+// FloatParameter:13
+	float n_out13p0 = Mattness;
+
+
 // VectorOp:19
 	vec2 n_out19p0 = vec2(n_out5p0.xy) * n_out7p0;
 
@@ -250,7 +262,7 @@ void fragment() {
 
 
 // FloatConstant:38
-	float n_out38p0 = 0.800000;
+	float n_out38p0 = 1.000000;
 
 
 // VectorOp:37
@@ -267,10 +279,6 @@ void fragment() {
 	vec3 n_out36p0 = mix(n_out14p0, n_out37p0, vec3(n_out30p0));
 
 
-// FloatConstant:34
-	float n_out34p0 = 0.100000;
-
-
 // FloatParameter:15
 	float n_out15p0 = Emission;
 
@@ -280,16 +288,12 @@ void fragment() {
 
 
 // BooleanConstant:12
-	bool n_out12p0 = true;
-
-
-// FloatParameter:13
-	float n_out13p0 = Mattness;
+	bool n_out12p0 = false;
 
 
 // Output:0
-	ALBEDO = n_out36p0;
-	ROUGHNESS = n_out34p0;
+	ALBEDO = vec3(n_out2p0.xyz);
+	ROUGHNESS = n_out13p0;
 	EMISSION = n_out27p0;
 	CLEARCOAT = (n_out12p0 ? 1.0 : 0.0);
 	CLEARCOAT_ROUGHNESS = n_out13p0;
@@ -297,7 +301,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-1066.36, -3.50674)
+graph_offset = Vector2(-4.97107, 96.4269)
 nodes/fragment/0/position = Vector2(1540, 200)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ailpj")
 nodes/fragment/2/position = Vector2(380, 40)
@@ -320,9 +324,9 @@ nodes/fragment/12/position = Vector2(780, 640)
 nodes/fragment/13/node = SubResource("VisualShaderNodeFloatParameter_v2yw5")
 nodes/fragment/13/position = Vector2(660, 740)
 nodes/fragment/14/node = SubResource("VisualShaderNodeVectorOp_dnkgh")
-nodes/fragment/14/position = Vector2(680, 240)
+nodes/fragment/14/position = Vector2(640, 100)
 nodes/fragment/15/node = SubResource("VisualShaderNodeFloatParameter_pvv7r")
-nodes/fragment/15/position = Vector2(340, 360)
+nodes/fragment/15/position = Vector2(340, 520)
 nodes/fragment/19/node = SubResource("VisualShaderNodeVectorOp_bdldi")
 nodes/fragment/19/position = Vector2(-1160, 660)
 nodes/fragment/20/node = SubResource("VisualShaderNodeVectorOp_i6aga")
@@ -334,7 +338,7 @@ nodes/fragment/22/position = Vector2(-1660, 460)
 nodes/fragment/23/node = SubResource("VisualShaderNodeFloatOp_m7u3x")
 nodes/fragment/23/position = Vector2(-1620, 580)
 nodes/fragment/24/node = SubResource("VisualShaderNodeCustom_t1nap")
-nodes/fragment/24/position = Vector2(-360, 680)
+nodes/fragment/24/position = Vector2(-320, 640)
 nodes/fragment/25/node = SubResource("VisualShaderNodeCustom_vdxae")
 nodes/fragment/25/position = Vector2(-600, 700)
 nodes/fragment/27/node = SubResource("VisualShaderNodeVectorOp_dft7r")
@@ -344,13 +348,19 @@ nodes/fragment/28/position = Vector2(-20, -160)
 nodes/fragment/30/node = SubResource("VisualShaderNodeDistanceFade_i4t0m")
 nodes/fragment/30/position = Vector2(40, 920)
 nodes/fragment/34/node = SubResource("VisualShaderNodeFloatConstant_68xvy")
-nodes/fragment/34/position = Vector2(980, 260)
-nodes/fragment/35/node = SubResource("VisualShaderNodeCustom_i862v")
-nodes/fragment/35/position = Vector2(-600, 880)
+nodes/fragment/34/position = Vector2(1020, 240)
 nodes/fragment/36/node = SubResource("VisualShaderNodeMix_ravp4")
 nodes/fragment/36/position = Vector2(960, 80)
 nodes/fragment/37/node = SubResource("VisualShaderNodeVectorOp_dfufo")
 nodes/fragment/37/position = Vector2(780, -100)
 nodes/fragment/38/node = SubResource("VisualShaderNodeFloatConstant_0t1ql")
 nodes/fragment/38/position = Vector2(460, -60)
-nodes/fragment/connections = PackedInt32Array(7, 0, 6, 1, 6, 0, 9, 0, 9, 0, 10, 0, 7, 0, 10, 1, 10, 0, 2, 0, 11, 0, 7, 0, 8, 0, 7, 1, 12, 0, 0, 13, 13, 0, 0, 14, 2, 0, 14, 0, 19, 0, 20, 0, 7, 0, 19, 1, 21, 0, 20, 1, 22, 0, 21, 0, 8, 0, 11, 0, 22, 0, 21, 1, 20, 0, 25, 0, 25, 0, 24, 0, 28, 0, 2, 2, 25, 0, 35, 0, 34, 0, 0, 3, 24, 1, 14, 1, 14, 0, 36, 0, 2, 0, 37, 0, 38, 0, 37, 1, 37, 0, 36, 1, 30, 0, 36, 2, 36, 0, 27, 0, 15, 0, 27, 1, 27, 0, 0, 5, 36, 0, 0, 0, 22, 0, 23, 0, 5, 0, 6, 0, 5, 0, 19, 0)
+nodes/fragment/40/node = SubResource("VisualShaderNodeFloatConstant_47o70")
+nodes/fragment/40/position = Vector2(1000, 320)
+nodes/fragment/43/node = SubResource("VisualShaderNodeInput_ps875")
+nodes/fragment/43/position = Vector2(-580, 1120)
+nodes/fragment/44/node = SubResource("VisualShaderNodeCustom_5e0e2")
+nodes/fragment/44/position = Vector2(140, 1300)
+nodes/fragment/45/node = SubResource("VisualShaderNodeTexture2DParameter_1g36g")
+nodes/fragment/45/position = Vector2(-360, 1380)
+nodes/fragment/connections = PackedInt32Array(7, 0, 6, 1, 6, 0, 9, 0, 9, 0, 10, 0, 7, 0, 10, 1, 10, 0, 2, 0, 11, 0, 7, 0, 8, 0, 7, 1, 12, 0, 0, 13, 13, 0, 0, 14, 2, 0, 14, 0, 19, 0, 20, 0, 7, 0, 19, 1, 21, 0, 20, 1, 22, 0, 21, 0, 8, 0, 11, 0, 22, 0, 21, 1, 20, 0, 25, 0, 28, 0, 2, 2, 24, 1, 14, 1, 14, 0, 36, 0, 2, 0, 37, 0, 38, 0, 37, 1, 37, 0, 36, 1, 30, 0, 36, 2, 15, 0, 27, 1, 22, 0, 23, 0, 5, 0, 6, 0, 5, 0, 19, 0, 27, 0, 0, 5, 45, 0, 44, 0, 25, 0, 24, 0, 25, 0, 44, 1, 36, 0, 27, 0, 2, 0, 0, 0, 13, 0, 0, 3)

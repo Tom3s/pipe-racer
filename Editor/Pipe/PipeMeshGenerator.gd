@@ -204,7 +204,7 @@ func refreshMesh() -> void:
 		var oldT = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 
-		print("[PipeMeshGenerator.gd] T difference: ", oldT - t)
+		# print("[PipeMeshGenerator.gd] T difference: ", oldT - t)
 
 		# print("[PipeMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
 		
