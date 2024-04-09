@@ -2,8 +2,6 @@
 extends Node3D
 class_name PipeNode
 
-# signal positionChanged(position: Vector3)
-# signal rotationChanged(rotation: Vector3)
 signal dataChanged()
 
 var oldPos: Vector3 = Vector3.ZERO
@@ -16,7 +14,7 @@ var profile: float = PI:
 		dataChanged.emit()
 
 @export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 64, PrefabConstants.GRID_SIZE)
-var radius: float = PrefabConstants.GRID_SIZE:
+var radius: int = PrefabConstants.GRID_SIZE:
 	set(newValue):
 		radius = newValue
 		dataChanged.emit()
@@ -29,12 +27,10 @@ var cap: bool = false:
 
 func _physics_process(_delta):
 	if oldPos != global_position:
-		# positionChanged.emit(global_position)
 		dataChanged.emit()
 	oldPos = global_position
 
 	if oldRot != global_rotation:
-		# rotationChanged.emit(global_rotation)
 		dataChanged.emit()
 	oldRot = global_rotation
 
