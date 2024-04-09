@@ -146,8 +146,10 @@ func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
 
 	pipeMesh.set_surface_override_material(0, materials[type])
 	pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
-	pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
-	pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+	if startNode.cap || endNode.cap:
+		pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+	if startNode.cap && endNode.cap:
+		pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
 
 	return type
 

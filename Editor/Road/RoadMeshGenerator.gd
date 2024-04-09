@@ -60,7 +60,7 @@ class RoadVertexCollection:
 @onready var startNode: RoadNode = %Start
 @onready var endNode: RoadNode = %End
 
-@onready var pipeMesh: MeshInstance3D = %Mesh
+@onready var roadMesh: MeshInstance3D = %Mesh
 
 enum SurfaceType {
 	ROAD,
@@ -86,13 +86,15 @@ var surfaceType: SurfaceType = SurfaceType.ROAD:
 		surfaceType = setSurfaceMaterial(newValue)
 
 func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
-	if pipeMesh == null:
+	if roadMesh == null:
 		return type
 
-	pipeMesh.set_surface_override_material(0, materials[type])
-	pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
-	pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
-	pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+	roadMesh.set_surface_override_material(0, materials[type])
+	roadMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
+	if startNode.cap || endNode.cap:
+		roadMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+	if startNode.cap && endNode.cap:
+		roadMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
 
 	return type
 
@@ -156,9 +158,9 @@ func refreshMesh() -> void:
 		var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 
-		print("[PipeMeshGenerator.gd] T difference: ", oldT - t)
+		print("[roadMeshGenerator.gd] T difference: ", oldT - t)
 
-		# print("[PipeMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
+		# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
 		
 		heights.push_back(
 			EditorMath.getHeightLerp(
@@ -184,7 +186,7 @@ func refreshMesh() -> void:
 	var mesh: ProceduralMesh = ProceduralMesh.new()
 
 	mesh.addMeshTo(
-		pipeMesh,
+		roadMesh,
 		vertexList,
 		PrefabConstants.ROAD_WIDTH_SEGMENTS,
 		PrefabConstants.ROAD_LENGTH_SEGMENTS,
@@ -210,7 +212,7 @@ func refreshMesh() -> void:
 		vertexList.append_array(interpolatedVertices)
 
 	mesh.addMeshTo(
-		pipeMesh,
+		roadMesh,
 		vertexList,
 		6,
 		PrefabConstants.ROAD_LENGTH_SEGMENTS,
@@ -227,7 +229,7 @@ func refreshMesh() -> void:
 			vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, startNode.basis) + startNode.global_position)
 
 		mesh.addMeshTo(
-			pipeMesh,
+			roadMesh,
 			vertices3D,
 			PrefabConstants.ROAD_WIDTH_SEGMENTS,
 			2,
@@ -244,7 +246,7 @@ func refreshMesh() -> void:
 			vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, endNode.basis) + endNode.global_position)
 
 		mesh.addMeshTo(
-			pipeMesh,
+			roadMesh,
 			vertices3D,
 			PrefabConstants.ROAD_WIDTH_SEGMENTS,
 			2,
