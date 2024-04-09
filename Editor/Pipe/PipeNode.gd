@@ -88,3 +88,23 @@ static func getCircleVertices(
 		vertices.push_back(Vector2(x, y) * radius)
 
 	return vertices
+
+func getProperties() -> Dictionary:
+	return {
+		"radius": radius,
+		"profile": profile,
+		"cap": cap,
+
+		"position": global_position,
+		"rotation": global_rotation,
+	}
+
+func setProperties(properties: Dictionary):
+	radius = properties["radius"]
+	profile = properties["profile"]
+	cap = properties["cap"]
+
+	global_position = properties["position"]
+	global_rotation = properties["rotation"]
+
+	dataChanged.emit()

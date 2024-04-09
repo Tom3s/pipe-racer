@@ -217,6 +217,53 @@ class ProceduralMesh:
 @onready var startNode: PipeNode = %Start
 @onready var endNode: PipeNode = %End
 
+@onready var pipeMesh: MeshInstance3D = %Mesh
+
+enum SurfaceType {
+	ROAD,
+	GRASS,
+	BOOSTER,
+	DIRT,
+	REVERSE_BOOSTER,
+	CONCRETE
+}
+
+var materials = [
+	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
+	preload("res://Track Props/GrassMaterial.tres"), # GRASS
+	preload("res://Track Props/DirtMaterial.tres"), # DIRT
+	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
+	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
+	preload("res://Tracks/RacetrackMaterial.tres") # CONCRETE
+]
+
+@export
+var surfaceType: SurfaceType = SurfaceType.ROAD:
+	set(newValue):
+		surfaceType = setSurfaceMaterial(newValue)
+
+		# refreshMesh()
+
+@export
+var swapStartEnd: bool = false:
+	set(newValue):
+		var tempProps = startNode.getProperties()
+		startNode.setProperties(endNode.getProperties())
+		endNode.setProperties(tempProps)
+
+		swapStartEnd = false
+
+func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
+	if pipeMesh == null:
+		return type
+
+	pipeMesh.set_surface_override_material(0, materials[type])
+	pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+
+	return type
+
 func _ready():
 
 	# startNode.positionChanged.connect(refreshMesh)
@@ -290,7 +337,7 @@ func refreshMesh() -> void:
 	var mesh: ProceduralMesh = ProceduralMesh.new()
 
 	mesh.addMeshTo(
-		%Mesh,
+		pipeMesh,
 		vertexList,
 		PrefabConstants.PIPE_WIDTH_SEGMENTS,
 		PrefabConstants.PIPE_LENGTH_SEGMENTS,
@@ -312,7 +359,7 @@ func refreshMesh() -> void:
 		vertexList.append_array(interpolatedVertices)
 
 	mesh.addMeshTo(
-		%Mesh,
+		pipeMesh,
 		vertexList,
 		PrefabConstants.PIPE_WIDTH_SEGMENTS + 4,
 		PrefabConstants.PIPE_LENGTH_SEGMENTS,
@@ -329,7 +376,7 @@ func refreshMesh() -> void:
 			vertices3D.push_back(VertexCollection.getRotatedVertex(vertex, startNode.basis) + startNode.global_position)
 
 		mesh.addMeshTo(
-			%Mesh,
+			pipeMesh,
 			vertices3D,
 			PrefabConstants.PIPE_WIDTH_SEGMENTS,
 			2,
@@ -346,7 +393,7 @@ func refreshMesh() -> void:
 			vertices3D.push_back(VertexCollection.getRotatedVertex(vertex, endNode.basis) + endNode.global_position)
 
 		mesh.addMeshTo(
-			%Mesh,
+			pipeMesh,
 			vertices3D,
 			PrefabConstants.PIPE_WIDTH_SEGMENTS,
 			2,
@@ -354,6 +401,8 @@ func refreshMesh() -> void:
 			true,
 			false
 		)
+	
+	setSurfaceMaterial(surfaceType)
 
 func getCurveLerp(
 	start: Vector3, 
@@ -406,6 +455,7 @@ func getCurveLerp(
 
 
 const HAX_HEIGHT_ERROR: float = 0.001
+const MAX_ITERATION_COUNT: int = 50
 
 func getHeightLerp(
 	length: float,
@@ -462,7 +512,7 @@ func getHeightLerp(
 		var heightError: float = abs(p3.x - expectedPoint)
 		
 		var iter: int = 0
-		while heightError > HAX_HEIGHT_ERROR || iter < 100:
+		while heightError > HAX_HEIGHT_ERROR && iter < MAX_ITERATION_COUNT:
 			var newT = t + (expectedPoint - p3.x) / length
 			p1 = lerp(startPos, intersection, newT)
 			p2 = lerp(intersection, endPos, newT)
@@ -470,7 +520,11 @@ func getHeightLerp(
 			t = newT
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
-
+		print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
 		return Vector3(0, p3.y, 0)
 
+func convertToPhysicsObject() -> void:
+	startNode.visible = false
+	endNode.visible = false
 
+	pipeMesh.create_trimesh_collision()
