@@ -17,13 +17,13 @@ var profile: Curve = Curve.new():
 		dataChanged.emit()
 
 @export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
-var profileHeight: int = PrefabConstants.GRID_SIZE:
+var profileHeight: float = PrefabConstants.GRID_SIZE:
 	set(newValue):
 		profileHeight = newValue
 		dataChanged.emit()
 
 @export_range(PrefabConstants.GRID_SIZE, 3 * PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
-var width: int = PrefabConstants.TRACK_WIDTH:
+var width: float = PrefabConstants.TRACK_WIDTH:
 	set(newValue):
 		width = newValue
 		dataChanged.emit()
@@ -35,6 +35,18 @@ var cap: bool = false:
 		cap = newValue
 		dataChanged.emit()
 
+
+@export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
+var leftRunoff: float = 0.0:
+	set(newValue):
+		leftRunoff = newValue
+		dataChanged.emit()
+
+@export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
+var rightRunoff: float = 0.0:
+	set(newValue):
+		rightRunoff = newValue
+		dataChanged.emit()
 
 
 # func _ready():
@@ -56,7 +68,7 @@ func getStartVertices() -> PackedVector2Array:
 
 	for i in PrefabConstants.ROAD_WIDTH_SEGMENTS:
 		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
-		var x = lerp(float(-width) / 2, float(width) / 2, t)
+		var x = lerp(-width / 2, width / 2, t)
 
 		var y = profile.sample(t) * profileHeight
 
@@ -68,25 +80,25 @@ func getOutsideVertices() -> PackedVector2Array:
 	var vertices: PackedVector2Array = []
 
 	vertices.push_back(
-		Vector2(float(-width) / 2, profile.sample(0) * profileHeight)
+		Vector2(-width / 2, profile.sample(0) * profileHeight)
 	)
 	
 	vertices.push_back(
-		Vector2(float(-width) / 2, -PrefabConstants.GRID_SIZE)
+		Vector2(-width / 2, -PrefabConstants.GRID_SIZE)
 	)
 	vertices.push_back(
-		Vector2(float(-width) / 2, -PrefabConstants.GRID_SIZE)
-	)
-
-	vertices.push_back(
-		Vector2(float(width) / 2, -PrefabConstants.GRID_SIZE)
-	)
-	vertices.push_back(
-		Vector2(float(width) / 2, -PrefabConstants.GRID_SIZE)
+		Vector2(-width / 2, -PrefabConstants.GRID_SIZE)
 	)
 
 	vertices.push_back(
-		Vector2(float(width) / 2, profile.sample(1) * profileHeight)
+		Vector2(width / 2, -PrefabConstants.GRID_SIZE)
+	)
+	vertices.push_back(
+		Vector2(width / 2, -PrefabConstants.GRID_SIZE)
+	)
+
+	vertices.push_back(
+		Vector2(width / 2, profile.sample(1) * profileHeight)
 	)
 
 	return vertices
@@ -99,7 +111,7 @@ func getCapVertices() -> PackedVector2Array:
 	
 	for i in PrefabConstants.ROAD_WIDTH_SEGMENTS:
 		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
-		var x = lerp(float(-width) / 2, float(width) / 2, t)
+		var x = lerp(-width / 2, width / 2, t)
 
 		var y = -PrefabConstants.GRID_SIZE
 
@@ -108,6 +120,57 @@ func getCapVertices() -> PackedVector2Array:
 	return vertices
 
 
+func getRightRunoffVertices() -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+
+	for i in PrefabConstants.ROAD_WIDTH_SEGMENTS:
+		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
+		var x = lerp(-width / 2, -width / 2 - rightRunoff, t)
+
+		var y = profile.sample(0) * profileHeight
+
+		vertices.push_back(Vector2(x, y))
+		if i == PrefabConstants.ROAD_WIDTH_SEGMENTS - 1:
+			vertices.push_back(Vector2(x, y))
+
+	vertices.push_back(
+		Vector2(-width / 2 - rightRunoff, -PrefabConstants.GRID_SIZE)
+	)
+	vertices.push_back(
+		Vector2(-width / 2 - rightRunoff, -PrefabConstants.GRID_SIZE)
+	)
+
+	vertices.push_back(
+		Vector2(-width / 2, -PrefabConstants.GRID_SIZE)
+	)
+
+	return vertices		
+
+func getLeftRunoffVertices() -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+
+	for i in PrefabConstants.ROAD_WIDTH_SEGMENTS:
+		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
+		var x = lerp(width / 2, width / 2 + leftRunoff, t)
+
+		var y = profile.sample(1) * profileHeight
+
+		vertices.push_back(Vector2(x, y))
+		if i == PrefabConstants.ROAD_WIDTH_SEGMENTS - 1:
+			vertices.push_back(Vector2(x, y))
+
+	vertices.push_back(
+		Vector2(width / 2 + leftRunoff, -PrefabConstants.GRID_SIZE)
+	)
+	vertices.push_back(
+		Vector2(width / 2 + leftRunoff, -PrefabConstants.GRID_SIZE)
+	)
+
+	vertices.push_back(
+		Vector2(width / 2, -PrefabConstants.GRID_SIZE)
+	)
+
+	return vertices
 
 func getProperties() -> Dictionary:
 	return {

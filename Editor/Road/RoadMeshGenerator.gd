@@ -37,7 +37,7 @@ class RoadVertexCollection:
 			var endVertex = endVertices[i]
 
 			var y = lerp(startVertex.y, endVertex.y, t)
-			var x = lerp(startVertex.x, endVertex.x, ease(t, -2.0))
+			var x = lerp(startVertex.x, endVertex.x, ease(t, -1.5))
 
 			var vertex3D = RoadVertexCollection.getRotatedVertex(Vector2(x, y), currentBasis)
 
@@ -60,7 +60,8 @@ class RoadVertexCollection:
 @onready var startNode: RoadNode = %Start
 @onready var endNode: RoadNode = %End
 
-@onready var roadMesh: MeshInstance3D = %Mesh
+@onready var roadMesh: MeshInstance3D = %RoadMesh
+@onready var runoffMesh: MeshInstance3D = %RunoffMesh
 
 enum SurfaceType {
 	ROAD,
@@ -256,3 +257,57 @@ func refreshMesh() -> void:
 		)
 	
 	setSurfaceMaterial(surfaceType)
+
+	runoffMesh.mesh = ArrayMesh.new()
+
+	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
+		vertexList = PackedVector3Array()
+
+		vertexCollection.startVertices = startNode.getLeftRunoffVertices()
+		vertexCollection.endVertices = endNode.getLeftRunoffVertices()
+
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		mesh.addMeshTo(
+			runoffMesh,
+			vertexList,
+			PrefabConstants.ROAD_WIDTH_SEGMENTS + 4,
+			PrefabConstants.ROAD_LENGTH_SEGMENTS,
+			lengthMultiplier,
+			false,
+			false
+		)
+	
+	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
+		vertexList = PackedVector3Array()
+
+		vertexCollection.startVertices = startNode.getRightRunoffVertices()
+		vertexCollection.endVertices = endNode.getRightRunoffVertices()
+
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		mesh.addMeshTo(
+			runoffMesh,
+			vertexList,
+			PrefabConstants.ROAD_WIDTH_SEGMENTS + 4,
+			PrefabConstants.ROAD_LENGTH_SEGMENTS,
+			lengthMultiplier,
+			true,
+			false
+		)
