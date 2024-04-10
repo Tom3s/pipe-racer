@@ -60,9 +60,9 @@ class RoadVertexCollection:
 @onready var startNode: RoadNode = %Start
 @onready var endNode: RoadNode = %End
 
-@onready var roadMesh: MeshInstance3D = %RoadMesh
-@onready var runoffMesh: MeshInstance3D = %RunoffMesh
-@onready var wallMesh: MeshInstance3D = %WallMesh
+@onready var roadMesh: PhysicsSurface = %RoadMesh
+@onready var runoffMesh: PhysicsSurface = %RunoffMesh
+@onready var wallMesh: PhysicsSurface = %WallMesh
 
 enum SurfaceType {
 	ROAD,
@@ -181,41 +181,109 @@ func _getFenceWallProfile() -> PackedVector2Array:
 # endregion
 
 @export
+var wallSurfaceType: SurfaceType = SurfaceType.CONCRETE:
+	set(newValue):
+		wallSurfaceType = setWallMaterial(newValue)
+
+func setWallMaterial(type: SurfaceType) -> SurfaceType:
+	if wallMesh == null:
+		return type
+
+	if leftWallType != WallTypes.NONE || rightWallType != WallTypes.NONE:
+		wallMesh.set_surface_override_material(0, materials[type])
+	if leftWallType != WallTypes.NONE && rightWallType != WallTypes.NONE:
+		wallMesh.set_surface_override_material(1, materials[type])
+	
+	return type
+
+@export
 var leftWallType: WallTypes = WallTypes.NONE:
 	set(newValue):
 		leftWallType = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var leftWallStartHeight: float = 1.0:
 	set(newValue):
 		leftWallStartHeight = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var leftWallEndHeight: float = 1.0:
 	set(newValue):
 		leftWallEndHeight = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
 @export
 var rightWallType: WallTypes = WallTypes.NONE:
 	set(newValue):
 		rightWallType = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var rightWallStartHeight: float = 1.0:
 	set(newValue):
 		rightWallStartHeight = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var rightWallEndHeight: float = 1.0:
 	set(newValue):
 		rightWallEndHeight = newValue
+		if wallMesh == null:
+			return
+
 		refreshWallMesh()
 
+
+@export
+var leftRunoffSurfaceType: SurfaceType = SurfaceType.GRASS:
+	set(newValue):
+		leftRunoffSurfaceType = setLeftRunoffMaterial(newValue)
+
+func setLeftRunoffMaterial(type: SurfaceType) -> SurfaceType:
+	if runoffMesh == null:
+		return type
+
+	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
+		runoffMesh.set_surface_override_material(0, materials[type])
+		
+	
+	return type
+
+@export
+var rightRunoffSurfaceType: SurfaceType = SurfaceType.GRASS:
+	set(newValue):
+		rightRunoffSurfaceType = setRightRunoffMaterial(newValue)
+
+func setRightRunoffMaterial(type: SurfaceType, ) -> SurfaceType:
+	if runoffMesh == null:
+		return type
+
+	# runoffMesh.set_surface_override_material(0, materials[type])
+	var surface = 0
+	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
+		surface = 1
+	
+	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
+		runoffMesh.set_surface_override_material(surface, materials[type])
+	
+	return type
 
 @export
 var swapStartEnd: bool = false:
@@ -239,7 +307,7 @@ func _ready():
 	startNode.runoffDataChanged.connect(refreshRunoffMesh)
 	endNode.runoffDataChanged.connect(refreshRunoffMesh)
 
-	refreshRoadMesh()
+	refreshAll()
 
 var lengthMultiplier: float = 1
 var vertexList: PackedVector3Array = []
@@ -455,6 +523,9 @@ func refreshRunoffMesh() -> void:
 			true,
 			false
 		)
+	
+	setLeftRunoffMaterial(leftRunoffSurfaceType)
+	setRightRunoffMaterial(rightRunoffSurfaceType)
 
 func refreshWallMesh() -> void:
 	wallMesh.mesh = ArrayMesh.new()
@@ -516,3 +587,18 @@ func refreshWallMesh() -> void:
 			false,
 			false,
 		)
+	
+	setWallMaterial(wallSurfaceType)
+
+func convertToPhysicsObject() -> void:
+	startNode.visible = false
+	endNode.visible = false
+
+	roadMesh.create_trimesh_collision()
+	roadMesh.setPhysicsMaterial(surfaceType)
+
+	wallMesh.create_trimesh_collision()
+	wallMesh.setPhysicsMaterial(wallSurfaceType)
+
+	runoffMesh.create_trimesh_collision()
+	runoffMesh.setPhysicsMaterial(leftRunoffSurfaceType)

@@ -177,7 +177,8 @@ func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> Pac
 	for i in wallProfile.size():
 		var vertex = wallProfile[i]
 		vertex.x -= width / 2 - PrefabConstants.GRID_SIZE / 2
-		vertex.y *= height
+		vertex.y *= height 
+		vertex.y += profile.sample(PrefabConstants.GRID_SIZE / 2) * profileHeight
 
 		vertices.push_back(vertex)
 
@@ -192,6 +193,7 @@ func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> Pack
 		
 		vertex.x += width / 2 - PrefabConstants.GRID_SIZE / 2
 		vertex.y *= height
+		vertex.y += profile.sample(1 - PrefabConstants.GRID_SIZE / 2) * profileHeight
 
 		vertices.push_back(vertex)
 
