@@ -174,7 +174,7 @@ func _getFenceWallProfile() -> PackedVector2Array:
 # endregion
 
 @export
-var wallSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.CONCRETE:
+var wallSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.FENCE:
 	set(newValue):
 		wallSurfaceType = setWallMaterial(newValue)
 
@@ -182,12 +182,38 @@ func setWallMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.Surface
 	if wallMesh == null:
 		return type
 
+	var surface = 0
+
 	if leftWallType != WallTypes.NONE || rightWallType != WallTypes.NONE:
-		wallMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+		wallMesh.set_surface_override_material(surface, PhysicsSurface.materials[type])
+		surface += 1
 	if leftWallType != WallTypes.NONE && rightWallType != WallTypes.NONE:
-		wallMesh.set_surface_override_material(1, PhysicsSurface.materials[type])
+		wallMesh.set_surface_override_material(surface, PhysicsSurface.materials[type])
+		surface += 1
 	
+	for i in wallCapCount:
+		wallMesh.set_surface_override_material(surface, PhysicsSurface.materials[type])
+		surface += 1
+
 	return type
+
+@export
+var startWallCap: bool = true:
+	set(newValue):
+		startWallCap = newValue
+		if wallMesh == null:
+			return
+
+		refreshWallMesh()
+
+@export
+var endWallCap: bool = true:
+	set(newValue):
+		endWallCap = newValue
+		if wallMesh == null:
+			return
+
+		refreshWallMesh()
 
 @export
 var leftWallType: WallTypes = WallTypes.NONE:
@@ -522,6 +548,8 @@ func refreshRunoffMesh() -> void:
 	setLeftRunoffMaterial(leftRunoffSurfaceType)
 	setRightRunoffMaterial(rightRunoffSurfaceType)
 
+var wallCapCount: int = 0
+
 func refreshWallMesh() -> void:
 	wallMesh.mesh = ArrayMesh.new()
 
@@ -582,8 +610,51 @@ func refreshWallMesh() -> void:
 			false,
 			false,
 		)
+
+	wallCapCount = 0
+
+	if startWallCap:
+		if rightWallType != WallTypes.NONE && rightWallStartHeight != 0:
+			var startCapVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
+			wallCapCount += 1
+			addWallCap(startCapVertices, startNode, true)
+		if leftWallType != WallTypes.NONE && leftWallStartHeight != 0:
+			var startCapVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
+			wallCapCount += 1
+			addWallCap(startCapVertices, startNode, false)
+	
+	if endWallCap:
+		if rightWallType != WallTypes.NONE && rightWallEndHeight != 0:
+			var endCapVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
+			wallCapCount += 1
+			addWallCap(endCapVertices, endNode, false)
+		if leftWallType != WallTypes.NONE && leftWallEndHeight != 0:
+			var endCapVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
+			wallCapCount += 1
+			addWallCap(endCapVertices, endNode, true)
+			
 	
 	setWallMaterial(wallSurfaceType)
+
+func addWallCap(vertices: PackedVector2Array, node: Node3D, clockwise: bool) -> void:
+	var vertices3D: PackedVector3Array = []
+
+	for i in vertices.size():
+		var vertex: Vector2 = vertices[i]
+		if i >= vertices.size() / 2:
+			vertex = vertices[vertices.size() - i - 1 - vertices.size() / 2]
+		
+		vertices3D.push_back(RoadVertexCollection.getRotatedVertex(vertex, node.basis) + node.global_position)
+	
+	mesh.addMeshTo(
+		wallMesh,
+		vertices3D,
+		vertices.size() / 2,
+		2,
+		1,
+		clockwise,
+		false
+	)
 
 func convertToPhysicsObject() -> void:
 	startNode.visible = false

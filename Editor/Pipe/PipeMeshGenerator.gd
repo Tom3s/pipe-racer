@@ -102,7 +102,7 @@ class PipeVertexCollection:
 @onready var startNode: PipeNode = %Start
 @onready var endNode: PipeNode = %End
 
-@onready var pipeMesh: MeshInstance3D = %Mesh
+@onready var pipeMesh: PhysicsSurface = %Mesh
 
 @export
 var surfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD:
@@ -288,3 +288,4 @@ func convertToPhysicsObject() -> void:
 	endNode.visible = false
 
 	pipeMesh.create_trimesh_collision()
+	pipeMesh.setPhysicsMaterial(surfaceType)
