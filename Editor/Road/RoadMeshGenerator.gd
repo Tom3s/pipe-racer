@@ -64,39 +64,32 @@ class RoadVertexCollection:
 @onready var runoffMesh: PhysicsSurface = %RunoffMesh
 @onready var wallMesh: PhysicsSurface = %WallMesh
 
-enum SurfaceType {
-	ROAD,
-	GRASS,
-	DIRT,
-	BOOSTER,
-	REVERSE_BOOSTER,
-	CONCRETE
-}
 
-var materials = [
-	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
-	preload("res://Track Props/GrassMaterial.tres"), # GRASS
-	preload("res://Track Props/DirtMaterial.tres"), # DIRT
-	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
-	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
-	preload("res://Tracks/RacetrackMaterial.tres") # CONCRETE
-]
+
+# var materials = [
+# 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
+# 	preload("res://Track Props/GrassMaterial.tres"), # GRASS
+# 	preload("res://Track Props/DirtMaterial.tres"), # DIRT
+# 	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
+# 	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
+# 	preload("res://Tracks/RacetrackMaterial.tres") # CONCRETE
+# ]
 
 @export
-var surfaceType: SurfaceType = SurfaceType.ROAD:
+var surfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD:
 	set(newValue):
 		surfaceType = setSurfaceMaterial(newValue)
 
-func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
+func setSurfaceMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
 	if roadMesh == null:
 		return type
 
-	roadMesh.set_surface_override_material(0, materials[type])
-	roadMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
+	roadMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+	roadMesh.set_surface_override_material(1, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 	if startNode.cap || endNode.cap:
-		roadMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+		roadMesh.set_surface_override_material(2, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 	if startNode.cap && endNode.cap:
-		roadMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+		roadMesh.set_surface_override_material(3, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 
 	return type
 
@@ -181,18 +174,18 @@ func _getFenceWallProfile() -> PackedVector2Array:
 # endregion
 
 @export
-var wallSurfaceType: SurfaceType = SurfaceType.CONCRETE:
+var wallSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.CONCRETE:
 	set(newValue):
 		wallSurfaceType = setWallMaterial(newValue)
 
-func setWallMaterial(type: SurfaceType) -> SurfaceType:
+func setWallMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
 	if wallMesh == null:
 		return type
 
 	if leftWallType != WallTypes.NONE || rightWallType != WallTypes.NONE:
-		wallMesh.set_surface_override_material(0, materials[type])
+		wallMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
 	if leftWallType != WallTypes.NONE && rightWallType != WallTypes.NONE:
-		wallMesh.set_surface_override_material(1, materials[type])
+		wallMesh.set_surface_override_material(1, PhysicsSurface.materials[type])
 	
 	return type
 
@@ -252,36 +245,36 @@ var rightWallEndHeight: float = 1.0:
 
 
 @export
-var leftRunoffSurfaceType: SurfaceType = SurfaceType.GRASS:
+var leftRunoffSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.GRASS:
 	set(newValue):
 		leftRunoffSurfaceType = setLeftRunoffMaterial(newValue)
 
-func setLeftRunoffMaterial(type: SurfaceType) -> SurfaceType:
+func setLeftRunoffMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
 	if runoffMesh == null:
 		return type
 
 	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
-		runoffMesh.set_surface_override_material(0, materials[type])
+		runoffMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
 		
 	
 	return type
 
 @export
-var rightRunoffSurfaceType: SurfaceType = SurfaceType.GRASS:
+var rightRunoffSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.GRASS:
 	set(newValue):
 		rightRunoffSurfaceType = setRightRunoffMaterial(newValue)
 
-func setRightRunoffMaterial(type: SurfaceType, ) -> SurfaceType:
+func setRightRunoffMaterial(type: PhysicsSurface.SurfaceType, ) -> PhysicsSurface.SurfaceType:
 	if runoffMesh == null:
 		return type
 
-	# runoffMesh.set_surface_override_material(0, materials[type])
+	# runoffMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
 	var surface = 0
 	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
 		surface = 1
 	
 	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
-		runoffMesh.set_surface_override_material(surface, materials[type])
+		runoffMesh.set_surface_override_material(surface, PhysicsSurface.materials[type])
 	
 	return type
 
@@ -301,8 +294,10 @@ func _ready():
 	startNode.transformChanged.connect(refreshAll)
 	endNode.transformChanged.connect(refreshAll)
 
-	startNode.roadDataChanged.connect(refreshRoadMesh)
-	endNode.roadDataChanged.connect(refreshRoadMesh)
+
+
+	startNode.roadDataChanged.connect(refreshAll)
+	endNode.roadDataChanged.connect(refreshAll)
 
 	startNode.runoffDataChanged.connect(refreshRunoffMesh)
 	endNode.runoffDataChanged.connect(refreshRunoffMesh)

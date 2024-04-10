@@ -176,9 +176,21 @@ func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> Pac
 	var vertices: PackedVector2Array = []
 	for i in wallProfile.size():
 		var vertex = wallProfile[i]
+		
+		var p1 = profile.sample(0) * profileHeight
+		var p2 = profile.sample(PrefabConstants.GRID_SIZE / width) * profileHeight
+
+		var angle = atan2(p2 - p1, PrefabConstants.GRID_SIZE)
+
+		vertex = vertex.rotated(angle)
+		
 		vertex.x -= width / 2 - PrefabConstants.GRID_SIZE / 2
 		vertex.y *= height 
-		vertex.y += profile.sample(PrefabConstants.GRID_SIZE / 2) * profileHeight
+
+
+		var height1 = (p1 + p2) / 2
+		var height2 = profile.sample(PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
+		vertex.y += min(height1, height2)
 
 		vertices.push_back(vertex)
 
@@ -191,10 +203,22 @@ func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> Pack
 		# flip profile
 		vertex.x = -vertex.x
 		
+		var p1 = profile.sample(1) * profileHeight
+		var p2 = profile.sample(1 - PrefabConstants.GRID_SIZE / width) * profileHeight
+
+		var angle = atan2(p1 - p2, PrefabConstants.GRID_SIZE)
+
+		vertex = vertex.rotated(angle)
+
 		vertex.x += width / 2 - PrefabConstants.GRID_SIZE / 2
 		vertex.y *= height
-		vertex.y += profile.sample(1 - PrefabConstants.GRID_SIZE / 2) * profileHeight
 
+
+		var height1 = (p1 + p2) / 2
+		var height2 = profile.sample(1 - PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
+		vertex.y += min(height1, height2)
+
+		
 		vertices.push_back(vertex)
 
 	return vertices

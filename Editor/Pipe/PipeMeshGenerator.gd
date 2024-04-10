@@ -104,26 +104,8 @@ class PipeVertexCollection:
 
 @onready var pipeMesh: MeshInstance3D = %Mesh
 
-enum SurfaceType {
-	ROAD,
-	GRASS,
-	DIRT,
-	BOOSTER,
-	REVERSE_BOOSTER,
-	CONCRETE
-}
-
-var materials = [
-	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
-	preload("res://Track Props/GrassMaterial.tres"), # GRASS
-	preload("res://Track Props/DirtMaterial.tres"), # DIRT
-	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
-	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
-	preload("res://Tracks/RacetrackMaterial.tres") # CONCRETE
-]
-
 @export
-var surfaceType: SurfaceType = SurfaceType.ROAD:
+var surfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD:
 	set(newValue):
 		surfaceType = setSurfaceMaterial(newValue)
 
@@ -140,16 +122,16 @@ var swapStartEnd: bool = false:
 
 		swapStartEnd = false
 
-func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
+func setSurfaceMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
 	if pipeMesh == null:
 		return type
 
-	pipeMesh.set_surface_override_material(0, materials[type])
-	pipeMesh.set_surface_override_material(1, materials[SurfaceType.CONCRETE])
+	pipeMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+	pipeMesh.set_surface_override_material(1, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 	if startNode.cap || endNode.cap:
-		pipeMesh.set_surface_override_material(2, materials[SurfaceType.CONCRETE])
+		pipeMesh.set_surface_override_material(2, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 	if startNode.cap && endNode.cap:
-		pipeMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
+		pipeMesh.set_surface_override_material(3, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 
 	return type
 

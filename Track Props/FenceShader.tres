@@ -1,0 +1,246 @@
+[gd_resource type="VisualShader" load_steps=16 format=3 uid="uid://c1n0qhjmiffwc"]
+
+[ext_resource type="Script" path="res://addons/shaderV/rgba/generate_shapes/gridShape.gd" id="1_rvciv"]
+[ext_resource type="Script" path="res://addons/shaderV/uv/transformUV.gd" id="2_7bb3e"]
+[ext_resource type="Script" path="res://addons/shaderV/rgba/noise/fractal/perlin2d_fractal.gd" id="3_bli8e"]
+[ext_resource type="Script" path="res://addons/shaderV/tools/remap.gd" id="4_s6xvg"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_6wn8a"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_qfifl"]
+function = 31
+
+[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_6i668"]
+output_port_for_preview = 0
+default_input_values = [0, 0.45, 1, 1.005, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_xxn7l"]
+output_port_for_preview = 0
+default_input_values = [1, Vector3(8, 8, 0), 2, Vector3(0.2, 0.2, 0), 3, Vector3(0, 0, 0), 4, Vector3(1, 1, 1), 5, 1.0, 6, Vector3(0, 0, 0), 7, 0.0]
+initialized = true
+script = ExtResource("1_rvciv")
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_amp2l"]
+default_input_values = [1, Vector3(0, 0, 0), 2, Vector3(8, 8, 0), 3, Vector3(0.5, 0.5, 0), 4, 0.785, 5, Vector3(0.5, 0.5, 0)]
+initialized = true
+script = ExtResource("2_7bb3e")
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_p40yl"]
+constant = 0.7
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_cdaul"]
+constant = Color(0.306923, 0.306923, 0.306923, 1)
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_hoeot"]
+constant = 0.2
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_rrin3"]
+output_port_for_preview = 0
+default_input_values = [1, 6, 2, Vector3(2, 2, 0), 3, 2.0, 4, 0.8, 5, 0.5, 6, 0.6, 7, Vector3(0.5, 0.5, 0)]
+initialized = true
+script = ExtResource("3_bli8e")
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_1ucgb"]
+default_input_values = [1, 0.0, 2, 1.0, 3, 0.2, 4, 0.6]
+initialized = true
+script = ExtResource("4_s6xvg")
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_hhhsj"]
+constant = Color(0.502884, 0.211401, 0.039748, 1)
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha;
+
+
+
+// TransformUV
+vec2 _transformUV(vec2 _uv_transform, vec2 _scale_uv_, vec2 _pivot_scale_uv_, vec2 _offset_uv_, float _rotate_uv, vec2 _pivot_rotate_uv_){
+	_uv_transform -= _offset_uv_; // offset
+	_uv_transform = (_uv_transform - _pivot_scale_uv_) * _scale_uv_ + _pivot_scale_uv_; // zoom
+	vec2 _rot_uv_angl = vec2(cos(_rotate_uv), sin(_rotate_uv));
+	mat2 _rot_matrix = mat2(vec2(_rot_uv_angl.x, - _rot_uv_angl.y), vec2(_rot_uv_angl.y, _rot_uv_angl.x));
+	_uv_transform = (_uv_transform - _pivot_rotate_uv_) * _rot_matrix + _pivot_rotate_uv_; // rotate
+	return _uv_transform;
+}
+// FractalPerlinNoise2D
+float _perlin2dNoiseFuncFractal(vec2 P) {
+	vec4 Pi = floor(vec4(P, P)) + vec4(0.0, 0.0, 1.0, 1.0);
+	vec4 Pf = fract(vec4(P, P)) - vec4(0.0, 0.0, 1.0, 1.0);
+	
+	Pi = Pi - floor(Pi * (1.0 / 289.0)) * 289.0;
+	vec4 ix = Pi.xzxz;
+	vec4 iy = Pi.yyww;
+	vec4 fx = Pf.xzxz;
+	vec4 fy = Pf.yyww;
+	
+	vec4 i = (((((((ix*34.0)+1.0)*ix)-floor((((ix*34.0)+1.0)*ix)*(1.0/289.0))*289.0 + iy)*34.0)+1.0)*
+		((((ix*34.0)+1.0)*ix)-floor((((ix*34.0)+1.0)*ix)*(1.0/289.0))*289.0 + iy))-
+		floor((((((((ix*34.0)+1.0)*ix)-floor((((ix*34.0)+1.0)*ix)*(1.0/289.0))*289.0 + iy)*34.0)+1.0)*
+		((((ix*34.0)+1.0)*ix)-floor((((ix*34.0)+1.0)*ix)*(1.0/289.0))*289.0 + iy))*(1.0/289.0))*289.0;
+	
+	vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
+	vec4 gy = abs(gx) - 0.5 ;
+	vec4 tx = floor(gx + 0.5);
+	gx = gx - tx;
+	
+	vec2 g00 = vec2(gx.x,gy.x);
+	vec2 g10 = vec2(gx.y,gy.y);
+	vec2 g01 = vec2(gx.z,gy.z);
+	vec2 g11 = vec2(gx.w,gy.w);
+	
+	vec4 norm = 1.79284291400159 - 0.85373472095314 * vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
+	g00 *= norm.x;
+	g01 *= norm.y;
+	g10 *= norm.z;
+	g11 *= norm.w;
+	
+	float n00 = dot(g00, vec2(fx.x, fy.x));
+	float n10 = dot(g10, vec2(fx.y, fy.y));
+	float n01 = dot(g01, vec2(fx.z, fy.z));
+	float n11 = dot(g11, vec2(fx.w, fy.w));
+	
+	vec2 fade_xy = Pf.xy * Pf.xy * Pf.xy * (Pf.xy * (Pf.xy * 6.0 - 15.0) + 10.0);
+	vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+	float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+	return 2.3 * n_xy;
+}
+float _perlinNoise2DFBM(vec2 _uv_pn2fbm, int _oct_pn2fbm, vec2 _per_pn2fbm, float _lac_pn2fbm,
+						float _persist_pn2fbm, float _rot_pn2fbm, float _ampl_pn2fbm, vec2 _shift_pn2fbm) {
+	float _v = 0.0;
+	float _a = _ampl_pn2fbm;
+	mat2 _r0t = mat2(vec2(cos(_rot_pn2fbm), sin(_rot_pn2fbm)), vec2(-sin(_rot_pn2fbm), cos(_rot_pn2fbm)));
+	for (int i = 0; i < _oct_pn2fbm; ++i) {
+		_v += _a * _perlin2dNoiseFuncFractal(_uv_pn2fbm * _per_pn2fbm);
+		_uv_pn2fbm = _r0t * _uv_pn2fbm * _lac_pn2fbm + _shift_pn2fbm;
+		_a *= _persist_pn2fbm;
+	}
+	return (min(_v, 1.0) + 1.0) * 0.5;
+}
+// GridShape
+vec4 _gridFunc(vec2 _grid_uv, vec2 _gridline_thickness, vec2 _gridline_smooth, vec2 _gridcell_count, vec4 _grid_col, vec4 _grid_bg_col){
+	vec2 _grid_vec = fract(_grid_uv * _gridcell_count);
+	_grid_vec = min(_grid_vec, vec2(1.0) - _grid_vec);
+	_grid_vec = smoothstep(_grid_vec - _gridline_smooth, _grid_vec + _gridline_smooth, _gridline_thickness / vec2(2.0));
+//	return mix(_grid_bg_col, _grid_col, clamp(_grid_vec.x + _grid_vec.y, 0.0, 1.0));
+	return mix(_grid_bg_col, _grid_col, (_grid_vec.x + _grid_vec.y));
+}
+// Remap
+vec3 _remapFunc(vec3 _remap_input, vec2 _remap_from, vec2 _remap_to){
+	return _remap_to.x + ((_remap_input - _remap_from.x) * (_remap_to.y - _remap_to.x)) / (_remap_from.y - _remap_from.x);
+}
+
+void fragment() {
+// ColorConstant:5
+	vec4 n_out5p0 = vec4(0.306923, 0.306923, 0.306923, 1.000000);
+
+
+// ColorConstant:9
+	vec4 n_out9p0 = vec4(0.502884, 0.211401, 0.039748, 1.000000);
+
+
+	vec3 n_out3p0;
+// TransformUV:3
+	vec3 n_in3p1 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_in3p2 = vec3(8.00000, 8.00000, 0.00000);
+	vec3 n_in3p3 = vec3(0.50000, 0.50000, 0.00000);
+	float n_in3p4 = 0.78500;
+	vec3 n_in3p5 = vec3(0.50000, 0.50000, 0.00000);
+	{
+		n_out3p0.xy = _transformUV(UV.xy, n_in3p2.xy, n_in3p3.xy, n_in3p1.xy, n_in3p4, n_in3p5.xy);
+	}
+
+
+	float n_out7p0;
+// FractalPerlinNoise2D:7
+	int n_in7p1 = 6;
+	vec3 n_in7p2 = vec3(2.00000, 2.00000, 0.00000);
+	float n_in7p3 = 2.00000;
+	float n_in7p4 = 0.80000;
+	float n_in7p5 = 0.50000;
+	float n_in7p6 = 0.60000;
+	vec3 n_in7p7 = vec3(0.50000, 0.50000, 0.00000);
+	{
+		n_out7p0 = _perlinNoise2DFBM(n_out3p0.xy, int(n_in7p1), n_in7p2.xy, n_in7p3, n_in7p4, n_in7p5, n_in7p6, n_in7p7.xy);
+	}
+
+
+// SmoothStep:12
+	float n_in12p0 = 0.45000;
+	float n_in12p1 = 1.00500;
+	float n_out12p0 = smoothstep(n_in12p0, n_in12p1, n_out7p0);
+
+
+// Mix:10
+	vec3 n_out10p0 = mix(vec3(n_out5p0.xyz), vec3(n_out9p0.xyz), vec3(n_out12p0));
+
+
+	vec3 n_out2p0;
+	float n_out2p1;
+// GridShape:2
+	vec3 n_in2p1 = vec3(8.00000, 8.00000, 0.00000);
+	vec3 n_in2p2 = vec3(0.20000, 0.20000, 0.00000);
+	vec3 n_in2p3 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_in2p4 = vec3(1.00000, 1.00000, 1.00000);
+	float n_in2p5 = 1.00000;
+	vec3 n_in2p6 = vec3(0.00000, 0.00000, 0.00000);
+	float n_in2p7 = 0.00000;
+	{
+		vec4 n_out2p0n_out2p1 = _gridFunc(n_out3p0.xy, n_in2p2.xy, n_in2p3.xy, n_in2p1.xy, vec4(n_in2p4, n_in2p5), vec4(n_in2p6, n_in2p7));
+		n_out2p0 = n_out2p0n_out2p1.rgb;
+		n_out2p1 = n_out2p0n_out2p1.a;
+	}
+
+
+// FloatFunc:11
+	float n_out11p0 = 1.0 - n_out12p0;
+
+
+	vec3 n_out8p0;
+// Remap:8
+	float n_in8p1 = 0.00000;
+	float n_in8p2 = 1.00000;
+	float n_in8p3 = 0.20000;
+	float n_in8p4 = 0.60000;
+	{
+		n_out8p0 = _remapFunc(vec3(n_out12p0), vec2(n_in8p1, n_in8p2), vec2(n_in8p3, n_in8p4));
+	}
+
+
+// Output:0
+	ALBEDO = n_out10p0;
+	ALPHA = n_out2p1;
+	METALLIC = n_out11p0;
+	ROUGHNESS = n_out8p0.x;
+
+
+}
+"
+graph_offset = Vector2(-868.305, -134.769)
+flags/depth_prepass_alpha = true
+nodes/fragment/0/position = Vector2(720, 180)
+nodes/fragment/2/node = SubResource("VisualShaderNodeCustom_xxn7l")
+nodes/fragment/2/position = Vector2(-280, 20)
+nodes/fragment/3/node = SubResource("VisualShaderNodeCustom_amp2l")
+nodes/fragment/3/position = Vector2(-800, 80)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_p40yl")
+nodes/fragment/4/position = Vector2(80, 200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorConstant_cdaul")
+nodes/fragment/5/position = Vector2(20, 20)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_hoeot")
+nodes/fragment/6/position = Vector2(60, 300)
+nodes/fragment/7/node = SubResource("VisualShaderNodeCustom_rrin3")
+nodes/fragment/7/position = Vector2(-80, 500)
+nodes/fragment/8/node = SubResource("VisualShaderNodeCustom_1ucgb")
+nodes/fragment/8/position = Vector2(480, 300)
+nodes/fragment/9/node = SubResource("VisualShaderNodeColorConstant_hhhsj")
+nodes/fragment/9/position = Vector2(260, -80)
+nodes/fragment/10/node = SubResource("VisualShaderNodeMix_6wn8a")
+nodes/fragment/10/position = Vector2(520, -20)
+nodes/fragment/11/node = SubResource("VisualShaderNodeFloatFunc_qfifl")
+nodes/fragment/11/position = Vector2(500, 180)
+nodes/fragment/12/node = SubResource("VisualShaderNodeSmoothStep_6i668")
+nodes/fragment/12/position = Vector2(260, 180)
+nodes/fragment/connections = PackedInt32Array(2, 1, 0, 1, 8, 0, 0, 3, 5, 0, 10, 0, 9, 0, 10, 1, 10, 0, 0, 0, 3, 0, 2, 0, 3, 0, 7, 0, 11, 0, 0, 2, 7, 0, 12, 2, 12, 0, 10, 2, 12, 0, 8, 0, 12, 0, 11, 0)

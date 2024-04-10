@@ -1,14 +1,25 @@
 extends MeshInstance3D
 class_name PhysicsSurface
 
-# var materials = [
-# 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
-# 	preload("res://Track Props/GrassMaterial.tres"), # GRASS
-# 	preload("res://Track Props/DirtMaterial.tres"), # DIRT
-# 	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
-# 	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
-# 	preload("res://Tracks/RacetrackMaterial.tres") # CONCRETE
-# ]
+enum SurfaceType {
+	ROAD,
+	GRASS,
+	DIRT,
+	BOOSTER,
+	REVERSE_BOOSTER,
+	CONCRETE,
+	FENCE
+}
+
+const materials = [
+	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
+	preload("res://Track Props/GrassMaterial.tres"), # GRASS
+	preload("res://Track Props/DirtMaterial.tres"), # DIRT
+	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
+	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
+	preload("res://Tracks/RacetrackMaterial.tres"), # CONCRETE
+	preload("res://Track Props/FenceMaterial.tres"), # FENCE
+]
 
 var frictions = [
 	1.0, # ROAD
@@ -17,6 +28,7 @@ var frictions = [
 	1.0, # BOOSTER
 	1.0, # REVERSE BOOSTER
 	0.9, # CONCRETE
+	0.5, # FENCE
 ]
 
 var accelerationMultipliers = [
@@ -26,6 +38,7 @@ var accelerationMultipliers = [
 	3.0, # BOOSTER
 	3.0, # REVERSE BOOSTER
 	0.9, # CONCRETE
+	0.5, # FENCE
 ]
 
 var smokeParticlesTypes = [
@@ -35,6 +48,7 @@ var smokeParticlesTypes = [
 	true, # BOOSTER
 	true, # REVERSE BOOSTER
 	true, # CONCRETE
+	true, # FENCE
 ]
 
 var friction: float = 1.0
@@ -45,3 +59,12 @@ func setPhysicsMaterial(material: int) -> void:
 	friction = frictions[material]
 	accelerationPenalty = accelerationMultipliers[material]
 	smokeParticles = smokeParticlesTypes[material]
+
+func getFriction() -> float:
+	return friction
+
+func getAccelerationMultiplier() -> float:
+	return accelerationPenalty
+
+func getSmokeParticles() -> bool:
+	return smokeParticles
