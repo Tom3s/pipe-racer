@@ -2,9 +2,9 @@
 extends Node3D
 class_name RoadNode
 
-# signal positionChanged(position: Vector3)
-# signal rotationChanged(rotation: Vector3)
-signal dataChanged()
+signal transformChanged()
+signal roadDataChanged()
+signal runoffDataChanged()
 
 var oldPos: Vector3 = Vector3.ZERO
 var oldRot: Vector3 = Vector3.ZERO
@@ -14,39 +14,39 @@ var profile: Curve = Curve.new():
 	set(newValue):
 		profile = newValue
 		# profile.bake()
-		dataChanged.emit()
+		roadDataChanged.emit()
 
 @export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
 var profileHeight: float = PrefabConstants.GRID_SIZE:
 	set(newValue):
 		profileHeight = newValue
-		dataChanged.emit()
+		roadDataChanged.emit()
 
 @export_range(PrefabConstants.GRID_SIZE, 3 * PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
 var width: float = PrefabConstants.TRACK_WIDTH:
 	set(newValue):
 		width = newValue
-		dataChanged.emit()
+		roadDataChanged.emit()
 
 
 @export
 var cap: bool = false:
 	set(newValue):
 		cap = newValue
-		dataChanged.emit()
+		roadDataChanged.emit()
 
 
 @export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
 var leftRunoff: float = 0.0:
 	set(newValue):
 		leftRunoff = newValue
-		dataChanged.emit()
+		runoffDataChanged.emit()
 
 @export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
 var rightRunoff: float = 0.0:
 	set(newValue):
 		rightRunoff = newValue
-		dataChanged.emit()
+		runoffDataChanged.emit()
 
 
 # func _ready():
@@ -56,11 +56,11 @@ var rightRunoff: float = 0.0:
 
 func _physics_process(_delta):
 	if oldPos != global_position:
-		dataChanged.emit()
+		transformChanged.emit()
 	oldPos = global_position
 
 	if oldRot != global_rotation:
-		dataChanged.emit()
+		transformChanged.emit()
 	oldRot = global_rotation
 
 func getStartVertices() -> PackedVector2Array:
@@ -176,7 +176,7 @@ func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> Pac
 	var vertices: PackedVector2Array = []
 	for i in wallProfile.size():
 		var vertex = wallProfile[i]
-		vertex.x -= width / 2 + PrefabConstants.GRID_SIZE / 2
+		vertex.x -= width / 2 - PrefabConstants.GRID_SIZE / 2
 		vertex.y *= height
 
 		vertices.push_back(vertex)
@@ -217,4 +217,4 @@ func setProperties(properties: Dictionary):
 	global_position = properties["position"]
 	global_rotation = properties["rotation"]
 
-	dataChanged.emit()
+	roadDataChanged.emit()

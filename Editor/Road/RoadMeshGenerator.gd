@@ -181,40 +181,40 @@ func _getFenceWallProfile() -> PackedVector2Array:
 # endregion
 
 @export
-var leftWallType: WallTypes = WallTypes.NORMAL:
+var leftWallType: WallTypes = WallTypes.NONE:
 	set(newValue):
 		leftWallType = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var leftWallStartHeight: float = 1.0:
 	set(newValue):
 		leftWallStartHeight = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var leftWallEndHeight: float = 1.0:
 	set(newValue):
 		leftWallEndHeight = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 @export
-var rightWallType: WallTypes = WallTypes.NORMAL:
+var rightWallType: WallTypes = WallTypes.NONE:
 	set(newValue):
 		rightWallType = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var rightWallStartHeight: float = 1.0:
 	set(newValue):
 		rightWallStartHeight = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 @export_range(0.0, 3, 0.1)
 var rightWallEndHeight: float = 1.0:
 	set(newValue):
 		rightWallEndHeight = newValue
-		refreshMesh()
+		refreshWallMesh()
 
 
 @export
@@ -230,23 +230,39 @@ var swapStartEnd: bool = false:
 
 func _ready():
 
-	startNode.dataChanged.connect(refreshMesh)
-	endNode.dataChanged.connect(refreshMesh)
+	startNode.transformChanged.connect(refreshAll)
+	endNode.transformChanged.connect(refreshAll)
 
-	refreshMesh()
+	startNode.roadDataChanged.connect(refreshRoadMesh)
+	endNode.roadDataChanged.connect(refreshRoadMesh)
+
+	startNode.runoffDataChanged.connect(refreshRunoffMesh)
+	endNode.runoffDataChanged.connect(refreshRunoffMesh)
+
+	refreshRoadMesh()
 
 var lengthMultiplier: float = 1
+var vertexList: PackedVector3Array = []
+var curveOffsets: PackedVector3Array = []
+var heights: PackedVector3Array = []
+var vertexCollection = RoadVertexCollection.new()
+var mesh: ProceduralMesh = ProceduralMesh.new()
 
-func refreshMesh() -> void:
-	var vertexCollection = RoadVertexCollection.new()\
+func refreshAll() -> void:
+	refreshRoadMesh()
+	refreshRunoffMesh()
+	refreshWallMesh()
+
+func refreshRoadMesh() -> void:
+	vertexCollection\
 		.withStart(startNode.getStartVertices(), startNode.basis)\
 		.withEnd(endNode.getStartVertices(), endNode.basis)
 	
-	var vertexList: PackedVector3Array = []
+	vertexList = []
 
-	var curveOffsets: PackedVector3Array = []
+	curveOffsets = []
 
-	var heights: PackedVector3Array = []
+	heights = []
 
 	var distance = startNode.global_position.distance_to(endNode.global_position)
 	# if distance > PrefabConstants.TRACK_WIDTH:
@@ -302,7 +318,6 @@ func refreshMesh() -> void:
 		)
 		vertexList.append_array(interpolatedVertices)
 	
-	var mesh: ProceduralMesh = ProceduralMesh.new()
 
 	mesh.addMeshTo(
 		roadMesh,
@@ -376,13 +391,21 @@ func refreshMesh() -> void:
 	
 	setSurfaceMaterial(surfaceType)
 
+func refreshRunoffMesh() -> void:
+	# vertexCollection\
+	# 	.withStart(startNode.getStartVertices(), startNode.basis)\
+	# 	.withEnd(endNode.getStartVertices(), endNode.basis)
+
 	runoffMesh.mesh = ArrayMesh.new()
 
 	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		vertexCollection.startVertices = startNode.getLeftRunoffVertices()
-		vertexCollection.endVertices = endNode.getLeftRunoffVertices()
+		# vertexCollection.startVertices = startNode.getLeftRunoffVertices()
+		# vertexCollection.endVertices = endNode.getLeftRunoffVertices()
+		vertexCollection\
+			.withStart(startNode.getLeftRunoffVertices(), startNode.basis)\
+			.withEnd(endNode.getLeftRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
@@ -407,8 +430,11 @@ func refreshMesh() -> void:
 	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		vertexCollection.startVertices = startNode.getRightRunoffVertices()
-		vertexCollection.endVertices = endNode.getRightRunoffVertices()
+		# vertexCollection.startVertices = startNode.getRightRunoffVertices()
+		# vertexCollection.endVertices = endNode.getRightRunoffVertices()
+		vertexCollection\
+			.withStart(startNode.getRightRunoffVertices(), startNode.basis)\
+			.withEnd(endNode.getRightRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
@@ -429,14 +455,18 @@ func refreshMesh() -> void:
 			true,
 			false
 		)
-	
+
+func refreshWallMesh() -> void:
 	wallMesh.mesh = ArrayMesh.new()
 
 	if leftWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		vertexCollection.startVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
-		vertexCollection.endVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
+		# vertexCollection.startVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
+		# vertexCollection.endVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
+		vertexCollection\
+			.withStart(startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight), startNode.basis)\
+			.withEnd(endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
@@ -461,8 +491,11 @@ func refreshMesh() -> void:
 	if rightWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		vertexCollection.startVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
-		vertexCollection.endVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
+		# vertexCollection.startVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
+		# vertexCollection.endVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
+		vertexCollection\
+			.withStart(startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight), startNode.basis)\
+			.withEnd(endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
