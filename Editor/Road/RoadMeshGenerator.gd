@@ -62,6 +62,7 @@ class RoadVertexCollection:
 
 @onready var roadMesh: MeshInstance3D = %RoadMesh
 @onready var runoffMesh: MeshInstance3D = %RunoffMesh
+@onready var wallMesh: MeshInstance3D = %WallMesh
 
 enum SurfaceType {
 	ROAD,
@@ -98,6 +99,123 @@ func setSurfaceMaterial(type: SurfaceType) -> SurfaceType:
 		roadMesh.set_surface_override_material(3, materials[SurfaceType.CONCRETE])
 
 	return type
+
+enum WallTypes {
+	NONE,
+	NORMAL,
+	GUARDRAIL,
+	ROUND,
+	FENCE,
+}
+
+var wallProfiles = [
+	[],
+	_getNormalWallProfile(),
+	_getGuardrailProfile(),
+	_getRockWallProfile(),
+	_getFenceWallProfile()
+]
+
+
+# Wall Profiles
+# region Wall Profiles
+func _getNormalWallProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	var wallWidth = PrefabConstants.GRID_SIZE / 2
+
+	wallProfile.push_back(Vector2(-wallWidth, 0))
+	wallProfile.push_back(Vector2(-wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(-wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, 0))	
+
+	return wallProfile
+
+func _getGuardrailProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	var wallWidth = PrefabConstants.GRID_SIZE / 8
+
+	wallProfile.push_back(Vector2(-wallWidth, 0))
+	wallProfile.push_back(Vector2(-wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(-wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(wallWidth, 0))	
+
+	return wallProfile
+
+func _getRockWallProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	var wallWidth = PrefabConstants.GRID_SIZE / 2
+
+	var segments = 6
+
+	for i in segments:
+		var angle = (segments - i - 1) * (PI / (segments - 1))
+		var x = cos(angle) * wallWidth
+		var y = sin(angle) * wallWidth
+
+		wallProfile.push_back(Vector2(x, y))
+	
+	return wallProfile
+
+func _getFenceWallProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	var wallWidth = PrefabConstants.GRID_SIZE / 8
+	var topOffset = PrefabConstants.GRID_SIZE / 2
+
+	wallProfile.push_back(Vector2(-wallWidth, 0))
+	wallProfile.push_back(Vector2(-wallWidth, PrefabConstants.GRID_SIZE * 2))
+	wallProfile.push_back(Vector2(-wallWidth + topOffset, PrefabConstants.GRID_SIZE * 2 + topOffset))
+	wallProfile.push_back(Vector2(wallWidth + topOffset, PrefabConstants.GRID_SIZE * 2 + topOffset))
+	wallProfile.push_back(Vector2(wallWidth, PrefabConstants.GRID_SIZE * 2))
+	wallProfile.push_back(Vector2(wallWidth, 0))
+
+	return wallProfile
+
+# endregion
+
+@export
+var leftWallType: WallTypes = WallTypes.NORMAL:
+	set(newValue):
+		leftWallType = newValue
+		refreshMesh()
+
+@export_range(0.0, 3, 0.1)
+var leftWallStartHeight: float = 1.0:
+	set(newValue):
+		leftWallStartHeight = newValue
+		refreshMesh()
+
+@export_range(0.0, 3, 0.1)
+var leftWallEndHeight: float = 1.0:
+	set(newValue):
+		leftWallEndHeight = newValue
+		refreshMesh()
+
+@export
+var rightWallType: WallTypes = WallTypes.NORMAL:
+	set(newValue):
+		rightWallType = newValue
+		refreshMesh()
+
+@export_range(0.0, 3, 0.1)
+var rightWallStartHeight: float = 1.0:
+	set(newValue):
+		rightWallStartHeight = newValue
+		refreshMesh()
+
+@export_range(0.0, 3, 0.1)
+var rightWallEndHeight: float = 1.0:
+	set(newValue):
+		rightWallEndHeight = newValue
+		refreshMesh()
+
 
 @export
 var swapStartEnd: bool = false:
@@ -310,4 +428,58 @@ func refreshMesh() -> void:
 			lengthMultiplier,
 			true,
 			false
+		)
+	
+	wallMesh.mesh = ArrayMesh.new()
+
+	if leftWallType != WallTypes.NONE:
+		vertexList = PackedVector3Array()
+
+		vertexCollection.startVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
+		vertexCollection.endVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
+
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		mesh.addMeshTo(
+			wallMesh,
+			vertexList,
+			wallProfiles[leftWallType].size(),
+			PrefabConstants.ROAD_LENGTH_SEGMENTS,
+			lengthMultiplier,
+			true,
+			false,
+		)
+	
+	if rightWallType != WallTypes.NONE:
+		vertexList = PackedVector3Array()
+
+		vertexCollection.startVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
+		vertexCollection.endVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
+
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		mesh.addMeshTo(
+			wallMesh,
+			vertexList,
+			wallProfiles[rightWallType].size(),
+			PrefabConstants.ROAD_LENGTH_SEGMENTS,
+			lengthMultiplier,
+			false,
+			false,
 		)

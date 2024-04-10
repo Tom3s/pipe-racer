@@ -172,6 +172,31 @@ func getLeftRunoffVertices() -> PackedVector2Array:
 
 	return vertices
 
+func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+	for i in wallProfile.size():
+		var vertex = wallProfile[i]
+		vertex.x -= width / 2 + PrefabConstants.GRID_SIZE / 2
+		vertex.y *= height
+
+		vertices.push_back(vertex)
+
+	return vertices
+
+func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> PackedVector2Array:
+	var vertices: PackedVector2Array = []
+	for i in wallProfile.size():
+		var vertex = wallProfile[i]
+		# flip profile
+		vertex.x = -vertex.x
+		
+		vertex.x += width / 2 - PrefabConstants.GRID_SIZE / 2
+		vertex.y *= height
+
+		vertices.push_back(vertex)
+
+	return vertices
+
 func getProperties() -> Dictionary:
 	return {
 		"profile": profile,
