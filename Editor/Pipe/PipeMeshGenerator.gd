@@ -37,7 +37,8 @@ class PipeVertexCollection:
 			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			lerp(startNode.radius, endNode.radius, ease(t, -1.5))
+			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
+			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t))
 		)
 
 		for i in vertices.size():
@@ -59,7 +60,8 @@ class PipeVertexCollection:
 			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			lerp(startNode.radius, endNode.radius, ease(t, -1.5))
+			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
+			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t))
 		)
 
 		var firstVertex = vertices[vertices.size() - 1]

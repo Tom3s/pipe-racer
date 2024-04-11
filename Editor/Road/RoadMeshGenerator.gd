@@ -37,7 +37,8 @@ class RoadVertexCollection:
 			var endVertex = endVertices[i]
 
 			var y = lerp(startVertex.y, endVertex.y, t)
-			var x = lerp(startVertex.x, endVertex.x, ease(t, -1.5))
+			# var x = lerp(startVertex.x, endVertex.x, ease(t, -1.5))
+			var x = lerp(startVertex.x, endVertex.x, smoothstep(0, 1, t))
 
 			var vertex3D = RoadVertexCollection.getRotatedVertex(Vector2(x, y), currentBasis)
 
