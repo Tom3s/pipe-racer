@@ -20,6 +20,12 @@ var radius: int = PrefabConstants.GRID_SIZE:
 		dataChanged.emit()
 
 @export
+var flat: bool = false:
+	set(newValue):
+		flat = newValue
+		dataChanged.emit()
+
+@export
 var cap: bool = false:
 	set(newValue):
 		cap = newValue
@@ -44,9 +50,13 @@ func getStartCircleVertices() -> PackedVector2Array:
 			- global_rotation.z \
 			- PI / 2 \
 			- profile / 2
-		var x = cos(angle) #* radius
-		var y = sin(angle) #* radius
-		vertices.push_back(Vector2(x, y) * radius)
+		var x = cos(angle) * radius
+		var y = sin(angle) * radius
+
+		if flat:
+			y = -radius
+
+		vertices.push_back(Vector2(x, y))
 
 	return vertices
 
@@ -58,7 +68,8 @@ func getCapVertices() -> PackedVector2Array:
 		getCircleVertices(
 			global_rotation.z,
 			profile,
-			radius + PrefabConstants.GRID_SIZE
+			radius + PrefabConstants.GRID_SIZE,
+			float(flat)
 		)
 	)
 
@@ -68,7 +79,8 @@ func getCapVertices() -> PackedVector2Array:
 static func getCircleVertices(
 	rotation: float,
 	profile: float,
-	radius: float
+	radius: float,
+	flat: float = 0.0
 ) -> PackedVector2Array:
 	var vertices: PackedVector2Array = []
 
@@ -79,9 +91,12 @@ static func getCircleVertices(
 			- rotation \
 			- PI / 2 \
 			- profile / 2
-		var x = cos(angle) #* radius
-		var y = sin(angle) #* radius
-		vertices.push_back(Vector2(x, y) * radius)
+		var x = cos(angle) * radius
+		var y = sin(angle) * radius
+
+		y = lerp(y, -radius, flat)
+
+		vertices.push_back(Vector2(x, y))
 
 	return vertices
 

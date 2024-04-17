@@ -38,7 +38,8 @@ class PipeVertexCollection:
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
 			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
-			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t))
+			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t)),
+			lerp(float(startNode.flat), float(endNode.flat), t)
 		)
 
 		for i in vertices.size():
@@ -61,7 +62,8 @@ class PipeVertexCollection:
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
 			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
-			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t))
+			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t)),
+			lerp(float(startNode.flat), float(endNode.flat), t)
 		)
 
 		var firstVertex = vertices[vertices.size() - 1]
@@ -188,10 +190,6 @@ func refreshMesh() -> void:
 		var oldT = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 
-		# print("[PipeMeshGenerator.gd] T difference: ", oldT - t)
-
-		# print("[PipeMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
-		
 		heights.push_back(
 			EditorMath.getHeightLerp(
 				curveLength,
