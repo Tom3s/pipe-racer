@@ -17,3 +17,14 @@ func _ready():
 	carCamera.current = true
 	%Car.state.hasControl = true
 	%Car.state.isReady = true
+
+	for area in %Fluids.get_children():
+		area = area as Area3D
+		area.body_entered.connect(func(body: Node3D):
+			# if body is CarController:
+			body.inFluid = area
+		)
+		area.body_exited.connect(func(body: Node3D):
+			# if body is CarController:
+			body.inFluid = null
+		)

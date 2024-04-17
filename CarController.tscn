@@ -140,7 +140,8 @@ regripFactor = 0.02
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 
-[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="."]
+[node name="Collider" type="CollisionPolygon3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 depth = 1.52
 polygon = PackedVector2Array(-2.16487, 0.531944, -1.50684, 0.395462, 1.49575, 0.380839, 1.82234, 0.751289, 0.866965, 1.51656, -0.0152905, 1.52143, -0.707447, 1.00963, -1.65794, 0.765912)

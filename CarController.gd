@@ -192,6 +192,8 @@ func _ready():
 
 	set_physics_process(true)
 
+var inFluid: Area3D = null
+
 func _physics_process(_delta):
 	# angular_velocity = clamp(angular_velocity, -angularTerminalVelocity * Vector3.ONE, angularTerminalVelocity * Vector3.ONE)
 	if angular_velocity.x > angularTerminalVelocity || angular_velocity.x < -angularTerminalVelocity || \
@@ -204,6 +206,12 @@ func _physics_process(_delta):
 			calculateTirePhysics(tire, _delta)
 		for bottomOut in bottomOuts:
 			calculateBottomOutPhysics(bottomOut, _delta)
+		
+		if inFluid != null:
+			calculateBouyancy(_delta)
+			var viscosityDamping = remap(inFluid.viscosity, 0, 5, 1.0, 0.9)
+			linear_velocity *= viscosityDamping
+			angular_velocity *= viscosityDamping
 
 	if is_multiplayer_authority():
 		
@@ -560,7 +568,110 @@ func getTireSkidRatio(tirePosition: Vector3, sidewaysDirecion: Vector3):
 	var skiddingRatio = skiddingSideways / skiddinForward
 	
 	return abs(skiddingRatio) if !is_nan(skiddingRatio) else 0.0
-	
+
+@export
+var selfRightingForceCoeff: float = 15
+
+func calculateBouyancy(_delta) -> void:
+	var displacedVolume = calculateDisplacedVolume()
+
+	var force: Vector3 = Vector3.ZERO
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+	force.y = inFluid.density * gravity * displacedVolume
+
+	apply_central_force(force * _delta)
+
+	# self righting
+	var angleDifference = global_rotation.z
+
+	apply_torque(global_transform.basis.z * -angleDifference * _delta * selfRightingForceCoeff * mass)
+
+var collisionPolygonBoundingBox: Vector3 = Vector3.ZERO
+var approxVolumeSide: float = 0.0
+func calculateDisplacedVolume() -> float:
+	# get bounding box
+	if collisionPolygonBoundingBox == Vector3.ZERO:
+		var collider: CollisionPolygon3D = %Collider
+
+		var minX: float = 10000
+		var minY: float = 10000
+		var maxX: float = -10000
+		var maxY: float = -10000
+
+		for vertex in collider.polygon:
+			print('Vertex: ', vertex)
+		
+			if vertex.x < minX:
+				minX = vertex.x
+			if vertex.x > maxX:
+				maxX = vertex.x
+			if vertex.y < minY:
+				minY = vertex.y
+			if vertex.y > maxY:
+				maxY = vertex.y	
+		
+		var depth = collider.depth
+
+		collisionPolygonBoundingBox = Vector3(
+			depth,
+			maxY - minY,
+			maxX - minX
+		)
+
+		var volume = collisionPolygonBoundingBox.x * collisionPolygonBoundingBox.y * collisionPolygonBoundingBox.z
+		approxVolumeSide = pow(volume, 1.0/3)
+
+	var xCoverage = getVolumeCoverageOnAxis(
+		inFluid.global_position.x,
+		inFluid.width,
+		global_position.x,
+		center_of_mass.x
+	)
+	var yCoverage = getVolumeCoverageOnAxis(
+		inFluid.global_position.y,
+		inFluid.height,
+		global_position.y,
+		center_of_mass.y
+	)
+	var zCoverage = getVolumeCoverageOnAxis(
+		inFluid.global_position.z,
+		inFluid.length,
+		global_position.z,
+		center_of_mass.z
+	)
+
+	return xCoverage * yCoverage * zCoverage * collisionPolygonBoundingBox.x * collisionPolygonBoundingBox.y * collisionPolygonBoundingBox.z
+
+
+func getVolumeCoverageOnAxis(
+	fluidPos: float,
+	fluidSize: float,
+	pos: float,
+	centerOfMassOffset: float,
+) -> float:
+	var xMin = fluidPos
+	var xMax = fluidPos + fluidSize
+	return max(
+		clamp(
+			remap(
+				pos,
+				xMax + approxVolumeSide + centerOfMassOffset,
+				xMax - approxVolumeSide + centerOfMassOffset,
+				0,
+				1
+			), 0, 1
+		),
+		clamp(
+			remap(
+				pos,
+				xMin - approxVolumeSide + centerOfMassOffset,
+				xMin + approxVolumeSide + centerOfMassOffset,
+				0,
+				1
+			), 0, 1
+		)
+	)
 
 @export
 var soundSpeedLimit: float = 1.0
