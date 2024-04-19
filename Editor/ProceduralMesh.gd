@@ -13,6 +13,7 @@ func addMeshTo(
 	meshData.resize(ArrayMesh.ARRAY_MAX)
 	meshData[ArrayMesh.ARRAY_VERTEX] = vertices
 	var indices := getVertexIndexArray(
+		vertices,
 		widthSegments,
 		lengthSegments,
 		lengthMultiplier,
@@ -32,6 +33,7 @@ func addMeshTo(
 
 
 func getVertexIndexArray(
+	vertices: PackedVector3Array,
 	widthSegments: int,
 	lengthSegments: int,
 	lengthMultiplier: float = 1,
@@ -42,6 +44,15 @@ func getVertexIndexArray(
 		for i in (lengthSegments * lengthMultiplier) - 1:
 			for j in widthSegments - 1:
 				var index = i * widthSegments + j
+
+				var v1: Vector3 = vertices[index]
+				var v2: Vector3 = vertices[index + 1]
+				var v3: Vector3 = vertices[index + (widthSegments)]
+				var v4: Vector3 = vertices[index + (widthSegments) + 1]
+
+				if v1 == v2 or v1 == v3 or v2 == v3 or v2 == v4 or v3 == v4:
+					continue
+
 				indexList.push_back(index)
 				indexList.push_back(index + (widthSegments))
 				indexList.push_back(index + 1)
@@ -53,6 +64,15 @@ func getVertexIndexArray(
 		for i in (lengthSegments * lengthMultiplier) - 1:
 			for j in widthSegments - 1:
 				var index = i * widthSegments + j
+
+				var v1: Vector3 = vertices[index]
+				var v2: Vector3 = vertices[index + 1]
+				var v3: Vector3 = vertices[index + (widthSegments)]
+				var v4: Vector3 = vertices[index + (widthSegments) + 1]
+
+				if v1 == v2 or v1 == v3 or v2 == v3 or v2 == v4 or v3 == v4:
+					continue
+
 				indexList.push_back(index)
 				indexList.push_back(index + 1)
 				indexList.push_back(index + (widthSegments))

@@ -280,14 +280,6 @@ enum SupportType {
 	SCAFFOLDING,
 }
 
-var supportProfiles = [
-	[],
-	[],
-	_getRectPillarProfile(),
-	_getRoundPillarProfile(),
-	[]
-
-]
 func _getRectPillarProfile() -> PackedVector2Array:
 	var wallProfile: PackedVector2Array = []
 
@@ -749,9 +741,11 @@ func refreshSupportMesh() -> void:
 			curveOffsets[i] + 
 			heights[i] 
 		)
-		vertexList.append_array(interpolatedVertices)
+		leftSideVertices.append_array(interpolatedVertices)
 	
-	leftSideVertices.append_array(vertexList)
+	# vertexList.push_back(leftSideVertices[0])
+	vertexList.append_array(leftSideVertices)
+	vertexList.push_back(leftSideVertices[leftSideVertices.size() - 1])
 
 	var endRight: Vector2 = Vector2(endNode.width / 2, -PrefabConstants.GRID_SIZE)
 	var startRight: Vector2 = Vector2(startNode.width / 2, -PrefabConstants.GRID_SIZE)
@@ -771,13 +765,17 @@ func refreshSupportMesh() -> void:
 			curveOffsets[i] + 
 			heights[i] 
 		)
-		vertexList.append_array(interpolatedVertices)
+		rightSideVertices.append_array(interpolatedVertices)
 	
-	rightSideVertices.append_array(vertexList.slice(vertexList.size() / 2, vertexList.size()))
+	vertexList.push_back(rightSideVertices[0])
+	vertexList.append_array(rightSideVertices)
+	vertexList.push_back(rightSideVertices[rightSideVertices.size() - 1])
+	vertexList.push_back(leftSideVertices[0])
+
+
 	rightSideVertices.reverse()
 
 	if supportType == SupportType.SOLID:
-		vertexList.push_back(vertexList[0])
 
 		var bottomVertexList: PackedVector3Array = []
 
@@ -789,7 +787,7 @@ func refreshSupportMesh() -> void:
 		mesh.addMeshTo(
 			supportMesh,
 			vertexList,
-			(PrefabConstants.ROAD_LENGTH_SEGMENTS * 2 * lengthMultiplier) + 1,
+			(PrefabConstants.ROAD_LENGTH_SEGMENTS * 2 * lengthMultiplier) + 4,
 			2,
 			1,
 			false,
@@ -824,7 +822,7 @@ func refreshSupportMesh() -> void:
 			mesh.addMeshTo(
 				supportMesh,
 				vertices,
-				supportProfiles[supportType].size(),
+				vertices.size() / 2,
 				2,
 				1,
 				false,
@@ -842,7 +840,7 @@ func refreshSupportMesh() -> void:
 			mesh.addMeshTo(
 				supportMesh,
 				vertices,
-				supportProfiles[supportType].size(),
+				vertices.size() / 2,
 				2,
 				1,
 				false,
@@ -877,7 +875,7 @@ func refreshSupportMesh() -> void:
 			mesh.addMeshTo(
 				supportMesh,
 				vertices,
-				supportProfiles[supportType].size(),
+				vertices.size() / 2,
 				2,
 				1,
 				false,
@@ -895,7 +893,7 @@ func refreshSupportMesh() -> void:
 			mesh.addMeshTo(
 				supportMesh,
 				vertices,
-				supportProfiles[supportType].size(),
+				vertices.size() / 2,
 				2,
 				1,
 				false,
@@ -919,20 +917,27 @@ func _getRectPillarVertices(
 ) -> PackedVector3Array:
 	var vertices := PackedVector3Array()
 
+	# pushing vertices twice for sharp edges
 	if left:
 		vertices.push_back(vertex1)
 		vertices.push_back(vertex2)
+		vertices.push_back(vertex2)
+		vertices.push_back((vertex3 - vertex2).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex2)
 		vertices.push_back((vertex3 - vertex2).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex2)
 		vertices.push_back((vertex4 - vertex1).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex1)
-
+		vertices.push_back((vertex4 - vertex1).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex1)
 		vertices.push_back(vertex1)
+
 	else:
 		vertices.push_back(vertex3)
 		vertices.push_back(vertex4)
+		vertices.push_back(vertex4)
+		vertices.push_back((vertex1 - vertex4).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex4)
 		vertices.push_back((vertex1 - vertex4).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex4)
 		vertices.push_back((vertex2 - vertex3).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex3)
-
+		vertices.push_back((vertex2 - vertex3).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex3)
 		vertices.push_back(vertex3)
+
 	
 	var bottomVertices: PackedVector3Array = []
 	for vertex in vertices:
