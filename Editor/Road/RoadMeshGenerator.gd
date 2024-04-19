@@ -64,6 +64,7 @@ class RoadVertexCollection:
 @onready var roadMesh: PhysicsSurface = %RoadMesh
 @onready var runoffMesh: PhysicsSurface = %RunoffMesh
 @onready var wallMesh: PhysicsSurface = %WallMesh
+@onready var supportMesh: PhysicsSurface = %SupportMesh
 
 
 
@@ -271,6 +272,50 @@ var rightWallEndHeight: float = 1.0:
 		refreshWallMesh()
 
 
+enum SupportType {
+	NONE,
+	SOLID,
+	RECT_PILLAR,
+	ROUND_PILLAR,
+	SCAFFOLDING,
+}
+
+@export
+var supportType: SupportType = SupportType.NONE:
+	set(newValue):
+		supportType = newValue
+		if wallMesh == null:
+			return
+
+		refreshSupportMesh()
+
+@export_range(PrefabConstants.GRID_SIZE * -256, PrefabConstants.GRID_SIZE * 256, PrefabConstants.GRID_SIZE)
+var supportBottomHeight: float = 0.0:
+	set(newValue):
+		supportBottomHeight = newValue
+		if wallMesh == null:
+			return
+
+		refreshSupportMesh()
+
+@export
+var supportMaterial: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.CONCRETE:
+	set(newValue):
+		supportMaterial = newValue
+		if wallMesh == null:
+			return
+
+		refreshSupportMesh()
+
+func setSupportMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
+	if supportMesh == null:
+		return type
+
+	supportMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+
+	return type
+
+
 @export
 var leftRunoffSurfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.GRASS:
 	set(newValue):
@@ -342,6 +387,7 @@ func refreshAll() -> void:
 	refreshRoadMesh()
 	refreshRunoffMesh()
 	refreshWallMesh()
+	refreshSupportMesh()
 
 func refreshRoadMesh() -> void:
 	vertexCollection\
@@ -636,6 +682,76 @@ func refreshWallMesh() -> void:
 			
 	
 	setWallMaterial(wallSurfaceType)
+
+func refreshSupportMesh() -> void:
+	supportMesh.mesh = ArrayMesh.new()
+
+	if supportType == SupportType.NONE:
+		return
+	
+	if supportType == SupportType.SOLID:
+		vertexList = PackedVector3Array()
+
+		var startLeft: Vector2 = Vector2(-startNode.width / 2, -PrefabConstants.GRID_SIZE)
+		var endLeft: Vector2 = Vector2(-endNode.width / 2, -PrefabConstants.GRID_SIZE)
+		
+		vertexCollection\
+			.withStart([startLeft], startNode.basis)\
+			.withEnd([endLeft], endNode.basis)
+		
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		var endRight: Vector2 = Vector2(endNode.width / 2, -PrefabConstants.GRID_SIZE)
+		var startRight: Vector2 = Vector2(startNode.width / 2, -PrefabConstants.GRID_SIZE)
+
+		vertexCollection\
+			.withStart([startRight], startNode.basis)\
+			.withEnd([endRight], endNode.basis)
+		
+		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			
+			t = 1 - t
+			i = (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - i - 1
+
+			var interpolatedVertices = vertexCollection.getInterpolation(
+				t, 
+				curveOffsets[i] + 
+				heights[i] 
+			)
+			vertexList.append_array(interpolatedVertices)
+		
+		vertexList.push_back(vertexList[0])
+
+		var bottomVertexList: PackedVector3Array = []
+
+		for vertex in vertexList:
+			bottomVertexList.push_back(Vector3(vertex.x, supportBottomHeight, vertex.z))
+		
+		vertexList.append_array(bottomVertexList)
+
+		mesh.addMeshTo(
+			supportMesh,
+			vertexList,
+			(PrefabConstants.ROAD_LENGTH_SEGMENTS * 2 * lengthMultiplier) + 1,
+			2,
+			1,
+			false,
+			true
+		)
+
+		setSupportMaterial(supportMaterial)
+
+		return
+
 
 func addWallCap(vertices: PackedVector2Array, node: Node3D, clockwise: bool) -> void:
 	var vertices3D: PackedVector3Array = []
