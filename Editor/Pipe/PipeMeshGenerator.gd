@@ -284,8 +284,12 @@ func refreshMesh() -> void:
 
 
 func convertToPhysicsObject() -> void:
-	startNode.visible = false
-	endNode.visible = false
+	# startNode.visible = false
+	# endNode.visible = false
+	remove_child(startNode)
+	remove_child(endNode)
+	startNode.queue_free()
+	endNode.queue_free()
 
 	pipeMesh.create_trimesh_collision()
 	pipeMesh.setPhysicsMaterial(surfaceType)

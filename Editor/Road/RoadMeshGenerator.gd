@@ -280,6 +280,42 @@ enum SupportType {
 	SCAFFOLDING,
 }
 
+var supportProfiles = [
+	[],
+	[],
+	_getRectPillarProfile(),
+	_getRoundPillarProfile(),
+	[]
+
+]
+func _getRectPillarProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	wallProfile.push_back(Vector2(-PrefabConstants.GRID_SIZE, -PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(-PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE))
+	wallProfile.push_back(Vector2(PrefabConstants.GRID_SIZE, -PrefabConstants.GRID_SIZE))
+
+	wallProfile.push_back(Vector2(-PrefabConstants.GRID_SIZE, -PrefabConstants.GRID_SIZE))
+
+	return wallProfile
+
+func _getRoundPillarProfile() -> PackedVector2Array:
+	var wallProfile: PackedVector2Array = []
+
+	var segments = 8
+
+	for i in segments:
+		var angle = (segments - i - 1) * (PI / (segments - 1))
+		var x = cos(angle) * PrefabConstants.GRID_SIZE
+		var y = sin(angle) * PrefabConstants.GRID_SIZE
+
+		wallProfile.push_back(Vector2(x, y))
+	
+	wallProfile.push_back(Vector2(wallProfile[0].x, wallProfile[0].y))
+
+	return wallProfile
+
 @export
 var supportType: SupportType = SupportType.NONE:
 	set(newValue):
@@ -310,8 +346,12 @@ var supportMaterial: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.CON
 func setSupportMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.SurfaceType:
 	if supportMesh == null:
 		return type
-
-	supportMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+	if supportType == SupportType.SOLID:
+		supportMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
+	elif supportType == SupportType.RECT_PILLAR || supportType == SupportType.ROUND_PILLAR:
+		for i in (lengthMultiplier + 1) * 2:
+			supportMesh.set_surface_override_material(i, PhysicsSurface.materials[type])
+		
 
 	return type
 
@@ -382,7 +422,7 @@ var curveOffsets: PackedVector3Array = []
 var heights: PackedVector3Array = []
 var vertexCollection = RoadVertexCollection.new()
 var mesh: ProceduralMesh = ProceduralMesh.new()
-
+var curveSteps: PackedFloat32Array
 func refreshAll() -> void:
 	refreshRoadMesh()
 	refreshRunoffMesh()
@@ -405,7 +445,7 @@ func refreshRoadMesh() -> void:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
 	var curveLength: float = 0
-	var curveSteps: PackedFloat32Array = [0.0]
+	curveSteps = [0.0]
 
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
@@ -689,46 +729,54 @@ func refreshSupportMesh() -> void:
 	if supportType == SupportType.NONE:
 		return
 	
+	var leftSideVertices: PackedVector3Array = []
+	var rightSideVertices: PackedVector3Array = []
+
+	vertexList = PackedVector3Array()
+
+	var startLeft: Vector2 = Vector2(-startNode.width / 2, -PrefabConstants.GRID_SIZE)
+	var endLeft: Vector2 = Vector2(-endNode.width / 2, -PrefabConstants.GRID_SIZE)
+	
+	vertexCollection\
+		.withStart([startLeft], startNode.basis)\
+		.withEnd([endLeft], endNode.basis)
+	
+	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		
+		var interpolatedVertices = vertexCollection.getInterpolation(
+			t, 
+			curveOffsets[i] + 
+			heights[i] 
+		)
+		vertexList.append_array(interpolatedVertices)
+	
+	leftSideVertices.append_array(vertexList)
+
+	var endRight: Vector2 = Vector2(endNode.width / 2, -PrefabConstants.GRID_SIZE)
+	var startRight: Vector2 = Vector2(startNode.width / 2, -PrefabConstants.GRID_SIZE)
+
+	vertexCollection\
+		.withStart([startRight], startNode.basis)\
+		.withEnd([endRight], endNode.basis)
+	
+	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		
+		t = 1 - t
+		i = (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - i - 1
+
+		var interpolatedVertices = vertexCollection.getInterpolation(
+			t, 
+			curveOffsets[i] + 
+			heights[i] 
+		)
+		vertexList.append_array(interpolatedVertices)
+	
+	rightSideVertices.append_array(vertexList.slice(vertexList.size() / 2, vertexList.size()))
+	rightSideVertices.reverse()
+
 	if supportType == SupportType.SOLID:
-		vertexList = PackedVector3Array()
-
-		var startLeft: Vector2 = Vector2(-startNode.width / 2, -PrefabConstants.GRID_SIZE)
-		var endLeft: Vector2 = Vector2(-endNode.width / 2, -PrefabConstants.GRID_SIZE)
-		
-		vertexCollection\
-			.withStart([startLeft], startNode.basis)\
-			.withEnd([endLeft], endNode.basis)
-		
-		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-			
-			var interpolatedVertices = vertexCollection.getInterpolation(
-				t, 
-				curveOffsets[i] + 
-				heights[i] 
-			)
-			vertexList.append_array(interpolatedVertices)
-		
-		var endRight: Vector2 = Vector2(endNode.width / 2, -PrefabConstants.GRID_SIZE)
-		var startRight: Vector2 = Vector2(startNode.width / 2, -PrefabConstants.GRID_SIZE)
-
-		vertexCollection\
-			.withStart([startRight], startNode.basis)\
-			.withEnd([endRight], endNode.basis)
-		
-		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-			
-			t = 1 - t
-			i = (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - i - 1
-
-			var interpolatedVertices = vertexCollection.getInterpolation(
-				t, 
-				curveOffsets[i] + 
-				heights[i] 
-			)
-			vertexList.append_array(interpolatedVertices)
-		
 		vertexList.push_back(vertexList[0])
 
 		var bottomVertexList: PackedVector3Array = []
@@ -752,6 +800,210 @@ func refreshSupportMesh() -> void:
 
 		return
 
+	if supportType == SupportType.RECT_PILLAR:
+		for i in lengthMultiplier + 1:
+			var t = float(i) / (lengthMultiplier)
+
+			var vertices := PackedVector3Array()
+
+			var index = t * (leftSideVertices.size() - 1)
+
+			if i == 0:
+				index += 1
+			elif i == lengthMultiplier:
+				index -= 1
+			
+			vertices = _getRectPillarVertices(
+				leftSideVertices[index - 1],
+				leftSideVertices[index + 1],
+				rightSideVertices[index + 1],
+				rightSideVertices[index - 1],
+				true
+			)
+
+			mesh.addMeshTo(
+				supportMesh,
+				vertices,
+				supportProfiles[supportType].size(),
+				2,
+				1,
+				false,
+				false
+			)
+			
+			vertices = _getRectPillarVertices(
+				leftSideVertices[index - 1],
+				leftSideVertices[index + 1],
+				rightSideVertices[index + 1],
+				rightSideVertices[index - 1],
+				false
+			)
+
+			mesh.addMeshTo(
+				supportMesh,
+				vertices,
+				supportProfiles[supportType].size(),
+				2,
+				1,
+				false,
+				false
+			)
+		
+		setSupportMaterial(supportMaterial)
+
+		return
+
+	if supportType == SupportType.ROUND_PILLAR:
+		for i in lengthMultiplier + 1:
+			var t = float(i) / (lengthMultiplier)
+
+			var vertices := PackedVector3Array()
+
+			var index = t * (leftSideVertices.size() - 1)
+
+			if i == 0:
+				index += 2
+			elif i == lengthMultiplier:
+				index -= 2
+			
+			vertices = _getRoundPillarVertices(
+				leftSideVertices[index - 2],
+				leftSideVertices[index + 2],
+				rightSideVertices[index + 2],
+				rightSideVertices[index - 2],
+				true
+			)
+
+			mesh.addMeshTo(
+				supportMesh,
+				vertices,
+				supportProfiles[supportType].size(),
+				2,
+				1,
+				false,
+				false
+			)
+			
+			vertices = _getRoundPillarVertices(
+				leftSideVertices[index - 2],
+				leftSideVertices[index + 2],
+				rightSideVertices[index + 2],
+				rightSideVertices[index - 2],
+				false
+			)
+
+			mesh.addMeshTo(
+				supportMesh,
+				vertices,
+				supportProfiles[supportType].size(),
+				2,
+				1,
+				false,
+				false
+			)
+		
+		setSupportMaterial(supportMaterial)
+
+		return
+			
+
+
+	print("[roadMeshGenerator.gd] Support Type Not Implemented Yet: ", supportType)
+
+func _getRectPillarVertices(
+	vertex1: Vector3,
+	vertex2: Vector3,
+	vertex3: Vector3,
+	vertex4: Vector3,
+	left: bool
+) -> PackedVector3Array:
+	var vertices := PackedVector3Array()
+
+	if left:
+		vertices.push_back(vertex1)
+		vertices.push_back(vertex2)
+		vertices.push_back((vertex3 - vertex2).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex2)
+		vertices.push_back((vertex4 - vertex1).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex1)
+
+		vertices.push_back(vertex1)
+	else:
+		vertices.push_back(vertex3)
+		vertices.push_back(vertex4)
+		vertices.push_back((vertex1 - vertex4).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex4)
+		vertices.push_back((vertex2 - vertex3).normalized() * PrefabConstants.GRID_SIZE * 2 + vertex3)
+
+		vertices.push_back(vertex3)
+	
+	var bottomVertices: PackedVector3Array = []
+	for vertex in vertices:
+		bottomVertices.push_back(Vector3(vertex.x, supportBottomHeight, vertex.z))
+	
+	vertices.append_array(bottomVertices)
+
+	return vertices
+
+func _getRoundPillarVertices(
+	vertex1: Vector3,
+	vertex2: Vector3,
+	vertex3: Vector3,
+	vertex4: Vector3,
+	left: bool
+) -> PackedVector3Array:
+	var vertices := PackedVector3Array()
+
+	var corner1: Vector3
+	var corner2: Vector3
+	var corner3: Vector3
+	var corner4: Vector3
+	var center: Vector3
+	var midpoint1: Vector3
+	var midpoint2: Vector3
+	var midpoint3: Vector3
+	var midpoint4: Vector3
+
+	var pillarRadius: float = PrefabConstants.GRID_SIZE * 2
+
+	if left:
+		var offset = (vertex3 - vertex2).normalized() * PrefabConstants.GRID_SIZE
+		corner1 = vertex1 + offset
+		corner2 = vertex2 + offset
+		corner3 = (vertex3 - vertex2).normalized() * pillarRadius * 2 + vertex2 + offset
+		corner4 = (vertex4 - vertex1).normalized() * pillarRadius * 2 + vertex1 + offset
+
+	else:
+		var offset = (vertex1 - vertex4).normalized() * PrefabConstants.GRID_SIZE
+		corner1 = vertex3 + offset
+		corner2 = vertex4 + offset
+		corner3 = (vertex1 - vertex4).normalized() * pillarRadius * 2 + vertex4 + offset
+		corner4 = (vertex2 - vertex3).normalized() * pillarRadius * 2 + vertex3 + offset
+	
+	
+	midpoint1 = lerp(corner1, corner2, 0.5)
+	midpoint2 = lerp(corner2, corner3, 0.5)
+	midpoint3 = lerp(corner3, corner4, 0.5)
+	midpoint4 = lerp(corner4, corner1, 0.5)
+
+	center = lerp(corner1, corner3, 0.5)
+
+	vertices.push_back(center + (corner1 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (midpoint1 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (corner2 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (midpoint2 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (corner3 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (midpoint3 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (corner4 - center).normalized() * pillarRadius)
+	vertices.push_back(center + (midpoint4 - center).normalized() * pillarRadius)
+
+	vertices.push_back(center + (corner1 - center).normalized() * pillarRadius)
+	
+	var bottomVertices: PackedVector3Array = []
+	for vertex in vertices:
+		bottomVertices.push_back(Vector3(vertex.x, supportBottomHeight, vertex.z))
+	
+	vertices.append_array(bottomVertices)
+
+	return vertices
+
 
 func addWallCap(vertices: PackedVector2Array, node: Node3D, clockwise: bool) -> void:
 	var vertices3D: PackedVector3Array = []
@@ -774,8 +1026,12 @@ func addWallCap(vertices: PackedVector2Array, node: Node3D, clockwise: bool) -> 
 	)
 
 func convertToPhysicsObject() -> void:
-	startNode.visible = false
-	endNode.visible = false
+	# startNode.visible = false
+	# endNode.visible = false
+	remove_child(startNode)
+	remove_child(endNode)
+	startNode.queue_free()
+	endNode.queue_free()
 
 	roadMesh.create_trimesh_collision()
 	roadMesh.setPhysicsMaterial(surfaceType)
@@ -785,3 +1041,6 @@ func convertToPhysicsObject() -> void:
 
 	runoffMesh.create_trimesh_collision()
 	runoffMesh.setPhysicsMaterial(leftRunoffSurfaceType)
+
+	supportMesh.create_trimesh_collision()
+	supportMesh.setPhysicsMaterial(supportMaterial)
