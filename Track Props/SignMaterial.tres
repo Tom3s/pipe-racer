@@ -6,7 +6,9 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_u8g4b")
-shader_parameter/Pixel_Amount = 160
+shader_parameter/Pixel_Amount = 40
+shader_parameter/width = 4.0
+shader_parameter/height = 4.0
 shader_parameter/Mattness = 0.0
 shader_parameter/Emission = 0.8
 shader_parameter/Texture = ExtResource("3_6kbyk")

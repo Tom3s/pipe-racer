@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://nqvakke8vhpn"]
+
+[ext_resource type="Script" path="res://Editor/Props/LedBoard.gd" id="1_rgbxt"]
+[ext_resource type="Shader" uid="uid://b6mmye1k0yxxt" path="res://Track Props/sign.tres" id="2_0s2x4"]
+[ext_resource type="Texture2D" uid="uid://bqs7ug2x7dj0x" path="res://BillboardTextures/BigJump.png" id="3_hwixn"]
+[ext_resource type="Material" uid="uid://qkyt6jjraevf" path="res://Track Props/SimpleBlackMetal.tres" id="4_46306"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_iltpw"]
+_surfaces = [{
+"aabb": AABB(-40, -24, 0, 80, 48, 1e-05),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 2, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 0, 0, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191)
+}, {
+"aabb": AABB(-40, -24, -4, 80, 48, 4.00001),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 37, 73, 18, 62, 0, 0, 128, 63, 37, 73, 18, 62, 0, 0, 0, 0, 37, 73, 146, 62, 0, 0, 128, 63, 37, 73, 146, 62, 0, 0, 0, 0, 183, 109, 219, 62, 0, 0, 128, 63, 183, 109, 219, 62, 0, 0, 0, 0, 37, 73, 18, 63, 0, 0, 128, 63, 37, 73, 18, 63, 0, 0, 0, 0, 110, 219, 54, 63, 0, 0, 128, 63, 110, 219, 54, 63, 0, 0, 0, 0, 183, 109, 91, 63, 0, 0, 128, 63, 183, 109, 91, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 2, 0, 4, 0, 5, 0, 6, 0, 5, 0, 7, 0, 6, 0, 8, 0, 9, 0, 10, 0, 9, 0, 11, 0, 10, 0, 12, 0, 13, 0, 14, 0, 13, 0, 15, 0, 14, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray(0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 0, 0, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 0, 0, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 0, 0, 0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 128, 192, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191)
+}, {
+"aabb": AABB(-40, -24, -4, 80, 48, 1.00136e-05),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 2, 0, 1, 0, 1, 0, 2, 0, 3, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 128, 192, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191)
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3twa8"]
+render_priority = 0
+shader = ExtResource("2_0s2x4")
+shader_parameter/Pixel_Amount = 14
+shader_parameter/width = 80.0
+shader_parameter/height = 48.0
+shader_parameter/Mattness = 0.0
+shader_parameter/Emission = 0.8
+shader_parameter/Texture = ExtResource("3_hwixn")
+
+[node name="LedBoard" type="Node3D"]
+script = ExtResource("1_rgbxt")
+
+[node name="BoardMesh" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("ArrayMesh_iltpw")
+surface_material_override/0 = SubResource("ShaderMaterial_3twa8")
+surface_material_override/1 = ExtResource("4_46306")
+surface_material_override/2 = ExtResource("4_46306")
+
+[node name="SupportMesh" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
