@@ -2,7 +2,7 @@
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_e1x4a"]
 output_port_for_preview = 0
-default_input_values = [0, Vector2(0, 0), 1, Vector2(3, 3)]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0.2, 0.2)]
 op_type = 0
 operator = 2
 
@@ -74,7 +74,7 @@ input_name = "uv"
 
 [sub_resource type="VisualShader" id="VisualShader_m30hq"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec4 ColorParameter : source_color = vec4(0.122252, 0.122252, 0.122252, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -92,7 +92,7 @@ void fragment() {
 
 
 // VectorOp:10
-	vec2 n_in10p1 = vec2(3.00000, 3.00000);
+	vec2 n_in10p1 = vec2(0.20000, 0.20000);
 	vec2 n_out10p0 = n_out9p0 * n_in10p1;
 
 
@@ -122,7 +122,6 @@ void fragment() {
 
 }
 "
-modes/cull = 2
 nodes/fragment/0/position = Vector2(1120, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_bhtph")
 nodes/fragment/2/position = Vector2(180, 160)
@@ -144,7 +143,7 @@ nodes/fragment/11/node = SubResource("VisualShaderNodeInput_nag4c")
 nodes/fragment/11/position = Vector2(680, 760)
 nodes/fragment/12/node = SubResource("VisualShaderNodeColorOp_mwgu4")
 nodes/fragment/12/position = Vector2(903.84, 656.071)
-nodes/fragment/connections = PackedInt32Array(2, 0, 8, 1, 8, 0, 7, 1, 7, 0, 0, 3, 9, 0, 10, 0, 10, 0, 5, 0, 10, 0, 2, 0, 5, 0, 0, 9, 6, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(2, 0, 8, 1, 8, 0, 7, 1, 7, 0, 0, 3, 9, 0, 10, 0, 5, 0, 0, 9, 6, 0, 0, 0, 10, 0, 5, 0, 10, 0, 2, 0)
 
 [resource]
 render_priority = 0
