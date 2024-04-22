@@ -26,7 +26,7 @@ var support: bool = true:
 		support = newValue
 		refreshSupportMesh()
 
-@export_range(PrefabConstants.GRID_SIZE * -256, PrefabConstants.GRID_SIZE * 256, PrefabConstants.GRID_SIZE)
+@export_range(PrefabConstants.GRID_SIZE * -256, 0, PrefabConstants.GRID_SIZE)
 var supportBottomHeight: float = -PrefabConstants.GRID_SIZE * 4:
 	set(newValue):
 		supportBottomHeight = newValue
@@ -296,6 +296,53 @@ func refreshSupportMesh() -> void:
 			false,
 			false
 		)
+
+	var currentHeight: float = leftTop.y
+
+	var crossBeamHeight: float = height * 0.64
+
+	while currentHeight - crossBeamHeight >= supportBottomHeight:
+		var offset: Vector3 = Vector3(0, -2, 0)
+
+		var beamStart1: Vector3 = Vector3(leftTop.x, currentHeight, leftTop.z) + offset
+		var beamStart2: Vector3 = Vector3(rightTop.x, currentHeight, rightTop.z) + offset
+
+		var beamEnd1: Vector3 = Vector3(rightTop.x, currentHeight - crossBeamHeight, rightTop.z) + offset
+		var beamEnd2: Vector3 = Vector3(leftTop.x, currentHeight - crossBeamHeight, leftTop.z) + offset
+
+		beamVertices = getPipeVertices(
+			beamStart1,
+			beamEnd1,
+			PrefabConstants.GRID_SIZE / 4
+		)
+
+		proceduralMesh.addMeshTo(
+			supportMesh,
+			beamVertices,
+			beamVertices.size() / 2, 
+			2,
+			1,
+			false,
+			false
+		)
+
+		beamVertices = getPipeVertices(
+			beamStart2,
+			beamEnd2,
+			PrefabConstants.GRID_SIZE / 4
+		)
+
+		proceduralMesh.addMeshTo(
+			supportMesh,
+			beamVertices,
+			beamVertices.size() / 2, 
+			2,
+			1,
+			false,
+			false
+		)
+
+		currentHeight -= crossBeamHeight * 1.12
 
 	setSupportMaterial()
 
