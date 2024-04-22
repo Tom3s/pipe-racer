@@ -48,7 +48,7 @@ shader_parameter/Mattness = 0.0
 shader_parameter/Emission = 0.8
 shader_parameter/Texture = ExtResource("3_hwixn")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_fq8nu"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_j2vbr"]
 _surfaces = [{
 "aabb": AABB(-34, -40, -10, 4, 56, 4.00001),
 "attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 128, 62, 0, 0, 0, 0, 0, 0, 192, 62, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 32, 63, 0, 0, 0, 0, 0, 0, 64, 63, 0, 0, 0, 0, 0, 0, 96, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 62, 0, 0, 128, 63, 0, 0, 128, 62, 0, 0, 128, 63, 0, 0, 192, 62, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 32, 63, 0, 0, 128, 63, 0, 0, 64, 63, 0, 0, 128, 63, 0, 0, 96, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
@@ -243,7 +243,7 @@ surface_material_override/2 = ExtResource("4_46306")
 
 [node name="SupportMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_fq8nu")
+mesh = SubResource("ArrayMesh_j2vbr")
 surface_material_override/0 = ExtResource("4_46306")
 surface_material_override/1 = ExtResource("4_46306")
 surface_material_override/2 = ExtResource("4_46306")
