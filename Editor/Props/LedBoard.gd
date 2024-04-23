@@ -38,6 +38,7 @@ var supportBottomHeight: float = -PrefabConstants.GRID_SIZE * 4:
 
 
 func _ready():
+	boardMaterial = boardMaterial.duplicate()
 	refreshAll()
 
 func refreshAll() -> void:
@@ -48,6 +49,8 @@ func refreshAll() -> void:
 
 var proceduralMesh: ProceduralMesh = ProceduralMesh.new()
 
+
+# region Board Mesh
 func refreshBoardMesh() -> void:
 	var centeringOffset: Vector3 = Vector3(-width / 2, -height / 2, 0)
 	var vertices: PackedVector3Array = PackedVector3Array()
@@ -124,18 +127,20 @@ func refreshBackMesh() -> void:
 	setBackMaterial()
 
 func setBoardMaterial() -> void:
-	var newMaterial: ShaderMaterial = boardMaterial.duplicate()
-	newMaterial.set_shader_parameter("width", width)
-	newMaterial.set_shader_parameter("height", height)
-	newMaterial.set_shader_parameter("Pixel_Amount", 14)
-	boardMesh.set_surface_override_material(0, newMaterial)
+	# var newMaterial: ShaderMaterial = boardMaterial.duplicate()
+	boardMaterial.set_shader_parameter("width", width)
+	boardMaterial.set_shader_parameter("height", height)
+	boardMaterial.set_shader_parameter("Pixel_Amount", 14)
+	boardMesh.set_surface_override_material(0, boardMaterial)
 
 
 func setBackMaterial() -> void:
 	boardMesh.set_surface_override_material(1, metalMaterial)
 	boardMesh.set_surface_override_material(2, metalMaterial)
 
+# endregion
 
+# region Support Mesh
 func refreshSupportMesh() -> void:
 	supportMesh.mesh = ArrayMesh.new()
 	if !support:
@@ -349,7 +354,7 @@ func refreshSupportMesh() -> void:
 func setSupportMaterial() -> void:
 	for i in range(0, supportMesh.mesh.get_surface_count()):
 		supportMesh.set_surface_override_material(i, metalMaterial)
-
+# endregion
 
 func getPipeVertices(
 	a: Vector3,
@@ -393,3 +398,5 @@ func getPipeVertices(
 
 	return vertices
 
+func setTexture(texture: Texture) -> void:
+	boardMaterial.set_shader_parameter("Texture", texture)

@@ -1,10 +1,5 @@
 extends Node3D
 
-var billboardMaterial := preload("res://Track Props/SignMaterial.tres")
-
-@onready
-var board: MeshInstance3D = %Board
-
 var billboardTexture: Texture
 
 var billboardTextureName: String = ""
@@ -20,7 +15,8 @@ func setTexture(texture: Texture, textureName: String, url: String = "") -> void
 		billboardTextureUrl = url
 
 	if is_node_ready():
-		board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
+		# board.get_surface_override_material(0).set_shader_parameter("Texture", billboardTexture)
+		%LedBoard.setTexture(billboardTexture)
 		if url != "" && textureName == "Custom":
 			TextureLoader.loadOnlineTexture(
 			url,
@@ -31,9 +27,10 @@ func setTexture(texture: Texture, textureName: String, url: String = "") -> void
 	
 
 func _ready():
-	var newMaterial = billboardMaterial.duplicate()
-	newMaterial.set_shader_parameter("Texture", billboardTexture)
-	board.set_surface_override_material(0, newMaterial)
+	# var newMaterial = billboardMaterial.duplicate()
+	# newMaterial.set_shader_parameter("Texture", billboardTexture)
+	# board.set_surface_override_material(0, newMaterial)
+	%LedBoard.setTexture(billboardTexture)
 
 	if billboardTextureUrl != "" && billboardTextureName == "Custom":
 		# fetchImage(billboardTextureUrl)
