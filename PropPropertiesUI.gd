@@ -18,16 +18,16 @@ func _ready():
 	textureSelector.item_selected.connect(onTextureSelector_itemSelected)
 	applyButton.pressed.connect(onApplyButton_pressed)
 
-	for key in BillboardTextureLoader.textures:
+	for key in TextureLoader.billboardTextures:
 		textureSelector.add_item(
 			key,
-			BillboardTextureLoader.textures[key]
+			TextureLoader.billboardTextures[key]
 		)
 	
 	textureSelector.add_item("Custom")
 
-	print("defaultTextureIndex ", BillboardTextureLoader.defaultTextureIndex)
-	textureSelector.select(BillboardTextureLoader.defaultTextureIndex)
+	print("defaultTextureIndex ", TextureLoader.defaultBillboardTextureIndex)
+	textureSelector.select(TextureLoader.defaultBillboardTextureIndex)
 	textureChanged.emit("PipeRacerLanguages", "")
 
 func onTextureSelector_itemSelected(index: int):
