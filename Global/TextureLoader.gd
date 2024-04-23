@@ -3,6 +3,9 @@ extends Node
 var billboardTextures: Dictionary = {}
 var defaultBillboardTextureIndex: int = 0
 
+func _ready():
+	loadBillboardTextures()
+
 func loadBillboardTextures() -> void:
 	var path = "res://BillboardTextures/"
 	var directory = DirAccess.open(path)
@@ -29,6 +32,7 @@ func loadBillboardTextures() -> void:
 			index += 1
 
 var onlineTextures: Dictionary = {}
+var pendingRequests: Dictionary = {}
 
 func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 	if !is_node_ready():
@@ -37,6 +41,11 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 		print("[TextureLoader.gd] Texture already loaded: ", imageUrl)
 		setTextureCallback.call(onlineTextures[imageUrl])
 		return
+	if pendingRequests.has(imageUrl):
+		print("[TextureLoader.gd] Request already in progress: ", imageUrl)
+		pendingRequests[imageUrl].append(setTextureCallback)
+		return
+	pendingRequests[imageUrl] = [setTextureCallback]
 	var httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
 	httpRequest.timeout = 60
@@ -54,7 +63,9 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 
 		var texture = ImageTexture.create_from_image(image)
 		onlineTextures[imageUrl] = texture
-		setTextureCallback.call(texture)
+		for callback in pendingRequests[imageUrl]:
+			callback.call(texture)
+		pendingRequests.erase(imageUrl)
 	)
 
 	var httpError = httpRequest.request(imageUrl)
