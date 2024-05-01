@@ -19,6 +19,7 @@ func _ready():
 			capturedGizmo.capture()
 			gizmoCenter = capturedGizmo.getCenterPoint()
 			rotationAxis = capturedGizmo.rotationAxis
+			lastMousePos = get_viewport().get_mouse_position()
 
 	)
 

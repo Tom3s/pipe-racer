@@ -11,7 +11,7 @@ signal clickEnded()
 signal mouseMovedOnScreen(newPos: Vector2)
 
 func _unhandled_input(_event):
-	if !Input.is_action_pressed("editor_look_around"):
+	if !Input.is_action_pressed("editor_look_around") && Input.is_action_pressed("editor_place"):
 		# mouseMovedTo.emit(screenPointToRay(), Input.is_action_pressed("editor_place"))
 		mouseMovedOnScreen.emit(get_viewport().get_mouse_position())
 	
