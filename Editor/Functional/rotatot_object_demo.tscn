@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://bew4xh4ocoo3c"]
+
+[ext_resource type="Script" path="res://Editor/Functional/rotatot_object_demo.gd" id="1_ugngp"]
+[ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="2_5nmxg"]
+[ext_resource type="Script" path="res://Editor/Functional/RotatorInputHandler.gd" id="3_m68bu"]
+[ext_resource type="PackedScene" uid="uid://bjjceeyq3csc3" path="res://Editor/Sky/DynamicSky.tscn" id="4_i3nuc"]
+[ext_resource type="PackedScene" uid="uid://c2pcx8hglt7o3" path="res://Editor/Road/RoadMeshGenerator.tscn" id="5_7ba55"]
+
+[node name="rotatot_object_demo" type="Node3D"]
+script = ExtResource("1_ugngp")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.578599, -0.481756, 0.65813, 0, 0.806915, 0.590668, -0.815612, -0.34176, 0.46688, 254.235, 209.62, 205.859)
+
+[node name="Rotator" parent="." instance=ExtResource("2_5nmxg")]
+unique_name_in_owner = true
+
+[node name="RotatorInputHandler" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_m68bu")
+
+[node name="DynamicSky" parent="." instance=ExtResource("4_i3nuc")]
+
+[node name="RoadMeshGenerator" parent="." instance=ExtResource("5_7ba55")]
+unique_name_in_owner = true
+
+[node name="End" parent="RoadMeshGenerator" index="5"]
+transform = Transform3D(0.806414, 0, -0.591352, 0, 1, 0, 0.591352, 0, 0.806414, -118.023, -56, 220.846)
+
+[editable path="RoadMeshGenerator"]
