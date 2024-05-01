@@ -40,7 +40,12 @@ func init(
 	ratingValue = initialRatingValue
 	commentId = initialCommentId
 
-	loadProfilePicture()
+	# loadProfilePicture()
+	TextureLoader.loadOnlineTexture(
+		Backend.BACKEND_IP_ADRESS + "/api/users/picture/" + userId,
+		func(image):
+			profilePicture.texture = image
+	)
 	usernameLabel.text = username
 	commentLabel.text = commentText
 	rating.text = str(ratingValue)
@@ -64,37 +69,6 @@ func connectSignals() -> void:
 	upvoteButton.pressed.connect(onUpvoteButtonPressed)
 	downvoteButton.pressed.connect(onDownvoteButtonPressed)
 	replyButton.toggled.connect(onReplyButtonToggled)
-
-func loadProfilePicture():
-	var imageUrl = Backend.BACKEND_IP_ADRESS + "/api/users/picture/" + userId
-	var httpRequest = HTTPRequest.new()
-	Network.add_child(httpRequest)
-	httpRequest.timeout = 15
-	httpRequest.request_completed.connect(onLoadProfilePictureRequestCompleted)
-
-	var httpError = httpRequest.request(imageUrl)
-	if httpError != OK:
-		print("Error: " + str(httpError))
-
-func onLoadProfilePictureRequestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
-	var image = Image.new()
-	var imageError = image.load_jpg_from_buffer(body)
-	if imageError != OK:
-		print("Error loading jpg: " + error_string(imageError))
-		print("Trying PNG...")
-		imageError = image.load_png_from_buffer(body)
-		if imageError != OK:
-			print("Error loading png: " + error_string(imageError))
-			return
-		else:
-			print("PNG loaded successfully")
-	else:
-		print("JPG loaded successfully")
-	
-	# var profileTexture = ImageTexture.new()
-	
-
-	profilePicture.texture = ImageTexture.create_from_image(image)
 
 const INDENT_SIZE: int = 20
 
