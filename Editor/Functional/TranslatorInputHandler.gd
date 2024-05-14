@@ -1,9 +1,10 @@
 extends Node3D
-class_name RotatorInputHandler
+class_name TranslatorInputHandler
 
 var maxDistance: int = 2000
 
-@onready var rotator: Rotator = %Rotator
+# @onready var rotator: Rotator = %Rotator
+@onready var translator: Translator = %Translator
 
 signal clickStarted(node: Node3D)
 signal clickEnded()
@@ -21,7 +22,7 @@ func _unhandled_input(_event):
 		clickEnded.emit()
 
 	if Input.is_action_just_pressed("p1_pause"):
-		rotator.setRotation(Vector3.ZERO)
+		translator.setPostion(Vector3.ZERO)
 
 
 
