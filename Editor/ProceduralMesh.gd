@@ -113,3 +113,56 @@ func getNormalArray(indices: PackedInt32Array, vertices: PackedVector3Array) -> 
 		normalArray[indices[index + 2]] = normal
 
 	return normalArray
+
+static func getPipeVertices(
+	a: Vector3,
+	b: Vector3,
+	radius: float,
+) -> PackedVector3Array:
+	var segments: int = 8
+	var vertices: PackedVector3Array = PackedVector3Array()
+
+	var profile: PackedVector3Array = PackedVector3Array()
+
+	for i in segments + 1:
+		var angle: float = i * 2 * PI / segments
+		profile.push_back(Vector3(cos(angle) * radius, sin(angle) * radius, 0))
+
+	var forward: Vector3 = (b - a).normalized()
+	var tangent: Vector3 = Vector3(-forward.z, 0, forward.x).normalized() 
+	if tangent.length() == 0:
+		tangent = Vector3(0, 0, 1)
+
+
+	var rotationBasis: Basis = Basis(
+		tangent,
+		tangent.cross(forward),
+		forward
+	)
+
+	for i in segments + 1:
+		var vertex: Vector3 = profile[i]
+
+		vertex = rotationBasis * vertex + a
+
+		vertices.push_back(vertex)
+
+	for i in segments + 1:
+		var vertex: Vector3 = profile[i]
+
+		vertex = rotationBasis * vertex + b
+
+		vertices.push_back(vertex) 
+
+	return vertices
+
+static func getPipeCapVertices(
+	pipeVertices: PackedVector3Array,
+) -> PackedVector3Array:
+	var capVertices: PackedVector3Array = pipeVertices.slice(0, pipeVertices.size() / 2)
+	var extraVertices: PackedVector3Array = capVertices.slice(capVertices.size() / 2, capVertices.size() - 1)
+	extraVertices.reverse()
+	capVertices = capVertices.slice(0, capVertices.size() / 2)
+	capVertices.append_array(extraVertices)
+
+	return capVertices

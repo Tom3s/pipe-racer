@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ddv8dlwow0hmj"]
+
+[ext_resource type="Shader" uid="uid://dqoaqrmt3o4w2" path="res://Track Props/StartLineFlagShader.tres" id="1_d1on5"]
+[ext_resource type="Texture2D" uid="uid://bscn3vsxbnoae" path="res://Track Props/StartFlag.png" id="2_jdmny"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_d1on5")
+shader_parameter/ScaleX = 7.0
+shader_parameter/ScaleY = -1.0
+shader_parameter/OffestX = null
+shader_parameter/OffsetY = 0.0
+shader_parameter/Texture = ExtResource("2_jdmny")
