@@ -103,8 +103,21 @@ class PipeVertexCollection:
 
 
 
-@onready var startNode: PipeNode = %Start
-@onready var endNode: PipeNode = %End
+@onready var startNode: PipeNode = %Start:
+	set(newNode):
+		startNode.dataChanged.disconnect(refreshMesh)
+
+		startNode = newNode
+
+		startNode.dataChanged.connect(refreshMesh)
+
+@onready var endNode: PipeNode = %End:
+	set(newNode):
+		endNode.dataChanged.disconnect(refreshMesh)
+
+		endNode = newNode
+
+		endNode.dataChanged.connect(refreshMesh)
 
 @onready var pipeMesh: PhysicsSurface = %Mesh
 

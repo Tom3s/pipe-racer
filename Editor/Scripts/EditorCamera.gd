@@ -1,12 +1,9 @@
-class_name EditorCameraOld
 extends Camera3D
+class_name EditorCamera
 
 # Modifier keys' speed multiplier
 const SHIFT_MULTIPLIER = 3.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
-
-
-# @export_range(0.0, 1.0) var sensitivity: float = 0.25
 
 # Mouse state
 var _mouse_position = Vector2(0.0, 0.0)
@@ -29,6 +26,7 @@ var _e = false
 var _shift = false
 var _alt = false
 
+
 signal mouseCaptureExited()
 
 func _ready():
@@ -42,41 +40,12 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative
 	
-	# Receives mouse button input
-	# if event is InputEventMouseButton:
-		# match event.button_index:
-		# 	MOUSE_BUTTON_RIGHT: # Only allows rotation if right click down
-		# 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
-		# 	MOUSE_BUTTON_WHEEL_UP: # Increases max velocity
-		# 		_vel_multiplier = clamp(_vel_multiplier * 1.1, 0.2, 20)
-		# 	MOUSE_BUTTON_WHEEL_DOWN: # Decereases max velocity
-		# 		_vel_multiplier = clamp(_vel_multiplier / 1.1, 0.2, 20)
-		# if event.is_action("editor_look_around"):
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if Input.is_action_pressed("editor_look_around") else Input.MOUSE_MODE_VISIBLE)
 	mouseCaptured = Input.is_action_pressed("editor_look_around")
 
 	if Input.is_action_just_released("editor_look_around"):
 		mouseCaptureExited.emit()
 
-	# Receives key input
-	# if event is InputEventKey:
-	# 	match event.keycode:
-	# 		KEY_W:
-	# 			_w = event.pressed
-	# 		KEY_S:
-	# 			_s = event.pressed
-	# 		KEY_A:
-	# 			_a = event.pressed
-	# 		KEY_D:
-	# 			_d = event.pressed
-	# 		KEY_Q:
-	# 			_q = event.pressed
-	# 		KEY_E:
-	# 			_e = event.pressed
-	# 		KEY_SHIFT:
-	# 			_shift = event.pressed
-	# 		KEY_ALT:
-	# 			_alt = event.pressed
 	_w = Input.is_action_pressed("editor_move_forward")
 	_s = Input.is_action_pressed("editor_move_backward")
 	_a = Input.is_action_pressed("editor_move_left")
@@ -91,7 +60,6 @@ func _process(delta):
 	_update_movement(delta)
 
 # Updates camera movement
-
 var velocityLength = 0.0
 var mouseCaptured = false
 func _update_movement(delta):
@@ -165,15 +133,6 @@ func getGridAlignedBasis() -> Basis:
 	else:
 		gridAlignedBasis.x.x = 0
 	gridAlignedBasis.x = gridAlignedBasis.x.normalized()
-
-	# relative z axis
-	# gridAlignedBasis.z.y = 0
-	# if gridAlignedBasis.z.x > gridAlignedBasis.z.z:
-	# 	gridAlignedBasis.z.z = 0
-	# else:
-	# 	gridAlignedBasis.z.x = 0
-	# gridAlignedBasis.z = gridAlignedBasis.z.normalized()
-	# irrelevant, can be calculated from x and y
 
 	# constant y axis
 	gridAlignedBasis.y = Vector3.UP

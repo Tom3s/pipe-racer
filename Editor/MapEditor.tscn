@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://bbyihno4uk3q7"]
+
+[ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
+[ext_resource type="PackedScene" uid="uid://jfef8x3bl627" path="res://Editor/InteractiveMap.tscn" id="2_xocc0"]
+[ext_resource type="PackedScene" uid="uid://cptpsvgtq4jgc" path="res://Editor/Functional/RoadNode.tscn" id="3_nyxif"]
+[ext_resource type="Script" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
+[ext_resource type="Script" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
+
+[node name="MapEditor" type="Node3D"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="EditorCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_nfa8o")
+
+[node name="InteractiveMap" parent="." instance=ExtResource("2_xocc0")]
+
+[node name="PreviewElement" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
+
+[node name="EditorInputHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_yc3pc")
+
+[node name="EditorEventListener" type="Node" parent="."]
+script = ExtResource("4_miouu")

@@ -1,9 +1,9 @@
 extends Node3D
 
-var editorInputHandler: EditorInputHandler
+var editorInputHandler: EditorInputHandlerOld
 var prefabMesher: PrefabMesher
 var editorStateMachine: EditorStateMachine
-var camera: EditorCamera
+var camera: EditorCameraOld
 var map: Map
 var propPlacer: PropPlacer
 

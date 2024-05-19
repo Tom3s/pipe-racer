@@ -58,8 +58,30 @@ class RoadVertexCollection:
 
 		return vertex3D
 
-@onready var startNode: RoadNode = %Start
-@onready var endNode: RoadNode = %End
+
+@onready var startNode: RoadNode = %Start:
+	set(newNode):
+		startNode.transformChanged.disconnect(refreshAll)
+		startNode.roadDataChanged.disconnect(refreshAll)
+		startNode.runoffDataChanged.disconnect(refreshRunoffMesh)
+
+		startNode = newNode
+
+		startNode.transformChanged.connect(refreshAll)
+		startNode.roadDataChanged.connect(refreshAll)
+		startNode.runoffDataChanged.connect(refreshRunoffMesh)
+
+@onready var endNode: RoadNode = %End:
+	set(newNode):
+		endNode.transformChanged.disconnect(refreshAll)
+		endNode.roadDataChanged.disconnect(refreshAll)
+		endNode.runoffDataChanged.disconnect(refreshRunoffMesh)
+
+		endNode = newNode
+
+		endNode.transformChanged.connect(refreshAll)
+		endNode.roadDataChanged.connect(refreshAll)
+		endNode.runoffDataChanged.connect(refreshRunoffMesh)
 
 @onready var roadMesh: PhysicsSurface = %RoadMesh
 @onready var runoffMesh: PhysicsSurface = %RunoffMesh
@@ -397,8 +419,6 @@ func _ready():
 
 	startNode.transformChanged.connect(refreshAll)
 	endNode.transformChanged.connect(refreshAll)
-
-
 
 	startNode.roadDataChanged.connect(refreshAll)
 	endNode.roadDataChanged.connect(refreshAll)
