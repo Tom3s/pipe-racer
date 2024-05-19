@@ -791,7 +791,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-507.398, 433.312)
 flags/depth_prepass_alpha = true
 nodes/fragment/0/position = Vector2(3000, 440)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ttc4p")
