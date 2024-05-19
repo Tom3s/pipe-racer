@@ -154,7 +154,7 @@ func refreshSupportMesh() -> void:
 	# leftSupport
 	var leftTop := Vector3(PrefabConstants.GRID_SIZE * 2, height - PrefabConstants.GRID_SIZE * 2, -PrefabConstants.GRID_SIZE * 2) + centeringOffset
 	var leftBottom := Vector3(PrefabConstants.GRID_SIZE * 2, supportBottomHeight, -PrefabConstants.GRID_SIZE * 2) + centeringOffset
-	pipeVertices = getPipeVertices(
+	pipeVertices = ProceduralMesh.getPipeVertices(
 		leftTop,
 		leftBottom,
 		PrefabConstants.GRID_SIZE / 2
@@ -170,11 +170,14 @@ func refreshSupportMesh() -> void:
 		true
 	)
 
-	var leftCapVertices: PackedVector3Array = pipeVertices.slice(0, pipeVertices.size() / 2)
-	var extraVertices: PackedVector3Array = leftCapVertices.slice(leftCapVertices.size() / 2, leftCapVertices.size() - 1)
-	extraVertices.reverse()
-	leftCapVertices = leftCapVertices.slice(0, leftCapVertices.size() / 2)
-	leftCapVertices.append_array(extraVertices)
+	# var leftCapVertices: PackedVector3Array = pipeVertices.slice(0, pipeVertices.size() / 2)
+	# var extraVertices: PackedVector3Array = leftCapVertices.slice(leftCapVertices.size() / 2, leftCapVertices.size() - 1)
+	# extraVertices.reverse()
+	# leftCapVertices = leftCapVertices.slice(0, leftCapVertices.size() / 2)
+	# leftCapVertices.append_array(extraVertices)
+	var leftCapVertices: PackedVector3Array = ProceduralMesh.getPipeCapVertices(
+		pipeVertices
+	)
 
 	proceduralMesh.addMeshTo(
 		supportMesh,
@@ -191,7 +194,7 @@ func refreshSupportMesh() -> void:
 	var rightTop := Vector3(width - PrefabConstants.GRID_SIZE * 2, height - PrefabConstants.GRID_SIZE * 2, -PrefabConstants.GRID_SIZE * 2) + centeringOffset
 	var rightBottom := Vector3(width - PrefabConstants.GRID_SIZE * 2, supportBottomHeight, -PrefabConstants.GRID_SIZE * 2) + centeringOffset
 	
-	pipeVertices = getPipeVertices(
+	pipeVertices = ProceduralMesh.getPipeVertices(
 		rightTop,
 		rightBottom,
 		PrefabConstants.GRID_SIZE / 2
@@ -207,11 +210,14 @@ func refreshSupportMesh() -> void:
 		false
 	)
 
-	var rightCapVertices: PackedVector3Array = pipeVertices.slice(0, pipeVertices.size() / 2)
-	extraVertices = rightCapVertices.slice(rightCapVertices.size() / 2, rightCapVertices.size() - 1)
-	extraVertices.reverse()
-	rightCapVertices = rightCapVertices.slice(0, rightCapVertices.size() / 2)
-	rightCapVertices.append_array(extraVertices)
+	# var rightCapVertices: PackedVector3Array = pipeVertices.slice(0, pipeVertices.size() / 2)
+	# extraVertices = rightCapVertices.slice(rightCapVertices.size() / 2, rightCapVertices.size() - 1)
+	# extraVertices.reverse()
+	# rightCapVertices = rightCapVertices.slice(0, rightCapVertices.size() / 2)
+	# rightCapVertices.append_array(extraVertices)
+	var rightCapVertices: PackedVector3Array = ProceduralMesh.getPipeCapVertices(
+		pipeVertices
+	)
 
 	proceduralMesh.addMeshTo(
 		supportMesh,
@@ -232,7 +238,7 @@ func refreshSupportMesh() -> void:
 		var beamOffset1: Vector3 = Vector3(PrefabConstants.GRID_SIZE * 1.5, -1.5, PrefabConstants.GRID_SIZE * 1.5)
 		var beamOffset2: Vector3 = Vector3(-PrefabConstants.GRID_SIZE * 1.5, -1.5, PrefabConstants.GRID_SIZE * 1.5)
 
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart + Vector3(0, -1.5, 0),
 			beamStart + beamOffset1,
 			PrefabConstants.GRID_SIZE / 4
@@ -248,7 +254,7 @@ func refreshSupportMesh() -> void:
 			false
 		)
 		
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart + Vector3(0, -1.5, 0),
 			beamStart + beamOffset2,
 			PrefabConstants.GRID_SIZE / 4
@@ -270,7 +276,7 @@ func refreshSupportMesh() -> void:
 		var beamOffset1: Vector3 = Vector3(PrefabConstants.GRID_SIZE * 1.5, -1.5, PrefabConstants.GRID_SIZE * 1.5)
 		var beamOffset2: Vector3 = Vector3(-PrefabConstants.GRID_SIZE * 1.5, -1.5, PrefabConstants.GRID_SIZE * 1.5)
 
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart + Vector3(0, -1.5, 0),
 			beamStart + beamOffset1,
 			PrefabConstants.GRID_SIZE / 4
@@ -286,7 +292,7 @@ func refreshSupportMesh() -> void:
 			false
 		)
 		
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart + Vector3(0, -1.5, 0),
 			beamStart + beamOffset2,
 			PrefabConstants.GRID_SIZE / 4
@@ -315,7 +321,7 @@ func refreshSupportMesh() -> void:
 		var beamEnd1: Vector3 = Vector3(rightTop.x, currentHeight - crossBeamHeight, rightTop.z) + offset
 		var beamEnd2: Vector3 = Vector3(leftTop.x, currentHeight - crossBeamHeight, leftTop.z) + offset
 
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart1,
 			beamEnd1,
 			PrefabConstants.GRID_SIZE / 4
@@ -331,7 +337,7 @@ func refreshSupportMesh() -> void:
 			false
 		)
 
-		beamVertices = getPipeVertices(
+		beamVertices = ProceduralMesh.getPipeVertices(
 			beamStart2,
 			beamEnd2,
 			PrefabConstants.GRID_SIZE / 4
@@ -356,47 +362,7 @@ func setSupportMaterial() -> void:
 		supportMesh.set_surface_override_material(i, metalMaterial)
 # endregion
 
-func getPipeVertices(
-	a: Vector3,
-	b: Vector3,
-	radius: float,
-) -> PackedVector3Array:
-	var segments: int = 8
-	var vertices: PackedVector3Array = PackedVector3Array()
 
-	var profile: PackedVector3Array = PackedVector3Array()
-
-	for i in segments + 1:
-		var angle: float = i * 2 * PI / segments
-		profile.push_back(Vector3(cos(angle) * radius, sin(angle) * radius, 0))
-
-	var forward: Vector3 = (b - a).normalized()
-	var tangent: Vector3 = Vector3(-forward.z, 0, forward.x).normalized() 
-	if tangent.length() == 0:
-		tangent = Vector3(0, 0, 1)
-
-
-	var rotationBasis: Basis = Basis(
-		tangent,
-		tangent.cross(forward),
-		forward
-	)
-
-	for i in segments + 1:
-		var vertex: Vector3 = profile[i]
-
-		vertex = rotationBasis * vertex + a
-
-		vertices.push_back(vertex)
-
-	for i in segments + 1:
-		var vertex: Vector3 = profile[i]
-
-		vertex = rotationBasis * vertex + b
-
-		vertices.push_back(vertex) 
-
-	return vertices
 
 func setTexture(texture: Texture) -> void:
 	boardMaterial.set_shader_parameter("Texture", texture)

@@ -117,4 +117,5 @@ static func getHeightLerp(
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
 		# print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
-		return Vector3(0, p3.y, 0)
+		return Vector3(0, p3.y, 0) 
+
