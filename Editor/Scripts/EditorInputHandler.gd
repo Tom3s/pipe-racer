@@ -8,6 +8,8 @@ signal moveUpGrid()
 signal moveDownGrid()
 
 signal rotatePressed(axis: Vector3, angle: float)
+signal resetRotationPressed()
+
 
 signal placePressed()
 
@@ -29,27 +31,35 @@ func _unhandled_input(event):
 		mouseMovedTo.emit(onScreenMousePosToGridIntersect())
 	
 	if Input.is_action_just_pressed("editor_rotate_right"):
-		rotatePressed.emit(Vector3.UP, angleSnap)
+		rotatePressed.emit(Vector3.UP, -angleSnap)
 	elif Input.is_action_just_pressed("editor_tilt_right"):
 		rotatePressed.emit(Vector3.FORWARD, angleSnap)
 	elif Input.is_action_just_pressed("editor_pitch_back"):
-		rotatePressed.emit(Vector3.RIGHT, angleSnap)
+		rotatePressed.emit(Vector3.RIGHT, -angleSnap)
 	elif Input.is_action_just_pressed("editor_grid_down"):
 		currentGridHeight -= PrefabConstants.GRID_SIZE
 		moveDownGrid.emit()
 
 
 	if Input.is_action_just_pressed("editor_rotate_left"):
-		rotatePressed.emit(Vector3.UP, -angleSnap)
+		rotatePressed.emit(Vector3.UP, angleSnap)
 	elif Input.is_action_just_pressed("editor_tilt_left"):
 		rotatePressed.emit(Vector3.FORWARD, -angleSnap)
 	elif Input.is_action_just_pressed("editor_pitch_forward"):
-		rotatePressed.emit(Vector3.RIGHT, -angleSnap)
+		rotatePressed.emit(Vector3.RIGHT, angleSnap)
 	elif Input.is_action_just_pressed("editor_grid_up"):
 		currentGridHeight += PrefabConstants.GRID_SIZE
 		moveUpGrid.emit()
 
 	lastGridHeight = currentGridHeight
+
+	if Input.is_action_just_pressed("editor_reset_rotation"):
+		resetRotationPressed.emit()
+
+	if Input.is_action_just_pressed("editor_place"):
+		placePressed.emit()
+
+
 
 func onScreenMousePosToGridIntersect() -> Vector3:
 	var mousePos = get_viewport().get_mouse_position()
@@ -104,3 +114,4 @@ func onScreenMousePosToGridIntersect() -> Vector3:
 	intersection = intersection.snapped(Vector3.ONE * PrefabConstants.GRID_SIZE)
 
 	return intersection
+

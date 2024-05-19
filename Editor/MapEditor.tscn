@@ -15,15 +15,17 @@ unique_name_in_owner = true
 script = ExtResource("1_nfa8o")
 
 [node name="InteractiveMap" parent="." instance=ExtResource("2_xocc0")]
+unique_name_in_owner = true
 
 [node name="PreviewElement" type="Node3D" parent="."]
 unique_name_in_owner = true
 
 [node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
+isPreviewNode = true
 
 [node name="EditorInputHandler" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("3_yc3pc")
 
-[node name="EditorEventListener" type="Node" parent="."]
+[node name="EditorEventListener" type="Node3D" parent="."]
 script = ExtResource("4_miouu")

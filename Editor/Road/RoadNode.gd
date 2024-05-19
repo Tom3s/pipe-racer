@@ -53,6 +53,12 @@ var rightRunoff: float = 0.0:
 	# profile.texture_mode = CurveTexture.TEXTURE_MODE_RED
 	# profile.width = 256
 
+@export
+var isPreviewNode: bool = false:
+	set(newValue):
+		isPreviewNode = newValue
+		# if isPreviewNode:
+		%Collider.use_collision = !isPreviewNode
 
 func _physics_process(_delta):
 	if oldPos != global_position:
@@ -244,3 +250,11 @@ func setProperties(properties: Dictionary):
 	global_rotation = properties["rotation"]
 
 	roadDataChanged.emit()
+
+@onready var roadNodeScene: PackedScene = preload("res://Editor/Functional/RoadNode.tscn")
+
+func getCopy() -> RoadNode:
+	var newNode: RoadNode = roadNodeScene.instantiate()
+	newNode.setProperties(getProperties())
+
+	return newNode

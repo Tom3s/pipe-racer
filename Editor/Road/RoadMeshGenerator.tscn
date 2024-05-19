@@ -92,6 +92,7 @@ unique_name_in_owner = true
 script = ExtResource("4_duv0h")
 profile = SubResource("Curve_cj3ar")
 cap = true
+isPreviewNode = null
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Start"]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -0.514821)
@@ -107,6 +108,7 @@ script = ExtResource("4_duv0h")
 profile = SubResource("Curve_sifaj")
 profileHeight = 64.0
 cap = true
+isPreviewNode = null
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="End"]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -0.514824)

@@ -1,9 +1,10 @@
-extends Node
+extends Node3D
 class_name EditorEventListener
 
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
 @onready var previewElementParent: Node3D = %PreviewElement
+@onready var map: InteractiveMap = %InteractiveMap
 
 func _ready():
 	connectSignals()
@@ -43,3 +44,49 @@ func connectSignals():
 		
 		currentElement.global_rotation = currentElement.global_rotation.snapped(Vector3.ONE * deg_to_rad(5))
 	)
+	inputHandler.resetRotationPressed.connect(func():
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+
+		currentElement.global_rotation = Vector3.ZERO
+	)
+
+	inputHandler.placePressed.connect(func():
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+
+		if currentElement.has_method("getCopy"):
+			var collidedObject = screenPointToRay()
+			if collidedObject != null: # && map.lastRoadElement == null:
+				collidedObject = collidedObject.get_parent()
+				print("[EditorEventListener.gd] collidedObject: ", collidedObject)
+
+				if collidedObject.has_method("getCopy"):
+					currentElement.global_position = collidedObject.global_position
+					currentElement.global_rotation = collidedObject.global_rotation
+
+
+			var newElement = currentElement.getCopy()
+			map.addRoadNode(newElement, currentElement.global_position, currentElement.global_rotation)
+	)
+
+	map.roadPreviewElementRequested.connect(func():
+		map.onRoadPreviewElementProvided(previewElementParent.get_child(0))
+	)
+
+var maxRaycastDistance: int = 2000
+
+func screenPointToRay() -> Node3D:
+	var spaceState = get_world_3d().direct_space_state
+
+	var mousePos = get_viewport().get_mouse_position()
+	var camera = get_tree().root.get_camera_3d()
+	var from = camera.project_ray_origin(mousePos)
+	var to = from + camera.project_ray_normal(mousePos) * maxRaycastDistance
+	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to))
+	
+	if rayArray.has("collider"):
+		return rayArray["collider"]
+	return null
