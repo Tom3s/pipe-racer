@@ -60,13 +60,16 @@ func connectSignals():
 		if currentElement == null:
 			return
 
-		if currentElement.has_method("getCopy"):
+		# print("[EditorEventListener.gd] Class of currentElement: ", ClassFunctions.getClassName(currentElement))
+
+		if ClassFunctions.getClassName(currentElement) == "RoadNode":
 			var collidedObject = screenPointToRay()
 			if collidedObject != null: # && map.lastRoadElement == null:
 				collidedObject = collidedObject.get_parent()
-				print("[EditorEventListener.gd] collidedObject: ", collidedObject)
+				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
 
-				if collidedObject.has_method("getCopy"):
+				# if collidedObject.has_method("getCopy"):
+				if ClassFunctions.getClassName(collidedObject) == "RoadNode":
 					currentElement.global_position = collidedObject.global_position
 					currentElement.global_rotation = collidedObject.global_rotation
 
