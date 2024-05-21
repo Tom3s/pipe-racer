@@ -65,6 +65,9 @@ class RoadVertexCollection:
 		startNode.roadDataChanged.disconnect(refreshAll)
 		startNode.runoffDataChanged.disconnect(refreshRunoffMesh)
 
+		if get_node("Start") != null:
+			%Start.queue_free()
+
 		startNode = newNode
 
 		startNode.transformChanged.connect(refreshAll)
@@ -76,6 +79,9 @@ class RoadVertexCollection:
 		endNode.transformChanged.disconnect(refreshAll)
 		endNode.roadDataChanged.disconnect(refreshAll)
 		endNode.runoffDataChanged.disconnect(refreshRunoffMesh)
+
+		if get_node("End") != null:
+			%End.queue_free() 
 
 		endNode = newNode
 
@@ -825,7 +831,7 @@ func refreshSupportMesh() -> void:
 	if supportType == SupportType.RECT_PILLAR:
 		if leftSideVertices.size() == 0 or rightSideVertices.size() == 0:
 			return
-			
+
 		for i in lengthMultiplier + 1:
 			var t = float(i) / (lengthMultiplier)
 
