@@ -236,6 +236,9 @@ func getProperties() -> Dictionary:
 		"width": width,
 		"cap": cap,
 
+		"leftRunoff": leftRunoff,
+		"rightRunoff": rightRunoff,
+
 		"position": global_position,
 		"rotation": global_rotation,
 	}
@@ -245,6 +248,9 @@ func setProperties(properties: Dictionary):
 	profileHeight = properties["profileHeight"]
 	width = properties["width"]
 	cap = properties["cap"]
+
+	leftRunoff = properties["leftRunoff"]
+	rightRunoff = properties["rightRunoff"]
 
 	global_position = properties["position"]
 	global_rotation = properties["rotation"]

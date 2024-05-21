@@ -765,7 +765,8 @@ func refreshSupportMesh() -> void:
 	
 	# vertexList.push_back(leftSideVertices[0])
 	vertexList.append_array(leftSideVertices)
-	vertexList.push_back(leftSideVertices[leftSideVertices.size() - 1])
+	if leftSideVertices.size() > 0:
+		vertexList.push_back(leftSideVertices[leftSideVertices.size() - 1])
 
 	var endRight: Vector2 = Vector2(endNode.width / 2, -PrefabConstants.GRID_SIZE)
 	var startRight: Vector2 = Vector2(startNode.width / 2, -PrefabConstants.GRID_SIZE)
@@ -787,10 +788,13 @@ func refreshSupportMesh() -> void:
 		)
 		rightSideVertices.append_array(interpolatedVertices)
 	
-	vertexList.push_back(rightSideVertices[0])
-	vertexList.append_array(rightSideVertices)
-	vertexList.push_back(rightSideVertices[rightSideVertices.size() - 1])
-	vertexList.push_back(leftSideVertices[0])
+	if rightSideVertices.size() > 0:
+		vertexList.push_back(rightSideVertices[0])
+		vertexList.append_array(rightSideVertices)
+		vertexList.push_back(rightSideVertices[rightSideVertices.size() - 1])
+	if leftSideVertices.size() > 0:
+		vertexList.push_back(leftSideVertices[0])
+
 
 
 	rightSideVertices.reverse()
@@ -819,6 +823,9 @@ func refreshSupportMesh() -> void:
 		return
 
 	if supportType == SupportType.RECT_PILLAR:
+		if leftSideVertices.size() == 0 or rightSideVertices.size() == 0:
+			return
+			
 		for i in lengthMultiplier + 1:
 			var t = float(i) / (lengthMultiplier)
 
@@ -872,6 +879,9 @@ func refreshSupportMesh() -> void:
 		return
 
 	if supportType == SupportType.ROUND_PILLAR:
+		if leftSideVertices.size() == 0 or rightSideVertices.size() == 0:
+			return
+
 		for i in lengthMultiplier + 1:
 			var t = float(i) / (lengthMultiplier)
 
@@ -1069,3 +1079,65 @@ func convertToPhysicsObject() -> void:
 
 	supportMesh.create_trimesh_collision()
 	supportMesh.setPhysicsMaterial(supportMaterial)
+
+func getProperties() -> Dictionary:
+	return {
+		"surfaceType": surfaceType,
+		"wallSurfaceType": wallSurfaceType,
+
+		"startWallCap": startWallCap,
+		"endWallCap": endWallCap,
+
+		"leftWallType": leftWallType,
+		"leftWallStartHeight": leftWallStartHeight,
+		"leftWallEndHeight": leftWallEndHeight,
+
+		"rightWallType": rightWallType,
+		"rightWallStartHeight": rightWallStartHeight,
+		"rightWallEndHeight": rightWallEndHeight,
+
+		"supportType": supportType,
+		"supportBottomHeight": supportBottomHeight,
+		"supportMaterial": supportMaterial,
+
+		"leftRunoffSurfaceType": leftRunoffSurfaceType,
+		"rightRunoffSurfaceType": rightRunoffSurfaceType,
+	}
+
+func setProperties(properties: Dictionary):
+	if properties.has("surfaceType"):
+		surfaceType = properties["surfaceType"] as PhysicsSurface.SurfaceType
+	if properties.has("wallSurfaceType"):
+		wallSurfaceType = properties["wallSurfaceType"] as PhysicsSurface.SurfaceType
+
+	if properties.has("startWallCap"):
+		startWallCap = properties["startWallCap"]
+	if properties.has("endWallCap"):
+		endWallCap = properties["endWallCap"]
+
+	if properties.has("leftWallType"):
+		leftWallType = properties["leftWallType"] as WallTypes
+	if properties.has("leftWallStartHeight"):
+		leftWallStartHeight = properties["leftWallStartHeight"]
+	if properties.has("leftWallEndHeight"):
+		leftWallEndHeight = properties["leftWallEndHeight"]
+
+	if properties.has("rightWallType"):
+		rightWallType = properties["rightWallType"] as WallTypes
+	if properties.has("rightWallStartHeight"):
+		rightWallStartHeight = properties["rightWallStartHeight"]
+	if properties.has("rightWallEndHeight"):
+		rightWallEndHeight = properties["rightWallEndHeight"]
+
+	if properties.has("supportType"):
+		supportType = properties["supportType"] as SupportType
+	if properties.has("supportBottomHeight"):
+		supportBottomHeight = properties["supportBottomHeight"]
+	if properties.has("supportMaterial"):
+		supportMaterial = properties["supportMaterial"] as PhysicsSurface.SurfaceType
+
+	if properties.has("leftRunoffSurfaceType"):
+		leftRunoffSurfaceType = properties["leftRunoffSurfaceType"] as PhysicsSurface.SurfaceType
+	if properties.has("rightRunoffSurfaceType"):
+		rightRunoffSurfaceType = properties["rightRunoffSurfaceType"] as PhysicsSurface.SurfaceType
+

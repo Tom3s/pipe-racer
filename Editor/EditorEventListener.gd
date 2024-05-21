@@ -6,6 +6,9 @@ class_name EditorEventListener
 @onready var previewElementParent: Node3D = %PreviewElement
 @onready var map: InteractiveMap = %InteractiveMap
 
+@onready var roadNodePropertiesUI: RoadNodePropertiesUI = %RoadNodePropertiesUI
+@onready var roadPropertiesUI: RoadPropertiesUI = %RoadPropertiesUI
+
 func _ready():
 	connectSignals()
 
@@ -69,12 +72,163 @@ func connectSignals():
 
 
 			var newElement = currentElement.getCopy()
-			map.addRoadNode(newElement, currentElement.global_position, currentElement.global_rotation)
+			map.addRoadNode(
+				newElement, 
+				currentElement.global_position, 
+				currentElement.global_rotation,
+				roadPropertiesUI.getProperties()
+			)
 	)
 
 	map.roadPreviewElementRequested.connect(func():
 		map.onRoadPreviewElementProvided(previewElementParent.get_child(0))
 	)
+
+	# road node properties ui
+	roadNodePropertiesUI.profileHeightChanged.connect(func(value: float):
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.profileHeight = value
+	)
+
+	roadNodePropertiesUI.widthChanged.connect(func(value: float):
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.width = value
+	)
+
+	roadNodePropertiesUI.leftRunoffChanged.connect(func(value: float):
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.leftRunoff = value
+	)
+
+	roadNodePropertiesUI.rightRunoffChanged.connect(func(value: float):
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null:
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.rightRunoff = value
+	)
+
+	# road properties ui
+	# signal roadSurfaceChanged(surface: int)
+	# signal wallMaterialChanged(material: int)
+	# signal supportTypeChanged(type: int)
+	# signal supportMaterialChanged(material: int)
+	# signal supportBottomChanged(bottom: float)
+
+	# signal leftWallTypeChanged(type: int)
+	# signal leftWallStartHeightChanged(height: float)
+	# signal leftWallEndHeightChanged(height: float)
+	# signal leftRunoffMaterialChanged(material: int)
+
+	# signal rightWallTypeChanged(type: int)
+	# signal rightWallStartHeightChanged(height: float)
+	# signal rightWallEndHeightChanged(height: float)
+	# signal rightRunoffMaterialChanged(material: int)
+	roadPropertiesUI.roadSurfaceChanged.connect(func(surface: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.surfaceType = surface as PhysicsSurface.SurfaceType
+	)
+
+	roadPropertiesUI.wallMaterialChanged.connect(func(material: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.wallSurfaceType = material as PhysicsSurface.SurfaceType
+	)
+
+	roadPropertiesUI.supportTypeChanged.connect(func(type: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.supportType = type as RoadMeshGenerator.SupportType
+	)
+
+	roadPropertiesUI.supportMaterialChanged.connect(func(material: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.supportMaterial = material as PhysicsSurface.SurfaceType
+	)
+
+	roadPropertiesUI.supportBottomChanged.connect(func(bottom: float):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.supportBottomHeight = bottom
+	)
+
+	roadPropertiesUI.leftWallTypeChanged.connect(func(type: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.leftWallType = type as RoadMeshGenerator.WallTypes
+	)
+
+	roadPropertiesUI.leftWallStartHeightChanged.connect(func(height: float):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.leftWallStartHeight = height
+	)
+
+	roadPropertiesUI.leftWallEndHeightChanged.connect(func(height: float):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.leftWallEndHeight = height
+	)
+
+	roadPropertiesUI.leftRunoffMaterialChanged.connect(func(material: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.leftRunoffSurfaceType = material as PhysicsSurface.SurfaceType
+	)
+
+	roadPropertiesUI.rightWallTypeChanged.connect(func(type: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.rightWallType = type as RoadMeshGenerator.WallTypes
+	)
+
+	roadPropertiesUI.rightWallStartHeightChanged.connect(func(height: float):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.rightWallStartHeight = height
+	)
+
+	roadPropertiesUI.rightWallEndHeightChanged.connect(func(height: float):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.rightWallEndHeight = height
+	)
+
+	roadPropertiesUI.rightRunoffMaterialChanged.connect(func(material: int):
+		if map.lastRoadElement == null:
+			return
+
+		map.lastRoadElement.rightRunoffSurfaceType = material as PhysicsSurface.SurfaceType
+	)
+
+
 
 var maxRaycastDistance: int = 2000
 

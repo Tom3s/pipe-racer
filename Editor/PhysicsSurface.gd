@@ -6,7 +6,7 @@ enum SurfaceType {
 	GRASS,
 	DIRT,
 	BOOSTER,
-	REVERSE_BOOSTER,
+	REV_BOOSTER,
 	CONCRETE,
 	FENCE
 }

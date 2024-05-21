@@ -17,7 +17,7 @@ func _ready():
 	roadPieces = roadElements.get_child(1)
 
 
-func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3):
+func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3, roadProperties: Dictionary):
 	roadNodes.add_child(node)
 	node.global_position = position
 	node.global_rotation = rotation
@@ -25,6 +25,7 @@ func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3):
 	if lastRoadNode == null:
 		var roadElement: RoadMeshGenerator = roadScene.instantiate()
 		roadPieces.add_child(roadElement)
+		roadElement.setProperties(roadProperties)
 		roadElement.startNode = node
 		lastRoadNode = node
 		lastRoadElement = roadElement

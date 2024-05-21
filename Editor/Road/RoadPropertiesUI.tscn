@@ -1,0 +1,265 @@
+[gd_scene load_steps=2 format=3 uid="uid://dl56mby6n2hiu"]
+
+[ext_resource type="Script" path="res://Editor/Road/RoadPropertiesUI.gd" id="1_cwi2r"]
+
+[node name="RoadPropertiesUI" type="VBoxContainer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -170.5
+offset_right = 170.5
+offset_bottom = 435.0
+grow_horizontal = 2
+size_flags_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cwi2r")
+
+[node name="MainContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Road Options"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Surface Material"
+
+[node name="RoadSurfaceOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wall Material
+"
+
+[node name="WallMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Support Type"
+
+[node name="SupportTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Support Material"
+
+[node name="SupportMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Support Bottom"
+
+[node name="SupportBottomSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -1024.0
+max_value = 1024.0
+step = 4.0
+alignment = 1
+custom_arrow_step = 4.0
+select_all_on_focus = true
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Label5" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+text = "Wall Type"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+text = "Wall Start Height"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+text = "Wall End Height"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+layout_mode = 2
+text = "Runoff Material"
+horizontal_alignment = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
+layout_mode = 2
+text = "Left"
+horizontal_alignment = 1
+
+[node name="LeftWallTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="LeftWallStartHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3.0
+step = 0.1
+value = 1.0
+alignment = 1
+custom_arrow_step = 0.1
+select_all_on_focus = true
+
+[node name="LeftWallEndHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3.0
+step = 0.1
+value = 1.0
+alignment = 1
+custom_arrow_step = 0.1
+select_all_on_focus = true
+
+[node name="LeftRunoffMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="VSeparator" type="VSeparator" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
+layout_mode = 2
+text = "Right"
+horizontal_alignment = 1
+
+[node name="RightWallTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="RightWallStartHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3.0
+step = 0.1
+value = 1.0
+alignment = 1
+custom_arrow_step = 0.1
+select_all_on_focus = true
+
+[node name="RightWallEndHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3.0
+step = 0.1
+value = 1.0
+alignment = 1
+custom_arrow_step = 0.1
+select_all_on_focus = true
+
+[node name="RightRunoffMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "WIP"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+
+[node name="VisibilityButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+toggle_mode = true
+text = "^ Road Settings"

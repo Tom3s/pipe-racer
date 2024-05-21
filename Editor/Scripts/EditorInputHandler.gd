@@ -24,6 +24,15 @@ var mousePos2D: Vector2 = Vector2()
 
 var angleSnap: float = deg_to_rad(5)
 
+var scrollCooldown: float = 0.0
+var scrollCooldownTime: float = 0.05
+
+func _ready():
+	set_physics_process(true)
+
+func _physics_process(delta):
+	scrollCooldown -= delta
+
 func _unhandled_input(event):
 	var newMousePos: Vector2 = get_viewport().get_mouse_position()
 	if !Input.is_action_pressed("editor_look_around") && (mousePos2D != newMousePos || lastGridHeight != currentGridHeight):
@@ -37,8 +46,11 @@ func _unhandled_input(event):
 	elif Input.is_action_just_pressed("editor_pitch_back"):
 		rotatePressed.emit(Vector3.RIGHT, -angleSnap)
 	elif Input.is_action_just_pressed("editor_grid_down"):
-		currentGridHeight -= PrefabConstants.GRID_SIZE
-		moveDownGrid.emit()
+		if scrollCooldown <= 0:
+			currentGridHeight -= PrefabConstants.GRID_SIZE
+			moveDownGrid.emit()
+			scrollCooldown = scrollCooldownTime
+			
 
 
 	if Input.is_action_just_pressed("editor_rotate_left"):
@@ -48,8 +60,10 @@ func _unhandled_input(event):
 	elif Input.is_action_just_pressed("editor_pitch_forward"):
 		rotatePressed.emit(Vector3.RIGHT, angleSnap)
 	elif Input.is_action_just_pressed("editor_grid_up"):
-		currentGridHeight += PrefabConstants.GRID_SIZE
-		moveUpGrid.emit()
+		if scrollCooldown <= 0:
+			currentGridHeight += PrefabConstants.GRID_SIZE
+			moveUpGrid.emit()
+			scrollCooldown = scrollCooldownTime
 
 	lastGridHeight = currentGridHeight
 
