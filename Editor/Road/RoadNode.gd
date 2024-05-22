@@ -81,7 +81,6 @@ func _ready():
 var isPreviewNode: bool = false:
 	set(newValue):
 		isPreviewNode = newValue
-		# if isPreviewNode:
 		%Collider.use_collision = !isPreviewNode
 
 func _physics_process(_delta):
@@ -281,7 +280,7 @@ func setProperties(properties: Dictionary):
 
 	roadDataChanged.emit()
 
-@onready var roadNodeScene: PackedScene = preload("res://Editor/Functional/RoadNode.tscn")
+@onready var roadNodeScene: PackedScene = preload("res://Editor/Road/RoadNode.tscn")
 
 func getCopy() -> RoadNode:
 	var newNode: RoadNode = roadNodeScene.instantiate()

@@ -65,8 +65,6 @@ script = ExtResource("4_2x8md")
 [node name="Start" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_01adp")
-radius = 24
-cap = true
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Start"]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -0.514821)
@@ -79,8 +77,6 @@ spin_sides = 8
 unique_name_in_owner = true
 transform = Transform3D(0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 64)
 script = ExtResource("2_01adp")
-radius = 24
-cap = true
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="End"]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -0.514824)

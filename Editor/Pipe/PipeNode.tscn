@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://4j0he4ousie"]
+
+[ext_resource type="Script" path="res://Editor/Pipe/PipeNode.gd" id="1_xvj33"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fp0up"]
+albedo_color = Color(0, 0.611765, 0.709804, 1)
+
+[node name="PipeNode" type="Node3D"]
+script = ExtResource("1_xvj33")
+
+[node name="Arrow" type="CSGPolygon3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -5.505)
+polygon = PackedVector2Array(0, 0, 0.2, 0, 0.2, 0.7, 0.4, 0.7, 0, 1.2)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 8
+material = SubResource("StandardMaterial3D_fp0up")
+
+[node name="Collider" type="CSGSphere3D" parent="."]
+unique_name_in_owner = true
+layers = 0
+use_collision = true
+radius = 15.0
+radial_segments = 8
+smooth_faces = false

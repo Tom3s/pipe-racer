@@ -107,6 +107,9 @@ class PipeVertexCollection:
 	set(newNode):
 		startNode.dataChanged.disconnect(refreshMesh)
 
+		if get_node("Start") != null:
+			%Start.queue_free()
+
 		startNode = newNode
 
 		startNode.dataChanged.connect(refreshMesh)
@@ -114,6 +117,9 @@ class PipeVertexCollection:
 @onready var endNode: PipeNode = %End:
 	set(newNode):
 		endNode.dataChanged.disconnect(refreshMesh)
+
+		if get_node("End") != null:
+			%End.queue_free() 
 
 		endNode = newNode
 
@@ -306,3 +312,12 @@ func convertToPhysicsObject() -> void:
 
 	pipeMesh.create_trimesh_collision()
 	pipeMesh.setPhysicsMaterial(surfaceType)
+
+func getProperties() -> Dictionary:
+	return {
+		"surfaceType": surfaceType
+	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("surfaceType"):
+		surfaceType = properties["surfaceType"] as PhysicsSurface.SurfaceType

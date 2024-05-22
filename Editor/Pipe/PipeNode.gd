@@ -14,7 +14,7 @@ var profile: float = PI:
 		dataChanged.emit()
 
 @export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 64, PrefabConstants.GRID_SIZE)
-var radius: int = PrefabConstants.GRID_SIZE:
+var radius: int = PrefabConstants.GRID_SIZE * 6:
 	set(newValue):
 		radius = newValue
 		dataChanged.emit()
@@ -26,10 +26,18 @@ var flat: bool = false:
 		dataChanged.emit()
 
 @export
-var cap: bool = false:
+var cap: bool = true:
 	set(newValue):
 		cap = newValue
 		dataChanged.emit()
+
+
+@export
+var isPreviewNode: bool = false:
+	set(newValue):
+		isPreviewNode = newValue
+		%Collider.use_collision = !isPreviewNode
+
 
 func _physics_process(_delta):
 	if oldPos != global_position:
@@ -119,3 +127,11 @@ func setProperties(properties: Dictionary):
 	global_rotation = properties["rotation"]
 
 	dataChanged.emit()
+
+@onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
+
+func getCopy() -> PipeNode:
+	var newNode: PipeNode = pipeNodeScene.instantiate()
+	newNode.setProperties(getProperties())
+
+	return newNode

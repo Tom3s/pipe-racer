@@ -19,6 +19,11 @@ unique_name_in_owner = true
 [node name="Pieces" type="Node3D" parent="RoadElements"]
 
 [node name="PipeElements" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Nodes" type="Node3D" parent="PipeElements"]
+
+[node name="Pieces" type="Node3D" parent="PipeElements"]
 
 [node name="Checkpoints" type="Node3D" parent="."]
 

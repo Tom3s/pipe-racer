@@ -49,6 +49,7 @@ text = "Surface Material"
 [node name="RoadSurfaceOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -67,6 +68,7 @@ text = "Wall Material
 [node name="WallMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -84,6 +86,7 @@ text = "Support Type"
 [node name="SupportTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -101,6 +104,7 @@ text = "Support Material"
 [node name="SupportMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -171,6 +175,7 @@ horizontal_alignment = 1
 [node name="LeftWallTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -200,6 +205,7 @@ select_all_on_focus = true
 [node name="LeftRunoffMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -220,6 +226,7 @@ horizontal_alignment = 1
 [node name="RightWallTypeOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -249,6 +256,7 @@ select_all_on_focus = true
 [node name="RightRunoffMaterialOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6/VBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 item_count = 1
 selected = 0
 popup/item_0/text = "WIP"
@@ -261,5 +269,6 @@ custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
+focus_mode = 0
 toggle_mode = true
 text = "^ Road Settings"

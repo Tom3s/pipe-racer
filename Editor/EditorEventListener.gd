@@ -3,13 +3,30 @@ class_name EditorEventListener
 
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
-@onready var previewElementParent: Node3D = %PreviewElement
+# @onready var previewElementParent: Node3D = %PreviewElement
 @onready var map: InteractiveMap = %InteractiveMap
+
+@onready var roadNode: RoadNode = %RoadNode
+@onready var pipeNode: PipeNode = %PipeNode
+var currentElement: Node3D = null
+
+@onready var editorSidebarUI: EditorSidebarUI = %EditorSidebarUI
 
 @onready var roadNodePropertiesUI: RoadNodePropertiesUI = %RoadNodePropertiesUI
 @onready var roadPropertiesUI: RoadPropertiesUI = %RoadPropertiesUI
 
+enum BuildMode {
+	ROAD,
+	PIPE,
+	START,
+	CP,
+	DECO
+}
+
 func _ready():
+	setUIVisibility(BuildMode.ROAD)
+	setCurrentElement(BuildMode.ROAD)
+
 	connectSignals()
 
 func connectSignals():
@@ -17,7 +34,6 @@ func connectSignals():
 		if worldPos == Vector3.INF:
 			return
 		
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null:
 			return
 
@@ -33,11 +49,9 @@ func connectSignals():
 	)
 
 	inputHandler.rotatePressed.connect(func(axis: Vector3, angle: float):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null:
 			return
 
-		# currentElement.rotate(axis, angle)
 		if axis == Vector3.UP:
 			currentElement.global_rotation.y += angle
 		elif axis == Vector3.RIGHT:
@@ -48,7 +62,6 @@ func connectSignals():
 		currentElement.global_rotation = currentElement.global_rotation.snapped(Vector3.ONE * deg_to_rad(5))
 	)
 	inputHandler.resetRotationPressed.connect(func():
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null:
 			return
 
@@ -56,11 +69,8 @@ func connectSignals():
 	)
 
 	inputHandler.placePressed.connect(func():
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null:
 			return
-
-		# print("[EditorEventListener.gd] Class of currentElement: ", ClassFunctions.getClassName(currentElement))
 
 		if ClassFunctions.getClassName(currentElement) == "RoadNode":
 			var collidedObject = screenPointToRay()
@@ -68,7 +78,6 @@ func connectSignals():
 				collidedObject = collidedObject.get_parent()
 				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
 
-				# if collidedObject.has_method("getCopy"):
 				if ClassFunctions.getClassName(collidedObject) == "RoadNode":
 					currentElement.global_position = collidedObject.global_position
 					currentElement.global_rotation = collidedObject.global_rotation
@@ -81,15 +90,44 @@ func connectSignals():
 				currentElement.global_rotation,
 				roadPropertiesUI.getProperties()
 			)
+		elif ClassFunctions.getClassName(currentElement) == "PipeNode":
+			var collidedObject = screenPointToRay()
+			if collidedObject != null:
+				collidedObject = collidedObject.get_parent()
+				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+
+				if ClassFunctions.getClassName(collidedObject) == "PipeNode":
+					currentElement.global_position = collidedObject.global_position
+					currentElement.global_rotation = collidedObject.global_rotation
+				
+			var newElement = currentElement.getCopy()
+			map.addPipeNode(
+				newElement, 
+				currentElement.global_position, 
+				currentElement.global_rotation,
+				{} # TODO: implement UI
+			)
+
+
 	)
 
 	map.roadPreviewElementRequested.connect(func():
-		map.onRoadPreviewElementProvided(previewElementParent.get_child(0))
+		map.onRoadPreviewElementProvided(roadNode)
+	)
+
+	map.pipePreviewElementRequested.connect(func():
+		map.onPipePreviewElementProvided(pipeNode)
+	)
+
+	# sidebar
+	editorSidebarUI.buildModeChanged.connect(func(mode: BuildMode):
+		map.clearPreviews()
+		setUIVisibility(mode)
+		setCurrentElement(mode)
 	)
 
 	# road node properties ui
 	roadNodePropertiesUI.roadProfileChanged.connect(func(profile: int):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -98,7 +136,6 @@ func connectSignals():
 	)
 
 	roadNodePropertiesUI.profileHeightChanged.connect(func(value: float):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -107,7 +144,6 @@ func connectSignals():
 	)
 
 	roadNodePropertiesUI.widthChanged.connect(func(value: float):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -116,7 +152,6 @@ func connectSignals():
 	)
 
 	roadNodePropertiesUI.leftRunoffChanged.connect(func(value: float):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -125,7 +160,6 @@ func connectSignals():
 	)
 
 	roadNodePropertiesUI.rightRunoffChanged.connect(func(value: float):
-		var currentElement = previewElementParent.get_child(0)
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -134,21 +168,6 @@ func connectSignals():
 	)
 
 	# road properties ui
-	# signal roadSurfaceChanged(surface: int)
-	# signal wallMaterialChanged(material: int)
-	# signal supportTypeChanged(type: int)
-	# signal supportMaterialChanged(material: int)
-	# signal supportBottomChanged(bottom: float)
-
-	# signal leftWallTypeChanged(type: int)
-	# signal leftWallStartHeightChanged(height: float)
-	# signal leftWallEndHeightChanged(height: float)
-	# signal leftRunoffMaterialChanged(material: int)
-
-	# signal rightWallTypeChanged(type: int)
-	# signal rightWallStartHeightChanged(height: float)
-	# signal rightWallEndHeightChanged(height: float)
-	# signal rightRunoffMaterialChanged(material: int)
 	roadPropertiesUI.roadSurfaceChanged.connect(func(surface: int):
 		if map.lastRoadElement == null:
 			return
@@ -240,7 +259,21 @@ func connectSignals():
 		map.lastRoadElement.rightRunoffSurfaceType = material as PhysicsSurface.SurfaceType
 	)
 
+func setUIVisibility(mode: BuildMode):
+	roadNodePropertiesUI.visible = mode == BuildMode.ROAD
+	roadPropertiesUI.visible = mode == BuildMode.ROAD
 
+func setCurrentElement(mode: BuildMode):
+	roadNode.visible = mode == BuildMode.ROAD
+	pipeNode.visible = mode == BuildMode.PIPE
+
+	if mode == BuildMode.ROAD:
+		currentElement = roadNode
+	elif mode == BuildMode.PIPE:
+		currentElement = pipeNode
+	else:
+		print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
+		currentElement = null
 
 var maxRaycastDistance: int = 2000
 
