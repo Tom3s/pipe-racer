@@ -15,6 +15,10 @@ var currentElement: Node3D = null
 @onready var roadNodePropertiesUI: RoadNodePropertiesUI = %RoadNodePropertiesUI
 @onready var roadPropertiesUI: RoadPropertiesUI = %RoadPropertiesUI
 
+@onready var pipeNodePropertiesUI: PipeNodePropertiesUI = %PipeNodePropertiesUI
+@onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
+
+
 enum BuildMode {
 	ROAD,
 	PIPE,
@@ -105,7 +109,7 @@ func connectSignals():
 				newElement, 
 				currentElement.global_position, 
 				currentElement.global_rotation,
-				{} # TODO: implement UI
+				pipePropertiesUI.getProperties()
 			)
 
 
@@ -259,9 +263,48 @@ func connectSignals():
 		map.lastRoadElement.rightRunoffSurfaceType = material as PhysicsSurface.SurfaceType
 	)
 
+	# pipe node properties ui
+
+	pipeNodePropertiesUI.profileChanged.connect(func(profile: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
+			return
+		
+		currentElement = currentElement as PipeNode
+		currentElement.profile = profile
+	)
+
+	pipeNodePropertiesUI.radiusChanged.connect(func(radius: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
+			return
+		
+		currentElement = currentElement as PipeNode
+		currentElement.radius = radius
+	)
+
+	pipeNodePropertiesUI.flatChanged.connect(func(flat: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
+			return
+		
+		currentElement = currentElement as PipeNode
+		currentElement.flat = flat
+	)
+
+
+	# pipe properties ui
+
+	pipePropertiesUI.pipeSurfaceChanged.connect(func(surface: int):
+		if map.lastPipeElement == null:
+			return
+
+		map.lastPipeElement.surfaceType = surface as PhysicsSurface.SurfaceType
+	)
+
 func setUIVisibility(mode: BuildMode):
 	roadNodePropertiesUI.visible = mode == BuildMode.ROAD
 	roadPropertiesUI.visible = mode == BuildMode.ROAD
+
+	pipeNodePropertiesUI.visible = mode == BuildMode.PIPE
+	pipePropertiesUI.visible = mode == BuildMode.PIPE
 
 func setCurrentElement(mode: BuildMode):
 	roadNode.visible = mode == BuildMode.ROAD

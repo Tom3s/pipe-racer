@@ -112,6 +112,8 @@ func getProperties() -> Dictionary:
 	return {
 		"radius": radius,
 		"profile": profile,
+		"flat": flat,
+
 		"cap": cap,
 
 		"position": global_position,
@@ -119,12 +121,20 @@ func getProperties() -> Dictionary:
 	}
 
 func setProperties(properties: Dictionary):
-	radius = properties["radius"]
-	profile = properties["profile"]
-	cap = properties["cap"]
+	if properties.has("radius"):
+		radius = properties["radius"]
+	if properties.has("profile"):
+		profile = properties["profile"]
+	if properties.has("flat"):
+		flat = properties["flat"]
 
-	global_position = properties["position"]
-	global_rotation = properties["rotation"]
+	if properties.has("cap"):
+		cap = properties["cap"]
+
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
 
 	dataChanged.emit()
 

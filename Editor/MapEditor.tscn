@@ -1,12 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=12 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
 [ext_resource type="PackedScene" uid="uid://dl56mby6n2hiu" path="res://Editor/Road/RoadPropertiesUI.tscn" id="2_0cxd4"]
 [ext_resource type="PackedScene" uid="uid://jfef8x3bl627" path="res://Editor/InteractiveMap.tscn" id="2_xocc0"]
+[ext_resource type="PackedScene" uid="uid://c1hooek1vtv6b" path="res://Editor/Pipe/PipeNodePropertiesUI.tscn" id="3_6opws"]
 [ext_resource type="PackedScene" uid="uid://dbyuroab0s0la" path="res://Editor/EditorSidebarUI.tscn" id="3_k84hq"]
 [ext_resource type="PackedScene" uid="uid://cptpsvgtq4jgc" path="res://Editor/Road/RoadNode.tscn" id="3_nyxif"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
+[ext_resource type="PackedScene" uid="uid://bk861qiqtdvug" path="res://Editor/Pipe/PipePropertiesUI.tscn" id="4_dqsn7"]
 [ext_resource type="Script" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
 [ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
 
@@ -33,6 +35,16 @@ layout_mode = 2
 
 [node name="RoadPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("2_0cxd4")]
 unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PipeNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("3_6opws")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PipePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("4_dqsn7")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="EditorSidebarUI" parent="UI" instance=ExtResource("3_k84hq")]

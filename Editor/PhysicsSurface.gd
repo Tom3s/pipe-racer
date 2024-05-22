@@ -15,8 +15,8 @@ const materials = [
 	preload("res://Tracks/AsphaltMaterial.tres"), # ROAD
 	preload("res://Track Props/GrassMaterial.tres"), # GRASS
 	preload("res://Track Props/DirtMaterial.tres"), # DIRT
-	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
 	preload("res://Track Props/BoosterMaterialReversed.tres"), # REVERSE BOOSTER	
+	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
 	preload("res://Tracks/RacetrackMaterial.tres"), # CONCRETE
 	preload("res://Track Props/FenceMaterial.tres"), # FENCE
 ]
