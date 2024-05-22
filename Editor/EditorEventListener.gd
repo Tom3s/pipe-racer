@@ -88,9 +88,18 @@ func connectSignals():
 	)
 
 	# road node properties ui
+	roadNodePropertiesUI.roadProfileChanged.connect(func(profile: int):
+		var currentElement = previewElementParent.get_child(0)
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.profileType = profile as RoadNode.RoadProfile
+	)
+
 	roadNodePropertiesUI.profileHeightChanged.connect(func(value: float):
 		var currentElement = previewElementParent.get_child(0)
-		if currentElement == null:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
 		currentElement = currentElement as RoadNode
@@ -99,7 +108,7 @@ func connectSignals():
 
 	roadNodePropertiesUI.widthChanged.connect(func(value: float):
 		var currentElement = previewElementParent.get_child(0)
-		if currentElement == null:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
 		currentElement = currentElement as RoadNode
@@ -108,7 +117,7 @@ func connectSignals():
 
 	roadNodePropertiesUI.leftRunoffChanged.connect(func(value: float):
 		var currentElement = previewElementParent.get_child(0)
-		if currentElement == null:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
 		currentElement = currentElement as RoadNode
@@ -117,7 +126,7 @@ func connectSignals():
 
 	roadNodePropertiesUI.rightRunoffChanged.connect(func(value: float):
 		var currentElement = previewElementParent.get_child(0)
-		if currentElement == null:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
 		currentElement = currentElement as RoadNode

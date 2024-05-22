@@ -44,6 +44,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
+profileType = null
 isPreviewNode = true
 
 [node name="EditorInputHandler" type="Node" parent="."]

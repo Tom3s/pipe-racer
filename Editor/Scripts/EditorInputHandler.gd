@@ -48,6 +48,7 @@ func _unhandled_input(event):
 	elif Input.is_action_just_pressed("editor_grid_down"):
 		if scrollCooldown <= 0:
 			currentGridHeight -= PrefabConstants.GRID_SIZE
+			mouseMovedTo.emit(onScreenMousePosToGridIntersect())
 			moveDownGrid.emit()
 			scrollCooldown = scrollCooldownTime
 			
@@ -63,6 +64,7 @@ func _unhandled_input(event):
 		if scrollCooldown <= 0:
 			currentGridHeight += PrefabConstants.GRID_SIZE
 			moveUpGrid.emit()
+			mouseMovedTo.emit(onScreenMousePosToGridIntersect())
 			scrollCooldown = scrollCooldownTime
 
 	lastGridHeight = currentGridHeight
