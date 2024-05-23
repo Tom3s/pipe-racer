@@ -105,4 +105,25 @@ func connectSignals():
 	)
 
 	
+func getProperties() -> Dictionary:
+	return {
+		"radius": radiusSpinbox.value,
+		"profile": deg_to_rad(profileSpinbox.value),
+		"flat": flatToggle.pressed,
 
+		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
+		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value)
+	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("radius"):
+		setRadius(properties["radius"])
+	if properties.has("profile"):
+		setProfile(properties["profile"])
+	if properties.has("flat"):
+		setFlat(properties["flat"])
+
+	if properties.has("position"):
+		setPosition(properties["position"])
+	if properties.has("rotation"):
+		setRotation(properties["rotation"])

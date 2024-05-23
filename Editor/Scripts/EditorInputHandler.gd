@@ -78,12 +78,35 @@ func _unhandled_input(event):
 
 		if Input.is_action_just_pressed("editor_place"):
 			placePressed.emit()
+
+
 	elif editorMode == EditorEventListener.EditorMode.SCENERY:
 		if !Input.is_action_pressed("editor_look_around"):
 			mouseMovedTo_Scenery.emit(screenPointToRay_Scenery(), Input.is_action_pressed("editor_place"))
 
 		if Input.is_action_just_pressed("editor_place"):
 			placePressed.emit()
+
+
+	elif editorMode == EditorEventListener.EditorMode.EDIT:
+		if Input.is_action_just_pressed("editor_place"):
+			placePressed.emit()
+		
+		if Input.is_action_just_pressed("editor_rotate_right"):
+			rotatePressed.emit(Vector3.UP, -angleSnap)
+		elif Input.is_action_just_pressed("editor_tilt_right"):
+			rotatePressed.emit(Vector3.FORWARD, angleSnap)
+		elif Input.is_action_just_pressed("editor_pitch_back"):
+			rotatePressed.emit(Vector3.RIGHT, -angleSnap)
+				
+
+
+		if Input.is_action_just_pressed("editor_rotate_left"):
+			rotatePressed.emit(Vector3.UP, angleSnap)
+		elif Input.is_action_just_pressed("editor_tilt_left"):
+			rotatePressed.emit(Vector3.FORWARD, -angleSnap)
+		elif Input.is_action_just_pressed("editor_pitch_forward"):
+			rotatePressed.emit(Vector3.RIGHT, angleSnap)
 
 
 

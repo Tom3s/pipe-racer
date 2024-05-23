@@ -130,5 +130,34 @@ func connectSignals():
 		rotationChanged.emit(Vector3(rotXSpinbox.value, rotYSpinbox.value, value))
 	)
 
-	
 
+func getProperties() -> Dictionary:
+	return {
+		"profileType": roadProfileOptions.selected,
+		"profileHeight": profileHeightSpinbox.value,
+		"width": widthSpinbox.value,
+
+		"leftRunoff": leftRunoffSpinbox.value,
+		"rightRunoff": rightRunoffSpinbox.value,
+
+		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
+		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value)
+	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("profileType"):
+		setRoadProfile(properties["profileType"])
+	if properties.has("profileHeight"):
+		setProfileHeight(properties["profileHeight"])
+	if properties.has("width"):
+		setWidth(properties["width"])
+
+	if properties.has("leftRunoff"):
+		setLeftRunoff(properties["leftRunoff"])
+	if properties.has("rightRunoff"):
+		setRightRunoff(properties["rightRunoff"])
+
+	if properties.has("position"):
+		setPosition(properties["position"])
+	if properties.has("rotation"):
+		setRotation(properties["rotation"])

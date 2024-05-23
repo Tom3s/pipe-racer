@@ -89,47 +89,68 @@ func connectSignals():
 		if currentEditorMode == EditorMode.SCENERY:
 			map.onInputHandler_placePressed()
 			return
-		
-		if currentElement == null:
-			return
+		elif currentEditorMode == EditorMode.BUILD:
+			if currentElement == null:
+				return
 
-		if ClassFunctions.getClassName(currentElement) == "RoadNode":
+			if ClassFunctions.getClassName(currentElement) == "RoadNode":
+				var collidedObject = screenPointToRay()
+				var newElement = currentElement.getCopy()	
+				if collidedObject != null: # && map.lastRoadElement == null:
+					collidedObject = collidedObject.get_parent()
+					print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+
+					if ClassFunctions.getClassName(collidedObject) == "RoadNode":
+						currentElement.global_position = collidedObject.global_position
+						currentElement.global_rotation = collidedObject.global_rotation
+						newElement = collidedObject
+
+				map.addRoadNode(
+					newElement, 
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					roadPropertiesUI.getProperties()
+				)
+			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
+				var collidedObject = screenPointToRay()
+				var newElement = currentElement.getCopy()
+				if collidedObject != null:
+					collidedObject = collidedObject.get_parent()
+					print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+
+					if ClassFunctions.getClassName(collidedObject) == "PipeNode":
+						currentElement.global_position = collidedObject.global_position
+						currentElement.global_rotation = collidedObject.global_rotation
+						newElement = collidedObject
+					
+				map.addPipeNode(
+					newElement, 
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					pipePropertiesUI.getProperties()
+				)
+		elif currentEditorMode == EditorMode.EDIT:
 			var collidedObject = screenPointToRay()
-			var newElement = currentElement.getCopy()	
-			if collidedObject != null: # && map.lastRoadElement == null:
+			if collidedObject != null: 
 				collidedObject = collidedObject.get_parent()
-				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+				if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
+					collidedObject = collidedObject.get_parent()
 
-				if ClassFunctions.getClassName(collidedObject) == "RoadNode":
-					currentElement.global_position = collidedObject.global_position
-					currentElement.global_rotation = collidedObject.global_rotation
-					newElement = collidedObject
+				print("[EditorEventListener.gd] Class of collided Object (edit mode): ", ClassFunctions.getClassName(collidedObject))
 
-			map.addRoadNode(
-				newElement, 
-				currentElement.global_position, 
-				currentElement.global_rotation,
-				roadPropertiesUI.getProperties()
-			)
-		elif ClassFunctions.getClassName(currentElement) == "PipeNode":
-			var collidedObject = screenPointToRay()
-			var newElement = currentElement.getCopy()
-			if collidedObject != null:
-				collidedObject = collidedObject.get_parent()
-				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
-
-				if ClassFunctions.getClassName(collidedObject) == "PipeNode":
-					currentElement.global_position = collidedObject.global_position
-					currentElement.global_rotation = collidedObject.global_rotation
-					newElement = collidedObject
-				
-			map.addPipeNode(
-				newElement, 
-				currentElement.global_position, 
-				currentElement.global_rotation,
-				pipePropertiesUI.getProperties()
-			)
-
+				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
+					map.lastRoadElement = collidedObject
+					roadPropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.ROAD_PROPERTIES)
+				elif ClassFunctions.getClassName(collidedObject) == "PipeMeshGenerator":
+					map.lastPipeElement = collidedObject
+					pipePropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.PIPE_PROPERTIES)
+				else:
+					map.lastPipeElement = null
+					map.lastRoadElement = null
+					setEditUIVisibility(EditUIType.NONE)
+					
 
 	)
 
@@ -368,7 +389,22 @@ func setUIVisibility():
 
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
+enum EditUIType {
+	ROAD_NODE_PROPERTIES,
+	ROAD_PROPERTIES,
+	PIPE_NODE_PROPERTIES,
+	PIPE_PROPERTIES,
+	NONE,
+}
+
+func setEditUIVisibility(ui: EditUIType):
+	roadPropertiesUI.visible = ui == EditUIType.ROAD_PROPERTIES
+	roadNodePropertiesUI.visible = ui == EditUIType.ROAD_NODE_PROPERTIES
+	pipePropertiesUI.visible = ui == EditUIType.PIPE_PROPERTIES
+	pipeNodePropertiesUI.visible = ui == EditUIType.PIPE_NODE_PROPERTIES
+
 func setCurrentElement():
+	
 	if currentEditorMode == EditorMode.BUILD:
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
@@ -381,6 +417,9 @@ func setCurrentElement():
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
 			currentElement = null
 		return
+
+	roadNode.visible = currentEditorMode == EditorMode.BUILD
+	pipeNode.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 

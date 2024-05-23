@@ -47,3 +47,6 @@ func getProperties() -> Dictionary:
 	return {
 		"surfaceType": pipeSurfaceOptions.selected,
 	}
+
+func setProperties(properties: Dictionary) -> void:
+	setRoadSurface(properties["surfaceType"])

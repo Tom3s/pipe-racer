@@ -215,3 +215,36 @@ func getProperties() -> Dictionary:
 		"leftRunoffSurfaceType": leftRunoffMaterialOptions.selected,
 		"rightRunoffSurfaceType": rightRunoffMaterialOptions.selected
 	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("surfaceType"):
+		setRoadSurface(properties["surfaceType"])
+	if properties.has("wallSurfaceType"):
+		setWallMaterial(properties["wallSurfaceType"])
+	
+	if properties.has("leftWallType"):
+		setLeftWallType(properties["leftWallType"])
+	if properties.has("leftWallStartHeight"):
+		setLeftWallStartHeight(properties["leftWallStartHeight"])
+	if properties.has("leftWallEndHeight"):
+		setLeftWallEndHeight(properties["leftWallEndHeight"])
+
+	if properties.has("rightWallType"):
+		setRightWallType(properties["rightWallType"])
+	if properties.has("rightWallStartHeight"):
+		setRightWallStartHeight(properties["rightWallStartHeight"])
+	if properties.has("rightWallEndHeight"):
+		setRightWallEndHeight(properties["rightWallEndHeight"])
+
+	if properties.has("supportType"):
+		setSupportType(properties["supportType"])
+	if properties.has("supportBottomHeight"):
+		setSupportBottom(properties["supportBottomHeight"])
+	if properties.has("supportMaterial"):
+		setSupportMaterial(properties["supportMaterial"])
+
+	if properties.has("leftRunoffSurfaceType"):
+		setLeftRunoffMaterial(properties["leftRunoffSurfaceType"])
+	if properties.has("rightRunoffSurfaceType"):
+		setRightRunoffMaterial(properties["rightRunoffSurfaceType"])
+	
