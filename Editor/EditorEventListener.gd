@@ -95,6 +95,7 @@ func connectSignals():
 
 		if ClassFunctions.getClassName(currentElement) == "RoadNode":
 			var collidedObject = screenPointToRay()
+			var newElement = currentElement.getCopy()	
 			if collidedObject != null: # && map.lastRoadElement == null:
 				collidedObject = collidedObject.get_parent()
 				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
@@ -102,9 +103,8 @@ func connectSignals():
 				if ClassFunctions.getClassName(collidedObject) == "RoadNode":
 					currentElement.global_position = collidedObject.global_position
 					currentElement.global_rotation = collidedObject.global_rotation
+					newElement = collidedObject
 
-
-			var newElement = currentElement.getCopy()
 			map.addRoadNode(
 				newElement, 
 				currentElement.global_position, 
@@ -113,6 +113,7 @@ func connectSignals():
 			)
 		elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 			var collidedObject = screenPointToRay()
+			var newElement = currentElement.getCopy()
 			if collidedObject != null:
 				collidedObject = collidedObject.get_parent()
 				print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
@@ -120,8 +121,8 @@ func connectSignals():
 				if ClassFunctions.getClassName(collidedObject) == "PipeNode":
 					currentElement.global_position = collidedObject.global_position
 					currentElement.global_rotation = collidedObject.global_rotation
+					newElement = collidedObject
 				
-			var newElement = currentElement.getCopy()
 			map.addPipeNode(
 				newElement, 
 				currentElement.global_position, 

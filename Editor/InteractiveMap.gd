@@ -51,7 +51,11 @@ func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3, roadPrope
 		lastRoadElement = roadElement
 		roadPreviewElementRequested.emit()
 	else:
+		if EditorMath.positionsMatch(lastRoadElement.startNode, node):
+			roadNodes.remove_child(node)
+			return
 		lastRoadElement.endNode = node
+		lastRoadElement.convertToPhysicsObject()
 		lastRoadNode = null
 		lastRoadElement = null
 
@@ -74,7 +78,11 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 		lastPipeElement = pipeElement
 		pipePreviewElementRequested.emit()
 	else:
+		if EditorMath.positionsMatch(lastPipeElement.startNode, node):
+			pipeNodes.remove_child(node)
+			return
 		lastPipeElement.endNode = node
+		lastPipeElement.convertToPhysicsObject()
 		lastPipeNode = null
 		lastPipeElement = null
 	
