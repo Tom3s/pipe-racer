@@ -24,6 +24,11 @@ var lastPipeElement: PipeMeshGenerator
 signal pipePreviewElementRequested()
 
 
+# scenery
+
+@onready var scenery: EditableScenery = %EditableScenery
+@onready var dynamicSky: DynamicSky = %DynamicSky
+
 func _ready():
 	roadNodes = roadElements.get_child(0)
 	roadPieces = roadElements.get_child(1)
@@ -89,3 +94,61 @@ func clearPreviews():
 		lastPipeElement = null
 		lastPipeNode.queue_free()
 		lastPipeNode = null
+
+var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
+var scenerySelectionSize: int = 1
+var sceneryEditDirection: int = 1
+var sceneryEditMode: int = SceneryEditorUI.NORMAL_MODE
+
+var sceneryFlattenHeight: float = 0.0
+
+func onInputHandler_mouseMovedTo(
+	pos: Vector3,
+	placePressed: bool,
+) -> void:
+	if pos != Vector3.INF:
+		var newVertexIndex = scenery.getClosestVertex(pos)
+
+		if newVertexIndex != lastSceneryVertexIndex && placePressed:
+			if sceneryEditMode == SceneryEditorUI.NORMAL_MODE:
+				scenery.moveVertex(newVertexIndex, sceneryEditDirection, scenerySelectionSize)
+			elif sceneryEditMode == SceneryEditorUI.FLATTEN_MODE:
+				scenery.flattenAtVertex(newVertexIndex, sceneryFlattenHeight, scenerySelectionSize)
+				
+
+		lastSceneryVertexIndex = newVertexIndex
+		scenery.setSelection(true, lastSceneryVertexIndex, scenerySelectionSize)
+	else:
+		lastSceneryVertexIndex = Vector2i(-1, -1)
+		scenery.setSelection(false, lastSceneryVertexIndex, scenerySelectionSize)
+
+func onInputHandler_placePressed():
+	if lastSceneryVertexIndex != Vector2i(-1, -1):
+		if sceneryEditMode == SceneryEditorUI.NORMAL_MODE:
+			scenery.moveVertex(lastSceneryVertexIndex, sceneryEditDirection, scenerySelectionSize)
+		elif sceneryEditMode == SceneryEditorUI.FLATTEN_MODE:
+			sceneryFlattenHeight = scenery.vertexHeights.getHeight(lastSceneryVertexIndex.y, lastSceneryVertexIndex.x)
+			scenery.flattenAtVertex(lastSceneryVertexIndex, sceneryFlattenHeight, scenerySelectionSize)
+
+func setDayTime(time: float):
+	dynamicSky.day_time = time
+
+func setCloudiness(cloudiness: float):
+	dynamicSky.cloudiness = cloudiness
+
+func setGloomyness(gloomyness: float):
+	dynamicSky.gloomyness = gloomyness
+
+func setBrushSize(size: int):
+	scenerySelectionSize = size
+	if lastSceneryVertexIndex != Vector2i(-1, -1):
+		scenery.setSelection(true, lastSceneryVertexIndex, scenerySelectionSize)
+
+func setEditDirection(direction: int):
+	sceneryEditDirection = direction
+
+func setEditMode(mode: int):
+	sceneryEditMode = mode
+
+func setGroundSize(size: int):
+	scenery.groundSize = size

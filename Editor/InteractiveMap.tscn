@@ -8,8 +8,10 @@
 script = ExtResource("1_5qhtb")
 
 [node name="EditableScenery" parent="." instance=ExtResource("1_8p0hb")]
+unique_name_in_owner = true
 
 [node name="DynamicSky" parent="." instance=ExtResource("2_d55jv")]
+unique_name_in_owner = true
 
 [node name="RoadElements" type="Node3D" parent="."]
 unique_name_in_owner = true

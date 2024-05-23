@@ -36,38 +36,81 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="RoadButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/VBoxContainer"]
+[node name="EditorModeButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BuildButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Build"
+
+[node name="EditButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Edit"
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Delete"
+
+[node name="SceneryButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Scenery"
+
+[node name="PaintButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Paint"
+
+[node name="BuildButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RoadButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Road"
 
-[node name="PipeButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/VBoxContainer"]
+[node name="PipeButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Pipe"
 
-[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/VBoxContainer"]
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Start"
 
-[node name="CPButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/VBoxContainer"]
+[node name="CPButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "CP"
 
-[node name="DecoButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/VBoxContainer"]
+[node name="DecoButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

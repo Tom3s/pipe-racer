@@ -18,6 +18,17 @@ var currentElement: Node3D = null
 @onready var pipeNodePropertiesUI: PipeNodePropertiesUI = %PipeNodePropertiesUI
 @onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
 
+@onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
+
+enum EditorMode {
+	BUILD,
+	EDIT,
+	DELETE,
+	SCENERY,
+	PAINT,
+}
+
+var currentEditorMode: EditorMode = EditorMode.BUILD
 
 enum BuildMode {
 	ROAD,
@@ -27,9 +38,11 @@ enum BuildMode {
 	DECO
 }
 
+var currentBuildMode: BuildMode = BuildMode.ROAD
+
 func _ready():
-	setUIVisibility(BuildMode.ROAD)
-	setCurrentElement(BuildMode.ROAD)
+	setUIVisibility()
+	setCurrentElement()
 
 	connectSignals()
 
@@ -73,6 +86,10 @@ func connectSignals():
 	)
 
 	inputHandler.placePressed.connect(func():
+		if currentEditorMode == EditorMode.SCENERY:
+			map.onInputHandler_placePressed()
+			return
+		
 		if currentElement == null:
 			return
 
@@ -126,8 +143,16 @@ func connectSignals():
 	# sidebar
 	editorSidebarUI.buildModeChanged.connect(func(mode: BuildMode):
 		map.clearPreviews()
-		setUIVisibility(mode)
-		setCurrentElement(mode)
+		currentBuildMode = mode
+		setUIVisibility()
+		setCurrentElement()
+	)
+
+	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
+		currentEditorMode = mode
+		inputHandler.editorMode = mode
+		setUIVisibility()
+		setCurrentElement()
 	)
 
 	# road node properties ui
@@ -299,24 +324,65 @@ func connectSignals():
 		map.lastPipeElement.surfaceType = surface as PhysicsSurface.SurfaceType
 	)
 
-func setUIVisibility(mode: BuildMode):
-	roadNodePropertiesUI.visible = mode == BuildMode.ROAD
-	roadPropertiesUI.visible = mode == BuildMode.ROAD
+	# scenery editor ui
 
-	pipeNodePropertiesUI.visible = mode == BuildMode.PIPE
-	pipePropertiesUI.visible = mode == BuildMode.PIPE
+	inputHandler.mouseMovedTo_Scenery.connect(
+		map.onInputHandler_mouseMovedTo
+	)
 
-func setCurrentElement(mode: BuildMode):
-	roadNode.visible = mode == BuildMode.ROAD
-	pipeNode.visible = mode == BuildMode.PIPE
+	sceneryEditorUI.modeChanged.connect(func(mode: int):
+		map.setEditMode(mode)
+	)
 
-	if mode == BuildMode.ROAD:
-		currentElement = roadNode
-	elif mode == BuildMode.PIPE:
-		currentElement = pipeNode
-	else:
-		print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
-		currentElement = null
+	sceneryEditorUI.directionChanged.connect(func(direction: int):
+		map.setEditDirection(direction)
+	)
+
+	sceneryEditorUI.brushSizeChanged.connect(func(size: int):
+		map.setBrushSize(size)
+	)
+
+	sceneryEditorUI.timeChanged.connect(func(time: float):
+		map.setDayTime(time)
+	)
+
+	sceneryEditorUI.cloudChanged.connect(func(cloud: float):
+		map.setCloudiness(cloud)
+	)
+
+	sceneryEditorUI.gloomyChanged.connect(func(gloomy: float):
+		map.setGloomyness(gloomy)
+	)
+
+	sceneryEditorUI.groundSizeChanged.connect(func(size: int):
+		map.setGroundSize(size)
+	)
+
+func setUIVisibility():
+	roadNodePropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
+	roadPropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
+
+	pipeNodePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
+	pipePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
+
+	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
+
+func setCurrentElement():
+	if currentEditorMode == EditorMode.BUILD:
+		roadNode.visible = currentBuildMode == BuildMode.ROAD
+		pipeNode.visible = currentBuildMode == BuildMode.PIPE
+
+		if currentBuildMode == BuildMode.ROAD:
+			currentElement = roadNode
+		elif currentBuildMode == BuildMode.PIPE:
+			currentElement = pipeNode
+		else:
+			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
+			currentElement = null
+		return
+	
+	currentElement = null
+
 
 var maxRaycastDistance: int = 2000
 
@@ -332,3 +398,4 @@ func screenPointToRay() -> Node3D:
 	if rayArray.has("collider"):
 		return rayArray["collider"]
 	return null
+
