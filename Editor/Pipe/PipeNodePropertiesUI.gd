@@ -109,7 +109,7 @@ func getProperties() -> Dictionary:
 	return {
 		"radius": radiusSpinbox.value,
 		"profile": deg_to_rad(profileSpinbox.value),
-		"flat": flatToggle.pressed,
+		"flat": flatToggle.button_pressed,
 
 		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
 		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value)

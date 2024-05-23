@@ -146,9 +146,39 @@ func connectSignals():
 					map.lastPipeElement = collidedObject
 					pipePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.PIPE_PROPERTIES)
+				elif ClassFunctions.getClassName(collidedObject) == "RoadNode":
+					# map.lastRoadNode = collidedObject
+					currentElement = collidedObject
+					roadNodePropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.ROAD_NODE_PROPERTIES)
+				elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
+					# map.lastPipeNode = collidedObject
+					currentElement = collidedObject
+					pipeNodePropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
 				else:
-					map.lastPipeElement = null
+					if map.lastRoadElement != null:
+						map.lastRoadElement.convertToPhysicsObject()
 					map.lastRoadElement = null
+
+					if map.lastPipeElement != null:
+						map.lastPipeElement.convertToPhysicsObject()
+					map.lastPipeElement = null
+					
+					# if map.lastRoadNode != null:
+					# 	map.lastRoadNode.meshGenerator.convertToPhysicsObject()
+					# map.lastRoadNode = null
+
+					# if map.lastPipeNode != null:
+					# 	map.lastPipeNode.meshGenerator.convertToPhysicsObject()
+					# map.lastPipeNode = null
+					if currentElement != null:
+						if currentElement.meshGenerator_s != null:
+							currentElement.meshGenerator_s.convertToPhysicsObject()
+						if currentElement.meshGenerator_e != null:
+							currentElement.meshGenerator_e.convertToPhysicsObject()
+					currentElement = null
+
 					setEditUIVisibility(EditUIType.NONE)
 					
 
@@ -173,6 +203,27 @@ func connectSignals():
 	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
 		currentEditorMode = mode
 		inputHandler.editorMode = mode
+		map.clearPreviews()
+
+		if mode != EditorMode.EDIT:
+			if map.lastRoadElement != null:
+				map.lastRoadElement.convertToPhysicsObject()
+			map.lastRoadElement = null
+
+			if map.lastPipeElement != null:
+				map.lastPipeElement.convertToPhysicsObject()
+			map.lastPipeElement = null
+
+			var roadNodeProperties = roadNodePropertiesUI.getProperties()
+			roadNodeProperties.erase("position")
+			roadNodeProperties.erase("rotation")
+			roadNode.setProperties(roadNodeProperties)
+
+			var pipeNodeProperties = pipeNodePropertiesUI.getProperties()
+			pipeNodeProperties.erase("position")
+			pipeNodeProperties.erase("rotation")
+			pipeNode.setProperties(pipeNodeProperties)
+
 		setUIVisibility()
 		setCurrentElement()
 	)
@@ -216,6 +267,22 @@ func connectSignals():
 		
 		currentElement = currentElement as RoadNode
 		currentElement.rightRunoff = value
+	)
+
+	roadNodePropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.global_position = value
+	)
+
+	roadNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
+			return
+		
+		currentElement = currentElement as RoadNode
+		currentElement.global_rotation = value
 	)
 
 	# road properties ui
@@ -334,6 +401,22 @@ func connectSignals():
 		
 		currentElement = currentElement as PipeNode
 		currentElement.flat = flat
+	)
+
+	pipeNodePropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
+			return
+		
+		currentElement = currentElement as PipeNode
+		currentElement.global_position = value
+	)
+
+	pipeNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
+			return
+		
+		currentElement = currentElement as PipeNode
+		currentElement.global_rotation = value
 	)
 
 

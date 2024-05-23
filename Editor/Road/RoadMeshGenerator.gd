@@ -74,6 +74,8 @@ class RoadVertexCollection:
 		startNode.roadDataChanged.connect(refreshAll)
 		startNode.runoffDataChanged.connect(refreshRunoffMesh)
 
+		newNode.meshGenerator_s = self
+
 @onready var endNode: RoadNode = %End:
 	set(newNode):
 		endNode.transformChanged.disconnect(refreshAll)
@@ -88,6 +90,8 @@ class RoadVertexCollection:
 		endNode.transformChanged.connect(refreshAll)
 		endNode.roadDataChanged.connect(refreshAll)
 		endNode.runoffDataChanged.connect(refreshRunoffMesh)
+
+		newNode.meshGenerator_e = self
 
 @onready var roadMesh: PhysicsSurface = %RoadMesh
 @onready var runoffMesh: PhysicsSurface = %RunoffMesh
@@ -1073,15 +1077,27 @@ func convertToPhysicsObject(clearNodes: bool = false) -> void:
 		remove_child(endNode)
 		endNode.queue_free()
 
+	if roadMesh.get_child_count() > 0:
+		for child in roadMesh.get_children():
+			child.queue_free()
 	roadMesh.create_trimesh_collision()
 	roadMesh.setPhysicsMaterial(surfaceType)
 
+	if wallMesh.get_child_count() > 0:
+		for child in wallMesh.get_children():
+			child.queue_free()
 	wallMesh.create_trimesh_collision()
 	wallMesh.setPhysicsMaterial(wallSurfaceType)
 
+	if runoffMesh.get_child_count() > 0:
+		for child in runoffMesh.get_children():
+			child.queue_free()
 	runoffMesh.create_trimesh_collision()
 	runoffMesh.setPhysicsMaterial(leftRunoffSurfaceType)
 
+	if supportMesh.get_child_count() > 0:
+		for child in supportMesh.get_children():
+			child.queue_free()
 	supportMesh.create_trimesh_collision()
 	supportMesh.setPhysicsMaterial(supportMaterial)
 

@@ -2,6 +2,9 @@
 extends Node3D
 class_name RoadNode
 
+var meshGenerator_s: RoadMeshGenerator
+var meshGenerator_e: RoadMeshGenerator
+
 signal transformChanged()
 signal roadDataChanged()
 signal runoffDataChanged()
@@ -267,16 +270,24 @@ func getProperties() -> Dictionary:
 	}
 
 func setProperties(properties: Dictionary):
-	profileType = properties["profileType"]
-	profileHeight = properties["profileHeight"]
-	width = properties["width"]
-	cap = properties["cap"]
+	if properties.has("profileType"):
+		profileType = properties["profileType"]
+	if properties.has("profileHeight"):
+		profileHeight = properties["profileHeight"]
+	if properties.has("width"):
+		width = properties["width"]
+	if properties.has("cap"):
+		cap = properties["cap"]
 
-	leftRunoff = properties["leftRunoff"]
-	rightRunoff = properties["rightRunoff"]
+	if properties.has("leftRunoff"):
+		leftRunoff = properties["leftRunoff"]
+	if properties.has("rightRunoff"):
+		rightRunoff = properties["rightRunoff"]
 
-	global_position = properties["position"]
-	global_rotation = properties["rotation"]
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
 
 	roadDataChanged.emit()
 

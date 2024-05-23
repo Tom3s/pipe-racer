@@ -2,6 +2,9 @@
 extends Node3D
 class_name PipeNode
 
+var meshGenerator_s: PipeMeshGenerator
+var meshGenerator_e: PipeMeshGenerator
+
 signal dataChanged()
 
 var oldPos: Vector3 = Vector3.ZERO

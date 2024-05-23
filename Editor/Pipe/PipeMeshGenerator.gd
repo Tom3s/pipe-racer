@@ -114,6 +114,8 @@ class PipeVertexCollection:
 
 		startNode.dataChanged.connect(refreshMesh)
 
+		newNode.meshGenerator_s = self
+
 @onready var endNode: PipeNode = %End:
 	set(newNode):
 		endNode.dataChanged.disconnect(refreshMesh)
@@ -124,6 +126,8 @@ class PipeVertexCollection:
 		endNode = newNode
 
 		endNode.dataChanged.connect(refreshMesh)
+
+		newNode.meshGenerator_e = self
 
 @onready var pipeMesh: PhysicsSurface = %Mesh
 
@@ -309,6 +313,9 @@ func convertToPhysicsObject(clearNodes: bool = false) -> void:
 		remove_child(endNode)
 		endNode.queue_free()
 
+	if pipeMesh.get_child_count() > 0:
+		for child in pipeMesh.get_children():
+			child.queue_free()
 	pipeMesh.create_trimesh_collision()
 	pipeMesh.setPhysicsMaterial(surfaceType)
 
