@@ -55,6 +55,7 @@ func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3, roadPrope
 			roadNodes.remove_child(node)
 			return
 		lastRoadElement.endNode = node
+		lastRoadElement.refreshAll()
 		lastRoadElement.convertToPhysicsObject()
 		lastRoadNode = null
 		lastRoadElement = null
@@ -82,6 +83,7 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 			pipeNodes.remove_child(node)
 			return
 		lastPipeElement.endNode = node
+		lastPipeElement.refreshMesh()
 		lastPipeElement.convertToPhysicsObject()
 		lastPipeNode = null
 		lastPipeElement = null

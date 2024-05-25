@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=17 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="6_2dxsa"]
 [ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
+[ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -20,6 +21,7 @@ size = Vector2(128, 128)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1wdtv"]
 render_priority = 0
 shader = ExtResource("11_m3iqd")
+shader_parameter/Grid = ExtResource("12_5xrek")
 
 [node name="MapEditor" type="Node3D"]
 
@@ -83,7 +85,6 @@ isPreviewNode = true
 
 [node name="GridMesh" type="MeshInstance3D" parent="PreviewElement"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.8963, 12, -20.8735)
 mesh = SubResource("PlaneMesh_4qril")
 surface_material_override/0 = SubResource("ShaderMaterial_1wdtv")
 

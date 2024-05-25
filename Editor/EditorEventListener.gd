@@ -141,6 +141,18 @@ func connectSignals():
 
 				print("[EditorEventListener.gd] Class of collided Object (edit mode): ", ClassFunctions.getClassName(collidedObject))
 
+				# apply edits to prev element
+				if map.lastRoadElement != null:
+					map.lastRoadElement.convertToPhysicsObject()
+				if map.lastPipeElement != null:
+					map.lastPipeElement.convertToPhysicsObject()
+
+				if currentElement != null:
+					if currentElement.meshGenerator_s != null:
+						currentElement.meshGenerator_s.convertToPhysicsObject()
+					if currentElement.meshGenerator_e != null:
+						currentElement.meshGenerator_e.convertToPhysicsObject()
+
 				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
 					map.lastRoadElement = collidedObject
 					roadPropertiesUI.setProperties(collidedObject.getProperties())
@@ -160,26 +172,9 @@ func connectSignals():
 					pipeNodePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
 				else:
-					if map.lastRoadElement != null:
-						map.lastRoadElement.convertToPhysicsObject()
 					map.lastRoadElement = null
-
-					if map.lastPipeElement != null:
-						map.lastPipeElement.convertToPhysicsObject()
 					map.lastPipeElement = null
 					
-					# if map.lastRoadNode != null:
-					# 	map.lastRoadNode.meshGenerator.convertToPhysicsObject()
-					# map.lastRoadNode = null
-
-					# if map.lastPipeNode != null:
-					# 	map.lastPipeNode.meshGenerator.convertToPhysicsObject()
-					# map.lastPipeNode = null
-					if currentElement != null:
-						if currentElement.meshGenerator_s != null:
-							currentElement.meshGenerator_s.convertToPhysicsObject()
-						if currentElement.meshGenerator_e != null:
-							currentElement.meshGenerator_e.convertToPhysicsObject()
 					currentElement = null
 
 					setEditUIVisibility(EditUIType.NONE)
