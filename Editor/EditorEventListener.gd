@@ -10,6 +10,8 @@ class_name EditorEventListener
 @onready var pipeNode: PipeNode = %PipeNode
 var currentElement: Node3D = null
 
+@onready var gridMesh: MeshInstance3D = %GridMesh
+
 @onready var editorSidebarUI: EditorSidebarUI = %EditorSidebarUI
 
 @onready var roadNodePropertiesUI: RoadNodePropertiesUI = %RoadNodePropertiesUI
@@ -55,6 +57,7 @@ func connectSignals():
 			return
 
 		currentElement.global_position = worldPos
+		gridMesh.global_position = worldPos
 	)
 
 	inputHandler.moveUpGrid.connect(func():
@@ -488,6 +491,8 @@ func setEditUIVisibility(ui: EditUIType):
 
 func setCurrentElement():
 	
+	gridMesh.visible = currentEditorMode == EditorMode.BUILD
+
 	if currentEditorMode == EditorMode.BUILD:
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
@@ -521,4 +526,3 @@ func screenPointToRay() -> Node3D:
 	if rayArray.has("collider"):
 		return rayArray["collider"]
 	return null
-
