@@ -25,6 +25,7 @@ var currentElement: Node3D = null
 
 # gizmos
 @onready var rotator: Rotator = %Rotator
+@onready var translator: Translator = %Translator
 
 enum EditorMode {
 	BUILD,
@@ -50,6 +51,8 @@ var capturedGizmo: Node3D = null
 
 var gizmoCenter: Vector2 = Vector2.ZERO
 var rotationAxis: Vector3 = Vector3.ZERO
+var moveAxis: Vector3 = Vector3.ZERO
+
 
 var lastMousePos: Vector2 = Vector2.ZERO
 
@@ -60,6 +63,7 @@ func _ready():
 	connectSignals()
 
 	rotator.disable()
+	translator.disable()
 
 func connectSignals():
 	inputHandler.mouseMovedTo.connect(func(worldPos: Vector3):
@@ -148,9 +152,11 @@ func connectSignals():
 		elif currentEditorMode == EditorMode.EDIT:
 			var collidedObject = screenPointToRay()
 			if collidedObject != null: 
-				if ClassFunctions.getClassName(collidedObject) == "RotatorGizmo":
+				if ClassFunctions.getClassName(collidedObject) == "RotatorGizmo" || \
+					ClassFunctions.getClassName(collidedObject) == "TranslatorGizmo":
 					return
 				rotator.disable()
+				translator.disable()
 
 				collidedObject = collidedObject.get_parent()
 				if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
@@ -185,6 +191,8 @@ func connectSignals():
 					setEditUIVisibility(EditUIType.ROAD_NODE_PROPERTIES)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
 				elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
 					# map.lastPipeNode = collidedObject
 					currentElement = collidedObject
@@ -192,6 +200,8 @@ func connectSignals():
 					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -209,10 +219,13 @@ func connectSignals():
 			capturedGizmo.capture()
 			if ClassFunctions.getClassName(capturedGizmo) == "RotatorGizmo":
 				gizmoCenter = capturedGizmo.getCenterPoint()
-				print("[EditorEventListener.gd] Gizmo Center: ", gizmoCenter)
 				rotationAxis = capturedGizmo.rotationAxis
-				lastMousePos = get_viewport().get_mouse_position()
-
+			elif ClassFunctions.getClassName(capturedGizmo) == "TranslatorGizmo":
+				gizmoCenter = capturedGizmo.getCenterPoint()
+				moveAxis = capturedGizmo.moveAxis
+				gridMesh.global_position = capturedGizmo.global_position
+				gridMesh.visible = true				
+			lastMousePos = get_viewport().get_mouse_position()
 	)
 
 	inputHandler.clickEnded.connect(func():
@@ -220,7 +233,9 @@ func connectSignals():
 			capturedGizmo.release()
 		gizmoCenter = Vector2.ZERO
 		rotationAxis = Vector3.ZERO
+		moveAxis = Vector3.ZERO
 		capturedGizmo = null
+		gridMesh.visible = false
 	)
 
 	inputHandler.mouseMovedOnScreen.connect(func(mousePos: Vector2):
@@ -237,6 +252,16 @@ func connectSignals():
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
 	)
 
+	translator.positionChanged.connect(func(newPos: Vector3):
+		if currentElement != null:
+			currentElement.global_position = newPos
+			gridMesh.global_position = newPos
+			rotator.moveToNode(currentElement)
+			if ClassFunctions.getClassName(currentElement) == "RoadNode":
+				roadNodePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
+				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
+	)
 
 	map.roadPreviewElementRequested.connect(func():
 		map.onRoadPreviewElementProvided(roadNode)
@@ -257,7 +282,9 @@ func connectSignals():
 	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
 		currentEditorMode = mode
 		inputHandler.editorMode = mode
-		map.clearPreviews()
+
+		if mode == EditorMode.BUILD:
+			map.clearPreviews()
 
 		if mode != EditorMode.EDIT:
 			if map.lastRoadElement != null:
@@ -268,6 +295,13 @@ func connectSignals():
 				map.lastPipeElement.convertToPhysicsObject()
 			map.lastPipeElement = null
 
+			if currentElement != null:
+				if currentElement.meshGenerator_s != null:
+					currentElement.meshGenerator_s.convertToPhysicsObject()
+				if currentElement.meshGenerator_e != null:
+					currentElement.meshGenerator_e.convertToPhysicsObject()
+			currentElement = null
+
 			var roadNodeProperties = roadNodePropertiesUI.getProperties()
 			roadNodeProperties.erase("position")
 			roadNodeProperties.erase("rotation")
@@ -277,6 +311,9 @@ func connectSignals():
 			pipeNodeProperties.erase("position")
 			pipeNodeProperties.erase("rotation")
 			pipeNode.setProperties(pipeNodeProperties)
+
+			rotator.disable()
+			translator.disable()
 
 		setUIVisibility()
 		setCurrentElement()
@@ -331,6 +368,7 @@ func connectSignals():
 		currentElement.global_position = value
 
 		rotator.moveToNode(currentElement)
+		translator.global_position = value
 	)
 
 	roadNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
@@ -341,6 +379,7 @@ func connectSignals():
 		currentElement.global_rotation = value
 
 		rotator.moveToNode(currentElement)
+		translator.global_position = value
 	)
 
 	# road properties ui
@@ -467,6 +506,9 @@ func connectSignals():
 		
 		currentElement = currentElement as PipeNode
 		currentElement.global_position = value
+	
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
 	)
 
 	pipeNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
@@ -475,6 +517,9 @@ func connectSignals():
 		
 		currentElement = currentElement as PipeNode
 		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
 	)
 
 
@@ -589,6 +634,13 @@ const ROTATION_SNAP = deg_to_rad(5)
 
 var rotateTreshold: float = 5
 
+@export
+var MOVE_SPEED: float = 1
+
+const MOVE_SNAP = PrefabConstants.GRID_SIZE
+
+var moveTreshold: float = 5
+
 func handleMouseMovement(mousePos: Vector2):
 	if capturedGizmo == null:
 		return
@@ -615,5 +667,22 @@ func handleMouseMovement(mousePos: Vector2):
 		# print("[EditorEventListener.gd] Rotating gizmo by: ", angle)
 
 		capturedGizmo.rotateGizmo(angle)
+
+		lastMousePos = mousePos
+	elif ClassFunctions.getClassName(capturedGizmo) == "TranslatorGizmo":
+		var delta = mousePos - lastMousePos
+		if delta.length() < moveTreshold:
+			return
+		
+		var move = delta * MOVE_SPEED
+
+		if moveAxis.y == 1:
+			move.x = 0
+		else:
+			move.y = 0
+		
+		move = round(move / MOVE_SNAP) * MOVE_SNAP
+
+		capturedGizmo.moveGizmo(move.x - move.y)
 
 		lastMousePos = mousePos

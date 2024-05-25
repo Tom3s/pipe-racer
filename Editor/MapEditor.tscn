@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=19 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
@@ -15,6 +15,7 @@
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
 [ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
+[ext_resource type="PackedScene" uid="uid://ca7tfdokimak7" path="res://Editor/Functional/Translator.tscn" id="14_ou2ir"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -92,6 +93,9 @@ surface_material_override/0 = SubResource("ShaderMaterial_1wdtv")
 [node name="Gizmos" type="Node3D" parent="."]
 
 [node name="Rotator" parent="Gizmos" instance=ExtResource("13_2gn6g")]
+unique_name_in_owner = true
+
+[node name="Translator" parent="Gizmos" instance=ExtResource("14_ou2ir")]
 unique_name_in_owner = true
 
 [node name="EditorInputHandler" type="Node" parent="."]
