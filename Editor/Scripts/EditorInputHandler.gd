@@ -10,6 +10,10 @@ signal moveDownGrid()
 signal rotatePressed(axis: Vector3, angle: float)
 signal resetRotationPressed()
 
+signal clickStarted()
+signal clickEnded()
+
+signal mouseMovedOnScreen(newPos: Vector2)
 
 signal placePressed()
 
@@ -89,8 +93,14 @@ func _unhandled_input(event):
 
 
 	elif editorMode == EditorEventListener.EditorMode.EDIT:
+		if !Input.is_action_pressed("editor_look_around") && Input.is_action_pressed("editor_place"):
+			mouseMovedOnScreen.emit(get_viewport().get_mouse_position())
+
 		if Input.is_action_just_pressed("editor_place"):
+			clickStarted.emit()
 			placePressed.emit()
+		elif Input.is_action_just_released("editor_place"):
+			clickEnded.emit()
 		
 		if Input.is_action_just_pressed("editor_rotate_right"):
 			rotatePressed.emit(Vector3.UP, -angleSnap)
