@@ -28,6 +28,8 @@ signal pipePreviewElementRequested()
 @onready var start: Node3D = %Start
 var startLine: FunctionalStartLine
 
+@onready var checkpoints: Node3D = %Checkpoints
+
 # scenery
 
 @onready var scenery: EditableScenery = %EditableScenery
@@ -95,7 +97,7 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 func onPipePreviewElementProvided(node: PipeNode):
 	if lastPipeElement != null:
 		lastPipeElement.endNode = node
-	
+
 func clearPreviews():
 	if lastRoadElement != null:
 		lastRoadElement.queue_free()
@@ -117,7 +119,12 @@ func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
 	startLine.global_rotation = rotation
 	startLine.setProperties(properties)
 	startLine.convertToPhysicsObject()
-	
+
+func addCheckpoint(node: FunctionalCheckpoint, position: Vector3, rotation: Vector3, properties: Dictionary):
+	checkpoints.add_child(node)
+	node.global_position = position
+	node.global_rotation = rotation
+	node.setProperties(properties)
 
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
 var scenerySelectionSize: int = 1
@@ -257,3 +264,6 @@ func removePipeNode(node: PipeNode):
 	
 	if node != null:
 		node.queue_free()
+
+func removeCheckpoint(node: FunctionalCheckpoint):
+	node.queue_free()

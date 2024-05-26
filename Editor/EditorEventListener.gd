@@ -9,6 +9,7 @@ class_name EditorEventListener
 @onready var roadNode: RoadNode = %RoadNode
 @onready var pipeNode: PipeNode = %PipeNode
 @onready var startLine: ProceduralStartLine = %StartLine
+@onready var checkpoint: FunctionalCheckpoint = %Checkpoint
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -22,6 +23,8 @@ var currentElement: Node3D = null
 @onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
 
 @onready var startLinePropertiesUI: StartLinePropertiesUI = %StartLinePropertiesUI
+
+@onready var checkpointPropertiesUI: CheckpointPropertiesUI = %CheckpointPropertiesUI
 
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
@@ -162,6 +165,14 @@ func connectSignals():
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
+				map.addCheckpoint(
+					currentElement.getCopy(),
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					currentElement.getProperties()
+				)
+			
 
 		elif currentEditorMode == EditorMode.EDIT:
 			var collidedObject = screenPointToRay()
@@ -173,7 +184,8 @@ func connectSignals():
 				translator.disable()
 
 				collidedObject = collidedObject.get_parent()
-				if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
+				if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface" || \
+					ClassFunctions.getClassName(collidedObject) == "ProceduralCheckpoint":
 					collidedObject = collidedObject.get_parent()
 
 				print("[EditorEventListener.gd] Class of collided Object (edit mode): ", ClassFunctions.getClassName(collidedObject))
@@ -189,7 +201,7 @@ func connectSignals():
 					 ClassFunctions.getClassName(currentElement) == "PipeNode"):
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
-						
+
 				if currentElement != null && \
 					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine"):
 					currentElement.convertToPhysicsObject()
@@ -228,6 +240,14 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+				elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
+					currentElement = collidedObject
+					checkpointPropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.CP_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -252,6 +272,8 @@ func connectSignals():
 				map.removeRoadNode(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
 				map.removePipeNode(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
+				map.removeCheckpoint(collidedObject)
 			else:
 				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
 
@@ -296,6 +318,9 @@ func connectSignals():
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
+				checkpointPropertiesUI.setProperties(currentElement.getProperties())
+				pass
 	)
 
 	translator.positionChanged.connect(func(newPos: Vector3):
@@ -309,6 +334,9 @@ func connectSignals():
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
+				checkpointPropertiesUI.setProperties(currentElement.getProperties())
+				pass
 	)
 
 	map.roadPreviewElementRequested.connect(func():
@@ -361,6 +389,10 @@ func connectSignals():
 			var startLineProperties = startLinePropertiesUI.getProperties()
 			startLineProperties.erase("position")
 			startLineProperties.erase("rotation")
+
+			var checkpointProperties = checkpointPropertiesUI.getProperties()
+			checkpointProperties.erase("position")
+			checkpointProperties.erase("rotation")
 
 			rotator.disable()
 			translator.disable()
@@ -627,6 +659,45 @@ func connectSignals():
 		rotator.moveToNode(currentElement)
 	)
 
+	# checkpoint properties ui
+
+	checkpointPropertiesUI.ringWidthChanged.connect(func(width: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
+			return
+		
+		currentElement = currentElement as FunctionalCheckpoint
+		currentElement.ringWidth = width
+	)
+
+	checkpointPropertiesUI.radiusChanged.connect(func(radius: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
+			return
+		
+		currentElement = currentElement as FunctionalCheckpoint
+		currentElement.ringRadius = radius
+	)
+
+	checkpointPropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
+			return
+		
+		currentElement = currentElement as FunctionalCheckpoint
+		currentElement.global_position = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	checkpointPropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
+			return
+		
+		currentElement = currentElement as FunctionalCheckpoint
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+	)
+
 	# scenery editor ui
 
 	inputHandler.mouseMovedTo_Scenery.connect(
@@ -670,6 +741,8 @@ func setUIVisibility():
 
 	startLinePropertiesUI.visible = currentBuildMode == BuildMode.START && currentEditorMode == EditorMode.BUILD
 
+	checkpointPropertiesUI.visible = currentBuildMode == BuildMode.CP && currentEditorMode == EditorMode.BUILD
+
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 enum EditUIType {
@@ -678,6 +751,7 @@ enum EditUIType {
 	PIPE_NODE_PROPERTIES,
 	PIPE_PROPERTIES,
 	START_LINE_PROPERTIES,
+	CP_PROPERTIES,
 	NONE,
 }
 
@@ -687,6 +761,7 @@ func setEditUIVisibility(ui: EditUIType):
 	pipePropertiesUI.visible = ui == EditUIType.PIPE_PROPERTIES
 	pipeNodePropertiesUI.visible = ui == EditUIType.PIPE_NODE_PROPERTIES
 	startLinePropertiesUI.visible = ui == EditUIType.START_LINE_PROPERTIES
+	checkpointPropertiesUI.visible = ui == EditUIType.CP_PROPERTIES
 
 func setCurrentElement():
 	
@@ -696,6 +771,7 @@ func setCurrentElement():
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
 		startLine.visible = currentBuildMode == BuildMode.START
+		checkpoint.visible = currentBuildMode == BuildMode.CP
 
 		if currentBuildMode == BuildMode.ROAD:
 			currentElement = roadNode
@@ -703,6 +779,8 @@ func setCurrentElement():
 			currentElement = pipeNode
 		elif currentBuildMode == BuildMode.START:
 			currentElement = startLine
+		elif currentBuildMode == BuildMode.CP:
+			currentElement = checkpoint
 		
 		else:
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
@@ -712,6 +790,7 @@ func setCurrentElement():
 	roadNode.visible = currentEditorMode == EditorMode.BUILD
 	pipeNode.visible = currentEditorMode == EditorMode.BUILD
 	startLine.visible = currentEditorMode == EditorMode.BUILD
+	checkpoint.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 

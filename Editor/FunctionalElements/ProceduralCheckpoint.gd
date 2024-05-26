@@ -73,6 +73,8 @@ func refreshRingMesh() -> void:
 		largeSegments,
 	)
 
+	setUncollected()
+
 func setCollected():
 	mesh.set_surface_override_material(0, collectedMaterial)
 

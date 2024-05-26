@@ -28,6 +28,7 @@ unique_name_in_owner = true
 [node name="Pieces" type="Node3D" parent="PipeElements"]
 
 [node name="Checkpoints" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="Start" type="Node3D" parent="."]
 unique_name_in_owner = true

@@ -5,7 +5,7 @@ class_name Checkpoint
 # var uncollectedMaterial := preload("res://Track Props/CheckPointRed.tres")
 
 
-signal bodyEnteredCheckpoint(body, checkpoint: Node3D)
+signal bodyEnteredCheckpoint(body: Node3D, checkpoint: Node3D)
 
 var index: int = -1
 
