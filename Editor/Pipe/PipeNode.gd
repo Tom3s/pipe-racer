@@ -2,8 +2,9 @@
 extends Node3D
 class_name PipeNode
 
-var meshGenerator_s: PipeMeshGenerator
-var meshGenerator_e: PipeMeshGenerator
+# var meshGenerator_s: PipeMeshGenerator
+# var meshGenerator_e: PipeMeshGenerator
+var meshGeneratorRefs: Array[PipeMeshGenerator] = []
 
 signal dataChanged()
 

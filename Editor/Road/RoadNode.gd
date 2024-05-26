@@ -2,8 +2,9 @@
 extends Node3D
 class_name RoadNode
 
-var meshGenerator_s: RoadMeshGenerator
-var meshGenerator_e: RoadMeshGenerator
+# var meshGenerator_s: RoadMeshGenerator
+# var meshGenerator_e: RoadMeshGenerator
+var meshGeneratorRefs: Array[RoadMeshGenerator] = []
 
 signal transformChanged()
 signal roadDataChanged()

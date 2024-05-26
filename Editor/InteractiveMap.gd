@@ -162,3 +162,84 @@ func setEditMode(mode: int):
 
 func setGroundSize(size: int):
 	scenery.groundSize = size
+
+
+func removeRoadElement(node: RoadMeshGenerator):
+	node.startNode.meshGeneratorRefs.erase(node) 
+	node.endNode.meshGeneratorRefs.erase(node)
+
+	while node.meshGeneratorRefs.find(null) != -1:
+		node.meshGeneratorRefs.erase(null)
+	if node.startNode.meshGeneratorRefs.size() == 0:
+		node.startNode.queue_free()
+
+	while node.meshGeneratorRefs.find(null) != -1:
+		node.meshGeneratorRefs.erase(null)
+	if node.endNode.meshGeneratorRefs.size() == 0:
+		node.endNode.queue_free()
+
+	node.queue_free()
+
+func removePipeElement(node: PipeMeshGenerator):
+	node.startNode.meshGeneratorRefs.erase(node) 
+	node.endNode.meshGeneratorRefs.erase(node)
+
+	while node.meshGeneratorRefs.find(null) != -1:
+		node.meshGeneratorRefs.erase(null)
+	if node.startNode.meshGeneratorRefs.size() == 0:
+		node.startNode.queue_free()
+
+	while node.meshGeneratorRefs.find(null) != -1:
+		node.meshGeneratorRefs.erase(null)
+	if node.endNode.meshGeneratorRefs.size() == 0:
+		node.endNode.queue_free()
+
+	node.queue_free()
+
+func removeRoadNode(node: RoadNode):
+	var roadNodes: Dictionary = {}
+	var meshGeneratorRefs: Array = []
+	meshGeneratorRefs.append_array(node.meshGeneratorRefs)
+
+	for meshGenerator in meshGeneratorRefs:
+		if !roadNodes.has(meshGenerator.startNode):
+			roadNodes[meshGenerator.startNode] = null
+		if !roadNodes.has(meshGenerator.endNode):
+			roadNodes[meshGenerator.endNode] = null
+		meshGenerator.startNode.meshGeneratorRefs.erase(meshGenerator)
+		meshGenerator.endNode.meshGeneratorRefs.erase(meshGenerator)
+		meshGenerator.queue_free()
+	
+	for roadNode in roadNodes.keys():
+		while roadNode.meshGeneratorRefs.find(null) != -1:
+			roadNode.meshGeneratorRefs.erase(null)
+		if roadNode.meshGeneratorRefs.size() == 0:
+			roadNode.queue_free()
+	
+	if node != null:
+		node.queue_free()
+
+
+
+func removePipeNode(node: PipeNode):
+	var pipeNodes: Dictionary = {}
+	var meshGeneratorRefs: Array = []
+	meshGeneratorRefs.append_array(node.meshGeneratorRefs)
+
+	for meshGenerator in meshGeneratorRefs:
+		if !pipeNodes.has(meshGenerator.startNode):
+			pipeNodes[meshGenerator.startNode] = null
+		if !pipeNodes.has(meshGenerator.endNode):
+			pipeNodes[meshGenerator.endNode] = null
+		meshGenerator.startNode.meshGeneratorRefs.erase(meshGenerator)
+		meshGenerator.endNode.meshGeneratorRefs.erase(meshGenerator)
+		meshGenerator.queue_free()
+	
+	for pipeNode in pipeNodes.keys():
+		while pipeNode.meshGeneratorRefs.find(null) != -1:
+			pipeNode.meshGeneratorRefs.erase(null)
+		if pipeNode.meshGeneratorRefs.size() == 0:
+			pipeNode.queue_free()
+	
+	if node != null:
+		node.queue_free()

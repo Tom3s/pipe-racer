@@ -117,7 +117,11 @@ func _unhandled_input(event):
 			rotatePressed.emit(Vector3.FORWARD, -angleSnap)
 		elif Input.is_action_just_pressed("editor_pitch_forward"):
 			rotatePressed.emit(Vector3.RIGHT, angleSnap)
+	
 
+	elif editorMode == EditorEventListener.EditorMode.DELETE:
+		if Input.is_action_just_pressed("editor_place"):
+			placePressed.emit()
 
 
 func onScreenMousePosToGridIntersect() -> Vector3:

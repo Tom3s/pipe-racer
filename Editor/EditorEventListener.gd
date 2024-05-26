@@ -175,10 +175,8 @@ func connectSignals():
 					map.lastPipeElement.convertToPhysicsObject()
 
 				if currentElement != null:
-					if currentElement.meshGenerator_s != null:
-						currentElement.meshGenerator_s.convertToPhysicsObject()
-					if currentElement.meshGenerator_e != null:
-						currentElement.meshGenerator_e.convertToPhysicsObject()
+					for meshGenerator in currentElement.meshGeneratorRefs:
+						meshGenerator.convertToPhysicsObject()
 
 				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
 					map.lastRoadElement = collidedObject
@@ -213,7 +211,25 @@ func connectSignals():
 					currentElement = null
 
 					setEditUIVisibility(EditUIType.NONE)
-					
+		elif currentEditorMode == EditorMode.DELETE:
+			var collidedObject = screenPointToRay()
+			if collidedObject == null:
+				return
+
+			collidedObject = collidedObject.get_parent()
+			if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
+				collidedObject = collidedObject.get_parent()
+
+			if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
+				map.removeRoadElement(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "PipeMeshGenerator":
+				map.removePipeElement(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "RoadNode":
+				map.removeRoadNode(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
+				map.removePipeNode(collidedObject)
+			else:
+				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
 
 	)
 
@@ -300,10 +316,8 @@ func connectSignals():
 			map.lastPipeElement = null
 
 			if currentElement != null:
-				if currentElement.meshGenerator_s != null:
-					currentElement.meshGenerator_s.convertToPhysicsObject()
-				if currentElement.meshGenerator_e != null:
-					currentElement.meshGenerator_e.convertToPhysicsObject()
+				for meshGenerator in currentElement.meshGeneratorRefs:
+					meshGenerator.convertToPhysicsObject()
 			currentElement = null
 
 			var roadNodeProperties = roadNodePropertiesUI.getProperties()

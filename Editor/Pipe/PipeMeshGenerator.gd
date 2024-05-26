@@ -114,7 +114,7 @@ class PipeVertexCollection:
 
 		startNode.dataChanged.connect(refreshMesh)
 
-		newNode.meshGenerator_s = self
+		newNode.meshGeneratorRefs.push_back(self)
 
 @onready var endNode: PipeNode = %End:
 	set(newNode):
@@ -127,7 +127,8 @@ class PipeVertexCollection:
 
 		endNode.dataChanged.connect(refreshMesh)
 
-		newNode.meshGenerator_e = self
+		newNode.meshGeneratorRefs.push_back(self)
+
 
 @onready var pipeMesh: PhysicsSurface = %Mesh
 

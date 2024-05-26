@@ -74,7 +74,7 @@ class RoadVertexCollection:
 		startNode.roadDataChanged.connect(refreshAll)
 		startNode.runoffDataChanged.connect(refreshRunoffMesh)
 
-		newNode.meshGenerator_s = self
+		newNode.meshGeneratorRefs.push_back(self)
 
 @onready var endNode: RoadNode = %End:
 	set(newNode):
@@ -91,7 +91,7 @@ class RoadVertexCollection:
 		endNode.roadDataChanged.connect(refreshAll)
 		endNode.runoffDataChanged.connect(refreshRunoffMesh)
 
-		newNode.meshGenerator_e = self
+		newNode.meshGeneratorRefs.push_back(self)
 
 @onready var roadMesh: PhysicsSurface = %RoadMesh
 @onready var runoffMesh: PhysicsSurface = %RunoffMesh
