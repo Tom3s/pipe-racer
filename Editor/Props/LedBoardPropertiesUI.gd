@@ -165,6 +165,11 @@ func fillTextureOptions() -> void:
 	
 	localTextureOptions.select(TextureLoader.defaultBillboardTextureIndex)
 
+	var popup: PopupMenu = localTextureOptions.get_popup()
+	for i in TextureLoader.billboardTextures.size():
+		popup.set_item_icon_max_width(i, 148)
+
+
 
 	
 func getProperties() -> Dictionary:
