@@ -261,7 +261,8 @@ func connectSignals():
 				return
 
 			collidedObject = collidedObject.get_parent()
-			if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
+			if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface" || \
+				ClassFunctions.getClassName(collidedObject) == "ProceduralCheckpoint":
 				collidedObject = collidedObject.get_parent()
 
 			if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
@@ -372,8 +373,11 @@ func connectSignals():
 			map.lastPipeElement = null
 
 			if currentElement != null:
-				for meshGenerator in currentElement.meshGeneratorRefs:
-					meshGenerator.convertToPhysicsObject()
+				if ClassFunctions.getClassName(currentElement) == "RoadNode" || \
+					ClassFunctions.getClassName(currentElement) == "RoadNode":
+					for meshGenerator in currentElement.meshGeneratorRefs:
+						meshGenerator.convertToPhysicsObject()
+					
 			currentElement = null
 
 			var roadNodeProperties = roadNodePropertiesUI.getProperties()
