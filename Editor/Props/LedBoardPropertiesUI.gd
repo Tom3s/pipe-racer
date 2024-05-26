@@ -51,7 +51,7 @@ func setWidth(newWidth: float) -> void:
 	widthSpinbox.set_value_no_signal(newWidth)
 
 func setHeight(newHeight: float) -> void:
-	heightSpinbox.set_value_no_signal(rad_to_deg(newHeight))
+	heightSpinbox.set_value_no_signal(newHeight)
 
 func setSupport(newSupport: bool) -> void:
 	supportToggle.button_pressed = newSupport
