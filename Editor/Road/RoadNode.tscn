@@ -7,7 +7,6 @@ albedo_color = Color(1, 0.545098, 0, 1)
 
 [node name="RoadNode" type="Node3D"]
 script = ExtResource("1_cyuye")
-profileType = null
 cap = true
 
 [node name="Arrow" type="CSGPolygon3D" parent="."]

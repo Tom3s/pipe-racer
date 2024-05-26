@@ -8,6 +8,7 @@ class_name EditorEventListener
 
 @onready var roadNode: RoadNode = %RoadNode
 @onready var pipeNode: PipeNode = %PipeNode
+@onready var startLine: ProceduralStartLine = %StartLine
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -153,6 +154,13 @@ func connectSignals():
 					currentElement.global_rotation,
 					pipePropertiesUI.getProperties()
 				)
+			elif ClassFunctions.getClassName(currentElement) == "ProceduralStartLine":
+				map.setStartLine(
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					currentElement.getProperties()
+				)
+
 		elif currentEditorMode == EditorMode.EDIT:
 			var collidedObject = screenPointToRay()
 			if collidedObject != null: 
@@ -174,7 +182,9 @@ func connectSignals():
 				if map.lastPipeElement != null:
 					map.lastPipeElement.convertToPhysicsObject()
 
-				if currentElement != null:
+				if currentElement != null && \
+					(ClassFunctions.getClassName(currentElement) == "RoadNode" || \
+					 ClassFunctions.getClassName(currentElement) == "PipeNode"):
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
 
@@ -200,6 +210,14 @@ func connectSignals():
 					currentElement = collidedObject
 					pipeNodePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
+				elif ClassFunctions.getClassName(collidedObject) == "ProceduralStartLine":
+					currentElement = collidedObject.get_parent() as FunctionalStartLine
+					# set ui properties
+					# setEditUIVisibility(EditUIType.NONE)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
 					translator.enable()
@@ -614,11 +632,15 @@ func setCurrentElement():
 	if currentEditorMode == EditorMode.BUILD:
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
+		startLine.visible = currentBuildMode == BuildMode.START
 
 		if currentBuildMode == BuildMode.ROAD:
 			currentElement = roadNode
 		elif currentBuildMode == BuildMode.PIPE:
 			currentElement = pipeNode
+		elif currentBuildMode == BuildMode.START:
+			currentElement = startLine
+		
 		else:
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
 			currentElement = null
@@ -626,6 +648,7 @@ func setCurrentElement():
 
 	roadNode.visible = currentEditorMode == EditorMode.BUILD
 	pipeNode.visible = currentEditorMode == EditorMode.BUILD
+	startLine.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 

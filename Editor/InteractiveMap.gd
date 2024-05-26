@@ -3,6 +3,7 @@ class_name InteractiveMap
 
 @onready var roadScene: PackedScene = preload("res://Editor/Road/RoadMeshGenerator.tscn")
 @onready var pipeScene: PackedScene = preload("res://Editor/Pipe/PipeMeshGenerator.tscn")
+@onready var startLineScene: PackedScene = preload("res://Editor/FunctionalElements/FunctionalStartLine.tscn")
 
 @onready var roadElements: Node3D = %RoadElements
 var roadNodes: Node3D
@@ -23,6 +24,9 @@ var lastPipeElement: PipeMeshGenerator
 
 signal pipePreviewElementRequested()
 
+
+@onready var start: Node3D = %Start
+var startLine: FunctionalStartLine
 
 # scenery
 
@@ -104,6 +108,16 @@ func clearPreviews():
 		lastPipeElement = null
 		lastPipeNode.queue_free()
 		lastPipeNode = null
+
+func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
+	if startLine == null:
+		startLine = startLineScene.instantiate()
+		start.add_child(startLine)
+	startLine.global_position = position
+	startLine.global_rotation = rotation
+	startLine.setProperties(properties)
+	startLine.convertToPhysicsObject()
+	
 
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
 var scenerySelectionSize: int = 1

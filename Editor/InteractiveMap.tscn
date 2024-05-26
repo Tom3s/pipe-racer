@@ -30,5 +30,6 @@ unique_name_in_owner = true
 [node name="Checkpoints" type="Node3D" parent="."]
 
 [node name="Start" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="Deco" type="Node3D" parent="."]
