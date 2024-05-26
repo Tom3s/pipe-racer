@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=25 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
@@ -14,12 +14,14 @@
 [ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="6_2dxsa"]
 [ext_resource type="PackedScene" uid="uid://cpiqv66u8wuj4" path="res://Editor/FunctionalElements/CheckpointPropertiesUI.tscn" id="6_3b1bn"]
 [ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
+[ext_resource type="PackedScene" uid="uid://dhr0gg8gqdduy" path="res://Editor/Props/LedBoardPropertiesUI.tscn" id="7_4pe1b"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
 [ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
 [ext_resource type="PackedScene" uid="uid://c2l244tfm5rgk" path="res://Editor/FunctionalElements/ProceduralStartLine.tscn" id="13_gh66r"]
 [ext_resource type="PackedScene" uid="uid://ca7tfdokimak7" path="res://Editor/Functional/Translator.tscn" id="14_ou2ir"]
 [ext_resource type="PackedScene" uid="uid://dv0q3xnvt43gx" path="res://Editor/FunctionalElements/FunctionalCheckpoint.tscn" id="15_d2ml2"]
+[ext_resource type="PackedScene" uid="uid://nqvakke8vhpn" path="res://Editor/Props/LedBoard.tscn" id="17_emavj"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -74,6 +76,11 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
+[node name="LedBoardPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("7_4pe1b")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="EditorSidebarUI" parent="UI" instance=ExtResource("3_k84hq")]
 unique_name_in_owner = true
 
@@ -109,6 +116,9 @@ unique_name_in_owner = true
 [node name="Checkpoint" parent="PreviewElement" instance=ExtResource("15_d2ml2")]
 unique_name_in_owner = true
 isPreview = true
+
+[node name="LedBoard" parent="PreviewElement" instance=ExtResource("17_emavj")]
+unique_name_in_owner = true
 
 [node name="Gizmos" type="Node3D" parent="."]
 

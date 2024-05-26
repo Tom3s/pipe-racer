@@ -1,6 +1,7 @@
 extends Node
 
 var billboardTextures: Dictionary = {}
+var billboardTextureIndices: Dictionary = {}
 var defaultBillboardTextureIndex: int = 0
 
 func _ready():
@@ -22,6 +23,8 @@ func loadBillboardTextures() -> void:
 
 			var textureFileName = file_name.replace(path, "").replace(".png.import", "")
 			var texture: Texture = ResourceLoader.load(path + file_name.replace(".import", ""))
+
+			billboardTextureIndices[textureFileName] = index
 
 			if textureFileName == "PipeRacerLanguages":
 				defaultBillboardTextureIndex = index

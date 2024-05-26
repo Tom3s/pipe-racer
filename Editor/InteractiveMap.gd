@@ -126,6 +126,13 @@ func addCheckpoint(node: FunctionalCheckpoint, position: Vector3, rotation: Vect
 	node.global_rotation = rotation
 	node.setProperties(properties)
 
+func addLedBoard(node: LedBoard, position: Vector3, rotation: Vector3, properties: Dictionary):
+	checkpoints.add_child(node)
+	node.global_position = position
+	node.global_rotation = rotation
+	node.setProperties(properties)
+	node.convertToPhysicsObject()
+
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
 var scenerySelectionSize: int = 1
 var sceneryEditDirection: int = 1
@@ -266,4 +273,7 @@ func removePipeNode(node: PipeNode):
 		node.queue_free()
 
 func removeCheckpoint(node: FunctionalCheckpoint):
+	node.queue_free()
+
+func removeLedBoard(node: LedBoard):
 	node.queue_free()

@@ -10,6 +10,7 @@ class_name EditorEventListener
 @onready var pipeNode: PipeNode = %PipeNode
 @onready var startLine: ProceduralStartLine = %StartLine
 @onready var checkpoint: FunctionalCheckpoint = %Checkpoint
+@onready var ledBoard: LedBoard = %LedBoard
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -23,8 +24,8 @@ var currentElement: Node3D = null
 @onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
 
 @onready var startLinePropertiesUI: StartLinePropertiesUI = %StartLinePropertiesUI
-
 @onready var checkpointPropertiesUI: CheckpointPropertiesUI = %CheckpointPropertiesUI
+@onready var ledBoardPropertiesUI: LedBoardPropertiesUI = %LedBoardPropertiesUI
 
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
@@ -172,6 +173,14 @@ func connectSignals():
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
+				map.addLedBoard(
+					currentElement.getCopy(),
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					currentElement.getProperties()
+				)
+			
 			
 
 		elif currentEditorMode == EditorMode.EDIT:
@@ -203,7 +212,8 @@ func connectSignals():
 						meshGenerator.convertToPhysicsObject()
 
 				if currentElement != null && \
-					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine"):
+					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine" || \
+					 ClassFunctions.getClassName(currentElement) == "LedBoard"):
 					currentElement.convertToPhysicsObject()
 
 				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
@@ -248,6 +258,14 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+				elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
+					currentElement = collidedObject
+					ledBoardPropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.LED_BOARD_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -275,6 +293,8 @@ func connectSignals():
 				map.removePipeNode(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
 				map.removeCheckpoint(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
+				map.removeLedBoard(collidedObject)
 			else:
 				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
 
@@ -321,7 +341,8 @@ func connectSignals():
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
 				checkpointPropertiesUI.setProperties(currentElement.getProperties())
-				pass
+			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
+				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	translator.positionChanged.connect(func(newPos: Vector3):
@@ -337,7 +358,8 @@ func connectSignals():
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
 				checkpointPropertiesUI.setProperties(currentElement.getProperties())
-				pass
+			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
+				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	map.roadPreviewElementRequested.connect(func():
@@ -377,6 +399,9 @@ func connectSignals():
 					ClassFunctions.getClassName(currentElement) == "RoadNode":
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
+				
+				if ClassFunctions.getClassName(currentElement) == "LedBoard":
+					currentElement.convertToPhysicsObject()
 					
 			currentElement = null
 
@@ -390,13 +415,19 @@ func connectSignals():
 			pipeNodeProperties.erase("rotation")
 			pipeNode.setProperties(pipeNodeProperties)
 
-			var startLineProperties = startLinePropertiesUI.getProperties()
-			startLineProperties.erase("position")
-			startLineProperties.erase("rotation")
+			# var startLineProperties = startLinePropertiesUI.getProperties()
+			# startLineProperties.erase("position")
+			# startLineProperties.erase("rotation")
 
 			var checkpointProperties = checkpointPropertiesUI.getProperties()
 			checkpointProperties.erase("position")
 			checkpointProperties.erase("rotation")
+			checkpoint.setProperties(checkpointProperties)
+
+			var ledBoardProperties = ledBoardPropertiesUI.getProperties()
+			ledBoardProperties.erase("position")
+			ledBoardProperties.erase("rotation")
+			ledBoard.setProperties(ledBoardProperties)
 
 			rotator.disable()
 			translator.disable()
@@ -702,6 +733,85 @@ func connectSignals():
 		rotator.moveToNode(currentElement)
 	)
 
+	# led board ui
+
+	ledBoardPropertiesUI.widthChanged.connect(func(width: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.width = width
+	)
+
+	ledBoardPropertiesUI.heightChanged.connect(func(height: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.height = height
+	)
+
+	ledBoardPropertiesUI.supportChanged.connect(func(support: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.support = support
+	)
+
+	ledBoardPropertiesUI.supportBottomHeightChanged.connect(func(height: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.supportBottomHeight = height
+	)
+
+	ledBoardPropertiesUI.customTextureChanged.connect(func(usingOnlineTexture: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.usingOnlineTexture = usingOnlineTexture
+	)
+
+	ledBoardPropertiesUI.localTextureChanged.connect(func(textureName: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.textureName = textureName
+	)
+
+	ledBoardPropertiesUI.customTextureUrlChanged.connect(func(textureUrl: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.customTextureUrl = textureUrl
+	)
+
+	ledBoardPropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.global_position = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	ledBoardPropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
+			return
+		
+		currentElement = currentElement as LedBoard
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+	)
+
 	# scenery editor ui
 
 	inputHandler.mouseMovedTo_Scenery.connect(
@@ -747,6 +857,8 @@ func setUIVisibility():
 
 	checkpointPropertiesUI.visible = currentBuildMode == BuildMode.CP && currentEditorMode == EditorMode.BUILD
 
+	ledBoardPropertiesUI.visible = currentBuildMode == BuildMode.DECO && currentEditorMode == EditorMode.BUILD
+
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 enum EditUIType {
@@ -756,6 +868,7 @@ enum EditUIType {
 	PIPE_PROPERTIES,
 	START_LINE_PROPERTIES,
 	CP_PROPERTIES,
+	LED_BOARD_PROPERTIES,
 	NONE,
 }
 
@@ -766,6 +879,7 @@ func setEditUIVisibility(ui: EditUIType):
 	pipeNodePropertiesUI.visible = ui == EditUIType.PIPE_NODE_PROPERTIES
 	startLinePropertiesUI.visible = ui == EditUIType.START_LINE_PROPERTIES
 	checkpointPropertiesUI.visible = ui == EditUIType.CP_PROPERTIES
+	ledBoardPropertiesUI.visible = ui == EditUIType.LED_BOARD_PROPERTIES
 
 func setCurrentElement():
 	
@@ -776,6 +890,7 @@ func setCurrentElement():
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
 		startLine.visible = currentBuildMode == BuildMode.START
 		checkpoint.visible = currentBuildMode == BuildMode.CP
+		ledBoard.visible = currentBuildMode == BuildMode.DECO
 
 		if currentBuildMode == BuildMode.ROAD:
 			currentElement = roadNode
@@ -785,6 +900,8 @@ func setCurrentElement():
 			currentElement = startLine
 		elif currentBuildMode == BuildMode.CP:
 			currentElement = checkpoint
+		elif currentBuildMode == BuildMode.DECO:
+			currentElement = ledBoard
 		
 		else:
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
@@ -795,6 +912,7 @@ func setCurrentElement():
 	pipeNode.visible = currentEditorMode == EditorMode.BUILD
 	startLine.visible = currentEditorMode == EditorMode.BUILD
 	checkpoint.visible = currentEditorMode == EditorMode.BUILD
+	ledBoard.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 
