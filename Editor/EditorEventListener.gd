@@ -21,6 +21,8 @@ var currentElement: Node3D = null
 @onready var pipeNodePropertiesUI: PipeNodePropertiesUI = %PipeNodePropertiesUI
 @onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
 
+@onready var startLinePropertiesUI: StartLinePropertiesUI = %StartLinePropertiesUI
+
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
 
@@ -187,6 +189,10 @@ func connectSignals():
 					 ClassFunctions.getClassName(currentElement) == "PipeNode"):
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
+						
+				if currentElement != null && \
+					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine"):
+					currentElement.convertToPhysicsObject()
 
 				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
 					map.lastRoadElement = collidedObject
@@ -216,8 +222,8 @@ func connectSignals():
 					translator.global_position = currentElement.global_position
 				elif ClassFunctions.getClassName(collidedObject) == "ProceduralStartLine":
 					currentElement = collidedObject.get_parent() as FunctionalStartLine
-					# set ui properties
-					# setEditUIVisibility(EditUIType.NONE)
+					startLinePropertiesUI.setProperties(currentElement.getProperties())
+					setEditUIVisibility(EditUIType.START_LINE_PROPERTIES)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
 					translator.enable()
@@ -288,6 +294,8 @@ func connectSignals():
 				roadNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
+				startLinePropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	translator.positionChanged.connect(func(newPos: Vector3):
@@ -299,6 +307,8 @@ func connectSignals():
 				roadNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
+				startLinePropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	map.roadPreviewElementRequested.connect(func():
@@ -347,6 +357,10 @@ func connectSignals():
 			pipeNodeProperties.erase("position")
 			pipeNodeProperties.erase("rotation")
 			pipeNode.setProperties(pipeNodeProperties)
+
+			var startLineProperties = startLinePropertiesUI.getProperties()
+			startLineProperties.erase("position")
+			startLineProperties.erase("rotation")
 
 			rotator.disable()
 			translator.disable()
@@ -415,7 +429,6 @@ func connectSignals():
 		currentElement.global_rotation = value
 
 		rotator.moveToNode(currentElement)
-		translator.global_position = value
 	)
 
 	# road properties ui
@@ -555,7 +568,6 @@ func connectSignals():
 		currentElement.global_rotation = value
 
 		rotator.moveToNode(currentElement)
-		translator.global_position = value
 	)
 
 
@@ -566,6 +578,53 @@ func connectSignals():
 			return
 
 		map.lastPipeElement.surfaceType = surface as PhysicsSurface.SurfaceType
+	)
+
+	# start line properties ui
+
+	startLinePropertiesUI.widthChanged.connect(func(width: float):
+		if currentElement == null || \
+			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
+			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
+			return
+		
+		# currentElement = currentElement as FunctionalStartLine
+		currentElement.width = width
+	)
+
+	startLinePropertiesUI.heightChanged.connect(func(height: float):
+		if currentElement == null || \
+			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
+			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
+			return
+		
+		# currentElement = currentElement as FunctionalStartLine
+		currentElement.height = height
+	)
+
+	startLinePropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || \
+			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
+			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
+			return
+		
+		# currentElement = currentElement as FunctionalStartLine
+		currentElement.global_position = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	startLinePropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || \
+			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
+			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
+			return
+		
+		# currentElement = currentElement as FunctionalStartLine
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
 	)
 
 	# scenery editor ui
@@ -609,6 +668,8 @@ func setUIVisibility():
 	pipeNodePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
 	pipePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
 
+	startLinePropertiesUI.visible = currentBuildMode == BuildMode.START && currentEditorMode == EditorMode.BUILD
+
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 enum EditUIType {
@@ -616,6 +677,7 @@ enum EditUIType {
 	ROAD_PROPERTIES,
 	PIPE_NODE_PROPERTIES,
 	PIPE_PROPERTIES,
+	START_LINE_PROPERTIES,
 	NONE,
 }
 
@@ -624,6 +686,7 @@ func setEditUIVisibility(ui: EditUIType):
 	roadNodePropertiesUI.visible = ui == EditUIType.ROAD_NODE_PROPERTIES
 	pipePropertiesUI.visible = ui == EditUIType.PIPE_PROPERTIES
 	pipeNodePropertiesUI.visible = ui == EditUIType.PIPE_NODE_PROPERTIES
+	startLinePropertiesUI.visible = ui == EditUIType.START_LINE_PROPERTIES
 
 func setCurrentElement():
 	

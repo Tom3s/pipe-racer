@@ -96,7 +96,10 @@ func setArrowVisibility(visible: bool):
 func getProperties() -> Dictionary:
 	return {
 		"width": width,
-		"height": height
+		"height": height,
+
+		"position": global_position,
+		"rotation": global_rotation,
 	}
 
 func setProperties(properties: Dictionary) -> void:
@@ -104,6 +107,11 @@ func setProperties(properties: Dictionary) -> void:
 		width = properties["width"]
 	if properties.has("height"):
 		height = properties["height"]
+
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
 	
 func convertToPhysicsObject() -> void:
 	proceduralStartLine.convertToPhysicsObject()

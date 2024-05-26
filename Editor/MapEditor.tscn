@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=21 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
 [ext_resource type="PackedScene" uid="uid://bk861qiqtdvug" path="res://Editor/Pipe/PipePropertiesUI.tscn" id="4_dqsn7"]
 [ext_resource type="Script" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
+[ext_resource type="PackedScene" uid="uid://dxowojga3va4l" path="res://Editor/FunctionalElements/StartLinePropertiesUI.tscn" id="5_o7bqe"]
 [ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="6_2dxsa"]
 [ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
@@ -61,6 +62,11 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
+[node name="StartLinePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("5_o7bqe")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="EditorSidebarUI" parent="UI" instance=ExtResource("3_k84hq")]
 unique_name_in_owner = true
 
@@ -79,7 +85,6 @@ unique_name_in_owner = true
 
 [node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
 unique_name_in_owner = true
-profileType = 0
 isPreviewNode = true
 
 [node name="PipeNode" parent="PreviewElement" instance=ExtResource("6_07kp7")]
