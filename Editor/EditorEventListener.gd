@@ -96,7 +96,11 @@ func connectSignals():
 		elif axis == Vector3.FORWARD:
 			currentElement.global_rotation.z += angle
 		
-		currentElement.global_rotation = currentElement.global_rotation.snapped(Vector3.ONE * deg_to_rad(5))
+		# currentElement.global_rotation = currentElement.global_rotation.snapped(Vector3.ONE * deg_to_rad(5))
+		# round(angle / ROTATION_SNAP) * ROTATION_SNAP
+		var vec3Snap = Vector3.ONE * ROTATION_SNAP
+
+		currentElement.global_rotation = (currentElement.global_rotation / vec3Snap) * vec3Snap
 	)
 	inputHandler.resetRotationPressed.connect(func():
 		if currentElement == null:
