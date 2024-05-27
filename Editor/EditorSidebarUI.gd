@@ -10,6 +10,7 @@ class_name EditorSidebarUI
 @onready var deleteButton: Button = %DeleteButton
 @onready var sceneryButton: Button = %SceneryButton
 @onready var paintButton: Button = %PaintButton
+@onready var testButton: Button = %TestButton
 
 @onready var metadataButton: Button = %MetadataButton
 @onready var saveButton: Button = %SaveButton
@@ -42,6 +43,8 @@ signal savePressed()
 signal trackNameChanged(name: String)
 signal lapCountChanged(count: int)
 
+# signal testPressed()
+
 
 func _ready():
 	onEditorModeButtonPressed(0)
@@ -66,6 +69,9 @@ func connectSignals():
 	)
 	sceneryButton.pressed.connect(func():
 		onEditorModeButtonPressed(EditorEventListener.EditorMode.SCENERY)
+	)
+	testButton.pressed.connect(func():
+		onEditorModeButtonPressed(EditorEventListener.EditorMode.TEST)
 	)
 
 
@@ -133,6 +139,7 @@ func onEditorModeButtonPressed(index: int) -> void:
 	deleteButton.button_pressed = index == EditorEventListener.EditorMode.DELETE
 	paintButton.button_pressed = index == EditorEventListener.EditorMode.PAINT
 	sceneryButton.button_pressed = index == EditorEventListener.EditorMode.SCENERY
+	testButton.button_pressed = index == EditorEventListener.EditorMode.TEST
 
 	editorModeChanged.emit(index as EditorEventListener.EditorMode)
 

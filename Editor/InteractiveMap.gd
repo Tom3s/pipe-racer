@@ -563,21 +563,18 @@ func importTrack(fileName: String) -> bool:
 
 # ingame functionality
 
-func setIngame() -> void:
+func setIngame(ingame: bool = true) -> void:
 	for child in roadNodes.get_children():
 		child.setIngame()
-	# for child in roadPieces.get_children():
-	# 	child.setIngame()
+
 	for child in pipeNodes.get_children():
 		child.setIngame()
-	# for child in pipePieces.get_children():
-	# 	child.setIngame()
 
 	for child in checkpoints.get_children():
-		child.setArrowVisibility(false)
+		child.setArrowVisibility(!ingame)
 	
 	if start != null:
-		start.setArrowVisibility(false)
+		start.setArrowVisibility(!ingame)
 
 func getCheckpoints():
 	return checkpoints.get_children()

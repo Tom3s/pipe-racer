@@ -187,6 +187,6 @@ func importData(data: Dictionary):
 	if data.has("flat"):
 		flat = data["flat"]
 
-func setIngame() -> void:
-	%Collider.use_collision = false
-	%Arrow.visible = false
+func setIngame(ingame: bool = true) -> void:
+	%Collider.use_collision = !ingame
+	%Arrow.visible = !ingame

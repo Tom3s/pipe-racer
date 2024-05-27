@@ -20,6 +20,7 @@ signal placePressed()
 signal mouseMovedTo_Scenery(worldPosition: Vector3, isPlacePressed: bool)
 
 signal pausePressed(paused)
+signal stopTestingPressed()
 
 var lastGridHeight: float = 0
 var currentGridHeight: float = 0
@@ -34,6 +35,8 @@ var scrollCooldownTime: float = 0.05
 
 var editorMode: EditorEventListener.EditorMode = EditorEventListener.EditorMode.BUILD
 
+var paused: bool = false
+
 func _ready():
 	set_physics_process(true)
 
@@ -41,6 +44,13 @@ func _physics_process(delta):
 	scrollCooldown -= delta
 
 func _unhandled_input(event):
+	if Input.is_action_just_pressed("p1_pause"):
+		if editorMode == EditorEventListener.EditorMode.TEST:
+			stopTestingPressed.emit()
+		else:
+			pausePressed.emit(!paused)
+	
+
 	if editorMode == EditorEventListener.EditorMode.BUILD:
 		var newMousePos: Vector2 = get_viewport().get_mouse_position()
 		if !Input.is_action_pressed("editor_look_around") && (mousePos2D != newMousePos || lastGridHeight != currentGridHeight):
@@ -127,6 +137,19 @@ func _unhandled_input(event):
 	elif editorMode == EditorEventListener.EditorMode.PAINT:
 		if Input.is_action_just_pressed("editor_place"):
 			placePressed.emit()
+
+	
+	elif editorMode == EditorEventListener.EditorMode.TEST:
+		if !Input.is_action_pressed("editor_look_around"):
+			mouseMovedOnScreen.emit(Vector2.ZERO)
+		if Input.is_action_just_pressed("editor_place"):
+			placePressed.emit()
+		
+		if Input.is_action_just_pressed("editor_rotate_right"):
+			rotatePressed.emit(Vector3.UP, -angleSnap)
+
+		if Input.is_action_just_pressed("editor_rotate_left"):
+			rotatePressed.emit(Vector3.UP, angleSnap)
 	
 
 	

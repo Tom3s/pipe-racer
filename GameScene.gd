@@ -82,10 +82,10 @@ func setup(
 	else:
 		%GameEventListener.addGhosts(localReplays, downloadedReplays)
 
-	# load environment
-	if ClassFunctions.getClassName(map) == "Map":
-		var environment: WorldEnvironment = MapEnvironment.instantiate()
-		add_child(environment)
+	# # load environment
+	# if !ClassFunctions.getClassName(map) == "InteractiveMap":
+	# 	var environment: WorldEnvironment = MapEnvironment.instantiate()
+	# 	add_child(environment)
 		
 
 	if !online:

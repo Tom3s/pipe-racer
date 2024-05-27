@@ -34,10 +34,20 @@ var currentElement: Node3D = null
 
 @onready var paintBrushUI: PaintBrushUI = %PaintBrushUI
 
+@onready var pauseMenu: PauseMenu = %PauseMenu
 
 # gizmos
 @onready var rotator: Rotator = %Rotator
 @onready var translator: Translator = %Translator
+
+# player
+@onready var playerParent: Node3D = %Player
+@onready var car: CarController = %CarController
+@onready var carPreview: Node3D = %CarPreview
+var carCamera: FollowingCamera
+@onready var carPath: Node3D = %CarPath
+
+
 
 enum EditorMode {
 	BUILD,
@@ -45,6 +55,7 @@ enum EditorMode {
 	DELETE,
 	SCENERY,
 	PAINT,
+	TEST,
 }
 
 var currentEditorMode: EditorMode = EditorMode.BUILD
@@ -59,6 +70,14 @@ enum BuildMode {
 
 var currentBuildMode: BuildMode = BuildMode.ROAD
 
+enum TestMode {
+	PLACING,
+	DRIVING
+}
+
+var currentTestMode: TestMode = TestMode.PLACING
+
+
 var capturedGizmo: Node3D = null
 
 var gizmoCenter: Vector2 = Vector2.ZERO
@@ -69,6 +88,10 @@ var moveAxis: Vector3 = Vector3.ZERO
 var lastMousePos: Vector2 = Vector2.ZERO
 
 var currentPaintBrushSurface: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD
+
+var editorStats: EditorStats
+
+var carPreviewAngleOffset: float = 0
 
 func _ready():
 	setUIVisibility()
@@ -82,6 +105,48 @@ func _ready():
 	map.importTrack("user://tracks/local/kutya_test.json")
 	editorSidebarUI.trackNameLineEdit.text = map.trackName
 	editorSidebarUI.lapCountSpinbox.value = map.lapCount
+
+	pauseMenu.visible = false
+	pauseMenu.restartButton.visible = false
+	pauseMenu.editorGuide.visible = true
+	pauseMenu.leaderboardButton.visible = false
+
+	editorStats = EditorStats.new()
+
+	carCamera = FollowingCamera.new(car)
+	carCamera.current = false
+	playerParent.add_child(carCamera)
+
+	car.isResetting.connect(func(_sink1 = null, _sink2 = null, _sink3 = null):
+		if currentEditorMode == EditorMode.TEST && currentTestMode == TestMode.DRIVING:
+			car.setRespawnPositionFromDictionary(originalRespawn)
+			car.respawn()
+	)
+
+	carPreview.visible = false
+
+
+	set_physics_process(true)
+
+const MAX_CAR_PATH_LENGTH: int = 8192
+const MAX_CAR_PATHS: int = 16
+
+var wasTesting: bool = false
+
+func _physics_process(delta):
+	if currentTestMode == TestMode.DRIVING && !wasTesting:
+		carPathArray.clear()
+		carPathArray.append([])
+		if carPathArray.size() > MAX_CAR_PATHS:
+			carPathArray.pop_front()
+	
+	if currentTestMode == TestMode.DRIVING:
+		if car != null:
+			carPathArray.back().append(car.getCurrentFrame())
+			if carPathArray.back().size() > MAX_CAR_PATH_LENGTH:
+				carPathArray.back().pop_front()
+
+	wasTesting = currentTestMode == TestMode.DRIVING
 
 
 func connectSignals():
@@ -105,6 +170,9 @@ func connectSignals():
 	)
 
 	inputHandler.rotatePressed.connect(func(axis: Vector3, angle: float):
+		if currentEditorMode == EditorMode.TEST:
+			carPreviewAngleOffset += angle
+
 		if currentElement == null:
 			return
 
@@ -154,6 +222,7 @@ func connectSignals():
 					currentElement.global_rotation,
 					roadPropertiesUI.getProperties()
 				)
+				editorStats.increasePlacedTrackPieces()
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 				var collidedObject = screenPointToRay()
 				var newElement = currentElement.getCopy()
@@ -172,12 +241,14 @@ func connectSignals():
 					currentElement.global_rotation,
 					pipePropertiesUI.getProperties()
 				)
+				editorStats.increasePlacedTrackPieces()
 			elif ClassFunctions.getClassName(currentElement) == "ProceduralStartLine":
 				map.setStartLine(
 					currentElement.global_position, 
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+				editorStats.increasePlacedProps()
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
 				map.addCheckpoint(
 					currentElement.getCopy(),
@@ -185,6 +256,7 @@ func connectSignals():
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+				editorStats.increasePlacedCheckpoints()
 			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
 				map.addLedBoard(
 					# currentElement.getCopy(),
@@ -193,6 +265,7 @@ func connectSignals():
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+				editorStats.increasePlacedProps()
 			
 			
 
@@ -328,6 +401,37 @@ func connectSignals():
 			elif ClassFunctions.getClassName(collidedObject) == "PipeMeshGenerator":
 				collidedObject.surfaceType = currentPaintBrushSurface
 
+		elif currentEditorMode == EditorMode.TEST:
+			var collidedObject = screenPointToRay()
+			if collidedObject == null:
+				
+				return
+			
+			collidedObject = collidedObject.get_parent()
+			if ClassFunctions.getClassName(collidedObject) == "PhysicsSurface" || \
+				ClassFunctions.getClassName(collidedObject) == "ProceduralCheckpoint":
+				collidedObject = collidedObject.get_parent()
+
+			if ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
+				collidedObject = collidedObject as FunctionalCheckpoint
+				var respawn: Dictionary = collidedObject.getRespawnPosition(0, 1)
+				startTesting(
+					respawn.position,
+					respawn.rotation
+				)
+			elif ClassFunctions.getClassName(collidedObject) == "ProceduralStartLine":
+				collidedObject = collidedObject.get_parent() as FunctionalStartLine
+				var respawn: Dictionary = collidedObject.getStartPosition(0, 1)
+				startTesting(
+					respawn.position,
+					respawn.rotation
+				)
+			else:
+				startTesting(
+					carPreview.global_position,
+					carPreview.global_rotation
+				)
+
 	)
 
 	inputHandler.clickStarted.connect(func(): 
@@ -356,8 +460,23 @@ func connectSignals():
 	)
 
 	inputHandler.mouseMovedOnScreen.connect(func(mousePos: Vector2):
-		# handle mouse movement
-		handleMouseMovement(mousePos)
+		if currentEditorMode == EditorMode.EDIT:
+			# handle mouse movement
+			handleMouseMovement(mousePos)
+
+		elif currentEditorMode == EditorMode.TEST:
+			var intersectData = screenPointToRay_worldPos()
+			if intersectData.has("position") && intersectData.has("normal"):
+				carPreview.global_position = intersectData["position"] + 0.35 * intersectData["normal"]
+				carPreview.global_rotation = intersectData["normal"]
+				# carPreview.global_rotation.y += carPreviewAngleOffset
+				carPreview.rotate(carPreview.global_basis.y, carPreviewAngleOffset)
+				
+				
+	)
+
+	inputHandler.stopTestingPressed.connect(func():
+		stopTesting()
 	)
 
 	rotator.rotationChanged.connect(func(newRotation: Vector3):
@@ -411,6 +530,10 @@ func connectSignals():
 	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
 		currentEditorMode = mode
 		inputHandler.editorMode = mode
+
+		if mode == EditorMode.TEST:
+			currentTestMode = TestMode.PLACING
+			carPreview.visible = true
 
 		if mode == EditorMode.BUILD:
 			map.clearPreviews()
@@ -895,6 +1018,24 @@ func connectSignals():
 		currentPaintBrushSurface = surface as PhysicsSurface.SurfaceType
 	)
 
+	# pause menu
+
+	pauseMenu.resumePressed.connect(func(paused: bool = false):
+		pauseMenu.visible = paused
+		inputHandler.paused = paused
+	)
+
+	
+	pauseMenu.exitPressed.connect(func():
+		# AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
+		if !VersionCheck.offline:
+			var signalResponse = submitEditorStats(editorStats.getObject())
+			await signalResponse
+		else:
+			AlertManager.showAlert(self, "Offline", "Please update the game to keep track of your stats")
+		get_parent().editorExited.emit()
+	)
+
 func setUIVisibility():
 	roadNodePropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
 	roadPropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
@@ -911,6 +1052,8 @@ func setUIVisibility():
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 	paintBrushUI.visible = currentEditorMode == EditorMode.PAINT
+
+
 
 
 enum EditUIType {
@@ -937,12 +1080,15 @@ func setCurrentElement():
 	
 	gridMesh.visible = currentEditorMode == EditorMode.BUILD
 
+	carPreview.visible = currentEditorMode == EditorMode.TEST && currentTestMode == TestMode.PLACING
+
 	if currentEditorMode == EditorMode.BUILD:
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
 		startLine.visible = currentBuildMode == BuildMode.START
 		checkpoint.visible = currentBuildMode == BuildMode.CP
 		ledBoard.visible = currentBuildMode == BuildMode.DECO
+
 
 		if currentBuildMode == BuildMode.ROAD:
 			currentElement = roadNode
@@ -983,6 +1129,34 @@ func screenPointToRay() -> Node3D:
 	if rayArray.has("collider"):
 		return rayArray["collider"]
 	return null
+
+
+func screenPointToRay_worldPos():
+	var spaceState = get_world_3d().direct_space_state
+
+	var mousePos = get_viewport().get_mouse_position()
+	var camera = get_tree().root.get_camera_3d()
+	var from = camera.project_ray_origin(mousePos)
+	var to = from + camera.project_ray_normal(mousePos) * maxRaycastDistance
+	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, 4294967295 - 16))
+	
+	# if rayArray.has("position"):
+	# 	return rayArray["position"]
+	# return null
+	var data = {
+		"position": Vector3.ZERO,
+		"normal": Vector3.ZERO,
+		"collider": null
+	}
+
+	if rayArray.has("position"):
+		data["position"] = rayArray["position"]
+	if rayArray.has("normal"):
+		data["normal"] = rayArray["normal"]
+	if rayArray.has("collider"):
+		data["collider"] = rayArray["collider"]
+	
+	return data
 
 @export
 var ROTATION_STRENGTH: float = 0.01
@@ -1043,3 +1217,114 @@ func handleMouseMovement(mousePos: Vector2):
 		capturedGizmo.moveGizmo(move.x - move.y)
 
 		lastMousePos = mousePos
+
+func submitEditorStats(stats: Dictionary) -> Signal:
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.timeout = 5
+	request.request_completed.connect(onSubmitEditorStats_requestCompleted)
+
+	var httpError = request.request(
+		Backend.BACKEND_IP_ADRESS + "/api/stats/editor",
+		[
+			"Content-Type: application/json",
+			"Session-Token: " + GlobalProperties.SESSION_TOKEN,
+		],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(stats)
+	)
+	if httpError != OK:
+		print("Error submitting time: " + error_string(httpError))
+	
+	return request.request_completed
+
+func onSubmitEditorStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
+	print("Editor stat Submit Response: ", _responseCode)
+	return
+
+var originalRespawn: Dictionary = {
+	"position": Vector3.ZERO,
+	"rotation": Vector3.ZERO
+}
+
+func startTesting(
+	pos: Vector3,
+	rot: Vector3
+) -> void:
+	currentTestMode = TestMode.DRIVING
+
+	originalRespawn = {
+		"position": pos,
+		"rotation": rot
+	}
+
+	car.resumeMovement()
+	car.setRespawnPositionFromDictionary(
+		{
+			"position": pos,
+			"rotation": rot
+		}
+	)
+
+	car.respawn()
+	car.visible = true
+	car.state.hasControl = true
+	car.state.isReady = true
+
+	carCamera.current = true
+	camera.current = false
+	camera.inputEnabled = false
+
+	editorStats.increaseNrTests()
+
+	editorSidebarUI.visible = false
+
+	for cp in map.getCheckpoints():
+		cp.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
+
+	map.setIngame(true)
+
+	carPreview.visible = false
+
+	clearCarPath()
+
+func stopTesting() -> void:
+	currentTestMode = TestMode.PLACING
+
+	editorSidebarUI.visible = true
+
+	car.setRespawnPosition(Vector3(0, -1000, 0), Vector3(0, 0, 0))
+	car.respawn()
+	car.pauseMovement()
+	car.visible = false
+	carCamera.current = false
+	camera.current = true
+	camera.inputEnabled = true
+
+	map.setIngame(false)
+
+	carPreview.visible = true
+
+	generateCarPath()
+
+func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: FunctionalCheckpoint):
+	car.setRespawnPositionFromDictionary(checkpoint.getRespawnPosition(0, 1))
+
+func clearCarPath():
+	for child in carPath.get_children():
+		child.queue_free()
+
+
+var carPathArray: Array = []
+func generateCarPath():
+	for path in carPathArray:
+		var length = path.size()
+		for i in length - 1:
+			if i <= 2:
+				continue
+			carPath.add_child(PathDrawer3D.get3DLine(
+				path[i].position + Vector3(0, 0.6, 0),
+				path[i + 1].position + Vector3(0, 0.6, 0),
+				path[i].getColor()
+				)
+			)

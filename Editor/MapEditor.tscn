@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=29 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
 [ext_resource type="PackedScene" uid="uid://dhr0gg8gqdduy" path="res://Editor/Props/LedBoardPropertiesUI.tscn" id="7_4pe1b"]
 [ext_resource type="PackedScene" uid="uid://csnsoov0ek0hk" path="res://Editor/Functional/PaintBrushUI.tscn" id="8_xxuga"]
+[ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="11_6xw54"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
 [ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
@@ -23,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://ca7tfdokimak7" path="res://Editor/Functional/Translator.tscn" id="14_ou2ir"]
 [ext_resource type="PackedScene" uid="uid://dv0q3xnvt43gx" path="res://Editor/FunctionalElements/FunctionalCheckpoint.tscn" id="15_d2ml2"]
 [ext_resource type="PackedScene" uid="uid://nqvakke8vhpn" path="res://Editor/Props/LedBoard.tscn" id="17_emavj"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="23_nr0wy"]
+[ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="24_hbp31"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -93,6 +96,10 @@ unique_name_in_owner = true
 [node name="SceneryEditorUI" parent="UI" instance=ExtResource("6_2dxsa")]
 unique_name_in_owner = true
 
+[node name="PauseMenu" parent="UI" instance=ExtResource("11_6xw54")]
+unique_name_in_owner = true
+visible = false
+
 [node name="EditorCamera" type="Camera3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_nfa8o")
@@ -132,6 +139,18 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Translator" parent="Gizmos" instance=ExtResource("14_ou2ir")]
+unique_name_in_owner = true
+
+[node name="Player" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CarController" parent="Player" instance=ExtResource("23_nr0wy")]
+unique_name_in_owner = true
+
+[node name="CarPreview" parent="Player" instance=ExtResource("24_hbp31")]
+unique_name_in_owner = true
+
+[node name="CarPath" type="Node3D" parent="."]
 unique_name_in_owner = true
 
 [node name="EditorInputHandler" type="Node" parent="."]
