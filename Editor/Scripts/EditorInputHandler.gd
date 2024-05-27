@@ -215,7 +215,7 @@ func screenPointToRay_Scenery() -> Vector3:
 	var mousePos = get_viewport().get_mouse_position()
 	var camera = get_tree().root.get_camera_3d()
 	var from = camera.project_ray_origin(mousePos)
-	var to = from + camera.project_ray_normal(mousePos) * maxDistance
+	var to = from + camera.project_ray_normal(mousePos) * maxDistance * 2
 	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, 8))
 	
 	if rayArray.has("position"):

@@ -565,10 +565,10 @@ func importTrack(fileName: String) -> bool:
 
 func setIngame(ingame: bool = true) -> void:
 	for child in roadNodes.get_children():
-		child.setIngame()
+		child.setIngame(ingame)
 
 	for child in pipeNodes.get_children():
-		child.setIngame()
+		child.setIngame(ingame)
 
 	for child in checkpoints.get_children():
 		child.setArrowVisibility(!ingame)
