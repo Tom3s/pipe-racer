@@ -424,7 +424,8 @@ func connectSignals():
 				if ClassFunctions.getClassName(currentElement) == "RoadNode" || \
 					ClassFunctions.getClassName(currentElement) == "RoadNode":
 					for meshGenerator in currentElement.meshGeneratorRefs:
-						meshGenerator.convertToPhysicsObject()
+						if meshGenerator != null:
+							meshGenerator.convertToPhysicsObject()
 				
 				if ClassFunctions.getClassName(currentElement) == "LedBoard":
 					currentElement.convertToPhysicsObject()

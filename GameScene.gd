@@ -4,6 +4,8 @@ class_name GameScene
 @onready var Map = preload("res://MapScene.tscn")
 @onready var MapEnvironment = preload("res://TestTrackEnv.tscn")
 
+@onready var mapScene: InteractiveMap = preload("res://Editor/InteractiveMap.tscn")
+
  
 var map: Map
 

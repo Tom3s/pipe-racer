@@ -122,17 +122,21 @@ func onPipePreviewElementProvided(node: PipeNode):
 
 func clearPreviews():
 	if lastRoadElement != null:
+		if lastRoadNode.meshGeneratorRefs.size() == 1:
+			lastRoadNode.queue_free()
+		else:
+			lastRoadNode.meshGeneratorRefs.erase(lastRoadElement)
 		lastRoadElement.queue_free()
 		lastRoadElement = null
-	if lastRoadNode != null:
-		lastRoadNode.queue_free()
 		lastRoadNode = null
 	
 	if lastPipeElement != null:
+		if lastPipeNode.meshGeneratorRefs.size() == 1:
+			lastPipeNode.queue_free()
+		else:
+			lastPipeNode.meshGeneratorRefs.erase(lastPipeElement)
 		lastPipeElement.queue_free()
 		lastPipeElement = null
-	if lastPipeNode != null:
-		lastPipeNode.queue_free()
 		lastPipeNode = null
 
 func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
