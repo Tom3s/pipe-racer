@@ -36,6 +36,9 @@ var currentElement: Node3D = null
 
 @onready var pauseMenu: PauseMenu = %PauseMenu
 
+@onready var levelSavedLabel: Label = %LevelSavedLabel
+
+
 # gizmos
 @onready var rotator: Rotator = %Rotator
 @onready var translator: Translator = %Translator
@@ -102,9 +105,7 @@ func _ready():
 	rotator.disable()
 	translator.disable()
 
-	map.importTrack("user://tracks/local/kutya_test.json")
-	editorSidebarUI.trackNameLineEdit.text = map.trackName
-	editorSidebarUI.lapCountSpinbox.value = map.lapCount
+
 
 	pauseMenu.visible = false
 	pauseMenu.restartButton.visible = false
@@ -125,6 +126,8 @@ func _ready():
 
 	carPreview.visible = false
 
+	levelSavedLabel.modulate.a = 0
+	levelSavedLabel.text = "Level Saved As: " + map.trackName
 
 	set_physics_process(true)
 
@@ -479,6 +482,11 @@ func connectSignals():
 		stopTesting()
 	)
 
+	inputHandler.pausePressed.connect(func(paused: bool):
+		pauseMenu.visible = paused
+		inputHandler.paused = paused
+	)
+
 	rotator.rotationChanged.connect(func(newRotation: Vector3):
 		if currentElement != null:
 			currentElement.rotation = newRotation
@@ -600,6 +608,14 @@ func connectSignals():
 
 	editorSidebarUI.savePressed.connect(func():
 		map.exportTrack()
+
+		levelSavedLabel.text = "Level Saved As: " + map.trackName
+	
+		var tween = create_tween().set_ease(Tween.EASE_OUT)
+
+		tween.tween_property(levelSavedLabel, "modulate:a", 1, 0)
+		tween.tween_property(levelSavedLabel, "modulate:a", 1, 1.5)
+		tween.tween_property(levelSavedLabel, "modulate:a", 0, 0.3)
 	)
 
 	# road node properties ui
@@ -1328,3 +1344,11 @@ func generateCarPath():
 				path[i].getColor()
 				)
 			)
+
+func loadMap(filePath: String) -> bool:
+	var success = map.importTrack(filePath)
+	if success:
+		editorSidebarUI.trackNameLineEdit.text = map.trackName
+		editorSidebarUI.lapCountSpinbox.value = map.lapCount
+	
+	return success

@@ -1,6 +1,7 @@
-[gd_scene load_steps=29 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=31 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
+[ext_resource type="Script" path="res://Editor/MapEditor.gd" id="1_6ohh1"]
 [ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
 [ext_resource type="PackedScene" uid="uid://dl56mby6n2hiu" path="res://Editor/Road/RoadPropertiesUI.tscn" id="2_0cxd4"]
 [ext_resource type="PackedScene" uid="uid://jfef8x3bl627" path="res://Editor/InteractiveMap.tscn" id="2_xocc0"]
@@ -19,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="11_6xw54"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="12_rc3nc"]
 [ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
 [ext_resource type="PackedScene" uid="uid://c2l244tfm5rgk" path="res://Editor/FunctionalElements/ProceduralStartLine.tscn" id="13_gh66r"]
 [ext_resource type="PackedScene" uid="uid://ca7tfdokimak7" path="res://Editor/Functional/Translator.tscn" id="14_ou2ir"]
@@ -36,6 +38,7 @@ shader = ExtResource("11_m3iqd")
 shader_parameter/Grid = ExtResource("12_5xrek")
 
 [node name="MapEditor" type="Node3D"]
+script = ExtResource("1_6ohh1")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -100,6 +103,22 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 visible = false
 
+[node name="LevelSavedLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -152.2
+offset_top = 95.0
+offset_right = 152.2
+offset_bottom = 178.4
+grow_horizontal = 2
+theme = ExtResource("12_rc3nc")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 67
+text = "Level Saved!"
+
 [node name="EditorCamera" type="Camera3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_nfa8o")
@@ -146,6 +165,7 @@ unique_name_in_owner = true
 
 [node name="CarController" parent="Player" instance=ExtResource("23_nr0wy")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1000, 0)
 
 [node name="CarPreview" parent="Player" instance=ExtResource("24_hbp31")]
 unique_name_in_owner = true
@@ -158,4 +178,5 @@ unique_name_in_owner = true
 script = ExtResource("3_yc3pc")
 
 [node name="EditorEventListener" type="Node3D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("4_miouu")
