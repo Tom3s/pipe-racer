@@ -249,7 +249,10 @@ func onDownloadRequest_completed(_result: int, responseCode: int, _headers: Pack
 	selectButton.disabled = false
 
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	AlertManager.showAlert(self, "Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
+	if json.format == Map.CURRENT_FORMAT_VERSION:
+		AlertManager.showAlert(self, "Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
+	else:
+		AlertManager.showAlert(self, "Success", "Track Downloaded Successfully", "Track Name: " + json.metadata.trackName)
 
 func onDeleteButton_Pressed():
 	AlertManager.showDeleteAlert(

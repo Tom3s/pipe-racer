@@ -485,7 +485,7 @@ func importTrack(fileName: String) -> bool:
 
 	if !trackData.has("start"):
 		print("[InteractiveMap.gd] No start line found in the file")
-		return false
+		# return false
 
 	setStartLine(
 		str_to_var(trackData["start"]["position"]),
@@ -495,7 +495,7 @@ func importTrack(fileName: String) -> bool:
 
 	if !trackData.has("checkpoints"):
 		print("[InteractiveMap.gd] No checkpoints found in the file")
-		return false
+		# return false
 	
 	var checkpointIndex = 0
 	for checkpointData in trackData["checkpoints"]:
