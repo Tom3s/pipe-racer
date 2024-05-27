@@ -38,7 +38,7 @@ class VertexHeight:
 var vertexHeights: VertexHeight = VertexHeight.new()
 
 @export_range(2, 150, 1)
-var groundSize: int = 21:
+var groundSize: int = 64:
 	set(newValue):
 		groundSize = newValue
 		vertexHeights.reset(groundSize)
@@ -186,3 +186,34 @@ func setSelection(selected: bool, indices: Vector2i, radius: int) -> void:
 
 func getRadius(radius: int) -> float:
 	return (float(radius) * 0.75) / (groundSize - 1)
+
+
+func getExportData() -> Dictionary:
+	var data: Dictionary = {}
+	if groundSize != 64:
+		data["groundSize"] = groundSize
+
+	# for i in range(groundSize):
+	# 	for j in range(groundSize):
+	# 		if vertexHeights.getHeight(j, i) != 0:
+	# 			data["vertexHeights"].append([i, j, vertexHeights.getHeight(j, i)])
+	var compressedHeights: Array = []
+	for i in groundSize * groundSize:
+		if vertexHeights.vertices[i].y != 0:
+			compressedHeights.append([i, vertexHeights.vertices[i].y])
+	if compressedHeights.size() > 0:
+		data["vertexHeights"] = compressedHeights
+	
+	return data
+
+func importData(data: Dictionary) -> void:
+	if data.has("groundSize"):
+		groundSize = data["groundSize"]
+		vertexHeights.reset(groundSize)
+		
+	if data.has("vertexHeights"):
+		for height in data["vertexHeights"]:
+			vertexHeights.vertices[height[0]].y = height[1]
+	
+	setCollider()
+	setMesh()

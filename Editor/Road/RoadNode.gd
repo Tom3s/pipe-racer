@@ -2,8 +2,9 @@
 extends Node3D
 class_name RoadNode
 
-# var meshGenerator_s: RoadMeshGenerator
-# var meshGenerator_e: RoadMeshGenerator
+static var idCounter: int = -1
+var id: int
+
 var meshGeneratorRefs: Array[RoadMeshGenerator] = []
 
 signal transformChanged()
@@ -79,7 +80,11 @@ var rightRunoff: float = 0.0:
 
 
 func _ready():
+	set_physics_process(true)
+
 	profileCurve = profiles[profileType]
+	RoadNode.idCounter += 1
+	id = RoadNode.idCounter
 
 @export
 var isPreviewNode: bool = false:
@@ -299,3 +304,45 @@ func getCopy() -> RoadNode:
 	newNode.setProperties(getProperties())
 
 	return newNode
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+		"id": id,
+	}
+
+	if profileType != RoadProfile.FLAT:
+		data["profileType"] = profileType
+	if profileHeight != PrefabConstants.GRID_SIZE:
+		data["profileHeight"] = profileHeight
+	
+	if width != PrefabConstants.TRACK_WIDTH:
+		data["width"] = width
+	
+	if leftRunoff != 0.0:
+		data["leftRunoff"] = leftRunoff
+	if rightRunoff != 0.0:
+		data["rightRunoff"] = rightRunoff
+	
+	
+	return data
+
+func importData(data: Dictionary):
+	global_position = str_to_var(data["position"])
+	global_rotation = str_to_var(data["rotation"])
+	id = data["id"]
+
+	if data.has("profileType"):
+		profileType = data["profileType"]
+	if data.has("profileHeight"):
+		profileHeight = data["profileHeight"]
+
+	if data.has("width"):
+		width = data["width"]
+
+	if data.has("leftRunoff"):
+		leftRunoff = data["leftRunoff"]
+	if data.has("rightRunoff"):
+		rightRunoff = data["rightRunoff"]

@@ -1,9 +1,25 @@
 extends Node3D
 class_name InteractiveMap
 
+const CURRENT_FORMAT_VERSION = 4
+
+# metadata
+var trackName: String = "track_" + str(Time.get_datetime_string_from_system().replace(":", "-"))
+var lapCount: int = 3
+var trackId: String = ""
+var author: String = ""
+
+# misc
+var autoSaveInterval: float = 12
+
 @onready var roadScene: PackedScene = preload("res://Editor/Road/RoadMeshGenerator.tscn")
 @onready var pipeScene: PackedScene = preload("res://Editor/Pipe/PipeMeshGenerator.tscn")
 @onready var startLineScene: PackedScene = preload("res://Editor/FunctionalElements/FunctionalStartLine.tscn")
+@onready var checkpointScene: PackedScene = preload("res://Editor/FunctionalElements/FunctionalCheckpoint.tscn")
+@onready var roadNodeScene: PackedScene = preload("res://Editor/Road/RoadNode.tscn")
+@onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
+@onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
+
 
 @onready var roadElements: Node3D = %RoadElements
 var roadNodes: Node3D
@@ -30,6 +46,9 @@ var startLine: FunctionalStartLine
 
 @onready var checkpoints: Node3D = %Checkpoints
 
+@onready var deco: Node3D = %Deco
+var ledBoards: Node3D
+
 # scenery
 
 @onready var scenery: EditableScenery = %EditableScenery
@@ -41,6 +60,9 @@ func _ready():
 
 	pipeNodes = pipeElements.get_child(0)
 	pipePieces = pipeElements.get_child(1)
+
+	ledBoards = deco.get_child(0)
+
 
 
 func addRoadNode(node: RoadNode, position: Vector3, rotation: Vector3, roadProperties: Dictionary):
@@ -102,12 +124,14 @@ func clearPreviews():
 	if lastRoadElement != null:
 		lastRoadElement.queue_free()
 		lastRoadElement = null
+	if lastRoadNode != null:
 		lastRoadNode.queue_free()
 		lastRoadNode = null
 	
 	if lastPipeElement != null:
 		lastPipeElement.queue_free()
 		lastPipeElement = null
+	if lastPipeNode != null:
 		lastPipeNode.queue_free()
 		lastPipeNode = null
 
@@ -117,20 +141,20 @@ func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
 		start.add_child(startLine)
 	startLine.global_position = position
 	startLine.global_rotation = rotation
-	startLine.setProperties(properties)
+	startLine.setProperties(properties, false)
 	startLine.convertToPhysicsObject()
 
 func addCheckpoint(node: FunctionalCheckpoint, position: Vector3, rotation: Vector3, properties: Dictionary):
 	checkpoints.add_child(node)
 	node.global_position = position
 	node.global_rotation = rotation
-	node.setProperties(properties)
+	node.setProperties(properties, false)
 
 func addLedBoard(node: LedBoard, position: Vector3, rotation: Vector3, properties: Dictionary):
-	checkpoints.add_child(node)
+	ledBoards.add_child(node)
 	node.global_position = position
 	node.global_rotation = rotation
-	node.setProperties(properties)
+	node.setProperties(properties, false)
 	node.convertToPhysicsObject()
 
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
@@ -277,3 +301,251 @@ func removeCheckpoint(node: FunctionalCheckpoint):
 
 func removeLedBoard(node: LedBoard):
 	node.queue_free()
+
+
+var validated: bool = false
+var bestTotalTime: int = -1
+var bestTotalReplay: String = ""
+var bestLapTime: int = -1
+var bestLapReplay: String = ""
+
+func unvalidate():
+	validated = false
+	bestTotalTime = -1
+	bestTotalReplay = ""
+	bestLapTime = -1
+	bestLapReplay = ""
+
+func clearMap():
+	for child in roadNodes.get_children():
+		child.queue_free()
+	for child in roadPieces.get_children():
+		child.queue_free()
+	for child in pipeNodes.get_children():
+		child.queue_free()
+	for child in pipePieces.get_children():
+		child.queue_free()
+	for child in checkpoints.get_children():
+		child.queue_free()
+	if startLine != null:
+		startLine.queue_free()
+	scenery.vertexHeights.reset(64)
+	dynamicSky.reset()
+
+	# TODO: clear operation stack
+
+# save / load
+
+func exportTrack(autosave: bool = false) -> bool:
+	var trackData = {
+		"format": CURRENT_FORMAT_VERSION,
+		"metadata": {
+			"trackName": trackName,
+			"lapCount": lapCount,
+
+			"validated": validated,
+			"bestTotalTime": bestTotalTime,
+			"bestTotalReplay": bestTotalReplay,
+			"bestLapTime": bestLapTime,
+			"bestLapReplay": bestLapReplay,
+		},
+	}
+
+	# add start line
+	if startLine == null:
+		print("[InteractiveMap.gd] No start line found! Please add one.")
+		return false
+	trackData["start"] = startLine.getExportData()
+
+	# add checkpoints
+	if checkpoints.get_child_count() <= 0:
+		print("[InteractiveMap.gd] No checkpoints found! Please add at least one.")
+		return false
+	trackData["checkpoints"] = []
+	for checkpoint in checkpoints.get_children():
+		trackData["checkpoints"].append(checkpoint.getExportData())
+
+	# add terrain if modified
+	var terrainData: Dictionary = scenery.getExportData()
+	if terrainData.size() > 0:
+		trackData["terrain"] = terrainData
+
+	# add sky properties if modified
+	var skyData: Dictionary = dynamicSky.getExportData()
+	if skyData.size() > 0:
+		trackData["sky"] = skyData
+
+	# add roads
+	if roadNodes.get_child_count() > 0:
+		var roadData: Dictionary = {
+			"nodes": [],
+			"elements": [],
+		}
+		for node in roadNodes.get_children():
+			roadData["nodes"].append(node.getExportData())
+		for element in roadPieces.get_children():
+			roadData["elements"].append(element.getExportData())
+		trackData["roads"] = roadData
+
+	# add pipes
+	if pipeNodes.get_child_count() > 0:
+		var pipeData: Dictionary = {
+			"nodes": [],
+			"elements": [],
+		}
+		for node in pipeNodes.get_children():
+			pipeData["nodes"].append(node.getExportData())
+		for element in pipePieces.get_children():
+			pipeData["elements"].append(element.getExportData())
+		trackData["pipes"] = pipeData
+
+	trackData["deco"] = {}
+	if ledBoards.get_child_count() > 0:
+		trackData["deco"]["ledBoards"] = []
+		for node in ledBoards.get_children():
+			trackData["deco"]["ledBoards"].append(node.getExportData())
+
+	# return false
+	var path = "user://tracks/local/" + trackName + ".json"
+	if autosave:
+		path = "user://tracks/autosave/" + trackName + "_" + str(Time.get_datetime_string_from_system().replace(":", "-")) + ".json"
+	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
+
+	if fileHandler == null:
+		print("[InteractiveMap.gd] Error opening file to save into")
+		return false
+
+	fileHandler.store_string(JSON.stringify(trackData, "\t"))
+	fileHandler.close()
+
+	return true
+
+
+
+func importTrack(fileName: String) -> bool:
+	var path = fileName
+	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
+		path = "user://tracks/local/" + fileName
+	
+	if fileName.begins_with("user://tracks/downloaded/"):
+		trackId = fileName.split("/")[-1].split(".")[0]
+	else:
+		trackId = ""
+
+	var fileHandler = FileAccess.open(path, FileAccess.READ)
+
+	if fileHandler == null:
+		print("[InteractiveMap.gd] Error opening file to load from", path)
+		return false
+	
+	var trackData = JSON.parse_string(fileHandler.get_as_text())
+
+	if trackData == null:
+		print("[InteractiveMap.gd] Error parsing JSON when loading map")
+		return false
+	
+
+	if !trackData.has("metadata"):
+		print("[InteractiveMap.gd] No metadata found in the file")
+		return false
+
+	if trackData["metadata"].has("author"):
+		author = trackData["metadata"]["author"]
+	else:
+		author = ""
+	
+	if !trackData.has("format"):
+		print("[InteractiveMap.gd] No format version found in the file")
+		return false
+
+	if trackData["format"] != CURRENT_FORMAT_VERSION:
+		print("[InteractiveMap.gd] Error loading map: wrong format version")
+
+		# handle different format versions here
+		
+		# if !path.begins_with("user://tracks/downloaded/"):
+		# 	fileHandler.close()
+
+		# 	MapUpdater.updateMap(trackData, path)
+
+		# 	fileHandler = FileAccess.open(path, FileAccess.READ)
+		# 	trackData = JSON.parse_string(fileHandler.get_as_text())
+		# else:
+		# 	return false
+		return false
+	
+	clearMap()
+
+	trackName = trackData["metadata"]["trackName"]
+	lapCount = trackData["metadata"]["lapCount"]
+
+	if !trackData.has("start"):
+		print("[InteractiveMap.gd] No start line found in the file")
+		return false
+
+	setStartLine(
+		str_to_var(trackData["start"]["position"]),
+		str_to_var(trackData["start"]["rotation"]),
+		trackData["start"]
+	)
+
+	if !trackData.has("checkpoints"):
+		print("[InteractiveMap.gd] No checkpoints found in the file")
+		return false
+	
+	for checkpointData in trackData["checkpoints"]:
+		var checkpoint: FunctionalCheckpoint = checkpointScene.instantiate()
+		addCheckpoint(
+			checkpoint,
+			str_to_var(checkpointData["position"]),
+			str_to_var(checkpointData["rotation"]),
+			checkpointData
+		)
+	
+	if trackData.has("terrain"):
+		scenery.importData(trackData["terrain"])
+	
+	if trackData.has("sky"):
+		dynamicSky.importData(trackData["sky"])
+		
+	if trackData.has("roads"):
+		var nodeIds: Dictionary = {}
+
+		for nodeData in trackData["roads"]["nodes"]:
+			var node: RoadNode = roadNodeScene.instantiate()
+			roadNodes.add_child(node)
+			node.importData(nodeData)
+			nodeIds[nodeData["id"]] = node
+		
+		for elementData in trackData["roads"]["elements"]:
+			var element: RoadMeshGenerator = roadScene.instantiate()
+			roadPieces.add_child(element)
+			element.importData(elementData, nodeIds)
+	
+	if trackData.has("pipes"):
+		var nodeIds: Dictionary = {}
+
+		for nodeData in trackData["pipes"]["nodes"]:
+			var node: PipeNode = pipeNodeScene.instantiate()
+			pipeNodes.add_child(node)
+			node.importData(nodeData)
+			nodeIds[nodeData["id"]] = node
+		
+		for elementData in trackData["pipes"]["elements"]:
+			var element: PipeMeshGenerator = pipeScene.instantiate()
+			pipePieces.add_child(element)
+			element.importData(elementData, nodeIds)
+	
+	if trackData["deco"].has("ledBoards"):
+		for ledBoardData in trackData["deco"]["ledBoards"]:
+			var ledBoard: LedBoard = ledBoardScene.instantiate()
+			addLedBoard(
+				ledBoard,
+				str_to_var(ledBoardData["position"]),
+				str_to_var(ledBoardData["rotation"]),
+				ledBoardData
+			)
+
+	fileHandler.close()
+
+	return true

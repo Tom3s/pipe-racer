@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dbyuroab0s0la"]
+[gd_scene load_steps=3 format=3 uid="uid://dbyuroab0s0la"]
 
 [ext_resource type="Script" path="res://Editor/EditorSidebarUI.gd" id="1_2xesl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r82oc"]
+bg_color = Color(0, 0, 0, 0.247059)
 
 [node name="EditorSidebarUI" type="Control"]
 layout_mode = 3
@@ -78,6 +81,21 @@ focus_mode = 0
 toggle_mode = true
 text = "Paint"
 
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+layout_mode = 2
+
+[node name="MetadataButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Metadata"
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Save"
+
 [node name="BuildButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -126,3 +144,109 @@ size_flags_vertical = 0
 focus_mode = 0
 toggle_mode = true
 text = "<"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MetadataContainer" type="Panel" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r82oc")
+
+[node name="Container" type="PanelContainer" parent="CanvasLayer/MetadataContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = -123.5
+offset_right = 136.0
+offset_bottom = 123.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MetadataContainer/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Edit Metadata"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Track Name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TrackNameLineEdit" type="LineEdit" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Name"
+
+[node name="SaveTrackNameButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Set"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nr Laps"
+
+[node name="LapCountSpinbox" type="SpinBox" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+min_value = 1.0
+value = 3.0
+alignment = 1
+
+[node name="SaveLapCountButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Set"
+
+[node name="spacer" type="Control" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(256, 48)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="SaveCloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save & Close"

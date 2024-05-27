@@ -102,16 +102,30 @@ func getProperties() -> Dictionary:
 		"rotation": global_rotation,
 	}
 
-func setProperties(properties: Dictionary) -> void:
+func setProperties(properties: Dictionary, setTransform: bool = true) -> void:
 	if properties.has("width"):
 		width = properties["width"]
 	if properties.has("height"):
 		height = properties["height"]
-
-	if properties.has("position"):
-		global_position = properties["position"]
-	if properties.has("rotation"):
-		global_rotation = properties["rotation"]
+		
+	if setTransform:
+		if properties.has("position"):
+			global_position = properties["position"]
+		if properties.has("rotation"):
+			global_rotation = properties["rotation"]
 	
 func convertToPhysicsObject() -> void:
 	proceduralStartLine.convertToPhysicsObject()
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+	}
+
+	if width != PrefabConstants.TRACK_WIDTH:
+		data["width"] = width
+	if height != 24.0:
+		data["height"] = height
+
+	return data

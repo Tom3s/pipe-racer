@@ -76,6 +76,11 @@ func _ready():
 	rotator.disable()
 	translator.disable()
 
+	map.importTrack("user://tracks/local/kutya_test.json")
+	editorSidebarUI.trackNameLineEdit.text = map.trackName
+	editorSidebarUI.lapCountSpinbox.value = map.lapCount
+
+
 func connectSignals():
 	inputHandler.mouseMovedTo.connect(func(worldPos: Vector3):
 		if worldPos == Vector3.INF:
@@ -455,6 +460,18 @@ func connectSignals():
 
 		setUIVisibility()
 		setCurrentElement()
+	)
+
+	editorSidebarUI.trackNameChanged.connect(func(name: String):
+		map.trackName = name
+	)
+
+	editorSidebarUI.lapCountChanged.connect(func(count: int):
+		map.lapCount = count
+	)
+
+	editorSidebarUI.savePressed.connect(func():
+		map.exportTrack()
 	)
 
 	# road node properties ui

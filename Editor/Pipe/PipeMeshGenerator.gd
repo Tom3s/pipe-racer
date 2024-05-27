@@ -328,3 +328,24 @@ func getProperties() -> Dictionary:
 func setProperties(properties: Dictionary) -> void:
 	if properties.has("surfaceType"):
 		surfaceType = properties["surfaceType"] as PhysicsSurface.SurfaceType
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"startNodeId": startNode.id,
+		"endNodeId": endNode.id,
+	}
+
+	if surfaceType != PhysicsSurface.SurfaceType.ROAD:
+		data["surfaceType"] = surfaceType
+	
+	return data
+
+func importData(data: Dictionary, nodeIds: Dictionary):
+	startNode = nodeIds[data["startNodeId"]]
+	endNode = nodeIds[data["endNodeId"]]
+
+	if data.has("surfaceType"):
+		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
+	
+	refreshMesh()

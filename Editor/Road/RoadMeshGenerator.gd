@@ -1162,3 +1162,80 @@ func setProperties(properties: Dictionary):
 	if properties.has("rightRunoffSurfaceType"):
 		rightRunoffSurfaceType = properties["rightRunoffSurfaceType"] as PhysicsSurface.SurfaceType
 
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"startNodeId": startNode.id,
+		"endNodeId": endNode.id,
+	}
+
+	if surfaceType != PhysicsSurface.SurfaceType.ROAD:
+		data["surfaceType"] = surfaceType
+	
+	if wallSurfaceType != PhysicsSurface.SurfaceType.FENCE:
+		data["wallSurfaceType"] = wallSurfaceType
+	
+	if supportType != SupportType.NONE:
+		data["supportType"] = supportType
+	if supportBottomHeight != 0:
+		data["supportBottomHeight"] = supportBottomHeight
+	if supportMaterial != PhysicsSurface.SurfaceType.CONCRETE:
+		data["supportMaterial"] = supportMaterial
+
+	if leftWallType != WallTypes.NONE:
+		data["leftWallType"] = leftWallType
+	if leftWallStartHeight != 1.0:
+		data["leftWallStartHeight"] = leftWallStartHeight
+	if leftWallEndHeight != 1.0:
+		data["leftWallEndHeight"] = leftWallEndHeight
+	if leftRunoffSurfaceType != PhysicsSurface.SurfaceType.GRASS:
+		data["leftRunoffSurfaceType"] = leftRunoffSurfaceType
+	
+	if rightWallType != WallTypes.NONE:
+		data["rightWallType"] = rightWallType
+	if rightWallStartHeight != 1.0:
+		data["rightWallStartHeight"] = rightWallStartHeight
+	if rightWallEndHeight != 1.0:
+		data["rightWallEndHeight"] = rightWallEndHeight
+	if rightRunoffSurfaceType != PhysicsSurface.SurfaceType.GRASS:
+		data["rightRunoffSurfaceType"] = rightRunoffSurfaceType
+
+	return data
+
+func importData(data: Dictionary, nodeIds: Dictionary):
+	startNode = nodeIds[data["startNodeId"]]
+	endNode = nodeIds[data["endNodeId"]]
+
+	if data.has("surfaceType"):
+		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
+	
+	if data.has("wallSurfaceType"):
+		wallSurfaceType = data["wallSurfaceType"] as PhysicsSurface.SurfaceType
+	
+	if data.has("supportType"):
+		supportType = data["supportType"] as SupportType
+	if data.has("supportBottomHeight"):
+		supportBottomHeight = data["supportBottomHeight"]
+	if data.has("supportMaterial"):
+		supportMaterial = data["supportMaterial"] as PhysicsSurface.SurfaceType
+	
+	if data.has("leftWallType"):
+		leftWallType = data["leftWallType"] as WallTypes
+	if data.has("leftWallStartHeight"):
+		leftWallStartHeight = data["leftWallStartHeight"]
+	if data.has("leftWallEndHeight"):
+		leftWallEndHeight = data["leftWallEndHeight"]
+	if data.has("leftRunoffSurfaceType"):
+		leftRunoffSurfaceType = data["leftRunoffSurfaceType"] as PhysicsSurface.SurfaceType
+	
+	if data.has("rightWallType"):
+		rightWallType = data["rightWallType"] as WallTypes
+	if data.has("rightWallStartHeight"):
+		rightWallStartHeight = data["rightWallStartHeight"]
+	if data.has("rightWallEndHeight"):
+		rightWallEndHeight = data["rightWallEndHeight"]
+	if data.has("rightRunoffSurfaceType"):
+		rightRunoffSurfaceType = data["rightRunoffSurfaceType"] as PhysicsSurface.SurfaceType
+	
+	refreshAll()

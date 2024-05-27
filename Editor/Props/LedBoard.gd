@@ -438,7 +438,7 @@ func getProperties() -> Dictionary:
 	
 	return properties
 
-func setProperties(properties: Dictionary) -> void:
+func setProperties(properties: Dictionary, setTransform: bool = true) -> void:
 	if properties.has("width"):
 		width = properties["width"]
 	if properties.has("height"):
@@ -457,10 +457,11 @@ func setProperties(properties: Dictionary) -> void:
 	if properties.has("textureName"):
 		textureName = properties["textureName"]
 
-	if properties.has("position"):
-		global_position = properties["position"]
-	if properties.has("rotation"):
-		global_rotation = properties["rotation"]
+	if setTransform:
+		if properties.has("position"):
+			global_position = properties["position"]
+		if properties.has("rotation"):
+			global_rotation = properties["rotation"]
 
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
 
@@ -479,4 +480,30 @@ func convertToPhysicsObject() -> void:
 			child.queue_free()
 	supportMesh.create_trimesh_collision()
 	supportMesh.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+	}
+
+	if width != 80:
+		data["width"] = width
+	if height != 48:
+		data["height"] = height
+	
+	if support != true:
+		data["support"] = support
+	
+	if supportBottomHeight != -PrefabConstants.GRID_SIZE * 4:
+		data["supportBottomHeight"] = supportBottomHeight
+	
+	if usingOnlineTexture:
+		data["usingOnlineTexture"] = usingOnlineTexture
+		data["customTextureUrl"] = customTextureUrl
+	else:
+		data["textureName"] = textureName
+	
+	return data
 	

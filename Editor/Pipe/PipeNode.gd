@@ -2,8 +2,9 @@
 extends Node3D
 class_name PipeNode
 
-# var meshGenerator_s: PipeMeshGenerator
-# var meshGenerator_e: PipeMeshGenerator
+static var idCounter: int = -1
+var id: int
+
 var meshGeneratorRefs: Array[PipeMeshGenerator] = []
 
 signal dataChanged()
@@ -42,6 +43,11 @@ var isPreviewNode: bool = false:
 		isPreviewNode = newValue
 		%Collider.use_collision = !isPreviewNode
 
+func _ready():
+	set_physics_process(true)
+
+	PipeNode.idCounter += 1
+	id = PipeNode.idCounter
 
 func _physics_process(_delta):
 	if oldPos != global_position:
@@ -149,3 +155,34 @@ func getCopy() -> PipeNode:
 	newNode.setProperties(getProperties())
 
 	return newNode
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+		"id": id,
+	}
+
+	if radius != PrefabConstants.GRID_SIZE * 6:
+		data["radius"] = radius
+	if profile != PI:
+		data["profile"] = profile
+	
+	if flat:
+		data["flat"] = flat
+	
+	return data
+
+func importData(data: Dictionary):
+	global_position = str_to_var(data["position"])
+	global_rotation = str_to_var(data["rotation"])
+	id = data["id"]
+
+	if data.has("radius"):
+		radius = data["radius"]
+	if data.has("profile"):
+		profile = data["profile"]
+	
+	if data.has("flat"):
+		flat = data["flat"]

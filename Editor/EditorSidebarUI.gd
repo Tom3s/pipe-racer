@@ -8,8 +8,11 @@ class_name EditorSidebarUI
 @onready var buildButton: Button = %BuildButton
 @onready var editButton: Button = %EditButton
 @onready var deleteButton: Button = %DeleteButton
-@onready var paintButton: Button = %PaintButton
 @onready var sceneryButton: Button = %SceneryButton
+@onready var paintButton: Button = %PaintButton
+
+@onready var metadataButton: Button = %MetadataButton
+@onready var saveButton: Button = %SaveButton
 
 @onready var buildButtons: VBoxContainer = %BuildButtons
 @onready var roadButton: Button = %RoadButton
@@ -17,6 +20,15 @@ class_name EditorSidebarUI
 @onready var startButton: Button = %StartButton
 @onready var cpButton: Button = %CPButton
 @onready var decoButton: Button = %DecoButton
+
+@onready var metadataContainer: Control = %MetadataContainer
+@onready var trackNameLineEdit: LineEdit = %TrackNameLineEdit
+@onready var saveTrackNameButton: Button = %SaveTrackNameButton
+@onready var lapCountSpinbox: SpinBox = %LapCountSpinbox
+@onready var saveLapCountButton: Button = %SaveLapCountButton
+@onready var closeMetadataButton: Button = %CloseMetadataButton
+@onready var saveCloseMetadataButton: Button = %SaveCloseMetadataButton
+
 
 @onready var visibilityButton: Button = %VisibilityButton
 
@@ -26,10 +38,17 @@ signal buildModeChanged(mode: EditorEventListener.BuildMode)
 
 signal editorModeChanged(mode: EditorEventListener.EditorMode)
 
+signal savePressed()
+signal trackNameChanged(name: String)
+signal lapCountChanged(count: int)
+
+
 func _ready():
 	onEditorModeButtonPressed(0)
 	onBuildButtonPressed(0)
 	connectSignals()
+
+	metadataContainer.visible = false
 
 func connectSignals():
 
@@ -64,6 +83,32 @@ func connectSignals():
 	)
 	decoButton.pressed.connect(func():
 		onBuildButtonPressed(EditorEventListener.BuildMode.DECO)
+	)
+
+	metadataButton.pressed.connect(func():
+		metadataContainer.visible = true
+	)
+
+	saveButton.pressed.connect(func():
+		savePressed.emit()
+	)
+
+	saveTrackNameButton.pressed.connect(func():
+		trackNameChanged.emit(trackNameLineEdit.text)
+	)
+
+	saveLapCountButton.pressed.connect(func():
+		lapCountChanged.emit(lapCountSpinbox.value)
+	)
+
+	closeMetadataButton.pressed.connect(func():
+		metadataContainer.visible = false
+	)
+
+	saveCloseMetadataButton.pressed.connect(func():
+		trackNameChanged.emit(trackNameLineEdit.text)
+		lapCountChanged.emit(lapCountSpinbox.value)
+		metadataContainer.visible = false
 	)
 
 	visibilityButton.pressed.connect(func():
