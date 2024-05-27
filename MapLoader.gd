@@ -146,7 +146,12 @@ func uploadTrack(trackFileName: String):
 	if (jsonData == null):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Invalid JSON") 
 		return
-	if (!jsonData.has("validated") || jsonData.validated == false):
+
+	if (jsonData.format == Map.CURRENT_FORMAT_VERSION):
+		AlertManager.showAlert(self, "Error", "Upload Failed", "Legacy tracks can no longer be uploaded")
+		return
+	
+	if (jsonData.format > Map.CURRENT_FORMAT_VERSION && jsonData.metadata.validated == false):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Track must be validated (completed) before uploading") 
 		return
 
@@ -162,7 +167,7 @@ func uploadTrack(trackFileName: String):
 		
 		var replayId = JSON.parse_string(_body.get_string_from_utf8())._id
 
-		if jsonData.bestTotalReplay != jsonData.bestLapReplay:
+		if jsonData.metadata.bestTotalReplay != jsonData.metadata.bestLapReplay:
 			# upload lap replay
 			var lapReplayRequest = HTTPRequest.new()
 			add_child(lapReplayRequest)
@@ -174,13 +179,13 @@ func uploadTrack(trackFileName: String):
 				
 				var lapReplayId = JSON.parse_string(_body.get_string_from_utf8())._id
 
-				jsonData.bestLapReplay = lapReplayId
-				jsonData.bestTotalReplay = replayId
+				jsonData.metadata.bestLapReplay = lapReplayId
+				jsonData.metadata.bestTotalReplay = replayId
 
 				sendUploadRequest(jsonData)
 			)
 
-			var lapReplayData = FileAccess.open(jsonData.bestLapReplay, FileAccess.READ)
+			var lapReplayData = FileAccess.open(jsonData.metadata.bestLapReplay, FileAccess.READ)
 			var lapReplayBytes = lapReplayData.get_buffer(lapReplayData.get_length())
 			lapReplayData.close()
 
@@ -198,13 +203,13 @@ func uploadTrack(trackFileName: String):
 				print("Error: " + error_string(httpError))
 				AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading lap replay")
 		else:
-			jsonData.bestTotalReplay = replayId
-			jsonData.bestLapReplay = replayId
+			jsonData.metadata.bestTotalReplay = replayId
+			jsonData.metadata.bestLapReplay = replayId
 			sendUploadRequest(jsonData)
 
 	)
 
-	var replayData = FileAccess.open(jsonData.bestTotalReplay, FileAccess.READ)
+	var replayData = FileAccess.open(jsonData.metadata.bestTotalReplay, FileAccess.READ)
 	var replayBytes = replayData.get_buffer(replayData.get_length())
 	replayData.close()
 
