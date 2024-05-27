@@ -110,7 +110,7 @@ func calculateRaycast(origin: Vector3):
 
 	var to = origin + Vector3.DOWN * RAYCAST_MAX_DISTANCE
 
-	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(origin, to, 1))
+	var result = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(origin, to, 1 + 32))
 
 	if result.has("position"):
 		raycastPosition = result.position

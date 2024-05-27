@@ -16,7 +16,6 @@ height = 4.0
 
 [node name="FunctionalCheckpoint" type="Node3D"]
 script = ExtResource("1_d50af")
-isPreview = null
 
 [node name="ProceduralCheckpoint" parent="." instance=ExtResource("2_3dg5f")]
 unique_name_in_owner = true

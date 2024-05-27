@@ -101,7 +101,7 @@ func connectSignals():
 func getProperties() -> Dictionary:
 	return {
 		"ringRadius": radiusSpinbox.value,
-		"ringWidth": deg_to_rad(ringWidthSpinbox.value),
+		"ringWidth": ringWidthSpinbox.value,
 
 		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
 		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value)

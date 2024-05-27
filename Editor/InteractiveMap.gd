@@ -358,14 +358,16 @@ func exportTrack(autosave: bool = false) -> bool:
 	# add start line
 	if start == null:
 		print("[InteractiveMap.gd] No start line found! Please add one.")
-		return false
-	trackData["start"] = start.getExportData()
+		# return false
+	else:
+		trackData["start"] = start.getExportData()
 
 	# add checkpoints
 	if checkpoints.get_child_count() <= 0:
 		print("[InteractiveMap.gd] No checkpoints found! Please add at least one.")
-		return false
-	trackData["checkpoints"] = []
+		# return false
+	else:
+		trackData["checkpoints"] = []
 	for checkpoint in checkpoints.get_children():
 		trackData["checkpoints"].append(checkpoint.getExportData())
 
@@ -486,28 +488,28 @@ func importTrack(fileName: String) -> bool:
 	if !trackData.has("start"):
 		print("[InteractiveMap.gd] No start line found in the file")
 		# return false
-
-	setStartLine(
-		str_to_var(trackData["start"]["position"]),
-		str_to_var(trackData["start"]["rotation"]),
-		trackData["start"]
-	)
+	else:
+		setStartLine(
+			str_to_var(trackData["start"]["position"]),
+			str_to_var(trackData["start"]["rotation"]),
+			trackData["start"]
+		)
 
 	if !trackData.has("checkpoints"):
 		print("[InteractiveMap.gd] No checkpoints found in the file")
 		# return false
-	
-	var checkpointIndex = 0
-	for checkpointData in trackData["checkpoints"]:
-		var checkpoint: FunctionalCheckpoint = checkpointScene.instantiate()
-		addCheckpoint(
-			checkpoint,
-			str_to_var(checkpointData["position"]),
-			str_to_var(checkpointData["rotation"]),
-			checkpointData
-		)
-		checkpoint.index = checkpointIndex
-		checkpointIndex += 1
+	else:
+		var checkpointIndex = 0
+		for checkpointData in trackData["checkpoints"]:
+			var checkpoint: FunctionalCheckpoint = checkpointScene.instantiate()
+			addCheckpoint(
+				checkpoint,
+				str_to_var(checkpointData["position"]),
+				str_to_var(checkpointData["rotation"]),
+				checkpointData
+			)
+			checkpoint.index = checkpointIndex
+			checkpointIndex += 1
 	
 	if trackData.has("terrain"):
 		scenery.importData(trackData["terrain"])

@@ -175,7 +175,7 @@ func fillTextureOptions() -> void:
 func getProperties() -> Dictionary:
 	var properties =  {
 		"width": widthSpinbox.value,
-		"height": deg_to_rad(heightSpinbox.value),
+		"height": heightSpinbox.value,
 		"support": supportToggle.button_pressed,
 		"supportBottomHeight": supportBottomHeightSpinbox.value,
 
