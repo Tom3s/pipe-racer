@@ -196,13 +196,13 @@ func removeRoadElement(node: RoadMeshGenerator):
 	node.startNode.meshGeneratorRefs.erase(node) 
 	node.endNode.meshGeneratorRefs.erase(node)
 
-	while node.meshGeneratorRefs.find(null) != -1:
-		node.meshGeneratorRefs.erase(null)
+	while node.startNode.meshGeneratorRefs.find(null) != -1:
+		node.startNode.meshGeneratorRefs.erase(null)
 	if node.startNode.meshGeneratorRefs.size() == 0:
 		node.startNode.queue_free()
 
-	while node.meshGeneratorRefs.find(null) != -1:
-		node.meshGeneratorRefs.erase(null)
+	while node.endNode.meshGeneratorRefs.find(null) != -1:
+		node.endNode.meshGeneratorRefs.erase(null)
 	if node.endNode.meshGeneratorRefs.size() == 0:
 		node.endNode.queue_free()
 
@@ -212,13 +212,13 @@ func removePipeElement(node: PipeMeshGenerator):
 	node.startNode.meshGeneratorRefs.erase(node) 
 	node.endNode.meshGeneratorRefs.erase(node)
 
-	while node.meshGeneratorRefs.find(null) != -1:
-		node.meshGeneratorRefs.erase(null)
+	while node.startNode.meshGeneratorRefs.find(null) != -1:
+		node.startNode.meshGeneratorRefs.erase(null)
 	if node.startNode.meshGeneratorRefs.size() == 0:
 		node.startNode.queue_free()
 
-	while node.meshGeneratorRefs.find(null) != -1:
-		node.meshGeneratorRefs.erase(null)
+	while node.endNode.meshGeneratorRefs.find(null) != -1:
+		node.endNode.meshGeneratorRefs.erase(null)
 	if node.endNode.meshGeneratorRefs.size() == 0:
 		node.endNode.queue_free()
 
