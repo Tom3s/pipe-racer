@@ -1,6 +1,7 @@
-Implement Painting
 Saving/Loading
 Test Driving
+
+Implement Painting - DONE
 
 * Light emitting deco
 * simple shape Deco

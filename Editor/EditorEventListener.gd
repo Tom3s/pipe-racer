@@ -29,6 +29,8 @@ var currentElement: Node3D = null
 
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
+@onready var paintBrushUI: PaintBrushUI = %PaintBrushUI
+
 
 # gizmos
 @onready var rotator: Rotator = %Rotator
@@ -62,6 +64,8 @@ var moveAxis: Vector3 = Vector3.ZERO
 
 
 var lastMousePos: Vector2 = Vector2.ZERO
+
+var currentPaintBrushSurface: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD
 
 func _ready():
 	setUIVisibility()
@@ -297,6 +301,23 @@ func connectSignals():
 				map.removeLedBoard(collidedObject)
 			else:
 				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
+
+
+		elif currentEditorMode == EditorMode.PAINT:
+			var collidedObject = screenPointToRay()
+			if collidedObject == null:
+				return
+
+			collidedObject = collidedObject.get_parent()
+			if !ClassFunctions.getClassName(collidedObject) == "PhysicsSurface":
+				return
+			
+			collidedObject = collidedObject.get_parent()
+
+			if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
+				collidedObject.surfaceType = currentPaintBrushSurface
+			elif ClassFunctions.getClassName(collidedObject) == "PipeMeshGenerator":
+				collidedObject.surfaceType = currentPaintBrushSurface
 
 	)
 
@@ -846,6 +867,12 @@ func connectSignals():
 		map.setGroundSize(size)
 	)
 
+	# paint brush ui
+
+	paintBrushUI.surfaceMaterialChanged.connect(func(surface: int):
+		currentPaintBrushSurface = surface as PhysicsSurface.SurfaceType
+	)
+
 func setUIVisibility():
 	roadNodePropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
 	roadPropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
@@ -860,6 +887,9 @@ func setUIVisibility():
 	ledBoardPropertiesUI.visible = currentBuildMode == BuildMode.DECO && currentEditorMode == EditorMode.BUILD
 
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
+
+	paintBrushUI.visible = currentEditorMode == EditorMode.PAINT
+
 
 enum EditUIType {
 	ROAD_NODE_PROPERTIES,

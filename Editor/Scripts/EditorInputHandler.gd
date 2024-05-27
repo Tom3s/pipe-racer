@@ -122,6 +122,14 @@ func _unhandled_input(event):
 	elif editorMode == EditorEventListener.EditorMode.DELETE:
 		if Input.is_action_just_pressed("editor_place"):
 			placePressed.emit()
+	
+
+	elif editorMode == EditorEventListener.EditorMode.PAINT:
+		if Input.is_action_just_pressed("editor_place"):
+			placePressed.emit()
+	
+
+	
 
 
 func onScreenMousePosToGridIntersect() -> Vector3:
