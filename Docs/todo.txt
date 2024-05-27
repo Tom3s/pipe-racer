@@ -1,12 +1,15 @@
-Saving/Loading
-Test Driving
-
+Saving/Loading - DONE
+Test Driving - DONE
+Uploading/Playing - DONE
 Implement Painting - DONE
+
 
 * Light emitting deco
 * simple shape Deco
 * fluid containers
 
-Uploading/Playing
 
 DOCUMENTATION ;-;
+
+- Ghosts are WAY TOO LAGGY (add a toggle at least)
+- medal menu doesn't work
