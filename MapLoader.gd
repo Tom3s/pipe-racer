@@ -147,7 +147,7 @@ func uploadTrack(trackFileName: String):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Invalid JSON") 
 		return
 
-	if (jsonData.format == Map.CURRENT_FORMAT_VERSION):
+	if (jsonData.format <= Map.CURRENT_FORMAT_VERSION):
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Legacy tracks can no longer be uploaded")
 		return
 	

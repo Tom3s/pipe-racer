@@ -63,7 +63,7 @@ func loadMapList():
 			var fileHandler = FileAccess.open(path + fileName, FileAccess.READ)
 			var trackItem = JSON.parse_string(fileHandler.get_as_text())
 
-			if trackItem.format == Map.CURRENT_FORMAT_VERSION:
+			if trackItem.format <= Map.CURRENT_FORMAT_VERSION:
 				mapList.add_item(trackItem.trackName + " - by: " + trackItem.author)
 			else:
 				mapList.add_item(trackItem.metadata.trackName + " - by: " + trackItem.metadata.author)
