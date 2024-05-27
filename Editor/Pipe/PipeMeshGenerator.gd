@@ -348,4 +348,4 @@ func importData(data: Dictionary, nodeIds: Dictionary):
 	if data.has("surfaceType"):
 		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
 	
-	refreshMesh()
+	# refreshMesh()

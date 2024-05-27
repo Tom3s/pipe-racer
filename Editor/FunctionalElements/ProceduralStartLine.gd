@@ -2,9 +2,9 @@
 extends Node3D
 class_name ProceduralStartLine
 
-@onready var checkeredLine: PhysicsSurface = %CheckeredLine
-@onready var poles: PhysicsSurface = %Poles
-@onready var flag: PhysicsSurface = %Flag
+@onready var checkeredLine: MeshInstance3D = %CheckeredLine
+@onready var poles: MeshInstance3D = %Poles
+@onready var flag: MeshInstance3D = %Flag
 
 @onready var arrow: Node3D = %Arrow
 
@@ -313,16 +313,16 @@ func setProperties(properties: Dictionary) -> void:
 		global_rotation = properties["rotation"]
 
 func convertToPhysicsObject() -> void:
-	if checkeredLine.get_child_count() > 0:
-		for child in checkeredLine.get_children():
-			child.queue_free()
-	checkeredLine.create_trimesh_collision()
-	checkeredLine.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+	# if checkeredLine.get_child_count() > 0:
+	# 	for child in checkeredLine.get_children():
+	# 		child.queue_free()
+	# checkeredLine.create_trimesh_collision()
+	# checkeredLine.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
 
 	if poles.get_child_count() > 0:
 		for child in poles.get_children():
 			child.queue_free()
-	poles.create_convex_collision()
+	poles.create_trimesh_collision()
 	poles.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
 
 	if flag.get_child_count() > 0:

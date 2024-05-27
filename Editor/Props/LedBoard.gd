@@ -463,10 +463,10 @@ func setProperties(properties: Dictionary, setTransform: bool = true) -> void:
 		if properties.has("rotation"):
 			global_rotation = properties["rotation"]
 
-@onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
+# @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
 
-func getCopy() -> LedBoard:
-	return ledBoardScene.instantiate() as LedBoard
+# func getCopy() -> LedBoard:
+# 	return ledBoardScene.instantiate() as LedBoard
 
 func convertToPhysicsObject() -> void:
 	if boardMesh.get_child_count() > 0:

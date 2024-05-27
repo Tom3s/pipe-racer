@@ -1238,4 +1238,4 @@ func importData(data: Dictionary, nodeIds: Dictionary):
 	if data.has("rightRunoffSurfaceType"):
 		rightRunoffSurfaceType = data["rightRunoffSurfaceType"] as PhysicsSurface.SurfaceType
 	
-	refreshAll()
+	# refreshAll()

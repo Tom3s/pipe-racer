@@ -48,6 +48,8 @@ func _ready():
 	proceduralCheckpoint.ringWidth = ringWidth
 	proceduralCheckpoint.ringRadius = ringRadius
 
+	setCollisionShape()
+
 func onBodyEntered(body):
 	print("[Checkpoint.gd] Body entered checkpoint: ", body)
 	bodyEnteredCheckpoint.emit(body, self)

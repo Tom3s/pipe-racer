@@ -1,6 +1,9 @@
 extends Node3D
 class_name EditorEventListener
 
+@onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
+
+
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
 # @onready var previewElementParent: Node3D = %PreviewElement
@@ -184,7 +187,8 @@ func connectSignals():
 				)
 			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
 				map.addLedBoard(
-					currentElement.getCopy(),
+					# currentElement.getCopy(),
+					ledBoardScene.instantiate(),
 					currentElement.global_position, 
 					currentElement.global_rotation,
 					currentElement.getProperties()

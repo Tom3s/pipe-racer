@@ -4,10 +4,10 @@ class_name GameScene
 @onready var Map = preload("res://MapScene.tscn")
 @onready var MapEnvironment = preload("res://TestTrackEnv.tscn")
 
-@onready var mapScene: InteractiveMap = preload("res://Editor/InteractiveMap.tscn")
+@onready var mapScene: PackedScene = preload("res://Editor/InteractiveMap.tscn")
 
  
-var map: Map
+var map = null
 
 signal exitPressed()
 signal finishedLoading()
@@ -25,15 +25,28 @@ func setup(
 
 ) -> bool:
 	# load map
-	map = Map.instantiate()
+
+	# try loading new format
+	map = mapScene.instantiate() as InteractiveMap
 	add_child(map)
 
-	# TODO: check if map exists locally, if not, download it
-	var success = map.loadMap(mapName)
+	var success = map.importTrack(mapName)
 	if !success:
-		print("Failed to load map: " + mapName)
-		exitPressed.emit()
-		return false
+		print("[GameScene.gd] Failed to load map: " + mapName)
+		print("[GameScene.gd] Trying legacy format")
+		map.queue_free()
+
+		map = Map.instantiate()
+		add_child(map)
+
+		# TODO: check if map exists locally, if not, download it
+		success = map.loadMap(mapName)
+		if !success:
+			print("[GameScene.gd] Failed to load legacy format, exiting.")
+			exitPressed.emit()
+			return false
+
+
 	map.setIngame()
 
 	%GameEventListener.state.ranked = ranked
@@ -70,8 +83,10 @@ func setup(
 		%GameEventListener.addGhosts(localReplays, downloadedReplays)
 
 	# load environment
-	var environment: WorldEnvironment = MapEnvironment.instantiate()
-	add_child(environment)
+	if ClassFunctions.getClassName(map) == "Map":
+		var environment: WorldEnvironment = MapEnvironment.instantiate()
+		add_child(environment)
+		
 
 	if !online:
 		initializeLocalPlayers()

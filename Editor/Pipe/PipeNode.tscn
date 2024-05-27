@@ -9,6 +9,7 @@ albedo_color = Color(0, 0.611765, 0.709804, 1)
 script = ExtResource("1_xvj33")
 
 [node name="Arrow" type="CSGPolygon3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, -5.505)
 polygon = PackedVector2Array(0, 0, 0.2, 0, 0.2, 0.7, 0.4, 0.7, 0, 1.2)
 mode = 1

@@ -6,7 +6,7 @@
 [ext_resource type="Material" uid="uid://qkyt6jjraevf" path="res://Track Props/SimpleBlackMetal.tres" id="4_46306"]
 [ext_resource type="Script" path="res://Editor/PhysicsSurface.gd" id="5_urggv"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ri8qp"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_llq7e"]
 _surfaces = [{
 "aabb": AABB(-40, -24, 0, 80, 48, 1e-05),
 "attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
@@ -39,7 +39,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray(0, 0, 32, 194, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 65, 0, 0, 128, 192, 0, 0, 32, 194, 0, 0, 192, 193, 0, 0, 128, 192, 0, 0, 32, 66, 0, 0, 192, 193, 0, 0, 128, 192, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191)
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmg5a"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_864ma"]
 render_priority = 0
 shader = ExtResource("2_0s2x4")
 shader_parameter/Pixel_Amount = 14
@@ -49,7 +49,7 @@ shader_parameter/Mattness = 0.0
 shader_parameter/Emission = 0.8
 shader_parameter/Texture = ExtResource("3_hwixn")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_irucm"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_amcgb"]
 _surfaces = [{
 "aabb": AABB(-34, -40, -10, 4, 56, 4.00001),
 "attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 128, 62, 0, 0, 0, 0, 0, 0, 192, 62, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 32, 63, 0, 0, 0, 0, 0, 0, 64, 63, 0, 0, 0, 0, 0, 0, 96, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 62, 0, 0, 128, 63, 0, 0, 128, 62, 0, 0, 128, 63, 0, 0, 192, 62, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 32, 63, 0, 0, 128, 63, 0, 0, 64, 63, 0, 0, 128, 63, 0, 0, 96, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63),
@@ -237,15 +237,15 @@ script = ExtResource("1_rgbxt")
 
 [node name="BoardMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_ri8qp")
-surface_material_override/0 = SubResource("ShaderMaterial_mmg5a")
+mesh = SubResource("ArrayMesh_llq7e")
+surface_material_override/0 = SubResource("ShaderMaterial_864ma")
 surface_material_override/1 = ExtResource("4_46306")
 surface_material_override/2 = ExtResource("4_46306")
 script = ExtResource("5_urggv")
 
 [node name="SupportMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_irucm")
+mesh = SubResource("ArrayMesh_amcgb")
 surface_material_override/0 = ExtResource("4_46306")
 surface_material_override/1 = ExtResource("4_46306")
 surface_material_override/2 = ExtResource("4_46306")

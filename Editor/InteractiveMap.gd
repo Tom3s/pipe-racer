@@ -41,8 +41,8 @@ var lastPipeElement: PipeMeshGenerator
 signal pipePreviewElementRequested()
 
 
-@onready var start: Node3D = %Start
-var startLine: FunctionalStartLine
+@onready var startParent: Node3D = %Start
+var start: FunctionalStartLine
 
 @onready var checkpoints: Node3D = %Checkpoints
 
@@ -140,13 +140,13 @@ func clearPreviews():
 		lastPipeNode = null
 
 func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
-	if startLine == null:
-		startLine = startLineScene.instantiate()
-		start.add_child(startLine)
-	startLine.global_position = position
-	startLine.global_rotation = rotation
-	startLine.setProperties(properties, false)
-	startLine.convertToPhysicsObject()
+	if start == null:
+		start = startLineScene.instantiate()
+		startParent.add_child(start)
+	start.global_position = position
+	start.global_rotation = rotation
+	start.setProperties(properties, false)
+	start.convertToPhysicsObject()
 
 func addCheckpoint(node: FunctionalCheckpoint, position: Vector3, rotation: Vector3, properties: Dictionary):
 	checkpoints.add_child(node)
@@ -331,8 +331,8 @@ func clearMap():
 		child.queue_free()
 	for child in checkpoints.get_children():
 		child.queue_free()
-	if startLine != null:
-		startLine.queue_free()
+	if start != null:
+		start.queue_free()
 	scenery.vertexHeights.reset(64)
 	dynamicSky.reset()
 
@@ -356,10 +356,10 @@ func exportTrack(autosave: bool = false) -> bool:
 	}
 
 	# add start line
-	if startLine == null:
+	if start == null:
 		print("[InteractiveMap.gd] No start line found! Please add one.")
 		return false
-	trackData["start"] = startLine.getExportData()
+	trackData["start"] = start.getExportData()
 
 	# add checkpoints
 	if checkpoints.get_child_count() <= 0:
@@ -497,6 +497,7 @@ func importTrack(fileName: String) -> bool:
 		print("[InteractiveMap.gd] No checkpoints found in the file")
 		return false
 	
+	var checkpointIndex = 0
 	for checkpointData in trackData["checkpoints"]:
 		var checkpoint: FunctionalCheckpoint = checkpointScene.instantiate()
 		addCheckpoint(
@@ -505,6 +506,8 @@ func importTrack(fileName: String) -> bool:
 			str_to_var(checkpointData["rotation"]),
 			checkpointData
 		)
+		checkpoint.index = checkpointIndex
+		checkpointIndex += 1
 	
 	if trackData.has("terrain"):
 		scenery.importData(trackData["terrain"])
@@ -525,6 +528,8 @@ func importTrack(fileName: String) -> bool:
 			var element: RoadMeshGenerator = roadScene.instantiate()
 			roadPieces.add_child(element)
 			element.importData(elementData, nodeIds)
+			element.refreshAll()
+			element.convertToPhysicsObject()
 	
 	if trackData.has("pipes"):
 		var nodeIds: Dictionary = {}
@@ -539,10 +544,12 @@ func importTrack(fileName: String) -> bool:
 			var element: PipeMeshGenerator = pipeScene.instantiate()
 			pipePieces.add_child(element)
 			element.importData(elementData, nodeIds)
+			element.refreshMesh()
+			element.convertToPhysicsObject()
 	
 	if trackData["deco"].has("ledBoards"):
 		for ledBoardData in trackData["deco"]["ledBoards"]:
-			var ledBoard: LedBoard = ledBoardScene.instantiate()
+			var ledBoard: LedBoard = ledBoardScene.instantiate() as LedBoard
 			addLedBoard(
 				ledBoard,
 				str_to_var(ledBoardData["position"]),
@@ -553,3 +560,38 @@ func importTrack(fileName: String) -> bool:
 	fileHandler.close()
 
 	return true
+
+# ingame functionality
+
+func setIngame() -> void:
+	for child in roadNodes.get_children():
+		child.setIngame()
+	# for child in roadPieces.get_children():
+	# 	child.setIngame()
+	for child in pipeNodes.get_children():
+		child.setIngame()
+	# for child in pipePieces.get_children():
+	# 	child.setIngame()
+
+	for child in checkpoints.get_children():
+		child.setArrowVisibility(false)
+	
+	if start != null:
+		start.setArrowVisibility(false)
+
+func getCheckpoints():
+	return checkpoints.get_children()
+
+func getCheckpointCount():
+	return checkpoints.get_child_count()
+
+func setNewValidationTime(totalTime: int, bestLap: int, replay: String):
+	validated = true
+	if bestTotalTime == -1 || totalTime < bestTotalTime:
+		bestTotalTime = totalTime
+		bestTotalReplay = replay
+		exportTrack()
+	if bestLapTime == -1 || bestLap < bestLapTime:
+		bestLapTime = bestLap
+		bestLapReplay = replay
+		exportTrack()

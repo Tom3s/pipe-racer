@@ -31,7 +31,7 @@ func setCollisionShape():
 signal bodyEnteredStart(body: Node3D, start: Node3D)
 
 func onBodyEntered(body):
-	print("[Start.gd] Body entered start: ", body)
+	print("[FunctionalStartLine.gd] Body entered start: ", body)
 	bodyEnteredStart.emit(body, self)
 
 func _ready():
@@ -59,7 +59,7 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 	if nrPlayers == 1:
 		playerFraction = 0.5
 
-	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 8.0 # 7.99 magic number to avoid missing between faces
+	var raycastOrigin = global_position + Vector3.UP * 5 + leftLimit.lerp(rightLimit, playerFraction) + localBackwards * 7.99 # magic number to avoid missing between faces
 
 	calculateRaycast(raycastOrigin)
 
