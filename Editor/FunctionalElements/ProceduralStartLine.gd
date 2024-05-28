@@ -24,7 +24,7 @@ var height: float = 24.0:
 		refreshAllMesh()
 
 
-const LINE_HEIGHT: float = 0.5
+const LINE_HEIGHT: float = 0.15
 const LINE_THICKNESS: float = 4
 
 func _ready():
@@ -40,8 +40,8 @@ func refreshCheckeredLine():
 		return
 	var checkeredMesh: BoxMesh = checkeredLine.mesh 
 
-	checkeredMesh.size = Vector3(width, LINE_HEIGHT, LINE_THICKNESS)
-	checkeredLine.position = Vector3(0, LINE_HEIGHT / 2, 0)
+	checkeredMesh.size = Vector3(width, LINE_HEIGHT + PrefabConstants.GRID_SIZE, LINE_THICKNESS)
+	checkeredLine.position = Vector3(0, LINE_HEIGHT / 2 - PrefabConstants.GRID_SIZE / 2, 0)
 
 	var checkeredMaterial: ShaderMaterial = checkeredLine.get_surface_override_material(0)
 
