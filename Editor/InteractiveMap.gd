@@ -94,9 +94,10 @@ func onRoadPreviewElementProvided(node: RoadNode):
 
 
 func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipeProperties: Dictionary):
-	pipeNodes.add_child(node)
-	node.global_position = position
-	node.global_rotation = rotation
+	if node.get_parent() == null:
+		pipeNodes.add_child(node)
+		node.global_position = position
+		node.global_rotation = rotation
 
 	if lastPipeNode == null:
 		var pipeElement: PipeMeshGenerator = pipeScene.instantiate()
@@ -108,7 +109,8 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 		pipePreviewElementRequested.emit()
 	else:
 		if EditorMath.positionsMatch(lastPipeElement.startNode, node):
-			pipeNodes.remove_child(node)
+			# pipeNodes.remove_child(node)
+			# node.queue_free()
 			return
 		lastPipeElement.endNode = node
 		lastPipeElement.refreshMesh()

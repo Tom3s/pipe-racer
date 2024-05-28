@@ -536,6 +536,9 @@ func connectSignals():
 	)
 
 	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
+		if currentEditorMode == EditorMode.BUILD:
+			map.clearPreviews()
+
 		currentEditorMode = mode
 		inputHandler.editorMode = mode
 
@@ -544,8 +547,7 @@ func connectSignals():
 			inputHandler.carTestDriving = false
 			carPreview.visible = true
 
-		if mode == EditorMode.BUILD:
-			map.clearPreviews()
+		
 
 		if mode != EditorMode.EDIT:
 			if map.lastRoadElement != null:
