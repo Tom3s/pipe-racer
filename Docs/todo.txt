@@ -9,7 +9,7 @@ DONE - Implement Painting
 * fluid containers
 
 DONE - pause when test mode selected
-- fix node deleting
+DONE - fix node deleting
 
 - Ghosts are WAY TOO LAGGY (add a toggle at least)
 - medal menu doesn't work
