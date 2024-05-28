@@ -9,6 +9,7 @@ class_name SettingsMenu
 @onready var renderQuality: OptionButton = %RenderQuality
 @onready var fixPedalInput: CheckBox = %FixPedalInput
 @onready var compareAgainstBestLap: CheckBox = %CompareAgainstBestLap
+@onready var showGhostsToggle: CheckBox = %ShowGhostsToggle
 @onready var deadzoneSlider: HSlider = %DeadzoneSlider
 @onready var deadzoneSpinbox: SpinBox = %DeadzoneSpinbox
 @onready var smoothSteeringSlider: HSlider = %SmoothSteeringSlider
@@ -42,6 +43,7 @@ func _ready():
 
 	fixPedalInput.toggled.connect(onFixPedalInput_toggled)
 	compareAgainstBestLap.toggled.connect(onCompareAgainstBestLap_toggled)
+	showGhostsToggle.toggled.connect(onShowGhostsToggle_toggled)
 
 	# preciseInput.toggled.connect(onPreciseInput_toggled)
 	deadzoneSlider.value_changed.connect(deadzoneSlider_valueChanged)
@@ -63,6 +65,7 @@ func _ready():
 
 	fixPedalInput.button_pressed = GlobalProperties.FIX_PEDAL_INPUT
 	compareAgainstBestLap.button_pressed = GlobalProperties.COMPARE_AGAINST_BEST_LAP
+	showGhostsToggle.button_pressed = GlobalProperties.SHOW_GHOSTS_INGAME
 
 	deadzoneSlider.value = GlobalProperties.DEADZONE
 	deadzoneSpinbox.value = GlobalProperties.DEADZONE
@@ -98,6 +101,9 @@ func onFixPedalInput_toggled(fix: bool):
 
 func onCompareAgainstBestLap_toggled(compare: bool):
 	GlobalProperties.COMPARE_AGAINST_BEST_LAP = compare
+
+func onShowGhostsToggle_toggled(ghosts: bool):
+	GlobalProperties.SHOW_GHOSTS_INGAME = ghosts
 
 func deadzoneSlider_valueChanged(value: float):
 	deadzoneSpinbox.value = value

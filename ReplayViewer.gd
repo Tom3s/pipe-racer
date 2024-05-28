@@ -3,8 +3,12 @@ class_name ReplayViewer
 
 @onready var replayViewerUI: ReplayViewerUI = %ReplayViewerUI
 @onready var replayGhost: ReplayGhost = %ReplayGhost
-@onready var map: Map = %Map
+# @onready var map: Map = %Map
 @onready var freeCam: Camera3D = %FreeCam
+
+@onready var legacyMapScene: PackedScene = preload("res://MapScene.tscn")
+@onready var mapScene: PackedScene = preload("res://Editor/InteractiveMap.tscn")
+
 
 var camera: FollowingCamera
 
@@ -23,7 +27,30 @@ func setup(
 		var path = "user://replays/downloaded/" + replay
 		replayGhost.loadReplay(path, false, false)
 
-	map.loadMap("user://tracks/downloaded/" + mapId + ".json")
+	# map.loadMap("user://tracks/downloaded/" + mapId + ".json")
+
+	var map = mapScene.instantiate() as InteractiveMap
+	add_child(map)
+
+	var mapName: String = "user://tracks/downloaded/" + mapId + ".json"
+
+	var success = map.importTrack(mapName)
+	if !success:
+		print("[ReplayViewer.gd] Failed to load map: " + mapName)
+		print("[ReplayViewer.gd] Trying legacy format")
+		map.queue_free()
+
+		map = legacyMapScene.instantiate()
+		add_child(map)
+
+		# TODO: check if map exists locally, if not, download it
+		success = map.loadMap(mapName)
+		if !success:
+			print("[ReplayViewer.gd] Failed to load legacy format, exiting.")
+			exitPressed.emit()
+			return false
+
+	map.setIngame()
 
 	replayViewerUI.setup(replayGhost.getNrFrames(), replayGhost.getCar(0).playerName)
 
