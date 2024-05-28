@@ -1,5 +1,5 @@
 extends Node3D
-class_name EditorInputHandler
+class_name EditorInputHandlerOld
 
 var maxDistance: int = 2000
 

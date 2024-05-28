@@ -2,6 +2,11 @@
 extends Node3D
 class_name RoadNode
 
+static var idCounter: int = -1
+var id: int
+
+var meshGeneratorRefs: Array[RoadMeshGenerator] = []
+
 signal transformChanged()
 signal roadDataChanged()
 signal runoffDataChanged()
@@ -9,11 +14,36 @@ signal runoffDataChanged()
 var oldPos: Vector3 = Vector3.ZERO
 var oldRot: Vector3 = Vector3.ZERO
 
+enum RoadProfile {
+	FLAT,
+	BOWL,
+	SAUSAGE,
+	DOUBLE_BOWL,
+	DOUBLE_BUMP,
+	SHARP_BOWL,
+	SHARP_SAUSAGE,
+	VERY_BUMPY,
+	WHEEL_PATH
+}
+const profiles = [
+	preload("res://Editor/Road/Profiles/Flat.tres"),
+	preload("res://Editor/Road/Profiles/Bowl.tres"),
+	preload("res://Editor/Road/Profiles/Sausage.tres"),
+	preload("res://Editor/Road/Profiles/DoubleBowl.tres"),
+	preload("res://Editor/Road/Profiles/DoubleBump.tres"),
+	preload("res://Editor/Road/Profiles/SharpBowl.tres"),
+	preload("res://Editor/Road/Profiles/SharpSausage.tres"),
+	preload("res://Editor/Road/Profiles/VeryBumpy.tres"),
+	preload("res://Editor/Road/Profiles/WheelPath.tres")
+]
+
+var profileCurve: Curve = Curve.new()
+
 @export
-var profile: Curve = Curve.new():
+var profileType: RoadProfile = RoadProfile.FLAT:
 	set(newValue):
-		profile = newValue
-		# profile.bake()
+		profileType = newValue
+		profileCurve = profiles[profileType]
 		roadDataChanged.emit()
 
 @export_range(0, PrefabConstants.TRACK_WIDTH, PrefabConstants.GRID_SIZE)
@@ -49,10 +79,18 @@ var rightRunoff: float = 0.0:
 		runoffDataChanged.emit()
 
 
-# func _ready():
-	# profile.texture_mode = CurveTexture.TEXTURE_MODE_RED
-	# profile.width = 256
+func _ready():
+	set_physics_process(true)
 
+	profileCurve = profiles[profileType]
+	RoadNode.idCounter += 1
+	id = RoadNode.idCounter
+
+@export
+var isPreviewNode: bool = false:
+	set(newValue):
+		isPreviewNode = newValue
+		%Collider.use_collision = !isPreviewNode
 
 func _physics_process(_delta):
 	if oldPos != global_position:
@@ -70,7 +108,7 @@ func getStartVertices() -> PackedVector2Array:
 		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
 		var x = lerp(-width / 2, width / 2, t)
 
-		var y = profile.sample(t) * profileHeight
+		var y = profileCurve.sample(t) * profileHeight
 
 		vertices.push_back(Vector2(x, y))
 
@@ -80,7 +118,7 @@ func getOutsideVertices() -> PackedVector2Array:
 	var vertices: PackedVector2Array = []
 
 	vertices.push_back(
-		Vector2(-width / 2, profile.sample(0) * profileHeight)
+		Vector2(-width / 2, profileCurve.sample(0) * profileHeight)
 	)
 	
 	vertices.push_back(
@@ -98,7 +136,7 @@ func getOutsideVertices() -> PackedVector2Array:
 	)
 
 	vertices.push_back(
-		Vector2(width / 2, profile.sample(1) * profileHeight)
+		Vector2(width / 2, profileCurve.sample(1) * profileHeight)
 	)
 
 	return vertices
@@ -127,7 +165,7 @@ func getRightRunoffVertices() -> PackedVector2Array:
 		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
 		var x = lerp(-width / 2, -width / 2 - rightRunoff, t)
 
-		var y = profile.sample(0) * profileHeight
+		var y = profileCurve.sample(0) * profileHeight
 
 		vertices.push_back(Vector2(x, y))
 		if i == PrefabConstants.ROAD_WIDTH_SEGMENTS - 1:
@@ -153,7 +191,7 @@ func getLeftRunoffVertices() -> PackedVector2Array:
 		var t = float(i) / (PrefabConstants.ROAD_WIDTH_SEGMENTS - 1)
 		var x = lerp(width / 2, width / 2 + leftRunoff, t)
 
-		var y = profile.sample(1) * profileHeight
+		var y = profileCurve.sample(1) * profileHeight
 
 		vertices.push_back(Vector2(x, y))
 		if i == PrefabConstants.ROAD_WIDTH_SEGMENTS - 1:
@@ -177,8 +215,8 @@ func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> Pac
 	for i in wallProfile.size():
 		var vertex = wallProfile[i]
 		
-		var p1 = profile.sample(0) * profileHeight
-		var p2 = profile.sample(PrefabConstants.GRID_SIZE / width) * profileHeight
+		var p1 = profileCurve.sample(0) * profileHeight
+		var p2 = profileCurve.sample(PrefabConstants.GRID_SIZE / width) * profileHeight
 
 		var angle = atan2(p2 - p1, PrefabConstants.GRID_SIZE)
 
@@ -189,7 +227,7 @@ func getRightWallVertices(wallProfile: PackedVector2Array, height: float) -> Pac
 
 
 		var height1 = (p1 + p2) / 2
-		var height2 = profile.sample(PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
+		var height2 = profileCurve.sample(PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
 		vertex.y += min(height1, height2)
 
 		vertices.push_back(vertex)
@@ -203,8 +241,8 @@ func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> Pack
 		# flip profile
 		vertex.x = -vertex.x
 		
-		var p1 = profile.sample(1) * profileHeight
-		var p2 = profile.sample(1 - PrefabConstants.GRID_SIZE / width) * profileHeight
+		var p1 = profileCurve.sample(1) * profileHeight
+		var p2 = profileCurve.sample(1 - PrefabConstants.GRID_SIZE / width) * profileHeight
 
 		var angle = atan2(p1 - p2, PrefabConstants.GRID_SIZE)
 
@@ -215,7 +253,7 @@ func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> Pack
 
 
 		var height1 = (p1 + p2) / 2
-		var height2 = profile.sample(1 - PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
+		var height2 = profileCurve.sample(1 - PrefabConstants.GRID_SIZE / width/ 2) * profileHeight
 		vertex.y += min(height1, height2)
 
 		
@@ -225,22 +263,90 @@ func getLeftWallVertices(wallProfile: PackedVector2Array, height: float) -> Pack
 
 func getProperties() -> Dictionary:
 	return {
-		"profile": profile,
+		"profileType": profileType,
 		"profileHeight": profileHeight,
 		"width": width,
 		"cap": cap,
+
+		"leftRunoff": leftRunoff,
+		"rightRunoff": rightRunoff,
 
 		"position": global_position,
 		"rotation": global_rotation,
 	}
 
 func setProperties(properties: Dictionary):
-	profile = properties["profile"]
-	profileHeight = properties["profileHeight"]
-	width = properties["width"]
-	cap = properties["cap"]
+	if properties.has("profileType"):
+		profileType = properties["profileType"]
+	if properties.has("profileHeight"):
+		profileHeight = properties["profileHeight"]
+	if properties.has("width"):
+		width = properties["width"]
+	if properties.has("cap"):
+		cap = properties["cap"]
 
-	global_position = properties["position"]
-	global_rotation = properties["rotation"]
+	if properties.has("leftRunoff"):
+		leftRunoff = properties["leftRunoff"]
+	if properties.has("rightRunoff"):
+		rightRunoff = properties["rightRunoff"]
+
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
 
 	roadDataChanged.emit()
+
+@onready var roadNodeScene: PackedScene = preload("res://Editor/Road/RoadNode.tscn")
+
+func getCopy() -> RoadNode:
+	var newNode: RoadNode = roadNodeScene.instantiate()
+	newNode.setProperties(getProperties())
+
+	return newNode
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+		"id": id,
+	}
+
+	if profileType != RoadProfile.FLAT:
+		data["profileType"] = profileType
+	if profileHeight != PrefabConstants.GRID_SIZE:
+		data["profileHeight"] = profileHeight
+	
+	if width != PrefabConstants.TRACK_WIDTH:
+		data["width"] = width
+	
+	if leftRunoff != 0.0:
+		data["leftRunoff"] = leftRunoff
+	if rightRunoff != 0.0:
+		data["rightRunoff"] = rightRunoff
+	
+	
+	return data
+
+func importData(data: Dictionary):
+	global_position = str_to_var(data["position"])
+	global_rotation = str_to_var(data["rotation"])
+	id = data["id"]
+
+	if data.has("profileType"):
+		profileType = data["profileType"]
+	if data.has("profileHeight"):
+		profileHeight = data["profileHeight"]
+
+	if data.has("width"):
+		width = data["width"]
+
+	if data.has("leftRunoff"):
+		leftRunoff = data["leftRunoff"]
+	if data.has("rightRunoff"):
+		rightRunoff = data["rightRunoff"]
+
+func setIngame(ingame: bool = true) -> void:
+	%Collider.use_collision = !ingame
+	%Arrow.visible = !ingame

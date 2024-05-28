@@ -119,3 +119,9 @@ static func getHeightLerp(
 		# print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
 		return Vector3(0, p3.y, 0) 
 
+static func positionsMatch(
+	node_a: Node3D,
+	node_b: Node3D
+) -> bool:
+	return node_a.global_position == node_b.global_position \
+		&& node_a.global_rotation == node_b.global_rotation 

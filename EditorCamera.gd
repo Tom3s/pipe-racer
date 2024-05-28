@@ -1,4 +1,4 @@
-class_name EditorCamera
+class_name EditorCameraOld
 extends Camera3D
 
 # Modifier keys' speed multiplier

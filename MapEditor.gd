@@ -1,5 +1,5 @@
 extends Node3D
-class_name MapEditor
+class_name MapEditorOld
 
 signal editorExited()
 

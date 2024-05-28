@@ -1,10 +1,12 @@
 @tool
 extends Node3D
-class_name StartLine
+class_name ProceduralStartLine
 
 @onready var checkeredLine: MeshInstance3D = %CheckeredLine
 @onready var poles: MeshInstance3D = %Poles
 @onready var flag: MeshInstance3D = %Flag
+
+@onready var arrow: Node3D = %Arrow
 
 var poleMaterial: Material = preload("res://Track Props/StartLinePoleMaterial.tres")
 var flagMaterial: Material = preload("res://Track Props/StartLineFlagMaterial.tres")
@@ -290,3 +292,41 @@ func refreshFlag():
 
 	flag.mesh.surface_set_material(0, flagMaterial)
 
+func getProperties() -> Dictionary:
+	return {
+		"width": width,
+		"height": height,
+
+		"position": global_position,
+		"rotation": global_rotation,
+	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("width"):
+		width = properties["width"]
+	if properties.has("height"):
+		height = properties["height"]
+	
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
+
+func convertToPhysicsObject() -> void:
+	# if checkeredLine.get_child_count() > 0:
+	# 	for child in checkeredLine.get_children():
+	# 		child.queue_free()
+	# checkeredLine.create_trimesh_collision()
+	# checkeredLine.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+	if poles.get_child_count() > 0:
+		for child in poles.get_children():
+			child.queue_free()
+	poles.create_trimesh_collision()
+	poles.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+	if flag.get_child_count() > 0:
+		for child in flag.get_children():
+			child.queue_free()
+	flag.create_trimesh_collision()
+	flag.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)

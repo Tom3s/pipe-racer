@@ -112,7 +112,11 @@ func loadDownloadedTracks() -> void:
 			var fileHandler = FileAccess.open(path + file_name, FileAccess.READ)
 			var trackItem = JSON.parse_string(fileHandler.get_as_text())
 			# downloadedTrackListItems.append(file_name.replace(path, ""))
-			downloadedTracks.add_item(trackItem.trackName + " - by: " + trackItem.author)
+			if trackItem.format <= Map.CURRENT_FORMAT_VERSION:
+				downloadedTracks.add_item(trackItem.trackName + " - by: " + trackItem.author)
+			else:
+				downloadedTracks.add_item(trackItem.metadata.trackName + " - by: " + trackItem.metadata.author)
+
 			downloadedTrackListItems.append(file_name)
 			file_name = directory.get_next()
 
@@ -239,7 +243,11 @@ func onDownloadRequest_completed(_result: int, responseCode: int, _headers: Pack
 	selectButton.disabled = false
 
 	var json = JSON.parse_string(body.get_string_from_utf8())
-	showAlert("Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
+	if json.format <= Map.CURRENT_FORMAT_VERSION:
+		showAlert("Success", "Track Downloaded Successfully", "Track Name: " + json.trackName)
+	else:
+		showAlert("Success", "Track Downloaded Successfully", "Track Name: " + json.metadata.trackName)
+		
 
 @rpc("authority", "call_remote", "reliable")
 func downloadAndPlay(trackId: String):

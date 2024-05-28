@@ -2,6 +2,11 @@
 extends Node3D
 class_name PipeNode
 
+static var idCounter: int = -1
+var id: int
+
+var meshGeneratorRefs: Array[PipeMeshGenerator] = []
+
 signal dataChanged()
 
 var oldPos: Vector3 = Vector3.ZERO
@@ -14,7 +19,7 @@ var profile: float = PI:
 		dataChanged.emit()
 
 @export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 64, PrefabConstants.GRID_SIZE)
-var radius: int = PrefabConstants.GRID_SIZE:
+var radius: int = PrefabConstants.GRID_SIZE * 6:
 	set(newValue):
 		radius = newValue
 		dataChanged.emit()
@@ -26,10 +31,23 @@ var flat: bool = false:
 		dataChanged.emit()
 
 @export
-var cap: bool = false:
+var cap: bool = true:
 	set(newValue):
 		cap = newValue
 		dataChanged.emit()
+
+
+@export
+var isPreviewNode: bool = false:
+	set(newValue):
+		isPreviewNode = newValue
+		%Collider.use_collision = !isPreviewNode
+
+func _ready():
+	set_physics_process(true)
+
+	PipeNode.idCounter += 1
+	id = PipeNode.idCounter
 
 func _physics_process(_delta):
 	if oldPos != global_position:
@@ -104,6 +122,8 @@ func getProperties() -> Dictionary:
 	return {
 		"radius": radius,
 		"profile": profile,
+		"flat": flat,
+
 		"cap": cap,
 
 		"position": global_position,
@@ -111,11 +131,62 @@ func getProperties() -> Dictionary:
 	}
 
 func setProperties(properties: Dictionary):
-	radius = properties["radius"]
-	profile = properties["profile"]
-	cap = properties["cap"]
+	if properties.has("radius"):
+		radius = properties["radius"]
+	if properties.has("profile"):
+		profile = properties["profile"]
+	if properties.has("flat"):
+		flat = properties["flat"]
 
-	global_position = properties["position"]
-	global_rotation = properties["rotation"]
+	if properties.has("cap"):
+		cap = properties["cap"]
+
+	if properties.has("position"):
+		global_position = properties["position"]
+	if properties.has("rotation"):
+		global_rotation = properties["rotation"]
 
 	dataChanged.emit()
+
+@onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
+
+func getCopy() -> PipeNode:
+	var newNode: PipeNode = pipeNodeScene.instantiate()
+	newNode.setProperties(getProperties())
+
+	return newNode
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+		"id": id,
+	}
+
+	if radius != PrefabConstants.GRID_SIZE * 6:
+		data["radius"] = radius
+	if profile != PI:
+		data["profile"] = profile
+	
+	if flat:
+		data["flat"] = flat
+	
+	return data
+
+func importData(data: Dictionary):
+	global_position = str_to_var(data["position"])
+	global_rotation = str_to_var(data["rotation"])
+	id = data["id"]
+
+	if data.has("radius"):
+		radius = data["radius"]
+	if data.has("profile"):
+		profile = data["profile"]
+	
+	if data.has("flat"):
+		flat = data["flat"]
+
+func setIngame(ingame: bool = true) -> void:
+	%Collider.use_collision = !ingame
+	%Arrow.visible = !ingame

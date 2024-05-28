@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cqksavnq7whwm"]
 
-[ext_resource type="Script" path="res://Editor/FunctionalElements/StartLine.gd" id="1_ospjc"]
+[ext_resource type="Script" path="res://Editor/FunctionalElements/ProceduralStartLine.gd" id="1_ospjc"]
 [ext_resource type="Material" uid="uid://ddv8dlwow0hmj" path="res://Track Props/StartLineFlagMaterial.tres" id="2_13nbf"]
 [ext_resource type="Material" uid="uid://ch73rnpgcoq5w" path="res://Track Props/StartLinePoleMaterial.tres" id="2_b5unl"]
 [ext_resource type="Material" uid="uid://ifi2ag35ki56" path="res://Editor/FunctionalElements/CheckeredMaterial.tres" id="2_v406n"]

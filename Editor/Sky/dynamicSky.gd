@@ -160,3 +160,28 @@ func _update_shader() -> void :
 			"overwritten_time",
 			current_time
 		)
+
+func reset() -> void:
+	day_time = 10.0
+	cloudiness = 0.4
+	gloomyness = 0.0
+
+func getExportData() -> Dictionary:
+	var data: Dictionary = {}
+
+	if day_time != 10.0:
+		data["day_time"] = day_time
+	if cloudiness != 0.4:
+		data["cloudiness"] = cloudiness
+	if gloomyness != 0.0:
+		data["gloomyness"] = gloomyness
+	
+	return data
+
+func importData(data: Dictionary) -> void:
+	if data.has("day_time"):
+		day_time = data["day_time"]
+	if data.has("cloudiness"):
+		cloudiness = data["cloudiness"]
+	if data.has("gloomyness"):
+		gloomyness = data["gloomyness"]

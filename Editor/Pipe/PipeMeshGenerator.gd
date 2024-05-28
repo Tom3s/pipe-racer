@@ -103,8 +103,32 @@ class PipeVertexCollection:
 
 
 
-@onready var startNode: PipeNode = %Start
-@onready var endNode: PipeNode = %End
+@onready var startNode: PipeNode = %Start:
+	set(newNode):
+		startNode.dataChanged.disconnect(refreshMesh)
+
+		if get_node("Start") != null:
+			%Start.queue_free()
+
+		startNode = newNode
+
+		startNode.dataChanged.connect(refreshMesh)
+
+		newNode.meshGeneratorRefs.push_back(self)
+
+@onready var endNode: PipeNode = %End:
+	set(newNode):
+		endNode.dataChanged.disconnect(refreshMesh)
+
+		if get_node("End") != null:
+			%End.queue_free() 
+
+		endNode = newNode
+
+		endNode.dataChanged.connect(refreshMesh)
+
+		newNode.meshGeneratorRefs.push_back(self)
+
 
 @onready var pipeMesh: PhysicsSurface = %Mesh
 
@@ -283,13 +307,45 @@ func refreshMesh() -> void:
 
 
 
-func convertToPhysicsObject() -> void:
-	# startNode.visible = false
-	# endNode.visible = false
-	remove_child(startNode)
-	remove_child(endNode)
-	startNode.queue_free()
-	endNode.queue_free()
+func convertToPhysicsObject(clearNodes: bool = false) -> void:
+	if clearNodes:
+		remove_child(startNode)
+		startNode.queue_free()
+		remove_child(endNode)
+		endNode.queue_free()
 
+	if pipeMesh.get_child_count() > 0:
+		for child in pipeMesh.get_children():
+			child.queue_free()
 	pipeMesh.create_trimesh_collision()
 	pipeMesh.setPhysicsMaterial(surfaceType)
+
+func getProperties() -> Dictionary:
+	return {
+		"surfaceType": surfaceType
+	}
+
+func setProperties(properties: Dictionary) -> void:
+	if properties.has("surfaceType"):
+		surfaceType = properties["surfaceType"] as PhysicsSurface.SurfaceType
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"startNodeId": startNode.id,
+		"endNodeId": endNode.id,
+	}
+
+	if surfaceType != PhysicsSurface.SurfaceType.ROAD:
+		data["surfaceType"] = surfaceType
+	
+	return data
+
+func importData(data: Dictionary, nodeIds: Dictionary):
+	startNode = nodeIds[data["startNodeId"]]
+	endNode = nodeIds[data["endNodeId"]]
+
+	if data.has("surfaceType"):
+		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
+	
+	# refreshMesh()

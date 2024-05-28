@@ -1,7 +1,9 @@
 extends Node
 class_name EditorMapLoader
 
-var editorScene = preload("res://MapEditor.tscn")
+# var editorScene = preload("res://MapEditor.tscn")
+var editorScene = preload("res://Editor/MapEditor.tscn")
+
 var raceIngame = preload("res://GameScene.tscn")
 
 var mapLoader: MapLoader

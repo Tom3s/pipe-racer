@@ -8,13 +8,13 @@ var metalMaterial: Material = preload("res://Track Props/SimpleBlackMetal.tres")
 @onready var boardMesh: MeshInstance3D = %BoardMesh
 @onready var supportMesh: MeshInstance3D = %SupportMesh
 
-@export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 512, PrefabConstants.GRID_SIZE)
+@export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 512, PrefabConstants.GRID_SIZE / 2)
 var width: float = 80:
 	set(newValue):
 		width = newValue
 		refreshAll()
 
-@export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 512, PrefabConstants.GRID_SIZE)
+@export_range(PrefabConstants.GRID_SIZE, PrefabConstants.GRID_SIZE * 512, PrefabConstants.GRID_SIZE / 2)
 var height: float = 48:
 	set(newValue):
 		height = newValue 
@@ -35,17 +35,66 @@ var supportBottomHeight: float = -PrefabConstants.GRID_SIZE * 4:
 
 		refreshSupportMesh()
 
+@export
+var customTextureUrl: String = "":
+	set(newValue):
+		customTextureUrl = newValue
+		if !is_node_ready():
+			return
+		if customTextureUrl == "":
+			setTexture(TextureLoader.billboardTextures["PipeRacerLanguages"])
+			return
+
+		TextureLoader.loadOnlineTexture(customTextureUrl, setTexture)
+
+@export
+var textureName: String = "PipeRacerLanguages":
+	set(newValue):
+		textureName = newValue
+		if !is_node_ready():
+			return
+
+		if !TextureLoader.billboardTextures.has(textureName):
+			setTexture(TextureLoader.billboardTextures["PipeRacerLanguages"])
+			return
+
+		setTexture(TextureLoader.billboardTextures[textureName])
+
+var usingOnlineTexture: bool = false:
+	set(newValue):
+		usingOnlineTexture = newValue
+		if !is_node_ready():
+			return
+		if !TextureLoader.billboardTextures.has(textureName):
+			setTexture(TextureLoader.billboardTextures["PipeRacerLanguages"])
+			return
+
+		setTexture(TextureLoader.billboardTextures[textureName])
+
+		if usingOnlineTexture && customTextureUrl != "":
+			TextureLoader.loadOnlineTexture(customTextureUrl, setTexture)
 
 
 func _ready():
 	boardMaterial = boardMaterial.duplicate()
 	refreshAll()
 
+	if !TextureLoader.billboardTextures.has(textureName):
+		setTexture(TextureLoader.billboardTextures["PipeRacerLanguages"])
+		return
+
+	setTexture(TextureLoader.billboardTextures[textureName])
+
+	if usingOnlineTexture && customTextureUrl != "":
+		TextureLoader.loadOnlineTexture(customTextureUrl, setTexture)
+
+
 func refreshAll() -> void:
 	refreshBoardMesh()
 	refreshBackMesh()
 
 	refreshSupportMesh()
+
 
 var proceduralMesh: ProceduralMesh = ProceduralMesh.new()
 
@@ -366,3 +415,95 @@ func setSupportMaterial() -> void:
 
 func setTexture(texture: Texture) -> void:
 	boardMaterial.set_shader_parameter("Texture", texture)
+
+
+func getProperties() -> Dictionary:
+	var properties: Dictionary = {
+		"width": width,
+		"height": height,
+		
+		"support": support,
+		"supportBottomHeight": supportBottomHeight,
+		
+		"usingOnlineTexture": usingOnlineTexture,
+
+		"position": global_position,
+		"rotation": global_rotation,
+	}
+
+	if usingOnlineTexture:
+		properties["customTextureUrl"] = customTextureUrl
+	else:
+		properties["textureName"] = textureName
+	
+	return properties
+
+func setProperties(properties: Dictionary, setTransform: bool = true) -> void:
+	if properties.has("width"):
+		width = properties["width"]
+	if properties.has("height"):
+		height = properties["height"]
+	
+	if properties.has("support"):
+		support = properties["support"]
+	if properties.has("supportBottomHeight"):
+		supportBottomHeight = properties["supportBottomHeight"]
+	
+	if properties.has("usingOnlineTexture"):
+		usingOnlineTexture = properties["usingOnlineTexture"]
+	
+	if properties.has("customTextureUrl"):
+		customTextureUrl = properties["customTextureUrl"]
+	if properties.has("textureName"):
+		textureName = properties["textureName"]
+
+	if setTransform:
+		if properties.has("position"):
+			global_position = properties["position"]
+		if properties.has("rotation"):
+			global_rotation = properties["rotation"]
+
+# @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
+
+# func getCopy() -> LedBoard:
+# 	return ledBoardScene.instantiate() as LedBoard
+
+func convertToPhysicsObject() -> void:
+	if boardMesh.get_child_count() > 0:
+		for child in boardMesh.get_children():
+			child.queue_free()
+	boardMesh.create_trimesh_collision()
+	boardMesh.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+	if supportMesh.get_child_count() > 0:
+		for child in supportMesh.get_children():
+			child.queue_free()
+	supportMesh.create_trimesh_collision()
+	supportMesh.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+	}
+
+	if width != 80:
+		data["width"] = width
+	if height != 48:
+		data["height"] = height
+	
+	if support != true:
+		data["support"] = support
+	
+	if supportBottomHeight != -PrefabConstants.GRID_SIZE * 4:
+		data["supportBottomHeight"] = supportBottomHeight
+	
+	if usingOnlineTexture:
+		data["usingOnlineTexture"] = usingOnlineTexture
+		data["customTextureUrl"] = customTextureUrl
+	else:
+		data["textureName"] = textureName
+	
+	return data
+	
