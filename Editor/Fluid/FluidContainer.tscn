@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0dqwstkpwq68"]
+
+[ext_resource type="Script" path="res://Editor/Fluid/FluidContainer.gd" id="1_3iqpo"]
+[ext_resource type="Shader" uid="uid://cf6vnamijilnu" path="res://Tracks/Water.tres" id="1_c3voh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7wy77"]
+size = Vector3(92, 36, 88)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jkwjs"]
+size = Vector3(92, 36, 88)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l6368"]
+render_priority = 0
+shader = ExtResource("1_c3voh")
+shader_parameter/BaseColor = Color(0, 0.25098, 0.278431, 1)
+
+[node name="FluidContainer" type="Area3D"]
+collision_layer = 15
+collision_mask = 15
+script = ExtResource("1_3iqpo")
+density = 1000.0
+viscosity = null
+width = 60.0
+height = 28.0
+length = 96.0
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 14, 48)
+shape = SubResource("BoxShape3D_7wy77")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 14, 48)
+mesh = SubResource("BoxMesh_jkwjs")
+surface_material_override/0 = SubResource("ShaderMaterial_l6368")

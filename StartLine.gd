@@ -1,6 +1,6 @@
 extends Area3D
 
-class_name StartLine
+class_name StartLineOld
 
 enum StartLineState { 
 	START_LINE_STATE_WAITING,

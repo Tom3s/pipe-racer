@@ -132,6 +132,6 @@ func getPropObject(textureName: String = "", imageUrl: String = "") -> Node3D:
 	if textureName == "Custom":
 		dictKey = "PipeRacerLanguages"
 
-	prop.setTexture(BillboardTextureLoader.textures[dictKey], textureName, imageUrl)
+	prop.setTexture(TextureLoader.billboardTextures[dictKey], textureName, imageUrl)
 
 	return prop

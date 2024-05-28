@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ifi2ag35ki56"]
+
+[ext_resource type="Shader" uid="uid://1j6ymo4huha3" path="res://Editor/FunctionalElements/CheckeredShader.tres" id="1_hspj3"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_hspj3")
+shader_parameter/FrequencyX = 4
+shader_parameter/FrequencyY = 4
+shader_parameter/OffsetX = 0.0
+shader_parameter/OffsetY = 0.0

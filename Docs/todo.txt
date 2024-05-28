@@ -1,0 +1,19 @@
+DONE - Saving/Loading
+DONE - Test Driving
+DONE - Uploading/Playing
+DONE - Implement Painting
+
+
+* Light emitting deco
+* simple shape Deco
+* fluid containers
+
+DONE - pause when test mode selected
+DONE - fix node deleting
+
+DONE - Ghosts are WAY TOO LAGGY (add a toggle at least)
+DONE - medal menu doesn't work
+
+DOCUMENTATION ;-;
+
+replay viewer doesn't work (above 3 replays only?)

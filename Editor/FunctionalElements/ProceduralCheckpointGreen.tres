@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://borgvbiveegs5"]
+
+[ext_resource type="Shader" uid="uid://cq1srv2lm6tb6" path="res://Editor/FunctionalElements/ProceduralCheckpointShader.tres" id="1_yv06w"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_yv06w")
+shader_parameter/ring_color1 = Color(0, 1, 0, 1)
+shader_parameter/speed = 2.9
+shader_parameter/Direction = 3.9
+shader_parameter/segments = 3
+shader_parameter/offset = 1.0

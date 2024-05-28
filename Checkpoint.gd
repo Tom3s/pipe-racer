@@ -1,18 +1,18 @@
 extends Area3D
 class_name Checkpoint
 
-var collectedMaterial := preload("res://Track Props/CheckPointGreen.tres")
-var uncollectedMaterial := preload("res://Track Props/CheckPointRed.tres")
+# var collectedMaterial := preload("res://Track Props/CheckPointGreen.tres")
+# var uncollectedMaterial := preload("res://Track Props/CheckPointRed.tres")
 
-signal bodyEnteredCheckpoint(body, checkpoint: Node3D)
+
+signal bodyEnteredCheckpoint(body: Node3D, checkpoint: Node3D)
 
 var index: int = -1
 
-var checkpointModel: MeshInstance3D
+@onready var checkpointModel: Node3D = %ProceduralCheckpoint
 
 func _ready():
 	body_entered.connect(onBodyEntered)
-	checkpointModel = %CheckpointModel
 	
 	setUncollected()
 
@@ -92,10 +92,10 @@ func collect():
 	setCollected()
 
 func setCollected():
-	checkpointModel.set_surface_override_material(0, collectedMaterial)
+	checkpointModel.setCollected()
 
 func setUncollected():
-	checkpointModel.set_surface_override_material(0, uncollectedMaterial)
+	checkpointModel.setUncollected()
 
 func reset():
 	setUncollected()

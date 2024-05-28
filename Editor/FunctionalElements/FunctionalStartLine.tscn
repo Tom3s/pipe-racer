@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://no72ibkvifxu"]
+
+[ext_resource type="Script" path="res://Editor/FunctionalElements/FunctionalStartLine.gd" id="1_lueh0"]
+[ext_resource type="PackedScene" uid="uid://c2l244tfm5rgk" path="res://Editor/FunctionalElements/ProceduralStartLine.tscn" id="2_jscm7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xwuf7"]
+size = Vector3(64, 28, 4)
+
+[node name="FunctionalStartLine" type="Node3D"]
+script = ExtResource("1_lueh0")
+
+[node name="ProceduralStartLine" parent="." instance=ExtResource("2_jscm7")]
+unique_name_in_owner = true
+
+[node name="StartArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_mask = 2
+
+[node name="AreaCollisionShape" type="CollisionShape3D" parent="StartArea"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_xwuf7")

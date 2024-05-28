@@ -1,0 +1,2 @@
+- should mention the shader, how it works
+- mention everything, and go into detail for the features that are more interesting

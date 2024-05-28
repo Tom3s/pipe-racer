@@ -1,0 +1,182 @@
+[gd_scene load_steps=31 format=3 uid="uid://bbyihno4uk3q7"]
+
+[ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
+[ext_resource type="Script" path="res://Editor/MapEditor.gd" id="1_6ohh1"]
+[ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
+[ext_resource type="PackedScene" uid="uid://dl56mby6n2hiu" path="res://Editor/Road/RoadPropertiesUI.tscn" id="2_0cxd4"]
+[ext_resource type="PackedScene" uid="uid://jfef8x3bl627" path="res://Editor/InteractiveMap.tscn" id="2_xocc0"]
+[ext_resource type="PackedScene" uid="uid://c1hooek1vtv6b" path="res://Editor/Pipe/PipeNodePropertiesUI.tscn" id="3_6opws"]
+[ext_resource type="PackedScene" uid="uid://dbyuroab0s0la" path="res://Editor/EditorSidebarUI.tscn" id="3_k84hq"]
+[ext_resource type="PackedScene" uid="uid://cptpsvgtq4jgc" path="res://Editor/Road/RoadNode.tscn" id="3_nyxif"]
+[ext_resource type="Script" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
+[ext_resource type="PackedScene" uid="uid://bk861qiqtdvug" path="res://Editor/Pipe/PipePropertiesUI.tscn" id="4_dqsn7"]
+[ext_resource type="Script" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
+[ext_resource type="PackedScene" uid="uid://dxowojga3va4l" path="res://Editor/FunctionalElements/StartLinePropertiesUI.tscn" id="5_o7bqe"]
+[ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="6_2dxsa"]
+[ext_resource type="PackedScene" uid="uid://cpiqv66u8wuj4" path="res://Editor/FunctionalElements/CheckpointPropertiesUI.tscn" id="6_3b1bn"]
+[ext_resource type="PackedScene" uid="uid://4j0he4ousie" path="res://Editor/Pipe/PipeNode.tscn" id="6_07kp7"]
+[ext_resource type="PackedScene" uid="uid://dhr0gg8gqdduy" path="res://Editor/Props/LedBoardPropertiesUI.tscn" id="7_4pe1b"]
+[ext_resource type="PackedScene" uid="uid://csnsoov0ek0hk" path="res://Editor/Functional/PaintBrushUI.tscn" id="8_xxuga"]
+[ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="11_6xw54"]
+[ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
+[ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
+[ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="12_rc3nc"]
+[ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
+[ext_resource type="PackedScene" uid="uid://c2l244tfm5rgk" path="res://Editor/FunctionalElements/ProceduralStartLine.tscn" id="13_gh66r"]
+[ext_resource type="PackedScene" uid="uid://ca7tfdokimak7" path="res://Editor/Functional/Translator.tscn" id="14_ou2ir"]
+[ext_resource type="PackedScene" uid="uid://dv0q3xnvt43gx" path="res://Editor/FunctionalElements/FunctionalCheckpoint.tscn" id="15_d2ml2"]
+[ext_resource type="PackedScene" uid="uid://nqvakke8vhpn" path="res://Editor/Props/LedBoard.tscn" id="17_emavj"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="23_nr0wy"]
+[ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="24_hbp31"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
+size = Vector2(128, 128)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1wdtv"]
+render_priority = 0
+shader = ExtResource("11_m3iqd")
+shader_parameter/Grid = ExtResource("12_5xrek")
+
+[node name="MapEditor" type="Node3D"]
+script = ExtResource("1_6ohh1")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="RoadNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("1_2olcp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RoadPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("2_0cxd4")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PipeNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("3_6opws")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PipePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("4_dqsn7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="StartLinePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("5_o7bqe")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="CheckpointPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("6_3b1bn")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LedBoardPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("7_4pe1b")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PaintBrushUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("8_xxuga")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="EditorSidebarUI" parent="UI" instance=ExtResource("3_k84hq")]
+unique_name_in_owner = true
+
+[node name="SceneryEditorUI" parent="UI" instance=ExtResource("6_2dxsa")]
+unique_name_in_owner = true
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("11_6xw54")]
+unique_name_in_owner = true
+visible = false
+
+[node name="LevelSavedLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -152.2
+offset_top = 95.0
+offset_right = 152.2
+offset_bottom = 178.4
+grow_horizontal = 2
+theme = ExtResource("12_rc3nc")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 67
+text = "Level Saved!"
+
+[node name="EditorCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_nfa8o")
+
+[node name="InteractiveMap" parent="." instance=ExtResource("2_xocc0")]
+unique_name_in_owner = true
+
+[node name="PreviewElement" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
+unique_name_in_owner = true
+isPreviewNode = true
+
+[node name="PipeNode" parent="PreviewElement" instance=ExtResource("6_07kp7")]
+unique_name_in_owner = true
+isPreviewNode = true
+
+[node name="GridMesh" type="MeshInstance3D" parent="PreviewElement"]
+unique_name_in_owner = true
+mesh = SubResource("PlaneMesh_4qril")
+surface_material_override/0 = SubResource("ShaderMaterial_1wdtv")
+
+[node name="StartLine" parent="PreviewElement" instance=ExtResource("13_gh66r")]
+unique_name_in_owner = true
+
+[node name="Checkpoint" parent="PreviewElement" instance=ExtResource("15_d2ml2")]
+unique_name_in_owner = true
+isPreview = true
+
+[node name="LedBoard" parent="PreviewElement" instance=ExtResource("17_emavj")]
+unique_name_in_owner = true
+
+[node name="Gizmos" type="Node3D" parent="."]
+
+[node name="Rotator" parent="Gizmos" instance=ExtResource("13_2gn6g")]
+unique_name_in_owner = true
+
+[node name="Translator" parent="Gizmos" instance=ExtResource("14_ou2ir")]
+unique_name_in_owner = true
+
+[node name="Player" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CarController" parent="Player" instance=ExtResource("23_nr0wy")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1000, 0)
+
+[node name="CarPreview" parent="Player" instance=ExtResource("24_hbp31")]
+unique_name_in_owner = true
+
+[node name="CarPath" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="EditorInputHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_yc3pc")
+
+[node name="EditorEventListener" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_miouu")

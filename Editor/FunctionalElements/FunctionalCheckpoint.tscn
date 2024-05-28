@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://dv0q3xnvt43gx"]
+
+[ext_resource type="Script" path="res://Editor/FunctionalElements/FunctionalCheckpoint.gd" id="1_d50af"]
+[ext_resource type="PackedScene" uid="uid://150sqwiia6bp" path="res://Editor/FunctionalElements/ProceduralCheckpoint.tscn" id="2_3dg5f"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ludve"]
+radius = 33.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_45rco"]
+cull_mode = 1
+albedo_color = Color(0.309804, 1, 0.494118, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5urwe"]
+radius = 2.0
+height = 4.0
+
+[node name="FunctionalCheckpoint" type="Node3D"]
+script = ExtResource("1_d50af")
+
+[node name="ProceduralCheckpoint" parent="." instance=ExtResource("2_3dg5f")]
+unique_name_in_owner = true
+
+[node name="CheckpointArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_mask = 2
+
+[node name="AreaCollisionShape" type="CollisionShape3D" parent="CheckpointArea"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_ludve")
+
+[node name="Arrow" type="CSGPolygon3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(3, 0, 0, 0, -1.31134e-07, -3, 0, 3, -1.31134e-07, 0, 12, 0)
+polygon = PackedVector2Array(0, -5, -1.5, -3, -0.4, -3, -0.7, 5, 0, 5)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 12
+smooth_faces = true
+material = SubResource("StandardMaterial3D_45rco")
+
+[node name="CenterPoint" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("SphereMesh_5urwe")

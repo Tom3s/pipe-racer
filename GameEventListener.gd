@@ -15,7 +15,7 @@ var raceStats: Dictionary = {}
 var localCameras: Dictionary = {}
 
 # node in scene
-var map: Map:
+var map:
 	set(newMap):
 		map = newMap
 		for checkpoint in map.getCheckpoints():
@@ -311,7 +311,7 @@ func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
 		leaderboardUI.visible = false
 		validationFeedbackUI.visible = false
 
-func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Checkpoint):
+func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Node3D):
 	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
 
 	var alreadyCollected = car.state.collectCheckpoint(checkpoint.index)
@@ -339,7 +339,7 @@ func broadcastPlacement(carName: String, placement: int):
 			broadcastPlacement(player.name, player.state.placement)
 			return
 
-func onStart_bodyEnteredStart(car: CarController, start: Start):
+func onStart_bodyEnteredStart(car: CarController, start: Node3D):
 	if car.state.hasCollectedAllCheckpoints():
 		car.setRespawnPositionFromDictionary(start.getStartPosition(car.playerIndex, players.get_child_count()))
 		if car.networkId == Network.userId:
