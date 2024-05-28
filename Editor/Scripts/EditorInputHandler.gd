@@ -35,6 +35,8 @@ var scrollCooldownTime: float = 0.05
 
 var editorMode: EditorEventListener.EditorMode = EditorEventListener.EditorMode.BUILD
 
+var carTestDriving: bool = false
+
 var paused: bool = false
 
 func _ready():
@@ -45,7 +47,7 @@ func _physics_process(delta):
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("p1_pause"):
-		if editorMode == EditorEventListener.EditorMode.TEST:
+		if editorMode == EditorEventListener.EditorMode.TEST && carTestDriving:
 			stopTestingPressed.emit()
 		else:
 			pausePressed.emit(!paused)

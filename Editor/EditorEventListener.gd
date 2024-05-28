@@ -541,6 +541,7 @@ func connectSignals():
 
 		if mode == EditorMode.TEST:
 			currentTestMode = TestMode.PLACING
+			inputHandler.carTestDriving = false
 			carPreview.visible = true
 
 		if mode == EditorMode.BUILD:
@@ -1268,6 +1269,7 @@ func startTesting(
 	rot: Vector3
 ) -> void:
 	currentTestMode = TestMode.DRIVING
+	inputHandler.carTestDriving = true
 
 	originalRespawn = {
 		"position": pos,
@@ -1306,6 +1308,7 @@ func startTesting(
 
 func stopTesting() -> void:
 	currentTestMode = TestMode.PLACING
+	inputHandler.carTestDriving = false
 
 	editorSidebarUI.visible = true
 
