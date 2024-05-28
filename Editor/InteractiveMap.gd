@@ -487,6 +487,15 @@ func importTrack(fileName: String) -> bool:
 	trackName = trackData["metadata"]["trackName"]
 	lapCount = trackData["metadata"]["lapCount"]
 
+	if trackData["metadata"].has("validated"):
+		validated = trackData["metadata"]["validated"]
+		bestTotalTime = trackData["metadata"]["bestTotalTime"]
+		bestTotalReplay = trackData["metadata"]["bestTotalReplay"]
+		bestLapTime = trackData["metadata"]["bestLapTime"]
+		bestLapReplay = trackData["metadata"]["bestLapReplay"]
+	else:
+		unvalidate()
+
 	if !trackData.has("start"):
 		print("[InteractiveMap.gd] No start line found in the file")
 		# return false
