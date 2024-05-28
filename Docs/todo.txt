@@ -11,9 +11,9 @@ DONE - Implement Painting
 DONE - pause when test mode selected
 DONE - fix node deleting
 
-- Ghosts are WAY TOO LAGGY (add a toggle at least)
-- medal menu doesn't work
+DONE - Ghosts are WAY TOO LAGGY (add a toggle at least)
+DONE - medal menu doesn't work
 
 DOCUMENTATION ;-;
 
-- replay viewer doesn't work
+replay viewer doesn't work (above 3 replays only?)
