@@ -123,6 +123,16 @@ var COMPARE_AGAINST_BEST_LAP: bool = true:
 		return COMPARE_AGAINST_BEST_LAP
 
 @export
+var SHOW_GHOSTS_INGAME: bool = true:
+	set(newGhostToggle):
+		SHOW_GHOSTS_INGAME = newGhostToggle
+		saveToFile()
+	get:
+		return SHOW_GHOSTS_INGAME
+
+signal showGhostsIngameChanged(newStatus: bool)
+
+@export
 var MOUSE_SENSITIVITY: float = 20.0:
 	set(newSensitivity):
 		MOUSE_SENSITIVITY = newSensitivity
@@ -228,6 +238,7 @@ func saveToFile() -> void:
 		"KB_CONTROL_OVERWRITES": KB_CONTROL_OVERWRITES,
 		"CONTROL_DEVICE_OVERWRITES": CONTROL_DEVICE_OVERWRITES,
 		"COMPARE_AGAINST_BEST_LAP": COMPARE_AGAINST_BEST_LAP,
+		"SHOW_GHOSTS_INGAME": SHOW_GHOSTS_INGAME,
 		"MOUSE_SENSITIVITY": MOUSE_SENSITIVITY,
 	}
 
@@ -272,6 +283,8 @@ func loadFromFile() -> void:
 			CONTROL_DEVICE_OVERWRITES = jsonData["CONTROL_DEVICE_OVERWRITES"]
 		if jsonData.has("COMPARE_AGAINST_BEST_LAP"):
 			COMPARE_AGAINST_BEST_LAP = bool(jsonData["COMPARE_AGAINST_BEST_LAP"])
+		if jsonData.has("SHOW_GHOSTS_INGAME"):
+			SHOW_GHOSTS_INGAME = bool(jsonData["SHOW_GHOSTS_INGAME"])
 		if jsonData.has("MOUSE_SENSITIVITY"):
 			MOUSE_SENSITIVITY = float(jsonData["MOUSE_SENSITIVITY"])
 	else:

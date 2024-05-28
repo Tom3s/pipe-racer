@@ -18,6 +18,8 @@ var _nrCars: int = 0
 var bestGhostTime: int = 0
 var bestGhostSplits: Array = []
 
+var inReplayViewer: bool = false
+
 # signal loadedGhost(time: int, splits: Array)
 
 func _ready():
@@ -30,11 +32,17 @@ var currentIndex: int = 0
 var currentFraction: float = 0.0
 func _physics_process(_delta):
 	if playing:
+		if !inReplayViewer && !GlobalProperties.SHOW_GHOSTS_INGAME:
+			if frame < getNrFrames() - 1:
+				frame += timeScale
+			return
+
 		if frameData.size() <= 0:
 			return
 		# if frame < frameData[0].size() - 1:
 		currentIndex = int(frame)
 		currentFraction = frame - currentIndex
+
 
 		for i in get_child_count():
 			if frameData.size() <= currentIndex + 2:
@@ -54,6 +62,8 @@ func _physics_process(_delta):
 		if frame < getNrFrames() - 1:
 			frame += timeScale
 	else:
+		if !inReplayViewer && !GlobalProperties.SHOW_GHOSTS_INGAME:
+			return
 		for i in get_child_count():
 			var carController = get_child(i)
 			
@@ -77,15 +87,16 @@ func _physics_process(_delta):
 		# 	frame = 0
 
 func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = true):
+	inReplayViewer = !ghostMode
 	# var path = "user://replays/" + fileName
 	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
 	if fileHandler == null:
-		print("Error opening replay file ", fileName)
+		print("[ReplayGhost.gd] Error opening replay file ", fileName)
 		return
 	
 	var formatVesion = fileHandler.get_8()
 	if formatVesion != ReplayManager.REPLAY_FORMAT_VERSION:
-		print("Error reading replay file (wrong format version) ", fileName)
+		print("[ReplayGhost.gd] Error reading replay file (wrong format version) ", fileName)
 		return
 
 	var mapMetadata = fileHandler.get_csv_line()
@@ -101,7 +112,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		_time = fileHandler.get_32()
 		
 	if clearReplays:
-		print("=================== Clearing replays ===================")
+		print("[ReplayGhost.gd] =================== Clearing replays ===================")
 		self.clearReplays()
 
 	for i in _nrCars:
@@ -119,6 +130,15 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		carController.frameColor = playerColor
 		if ghostMode:
 			carController.setGhostMode(true)
+		
+		GlobalProperties.showGhostsIngameChanged.connect(func(showGhosts: bool):
+			if showGhosts:
+				carController.visible = true
+				carController.process_mode = Node.PROCESS_MODE_INHERIT
+			else:
+				carController.visible = false
+				carController.process_mode = Node.PROCESS_MODE_DISABLED
+		)
 				
 	var nrFrames = 0
 	for i in _nrCars:
@@ -129,25 +149,25 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	var _splitData = []
 	for i in _nrCars:
 		if fileHandler.get_line() != "SPLIT_BEGIN":
-			print("Error reading replay file (no SPLIT_BEGIN) ", fileName, " index ", i)
+			print("[ReplayGhost.gd] Error reading replay file (no SPLIT_BEGIN) ", fileName, " index ", i)
 			return
 		_splitData.append([])
 		for ii in _nrLaps:
 			if fileHandler.get_line() != "LAP_BEGIN":
-				print("Error reading replay file (no LAP_BEGIN) ", fileName, " index ", i, " lap ", ii)
+				print("[ReplayGhost.gd] Error reading replay file (no LAP_BEGIN) ", fileName, " index ", i, " lap ", ii)
 				return
 			_splitData.back().append([])
 			for iii in _nrCheckpoints + 1:
 				_splitData.back().back().append(fileHandler.get_32())
 			if fileHandler.get_line() != "LAP_END":
-				print("Error reading replay file (no LAP_END) ", fileName, " index ", i, " lap ", ii)
+				print("[ReplayGhost.gd] Error reading replay file (no LAP_END) ", fileName, " index ", i, " lap ", ii)
 				return
 		if fileHandler.get_line() != "SPLIT_END":
-			print("Error reading replay file (no SPLIT_END) ", fileName, " index ", i)
+			print("[ReplayGhost.gd] Error reading replay file (no SPLIT_END) ", fileName, " index ", i)
 			return
 
 
-	print("Split data: ", _splitData)
+	print("[ReplayGhost.gd] Split data: ", _splitData)
 
 	# loadedGhost.emit(_time, _splitData)
 	if _time < bestGhostTime or bestGhostTime == 0:
@@ -158,11 +178,11 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	var rot: Vector3 = Vector3.ZERO
 	
 	
-	# print("Loading replay: ", frameData)
+	# print("[ReplayGhost.gd] Loading replay: ", frameData)
 
 	for carIndex in _nrCars:
 		if fileHandler.get_line() != "REPLAY_BEGIN":
-			print("Error reading replay file (no REPLAY_BEGIN) ", fileName, " index ", carIndex)
+			print("[ReplayGhost.gd] Error reading replay file (no REPLAY_BEGIN) ", fileName, " index ", carIndex)
 			return
 		# frameData.append([])
 		for i in nrFrames:
@@ -185,7 +205,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 			frameData[i].append([pos, rot])
 
 		if fileHandler.get_line() != "REPLAY_END":
-			print("Error reading replay file (no REPLAY_END) ", fileName, " index ", carIndex)
+			print("[ReplayGhost.gd] Error reading replay file (no REPLAY_END) ", fileName, " index ", carIndex)
 			return
 	
 	# adjust for shorter replays:
@@ -193,13 +213,19 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	for data in frameData:
 		if data.size() > maxDataSize:
 			maxDataSize = data.size()
-		while data.size() < maxDataSize:
-			data.append([null, null])			
+		# while data.size() < maxDataSize:
+		# 	data.append([null, null])	
+		if data.size() < maxDataSize:
+			# print("ReplayGhost.gd] Adjusting for max data size: ", maxDataSize - data.size())
+			for i in (maxDataSize - data.size()):
+				data.append([null, null])
+			
+			assert(data.size() == maxDataSize)
 
 	
 	fileHandler.close()
-	print("Replay loaded: ", fileName)
-	print("Frames: ", frameData.back().size())
+	print("[ReplayGhost.gd] Replay loaded: ", fileName)
+	print("[ReplayGhost.gd] Frames: ", frameData.size())
 
 func stopReplay():
 	playing = false
