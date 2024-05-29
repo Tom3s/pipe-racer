@@ -17,3 +17,7 @@ DONE - medal menu doesn't work
 DOCUMENTATION ;-;
 
 replay viewer doesn't work (above 3 replays only?)
+
+BUGS:
+- painting doesn't change surface for physics
+- add randomizer button to usernames

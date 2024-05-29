@@ -10,6 +10,7 @@ class_name PlayerPanel
 @onready var asGuestButton: Button = %AsGuestButton
 @onready var logoutButton: Button = %LogoutButton
 @onready var randomColorButton: Button = %RandomColorButton
+@onready var randomUsernameButton: Button = %RandomUsernameButton
 
 @onready var profilePicture: TextureRect = %ProfilePicture
 
@@ -37,6 +38,7 @@ func connectSignals():
 	asGuestButton.pressed.connect(asGuestButton_pressed)
 	logoutButton.pressed.connect(onLogoutButton_pressed)
 	randomColorButton.pressed.connect(onRandomColorButton_pressed)
+	randomUsernameButton.pressed.connect(onRandomUsernameButton_pressed)
 
 
 
@@ -149,6 +151,11 @@ func onRandomColorButton_pressed():
 	# colorPicker.color_changed.emit(colorPicker.color)
 	if isMainPlayer:
 		GlobalProperties.PLAYER_COLOR = colorPicker.color
+
+func onRandomUsernameButton_pressed():
+	username.text = UsernameGenerator.getUsername()
+	if isMainPlayer:
+		GlobalProperties.PLAYER_NAME = username.text
 
 func setMainPlayerData():
 	# while !is_node_ready():
