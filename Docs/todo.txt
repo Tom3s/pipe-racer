@@ -21,3 +21,4 @@ replay viewer doesn't work (above 3 replays only?)
 BUGS:
 - painting doesn't change surface for physics
 - add randomizer button to usernames
+- legacy start line is misaligned, and the checkered line isn't visible
