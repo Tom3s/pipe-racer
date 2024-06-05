@@ -366,11 +366,3 @@ spot_range = 256.0
 spot_attenuation = 0.37893
 spot_angle = 35.0
 spot_angle_attenuation = 0.659754
-
-[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
-update_mode = 1
-size = Vector3(64, 32, 64)
-origin_offset = Vector3(0, -11, 0)
-ambient_mode = 0

@@ -730,7 +730,15 @@ func setGhostMode(ghostMode: bool):
 		for tire in tires:
 			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
 		%HeadLight.visible = false
-		%ReflectionProbe.update_mode = ReflectionProbe.UPDATE_ONCE
+		# %ReflectionProbe.update_mode = ReflectionProbe.UPDATE_ONCE
+
+# [node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+# unique_name_in_owner = true
+# transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
+# update_mode = 1
+# size = Vector3(64, 32, 64)
+# origin_offset = Vector3(0, -11, 0)
+# ambient_mode = 0
 
 func setLabelVisibility(visible: bool):
 	%PlayernameLabel.visible = visible

@@ -25,6 +25,8 @@ func setup(
 
 ) -> bool:
 	# load map
+	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED 
+
 
 	# try loading new format
 	map = mapScene.instantiate() as InteractiveMap
@@ -42,6 +44,8 @@ func setup(
 		# TODO: check if map exists locally, if not, download it
 		success = map.loadMap(mapName)
 		if !success:
+			get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+
 			print("[GameScene.gd] Failed to load legacy format, exiting.")
 			exitPressed.emit()
 			return false

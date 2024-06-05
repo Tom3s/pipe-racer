@@ -452,6 +452,8 @@ func onPauseMenu_exitPressed():
 		else:
 			rpc_id(1, "clientExited", Network.userId)
 	
+	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	
 	get_parent().exitPressed.emit()
 
 func setSplitsToReplay(time: int, splits: Array):

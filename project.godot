@@ -526,6 +526,7 @@ common/physics_ticks_per_second=120
 common/physics_jitter_fix=0.0
 3d/physics_engine="JoltPhysics3D"
 3d/default_gravity=30.0
+jolt_3d/limits/max_linear_velocity=750.0
 
 [rendering]
 
