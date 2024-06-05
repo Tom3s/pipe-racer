@@ -729,6 +729,8 @@ func setGhostMode(ghostMode: bool):
 		%CarModel.setGhostMode(frameColor)
 		for tire in tires:
 			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
+		%HeadLight.visible = false
+		%ReflectionProbe.update_mode = ReflectionProbe.UPDATE_ONCE
 
 func setLabelVisibility(visible: bool):
 	%PlayernameLabel.visible = visible
