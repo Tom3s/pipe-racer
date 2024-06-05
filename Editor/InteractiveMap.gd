@@ -343,6 +343,7 @@ func clearMap():
 # save / load
 
 func exportTrack(autosave: bool = false) -> bool:
+	unvalidate()
 	var trackData = {
 		"format": CURRENT_FORMAT_VERSION,
 		"metadata": {
@@ -520,6 +521,8 @@ func importTrack(fileName: String) -> bool:
 				checkpointData
 			)
 			checkpoint.index = checkpointIndex
+			# checkpoint.setCollisionShape()
+			# print("Checkpoint ", checkpointIndex, " collision size: ", checkpoint.areaCollisionShape.shape.radius) 
 			checkpointIndex += 1
 	
 	if trackData.has("terrain"):
