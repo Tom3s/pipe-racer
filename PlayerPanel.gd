@@ -153,6 +153,8 @@ func onRandomColorButton_pressed():
 		GlobalProperties.PLAYER_COLOR = colorPicker.color
 
 func onRandomUsernameButton_pressed():
+	if !username.editable:
+		return
 	username.text = UsernameGenerator.getUsername()
 	if isMainPlayer:
 		GlobalProperties.PLAYER_NAME = username.text
@@ -215,6 +217,8 @@ func setButtonsLoggingIn():
 	username.editable = false
 	password.editable = false
 
+	randomUsernameButton.visible = false
+
 	# guestLabel.visible = false
 	# guestTickBox.visible = false
 
@@ -225,6 +229,7 @@ func setButtonsLoggedIn():
 	username.editable = false
 	password.editable = false
 	password.visible = false
+	randomUsernameButton.visible = false
 
 func setButtonsLoggedOut():
 	loginButton.disabled = false
@@ -240,4 +245,6 @@ func setButtonsLoggedOut():
 	username.editable = true
 	password.editable = true
 	password.visible = true
+
+	randomUsernameButton.visible = true
 
