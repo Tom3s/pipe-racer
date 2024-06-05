@@ -401,8 +401,10 @@ func connectSignals():
 
 			if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
 				collidedObject.surfaceType = currentPaintBrushSurface
+				collidedObject.convertToPhysicsObject()
 			elif ClassFunctions.getClassName(collidedObject) == "PipeMeshGenerator":
 				collidedObject.surfaceType = currentPaintBrushSurface
+				collidedObject.convertToPhysicsObject()
 
 		elif currentEditorMode == EditorMode.TEST:
 			var collidedObject = screenPointToRay()

@@ -19,6 +19,8 @@ DOCUMENTATION ;-;
 replay viewer doesn't work (above 3 replays only?)
 
 BUGS:
-- painting doesn't change surface for physics
-- add randomizer button to usernames
+DONE - add randomizer button to usernames
+DONE - painting doesn't change surface for physics
 - legacy start line is misaligned, and the checkered line isn't visible
+- checkpoints have incorrect hitbox
+- *validation stays true after editing tracks
