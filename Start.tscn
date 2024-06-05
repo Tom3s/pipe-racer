@@ -10,7 +10,6 @@ size = Vector3(5.1, 40, 64)
 script = ExtResource("1_3bpir")
 
 [node name="FINISHLINE" parent="." instance=ExtResource("1_f37g8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 
 [node name="StartLine" type="Area3D" parent="."]
 unique_name_in_owner = true

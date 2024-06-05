@@ -510,6 +510,7 @@ func spawnPlayer(
 	var car: CarController = Car.instantiate()
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
+	print("[CarController.gd] Car.name: ", car.name)
 	car.playerName = data.PLAYER_NAME
 	car.playerId = data.PLAYER_ID
 	# car.playerIndex = players.get_child_count()
