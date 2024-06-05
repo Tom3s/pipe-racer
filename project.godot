@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Pipe Racer"
+config/version="1.3.1"
 config/tags=PackedStringArray("real")
 run/main_scene="res://Menu/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
