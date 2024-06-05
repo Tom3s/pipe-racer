@@ -21,6 +21,7 @@ replay viewer doesn't work (above 3 replays only?)
 BUGS:
 DONE - add randomizer button to usernames
 DONE - painting doesn't change surface for physics
-- legacy start line is misaligned, and the checkered line isn't visible
+DONE - legacy start line is misaligned, and the checkered line isn't visible
+- username is changable when logged in
 - checkpoints have incorrect hitbox
 - *validation stays true after editing tracks
