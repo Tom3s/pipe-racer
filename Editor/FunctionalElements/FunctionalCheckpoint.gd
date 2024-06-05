@@ -33,22 +33,24 @@ var isPreview: bool = false:
 @onready var areaCollisionShape: CollisionShape3D = %AreaCollisionShape
 
 func setCollisionShape():
-	var cylinderShape = areaCollisionShape.shape as CylinderShape3D
+	areaCollisionShape.shape = CylinderShape3D.new()
+	var cylinderShape: CylinderShape3D = areaCollisionShape.shape as CylinderShape3D
 
 	cylinderShape.radius = ringRadius + 1
 	areaCollisionShape.position = Vector3.ZERO
 	areaCollisionShape.rotation = Vector3(deg_to_rad(90), 0, 0)
 
+
 signal bodyEnteredCheckpoint(body: Node3D, checkpoint: Node3D)
 
 func _ready():
-	%CheckpointArea.body_entered.connect(onBodyEntered)
 	isPreview = isPreview	
 
 	proceduralCheckpoint.ringWidth = ringWidth
 	proceduralCheckpoint.ringRadius = ringRadius
 
 	setCollisionShape()
+	%CheckpointArea.body_entered.connect(onBodyEntered)
 
 func onBodyEntered(body):
 	print("[Checkpoint.gd] Body entered checkpoint: ", body)

@@ -191,32 +191,12 @@ focus_next = NodePath("../../HBoxContainer2/Password")
 theme_override_fonts/font = SubResource("FontVariation_673kc")
 placeholder_text = "Username"
 
-[node name="VSeparator" type="Control" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="ColorPicker" type="ColorPickerButton" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_a4eyt")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_q7yjj")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_vbtuv")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_3wu5m")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yjyrh")
-color = Color(1, 1, 1, 1)
-edit_alpha = false
-
-[node name="Control" type="Control" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
-
-[node name="RandomColorButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="RandomUsernameButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 10
-tooltip_text = "Randomize Car Color"
+tooltip_text = "Generate Random Username"
 icon = ExtResource("4_ma6sb")
 icon_alignment = 1
 expand_icon = true
@@ -229,10 +209,40 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-focus_next = NodePath("../../HBoxContainer/ColorPicker")
+focus_next = NodePath("../ColorPicker")
 theme_override_fonts/font = ExtResource("7_ikgoe")
 placeholder_text = "Password"
 secret = true
+
+[node name="VSeparator" type="Control" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="ColorPicker" type="ColorPickerButton" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a4eyt")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q7yjj")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vbtuv")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_3wu5m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yjyrh")
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="Control" type="Control" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="RandomColorButton" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Randomize Car Color"
+icon = ExtResource("4_ma6sb")
+icon_alignment = 1
+expand_icon = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
 layout_mode = 2

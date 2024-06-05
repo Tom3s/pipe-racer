@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://dadg354a8rg6r"]
+[gd_scene load_steps=3 format=3 uid="uid://dadg354a8rg6r"]
 
 [ext_resource type="Script" path="res://playground.gd" id="1_a7mpm"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="2_6d6y5"]
 
-[node name="Node" type="Node"]
+[node name="Node" type="Node3D"]
 script = ExtResource("1_a7mpm")
+
+[node name="CarController" parent="." instance=ExtResource("2_6d6y5")]
+
+[node name="CarController2" parent="." instance=ExtResource("2_6d6y5")]
+
+[node name="CarController3" parent="." instance=ExtResource("2_6d6y5")]

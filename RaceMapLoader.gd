@@ -59,6 +59,8 @@ func onOnlineTrackContainer_backPressed():
 	
 
 func onMapOverviewMenu_trackSelected(trackName: String):
+	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED 
+	# get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	raceNode = raceIngame.instantiate()
 	add_child(raceNode)
 	raceNode.exitPressed.connect(onRace_exited)
@@ -74,6 +76,7 @@ func onMapOverviewMenu_trackSelected(trackName: String):
 		mapOverviewMenu.personalBestLap,
 	)
 	if !success:
+		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 		AlertManager.showAlert(
 			self,
 			"Error loading map",
@@ -93,6 +96,7 @@ func onPlayerSelectorMenu_backPressed():
 	backPressed.emit()
 
 func onRace_exited():
+	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	raceNode.queue_free()
 	mapOverviewMenu.refreshMenu()
 	mapOverviewMenu.animateIn()

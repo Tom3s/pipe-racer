@@ -126,6 +126,7 @@ var COMPARE_AGAINST_BEST_LAP: bool = true:
 var SHOW_GHOSTS_INGAME: bool = true:
 	set(newGhostToggle):
 		SHOW_GHOSTS_INGAME = newGhostToggle
+		showGhostsIngameChanged.emit(newGhostToggle)
 		saveToFile()
 	get:
 		return SHOW_GHOSTS_INGAME

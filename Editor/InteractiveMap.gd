@@ -342,7 +342,9 @@ func clearMap():
 
 # save / load
 
-func exportTrack(autosave: bool = false) -> bool:
+func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
+	if resetValidate:
+		unvalidate()
 	var trackData = {
 		"format": CURRENT_FORMAT_VERSION,
 		"metadata": {
@@ -520,6 +522,8 @@ func importTrack(fileName: String) -> bool:
 				checkpointData
 			)
 			checkpoint.index = checkpointIndex
+			# checkpoint.setCollisionShape()
+			# print("Checkpoint ", checkpointIndex, " collision size: ", checkpoint.areaCollisionShape.shape.radius) 
 			checkpointIndex += 1
 	
 	if trackData.has("terrain"):
@@ -600,8 +604,8 @@ func setNewValidationTime(totalTime: int, bestLap: int, replay: String):
 	if bestTotalTime == -1 || totalTime < bestTotalTime:
 		bestTotalTime = totalTime
 		bestTotalReplay = replay
-		exportTrack()
+		exportTrack(false, false)
 	if bestLapTime == -1 || bestLap < bestLapTime:
 		bestLapTime = bestLap
 		bestLapReplay = replay
-		exportTrack()
+		exportTrack(false, false)

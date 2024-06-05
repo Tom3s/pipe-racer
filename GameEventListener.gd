@@ -452,6 +452,8 @@ func onPauseMenu_exitPressed():
 		else:
 			rpc_id(1, "clientExited", Network.userId)
 	
+	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	
 	get_parent().exitPressed.emit()
 
 func setSplitsToReplay(time: int, splits: Array):
@@ -510,6 +512,7 @@ func spawnPlayer(
 	var car: CarController = Car.instantiate()
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
+	print("[CarController.gd] Car.name: ", car.name)
 	car.playerName = data.PLAYER_NAME
 	car.playerId = data.PLAYER_ID
 	# car.playerIndex = players.get_child_count()

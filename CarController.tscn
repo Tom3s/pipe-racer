@@ -323,6 +323,7 @@ unique_name_in_owner = true
 script = ExtResource("3_kfdpd")
 
 [node name="CarSoundEffects" parent="." instance=ExtResource("11_vb0oa")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.806566, 0)
 
 [node name="CarStateMachine" type="Node" parent="."]
@@ -346,6 +347,7 @@ fixed_size = true
 font = ExtResource("16_crdig")
 
 [node name="HeadLight" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="SpotLight3D" type="SpotLight3D" parent="HeadLight"]
 transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, 0.5, 0.811, 2.004)
@@ -364,10 +366,3 @@ spot_range = 256.0
 spot_attenuation = 0.37893
 spot_angle = 35.0
 spot_angle_attenuation = 0.659754
-
-[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
-update_mode = 1
-size = Vector3(64, 32, 64)
-origin_offset = Vector3(0, -11, 0)
-ambient_mode = 0

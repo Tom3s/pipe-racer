@@ -91,7 +91,8 @@ func calculateRaycast(origin: Vector3):
 		raycastNormal = null
 
 func setArrowVisibility(visible: bool):
-	proceduralStartLine.arrow.visible = visible
+	if proceduralStartLine.arrow != null:
+		proceduralStartLine.arrow.visible = visible
 
 func getProperties() -> Dictionary:
 	return {
