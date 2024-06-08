@@ -1,22 +1,20 @@
+* Light emitting deco
+* simple shape Deco
+* fluid containers
+* maybe up the resolution of pipes (width segments)
+
+DOCUMENTATION ;-;
+
+
+features:
 DONE - Saving/Loading
 DONE - Test Driving
 DONE - Uploading/Playing
 DONE - Implement Painting
-
-
-* Light emitting deco
-* simple shape Deco
-* fluid containers
-
 DONE - pause when test mode selected
 DONE - fix node deleting
-
 DONE - Ghosts are WAY TOO LAGGY (add a toggle at least)
 DONE - medal menu doesn't work
-
-DOCUMENTATION ;-;
-
-replay viewer doesn't work (above 3 replays only?)
 
 BUGS:
 DONE - add randomizer button to usernames
@@ -25,3 +23,4 @@ DONE - legacy start line is misaligned, and the checkered line isn't visible
 DONE - username is changable when logged in
 DONE - checkpoints have incorrect hitbox
 DONE - *validation stays true after editing tracks
+DONE - replay viewer doesn't work (above 3 replays only?)
