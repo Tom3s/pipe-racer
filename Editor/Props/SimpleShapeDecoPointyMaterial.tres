@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dpqfp8ed7dptc"]
+
+[ext_resource type="Shader" uid="uid://dih7hoj8gkorv" path="res://Editor/Props/SimpleShapeDecoPointyShader.tres" id="1_r6xoj"]
+[ext_resource type="Texture2D" uid="uid://ds4rnuhypjs8a" path="res://addons/shaderV/examples/godot_logo.png" id="2_l85k2"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_r6xoj")
+shader_parameter/Sides = 4
+shader_parameter/Repeated = false
+shader_parameter/Texture = ExtResource("2_l85k2")

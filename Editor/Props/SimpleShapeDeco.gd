@@ -3,6 +3,9 @@ extends Node3D
 
 @onready var mesh: MeshInstance3D = %Mesh
 
+@onready
+var material: ShaderMaterial = preload("res://Editor/Props/SimpleShapeDecoShaderMaterial.tres")
+var materialPointy: ShaderMaterial = preload("res://Editor/Props/SimpleShapeDecoPointyMaterial.tres")
 
 @export_range(0.1, 256, 0.1)
 var width: float = 1.0:
@@ -20,12 +23,17 @@ var depth: float = 1.0:
 		depth = value
 		refreshMesh()
 
-@export
-var sides: int = 3:
+@export_range(3, 64, 1)
+var sides: int = 4:
 	set(value):
 		sides = value
 		if sides <= 12:
 			sharp = true
+		repeatSides.x = sides
+
+		if sideMaterialPointy != null:
+			sideMaterialPointy.set_shader_parameter("Sides", sides)
+
 		refreshMesh()
 
 @export
@@ -39,16 +47,93 @@ var sharp: bool = true:
 	set(value):
 		sharp = value || sides <= 12
 		refreshMesh()
+@export
+var repeatTop: Vector2 = Vector2.ONE:
+	set(value):
+		repeatTop = value
+		if topMaterial != null:
+			topMaterial.set_shader_parameter("Repeat", repeatTop)
 
-var repeatTop: int = 1
-var repeatBottom: int = 1
-var repeatSides: int = 1
+@export		
+var repeatSides: Vector2 = Vector2.ONE:
+	set(value):
+		repeatSides = value
+		if sideMaterial != null:
+			sideMaterial.set_shader_parameter("Repeat", repeatSides)
+
+@export		
+var repeatBottom: Vector2 = Vector2.ONE:
+	set(value):
+		repeatBottom = value
+		if bottomMaterial != null:
+			bottomMaterial.set_shader_parameter("Repeat", repeatBottom)
+
+
+@export
+var repeatSidesPointy: bool = false:
+	set(value):
+		repeatSidesPointy = value
+		if sideMaterialPointy != null:
+			sideMaterialPointy.set_shader_parameter("Repeated", repeatSidesPointy)
+
+
+@export
+var topTexture: Texture = null:
+	set(value):
+		topTexture = value
+		if topMaterial != null:
+			topMaterial.set_shader_parameter("Texture", topTexture)
+
+
+@export
+var sideTexture: Texture = null:
+	set(value):
+		sideTexture = value
+		if sideMaterial != null:
+			sideMaterial.set_shader_parameter("Texture", sideTexture)
+		
+		if sideMaterialPointy != null:
+			sideMaterialPointy.set_shader_parameter("Texture", sideTexture)
+
+@export
+var bottomTexture: Texture = null:
+	set(value):
+		bottomTexture = value
+		if bottomMaterial != null:
+			bottomMaterial.set_shader_parameter("Texture", bottomTexture)
+
+var topMaterial: ShaderMaterial = null
+var bottomMaterial: ShaderMaterial = null
+var sideMaterial: ShaderMaterial = null
+var sideMaterialPointy: ShaderMaterial = null
+
+func _ready():
+	refreshMesh()
+	# for i in range(0, mesh.mesh.get_surface_count()):
+		# mesh.set_surface_override_material(i, material.duplicate())
+	topMaterial = material.duplicate()
+	bottomMaterial = material.duplicate()
+	sideMaterial = material.duplicate()
+	sideMaterialPointy = materialPointy.duplicate()
+
+	repeatSides = Vector2(sides, 1)
+
+	setMaterial()
+
 
 var flipFaces: bool = false
 
 var useOnlineTextures: bool = false
 
 var proceduralMesh: ProceduralMesh = ProceduralMesh.new()
+
+func setMaterial():
+	if !pointy:
+		mesh.set_surface_override_material(0, topMaterial)
+	mesh.set_surface_override_material(1 - int(pointy), bottomMaterial)
+
+	mesh.set_surface_override_material(2 - int(pointy), sideMaterialPointy if pointy else sideMaterial)
+
 
 func refreshMesh():
 	var topVertices: PackedVector3Array = []
@@ -156,8 +241,8 @@ func refreshMesh():
 			indices.append(i + (sides * 2))
 			indices.append((i + 1 + (sides * 2)) % (sides * 2) + (sides * 2))
 		
-		for vertex in indices:
-			print("[SimpleShapeDeco.gd] Index ", var_to_str(vertex), ": ", var_to_str(sideVertices[vertex]))
+		# for vertex in indices:
+			# print("[SimpleShapeDeco.gd] Index ", var_to_str(vertex), ": ", var_to_str(sideVertices[vertex]))
 		
 
 	uv = []
@@ -185,7 +270,7 @@ func refreshMesh():
 		uv.append(lerp(Vector2(1, 1), Vector2(0, 1), float(sides - 1) / sides))
 
 	normal = getSideNormals(sideVertices)
-	print("[SimpleShapeDeco.gd] ", sideVertices.size(), " ", normal.size())
+	# print("[SimpleShapeDeco.gd] ", sideVertices.size(), " ", normal.size())
 
 	proceduralMesh.addMeshCustom(
 		mesh,
@@ -195,6 +280,8 @@ func refreshMesh():
 		normal,
 		false
 	)
+
+	setMaterial()
 		
 
 
@@ -259,8 +346,8 @@ func getSideNormals(vertices: PackedVector3Array):
 			
 			normals.append(extra)
 
-			for normal in normals:
-				print("[SimpleShapeDeco.gd] Normal: ", var_to_str(normal), " ", var_to_str(normal.is_normalized()))
+			# for normal in normals:
+				# print("[SimpleShapeDeco.gd] Normal: ", var_to_str(normal), " ", var_to_str(normal.is_normalized()))
 
 			return normals
 
