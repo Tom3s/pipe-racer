@@ -21,6 +21,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(-285.519, 49.7799)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ipvx4")
 nodes/fragment/2/position = Vector2(-7, 173)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)

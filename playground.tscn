@@ -1,13 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://dadg354a8rg6r"]
+[gd_scene load_steps=5 format=3 uid="uid://dadg354a8rg6r"]
 
 [ext_resource type="Script" path="res://playground.gd" id="1_a7mpm"]
-[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="2_6d6y5"]
+[ext_resource type="Shader" uid="uid://ck5xxsg71fjjg" path="res://playground.tres" id="2_xiodi"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_cfeyc"]
+size = Vector2(8, 8)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uyla0"]
+render_priority = 0
+shader = ExtResource("2_xiodi")
 
 [node name="Node" type="Node3D"]
 script = ExtResource("1_a7mpm")
 
-[node name="CarController" parent="." instance=ExtResource("2_6d6y5")]
-
-[node name="CarController2" parent="." instance=ExtResource("2_6d6y5")]
-
-[node name="CarController3" parent="." instance=ExtResource("2_6d6y5")]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_cfeyc")
+surface_material_override/0 = SubResource("ShaderMaterial_uyla0")
