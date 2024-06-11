@@ -1,57 +1,59 @@
-[gd_scene load_steps=6 format=3 uid="uid://pc8ac2621xjd"]
+[gd_scene load_steps=9 format=3 uid="uid://pc8ac2621xjd"]
 
 [ext_resource type="Script" path="res://Editor/Props/SimpleShapeDeco.gd" id="1_1u5qt"]
 [ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="2_4v14t"]
-[ext_resource type="Texture2D" uid="uid://dpy6h2kebasv4" path="res://Sprites/logo.png" id="3_wds1c"]
+[ext_resource type="Texture2D" uid="uid://c581j2jbggqsi" path="res://Sprites/Medals/ChronoMedal.png" id="2_r5e4d"]
+[ext_resource type="Shader" uid="uid://dih7hoj8gkorv" path="res://Editor/Props/SimpleShapeDecoPointyShader.tres" id="2_yjwlp"]
+[ext_resource type="Texture2D" uid="uid://ds4rnuhypjs8a" path="res://addons/shaderV/examples/godot_logo.png" id="4_awp52"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dny52"]
-render_priority = 0
-shader = ExtResource("2_4v14t")
-shader_parameter/RepeatX = 4.0
-shader_parameter/RepeatY = 1.0
-shader_parameter/Texture = ExtResource("3_wds1c")
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_ub51x"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_edtdc"]
 _surfaces = [{
-"aabb": AABB(-1.45, 2.9, -1.45, 2.90001, 1.00136e-05, 2.90001),
-"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 203, 61, 141, 178, 0, 0, 128, 63, 203, 61, 141, 178, 203, 61, 141, 178, 0, 0, 128, 63, 203, 61, 141, 178),
-"format": 34359742487,
-"index_count": 6,
-"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 2, 0, 3, 0),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 4,
-"vertex_data": PackedByteArray(154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 191, 154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 191, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128, 255, 127, 255, 255, 0, 0, 0, 128)
-}, {
-"aabb": AABB(-1.45, 0, -1.45, 2.90001, 1e-05, 2.90001),
-"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 203, 61, 141, 178, 0, 0, 128, 63, 203, 61, 141, 178, 203, 61, 141, 178, 0, 0, 128, 63, 203, 61, 141, 178),
+"aabb": AABB(-8, 0, -8, 16, 1e-05, 16),
+"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0),
 "format": 34359742487,
 "index_count": 6,
 "index_data": PackedByteArray(0, 0, 2, 0, 1, 0, 0, 0, 3, 0, 2, 0),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 4,
-"vertex_data": PackedByteArray(154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 191, 154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 191, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128)
+"vertex_data": PackedByteArray(0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 193, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128, 255, 127, 0, 0, 0, 0, 0, 128)
 }, {
-"aabb": AABB(-1.45, 0, -1.45, 2.90001, 2.90001, 2.90001),
+"aabb": AABB(-8, 0, -8, 16, 12, 16),
 "attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 64, 63, 0, 0, 0, 0, 0, 0, 64, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 128, 62, 0, 0, 0, 0, 0, 0, 128, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 64, 63, 0, 0, 128, 63, 0, 0, 64, 63, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 128, 62, 0, 0, 128, 63, 0, 0, 128, 62, 0, 0, 128, 63),
 "format": 34359742487,
-"index_count": 24,
-"index_data": PackedByteArray(1, 0, 9, 0, 2, 0, 2, 0, 9, 0, 10, 0, 3, 0, 11, 0, 4, 0, 4, 0, 11, 0, 12, 0, 5, 0, 13, 0, 6, 0, 6, 0, 13, 0, 14, 0, 7, 0, 15, 0, 0, 0, 0, 0, 15, 0, 8, 0),
+"index_count": 12,
+"index_data": PackedByteArray(2, 0, 9, 0, 10, 0, 4, 0, 11, 0, 12, 0, 6, 0, 13, 0, 14, 0, 0, 0, 15, 0, 8, 0),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 16,
-"vertex_data": PackedByteArray(154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 63, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 191, 154, 153, 185, 191, 154, 153, 57, 64, 154, 153, 185, 191, 154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 191, 154, 153, 185, 63, 154, 153, 57, 64, 154, 153, 185, 191, 154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 63, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 191, 154, 153, 185, 191, 0, 0, 0, 0, 154, 153, 185, 191, 154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 191, 154, 153, 185, 63, 0, 0, 0, 0, 154, 153, 185, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255)
+"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 65, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 0, 193, 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 193, 204, 204, 152, 217, 0, 0, 255, 223, 101, 166, 50, 179, 255, 255, 255, 223, 101, 166, 50, 179, 255, 255, 255, 223, 153, 89, 50, 179, 255, 191, 255, 191, 153, 89, 50, 179, 255, 191, 255, 191, 50, 51, 152, 217, 255, 63, 255, 191, 50, 51, 152, 217, 255, 63, 255, 191, 204, 204, 152, 217, 0, 0, 255, 223, 204, 204, 152, 217, 0, 0, 255, 223, 101, 166, 50, 179, 255, 255, 255, 223, 101, 166, 50, 179, 255, 255, 255, 223, 153, 89, 50, 179, 255, 191, 255, 191, 153, 89, 50, 179, 255, 191, 255, 191, 50, 51, 152, 217, 255, 63, 255, 191, 50, 51, 152, 217, 255, 63, 255, 191, 204, 204, 152, 217, 0, 0, 255, 223)
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8w4e"]
+render_priority = 0
+shader = ExtResource("2_4v14t")
+shader_parameter/Repeat = Vector2(1, 1)
+shader_parameter/Texture = ExtResource("4_awp52")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xx1tr"]
+render_priority = 0
+shader = ExtResource("2_yjwlp")
+shader_parameter/Sides = 4
+shader_parameter/Repeated = true
+shader_parameter/Texture = ExtResource("2_r5e4d")
 
 [node name="SimpleShapeDeco" type="Node3D"]
 script = ExtResource("1_1u5qt")
-width = 2.9
-height = 2.9
-depth = 2.9
-sides = 4
+width = 16.0
+height = 12.0
+depth = 16.0
+pointy = true
+repeatSides = Vector2(4, 1)
+repeatSidesPointy = true
+sideTexture = ExtResource("2_r5e4d")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-material_override = SubResource("ShaderMaterial_dny52")
-mesh = SubResource("ArrayMesh_ub51x")
+mesh = SubResource("ArrayMesh_edtdc")
+surface_material_override/0 = SubResource("ShaderMaterial_m8w4e")
+surface_material_override/1 = SubResource("ShaderMaterial_xx1tr")
