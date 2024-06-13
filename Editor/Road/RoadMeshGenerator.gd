@@ -461,12 +461,7 @@ func refreshRoadMesh() -> void:
 	
 	vertexList = []
 
-	# curveOffsets = []
-
-	# heights = []
-
 	var distance = startNode.global_position.distance_to(endNode.global_position)
-	# if distance > PrefabConstants.TRACK_WIDTH:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
 	curveLength = 0
@@ -494,55 +489,8 @@ func refreshRoadMesh() -> void:
 			curveSteps.push_back(curveLength)
 
 
-	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-	# 	var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-
-	# 	curveOffsets.push_back(
-	# 		EditorMath.getCurveLerp(
-	# 			startNode.global_position,
-	# 			startNode.basis.z,
-	# 			endNode.global_position,
-	# 			endNode.basis.z,
-	# 			t
-	# 		)
-	# 	)
-
-	# 	if i != 0:
-	# 		var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
-	# 		curveLength += distanceStep
-	# 		curveSteps.push_back(curveLength)
-
-	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-	# 	var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-	# 	var t = curveSteps[i] / curveLength
-
-	# 	# print("[roadMeshGenerator.gd] T difference: ", oldT - t)
-
-	# 	# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
-		
-	# 	heights.push_back(
-	# 		EditorMath.getHeightLerp(
-	# 			curveLength,
-	# 			startNode.global_position.y,
-	# 			startNode.global_rotation.x,
-	# 			endNode.global_position.y,
-	# 			endNode.global_rotation.x,
-	# 			t
-	# 		)
-	# 	)
-
-	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-	# 	var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-		
-	# 	var interpolatedVertices = vertexCollection.getInterpolation(
-	# 		t, 
-	# 		curveOffsets[i] + 
-	# 		heights[i]
-	# 	)
-	# 	vertexList.append_array(interpolatedVertices)
 	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
@@ -624,23 +572,17 @@ func refreshRoadMesh() -> void:
 	setSurfaceMaterial(surfaceType)
 
 func refreshRunoffMesh() -> void:
-	# vertexCollection\
-	# 	.withStart(startNode.getStartVertices(), startNode.basis)\
-	# 	.withEnd(endNode.getStartVertices(), endNode.basis)
 
 	runoffMesh.mesh = ArrayMesh.new()
 
 	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getLeftRunoffVertices()
-		# vertexCollection.endVertices = endNode.getLeftRunoffVertices()
 		vertexCollection\
 			.withStart(startNode.getLeftRunoffVertices(), startNode.basis)\
 			.withEnd(endNode.getLeftRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
@@ -662,14 +604,11 @@ func refreshRunoffMesh() -> void:
 	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getRightRunoffVertices()
-		# vertexCollection.endVertices = endNode.getRightRunoffVertices()
 		vertexCollection\
 			.withStart(startNode.getRightRunoffVertices(), startNode.basis)\
 			.withEnd(endNode.getRightRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
@@ -699,14 +638,11 @@ func refreshWallMesh() -> void:
 	if leftWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
-		# vertexCollection.endVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
 		vertexCollection\
 			.withStart(startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight), startNode.basis)\
 			.withEnd(endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
@@ -728,14 +664,11 @@ func refreshWallMesh() -> void:
 	if rightWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
-		# vertexCollection.endVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
 		vertexCollection\
 			.withStart(startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight), startNode.basis)\
 			.withEnd(endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
@@ -798,7 +731,6 @@ func refreshSupportMesh() -> void:
 		.withEnd([endLeft], endNode.basis)
 	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
@@ -807,7 +739,6 @@ func refreshSupportMesh() -> void:
 		)
 		leftSideVertices.append_array(interpolatedVertices)
 	
-	# vertexList.push_back(leftSideVertices[0])
 	vertexList.append_array(leftSideVertices)
 	if leftSideVertices.size() > 0:
 		vertexList.push_back(leftSideVertices[leftSideVertices.size() - 1])
@@ -820,7 +751,6 @@ func refreshSupportMesh() -> void:
 		.withEnd([endRight], endNode.basis)
 	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
 		
 		t = 1 - t
