@@ -245,7 +245,8 @@ func refreshMesh() -> void:
 		false
 	)
 
-	if startNode.cap:
+	# if startNode.cap:
+	if startNode.meshGeneratorRefs.size() <= 1:
 		var startCapVertices = startNode.getCapVertices()
 		var vertices3D: PackedVector3Array = []
 
@@ -262,7 +263,8 @@ func refreshMesh() -> void:
 			false
 		)
 	
-	if endNode.cap:
+	# if endNode.cap:
+	if endNode.meshGeneratorRefs.size() <= 1:
 		var endCapVertices = endNode.getCapVertices()
 		var vertices3D: PackedVector3Array = []
 
