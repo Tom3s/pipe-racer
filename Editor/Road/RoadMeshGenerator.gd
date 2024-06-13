@@ -458,9 +458,9 @@ func refreshRoadMesh() -> void:
 	
 	vertexList = []
 
-	curveOffsets = []
+	# curveOffsets = []
 
-	heights = []
+	# heights = []
 
 	var distance = startNode.global_position.distance_to(endNode.global_position)
 	# if distance > PrefabConstants.TRACK_WIDTH:
@@ -469,11 +469,13 @@ func refreshRoadMesh() -> void:
 	var curveLength: float = 0
 	curveSteps = [0.0]
 
+	var offsets: PackedVector3Array = []
+
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 
-		curveOffsets.push_back(
-			EditorMath.getCurveLerp(
+		offsets.push_back(
+			EditorMath.get3DBezierLerp(
 				startNode.global_position,
 				startNode.basis.z,
 				endNode.global_position,
@@ -483,36 +485,65 @@ func refreshRoadMesh() -> void:
 		)
 
 		if i != 0:
-			var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
+			var distanceStep = offsets[i].distance_to(offsets[i - 1])
 			curveLength += distanceStep
 			curveSteps.push_back(curveLength)
 
-	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
-		var t = curveSteps[i] / curveLength
 
-		# print("[roadMeshGenerator.gd] T difference: ", oldT - t)
+	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+	# 	var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 
-		# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
+	# 	curveOffsets.push_back(
+	# 		EditorMath.getCurveLerp(
+	# 			startNode.global_position,
+	# 			startNode.basis.z,
+	# 			endNode.global_position,
+	# 			endNode.basis.z,
+	# 			t
+	# 		)
+	# 	)
+
+	# 	if i != 0:
+	# 		var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
+	# 		curveLength += distanceStep
+	# 		curveSteps.push_back(curveLength)
+
+	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+	# 	var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+	# 	var t = curveSteps[i] / curveLength
+
+	# 	# print("[roadMeshGenerator.gd] T difference: ", oldT - t)
+
+	# 	# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
 		
-		heights.push_back(
-			EditorMath.getHeightLerp(
-				curveLength,
-				startNode.global_position.y,
-				startNode.global_rotation.x,
-				endNode.global_position.y,
-				endNode.global_rotation.x,
-				t
-			)
-		)
+	# 	heights.push_back(
+	# 		EditorMath.getHeightLerp(
+	# 			curveLength,
+	# 			startNode.global_position.y,
+	# 			startNode.global_rotation.x,
+	# 			endNode.global_position.y,
+	# 			endNode.global_rotation.x,
+	# 			t
+	# 		)
+	# 	)
 
+	# for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
+	# 	var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		
+	# 	var interpolatedVertices = vertexCollection.getInterpolation(
+	# 		t, 
+	# 		curveOffsets[i] + 
+	# 		heights[i]
+	# 	)
+	# 	vertexList.append_array(interpolatedVertices)
+	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		# var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i]
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 	
@@ -534,12 +565,11 @@ func refreshRoadMesh() -> void:
 	vertexCollection.endVertices = endNode.getOutsideVertices()
 
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i] 
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 
