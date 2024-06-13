@@ -1,7 +1,24 @@
-[gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://d0bh52mvk8g7w"]
+[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://d0bh52mvk8g7w"]
+
+[ext_resource type="Script" path="res://addons/shaderV/rgba/grayscale.gd" id="1_6pah6"]
+[ext_resource type="Script" path="res://addons/shaderV/rgba/normalFromHeightmap.gd" id="2_stna0"]
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_8o4ua"]
+default_input_values = [1, 1.0]
+initialized = true
+script = ExtResource("1_6pah6")
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_q7prl"]
+default_input_values = [2, Vector3(128, 128, 0), 3, 0.25, 4, true, 5, true, 6, true]
+initialized = true
+script = ExtResource("2_stna0")
+
+[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_m5y4k"]
+default_input_values = [1, 0.0, 2, 1.0, 3, 0.9, 4, 0.4]
 
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_fdtw7"]
 parameter_name = "Texture"
+texture_filter = 2
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ktwmq"]
 source = 5
@@ -24,9 +41,34 @@ code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec2 Repeat = vec2(1.000000, 1.000000);
-uniform sampler2D Texture;
+uniform sampler2D Texture : filter_linear;
 
 
+// GrayscalePlus
+vec3 _grayscaleFunc(vec3 _color_grayscale, float _gray_factor){
+	return _color_grayscale * (1.0 - _gray_factor) + (0.21 * _color_grayscale.r + 0.71 * _color_grayscale.g + 0.07 * _color_grayscale.b) * _gray_factor;
+}
+// NormalFromHeightmap
+vec3 _normalFromHeightmapFunc(vec2 _hm_uv, sampler2D _hm_tex, vec2 _hm_size, float _norm_hm_strgth, bool _conv_hm_gray, bool _inv_x_norm, bool _inv_y_norm){
+	vec3 _hm_down = textureLod(_hm_tex, _hm_uv + vec2(0.0, 1.0 / _hm_size.y), 0.0).rgb;
+	vec3 _hm_up = textureLod(_hm_tex, _hm_uv - vec2(0.0, 1.0 / _hm_size.y), 0.0).rgb;
+	vec3 _hm_right = textureLod(_hm_tex, _hm_uv + vec2(1.0 / _hm_size.x, 0.0), 0.0).rgb;
+	vec3 _hm_left = textureLod(_hm_tex, _hm_uv - vec2(1.0 / _hm_size.x, 0.0), 0.0).rgb;
+	
+	if (_conv_hm_gray) {
+		_hm_down.r = 0.2126 * _hm_down.r + 0.7152 * _hm_down.g + 0.0722 * _hm_down.b;
+		_hm_up.r = 0.2126 * _hm_up.r + 0.7152 * _hm_up.g + 0.0722 * _hm_up.b;
+		_hm_right.r = 0.2126 * _hm_right.r + 0.7152 * _hm_right.g + 0.0722 * _hm_right.b;
+		_hm_left.r = 0.2126 * _hm_left.r + 0.7152 * _hm_left.g + 0.0722 * _hm_left.b;
+	}
+	
+	float dx = (1.0 - float(_inv_x_norm)) * (_hm_left.r - _hm_right.r) + 
+				(float(_inv_x_norm)) * (-_hm_left.r + _hm_right.r);
+	float dy = (1.0 - float(_inv_y_norm)) * (_hm_up.r - _hm_down.r) + 
+				(float(_inv_y_norm)) * (-_hm_up.r + _hm_down.r);
+	
+	return normalize(vec3(dx, dy, 1.0 / _norm_hm_strgth));
+}
 
 void fragment() {
 // Input:4
@@ -46,22 +88,64 @@ void fragment() {
 	n_out3p0 = texture(Texture, n_out5p0);
 
 
+	vec3 n_out10p0;
+// GrayscalePlus:10
+	float n_in10p1 = 1.00000;
+	{
+		n_out10p0 = _grayscaleFunc(vec3(n_out3p0.xyz), n_in10p1);
+	}
+
+
+	float n_out12p0;
+// Remap:12
+	float n_in12p1 = 0.00000;
+	float n_in12p2 = 1.00000;
+	float n_in12p3 = 0.90000;
+	float n_in12p4 = 0.40000;
+	{
+		float __input_range = n_in12p2 - n_in12p1;
+		float __output_range = n_in12p4 - n_in12p3;
+		n_out12p0 = n_in12p3 + __output_range * ((n_out10p0.x - n_in12p1) / __input_range);
+	}
+
+
+	vec3 n_out11p0;
+// NormalFromHeightmap:11
+	vec3 n_in11p2 = vec3(128.00000, 128.00000, 0.00000);
+	float n_in11p3 = 0.25000;
+	bool n_in11p4 = true;
+	bool n_in11p5 = true;
+	bool n_in11p6 = true;
+	{
+		n_out11p0 = _normalFromHeightmapFunc(vec3(n_out5p0, 0.0).xy, Texture, n_in11p2.xy, n_in11p3, n_in11p4, n_in11p5, n_in11p6);
+	}
+
+
 // Output:0
 	ALBEDO = vec3(n_out3p0.xyz);
+	ROUGHNESS = n_out12p0;
+	SPECULAR = n_out10p0.x;
+	NORMAL_MAP = n_out11p0;
 
 
 }
 "
-graph_offset = Vector2(469.653, 1306.58)
-nodes/fragment/0/position = Vector2(2000, 1500)
+graph_offset = Vector2(1383.19, 1435.63)
+nodes/fragment/0/position = Vector2(2360, 1480)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture2DParameter_fdtw7")
 nodes/fragment/2/position = Vector2(955.586, 1389.42)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_ktwmq")
-nodes/fragment/3/position = Vector2(1578, 1559.72)
+nodes/fragment/3/position = Vector2(1580, 1500)
 nodes/fragment/4/node = SubResource("VisualShaderNodeInput_x7njv")
 nodes/fragment/4/position = Vector2(660, 1800)
 nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_xmefd")
 nodes/fragment/5/position = Vector2(1106.29, 1835.51)
 nodes/fragment/6/node = SubResource("VisualShaderNodeVec2Parameter_21wrq")
 nodes/fragment/6/position = Vector2(660, 1900)
-nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 4, 0, 5, 0, 5, 0, 3, 0, 3, 0, 0, 0, 6, 0, 5, 1)
+nodes/fragment/10/node = SubResource("VisualShaderNodeCustom_8o4ua")
+nodes/fragment/10/position = Vector2(1820, 1580)
+nodes/fragment/11/node = SubResource("VisualShaderNodeCustom_q7prl")
+nodes/fragment/11/position = Vector2(1780, 1800)
+nodes/fragment/12/node = SubResource("VisualShaderNodeRemap_m5y4k")
+nodes/fragment/12/position = Vector2(2080, 1540)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 4, 0, 5, 0, 5, 0, 3, 0, 6, 0, 5, 1, 3, 0, 10, 0, 2, 0, 11, 0, 5, 0, 11, 1, 3, 0, 0, 0, 10, 0, 12, 0, 11, 0, 0, 9, 12, 0, 0, 3, 10, 0, 0, 4)
