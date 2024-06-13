@@ -125,3 +125,60 @@ static func positionsMatch(
 ) -> bool:
 	return node_a.global_position == node_b.global_position \
 		&& node_a.global_rotation == node_b.global_rotation 
+
+const INTERSECT_EXTENTS: float = 64 * PrefabConstants.TRACK_WIDTH 
+
+static func get3DBezierLerp(
+	start: Vector3, 
+	startTangent: Vector3, 
+	end: Vector3,
+	endTangent: Vector3,
+	t: float
+) -> Vector3:
+	var control1 := Vector3.ZERO
+	var control2 := Vector3.ZERO
+
+	if (end - start).normalized().is_equal_approx(startTangent): # straight line
+		return lerp(start, end, t)
+	elif startTangent.is_equal_approx(endTangent): # parallel
+		var corner: Vector3 = Geometry3D.get_closest_point_to_segment_uncapped(
+			end,
+			start,
+			start + startTangent
+		)
+			
+		control1 = start + startTangent * (corner - start).length() * 0.5
+		control2 = end - endTangent * (corner - start).length() * 0.5
+	else:
+		var points := Geometry3D.get_closest_points_between_segments(
+			start - startTangent * INTERSECT_EXTENTS,
+			start + startTangent * INTERSECT_EXTENTS,
+			end - endTangent * INTERSECT_EXTENTS,
+			end + endTangent * INTERSECT_EXTENTS
+		)
+
+		control1 = points[0]
+		control2 = points[1]
+
+
+		control1 = lerp(start, control1, 0.6)
+		control2 = lerp(end, control2, 0.6)
+
+		# print("[EditorMath.gd] get3DBezierLerp points: ", points)
+		# if t == 0:
+		# 	print("[EditorMath.gd] get3DBezierLerp: control points: ", control1, control2)
+
+		# if control1.is_equal_approx(control2):
+		# 	if t == 0:
+		# 		print("[EditorMath.gd] get3DBezierLerp: control points are equal")
+
+
+
+	var p1: Vector3 = lerp(start, control1, t)
+	var p2: Vector3 = lerp(control1, control2, t)
+	var p3: Vector3 = lerp(control2, end, t)
+
+	var p4: Vector3 = lerp(p1, p2, t)
+	var p5: Vector3 = lerp(p2, p3, t)
+
+	return lerp(p4, p5, t)

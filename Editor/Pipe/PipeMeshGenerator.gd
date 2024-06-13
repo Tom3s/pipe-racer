@@ -34,10 +34,8 @@ class PipeVertexCollection:
 		var currentBasis = startBasis.slerp(endBasis, t)
 
 		var vertices := PipeNode.getCircleVertices(
-			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
 			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t)),
 			lerp(float(startNode.flat), float(endNode.flat), t)
 		)
@@ -58,10 +56,8 @@ class PipeVertexCollection:
 		var currentBasis = startBasis.slerp(endBasis, t)
 
 		var vertices := PipeNode.getCircleVertices(
-			# lerp(startBasis.get_euler().z, endBasis.get_euler().z, t),
 			currentBasis.get_euler().z,
 			lerp(startNode.profile, endNode.profile, t),
-			# lerp(startNode.radius, endNode.radius, ease(t, -1.5))
 			lerp(startNode.radius, endNode.radius, smoothstep(0, 1, t)),
 			lerp(float(startNode.flat), float(endNode.flat), t)
 		)
@@ -176,27 +172,22 @@ func refreshMesh() -> void:
 	var vertexCollection = PipeVertexCollection.new()\
 		.withStart(startNode, startNode.basis)\
 		.withEnd(endNode, endNode.basis)
-		# .withStart(startNode.getCircleVertices(), Basis(Vector3(1,0,0), Vector3.UP, Vector3(0,0,1)))\
-		# .withEnd(endNode.getCircleVertices(), Basis(Vector3(0,0,1), Vector3.UP, Vector3(-1,0,0)))
 	
 	var vertexList: PackedVector3Array = []
 
-	var curveOffsets: PackedVector3Array = []
-
-	var heights: PackedVector3Array = []
-
 	var distance = startNode.global_position.distance_to(endNode.global_position)
-	# if distance > PrefabConstants.TRACK_WIDTH:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
 	var curveLength: float = 0
 	var curveSteps: PackedFloat32Array = [0.0]
 
-	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+	var offsets: PackedVector3Array = []
 
-		curveOffsets.push_back(
-			EditorMath.getCurveLerp(
+	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
+		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+
+		offsets.push_back(
+			EditorMath.get3DBezierLerp(
 				startNode.global_position,
 				startNode.basis.z,
 				endNode.global_position,
@@ -206,32 +197,17 @@ func refreshMesh() -> void:
 		)
 
 		if i != 0:
-			var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
+			var distanceStep = offsets[i].distance_to(offsets[i - 1])
 			curveLength += distanceStep
 			curveSteps.push_back(curveLength)
 
+
 	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
-		var oldT = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
-
-		heights.push_back(
-			EditorMath.getHeightLerp(
-				curveLength,
-				startNode.global_position.y,
-				startNode.global_rotation.x,
-				endNode.global_position.y,
-				endNode.global_rotation.x,
-				t
-			)
-		)
-
-	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i]
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 	
@@ -250,12 +226,12 @@ func refreshMesh() -> void:
 	vertexList = PackedVector3Array()
 
 	for i in (PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.PIPE_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
+
 		var interpolatedVertices = vertexCollection.getOutsideInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i] 
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 
@@ -348,4 +324,3 @@ func importData(data: Dictionary, nodeIds: Dictionary):
 	if data.has("surfaceType"):
 		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
 	
-	# refreshMesh()

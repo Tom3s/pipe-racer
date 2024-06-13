@@ -440,11 +440,14 @@ func _ready():
 
 var lengthMultiplier: float = 1
 var vertexList: PackedVector3Array = []
-var curveOffsets: PackedVector3Array = []
-var heights: PackedVector3Array = []
+# var curveOffsets: PackedVector3Array = []
+# var heights: PackedVector3Array = []
+var offsets: PackedVector3Array = []
 var vertexCollection = RoadVertexCollection.new()
 var mesh: ProceduralMesh = ProceduralMesh.new()
 var curveSteps: PackedFloat32Array
+var curveLength: float = 0
+
 func refreshAll() -> void:
 	refreshRoadMesh()
 	refreshRunoffMesh()
@@ -458,22 +461,20 @@ func refreshRoadMesh() -> void:
 	
 	vertexList = []
 
-	curveOffsets = []
-
-	heights = []
-
 	var distance = startNode.global_position.distance_to(endNode.global_position)
-	# if distance > PrefabConstants.TRACK_WIDTH:
 	lengthMultiplier = ceilf(distance / PrefabConstants.TRACK_WIDTH)
 
-	var curveLength: float = 0
+	curveLength = 0
 	curveSteps = [0.0]
+
+	offsets = []
+
 
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
 		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 
-		curveOffsets.push_back(
-			EditorMath.getCurveLerp(
+		offsets.push_back(
+			EditorMath.get3DBezierLerp(
 				startNode.global_position,
 				startNode.basis.z,
 				endNode.global_position,
@@ -483,36 +484,18 @@ func refreshRoadMesh() -> void:
 		)
 
 		if i != 0:
-			var distanceStep = curveOffsets[i].distance_to(curveOffsets[i - 1])
+			var distanceStep = offsets[i].distance_to(offsets[i - 1])
 			curveLength += distanceStep
 			curveSteps.push_back(curveLength)
 
+
+	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var oldT = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		var t = curveSteps[i] / curveLength
-
-		# print("[roadMeshGenerator.gd] T difference: ", oldT - t)
-
-		# print("[roadMeshGenerator.gd] Current height t: ", t, " - ", curveSteps[i], " / ", curveLength)
-		
-		heights.push_back(
-			EditorMath.getHeightLerp(
-				curveLength,
-				startNode.global_position.y,
-				startNode.global_rotation.x,
-				endNode.global_position.y,
-				endNode.global_rotation.x,
-				t
-			)
-		)
-
-	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i]
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 	
@@ -534,12 +517,11 @@ func refreshRoadMesh() -> void:
 	vertexCollection.endVertices = endNode.getOutsideVertices()
 
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i] 
+			offsets[i]
 		)
 		vertexList.append_array(interpolatedVertices)
 
@@ -590,28 +572,22 @@ func refreshRoadMesh() -> void:
 	setSurfaceMaterial(surfaceType)
 
 func refreshRunoffMesh() -> void:
-	# vertexCollection\
-	# 	.withStart(startNode.getStartVertices(), startNode.basis)\
-	# 	.withEnd(endNode.getStartVertices(), endNode.basis)
 
 	runoffMesh.mesh = ArrayMesh.new()
 
 	if startNode.leftRunoff != 0 || endNode.leftRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getLeftRunoffVertices()
-		# vertexCollection.endVertices = endNode.getLeftRunoffVertices()
 		vertexCollection\
 			.withStart(startNode.getLeftRunoffVertices(), startNode.basis)\
 			.withEnd(endNode.getLeftRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
 				t, 
-				curveOffsets[i] + 
-				heights[i] 
+				offsets[i]
 			)
 			vertexList.append_array(interpolatedVertices)
 		
@@ -628,19 +604,16 @@ func refreshRunoffMesh() -> void:
 	if startNode.rightRunoff != 0 || endNode.rightRunoff != 0:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getRightRunoffVertices()
-		# vertexCollection.endVertices = endNode.getRightRunoffVertices()
 		vertexCollection\
 			.withStart(startNode.getRightRunoffVertices(), startNode.basis)\
 			.withEnd(endNode.getRightRunoffVertices(), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
 				t, 
-				curveOffsets[i] + 
-				heights[i] 
+				offsets[i]
 			)
 			vertexList.append_array(interpolatedVertices)
 		
@@ -665,19 +638,16 @@ func refreshWallMesh() -> void:
 	if leftWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight)
-		# vertexCollection.endVertices = endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight)
 		vertexCollection\
 			.withStart(startNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallStartHeight), startNode.basis)\
 			.withEnd(endNode.getLeftWallVertices(wallProfiles[leftWallType], leftWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
 				t, 
-				curveOffsets[i] + 
-				heights[i] 
+				offsets[i]
 			)
 			vertexList.append_array(interpolatedVertices)
 		
@@ -694,19 +664,16 @@ func refreshWallMesh() -> void:
 	if rightWallType != WallTypes.NONE:
 		vertexList = PackedVector3Array()
 
-		# vertexCollection.startVertices = startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight)
-		# vertexCollection.endVertices = endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight)
 		vertexCollection\
 			.withStart(startNode.getRightWallVertices(wallProfiles[rightWallType], rightWallStartHeight), startNode.basis)\
 			.withEnd(endNode.getRightWallVertices(wallProfiles[rightWallType], rightWallEndHeight), endNode.basis)
 
 		for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-			var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+			var t = curveSteps[i] / curveLength
 			
 			var interpolatedVertices = vertexCollection.getInterpolation(
 				t, 
-				curveOffsets[i] + 
-				heights[i] 
+				offsets[i]
 			)
 			vertexList.append_array(interpolatedVertices)
 		
@@ -764,16 +731,14 @@ func refreshSupportMesh() -> void:
 		.withEnd([endLeft], endNode.basis)
 	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i] 
+			offsets[i]
 		)
 		leftSideVertices.append_array(interpolatedVertices)
 	
-	# vertexList.push_back(leftSideVertices[0])
 	vertexList.append_array(leftSideVertices)
 	if leftSideVertices.size() > 0:
 		vertexList.push_back(leftSideVertices[leftSideVertices.size() - 1])
@@ -786,15 +751,14 @@ func refreshSupportMesh() -> void:
 		.withEnd([endRight], endNode.basis)
 	
 	for i in (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier):
-		var t = float(i) / ((PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - 1)
+		var t = curveSteps[i] / curveLength
 		
 		t = 1 - t
 		i = (PrefabConstants.ROAD_LENGTH_SEGMENTS * lengthMultiplier) - i - 1
 
 		var interpolatedVertices = vertexCollection.getInterpolation(
 			t, 
-			curveOffsets[i] + 
-			heights[i] 
+			offsets[i]
 		)
 		rightSideVertices.append_array(interpolatedVertices)
 	
