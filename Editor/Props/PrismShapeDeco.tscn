@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://pc8ac2621xjd"]
+[gd_scene load_steps=9 format=3 uid="uid://pc8ac2621xjd"]
 
 [ext_resource type="Script" path="res://Editor/Props/PrismShapeDeco.gd" id="1_1u5qt"]
 [ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="2_4v14t"]
 [ext_resource type="Texture2D" uid="uid://bk7ycinsihbw8" path="res://Editor/PropTextures/Cobblestone.png" id="2_d8d72"]
+[ext_resource type="Script" path="res://Editor/PhysicsSurface.gd" id="4_hmx4d"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_1sjpw"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_c5c5o"]
 _surfaces = [{
 "aabb": AABB(-0.5, 1, -0.5, 1.00001, 1.00136e-05, 1.00001),
 "attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0),
@@ -37,21 +38,23 @@ _surfaces = [{
 "vertex_data": PackedByteArray(0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 128, 63, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 128, 63, 0, 0, 0, 191, 0, 0, 0, 191, 0, 0, 128, 63, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255)
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_53nab"]
-render_priority = 0
-shader = ExtResource("2_4v14t")
-shader_parameter/Repeat = Vector2(1, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3ds0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfasf"]
 render_priority = 0
 shader = ExtResource("2_4v14t")
 shader_parameter/Repeat = Vector2(1, 1)
 shader_parameter/Texture = ExtResource("2_d8d72")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rb6n4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s0u01"]
+render_priority = 0
+shader = ExtResource("2_4v14t")
+shader_parameter/Repeat = Vector2(1, 1)
+shader_parameter/Texture = ExtResource("2_d8d72")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdawk"]
 render_priority = 0
 shader = ExtResource("2_4v14t")
 shader_parameter/Repeat = Vector2(4, 1)
+shader_parameter/Texture = ExtResource("2_d8d72")
 
 [node name="PrismShapeDeco" type="Node3D"]
 script = ExtResource("1_1u5qt")
@@ -60,7 +63,8 @@ repeatSidesPointy = true
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_1sjpw")
-surface_material_override/0 = SubResource("ShaderMaterial_53nab")
-surface_material_override/1 = SubResource("ShaderMaterial_v3ds0")
-surface_material_override/2 = SubResource("ShaderMaterial_rb6n4")
+mesh = SubResource("ArrayMesh_c5c5o")
+surface_material_override/0 = SubResource("ShaderMaterial_gfasf")
+surface_material_override/1 = SubResource("ShaderMaterial_s0u01")
+surface_material_override/2 = SubResource("ShaderMaterial_rdawk")
+script = ExtResource("4_hmx4d")

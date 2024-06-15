@@ -19,7 +19,7 @@ var autoSaveInterval: float = 12
 @onready var roadNodeScene: PackedScene = preload("res://Editor/Road/RoadNode.tscn")
 @onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
-
+@onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
 
 @onready var roadElements: Node3D = %RoadElements
 var roadNodes: Node3D
@@ -48,6 +48,7 @@ var start: FunctionalStartLine
 
 @onready var deco: Node3D = %Deco
 var ledBoards: Node3D
+var prisms: Node3D
 
 # scenery
 
@@ -62,6 +63,7 @@ func _ready():
 	pipePieces = pipeElements.get_child(1)
 
 	ledBoards = deco.get_child(0)
+	prisms = deco.get_child(1)
 
 
 
@@ -158,6 +160,13 @@ func addCheckpoint(node: FunctionalCheckpoint, position: Vector3, rotation: Vect
 
 func addLedBoard(node: LedBoard, position: Vector3, rotation: Vector3, properties: Dictionary):
 	ledBoards.add_child(node)
+	node.global_position = position
+	node.global_rotation = rotation
+	node.setProperties(properties, false)
+	node.convertToPhysicsObject()
+
+func addPrismShapeDeco(node: PrismShapeDeco, position: Vector3, rotation: Vector3, properties: Dictionary):
+	prisms.add_child(node)
 	node.global_position = position
 	node.global_rotation = rotation
 	node.setProperties(properties, false)
@@ -308,6 +317,9 @@ func removeCheckpoint(node: FunctionalCheckpoint):
 func removeLedBoard(node: LedBoard):
 	node.queue_free()
 
+func removePrismShapeDeco(node: PrismShapeDeco):
+	node.queue_free()
+
 
 var validated: bool = false
 var bestTotalTime: int = -1
@@ -414,6 +426,11 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 		trackData["deco"]["ledBoards"] = []
 		for node in ledBoards.get_children():
 			trackData["deco"]["ledBoards"].append(node.getExportData())
+
+	if prisms.get_child_count() > 0:
+		trackData["deco"]["prisms"] = []
+		for node in prisms.get_children():
+			trackData["deco"]["prisms"].append(node.getExportData())
 
 	# return false
 	var path = "user://tracks/local/" + trackName + ".json"
@@ -582,6 +599,16 @@ func importTrack(fileName: String) -> bool:
 				str_to_var(ledBoardData["position"]),
 				str_to_var(ledBoardData["rotation"]),
 				ledBoardData
+			)
+
+	if trackData["deco"].has("prisms"):
+		for prismData in trackData["deco"]["prisms"]:
+			var prism: PrismShapeDeco = prismShapeDecoScene.instantiate() as PrismShapeDeco
+			addPrismShapeDeco(
+				prism,
+				str_to_var(prismData["position"]),
+				str_to_var(prismData["rotation"]),
+				prismData
 			)
 
 	fileHandler.close()

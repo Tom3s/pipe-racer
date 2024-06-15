@@ -1,5 +1,6 @@
 @tool
 extends Node3D
+class_name PrismShapeDeco
 
 @onready var mesh: MeshInstance3D = %Mesh
 
@@ -7,17 +8,19 @@ extends Node3D
 var material: ShaderMaterial = preload("res://Editor/Props/SimpleShapeDecoShaderMaterial.tres")
 var materialPointy: ShaderMaterial = preload("res://Editor/Props/SimpleShapeDecoPointyMaterial.tres")
 
-@export_range(0.1, 256, 0.1)
+var DEFAULT_TEXTURE: Texture = preload("res://Editor/PropTextures/Ice.png")
+
+@export_range(0.1, 512, 0.1)
 var width: float = 1.0:
 	set(value):
 		width = value
 		refreshMesh()
-@export_range(0.1, 256, 0.1)
+@export_range(0.1, 512, 0.1)
 var height: float = 1.0:
 	set(value):
 		height = value
 		refreshMesh()
-@export_range(0.1, 256, 0.1)
+@export_range(0.1, 512, 0.1)
 var depth: float = 1.0:
 	set(value):
 		depth = value
@@ -77,30 +80,66 @@ var repeatSidesPointy: bool = false:
 			sideMaterialPointy.set_shader_parameter("Repeated", repeatSidesPointy)
 
 
-@export
-var topTexture: Texture = null:
-	set(value):
-		topTexture = value
-		if topMaterial != null:
-			topMaterial.set_shader_parameter("Texture", topTexture)
+# @export
+# var topTexture: Texture = null:
+# 	set(value):
+# 		topTexture = value
+# 		if topMaterial != null:
+# 			topMaterial.set_shader_parameter("Texture", topTexture)
 
 
-@export
-var sideTexture: Texture = null:
-	set(value):
-		sideTexture = value
-		if sideMaterial != null:
-			sideMaterial.set_shader_parameter("Texture", sideTexture)
+# @export
+# var sideTexture: Texture = null:
+# 	set(value):
+# 		sideTexture = value
+# 		if sideMaterial != null:
+# 			sideMaterial.set_shader_parameter("Texture", sideTexture)
 		
-		if sideMaterialPointy != null:
-			sideMaterialPointy.set_shader_parameter("Texture", sideTexture)
+# 		if sideMaterialPointy != null:
+# 			sideMaterialPointy.set_shader_parameter("Texture", sideTexture)
 
-@export
-var bottomTexture: Texture = null:
+# @export
+# var bottomTexture: Texture = null:
+# 	set(value):
+# 		bottomTexture = value
+# 		if bottomMaterial != null:
+# 			bottomMaterial.set_shader_parameter("Texture", bottomTexture)
+
+var topTextureName: String = "Ice":
 	set(value):
-		bottomTexture = value
-		if bottomMaterial != null:
-			bottomMaterial.set_shader_parameter("Texture", bottomTexture)
+		topTextureName = value
+		if !is_node_ready():
+			return
+		
+		if !TextureLoader.propTextures.has(topTextureName):
+			setTopTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		setTopTexture(TextureLoader.propTextures[topTextureName])
+
+var sideTextureName: String = "Ice":
+	set(value):
+		sideTextureName = value
+		if !is_node_ready():
+			return
+		
+		if !TextureLoader.propTextures.has(sideTextureName):
+			setSideTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		setSideTexture(TextureLoader.propTextures[sideTextureName])
+
+var bottomTextureName: String = "Ice":
+	set(value):
+		bottomTextureName = value
+		if !is_node_ready():
+			return
+		
+		if !TextureLoader.propTextures.has(bottomTextureName):
+			setBottomTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		setBottomTexture(TextureLoader.propTextures[bottomTextureName])
 
 var topMaterial: ShaderMaterial = null
 var bottomMaterial: ShaderMaterial = null
@@ -120,10 +159,78 @@ func _ready():
 
 	setMaterial()
 
+	usingOnlineTextures = usingOnlineTextures
+
 
 var flipFaces: bool = false
 
-var useOnlineTextures: bool = false
+# var useOnlineTextures: bool = false
+var usingOnlineTextures: bool = false:
+	set(newValue):
+		usingOnlineTextures = newValue
+		if !is_node_ready():
+			return
+		
+		if !TextureLoader.propTextures.has(topTextureName):
+			setTopTexture(TextureLoader.propTextures["Ice"])
+		else:
+			setTopTexture(TextureLoader.propTextures[topTextureName])
+
+		if !TextureLoader.propTextures.has(sideTextureName):
+			setSideTexture(TextureLoader.propTextures["Ice"])
+		else:
+			setSideTexture(TextureLoader.propTextures[sideTextureName])
+		
+		if !TextureLoader.propTextures.has(bottomTextureName):
+			setBottomTexture(TextureLoader.propTextures["Ice"])
+		else:
+			setBottomTexture(TextureLoader.propTextures[bottomTextureName])
+
+
+
+		if usingOnlineTextures && topTextureUrl != "":
+			TextureLoader.loadOnlineTexture(topTextureUrl, setTopTexture)
+		if usingOnlineTextures && sideTextureUrl != "":
+			TextureLoader.loadOnlineTexture(sideTextureUrl, setSideTexture)
+		if usingOnlineTextures && bottomTextureUrl != "":
+			TextureLoader.loadOnlineTexture(bottomTextureUrl, setBottomTexture)
+
+
+var topTextureUrl: String = "":
+	set(value):
+		topTextureUrl = value
+		if !is_node_ready():
+			return
+
+		if topTextureUrl == "":
+			setTopTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		TextureLoader.loadOnlineTexture(topTextureUrl, setTopTexture)
+
+var sideTextureUrl: String = "":
+	set(value):
+		sideTextureUrl = value
+		if !is_node_ready():
+			return
+
+		if sideTextureUrl == "":
+			setSideTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		TextureLoader.loadOnlineTexture(sideTextureUrl, setSideTexture)
+
+var bottomTextureUrl: String = "":
+	set(value):
+		bottomTextureUrl = value
+		if !is_node_ready():
+			return
+
+		if bottomTextureUrl == "":
+			setBottomTexture(TextureLoader.propTextures["Ice"])
+			return
+		
+		TextureLoader.loadOnlineTexture(bottomTextureUrl, setBottomTexture)
 
 var proceduralMesh: ProceduralMesh = ProceduralMesh.new()
 
@@ -394,4 +501,132 @@ func getSideNormals(vertices: PackedVector3Array):
 		newNormals.append_array(normals)
 		return newNormals
 
-				
+
+func setTopTexture(texture: Texture):
+	topMaterial.set_shader_parameter("Texture", texture)
+
+func setSideTexture(texture: Texture):
+	sideMaterial.set_shader_parameter("Texture", texture)
+	sideMaterialPointy.set_shader_parameter("Texture", texture)
+
+func setBottomTexture(texture: Texture):
+	bottomMaterial.set_shader_parameter("Texture", texture)
+
+
+func getProperties() -> Dictionary:
+	var properties: Dictionary = {
+		"width": width,
+		"height": height,
+		"depth": depth,
+
+		"sides": sides,
+		"pointy": pointy,
+		"sharp": sharp,
+
+		"usingOnlineTextures": usingOnlineTextures,
+
+		"position": position,
+		"rotation": rotation,
+	}
+
+	if usingOnlineTextures:
+		properties["topTextureUrl"] = topTextureUrl
+		properties["sideTextureUrl"] = sideTextureUrl
+		properties["bottomTextureUrl"] = bottomTextureUrl
+	else:
+		properties["topTextureName"] = topTextureName
+		properties["sideTextureName"] = sideTextureName
+		properties["bottomTextureName"] = bottomTextureName
+	
+	return properties
+
+func setProperties(properties: Dictionary, setTransform: bool = true):
+	if properties.has("width"):
+		width = properties["width"]
+	if properties.has("height"):
+		height = properties["height"]
+	if properties.has("depth"):
+		depth = properties["depth"]
+
+	if properties.has("sides"):
+		sides = properties["sides"]
+	if properties.has("pointy"):
+		pointy = properties["pointy"]
+	if properties.has("sharp"):
+		sharp = properties["sharp"]
+
+	if properties.has("usingOnlineTextures"):
+		usingOnlineTextures = properties["usingOnlineTextures"]
+	
+	if properties.has("topTextureUrl"):
+		topTextureUrl = properties["topTextureUrl"]
+	if properties.has("sideTextureUrl"):
+		sideTextureUrl = properties["sideTextureUrl"]
+	if properties.has("bottomTextureUrl"):
+		bottomTextureUrl = properties["bottomTextureUrl"]
+	
+	if properties.has("topTextureName"):
+		topTextureName = properties["topTextureName"]
+	if properties.has("sideTextureName"):
+		sideTextureName = properties["sideTextureName"]
+	if properties.has("bottomTextureName"):
+		bottomTextureName = properties["bottomTextureName"]
+	
+	if setTransform:
+		if properties.has("position"):
+			global_position = properties["position"]
+		if properties.has("rotation"):
+			global_rotation = properties["rotation"]
+
+func convertToPhysicsObject() -> void:
+	if mesh.get_child_count() > 0:
+		for child in mesh.get_children():
+			child.queue_free()
+	mesh.create_trimesh_collision()
+	mesh.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+	}
+
+	if !is_equal_approx(width, 1.0):
+		data["width"] = width
+	if !is_equal_approx(height, 1.0):
+		data["height"] = height
+	if !is_equal_approx(depth, 1.0):
+		data["depth"] = depth
+	
+	if sides != 4:
+		data["sides"] = sides
+	
+	if pointy:
+		data["pointy"] = pointy
+	if !sharp:
+		data["sharp"] = sharp
+	
+	# if repeatTop != Vector2.ONE:
+	# 	data["repeatTop"] = var_to_str(repeatTop)
+	# if repeatSides != Vector2.ONE:
+	# 	data["repeatSides"] = var_to_str(repeatSides)
+	# if repeatBottom != Vector2.ONE:
+	# 	data["repeatBottom"] = var_to_str(repeatBottom)
+	
+	# if repeatSidesPointy:
+	# 	data["repeatSidesPointy"] = repeatSidesPointy
+	
+	if usingOnlineTextures:
+		data["usingOnlineTextures"] = usingOnlineTextures
+		data["topTextureUrl"] = topTextureUrl
+		data["sideTextureUrl"] = sideTextureUrl
+		data["bottomTextureUrl"] = bottomTextureUrl
+	else:
+		data["topTextureName"] = topTextureName
+		data["sideTextureName"] = sideTextureName
+		data["bottomTextureName"] = bottomTextureName
+	
+	return data
+
+
+	
