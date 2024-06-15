@@ -4,8 +4,13 @@ var billboardTextures: Dictionary = {}
 var billboardTextureIndices: Dictionary = {}
 var defaultBillboardTextureIndex: int = 0
 
+var propTextures: Dictionary = {}
+var propTextureIndices: Dictionary = {}
+var defaultPropTextureIndex: int = 0
+
 func _ready():
 	loadBillboardTextures()
+	loadPropTextures()
 
 func loadBillboardTextures() -> void:
 	var path = "res://BillboardTextures/"
@@ -30,6 +35,33 @@ func loadBillboardTextures() -> void:
 				defaultBillboardTextureIndex = index
 
 			billboardTextures[textureFileName] = texture
+
+			file_name = directory.get_next()
+			index += 1
+
+func loadPropTextures() -> void:
+	var path = "res://Editor/PropTextures/"
+	var directory = DirAccess.open(path)
+	if directory:
+		directory.list_dir_begin()
+		var file_name = directory.get_next()
+		var index = 0
+		while file_name != "":
+			# localTrackListItems.append(file_name.replace(path, ""))
+
+			if file_name.ends_with(".png"):
+				file_name = directory.get_next()
+				continue
+
+			var textureFileName = file_name.replace(path, "").replace(".png.import", "")
+			var texture: Texture = ResourceLoader.load(path + file_name.replace(".import", ""))
+
+			propTextureIndices[textureFileName] = index
+
+			if textureFileName == "Ice":
+				defaultPropTextureIndex = index
+
+			propTextures[textureFileName] = texture
 
 			file_name = directory.get_next()
 			index += 1
