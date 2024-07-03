@@ -535,6 +535,11 @@ func importTrack(fileName: String) -> bool:
 	if trackData.has("roads"):
 		var nodeIds: Dictionary = {}
 
+		var failsafeNode: RoadNode = roadNodeScene.instantiate()
+		roadNodes.add_child(failsafeNode)
+		failsafeNode.global_position = Vector3(0, 0, 0)
+		nodeIds[-1] = failsafeNode
+
 		for nodeData in trackData["roads"]["nodes"]:
 			var node: RoadNode = roadNodeScene.instantiate()
 			roadNodes.add_child(node)
@@ -550,6 +555,11 @@ func importTrack(fileName: String) -> bool:
 	
 	if trackData.has("pipes"):
 		var nodeIds: Dictionary = {}
+
+		var failsafeNode: PipeNode = pipeNodeScene.instantiate()
+		pipeNodes.add_child(failsafeNode)
+		failsafeNode.global_position = Vector3(0, 0, 0)
+		nodeIds[-1] = failsafeNode
 
 		for nodeData in trackData["pipes"]["nodes"]:
 			var node: PipeNode = pipeNodeScene.instantiate()

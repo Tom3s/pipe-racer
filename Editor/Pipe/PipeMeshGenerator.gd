@@ -318,8 +318,17 @@ func getExportData() -> Dictionary:
 	return data
 
 func importData(data: Dictionary, nodeIds: Dictionary):
-	startNode = nodeIds[data["startNodeId"]]
-	endNode = nodeIds[data["endNodeId"]]
+	# startNode = nodeIds[data["startNodeId"]]
+	# endNode = nodeIds[data["endNodeId"]]
+	if nodeIds.has(data["startNodeId"]):
+		startNode = nodeIds[data["startNodeId"]]
+	else: 
+		startNode = nodeIds[-1]
+	
+	if nodeIds.has(data["endNodeId"]):
+		endNode = nodeIds[data["endNodeId"]]
+	else:
+		endNode = nodeIds[-1]
 
 	if data.has("surfaceType"):
 		surfaceType = data["surfaceType"] as PhysicsSurface.SurfaceType
