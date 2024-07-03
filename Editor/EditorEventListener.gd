@@ -297,7 +297,7 @@ func connectSignals():
 				if currentElement != null && \
 					(ClassFunctions.getClassName(currentElement) == "RoadNode" || \
 					 ClassFunctions.getClassName(currentElement) == "PipeNode"):
-					# currentElement.setCollision(true)
+					currentElement.setCollision(true)
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
 
@@ -574,7 +574,7 @@ func connectSignals():
 
 			if currentElement != null:
 				if ClassFunctions.getClassName(currentElement) == "RoadNode" || \
-					ClassFunctions.getClassName(currentElement) == "RoadNode":
+					ClassFunctions.getClassName(currentElement) == "PipeNode":
 					currentElement.setCollision(true)
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						if meshGenerator != null:
