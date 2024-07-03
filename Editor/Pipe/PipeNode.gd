@@ -190,3 +190,6 @@ func importData(data: Dictionary):
 func setIngame(ingame: bool = true) -> void:
 	%Collider.use_collision = !ingame
 	%Arrow.visible = !ingame
+
+func setCollision(enabled: bool) -> void:
+	%Collider.use_collision = enabled

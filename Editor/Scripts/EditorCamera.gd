@@ -28,6 +28,7 @@ var _alt = false
 
 
 signal mouseCaptureExited()
+signal positionChanged(position: Vector3)
 
 func _ready():
 	global_position = Vector3.UP * 128
@@ -100,6 +101,8 @@ func _update_movement(delta):
 			return 
 
 		translate(_velocity * delta * speed_multi)
+
+		positionChanged.emit(global_position)
 
 # Updates mouse look 
 func _update_mouselook():

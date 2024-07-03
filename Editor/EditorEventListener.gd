@@ -297,6 +297,7 @@ func connectSignals():
 				if currentElement != null && \
 					(ClassFunctions.getClassName(currentElement) == "RoadNode" || \
 					 ClassFunctions.getClassName(currentElement) == "PipeNode"):
+					currentElement.setCollision(true)
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						meshGenerator.convertToPhysicsObject()
 
@@ -316,15 +317,18 @@ func connectSignals():
 				elif ClassFunctions.getClassName(collidedObject) == "RoadNode":
 					# map.lastRoadNode = collidedObject
 					currentElement = collidedObject
+					currentElement.setCollision(false)
 					roadNodePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.ROAD_NODE_PROPERTIES)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
 				elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
 					# map.lastPipeNode = collidedObject
 					currentElement = collidedObject
+					currentElement.setCollision(false)
 					pipeNodePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
 					rotator.enable()
@@ -339,6 +343,8 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
+
 				elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
 					currentElement = collidedObject
 					checkpointPropertiesUI.setProperties(collidedObject.getProperties())
@@ -347,6 +353,8 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
+
 				elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
 					currentElement = collidedObject
 					ledBoardPropertiesUI.setProperties(collidedObject.getProperties())
@@ -355,6 +363,8 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
+
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -509,6 +519,8 @@ func connectSignals():
 			currentElement.global_position = newPos
 			gridMesh.global_position = newPos
 			rotator.moveToNode(currentElement)
+			setGizmoScale(camera.global_position)
+
 			if ClassFunctions.getClassName(currentElement) == "RoadNode":
 				roadNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
@@ -563,6 +575,7 @@ func connectSignals():
 			if currentElement != null:
 				if ClassFunctions.getClassName(currentElement) == "RoadNode" || \
 					ClassFunctions.getClassName(currentElement) == "RoadNode":
+					currentElement.setCollision(true)
 					for meshGenerator in currentElement.meshGeneratorRefs:
 						if meshGenerator != null:
 							meshGenerator.convertToPhysicsObject()
@@ -1056,6 +1069,19 @@ func connectSignals():
 			AlertManager.showAlert(self, "Offline", "Please update the game to keep track of your stats")
 		get_parent().editorExited.emit()
 	)
+
+	camera.positionChanged.connect(func(value: Vector3):
+		setGizmoScale(value)
+	)
+
+@export
+var defaultGizmoDistance: float = 220
+
+func setGizmoScale(value: Vector3):
+	var distanceToGizmos: float = (value - rotator.global_position).length()
+
+	rotator.scale = (distanceToGizmos / defaultGizmoDistance) * Vector3.ONE
+	translator.scale = (distanceToGizmos / defaultGizmoDistance) * Vector3.ONE
 
 func setUIVisibility():
 	roadNodePropertiesUI.visible = currentBuildMode == BuildMode.ROAD && currentEditorMode == EditorMode.BUILD
