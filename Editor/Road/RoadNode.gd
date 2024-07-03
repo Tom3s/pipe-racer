@@ -352,4 +352,5 @@ func setIngame(ingame: bool = true) -> void:
 	%Arrow.visible = !ingame
 
 func setCollision(enabled: bool) -> void:
-	%Collider.use_collision = enabled
+	if !isPreviewNode:
+		%Collider.use_collision = enabled
