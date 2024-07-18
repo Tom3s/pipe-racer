@@ -118,6 +118,9 @@ func _update() -> void :
 	_update_clouds()
 	_update_shader()
 
+const _sun_color = Color(1.0, .8, .1)
+const _sunset_color = Color(1.0, 0, 0)
+
 func _update_sun() -> void :
 	if is_instance_valid( sun ) :
 		var day_progress : float = day_time / HOURS_IN_DAY
@@ -133,6 +136,12 @@ func _update_sun() -> void :
 		# Disabling light under the horizon
 		var sun_direction = sun.to_global( Vector3( 0.0, 0.0, 1.0 )).normalized()
 		sun.light_energy = smoothstep( -0.05, 0.1, sun_direction.y ) * sun_base_enegry
+
+		# float _sunset_amount = 1.0;
+		# 	if( LIGHT0_DIRECTION.y > 0.0 )
+		# 		_sunset_amount = clamp( cos( LIGHT0_DIRECTION.y * PI ), 0.0, 1.0 );
+		var sunset_amount = clamp( cos( sun_direction.y * PI ), 0.0, 1.0 )
+		sun.light_color = lerp(_sun_color, _sunset_color, sunset_amount)
 
 func _update_moon() -> void :
 	var day_progress : float = day_time / HOURS_IN_DAY

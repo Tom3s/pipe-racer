@@ -11,6 +11,7 @@ radial_segments = 8
 rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qqhpc"]
+shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vdfsm"]
@@ -18,9 +19,11 @@ height = 52.0
 radius = 6.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d1yua"]
+shading_mode = 0
 albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c1wgs"]
+shading_mode = 0
 albedo_color = Color(0, 0, 1, 1)
 
 [node name="Translator" type="Node3D"]
@@ -33,6 +36,7 @@ originalColor = Color(1, 0, 0, 1)
 
 [node name="Mesh" type="MeshInstance3D" parent="XPos"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 24, 0, 0)
+cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
 surface_material_override/0 = SubResource("StandardMaterial3D_qqhpc")
 
@@ -47,6 +51,7 @@ moveAxis = Vector3(0, 1, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="YPos"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, 0)
+cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
 surface_material_override/0 = SubResource("StandardMaterial3D_d1yua")
 
@@ -61,6 +66,7 @@ moveAxis = Vector3(0, 0, 1)
 
 [node name="Mesh" type="MeshInstance3D" parent="ZPos"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 24)
+cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
 surface_material_override/0 = SubResource("StandardMaterial3D_c1wgs")
 

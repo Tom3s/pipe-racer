@@ -175,7 +175,7 @@ func getVerticesInRadius(indices: Vector2i, radius: int) -> PackedVector2Array:
 	
 	return verticesToMove
 
-func setSelection(selected: bool, indices: Vector2i, radius: int) -> void:
+func setSelection(selected: bool, indices: Vector2i = Vector2i.ZERO, radius: int = 1) -> void:
 	var material: ShaderMaterial = groundMesh.material_override
 
 	var actualRadius: float = getRadius(radius)

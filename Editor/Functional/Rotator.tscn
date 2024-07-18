@@ -4,12 +4,15 @@
 [ext_resource type="Script" path="res://Editor/Functional/Rotator.gd" id="1_obahr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8puws"]
+shading_mode = 0
 albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wjt5"]
+shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6tytb"]
+shading_mode = 0
 albedo_color = Color(0.666667, 0, 1, 1)
 
 [node name="Rotator" type="Node3D"]
@@ -19,6 +22,7 @@ script = ExtResource("1_obahr")
 unique_name_in_owner = true
 
 [node name="Mesh" type="CSGTorus3D" parent="Direction"]
+cast_shadow = 0
 inner_radius = 66.0
 outer_radius = 72.0
 sides = 16
@@ -42,6 +46,7 @@ unique_name_in_owner = true
 
 [node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+cast_shadow = 0
 inner_radius = 58.0
 outer_radius = 64.0
 sides = 16
@@ -67,6 +72,7 @@ unique_name_in_owner = true
 
 [node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation/Tilt"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+cast_shadow = 0
 inner_radius = 50.0
 outer_radius = 56.0
 sides = 16

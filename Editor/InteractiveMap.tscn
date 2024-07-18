@@ -39,3 +39,5 @@ unique_name_in_owner = true
 [node name="LedBoards" type="Node3D" parent="Deco"]
 
 [node name="Prisms" type="Node3D" parent="Deco"]
+
+[node name="Lights" type="Node3D" parent="Deco"]

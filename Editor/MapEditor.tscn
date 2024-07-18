@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene load_steps=35 format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
 [ext_resource type="Script" path="res://Editor/MapEditor.gd" id="1_6ohh1"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dhr0gg8gqdduy" path="res://Editor/Props/LedBoardPropertiesUI.tscn" id="7_4pe1b"]
 [ext_resource type="PackedScene" uid="uid://csnsoov0ek0hk" path="res://Editor/Functional/PaintBrushUI.tscn" id="8_xxuga"]
 [ext_resource type="PackedScene" uid="uid://bcirlgcvbvw6k" path="res://Editor/Props/PrismShapePropertiesUI.tscn" id="9_7ykw3"]
+[ext_resource type="PackedScene" uid="uid://oaolsndg7xim" path="res://Editor/Props/LightDecoPropertiesUI.tscn" id="10_2qm6b"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="11_6xw54"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
@@ -30,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="23_nr0wy"]
 [ext_resource type="PackedScene" uid="uid://pc8ac2621xjd" path="res://Editor/Props/PrismShapeDeco.tscn" id="24_8u7j6"]
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="24_hbp31"]
+[ext_resource type="PackedScene" uid="uid://bhm3itq8us1mi" path="res://Editor/Props/LightDeco.tscn" id="26_f1ojp"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -95,6 +97,11 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
+[node name="LightDecoPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("10_2qm6b")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="PaintBrushUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("8_xxuga")]
 unique_name_in_owner = true
 visible = false
@@ -146,6 +153,7 @@ isPreviewNode = true
 
 [node name="GridMesh" type="MeshInstance3D" parent="PreviewElement"]
 unique_name_in_owner = true
+cast_shadow = 0
 mesh = SubResource("PlaneMesh_4qril")
 surface_material_override/0 = SubResource("ShaderMaterial_1wdtv")
 
@@ -160,6 +168,9 @@ isPreview = true
 unique_name_in_owner = true
 
 [node name="PrismShapeDeco" parent="PreviewElement" instance=ExtResource("24_8u7j6")]
+unique_name_in_owner = true
+
+[node name="LightDeco" parent="PreviewElement" instance=ExtResource("26_f1ojp")]
 unique_name_in_owner = true
 
 [node name="Gizmos" type="Node3D" parent="."]
