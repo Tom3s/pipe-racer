@@ -31,6 +31,26 @@ func addMeshTo(
 		node.mesh = ArrayMesh.new()
 	node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
 
+func addMeshCustom(
+	node: MeshInstance3D, 
+	vertices: PackedVector3Array,
+	indices: PackedInt32Array,
+	uv: PackedVector2Array,
+	normal: PackedVector3Array,
+	clear: bool = true
+) -> void:
+	var meshData = []
+	meshData.resize(ArrayMesh.ARRAY_MAX)
+	meshData[ArrayMesh.ARRAY_VERTEX] = vertices
+	meshData[ArrayMesh.ARRAY_INDEX] = indices
+	meshData[ArrayMesh.ARRAY_TEX_UV] = uv
+	# meshData[ArrayMesh.ARRAY_NORMAL] = getNormalArray(indices, vertices)
+	meshData[ArrayMesh.ARRAY_NORMAL] = normal
+
+	if clear:
+		node.mesh = ArrayMesh.new()
+	node.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, meshData)
+
 
 func getVertexIndexArray(
 	vertices: PackedVector3Array,

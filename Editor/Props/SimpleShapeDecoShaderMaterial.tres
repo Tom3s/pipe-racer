@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://byfapejtdouud"]
+
+[ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="1_bykyp"]
+[ext_resource type="Texture2D" uid="uid://bk7ycinsihbw8" path="res://Editor/PropTextures/Cobblestone.png" id="2_5ww1n"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bykyp")
+shader_parameter/Repeat = Vector2(1, 1)
+shader_parameter/Texture = ExtResource("2_5ww1n")

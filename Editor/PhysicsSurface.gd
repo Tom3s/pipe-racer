@@ -8,7 +8,8 @@ enum SurfaceType {
 	BOOSTER,
 	REV_BOOSTER,
 	CONCRETE,
-	FENCE
+	FENCE,
+	ICE,
 }
 
 const materials = [
@@ -19,6 +20,7 @@ const materials = [
 	preload("res://Track Props/BoosterMaterial.tres"), # BOOSTER	
 	preload("res://Tracks/RacetrackMaterial.tres"), # CONCRETE
 	preload("res://Track Props/FenceMaterial.tres"), # FENCE
+	preload("res://Editor/SurfaceMaterials/IceMaterial.tres"), # ICE
 ]
 
 var frictions = [
@@ -29,6 +31,7 @@ var frictions = [
 	1.0, # REVERSE BOOSTER
 	0.9, # CONCRETE
 	0.5, # FENCE
+	0.0, # ICE
 ]
 
 var accelerationMultipliers = [
@@ -39,6 +42,7 @@ var accelerationMultipliers = [
 	3.0, # REVERSE BOOSTER
 	0.9, # CONCRETE
 	0.5, # FENCE
+	0.7, # ICE
 ]
 
 var smokeParticlesTypes = [
@@ -49,6 +53,7 @@ var smokeParticlesTypes = [
 	true, # REVERSE BOOSTER
 	true, # CONCRETE
 	true, # FENCE
+	false, # ICE
 ]
 
 var friction: float = 1.0

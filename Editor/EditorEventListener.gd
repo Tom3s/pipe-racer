@@ -2,7 +2,7 @@ extends Node3D
 class_name EditorEventListener
 
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
-
+@onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
 
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
@@ -14,6 +14,7 @@ class_name EditorEventListener
 @onready var startLine: ProceduralStartLine = %StartLine
 @onready var checkpoint: FunctionalCheckpoint = %Checkpoint
 @onready var ledBoard: LedBoard = %LedBoard
+@onready var prismShapeDeco: PrismShapeDeco = %PrismShapeDeco
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -29,6 +30,7 @@ var currentElement: Node3D = null
 @onready var startLinePropertiesUI: StartLinePropertiesUI = %StartLinePropertiesUI
 @onready var checkpointPropertiesUI: CheckpointPropertiesUI = %CheckpointPropertiesUI
 @onready var ledBoardPropertiesUI: LedBoardPropertiesUI = %LedBoardPropertiesUI
+@onready var prismShapePropertiesUI: PrismShapePropertiesUI = %PrismShapePropertiesUI
 
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
@@ -68,7 +70,9 @@ enum BuildMode {
 	PIPE,
 	START,
 	CP,
-	DECO
+	DECO,
+	PRISM,
+	SPHERE
 }
 
 var currentBuildMode: BuildMode = BuildMode.ROAD
@@ -269,6 +273,13 @@ func connectSignals():
 					currentElement.getProperties()
 				)
 				editorStats.increasePlacedProps()
+			elif ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
+				map.addPrismShapeDeco(
+					prismShapeDecoScene.instantiate(),
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					currentElement.getProperties()
+				)
 			
 			
 
@@ -303,7 +314,8 @@ func connectSignals():
 
 				if currentElement != null && \
 					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine" || \
-					 ClassFunctions.getClassName(currentElement) == "LedBoard"):
+					 ClassFunctions.getClassName(currentElement) == "LedBoard" || \
+					 ClassFunctions.getClassName(currentElement) == "PrismShapeDeco"):
 					currentElement.convertToPhysicsObject()
 
 				if ClassFunctions.getClassName(collidedObject) == "RoadMeshGenerator":
@@ -365,6 +377,15 @@ func connectSignals():
 					translator.global_position = currentElement.global_position
 					setGizmoScale(camera.global_position)
 
+				elif ClassFunctions.getClassName(collidedObject) == "PrismShapeDeco":
+					currentElement = collidedObject
+					prismShapePropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.PRISM_SHAPE_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -394,6 +415,9 @@ func connectSignals():
 				map.removeCheckpoint(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
 				map.removeLedBoard(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "PrismShapeDeco":
+				map.removePrismShapeDeco(collidedObject)
+			
 			else:
 				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
 
@@ -512,6 +536,8 @@ func connectSignals():
 				checkpointPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
 				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
+				prismShapePropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	translator.positionChanged.connect(func(newPos: Vector3):
@@ -531,6 +557,8 @@ func connectSignals():
 				checkpointPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "LedBoard":
 				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
+				prismShapePropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	map.roadPreviewElementRequested.connect(func():
@@ -582,6 +610,9 @@ func connectSignals():
 				
 				if ClassFunctions.getClassName(currentElement) == "LedBoard":
 					currentElement.convertToPhysicsObject()
+				
+				if ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
+					currentElement.convertToPhysicsObject()
 					
 			currentElement = null
 
@@ -608,6 +639,11 @@ func connectSignals():
 			ledBoardProperties.erase("position")
 			ledBoardProperties.erase("rotation")
 			ledBoard.setProperties(ledBoardProperties)
+
+			var prismShapeProperties = prismShapePropertiesUI.getProperties()
+			prismShapeProperties.erase("position")
+			prismShapeProperties.erase("rotation")
+			prismShapeDeco.setProperties(prismShapeProperties)
 
 			rotator.disable()
 			translator.disable()
@@ -1012,6 +1048,145 @@ func connectSignals():
 		rotator.moveToNode(currentElement)
 	)
 
+	# prism shape properties ui
+
+	prismShapePropertiesUI.surfaceChanged.connect(func(surface: int):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.surfaceType = surface as PhysicsSurface.SurfaceType
+	)
+
+	prismShapePropertiesUI.widthChanged.connect(func(width: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.width = width
+	)
+
+	prismShapePropertiesUI.heightChanged.connect(func(height: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.height = height
+	)
+
+	prismShapePropertiesUI.depthChanged.connect(func(depth: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.depth = depth
+	)
+
+	prismShapePropertiesUI.sideChanged.connect(func(side: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.sides = side
+	)
+
+	prismShapePropertiesUI.pointyChanged.connect(func(pointy: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.pointy = pointy
+	)
+
+	prismShapePropertiesUI.sharpChanged.connect(func(sharp: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.sharp = sharp
+	)
+
+	prismShapePropertiesUI.useOnlineTexturesChanged.connect(func(useOnlineTextures: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.usingOnlineTextures = useOnlineTextures
+	)
+
+	prismShapePropertiesUI.topTextureChanged.connect(func(texture: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.topTextureName = texture
+	)
+
+	prismShapePropertiesUI.sideTextureChanged.connect(func(texture: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.sideTextureName = texture
+	)
+
+	prismShapePropertiesUI.bottomTextureChanged.connect(func(texture: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.bottomTextureName = texture
+	)
+
+	prismShapePropertiesUI.topTextureUrlChanged.connect(func(url: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.topTextureUrl = url
+	)
+
+	prismShapePropertiesUI.sideTextureUrlChanged.connect(func(url: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.sideTextureUrl = url
+	)
+
+	prismShapePropertiesUI.bottomTextureUrlChanged.connect(func(url: String):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.bottomTextureUrl = url
+	)
+
+	prismShapePropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.global_position = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	prismShapePropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+	)
+
+
+
+
+
 	# scenery editor ui
 
 	inputHandler.mouseMovedTo_Scenery.connect(
@@ -1096,6 +1271,8 @@ func setUIVisibility():
 
 	ledBoardPropertiesUI.visible = currentBuildMode == BuildMode.DECO && currentEditorMode == EditorMode.BUILD
 
+	prismShapePropertiesUI.visible = currentBuildMode == BuildMode.PRISM && currentEditorMode == EditorMode.BUILD
+
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 	paintBrushUI.visible = currentEditorMode == EditorMode.PAINT
@@ -1111,6 +1288,7 @@ enum EditUIType {
 	START_LINE_PROPERTIES,
 	CP_PROPERTIES,
 	LED_BOARD_PROPERTIES,
+	PRISM_SHAPE_PROPERTIES,
 	NONE,
 }
 
@@ -1122,6 +1300,7 @@ func setEditUIVisibility(ui: EditUIType):
 	startLinePropertiesUI.visible = ui == EditUIType.START_LINE_PROPERTIES
 	checkpointPropertiesUI.visible = ui == EditUIType.CP_PROPERTIES
 	ledBoardPropertiesUI.visible = ui == EditUIType.LED_BOARD_PROPERTIES
+	prismShapePropertiesUI.visible = ui == EditUIType.PRISM_SHAPE_PROPERTIES
 
 func setCurrentElement():
 	
@@ -1135,6 +1314,7 @@ func setCurrentElement():
 		startLine.visible = currentBuildMode == BuildMode.START
 		checkpoint.visible = currentBuildMode == BuildMode.CP
 		ledBoard.visible = currentBuildMode == BuildMode.DECO
+		prismShapeDeco.visible = currentBuildMode == BuildMode.PRISM
 
 
 		if currentBuildMode == BuildMode.ROAD:
@@ -1147,6 +1327,8 @@ func setCurrentElement():
 			currentElement = checkpoint
 		elif currentBuildMode == BuildMode.DECO:
 			currentElement = ledBoard
+		elif currentBuildMode == BuildMode.PRISM:
+			currentElement = prismShapeDeco
 		
 		else:
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
@@ -1158,6 +1340,7 @@ func setCurrentElement():
 	startLine.visible = currentEditorMode == EditorMode.BUILD
 	checkpoint.visible = currentEditorMode == EditorMode.BUILD
 	ledBoard.visible = currentEditorMode == EditorMode.BUILD
+	prismShapeDeco.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 

@@ -21,6 +21,7 @@ class_name EditorSidebarUI
 @onready var startButton: Button = %StartButton
 @onready var cpButton: Button = %CPButton
 @onready var decoButton: Button = %DecoButton
+@onready var prismButton: Button = %PrismButton
 
 @onready var metadataContainer: Control = %MetadataContainer
 @onready var trackNameLineEdit: LineEdit = %TrackNameLineEdit
@@ -90,6 +91,9 @@ func connectSignals():
 	decoButton.pressed.connect(func():
 		onBuildButtonPressed(EditorEventListener.BuildMode.DECO)
 	)
+	prismButton.pressed.connect(func():
+		onBuildButtonPressed(EditorEventListener.BuildMode.PRISM)
+	)
 
 	metadataButton.pressed.connect(func():
 		metadataContainer.visible = true
@@ -128,6 +132,7 @@ func onBuildButtonPressed(index: int) -> void:
 	startButton.button_pressed = index == EditorEventListener.BuildMode.START
 	cpButton.button_pressed = index == EditorEventListener.BuildMode.CP
 	decoButton.button_pressed = index == EditorEventListener.BuildMode.DECO
+	prismButton.button_pressed = index == EditorEventListener.BuildMode.PRISM
 
 	buildModeChanged.emit(index as EditorEventListener.BuildMode)	
 
