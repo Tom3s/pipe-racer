@@ -4,6 +4,8 @@ class_name PrismShapePropertiesUI
 # UI elements
 @onready var mainContainer: PanelContainer = %MainContainer
 
+@onready var surfaceOptions: OptionButton = %SurfaceOptions
+
 @onready var widthSpinbox: SpinBox = %WidthSpinbox
 @onready var heightSpinbox: SpinBox = %HeightSpinbox
 @onready var depthSpinbox: SpinBox = %DepthSpinbox
@@ -39,6 +41,8 @@ class_name PrismShapePropertiesUI
 @onready var visibilityButton: Button = %VisibilityButton
 
 # out signals
+signal surfaceChanged(surface: int)
+
 signal widthChanged(width: float)
 signal heightChanged(height: float)
 signal depthChanged(depth: float)
@@ -62,6 +66,9 @@ signal positionChanged(position: Vector3)
 signal rotationChanged(rotation: Vector3)
 
 # in setters
+
+func setSurface(surface: int) -> void:
+	surfaceOptions.selected = surface
 
 func setWidth(newWidth: float) -> void:
 	widthSpinbox.set_value_no_signal(newWidth)
@@ -121,6 +128,8 @@ func _ready():
 	rotYSpinbox.custom_arrow_step = deg_to_rad(5)
 	rotZSpinbox.custom_arrow_step = deg_to_rad(5)
 
+	setupSurfaceOptions()
+
 	connectSignals()
 
 	# localTextureContainer.visible = true
@@ -134,6 +143,10 @@ func connectSignals():
 	visibilityButton.pressed.connect(func():
 		mainContainer.visible = !visibilityButton.button_pressed
 		visibilityButton.text = "v Prism Shape" if visibilityButton.button_pressed else "^ Prism Shape"
+	)
+
+	surfaceOptions.item_selected.connect(func(index: int):
+		surfaceChanged.emit(index)
 	)
 
 	widthSpinbox.value_changed.connect(func(value: float):
@@ -219,6 +232,15 @@ func connectSignals():
 		rotationChanged.emit(Vector3(rotXSpinbox.value, rotYSpinbox.value, value))
 	)
 	
+func setupSurfaceOptions() -> void:
+	
+	surfaceOptions.clear()
+
+	for surfaceType in PhysicsSurface.SurfaceType.keys():
+		surfaceOptions.add_item(surfaceType.capitalize())
+
+	surfaceOptions.selected = 0
+
 func fillTextureOptions():
 	topTextureOptions.clear()
 	sideTextureOptions.clear()

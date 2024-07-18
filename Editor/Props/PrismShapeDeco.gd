@@ -10,6 +10,11 @@ var materialPointy: ShaderMaterial = preload("res://Editor/Props/SimpleShapeDeco
 
 var DEFAULT_TEXTURE: Texture = preload("res://Editor/PropTextures/Ice.png")
 
+@export
+var surfaceType: PhysicsSurface.SurfaceType = PhysicsSurface.SurfaceType.ROAD
+	# set(newValue):
+	# 	surfaceType = setSurfaceMaterial(newValue)
+
 @export_range(0.1, 512, 0.1)
 var width: float = 1.0:
 	set(value):
@@ -79,31 +84,6 @@ var repeatSidesPointy: bool = false:
 		if sideMaterialPointy != null:
 			sideMaterialPointy.set_shader_parameter("Repeated", repeatSidesPointy)
 
-
-# @export
-# var topTexture: Texture = null:
-# 	set(value):
-# 		topTexture = value
-# 		if topMaterial != null:
-# 			topMaterial.set_shader_parameter("Texture", topTexture)
-
-
-# @export
-# var sideTexture: Texture = null:
-# 	set(value):
-# 		sideTexture = value
-# 		if sideMaterial != null:
-# 			sideMaterial.set_shader_parameter("Texture", sideTexture)
-		
-# 		if sideMaterialPointy != null:
-# 			sideMaterialPointy.set_shader_parameter("Texture", sideTexture)
-
-# @export
-# var bottomTexture: Texture = null:
-# 	set(value):
-# 		bottomTexture = value
-# 		if bottomMaterial != null:
-# 			bottomMaterial.set_shader_parameter("Texture", bottomTexture)
 
 var topTextureName: String = "Ice":
 	set(value):
@@ -515,6 +495,8 @@ func setBottomTexture(texture: Texture):
 
 func getProperties() -> Dictionary:
 	var properties: Dictionary = {
+		"surfaceType": surfaceType,
+
 		"width": width,
 		"height": height,
 		"depth": depth,
@@ -541,6 +523,9 @@ func getProperties() -> Dictionary:
 	return properties
 
 func setProperties(properties: Dictionary, setTransform: bool = true):
+	if properties.has("surfaceType"):
+		surfaceType = properties["surfaceType"]
+
 	if properties.has("width"):
 		width = properties["width"]
 	if properties.has("height"):
@@ -583,13 +568,16 @@ func convertToPhysicsObject() -> void:
 		for child in mesh.get_children():
 			child.queue_free()
 	mesh.create_trimesh_collision()
-	mesh.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)
+	mesh.setPhysicsMaterial(surfaceType)
 
 func getExportData() -> Dictionary:
 	var data = {
 		"position": var_to_str(global_position),
 		"rotation": var_to_str(global_rotation),
 	}
+
+	if surfaceType != PhysicsSurface.SurfaceType.ROAD:
+		data["surfaceType"] = surfaceType
 
 	if !is_equal_approx(width, 1.0):
 		data["width"] = width

@@ -1050,6 +1050,14 @@ func connectSignals():
 
 	# prism shape properties ui
 
+	prismShapePropertiesUI.surfaceChanged.connect(func(surface: int):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
+			return
+		
+		currentElement = currentElement as PrismShapeDeco
+		currentElement.surfaceType = surface as PhysicsSurface.SurfaceType
+	)
+
 	prismShapePropertiesUI.widthChanged.connect(func(width: float):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
 			return
