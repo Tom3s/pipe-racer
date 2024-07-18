@@ -6,13 +6,13 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_msgkm"]
 shader = ExtResource("2_ghyuj")
-shader_parameter/day_top_color = Color(0.1, 0.6, 1, 1)
-shader_parameter/day_bottom_color = Color(0.4, 0.8, 1, 1)
-shader_parameter/sunset_top_color = Color(0.7, 0.75, 1, 1)
+shader_parameter/day_top_color = Color(0.411765, 0.733333, 1, 1)
+shader_parameter/day_bottom_color = Color(0.8, 0.933333, 1, 1)
+shader_parameter/sunset_top_color = Color(0.701961, 0.74902, 1, 1)
 shader_parameter/sunset_bottom_color = Color(1, 0.5, 0.7, 1)
-shader_parameter/night_top_color = Color(0.02, 0, 0.04, 1)
+shader_parameter/night_top_color = Color(0.0196078, 0, 0.0392157, 1)
 shader_parameter/night_bottom_color = Color(0.0666667, 0.0392157, 0.101961, 1)
-shader_parameter/horizon_color = Color(0, 0.329412, 0.384314, 1)
+shader_parameter/horizon_color = Color(0.168627, 0.34902, 0.380392, 1)
 shader_parameter/horizon_blur = 0.14
 shader_parameter/sun_color = Color(10, 8, 1, 1)
 shader_parameter/sun_sunset_color = Color(10, 0, 0, 1)
@@ -28,7 +28,7 @@ shader_parameter/clouds_bottom_color = Color(0.83, 0.83, 0.94, 1)
 shader_parameter/clouds_speed = 2.0
 shader_parameter/clouds_direction = 0.2
 shader_parameter/clouds_scale = 1.0
-shader_parameter/clouds_cutoff = 0.26
+shader_parameter/clouds_cutoff = 0.6
 shader_parameter/clouds_fuzziness = 0.5
 shader_parameter/clouds_weight = 0.0
 shader_parameter/clouds_blur = 0.25
@@ -36,7 +36,7 @@ shader_parameter/stars_speed = 1.0
 shader_parameter/stars_scale = 1.0
 shader_parameter/stars_opacity = 1.0
 shader_parameter/stars_texture = ExtResource("3_y4iwd")
-shader_parameter/overwritten_time = 152.675
+shader_parameter/overwritten_time = 501.991
 
 [sub_resource type="Sky" id="Sky_q13r3"]
 sky_material = SubResource("ShaderMaterial_msgkm")
@@ -45,7 +45,7 @@ sky_material = SubResource("ShaderMaterial_msgkm")
 background_mode = 2
 sky = SubResource("Sky_q13r3")
 ambient_light_source = 3
-ambient_light_sky_contribution = 0.7
+reflected_light_source = 2
 
 [node name="DynamicSky" type="Node3D"]
 script = ExtResource("1_csme5")
@@ -56,6 +56,7 @@ environment = SubResource("Environment_bh1jy")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.820008, 0.213047, 0.531224, -0.56471, 0.452339, 0.690284, -0.0932301, -0.866025, 0.491231, 0, 0, 0)
 rotation_order = 4
+light_color = Color(1, 0.8, 0.1, 1)
 shadow_enabled = true
 shadow_opacity = 0.75
 shadow_blur = 5.0
