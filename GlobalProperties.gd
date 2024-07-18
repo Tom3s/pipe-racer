@@ -81,6 +81,17 @@ var RENDER_QUALITY: float = 1.0:
 	get:
 		return RENDER_QUALITY
 
+signal shadowsChanged(newShadows: bool)
+
+@export
+var REAL_TIME_SHADOWS: bool = true:
+	set(newShadows):
+		REAL_TIME_SHADOWS = newShadows
+		shadowsChanged.emit(newShadows)
+		saveToFile()
+	get:
+		return REAL_TIME_SHADOWS
+
 @export
 var FIX_PEDAL_INPUT: bool = false:
 	set(newFix):
@@ -232,6 +243,7 @@ func saveToFile() -> void:
 		"SFX_VOLUME": SFX_VOLUME,
 		"FULLSCREEN": FULLSCREEN,
 		"RENDER_QUALITY": RENDER_QUALITY,
+		"REAL_TIME_SHADOWS": REAL_TIME_SHADOWS,
 		"FIX_PEDAL_INPUT": FIX_PEDAL_INPUT,
 		"DEADZONE": DEADZONE,
 		"SMOOTH_STEERING": SMOOTH_STEERING,
@@ -270,6 +282,8 @@ func loadFromFile() -> void:
 			FULLSCREEN = bool(jsonData["FULLSCREEN"])
 		if jsonData.has("RENDER_QUALITY"):
 			RENDER_QUALITY = float(jsonData["RENDER_QUALITY"])
+		if jsonData.has("REAL_TIME_SHADOWS"):
+			REAL_TIME_SHADOWS = bool(jsonData["REAL_TIME_SHADOWS"])
 		if jsonData.has("FIX_PEDAL_INPUT"):
 			FIX_PEDAL_INPUT = bool(jsonData["FIX_PEDAL_INPUT"])
 		if jsonData.has("DEADZONE"):

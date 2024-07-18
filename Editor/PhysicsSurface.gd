@@ -53,7 +53,7 @@ var smokeParticlesTypes = [
 	true, # REVERSE BOOSTER
 	true, # CONCRETE
 	true, # FENCE
-	false, # ICE
+	true, # ICE
 ]
 
 var friction: float = 1.0

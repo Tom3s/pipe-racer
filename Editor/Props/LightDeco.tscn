@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhm3itq8us1mi"]
+
+[ext_resource type="Script" path="res://Editor/Props/LightDeco.gd" id="1_yor7c"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_b0mq5"]
+radius = 2.0
+height = 4.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cp3h6"]
+shading_mode = 2
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.3
+rim_tint = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_mj2ic"]
+radius = 2.0
+height = 4.0
+radial_segments = 32
+rings = 16
+is_hemisphere = true
+
+[node name="LightDeco" type="Node3D"]
+script = ExtResource("1_yor7c")
+lightSize = 32.0
+spotSize = 128.0
+spotAngle = 35.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+unique_name_in_owner = true
+light_energy = 2.0
+shadow_enabled = true
+omni_range = 32.0
+omni_attenuation = 0.5
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+visible = false
+light_energy = 2.0
+shadow_enabled = true
+spot_range = 128.0
+spot_attenuation = 0.5
+spot_angle = 35.0
+spot_angle_attenuation = 0.5
+
+[node name="OmniPreview" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+cast_shadow = 0
+mesh = SubResource("SphereMesh_b0mq5")
+surface_material_override/0 = SubResource("StandardMaterial3D_cp3h6")
+
+[node name="SpotPreview" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+visible = false
+cast_shadow = 0
+mesh = SubResource("SphereMesh_mj2ic")
+surface_material_override/0 = SubResource("StandardMaterial3D_cp3h6")
+
+[node name="Collider" type="CSGSphere3D" parent="."]
+unique_name_in_owner = true
+layers = 0
+use_collision = true
+collision_layer = 16
+collision_mask = 16
+radius = 3.0
+radial_segments = 8
+smooth_faces = false

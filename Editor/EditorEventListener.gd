@@ -3,6 +3,7 @@ class_name EditorEventListener
 
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
 @onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
+@onready var lightDecoScene: PackedScene = preload("res://Editor/Props/LightDeco.tscn")
 
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
@@ -15,6 +16,7 @@ class_name EditorEventListener
 @onready var checkpoint: FunctionalCheckpoint = %Checkpoint
 @onready var ledBoard: LedBoard = %LedBoard
 @onready var prismShapeDeco: PrismShapeDeco = %PrismShapeDeco
+@onready var lightDeco: LightDeco = %LightDeco
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -31,6 +33,7 @@ var currentElement: Node3D = null
 @onready var checkpointPropertiesUI: CheckpointPropertiesUI = %CheckpointPropertiesUI
 @onready var ledBoardPropertiesUI: LedBoardPropertiesUI = %LedBoardPropertiesUI
 @onready var prismShapePropertiesUI: PrismShapePropertiesUI = %PrismShapePropertiesUI
+@onready var lightDecoPropertiesUI: LightDecoPropertiesUI = %LightDecoPropertiesUI
 
 @onready var sceneryEditorUI: SceneryEditorUI = %SceneryEditorUI
 
@@ -72,7 +75,8 @@ enum BuildMode {
 	CP,
 	DECO,
 	PRISM,
-	SPHERE
+	SPHERE,
+	LIGHT,
 }
 
 var currentBuildMode: BuildMode = BuildMode.ROAD
@@ -280,6 +284,15 @@ func connectSignals():
 					currentElement.global_rotation,
 					currentElement.getProperties()
 				)
+				editorStats.increasePlacedProps()
+			elif ClassFunctions.getClassName(currentElement) == "LightDeco":
+				map.addLightDeco(
+					lightDecoScene.instantiate(),
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					currentElement.getProperties()
+				)
+				editorStats.increasePlacedProps()
 			
 			
 
@@ -386,6 +399,15 @@ func connectSignals():
 					translator.enable()
 					translator.global_position = currentElement.global_position
 					setGizmoScale(camera.global_position)
+				elif ClassFunctions.getClassName(collidedObject) == "LightDeco":
+					currentElement = collidedObject
+					lightDecoPropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.LIGHT_DECO_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
+					setGizmoScale(camera.global_position)
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -417,6 +439,8 @@ func connectSignals():
 				map.removeLedBoard(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "PrismShapeDeco":
 				map.removePrismShapeDeco(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "LightDeco":
+				map.removeLightDeco(collidedObject)
 			
 			else:
 				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
@@ -538,6 +562,8 @@ func connectSignals():
 				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
 				prismShapePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "LightDeco":
+				lightDecoPropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	translator.positionChanged.connect(func(newPos: Vector3):
@@ -559,6 +585,8 @@ func connectSignals():
 				ledBoardPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PrismShapeDeco":
 				prismShapePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "LightDeco":
+				lightDecoPropertiesUI.setProperties(currentElement.getProperties())
 	)
 
 	map.roadPreviewElementRequested.connect(func():
@@ -580,6 +608,9 @@ func connectSignals():
 	editorSidebarUI.editorModeChanged.connect(func(mode: EditorMode):
 		if currentEditorMode == EditorMode.BUILD:
 			map.clearPreviews()
+		
+		if mode != EditorMode.SCENERY:
+			map.hideScenerySelection()
 
 		currentEditorMode = mode
 		inputHandler.editorMode = mode
@@ -645,6 +676,11 @@ func connectSignals():
 			prismShapeProperties.erase("rotation")
 			prismShapeDeco.setProperties(prismShapeProperties)
 
+			var lightDecoProperties = lightDecoPropertiesUI.getProperties()
+			lightDecoProperties.erase("position")
+			lightDecoProperties.erase("rotation")
+			lightDeco.setProperties(lightDecoProperties)
+
 			rotator.disable()
 			translator.disable()
 
@@ -654,23 +690,16 @@ func connectSignals():
 
 	editorSidebarUI.trackNameChanged.connect(func(name: String):
 		map.trackName = name
+		saveTrack()
+
 	)
 
 	editorSidebarUI.lapCountChanged.connect(func(count: int):
 		map.lapCount = count
+		saveTrack()
 	)
 
-	editorSidebarUI.savePressed.connect(func():
-		map.exportTrack()
-
-		levelSavedLabel.text = "Level Saved As: " + map.trackName
-	
-		var tween = create_tween().set_ease(Tween.EASE_OUT)
-
-		tween.tween_property(levelSavedLabel, "modulate:a", 1, 0)
-		tween.tween_property(levelSavedLabel, "modulate:a", 1, 1.5)
-		tween.tween_property(levelSavedLabel, "modulate:a", 0, 0.3)
-	)
+	editorSidebarUI.savePressed.connect(saveTrack)
 
 	# road node properties ui
 	roadNodePropertiesUI.roadProfileChanged.connect(func(profile: int):
@@ -1183,6 +1212,70 @@ func connectSignals():
 		rotator.moveToNode(currentElement)
 	)
 
+	# light deco properties ui
+
+	lightDecoPropertiesUI.colorChanged.connect(func(color: Color):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.color = color
+	)
+
+	lightDecoPropertiesUI.spotChanged.connect(func(spot: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.spotlightMode = spot
+	)
+
+	lightDecoPropertiesUI.omniSizeChanged.connect(func(size: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.lightSize = size
+	)
+
+	lightDecoPropertiesUI.spotlightSizeChanged.connect(func(size: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.spotSize = size
+	)
+
+	lightDecoPropertiesUI.spotlightAngleChanged.connect(func(angle: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.spotAngle = angle
+	)
+
+	lightDecoPropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.global_position = value
+
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	lightDecoPropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
+			return
+		
+		currentElement = currentElement as LightDeco
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+	)
+
+
 
 
 
@@ -1249,6 +1342,17 @@ func connectSignals():
 		setGizmoScale(value)
 	)
 
+func saveTrack():
+		map.exportTrack()
+
+		levelSavedLabel.text = "Level Saved As: " + map.trackName
+	
+		var tween = create_tween().set_ease(Tween.EASE_OUT)
+
+		tween.tween_property(levelSavedLabel, "modulate:a", 1, 0)
+		tween.tween_property(levelSavedLabel, "modulate:a", 1, 1.5)
+		tween.tween_property(levelSavedLabel, "modulate:a", 0, 0.3)
+
 @export
 var defaultGizmoDistance: float = 220
 
@@ -1273,6 +1377,8 @@ func setUIVisibility():
 
 	prismShapePropertiesUI.visible = currentBuildMode == BuildMode.PRISM && currentEditorMode == EditorMode.BUILD
 
+	lightDecoPropertiesUI.visible = currentBuildMode == BuildMode.LIGHT && currentEditorMode == EditorMode.BUILD
+
 	sceneryEditorUI.visible = currentEditorMode == EditorMode.SCENERY
 
 	paintBrushUI.visible = currentEditorMode == EditorMode.PAINT
@@ -1289,6 +1395,7 @@ enum EditUIType {
 	CP_PROPERTIES,
 	LED_BOARD_PROPERTIES,
 	PRISM_SHAPE_PROPERTIES,
+	LIGHT_DECO_PROPERTIES,
 	NONE,
 }
 
@@ -1301,6 +1408,7 @@ func setEditUIVisibility(ui: EditUIType):
 	checkpointPropertiesUI.visible = ui == EditUIType.CP_PROPERTIES
 	ledBoardPropertiesUI.visible = ui == EditUIType.LED_BOARD_PROPERTIES
 	prismShapePropertiesUI.visible = ui == EditUIType.PRISM_SHAPE_PROPERTIES
+	lightDecoPropertiesUI.visible = ui == EditUIType.LIGHT_DECO_PROPERTIES
 
 func setCurrentElement():
 	
@@ -1315,6 +1423,7 @@ func setCurrentElement():
 		checkpoint.visible = currentBuildMode == BuildMode.CP
 		ledBoard.visible = currentBuildMode == BuildMode.DECO
 		prismShapeDeco.visible = currentBuildMode == BuildMode.PRISM
+		lightDeco.visible = currentBuildMode == BuildMode.LIGHT
 
 
 		if currentBuildMode == BuildMode.ROAD:
@@ -1329,6 +1438,8 @@ func setCurrentElement():
 			currentElement = ledBoard
 		elif currentBuildMode == BuildMode.PRISM:
 			currentElement = prismShapeDeco
+		elif currentBuildMode == BuildMode.LIGHT:
+			currentElement = lightDeco
 		
 		else:
 			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
@@ -1341,6 +1452,7 @@ func setCurrentElement():
 	checkpoint.visible = currentEditorMode == EditorMode.BUILD
 	ledBoard.visible = currentEditorMode == EditorMode.BUILD
 	prismShapeDeco.visible = currentEditorMode == EditorMode.BUILD
+	lightDeco.visible = currentEditorMode == EditorMode.BUILD
 	
 	currentElement = null
 

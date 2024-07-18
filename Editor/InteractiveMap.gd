@@ -20,6 +20,7 @@ var autoSaveInterval: float = 12
 @onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
 @onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
+@onready var lightDecoScene: PackedScene = preload("res://Editor/Props/LightDeco.tscn")
 
 @onready var roadElements: Node3D = %RoadElements
 var roadNodes: Node3D
@@ -49,6 +50,7 @@ var start: FunctionalStartLine
 @onready var deco: Node3D = %Deco
 var ledBoards: Node3D
 var prisms: Node3D
+var lights: Node3D
 
 # scenery
 
@@ -64,6 +66,7 @@ func _ready():
 
 	ledBoards = deco.get_child(0)
 	prisms = deco.get_child(1)
+	lights = deco.get_child(2)
 
 
 
@@ -172,6 +175,12 @@ func addPrismShapeDeco(node: PrismShapeDeco, position: Vector3, rotation: Vector
 	node.setProperties(properties, false)
 	node.convertToPhysicsObject()
 
+func addLightDeco(node: LightDeco, position: Vector3, rotation: Vector3, properties: Dictionary):
+	lights.add_child(node)
+	node.global_position = position
+	node.global_rotation = rotation
+	node.setProperties(properties, false)
+
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
 var scenerySelectionSize: int = 1
 var sceneryEditDirection: int = 1
@@ -230,6 +239,9 @@ func setEditMode(mode: int):
 func setGroundSize(size: int):
 	scenery.groundSize = size
 
+func hideScenerySelection():
+	lastSceneryVertexIndex = Vector2i(-1, -1)
+	scenery.setSelection(false, lastSceneryVertexIndex, scenerySelectionSize)
 
 func removeRoadElement(node: RoadMeshGenerator):
 	node.startNode.meshGeneratorRefs.erase(node) 
@@ -320,6 +332,8 @@ func removeLedBoard(node: LedBoard):
 func removePrismShapeDeco(node: PrismShapeDeco):
 	node.queue_free()
 
+func removeLightDeco(node: LightDeco):
+	node.queue_free()
 
 var validated: bool = false
 var bestTotalTime: int = -1
@@ -345,6 +359,11 @@ func clearMap():
 		child.queue_free()
 	for child in checkpoints.get_children():
 		child.queue_free()
+	
+	for child in deco.get_children():
+		for subChild in child.get_children():
+			subChild.queue_free()
+
 	if start != null:
 		start.queue_free()
 	scenery.vertexHeights.reset(64)
@@ -431,6 +450,11 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 		trackData["deco"]["prisms"] = []
 		for node in prisms.get_children():
 			trackData["deco"]["prisms"].append(node.getExportData())
+
+	if lights.get_child_count() > 0:
+		trackData["deco"]["lights"] = []
+		for node in lights.get_children():
+			trackData["deco"]["lights"].append(node.getExportData())
 
 	# return false
 	var path = "user://tracks/local/" + trackName + ".json"
@@ -610,6 +634,20 @@ func importTrack(fileName: String) -> bool:
 				str_to_var(prismData["rotation"]),
 				prismData
 			)
+	
+	if trackData["deco"].has("lights"):
+		for lightData in trackData["deco"]["lights"]:
+			var light: LightDeco = lightDecoScene.instantiate() as LightDeco
+			if lightData.has("color"):
+				var color: Color = str_to_var(lightData["color"])
+				lightData["color"] = color
+				
+			addLightDeco(
+				light,
+				str_to_var(lightData["position"]),
+				str_to_var(lightData["rotation"]),
+				lightData
+			)
 
 	fileHandler.close()
 
@@ -627,6 +665,9 @@ func setIngame(ingame: bool = true) -> void:
 	for child in checkpoints.get_children():
 		child.setArrowVisibility(!ingame)
 	
+	for child in lights.get_children():
+		child.setIngame(ingame)
+
 	if start != null:
 		start.setArrowVisibility(!ingame)
 
