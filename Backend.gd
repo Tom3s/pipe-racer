@@ -3,7 +3,7 @@ extends Node
 const SAVE_FILE := "user://network-config.json"
 
 @export
-var BACKEND_IP_ADRESS: String = "https://pipe-racer.pro":
+var BACKEND_IP_ADRESS: String = "https://piperacer.mogyidev.com":
 	set(newAddress):
 		BACKEND_IP_ADRESS = newAddress
 		saveToFile()
@@ -11,7 +11,7 @@ var BACKEND_IP_ADRESS: String = "https://pipe-racer.pro":
 		return BACKEND_IP_ADRESS
 
 @export
-var FRONTEND_IP_ADRESS: String = "https://pipe-racer.pro/":
+var FRONTEND_IP_ADRESS: String = "https://piperacer.mogyidev.com/":
 	set(newAddress):
 		FRONTEND_IP_ADRESS = newAddress
 		saveToFile()
