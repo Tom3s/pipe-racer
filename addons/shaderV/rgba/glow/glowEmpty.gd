@@ -46,6 +46,7 @@ func _get_input_port_name(port: int):
 			return "color"
 		7:
 			return "alpha"
+	return ""
 
 func _get_input_port_type(port: int):
 	match port:
@@ -65,6 +66,7 @@ func _get_input_port_type(port: int):
 			return VisualShaderNode.PORT_TYPE_VECTOR_3D
 		7:
 			return VisualShaderNode.PORT_TYPE_SCALAR
+	return PORT_TYPE_SCALAR
 
 func _get_output_port_count() -> int:
 	return 2
@@ -75,6 +77,7 @@ func _get_output_port_name(port: int):
 			return "col"
 		1:
 			return "alpha"
+	return ""
 
 func _get_output_port_type(port: int):
 	match port:
@@ -82,10 +85,11 @@ func _get_output_port_type(port: int):
 			return VisualShaderNode.PORT_TYPE_VECTOR_3D
 		1:
 			return VisualShaderNode.PORT_TYPE_SCALAR
+	return PORT_TYPE_SCALAR
 
 func _get_global_code(mode):
-	var code : String = preload("glowEmpty.gdshaderinc").code
-	return code
+	var path = self.get_script().get_path().get_base_dir()
+	return '#include "' + path + '/glowEmpty.gdshaderinc"'
 
 func _get_code(input_vars, output_vars, mode, type):
 	var texture = "TEXTURE"

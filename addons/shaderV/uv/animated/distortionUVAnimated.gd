@@ -44,6 +44,7 @@ func _get_input_port_name(port: int):
 			return "speed"
 		6:
 			return "time"
+	return ""
 
 func _get_input_port_type(port: int):
 	match port:
@@ -61,6 +62,7 @@ func _get_input_port_type(port: int):
 			return VisualShaderNode.PORT_TYPE_SCALAR
 		6:
 			return VisualShaderNode.PORT_TYPE_SCALAR
+	return PORT_TYPE_SCALAR
 
 func _get_output_port_count() -> int:
 	return 1
@@ -72,8 +74,8 @@ func _get_output_port_type(port):
 	return VisualShaderNode.PORT_TYPE_VECTOR_3D
 
 func _get_global_code(mode):
-	var code : String = preload("distortionUVAnimated.gdshaderinc").code
-	return code
+	var path = self.get_script().get_path().get_base_dir()
+	return '#include "' + path + '/distortionUVAnimated.gdshaderinc"'
 
 func _get_code(input_vars, output_vars, mode, type):
 	var uv = "UV"
