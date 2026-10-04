@@ -19,6 +19,7 @@ config/version="1.3.1"
 config/tags=PackedStringArray("real")
 run/main_scene="res://Menu/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
+run/max_fps=60
 
 [audio]
 

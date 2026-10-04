@@ -91,3 +91,6 @@ func changeMode():
 func changeCullMask(playerIndex: int):
 	cull_mask = 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128
 	cull_mask -= 2 ** (playerIndex + 1)
+
+	# this layer renders portals
+	set_cull_mask_value(16, true)

@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://dmi5fb8uigr35"]
+
+[ext_resource type="Script" uid="uid://b466vg3nme85b" path="res://Editor/Props/Portal.gd" id="1_4hdyq"]
+[ext_resource type="Shader" uid="uid://cws23nyh5y4d0" path="res://PortalShader.gdshader" id="2_bagdj"]
+[ext_resource type="Texture2D" uid="uid://cw4aask4xyoy0" path="res://Menu/controller-layout.png" id="3_aamt4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jn2xb"]
+render_priority = 0
+shader = ExtResource("2_bagdj")
+shader_parameter/viewport_texture = ExtResource("3_aamt4")
+
+[sub_resource type="BoxMesh" id="BoxMesh_aamt4"]
+size = Vector3(8, 8, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8d41"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_i8d41"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i8d41"]
+size = Vector3(8, 8, 1)
+
+[node name="Portal" type="Node3D" unique_id=1599138379]
+script = ExtResource("1_4hdyq")
+portal_color = Color(0.9540979, 0.5803637, 0.36105043, 1)
+
+[node name="Visual" type="Node3D" parent="." unique_id=1412121481]
+
+[node name="PortalSurface" type="MeshInstance3D" parent="Visual" unique_id=337456144]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+layers = 32768
+material_override = SubResource("ShaderMaterial_jn2xb")
+mesh = SubResource("BoxMesh_aamt4")
+skeleton = NodePath("../..")
+
+[node name="CSGS" type="Node3D" parent="Visual" unique_id=2078629585]
+unique_name_in_owner = true
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Visual/CSGS" unique_id=1750969296]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+material_override = SubResource("StandardMaterial3D_i8d41")
+radius = 0.15
+height = 8.0
+sides = 6
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Visual/CSGS" unique_id=859121675]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+material_override = SubResource("StandardMaterial3D_i8d41")
+radius = 0.15
+height = 8.0
+sides = 6
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Visual/CSGS" unique_id=1106701373]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 8, 0)
+material_override = SubResource("StandardMaterial3D_i8d41")
+radius = 0.15
+height = 8.0
+sides = 6
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Visual/CSGS" unique_id=2001231330]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 8.561203, -2.3814569)
+material_override = SubResource("StandardMaterial3D_i8d41")
+polygon = PackedVector2Array(0, 0, 0, 5, 1.147, 3.5, 0.456, 3.5)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 6
+
+[node name="PortalViewport" type="SubViewport" parent="." unique_id=1483486606]
+unique_name_in_owner = true
+size = Vector2i(1280, 720)
+
+[node name="PortalCamera" type="Camera3D" parent="PortalViewport" unique_id=952749451]
+unique_name_in_owner = true
+cull_mask = 1015807
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PortalViewport/PortalCamera" unique_id=289292748]
+mesh = SubResource("SphereMesh_i8d41")
+
+[node name="DetectionArea" type="Area3D" parent="." unique_id=2024503918]
+unique_name_in_owner = true
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea" unique_id=467095904]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_i8d41")

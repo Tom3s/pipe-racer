@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://dtsmipcpo6otb"]
+
+[ext_resource type="Script" uid="uid://rkihm0rbgnlj" path="res://Editor/portal_test.gd" id="1_jn2xb"]
+[ext_resource type="PackedScene" uid="uid://ytjub2heokq0" path="res://Editor/Scenery/EditableScenery.tscn" id="1_te75h"]
+[ext_resource type="PackedScene" uid="uid://bjjceeyq3csc3" path="res://Editor/Sky/DynamicSky.tscn" id="2_p0l7o"]
+[ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="3_w0lpi"]
+[ext_resource type="Script" uid="uid://c6hlb2fr214mv" path="res://EditorCamera.gd" id="4_p0l7o"]
+[ext_resource type="PackedScene" uid="uid://dmi5fb8uigr35" path="res://Portal.tscn" id="5_w0lpi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_jn2xb"]
+
+[node name="PortalTest" type="Node3D" unique_id=1762260267]
+script = ExtResource("1_jn2xb")
+
+[node name="EditableScenery" parent="." unique_id=1366195238 instance=ExtResource("1_te75h")]
+
+[node name="DynamicSky" parent="." unique_id=2135879671 instance=ExtResource("2_p0l7o")]
+
+[node name="Player" type="Node3D" parent="." unique_id=248480563]
+
+[node name="CarController" parent="Player" unique_id=1542026868 instance=ExtResource("3_w0lpi")]
+unique_name_in_owner = true
+transform = Transform3D(0.86039793, 0, -0.5096228, 0, 1, 0, 0.5096228, 0, 0.86039793, 10.717479, 0.11810112, 2.451045)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1619038378]
+unique_name_in_owner = true
+script = ExtResource("4_p0l7o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D" unique_id=600232589]
+mesh = SubResource("SphereMesh_jn2xb")
+
+[node name="Portals" type="Node3D" parent="." unique_id=2047182206]
+unique_name_in_owner = true
+
+[node name="Portal" parent="Portals" unique_id=1599138379 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
+transform = Transform3D(0.9826524, 0, -0.18545735, 0, 1, 0, 0.18545735, 0, 0.9826524, 0, 0, 17.110088)
+linked_portal = NodePath("../Portal2")
+portal_color = Color(1, 0.050000012, 0, 1)
+
+[node name="Portal2" parent="Portals" unique_id=553399969 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
+transform = Transform3D(0.96790993, 0, 0.25129765, 0, 1, 0, -0.25129765, 0, 0.96790993, 31.499577, -1.9073486e-06, 8.812367)
+linked_portal = NodePath("../Portal")
+portal_color = Color(0, 0.0333333, 1, 1)
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1229924679]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Node3D" unique_id=1437142593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.291194, 0, 11.924339)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Node3D" unique_id=1944515074]
+transform = Transform3D(0.9261297, 0, -0.37720525, 0, 1, 0, 0.37720525, 0, 0.9261297, 0.39968014, 1.0118217, 9.663243)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Node3D" unique_id=1128837761]
+transform = Transform3D(0.9261297, 0, -0.37720525, 0, 1, 0, 0.37720525, 0, 0.9261297, -1.2104065, 2.1968822, 23.616669)
+size = Vector3(1, 3.3701172, 2.84375)
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Node3D" unique_id=879355976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.595203, 1.0191994, 3.7398915)
+radius = 1.0520896
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Node3D" unique_id=537519796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.758785, 1.9020016, 0.74017286)
+radius = 1.0520896
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="Node3D" unique_id=1784862694]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.6827, 1.9020016, 18.921364)
+radius = 1.0520896
+
+[node name="CSGSphere3D4" type="CSGSphere3D" parent="Node3D" unique_id=241372451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.154991, 3.5603, 18.921364)
+radius = 1.4745003

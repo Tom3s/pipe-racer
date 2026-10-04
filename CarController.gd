@@ -57,6 +57,11 @@ var downForce: float = 40
 var tireRadius: float = 0.375
 var shouldRespawn: bool = false
 
+var entry_transform: Transform3D
+var exit_transform: Transform3D
+var offset_transform: Transform3D
+var should_set_transform: bool = false
+
 @export
 var jumpingForceReduction: float = 0.02
 
@@ -201,7 +206,7 @@ func _physics_process(_delta):
 		angular_velocity.z > angularTerminalVelocity || angular_velocity.z < -angularTerminalVelocity:
 		angular_velocity *= angularVelocityDamping
 		
-	if !paused && !shouldRespawn:
+	if !paused && !shouldRespawn && !should_set_transform:
 		for tire in tires:
 			calculateTirePhysics(tire, _delta)
 		for bottomOut in bottomOuts:
@@ -232,6 +237,18 @@ func _physics_process(_delta):
 				# initialRespawn = false
 				pauseMovement()
 			respawned.emit(playerIndex, networkId)
+		elif should_set_transform:
+			print("[Car] Teleporting car!")
+			global_transform = exit_transform * offset_transform
+
+			var relative_rotation := exit_transform.basis * entry_transform.basis.inverse()
+
+			linear_velocity = relative_rotation * linear_velocity
+			angular_velocity = relative_rotation * angular_velocity
+
+			should_set_transform = false
+
+
 		else:
 			applyDownforce(state.getGroundedTireCount())
 			
@@ -544,6 +561,14 @@ func setRespawnPositionFromDictionary(newPosition: Dictionary):
 	respawnPosition = newPosition["position"]
 	respawnRotation = newPosition["rotation"]
 
+func set_new_transform(entrance_transform: Transform3D, exiting_transform: Transform3D, transform_offset: Transform3D,) -> void:
+	# new_transform = exit_transform * transform_offset
+	# entry_transform = entrance_transform
+	entry_transform = entrance_transform
+	exit_transform = exiting_transform
+	offset_transform = transform_offset
+	should_set_transform = true
+
 func respawn(initial: bool = false):
 	shouldRespawn = true
 	pauseAngularVelocity = Vector3.ZERO
@@ -752,4 +777,3 @@ func debugSkiddingRatio():
 	var text = "Sliding Factor: "
 	text += str(slidingFactor)
 	return text
-
