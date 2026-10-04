@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://n6b4x02624r2"]
+[gd_resource type="AudioBusLayout" format=3 uid="uid://n6b4x02624r2"]
 
 [sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_vqdmd"]
 resource_name = "PitchShift"
@@ -25,6 +25,7 @@ band_db/8000_hz = 6.6
 band_db/16000_hz = -16.4
 
 [resource]
+bus/0/volume_db = 0.0694828
 bus/1/name = &"SFX"
 bus/1/solo = false
 bus/1/mute = false

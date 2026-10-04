@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=10 format=3 uid="uid://be7y4x0cky4as"]
+[gd_resource type="VisualShader" format=3 uid="uid://be7y4x0cky4as"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1f84d"]
 expanded_output_ports = [0]
@@ -38,66 +38,6 @@ billboard_type = 3
 keep_scale = true
 
 [resource]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha, unshaded;
-
-uniform sampler2D curve_frg_6 : repeat_disable;
-
-
-
-void vertex() {
-	mat4 n_out2p0;
-// GetBillboardMatrix:2
-	{
-		mat4 __wm = mat4(normalize(INV_VIEW_MATRIX[0]), normalize(INV_VIEW_MATRIX[1]), normalize(INV_VIEW_MATRIX[2]), MODEL_MATRIX[3]);
-		__wm = __wm * mat4(vec4(cos(INSTANCE_CUSTOM.x), -sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(0.0, 0.0, 1.0, 0.0), vec4(0.0, 0.0, 0.0, 1.0));
-		__wm = __wm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
-		n_out2p0 = VIEW_MATRIX * __wm;
-	}
-
-
-// Output:0
-	MODELVIEW_MATRIX = n_out2p0;
-
-
-}
-
-void fragment() {
-// Input:2
-	vec4 n_out2p0 = COLOR;
-	float n_out2p4 = n_out2p0.a;
-
-
-// Input:3
-	vec2 n_out3p0 = UV;
-
-
-// VectorOp:8
-	vec2 n_in8p1 = vec2(0.50000, 0.50000);
-	vec2 n_out8p0 = n_out3p0 - n_in8p1;
-
-
-// Distance:5
-	vec2 n_in5p1 = vec2(0.00000, 0.00000);
-	float n_out5p0 = distance(n_out8p0, n_in5p1);
-
-
-// CurveTexture:6
-	float n_out6p0 = texture(curve_frg_6, vec2(n_out5p0)).r;
-
-
-// FloatOp:7
-	float n_out7p0 = n_out2p4 * n_out6p0;
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	ALPHA = n_out7p0;
-
-
-}
-"
-graph_offset = Vector2(-315.645, -38.4722)
 flags/depth_prepass_alpha = true
 flags/unshaded = true
 nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_tuw8t")

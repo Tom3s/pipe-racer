@@ -1,4 +1,4 @@
-[gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://dvof0mms3yhd8"]
+[gd_resource type="PlaneMesh" format=3 uid="uid://dvof0mms3yhd8"]
 
 [ext_resource type="Shader" uid="uid://be7y4x0cky4as" path="res://Track Props/smokeParticleShader.tres" id="1_echmt"]
 

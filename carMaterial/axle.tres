@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=4 format=3 uid="uid://dpysl5c815yk1"]
+[gd_resource type="VisualShader" format=3 uid="uid://dpysl5c815yk1"]
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_btwgb"]
 parameter_name = "ColorParameter"
@@ -18,37 +18,6 @@ default_value_enabled = true
 default_value = 0.008
 
 [resource]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
-
-uniform vec4 ColorParameter : source_color = vec4(0.223103, 0.223103, 0.223103, 1.000000);
-uniform float Metallic : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;
-uniform float roughness : hint_range(0, 1, 0.10000000149012) = 0.00800000037998;
-
-
-
-void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = ColorParameter;
-
-
-// FloatParameter:3
-	float n_out3p0 = Metallic;
-
-
-// FloatParameter:4
-	float n_out4p0 = roughness;
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	METALLIC = n_out3p0;
-	ROUGHNESS = n_out4p0;
-
-
-}
-"
-graph_offset = Vector2(-58.3636, 38.1818)
 nodes/fragment/0/position = Vector2(620, 120)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_btwgb")
 nodes/fragment/2/position = Vector2(240, 20)

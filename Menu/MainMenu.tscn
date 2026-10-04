@@ -1,20 +1,20 @@
-[gd_scene load_steps=24 format=3 uid="uid://c0bjc4qk7b5e1"]
+[gd_scene format=3 uid="uid://c0bjc4qk7b5e1"]
 
-[ext_resource type="Script" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
+[ext_resource type="Script" uid="uid://b88ov8lul7pb6" path="res://Menu/MainMenu.gd" id="1_8nrm6"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="1_ibxhk"]
 [ext_resource type="Shader" uid="uid://bwvni6ic3uxn2" path="res://Menu/MainMenu2.tres" id="3_3culy"]
 [ext_resource type="PackedScene" uid="uid://q0icvxyovnsr" path="res://SettingsMenu.tscn" id="4_fogf1"]
 [ext_resource type="Theme" uid="uid://dbn0nm5yk2udn" path="res://Menu/FancyButtonContainer.tres" id="4_harqg"]
-[ext_resource type="Script" path="res://Menu/ScaledContainer.gd" id="5_0tsik"]
+[ext_resource type="Script" uid="uid://tktdd5bnaaqs" path="res://Menu/ScaledContainer.gd" id="5_0tsik"]
 [ext_resource type="PackedScene" uid="uid://crwi3brrbj2mm" path="res://Menu/ControlsMenu.tscn" id="5_mlljy"]
-[ext_resource type="Script" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
+[ext_resource type="Script" uid="uid://cvryaph6hf8x0" path="res://Menu/MenuButton.gd" id="5_r5x1k"]
 [ext_resource type="PackedScene" uid="uid://jdupmg2nr6om" path="res://EditorMapLoader.tscn" id="5_ybx24"]
 [ext_resource type="PackedScene" uid="uid://d23300714kq52" path="res://RaceMapLoader.tscn" id="6_qgiqk"]
 [ext_resource type="PackedScene" uid="uid://df1rccijala1n" path="res://MusicPlayer.tscn" id="7_gdorw"]
 [ext_resource type="PackedScene" uid="uid://wrv4h1dcsnnu" path="res://OnlineMapLoader.tscn" id="7_r4ncp"]
 [ext_resource type="Shader" uid="uid://c04k1vssllusx" path="res://Menu/Title.tres" id="7_uhllf"]
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="8_8rxhx"]
-[ext_resource type="Script" path="res://Menu/ScaledContainerTopRight.gd" id="8_uqvtl"]
+[ext_resource type="Script" uid="uid://drrhy14jqrslt" path="res://Menu/ScaledContainerTopRight.gd" id="8_uqvtl"]
 [ext_resource type="PackedScene" uid="uid://dl5836ibbaqbg" path="res://PlayerPanel.tscn" id="10_px2jc"]
 [ext_resource type="PackedScene" uid="uid://clhi3xhdyb5j8" path="res://Sounds/MenuSFX.tscn" id="12_mhsla"]
 [ext_resource type="PackedScene" uid="uid://c0qgayng3g6pc" path="res://Menu/ReplayViewerLoader.tscn" id="12_xndm4"]
@@ -31,7 +31,7 @@ shader = ExtResource("3_3culy")
 shader = ExtResource("7_uhllf")
 shader_parameter/IntParameter = 6
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=327895863]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +42,7 @@ mouse_filter = 2
 theme = ExtResource("1_ibxhk")
 script = ExtResource("1_8nrm6")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1212455806]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_nj34w")
 layout_mode = 1
@@ -54,7 +54,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("CanvasTexture_40t0c")
 
-[node name="MainContent" type="Control" parent="."]
+[node name="MainContent" type="Control" parent="." unique_id=1131844653]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -64,7 +64,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ButtonContainer" type="VBoxContainer" parent="MainContent"]
+[node name="ButtonContainer" type="VBoxContainer" parent="MainContent" unique_id=31667106]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 4
@@ -78,11 +78,11 @@ grow_vertical = 2
 theme = ExtResource("4_harqg")
 script = ExtResource("5_0tsik")
 
-[node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=1921885546]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="PlayButton" type="Button" parent="MainContent/ButtonContainer/Container"]
+[node name="PlayButton" type="Button" parent="MainContent/ButtonContainer/Container" unique_id=851667044]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(182, 70)
 layout_mode = 2
@@ -92,7 +92,7 @@ focus_neighbor_top = NodePath("../../Container7/ExitButton")
 focus_neighbor_bottom = NodePath("../../Container2/EditButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container/PlayButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container/PlayButton" unique_id=155943601]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 356.4
@@ -106,11 +106,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container2" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container2" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=266052141]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="EditButton" type="Button" parent="MainContent/ButtonContainer/Container2"]
+[node name="EditButton" type="Button" parent="MainContent/ButtonContainer/Container2" unique_id=1597957744]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(175, 70)
 layout_mode = 2
@@ -119,7 +119,7 @@ focus_neighbor_top = NodePath("../../Container/PlayButton")
 focus_neighbor_bottom = NodePath("../../Container3/PlayOnlineButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container2/EditButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container2/EditButton" unique_id=728304780]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 260.4
@@ -133,11 +133,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container5" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container5" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=1134614693]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="ReplayButton" type="Button" parent="MainContent/ButtonContainer/Container5"]
+[node name="ReplayButton" type="Button" parent="MainContent/ButtonContainer/Container5" unique_id=1792523184]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(260, 70)
 layout_mode = 2
@@ -146,7 +146,7 @@ focus_neighbor_top = NodePath("../../Container/PlayButton")
 focus_neighbor_bottom = NodePath("../../Container3/PlayOnlineButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container5/ReplayButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container5/ReplayButton" unique_id=867532837]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 260.4
@@ -160,11 +160,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container3" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container3" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=749793435]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="PlayOnlineButton" type="Button" parent="MainContent/ButtonContainer/Container3"]
+[node name="PlayOnlineButton" type="Button" parent="MainContent/ButtonContainer/Container3" unique_id=1938164066]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(425, 70)
 layout_mode = 2
@@ -173,7 +173,7 @@ focus_neighbor_top = NodePath("../../Container2/EditButton")
 focus_neighbor_bottom = NodePath("../../Container4/WebsiteButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container3/PlayOnlineButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container3/PlayOnlineButton" unique_id=1885491419]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 850.4
@@ -187,11 +187,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container4" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container4" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=1063264110]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="WebsiteButton" type="Button" parent="MainContent/ButtonContainer/Container4"]
+[node name="WebsiteButton" type="Button" parent="MainContent/ButtonContainer/Container4" unique_id=1605542812]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(255, 70)
 layout_mode = 2
@@ -200,7 +200,7 @@ focus_neighbor_top = NodePath("../../Container3/PlayOnlineButton")
 focus_neighbor_bottom = NodePath("../../Container6/SettingsButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container4/WebsiteButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container4/WebsiteButton" unique_id=481652747]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 507.4
@@ -214,11 +214,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Container6" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container6" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=1753222752]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="SettingsButton" type="Button" parent="MainContent/ButtonContainer/Container6"]
+[node name="SettingsButton" type="Button" parent="MainContent/ButtonContainer/Container6" unique_id=928287817]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(285, 70)
 layout_mode = 2
@@ -227,7 +227,7 @@ focus_neighbor_top = NodePath("../../Container4/WebsiteButton")
 focus_neighbor_bottom = NodePath("../../Container7/ExitButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container6/SettingsButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container6/SettingsButton" unique_id=802448804]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 568.4
@@ -240,11 +240,11 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Container7" type="PanelContainer" parent="MainContent/ButtonContainer"]
+[node name="Container7" type="PanelContainer" parent="MainContent/ButtonContainer" unique_id=1215185099]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="ExitButton" type="Button" parent="MainContent/ButtonContainer/Container7"]
+[node name="ExitButton" type="Button" parent="MainContent/ButtonContainer/Container7" unique_id=1428491598]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(145, 70)
 layout_mode = 2
@@ -253,7 +253,7 @@ focus_neighbor_top = NodePath("../../Container6/SettingsButton")
 focus_neighbor_bottom = NodePath("../../Container/PlayButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container7/ExitButton"]
+[node name="Label" type="Label" parent="MainContent/ButtonContainer/Container7/ExitButton" unique_id=1830815207]
 layout_mode = 1
 offset_top = -15.0
 offset_right = 260.4
@@ -266,7 +266,7 @@ text = "EXit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="MainContent"]
+[node name="VersionLabel" type="Label" parent="MainContent" unique_id=825077316]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
@@ -281,7 +281,7 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 24
 text = "Version: v0.32"
 
-[node name="TitleContainer" type="VBoxContainer" parent="MainContent"]
+[node name="TitleContainer" type="VBoxContainer" parent="MainContent" unique_id=686251045]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_k5jwp")
 layout_mode = 1
@@ -292,14 +292,14 @@ script = ExtResource("8_uqvtl")
 overscale = 1.8
 offset = Vector2i(961, 54)
 
-[node name="Control" type="Control" parent="MainContent/TitleContainer"]
+[node name="Control" type="Control" parent="MainContent/TitleContainer" unique_id=881315240]
 use_parent_material = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="Title2" type="Label" parent="MainContent/TitleContainer/Control"]
+[node name="Title2" type="Label" parent="MainContent/TitleContainer/Control" unique_id=1593710823]
 use_parent_material = true
-layout_mode = 2
+layout_mode = 0
 offset_top = 2.0
 offset_right = 600.0
 offset_bottom = 65.4
@@ -314,7 +314,7 @@ theme_override_font_sizes/font_size = 100
 text = "    Welcome to"
 vertical_alignment = 2
 
-[node name="Title" type="Label" parent="MainContent/TitleContainer"]
+[node name="Title" type="Label" parent="MainContent/TitleContainer" unique_id=1780615561]
 use_parent_material = true
 custom_minimum_size = Vector2(1200, 680)
 layout_mode = 2
@@ -322,16 +322,16 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -134
 theme_override_constants/shadow_offset_x = 20
 theme_override_constants/shadow_offset_y = 10
 theme_override_constants/outline_size = 12
-theme_override_constants/line_spacing = -134
 theme_override_fonts/font = ExtResource("8_8rxhx")
 theme_override_font_sizes/font_size = 360
 text = "PIPE
   RACER"
 
-[node name="StatsContainer" type="HBoxContainer" parent="MainContent"]
+[node name="StatsContainer" type="HBoxContainer" parent="MainContent" unique_id=1752047965]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -344,13 +344,13 @@ offset_top = -152.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Container" type="PanelContainer" parent="MainContent/StatsContainer"]
+[node name="Container" type="PanelContainer" parent="MainContent/StatsContainer" unique_id=1245425278]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme = ExtResource("4_harqg")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rml2x")
 
-[node name="StatsButton" type="Button" parent="MainContent/StatsContainer/Container"]
+[node name="StatsButton" type="Button" parent="MainContent/StatsContainer/Container" unique_id=1996146020]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
@@ -360,7 +360,7 @@ focus_neighbor_top = NodePath("../../Container7/ExitButton")
 focus_neighbor_bottom = NodePath("../../Container2/EditButton")
 script = ExtResource("5_r5x1k")
 
-[node name="Label" type="Label" parent="MainContent/StatsContainer/Container/StatsButton"]
+[node name="Label" type="Label" parent="MainContent/StatsContainer/Container/StatsButton" unique_id=1369519381]
 layout_mode = 1
 offset_right = 203.4
 offset_bottom = 116.4
@@ -373,39 +373,39 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="PlayerPanel" parent="MainContent/StatsContainer" instance=ExtResource("10_px2jc")]
+[node name="PlayerPanel" parent="MainContent/StatsContainer" unique_id=1899442142 instance=ExtResource("10_px2jc")]
 layout_mode = 2
 
-[node name="SettingsMenu" parent="." instance=ExtResource("4_fogf1")]
+[node name="SettingsMenu" parent="." unique_id=101885091 instance=ExtResource("4_fogf1")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="ControlsMenu" parent="." instance=ExtResource("5_mlljy")]
+[node name="ControlsMenu" parent="." unique_id=1907420554 instance=ExtResource("5_mlljy")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="ReplayViewerLoader" parent="." instance=ExtResource("12_xndm4")]
+[node name="ReplayViewerLoader" parent="." unique_id=1387719144 instance=ExtResource("12_xndm4")]
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="PlayerStatsUI" parent="." instance=ExtResource("14_02ch5")]
+[node name="PlayerStatsUI" parent="." unique_id=262616663 instance=ExtResource("14_02ch5")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="EditorMapLoader" parent="." instance=ExtResource("5_ybx24")]
+[node name="EditorMapLoader" parent="." unique_id=546764919 instance=ExtResource("5_ybx24")]
 unique_name_in_owner = true
 
-[node name="RaceMapLoader" parent="." instance=ExtResource("6_qgiqk")]
+[node name="RaceMapLoader" parent="." unique_id=2010124087 instance=ExtResource("6_qgiqk")]
 unique_name_in_owner = true
 
-[node name="OnlineMapLoader" parent="." instance=ExtResource("7_r4ncp")]
+[node name="OnlineMapLoader" parent="." unique_id=1120541700 instance=ExtResource("7_r4ncp")]
 unique_name_in_owner = true
 
-[node name="MusicPlayer" parent="." instance=ExtResource("7_gdorw")]
+[node name="MusicPlayer" parent="." unique_id=701627863 instance=ExtResource("7_gdorw")]
 unique_name_in_owner = true
 
-[node name="MenuSFX" parent="." instance=ExtResource("12_mhsla")]
+[node name="MenuSFX" parent="." unique_id=511936394 instance=ExtResource("12_mhsla")]
 unique_name_in_owner = true

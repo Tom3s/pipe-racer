@@ -433,7 +433,7 @@ func onPauseMenu_exitPressed():
 	# TODO: submit times elsewhere, to avoid waiting for exit
 	if state.ranked:
 		for key in raceStats:
-			var car := players.get_node(key)
+			var car := players.get_node(str(key))
 			var sessionToken = Network.localData[car.getLocalIndex()].SESSION_TOKEN
 
 			if VersionCheck.offline:
