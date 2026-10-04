@@ -15,7 +15,8 @@ func _ready():
 func checkVersion():
 	var request = HTTPRequest.new()
 	add_child(request)
-	request.timeout = 15
+	request.timeout = 30.0
+	# request.timeout = 0.0
 	request.request_completed.connect(onCheckVersion_requestCompleted)
 
 	var result = request.request(
@@ -23,7 +24,7 @@ func checkVersion():
 	)
 
 	if result != OK:
-		print("Error: ", result)
+		print("Error while checking for updates: ", error_string(result))
 		AlertManager.showAlert(
 			self,
 			"Error",
@@ -35,7 +36,8 @@ func checkVersion():
 
 func onCheckVersion_requestCompleted(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
 	# print(body.get_string_from_ascii())
-	if response_code != 200 || result != OK:
+	print("Response: %d, Result code: %d" % [response_code, result])
+	if response_code != 200 || result != HTTPRequest.RESULT_SUCCESS:
 		print("Error: ", error_string(result), " (respone code: ", response_code, ")")
 		AlertManager.showAlert(
 			self,
