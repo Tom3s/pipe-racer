@@ -26,3 +26,15 @@ func reset_cutting_plane() -> void:
 	for mesh: MeshInstance3D in get_children():
 		var material: Material = mesh.get_surface_override_material(0)
 		material.set_shader_parameter("enable_cut", -1.0)
+
+func get_duplicate() -> CuttableCarModel:
+	var copy: CuttableCarModel = duplicate()
+	for copy_mesh: MeshInstance3D in copy.get_children():
+		copy_mesh.set_surface_override_material(0, copy_mesh.get_surface_override_material(0).duplicate())
+	
+	if get_parent() != null:
+		get_parent().car_copy_model = copy
+
+	# copy.set_frame_color()
+
+	return copy

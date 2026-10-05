@@ -24,7 +24,9 @@ func _ready() -> void:
 	detection_area.body_entered.connect(func (body: Node3D) -> void:
 		travelers[body] = body.global_transform
 		var offset := global_transform.affine_inverse() * body.global_transform
-		set_cutting_plane(body, -sign(offset.origin.z))
+		body.car_model.set_cutting_plane(global_transform, -sign(offset.origin.z))
+		body.car_copy_model.visible = true
+		body.car_copy_model.set_cutting_plane(linked_portal.global_transform, sign(offset.origin.z))
 		print("[%s] Body entered portal detection area!" % str(name))
 
 	)
@@ -32,7 +34,10 @@ func _ready() -> void:
 	detection_area.body_exited.connect(func (body: Node3D) -> void:
 		if travelers.has(body):
 			travelers.erase(body)
-			reset_cutting_plane(body)
+			if !linked_portal.travelers.has(body):
+				body.car_model.reset_cutting_plane()
+				body.car_copy_model.reset_cutting_plane()
+				body.car_copy_model.visible = false
 		print("[%s] Body exited portal detection area!" % str(name))
 	)
 
@@ -50,6 +55,7 @@ func _physics_process(delta: float) -> void:
 		var current_offset := global_transform.affine_inverse() * current_transform
 		var last_offset := global_transform.affine_inverse() * last_frame_transform
 
+		traveler.car_copy_model.global_transform = linked_portal.global_transform * current_offset
 		# print(current_offset.origin.z)
 		if current_offset.origin.z * last_offset.origin.z < 0:
 			print("[%s] Body passed through portal surface" % str(name))
@@ -59,10 +65,12 @@ func _physics_process(delta: float) -> void:
 				# linked_portal.global_transform * relative_transform
 				# traveler.set_new_transform(linked_portal.global_transform, current_offset)
 				traveler.set_new_transform(global_transform, linked_portal.global_transform, current_offset)
-
 				# marked_to_remove.push_back(traveler)	
-				travelers.erase(traveler)		
-				reset_cutting_plane(traveler)
+				# traveler.car_model.reset_cutting_plane()
+				# traveler.car_copy_model.reset_cutting_plane()
+				# traveler.car_copy_model.visible = false
+				traveler.car_model.set_cutting_plane(linked_portal.global_transform, -sign(current_offset.origin.z))
+				traveler.car_copy_model.set_cutting_plane(global_transform, sign(current_offset.origin.z))
 				continue
 		
 
@@ -100,8 +108,8 @@ func set_colors() -> void:
 		child.material_override = StandardMaterial3D.new()
 		child.material_override.albedo_color = portal_color
 
-func set_cutting_plane(car_controller: CarController, direction: float) -> void:
-	car_controller.car_model.set_cutting_plane(global_transform, direction)
+# func set_cutting_plane(car_controller: CarController, direction: float) -> void:
+# 	car_controller.car_model.set_cutting_plane(global_transform, direction)
 
-func reset_cutting_plane(car_controller: CarController) -> void:
-	car_controller.car_model.reset_cutting_plane()
+# func reset_cutting_plane(car_controller: CarController) -> void:
+# 	car_controller.car_model.reset_cutting_plane()

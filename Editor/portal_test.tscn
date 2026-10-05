@@ -35,7 +35,7 @@ mesh = SubResource("SphereMesh_jn2xb")
 unique_name_in_owner = true
 
 [node name="Portal" parent="Portals" unique_id=1599138379 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
-transform = Transform3D(0.9826524, 0, -0.18545735, 0, 1, 0, 0.18545735, 0, 0.9826524, 0, 0, 17.110088)
+transform = Transform3D(0.9826524, 0, -0.18545735, 0.15842354, 0.51989263, 0.8394128, 0.09641791, -0.85423166, 0.51087373, 28.080166, 11.723625, -18.613533)
 linked_portal = NodePath("../Portal2")
 portal_color = Color(1, 0.050000012, 0, 1)
 
@@ -71,3 +71,6 @@ radius = 1.0520896
 [node name="CSGSphere3D4" type="CSGSphere3D" parent="Node3D" unique_id=241372451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.154991, 3.5603, 18.921364)
 radius = 1.4745003
+
+[node name="CarCopies" type="Node3D" parent="." unique_id=1148469972]
+unique_name_in_owner = true

@@ -10,7 +10,7 @@ shader = ExtResource("2_bagdj")
 shader_parameter/viewport_texture = ExtResource("3_aamt4")
 
 [sub_resource type="BoxMesh" id="BoxMesh_aamt4"]
-size = Vector3(8, 8, 0.2)
+size = Vector3(8, 8, 0.01)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8d41"]
 

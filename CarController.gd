@@ -3,6 +3,8 @@ extends RigidBody3D
 class_name CarController
 
 @onready var car_model: CuttableCarModel = %CarModel
+var car_copy_model: CuttableCarModel
+
 
 @export
 var springConstant: float = 150
