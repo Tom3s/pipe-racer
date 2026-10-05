@@ -28,6 +28,10 @@ output_port_for_preview = 0
 input_name = "uv"
 
 [resource]
+flags/depth_test_disabled = true
+stencil/enabled = true
+stencil_modes/compare = 2
+stencil_flags/read = true
 nodes/vertex/0/position = Vector2(840, 120)
 nodes/vertex/3/node = SubResource("VisualShaderNodeVectorOp_ra2cy")
 nodes/vertex/3/position = Vector2(440, 420)

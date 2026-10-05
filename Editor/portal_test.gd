@@ -28,6 +28,7 @@ func _physics_process(delta: float) -> void:
 			car_controller.state.hasControl = false
 	# )
 
+func _process(delta: float) -> void:
 	current_camera = get_viewport().get_camera_3d()
 
 	for portal: Portal in portals_parent.get_children():

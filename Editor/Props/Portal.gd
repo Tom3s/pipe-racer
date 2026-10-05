@@ -23,6 +23,8 @@ signal passed_portal_surface(body: Node3D)
 func _ready() -> void:
 	detection_area.body_entered.connect(func (body: Node3D) -> void:
 		travelers[body] = body.global_transform
+		var offset := global_transform.affine_inverse() * body.global_transform
+		set_cutting_plane(body, -sign(offset.origin.z))
 		print("[%s] Body entered portal detection area!" % str(name))
 
 	)
@@ -30,6 +32,7 @@ func _ready() -> void:
 	detection_area.body_exited.connect(func (body: Node3D) -> void:
 		if travelers.has(body):
 			travelers.erase(body)
+			reset_cutting_plane(body)
 		print("[%s] Body exited portal detection area!" % str(name))
 	)
 
@@ -59,6 +62,7 @@ func _physics_process(delta: float) -> void:
 
 				# marked_to_remove.push_back(traveler)	
 				travelers.erase(traveler)		
+				reset_cutting_plane(traveler)
 				continue
 		
 
@@ -82,6 +86,12 @@ func set_remote_camera(camera: Camera3D) -> void:
 
 	# update the linked portals viewport, as that was moved by us
 	# updating our own would delay the portal by 1 frame
+
+	# await RenderingServer.frame_post_draw
+	# linked_portal.portal_viewport.force_draw
+	linked_portal.portal_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	RenderingServer.force_draw(false) 
+
 	var camera_texture := linked_portal.portal_viewport.get_texture()
 	portal_surface.material_override.set_shader_parameter("viewport_texture", camera_texture)
 
@@ -89,3 +99,9 @@ func set_colors() -> void:
 	for child in csgs.get_children():
 		child.material_override = StandardMaterial3D.new()
 		child.material_override.albedo_color = portal_color
+
+func set_cutting_plane(car_controller: CarController, direction: float) -> void:
+	car_controller.car_model.set_cutting_plane(global_transform, direction)
+
+func reset_cutting_plane(car_controller: CarController) -> void:
+	car_controller.car_model.reset_cutting_plane()

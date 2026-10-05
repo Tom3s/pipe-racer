@@ -24,6 +24,8 @@ transform = Transform3D(0.86039793, 0, -0.5096228, 0, 1, 0, 0.5096228, 0, 0.8603
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1619038378]
 unique_name_in_owner = true
+process_priority = 1
+process_physics_priority = 1
 script = ExtResource("4_p0l7o")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D" unique_id=600232589]

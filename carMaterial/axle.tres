@@ -18,6 +18,10 @@ default_value_enabled = true
 default_value = 0.008
 
 [resource]
+flags/depth_test_disabled = true
+stencil/enabled = true
+stencil_modes/compare = 2
+stencil_flags/read = true
 nodes/fragment/0/position = Vector2(620, 120)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_btwgb")
 nodes/fragment/2/position = Vector2(240, 20)

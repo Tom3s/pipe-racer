@@ -199,6 +199,10 @@ default_value = 0.25
 [sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_jijqh"]
 
 [resource]
+modes/blend = 4
+stencil/enabled = true
+stencil_modes/compare = 2
+stencil_flags/read = true
 nodes/fragment/0/position = Vector2(2740, 0)
 nodes/fragment/15/node = SubResource("VisualShaderNodeVectorCompose_imqgk")
 nodes/fragment/15/position = Vector2(160, 100)

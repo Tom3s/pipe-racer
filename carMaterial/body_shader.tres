@@ -1,7 +1,15 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://kivs4jx58xn8"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://kivs4jx58xn8"]
 
 [ext_resource type="Shader" uid="uid://cln2wbpucyp64" path="res://carMaterial/body.tres" id="1_yne2f"]
+[ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="2_a8drs"]
 
-[resource]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e0ttv"]
 render_priority = 0
 shader = ExtResource("1_yne2f")
+
+[resource]
+render_priority = -1
+next_pass = SubResource("ShaderMaterial_e0ttv")
+shader = ExtResource("2_a8drs")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dtips6h3b4446"]
+
+[ext_resource type="Script" uid="uid://daw688lqc8lyd" path="res://Editor/Functional/PortalCutterTest.gd" id="1_r3g3o"]
+[ext_resource type="Material" uid="uid://dbrsm6m16it3c" path="res://carMaterial/rollcage.tres" id="2_4ewug"]
+[ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="2_la7c2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3g3o"]
+render_priority = -1
+next_pass = ExtResource("2_4ewug")
+shader = ExtResource("2_la7c2")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = 1.0
+shader_parameter/cut_direction = 1.0
+
+[sub_resource type="PrismMesh" id="PrismMesh_i8d41"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_i8d41"]
+
+[node name="Node3D" type="Node3D" unique_id=343876208]
+script = ExtResource("1_r3g3o")
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=206920025]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.12652826)
+material_override = SubResource("ShaderMaterial_r3g3o")
+mesh = SubResource("PrismMesh_i8d41")
+
+[node name="CuttingPlane" type="MeshInstance3D" parent="." unique_id=371987254]
+unique_name_in_owner = true
+transform = Transform3D(0.9567211, 0.17371944, -0.23346572, 0, 0.80227023, 0.596961, 0.29100633, -0.5711252, 0.76754886, -0.15144593, 0.11924732, -0.32842135)
+mesh = SubResource("QuadMesh_i8d41")

@@ -2,6 +2,8 @@ extends RigidBody3D
 
 class_name CarController
 
+@onready var car_model: CuttableCarModel = %CarModel
+
 @export
 var springConstant: float = 150
 
@@ -119,9 +121,10 @@ var frameColor: Color = Color.PINK:
 		return frameColor
 
 func onFrameColorChanged(newColor: Color) -> Color:
-	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
-	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
-	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
+	# var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	# rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
+	# rollcage.get_surface_override_material(0).set("albedo_color", newColor)
+	car_model.set_frame_color(newColor)
 	return newColor
 
 var state: CarStateMachine
