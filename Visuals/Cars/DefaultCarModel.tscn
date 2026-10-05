@@ -53,7 +53,7 @@ shader_parameter/cut_direction = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvgc8"]
 transparency = 1
-albedo_color = Color(5.2943824e-07, 0.8671009, 0.08433957, 1)
+albedo_color = Color(0, 0.76345396, 0.077283286, 1)
 metallic = 0.9
 roughness = 0.36
 stencil_mode = 3
