@@ -17,7 +17,7 @@ size = Vector3(8, 8, 0.01)
 [sub_resource type="SphereMesh" id="SphereMesh_i8d41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i8d41"]
-size = Vector3(8, 8, 1)
+size = Vector3(8, 8, 3)
 
 [node name="Portal" type="Node3D" unique_id=1599138379]
 script = ExtResource("1_4hdyq")

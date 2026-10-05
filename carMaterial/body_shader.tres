@@ -13,3 +13,4 @@ next_pass = SubResource("ShaderMaterial_e0ttv")
 shader = ExtResource("2_a8drs")
 shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0

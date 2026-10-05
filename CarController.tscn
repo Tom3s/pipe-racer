@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cl84lqidm5uuj" path="res://Visuals/Cars/DefaultCarModel.tscn" id="2_q8rx4"]
 [ext_resource type="Script" uid="uid://bcqqwvg8yj8mu" path="res://InputHandlerNew.gd" id="3_kfdpd"]
 [ext_resource type="Script" uid="uid://b5mua5fsh3f2f" path="res://Tire.gd" id="3_qi2cw"]
-[ext_resource type="PackedScene" uid="uid://bfpyrrlsxjbd0" path="res://carMaterial/TireModel.tscn" id="4_k78f3"]
 [ext_resource type="Shader" uid="uid://ddhtdhtpsdk5r" path="res://Track Props/dirtParticleShader.tres" id="5_0o4p6"]
 [ext_resource type="Material" uid="uid://db2jkyqdfgrng" path="res://Track Props/SMokeParticles.tres" id="5_myblr"]
 [ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
@@ -165,11 +164,6 @@ debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 
-[node name="VisualRotation" type="Node3D" parent="Tires/TireFL" unique_id=1266295460]
-
-[node name="tire-new good normals" parent="Tires/TireFL/VisualRotation" unique_id=1711011192 instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
-
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFL" unique_id=1675411283]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 cast_shadow = 0
@@ -197,11 +191,6 @@ debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 1
-
-[node name="VisualRotation" type="Node3D" parent="Tires/TireFR" unique_id=1207457401]
-
-[node name="tire-new good normals" parent="Tires/TireFR/VisualRotation" unique_id=439743336 instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireFR" unique_id=2108998872]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
@@ -231,11 +220,6 @@ debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 2
 
-[node name="VisualRotation" type="Node3D" parent="Tires/TireBL" unique_id=1612675447]
-
-[node name="tire-new good normals" parent="Tires/TireBL/VisualRotation" unique_id=1392476753 instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.150418, 0, 0)
-
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBL" unique_id=19297579]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)
 cast_shadow = 0
@@ -263,11 +247,6 @@ debug_shape_custom_color = Color(0.827451, 0, 0.439216, 1)
 debug_shape_thickness = 3
 script = ExtResource("3_qi2cw")
 tireIndex = 3
-
-[node name="VisualRotation" type="Node3D" parent="Tires/TireBR" unique_id=1862290772]
-
-[node name="tire-new good normals" parent="Tires/TireBR/VisualRotation" unique_id=1593199643 instance=ExtResource("4_k78f3")]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.15, 0, 0)
 
 [node name="SmokeEmitter" type="GPUParticles3D" parent="Tires/TireBR" unique_id=1700983962]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.264698, 0.0103365)

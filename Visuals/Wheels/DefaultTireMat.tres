@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bbxma6of4xwde"]
+
+[ext_resource type="Shader" uid="uid://bt42as6jdco4s" path="res://Visuals/Wheels/DefaultTireMaterial.res" id="1_x8eah"]
+[ext_resource type="Texture2D" uid="uid://ccs8osubt6d10" path="res://carMaterial/TireText.png" id="2_ujyjl"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_x8eah")
+shader_parameter/tire_colo = Color(0.038397163, 0.038397174, 0.038397145, 1)
+shader_parameter/logo_color = Color(1, 0.51, 0.8040002, 1)
+shader_parameter/left_edge_start = 0.0
+shader_parameter/left_edge_end = 0.075
+shader_parameter/logo = ExtResource("2_ujyjl")
+shader_parameter/rigth_edge_start = 0.285
+shader_parameter/rigth_edge_end = 0.36
