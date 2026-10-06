@@ -21,6 +21,8 @@ var travelers: Dictionary[Node3D, Transform3D]
 signal passed_portal_surface(body: Node3D)
 
 func _ready() -> void:
+	set_physics_process(true)
+
 	detection_area.body_entered.connect(func (body: Node3D) -> void:
 		travelers[body] = body.global_transform
 		var offset := global_transform.affine_inverse() * body.global_transform
@@ -71,6 +73,7 @@ func _physics_process(delta: float) -> void:
 				# traveler.car_copy_model.visible = false
 				traveler.car_model.set_cutting_plane(linked_portal.global_transform, -sign(current_offset.origin.z))
 				traveler.car_copy_model.set_cutting_plane(global_transform, sign(current_offset.origin.z))
+				travelers.erase(traveler)
 				continue
 		
 
