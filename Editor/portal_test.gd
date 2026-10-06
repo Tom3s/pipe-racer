@@ -5,13 +5,22 @@ var current_camera: Camera3D
 @onready var portals_parent: Node3D = %Portals
 @onready var car_controller: CarController = %CarController
 @onready var free_fly_camera: Camera3D = %Camera3D
+@onready var car_copies_parent: Node3D = %CarCopies
 
 var carCamera: FollowingCamera
 var state: bool = false
 
+var car_copy: CuttableCarModel
+
 func _ready() -> void:
 	carCamera = FollowingCamera.new(car_controller)
 	add_child(carCamera)
+
+	car_copy = car_controller.car_model.get_duplicate()
+	car_copies_parent.add_child(car_copy)
+	car_copy.set_frame_color(Color.PINK)
+	car_copy.visible = false
+
 
 func _physics_process(delta: float) -> void:
 	# sceneryEditorInputHandler.pausePressed.connect(func(_paused):
@@ -28,6 +37,7 @@ func _physics_process(delta: float) -> void:
 			car_controller.state.hasControl = false
 	# )
 
+func _process(delta: float) -> void:
 	current_camera = get_viewport().get_camera_3d()
 
 	for portal: Portal in portals_parent.get_children():

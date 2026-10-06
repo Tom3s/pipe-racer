@@ -4,7 +4,7 @@ class_name Tire
 var targetRotation: float = 0.0
 
 
-var visualRotationNode = null
+# var visualRotationNode = null
 var tireModel = null
 var smokeEmitter: GPUParticles3D  = null
 var dirtEmitter: GPUParticles3D = null
@@ -21,15 +21,15 @@ var tireIndex: int = 0
 var visualRotation: float = 3.0
 
 func _ready():
-	visualRotationNode = get_child(0)
-	tireModel = get_child(0).get_child(0)
-	smokeEmitter = get_child(1)
+	# visualRotationNode = get_child(0)
+	# tireModel = get_child(0).get_child(0)
+	smokeEmitter = get_child(0)
 	smokeEmitter.emitting = false
 	smokeEmitter.one_shot = false
-	dirtEmitter = get_child(2)
+	dirtEmitter = get_child(1)
 	dirtEmitter.emitting = false
 	dirtEmitter.one_shot = false
 	set_physics_process(true)
 
-func _physics_process(delta):
-	visualRotationNode.rotation.y = rotation.y * visualRotation
+# func _physics_process(delta):
+# 	visualRotationNode.rotation.y = rotation.y * visualRotation

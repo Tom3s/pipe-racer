@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjjceeyq3csc3"]
+[gd_scene format=3 uid="uid://bjjceeyq3csc3"]
 
-[ext_resource type="Script" path="res://Editor/Sky/dynamicSky.gd" id="1_csme5"]
-[ext_resource type="Shader" path="res://Editor/Sky/sky.gdshader" id="2_ghyuj"]
+[ext_resource type="Script" uid="uid://dxsphdkdp2cf8" path="res://Editor/Sky/dynamicSky.gd" id="1_csme5"]
+[ext_resource type="Shader" uid="uid://dit423y8sqxh0" path="res://Editor/Sky/sky.gdshader" id="2_ghyuj"]
 [ext_resource type="Texture2D" uid="uid://bankhnmexuifx" path="res://Editor/Sky/stars.png" id="3_y4iwd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_msgkm"]
@@ -32,11 +32,11 @@ shader_parameter/clouds_cutoff = 0.6
 shader_parameter/clouds_fuzziness = 0.5
 shader_parameter/clouds_weight = 0.0
 shader_parameter/clouds_blur = 0.25
+shader_parameter/stars_texture = ExtResource("3_y4iwd")
 shader_parameter/stars_speed = 1.0
 shader_parameter/stars_scale = 1.0
 shader_parameter/stars_opacity = 1.0
-shader_parameter/stars_texture = ExtResource("3_y4iwd")
-shader_parameter/overwritten_time = 501.991
+shader_parameter/overwritten_time = 114.11532533333298
 
 [sub_resource type="Sky" id="Sky_q13r3"]
 sky_material = SubResource("ShaderMaterial_msgkm")
@@ -47,22 +47,23 @@ sky = SubResource("Sky_q13r3")
 ambient_light_source = 3
 reflected_light_source = 2
 
-[node name="DynamicSky" type="Node3D"]
+[node name="DynamicSky" type="Node3D" unique_id=789577442]
 script = ExtResource("1_csme5")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1686733046]
 environment = SubResource("Environment_bh1jy")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.820008, 0.213047, 0.531224, -0.56471, 0.452339, 0.690284, -0.0932301, -0.866025, 0.491231, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=947948148]
+transform = Transform3D(0.82000804, 0.21304742, 0.5312238, -0.5647097, 0.45233887, 0.6902842, -0.093230076, -0.8660249, 0.49123096, 0, 0, 0)
 rotation_order = 4
 light_color = Color(1, 0.8, 0.1, 1)
 shadow_enabled = true
 shadow_opacity = 0.75
 shadow_blur = 5.0
+directional_shadow_fade_start = 0.1
 
-[node name="Moon" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.849961, 0.0226777, -0.526356, -0.526808, 0.048149, -0.848619, 0.00609876, 0.998582, 0.0528717, 0, 0, 0)
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=1021346174]
+transform = Transform3D(0.8499608, 0.02267775, -0.526356, -0.5268082, 0.04814903, -0.84861904, 0.0060987575, 0.9985819, 0.05287173, 0, 0, 0)
 rotation_order = 4
 light_color = Color(1, 1, 0.6, 1)
 light_energy = 0.0

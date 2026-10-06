@@ -60,6 +60,7 @@ var frameColor: Color = Color.PINK:
 
 func onFrameColorChanged(newColor: Color) -> Color:
 	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	print("OLD CODE STILL RUNNING??!?!2")
 	# rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
 	rollcage.get_surface_override_material(0).set("albedo_color", newColor)
 	return newColor
@@ -104,6 +105,7 @@ func _ready():
 	tires.push_back(%FrontRightTire)
 
 	var rollcage: MeshInstance3D = get_node("%CarModel/%Rollcage")
+	print("OLD CODE STILL RUNNING??!?!")
 	rollcage.set_surface_override_material(0, rollcage.get_surface_override_material(0).duplicate())
 
 	var startLine: StartLine = get_parent().get_parent().get_node("%Start/%StartLine")

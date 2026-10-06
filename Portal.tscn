@@ -9,15 +9,15 @@ render_priority = 0
 shader = ExtResource("2_bagdj")
 shader_parameter/viewport_texture = ExtResource("3_aamt4")
 
-[sub_resource type="BoxMesh" id="BoxMesh_aamt4"]
-size = Vector3(8, 8, 0.2)
+[sub_resource type="QuadMesh" id="QuadMesh_210c5"]
+size = Vector2(8, 8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8d41"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_i8d41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i8d41"]
-size = Vector3(8, 8, 1)
+size = Vector3(8, 8, 3)
 
 [node name="Portal" type="Node3D" unique_id=1599138379]
 script = ExtResource("1_4hdyq")
@@ -30,7 +30,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 layers = 32768
 material_override = SubResource("ShaderMaterial_jn2xb")
-mesh = SubResource("BoxMesh_aamt4")
+mesh = SubResource("QuadMesh_210c5")
 skeleton = NodePath("../..")
 
 [node name="CSGS" type="Node3D" parent="Visual" unique_id=2078629585]
@@ -68,10 +68,13 @@ spin_sides = 6
 [node name="PortalViewport" type="SubViewport" parent="." unique_id=1483486606]
 unique_name_in_owner = true
 size = Vector2i(1280, 720)
+render_target_update_mode = 1
 
 [node name="PortalCamera" type="Camera3D" parent="PortalViewport" unique_id=952749451]
 unique_name_in_owner = true
 cull_mask = 1015807
+near = 0.001
+far = 2500.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PortalViewport/PortalCamera" unique_id=289292748]
 mesh = SubResource("SphereMesh_i8d41")

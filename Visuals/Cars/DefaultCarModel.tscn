@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://cl84lqidm5uuj"]
+
+[ext_resource type="ArrayMesh" uid="uid://ct2n6bc3uaa7i" path="res://Visuals/Cars/Default/Axles.res" id="1_1sg5n"]
+[ext_resource type="Script" uid="uid://1e7u6yial03n" path="res://Visuals/Cars/CuttableCarModel.gd" id="1_bbsld"]
+[ext_resource type="ArrayMesh" uid="uid://bd74kdaj88jd7" path="res://Visuals/Cars/Default/CarBody.res" id="2_bvgc8"]
+[ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="3_bbsld"]
+[ext_resource type="ArrayMesh" uid="uid://dfk8nsu257p1g" path="res://Visuals/Cars/Default/Rollcage.res" id="4_210c5"]
+[ext_resource type="ArrayMesh" uid="uid://bbfir17roxrdo" path="res://Visuals/Cars/Default/Spoilers.res" id="5_vfgqd"]
+[ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="6_bvgc8"]
+[ext_resource type="PackedScene" uid="uid://0e6ywfuhrk2r" path="res://Visuals/Wheels/CuttableWheel.tscn" id="8_210c5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2f8sc"]
+transparency = 1
+albedo_color = Color(0.7330051, 0.7330055, 0.7330052, 1)
+metallic = 0.9
+roughness = 0.48
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m73yk"]
+render_priority = -1
+next_pass = SubResource("StandardMaterial3D_2f8sc")
+shader = ExtResource("3_bbsld")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yx1cs"]
+frequency = 0.0079
+fractal_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2w4s6"]
+noise = SubResource("FastNoiseLite_yx1cs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2mwg"]
+transparency = 1
+albedo_color = Color(0.21590161, 0.21590179, 0.21590167, 1)
+metallic = 0.89
+roughness = 0.46
+roughness_texture = SubResource("NoiseTexture2D_2w4s6")
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3desp"]
+render_priority = -1
+next_pass = SubResource("StandardMaterial3D_v2mwg")
+shader = ExtResource("3_bbsld")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvgc8"]
+transparency = 1
+albedo_color = Color(0, 0.76345396, 0.077283286, 1)
+metallic = 0.9
+roughness = 0.36
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1sg5n"]
+render_priority = -1
+next_pass = SubResource("StandardMaterial3D_bvgc8")
+shader = ExtResource("3_bbsld")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_210c5"]
+render_priority = 0
+shader = ExtResource("6_bvgc8")
+shader_parameter/PatternFrequency = 14
+shader_parameter/PatternColor2Darkness = 0.2500000037253
+shader_parameter/Brightness = 0.20000000298024
+shader_parameter/BaseColor = Color(1, 1, 1, 1)
+shader_parameter/Roughness = 0.4
+shader_parameter/ClearcoatRoughness = 0.10000000149012
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bbsld"]
+render_priority = -1
+next_pass = SubResource("ShaderMaterial_210c5")
+shader = ExtResource("3_bbsld")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0
+
+[node name="VisualCarModel" type="Node3D" unique_id=550219274]
+script = ExtResource("1_bbsld")
+
+[node name="CarChassis" type="Node3D" parent="." unique_id=2015032922]
+unique_name_in_owner = true
+
+[node name="Axles" type="MeshInstance3D" parent="CarChassis" unique_id=118618297]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.375, 1.5)
+material_override = SubResource("ShaderMaterial_m73yk")
+mesh = ExtResource("1_1sg5n")
+skeleton = NodePath("../..")
+
+[node name="Body" type="MeshInstance3D" parent="CarChassis" unique_id=1029743110]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 1.08289, 0)
+material_override = SubResource("ShaderMaterial_3desp")
+mesh = ExtResource("2_bvgc8")
+skeleton = NodePath("../..")
+
+[node name="Rollcage" type="MeshInstance3D" parent="CarChassis" unique_id=1546582418]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565332, 1.76329, 1.85594)
+material_override = SubResource("ShaderMaterial_1sg5n")
+mesh = ExtResource("4_210c5")
+skeleton = NodePath("../..")
+
+[node name="Spoilers" type="MeshInstance3D" parent="CarChassis" unique_id=698597196]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_bbsld")
+mesh = ExtResource("5_vfgqd")
+skeleton = NodePath("../..")
+
+[node name="Wheels" type="Node3D" parent="." unique_id=1642447572]
+
+[node name="FL" type="Node3D" parent="Wheels" unique_id=1632617970]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, 1.5)
+
+[node name="AttachmentPoint" type="Node3D" parent="Wheels/FL" unique_id=143951025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
+
+[node name="WheelOffset" type="Node3D" parent="Wheels/FL/AttachmentPoint" unique_id=1773732545]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0.14999998, 0, 0)
+
+[node name="CuttableWheel" parent="Wheels/FL/AttachmentPoint/WheelOffset" unique_id=463072146 instance=ExtResource("8_210c5")]
+
+[node name="FR" type="Node3D" parent="Wheels" unique_id=2057524244]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
+
+[node name="AttachmentPoint" type="Node3D" parent="Wheels/FR" unique_id=1987900124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="WheelOffset" type="Node3D" parent="Wheels/FR/AttachmentPoint" unique_id=871902035]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.15, 0, 0)
+
+[node name="CuttableWheel" parent="Wheels/FR/AttachmentPoint/WheelOffset" unique_id=1316761828 instance=ExtResource("8_210c5")]
+
+[node name="BL" type="Node3D" parent="Wheels" unique_id=807269370]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.375467, -1.5)
+
+[node name="AttachmentPoint" type="Node3D" parent="Wheels/BL" unique_id=1299446812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
+
+[node name="WheelOffset" type="Node3D" parent="Wheels/BL/AttachmentPoint" unique_id=980270370]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0.14999998, 0, 0)
+
+[node name="CuttableWheel" parent="Wheels/BL/AttachmentPoint/WheelOffset" unique_id=1331546296 instance=ExtResource("8_210c5")]
+
+[node name="BR" type="Node3D" parent="Wheels" unique_id=529591572]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
+
+[node name="AttachmentPoint" type="Node3D" parent="Wheels/BR" unique_id=1192803522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="WheelOffset" type="Node3D" parent="Wheels/BR/AttachmentPoint" unique_id=598650194]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.15, 0, 0)
+
+[node name="CuttableWheel" parent="Wheels/BR/AttachmentPoint/WheelOffset" unique_id=938544569 instance=ExtResource("8_210c5")]

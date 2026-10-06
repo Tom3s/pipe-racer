@@ -20,10 +20,12 @@ script = ExtResource("1_jn2xb")
 
 [node name="CarController" parent="Player" unique_id=1542026868 instance=ExtResource("3_w0lpi")]
 unique_name_in_owner = true
-transform = Transform3D(0.86039793, 0, -0.5096228, 0, 1, 0, 0.5096228, 0, 0.86039793, 10.717479, 0.11810112, 2.451045)
+respawnPosition = Vector3(0, 1, 0)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1619038378]
 unique_name_in_owner = true
+process_priority = 1
+process_physics_priority = 1
 script = ExtResource("4_p0l7o")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D" unique_id=600232589]
@@ -33,12 +35,12 @@ mesh = SubResource("SphereMesh_jn2xb")
 unique_name_in_owner = true
 
 [node name="Portal" parent="Portals" unique_id=1599138379 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
-transform = Transform3D(0.9826524, 0, -0.18545735, 0, 1, 0, 0.18545735, 0, 0.9826524, 0, 0, 17.110088)
+transform = Transform3D(0.9862856, 0, -0.16504793, 0, 1, 0, 0.16504793, 0, 0.9862856, 6.4208317, 0, -20.512203)
 linked_portal = NodePath("../Portal2")
 portal_color = Color(1, 0.050000012, 0, 1)
 
 [node name="Portal2" parent="Portals" unique_id=553399969 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
-transform = Transform3D(0.96790993, 0, 0.25129765, 0, 1, 0, -0.25129765, 0, 0.96790993, 31.499577, -1.9073486e-06, 8.812367)
+transform = Transform3D(0.9554028, 0, -0.29530585, 0, 1, 0, 0.29530585, 0, 0.9554028, -6.3265276, 0, 16.24989)
 linked_portal = NodePath("../Portal")
 portal_color = Color(0, 0.0333333, 1, 1)
 
@@ -69,3 +71,6 @@ radius = 1.0520896
 [node name="CSGSphere3D4" type="CSGSphere3D" parent="Node3D" unique_id=241372451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.154991, 3.5603, 18.921364)
 radius = 1.4745003
+
+[node name="CarCopies" type="Node3D" parent="." unique_id=1148469972]
+unique_name_in_owner = true

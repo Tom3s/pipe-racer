@@ -1,6 +1,6 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled;
-uniform sampler2D viewport_texture : source_color;
+render_mode depth_test_disabled;
+stencil_mode read, compare_equal, 1;
 
 void vertex() {
 	// Called for every vertex the material is visible on.
@@ -8,7 +8,8 @@ void vertex() {
 
 void fragment() {
 	// Called for every pixel the material is visible on.
-	ALBEDO.rgb = texture(viewport_texture, SCREEN_UV).rgb;
+	ALBEDO = vec3(1.0, 0.0, 0.0);
+	//ALPHA = 0.0;
 }
 
 //void light() {

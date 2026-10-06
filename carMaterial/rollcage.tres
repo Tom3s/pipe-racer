@@ -1,6 +1,10 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://dbrsm6m16it3c"]
 
 [resource]
+transparency = 1
 albedo_color = Color(0, 0.8, 0.866667, 1)
 metallic = 0.76
 roughness = 0.15
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 2

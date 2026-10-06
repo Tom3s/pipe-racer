@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://0e6ywfuhrk2r"]
+
+[ext_resource type="Script" uid="uid://caft4j4d3ussd" path="res://Visuals/Wheels/CuttableWheel.gd" id="1_mkgcg"]
+[ext_resource type="ArrayMesh" uid="uid://clv0fwhgiu81m" path="res://Visuals/Wheels/DefaultWheel/RimSpokes.res" id="2_4oru4"]
+[ext_resource type="ArrayMesh" uid="uid://bsdfb2cxhk0xq" path="res://Visuals/Wheels/DefaultWheel/RimCenter.res" id="2_ipq8q"]
+[ext_resource type="Material" uid="uid://3el6pobroh5t" path="res://Visuals/Wheels/DefaultRimMaterial.res" id="2_sbw0b"]
+[ext_resource type="Material" uid="uid://bbxma6of4xwde" path="res://Visuals/Wheels/DefaultTireMat.tres" id="3_mkgcg"]
+[ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="4_sbw0b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2giqr"]
+render_priority = -1
+next_pass = ExtResource("3_mkgcg")
+shader = ExtResource("4_sbw0b")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0
+
+[node name="CuttableWheel" type="Node3D" unique_id=463072146]
+script = ExtResource("1_mkgcg")
+rim_material = ExtResource("2_sbw0b")
+
+[node name="Rubber" type="CSGPolygon3D" parent="." unique_id=533723934]
+material_override = SubResource("ShaderMaterial_2giqr")
+polygon = PackedVector2Array(0.25, 0.2, 0.35, 0.2, 0.375, 0.175, 0.375, -0.175, 0.35, -0.2, 0.25, -0.2, 0.3, 0)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 32
+smooth_faces = true
+
+[node name="WheelHub" type="CSGPolygon3D" parent="." unique_id=1159520089]
+material_override = ExtResource("2_sbw0b")
+polygon = PackedVector2Array(0.27, 0.21, 0.26, 0.21, 0.25, 0.2, 0.24, 0.19, 0.23, 0.185, 0.23, -0.185, 0.24, -0.19, 0.25, -0.2, 0.26, -0.21, 0.27, -0.21)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 32
+smooth_faces = true
+
+[node name="RimSpokes" type="MeshInstance3D" parent="." unique_id=632901336]
+transform = Transform3D(1, 0, 0, 0, 0.965539, -0.260258, 0, 0.260258, 0.965539, 0, -0.086, 0.303)
+material_override = ExtResource("2_sbw0b")
+mesh = ExtResource("2_4oru4")
+
+[node name="RimCenter" type="MeshInstance3D" parent="." unique_id=1126747209]
+transform = Transform3D(0.208, 0, -3.140713e-08, 0, -0.089, 0, 3.140713e-08, 0, 0.208, 0, 0.09273744, 0)
+material_override = ExtResource("2_sbw0b")
+mesh = ExtResource("2_ipq8q")
