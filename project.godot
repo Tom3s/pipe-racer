@@ -541,5 +541,6 @@ jolt_3d/limits/max_linear_velocity=750.0
 
 [rendering]
 
-lights_and_shadows/directional_shadow/size=8196
+lights_and_shadows/directional_shadow/size=16384
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
 scaling_3d/fsr_sharpness=0.2

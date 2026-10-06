@@ -79,10 +79,15 @@ func get_duplicate() -> CuttableCarModel:
 # wheel_turn -> attachmentpoint.y
 # rotation -> wheel_offset.x
 
-func rotate_wheels(rotation: float, wheel_turn: float) -> void:
-	pass
+func rotate_wheels(rotation: PackedFloat32Array, wheel_turn: float) -> void:
+	for i in 2:
+		wheels[i].get_child(0).rotation.y = wheel_turn
 
-func place_wheels() -> void:
-	pass
+	for i in 4:
+		wheels[i].get_child(0).get_child(0).rotate_x(rotation[i])
+
+func place_wheels(positions: PackedFloat32Array) -> void:
+	for i in 4:
+		wheels[i].get_child(0).position.y = positions[i]
 
 # attachment_point.y = -raycast.length

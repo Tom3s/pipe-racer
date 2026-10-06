@@ -20,6 +20,7 @@ script = ExtResource("1_jn2xb")
 
 [node name="CarController" parent="Player" unique_id=1542026868 instance=ExtResource("3_w0lpi")]
 unique_name_in_owner = true
+respawnPosition = Vector3(0, 1, 0)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1619038378]
 unique_name_in_owner = true

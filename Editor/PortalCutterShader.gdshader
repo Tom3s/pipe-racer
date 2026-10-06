@@ -19,7 +19,7 @@ void fragment() {
 	
 	if (dist < 0.0) discard;
 	
-	ALPHA = 0.0;
+	//ALPHA = 0.0;
 }
 
 

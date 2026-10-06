@@ -204,6 +204,9 @@ func _ready():
 
 var inFluid: Area3D = null
 
+var wheel_travelled_rotation: PackedFloat32Array = [0, 0, 0, 0]
+var wheel_position: PackedFloat32Array = [0, 0, 0, 0]
+
 func _physics_process(_delta):
 	# angular_velocity = clamp(angular_velocity, -angularTerminalVelocity * Vector3.ONE, angularTerminalVelocity * Vector3.ONE)
 	if angular_velocity.x > angularTerminalVelocity || angular_velocity.x < -angularTerminalVelocity || \
@@ -215,10 +218,14 @@ func _physics_process(_delta):
 		for tire in tires:
 			calculateTirePhysics(tire, _delta)
 		#TODO: rotate wheels here
+		car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+		car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 		
 		for bottomOut in bottomOuts:
 			calculateBottomOutPhysics(bottomOut, _delta)
 		
+		car_model.place_wheels(wheel_position)
+		car_copy_model.place_wheels(wheel_position)
 		#TODO: place wheels here
 
 		if inFluid != null:
@@ -236,11 +243,19 @@ func _physics_process(_delta):
 			global_rotation = respawnRotation
 
 			for tire in tires:
-				# tire.tireModel.position.y = tire.target_position.y + 0.375
-				# TODO: wheel
+				wheel_position[tire.tireIndex] = tire.target_position.y + tireRadius
 				tire.rotation.y = 0
 				tire.smokeEmitter.emitting = false
 				tire.dirtEmitter.emitting = false
+
+			wheel_travelled_rotation = [0,0,0,0]
+			
+			car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+			car_model.place_wheels(wheel_position)
+
+			car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+			car_copy_model.place_wheels(wheel_position)
+
 
 			shouldRespawn = false
 			if initialRespawn:
@@ -365,16 +380,14 @@ func calculateTirePhysics(tire: Tire, delta):
 
 		var tireDistanceTravelled = (tireVelocitySuspension * delta).dot(tire.global_transform.basis.z)
 
-		# tire.tireModel.position.y = -raycastDistance + 0.375
-		# tire.tireModel.rotate_x(tireDistanceTravelled / 0.375)
-		# TODO: rotate wheels
+		wheel_travelled_rotation[tire.tireIndex] = tireDistanceTravelled / tireRadius
+		wheel_position[tire.tireIndex] = -raycastDistance + tireRadius
 
 		tire.smokeEmitter.emitting = slidingFactor > 0.1 && getSpeed() > 15 && useSmokeParticles
 		tire.dirtEmitter.emitting = getSpeed() > 15 && !useSmokeParticles
 	else:
 		state.groundedTires[tire.tireIndex] = 0		
-		# tire.tireModel.position.y = tire.target_position.y + 0.375
-		# TODO: move wheels
+		wheel_position[tire.tireIndex] = tire.target_position.y + tireRadius
 		tire.smokeEmitter.emitting = false
 		tire.dirtEmitter.emitting = false
 
