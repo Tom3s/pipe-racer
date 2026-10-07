@@ -49,6 +49,7 @@ void fragment() {
 	float swirl_overlay = vertex_effect * ease_in_out_cubic(dist_from_side * 2.);
 	
 	dither_transparency(swirl_overlay, FRAGCOORD.xy);
+	//ALPHA = swirl_overlay;
 	//ALBEDO = vec3(step(.7, UV.x));
 	ALBEDO = swirl_color;
 	EMISSION = swirl_color * noise_pass2 * 1.42857142857;

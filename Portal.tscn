@@ -8,9 +8,9 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i8d41"]
 render_priority = 1
 shader = ExtResource("2_8ti6q")
-shader_parameter/swirl_color = Color(0.9816566, 2.0792484e-05, 0.6685115, 1)
+shader_parameter/swirl_color = Color(0, 1, 1, 1)
 shader_parameter/side_dist = Vector2(0.37, 0.48)
-shader_parameter/swirl_strength = 4.34
+shader_parameter/swirl_strength = 4.35
 shader_parameter/noise_size = Vector2(0.5, 1.6)
 shader_parameter/noise_period = Vector2(50, 16)
 shader_parameter/spin_speed = 0.2
@@ -22,6 +22,11 @@ render_priority = 0
 next_pass = SubResource("ShaderMaterial_i8d41")
 shader = ExtResource("2_bagdj")
 shader_parameter/viewport_texture = ExtResource("3_aamt4")
+shader_parameter/noise_size = Vector2(0.5, 1.6)
+shader_parameter/vortex_speed1 = Vector2(0.035, 0)
+shader_parameter/noise_period = Vector2(50, 16)
+shader_parameter/swirl_strength = 4.35
+shader_parameter/portal_displace = 0.01
 
 [sub_resource type="QuadMesh" id="QuadMesh_210c5"]
 size = Vector2(8, 8)

@@ -63,3 +63,9 @@ float seamless_noise(vec2 uv, vec2 _period) {
 float ease_in_out_cubic(float x) {
 	return x < 0.5 ? 4.0 * x * x * x : 1. - pow(-2.0 * x + 2.0, 3.) * .5;
 }
+
+void dither_noise(float transparency, vec2 frag_coord) {
+	if (transparency < 0.001 || transparency < random(frag_coord).x) {
+		discard;
+	}
+}
