@@ -93,7 +93,7 @@ func _get_selected_node_surface_material() -> ShaderMaterial:
 		var surface_uniforms := surface_material.shader.get_shader_uniform_list()
 		if surface_uniforms == code_uniforms:
 			return surface_material
-		if "next_pass" in surface_material:
+		if "next_pass" in surface_material && surface_material.next_pass != null:
 			surface_material = surface_material.next_pass
 			surface_uniforms = surface_material.shader.get_shader_uniform_list()
 			if surface_uniforms == code_uniforms:
