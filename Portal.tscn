@@ -1,11 +1,25 @@
 [gd_scene format=3 uid="uid://dmi5fb8uigr35"]
 
 [ext_resource type="Script" uid="uid://b466vg3nme85b" path="res://Editor/Props/Portal.gd" id="1_4hdyq"]
+[ext_resource type="Shader" uid="uid://cjqe1w4rjhgqk" path="res://Editor/Portals/PortalSwirlShader.gdshader" id="2_8ti6q"]
 [ext_resource type="Shader" uid="uid://cws23nyh5y4d0" path="res://PortalShader.gdshader" id="2_bagdj"]
-[ext_resource type="Texture2D" uid="uid://cw4aask4xyoy0" path="res://Menu/controller-layout.png" id="3_aamt4"]
+[ext_resource type="Texture2D" uid="uid://fk1rrr356g74" path="res://Menu/keyboard-layout.png" id="3_aamt4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i8d41"]
+render_priority = 1
+shader = ExtResource("2_8ti6q")
+shader_parameter/swirl_color = Color(0.9816566, 2.0792484e-05, 0.6685115, 1)
+shader_parameter/side_dist = Vector2(0.37, 0.48)
+shader_parameter/swirl_strength = 4.34
+shader_parameter/noise_size = Vector2(0.5, 1.6)
+shader_parameter/noise_period = Vector2(50, 16)
+shader_parameter/spin_speed = 0.2
+shader_parameter/vortex_speed1 = Vector2(0.035, 0)
+shader_parameter/vortex_speed2 = Vector2(0.28, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jn2xb"]
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_i8d41")
 shader = ExtResource("2_bagdj")
 shader_parameter/viewport_texture = ExtResource("3_aamt4")
 

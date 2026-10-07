@@ -2,13 +2,15 @@ shader_type spatial;
 render_mode unshaded, cull_disabled;
 uniform sampler2D viewport_texture : source_color;
 
-void vertex() {
-	// Called for every vertex the material is visible on.
-}
+#include "Visuals/utils.gdshaderinc"
 
 void fragment() {
 	// Called for every pixel the material is visible on.
-	ALBEDO.rgb = texture(viewport_texture, SCREEN_UV).rgb;
+	vec2 distorted_uv = SCREEN_UV;
+	distorted_uv += remap(perlin_noise(UV * 10.0), 0.0, 1.0, -.01, .01);
+	//distorted_uv *= 0.25;
+	//distorted_uv += 1.0;
+	ALBEDO.rgb = texture(viewport_texture, distorted_uv).rgb;
 }
 
 //void light() {
