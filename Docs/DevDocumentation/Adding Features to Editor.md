@@ -385,7 +385,7 @@ Save/Lod
 ```python
 func getProperties() -> Dictionary:
 	var properties := {
-		"sides": sideSpinbox.value,
+		"<param>": <param>Spinbox.value,
 		...
 		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
 		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value)
