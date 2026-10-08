@@ -344,3 +344,10 @@ spot_range = 256.0
 spot_attenuation = 0.37893
 spot_angle = 35.0
 spot_angle_attenuation = 0.659754
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=1537521308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.109589, 0)
+visible = false
+update_mode = 1
+size = Vector3(50, 20, 50)
+origin_offset = Vector3(0, -5.17, 0)

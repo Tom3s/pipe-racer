@@ -13,8 +13,10 @@ var state: bool = false
 var car_copy: CuttableCarModel
 
 func _ready() -> void:
+	set_physics_process(true)
 	carCamera = FollowingCamera.new(car_controller)
 	add_child(carCamera)
+	move_child(carCamera, 0)
 
 	car_copy = car_controller.car_model.get_duplicate()
 	car_copies_parent.add_child(car_copy)
@@ -37,8 +39,10 @@ func _physics_process(delta: float) -> void:
 			car_controller.state.hasControl = false
 	# )
 
+
+
 func _process(delta: float) -> void:
 	current_camera = get_viewport().get_camera_3d()
-
 	for portal: Portal in portals_parent.get_children():
 		portal.set_remote_camera(current_camera)
+	pass

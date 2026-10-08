@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://7x22yvmy0871"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://7x22yvmy0871"]
 
 [ext_resource type="Shader" uid="uid://cq1srv2lm6tb6" path="res://Editor/FunctionalElements/ProceduralCheckpointShader.tres" id="1_8x3fp"]
 

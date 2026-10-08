@@ -15,6 +15,7 @@ script = ExtResource("1_jn2xb")
 [node name="EditableScenery" parent="." unique_id=1366195238 instance=ExtResource("1_te75h")]
 
 [node name="DynamicSky" parent="." unique_id=2135879671 instance=ExtResource("2_p0l7o")]
+day_time = 1.4146
 
 [node name="Player" type="Node3D" parent="." unique_id=248480563]
 
@@ -37,12 +38,12 @@ unique_name_in_owner = true
 [node name="Portal" parent="Portals" unique_id=1599138379 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
 transform = Transform3D(0.9862856, 0, -0.16504793, 0, 1, 0, 0.16504793, 0, 0.9862856, 6.4208317, 0, -20.512203)
 linked_portal = NodePath("../Portal2")
-portal_color = Color(1, 0.050000012, 0, 1)
+portal_color = Color(0.99, 0, 0.65999985, 1)
 
 [node name="Portal2" parent="Portals" unique_id=553399969 node_paths=PackedStringArray("linked_portal") instance=ExtResource("5_w0lpi")]
-transform = Transform3D(0.9554028, 0, -0.29530585, 0, 1, 0, 0.29530585, 0, 0.9554028, -6.3265276, 0, 16.24989)
+transform = Transform3D(-0.47202873, 0, 0.88158315, 0, 1, 0, -0.88158315, 0, -0.47202873, 16.580124, 0, -13.295087)
 linked_portal = NodePath("../Portal")
-portal_color = Color(0, 0.0333333, 1, 1)
+portal_color = Color(0, 0.39999986, 1, 1)
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1229924679]
 

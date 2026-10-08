@@ -253,8 +253,9 @@ func _physics_process(_delta):
 			car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 			car_model.place_wheels(wheel_position)
 
-			car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
-			car_copy_model.place_wheels(wheel_position)
+			if car_copy_model != null:
+				car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+				car_copy_model.place_wheels(wheel_position)
 
 
 			shouldRespawn = false

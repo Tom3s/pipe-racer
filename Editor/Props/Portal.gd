@@ -3,9 +3,14 @@ class_name Portal
 
 @onready var portal_camera: Camera3D = %PortalCamera
 @onready var portal_viewport: SubViewport = %PortalViewport
-@onready var portal_surface: MeshInstance3D = %PortalSurface
+# @onready var portal_surface: MeshInstance3D%ProceduralPortal
+@onready var procedural_portal: ProceduralPortal = %ProceduralPortal
 @onready var detection_area: Area3D = %DetectionArea
 @onready var csgs: Node3D = %CSGS
+
+@onready var light1: AreaLight3D = %Light1
+@onready var light2: AreaLight3D = %Light2
+@onready var omni_light_3d: OmniLight3D = %OmniLight3D
 
 @export
 var linked_portal: Portal
@@ -14,6 +19,7 @@ var linked_portal: Portal
 @export
 var portal_color: Color
 
+# var portal_sur
 # @export_tool_button()
 
 var travelers: Dictionary[Node3D, Transform3D]
@@ -45,7 +51,9 @@ func _ready() -> void:
 
 	set_colors()
 
-	portal_surface.material_override = portal_surface.material_override.duplicate()
+	procedural_portal.portal_surface.material_override = procedural_portal.portal_surface.material_override.duplicate()
+	procedural_portal.portal_surface.material_override.next_pass = procedural_portal.portal_surface.material_override.next_pass.duplicate()
+
 
 func _physics_process(delta: float) -> void:
 	# var marked_to_remove: Array[Node3D] = []
@@ -104,12 +112,19 @@ func set_remote_camera(camera: Camera3D) -> void:
 	RenderingServer.force_draw(false) 
 
 	var camera_texture := linked_portal.portal_viewport.get_texture()
-	portal_surface.material_override.set_shader_parameter("viewport_texture", camera_texture)
+	procedural_portal.portal_surface.material_override.set_shader_parameter("viewport_texture", camera_texture)
 
 func set_colors() -> void:
-	for child in csgs.get_children():
-		child.material_override = StandardMaterial3D.new()
-		child.material_override.albedo_color = portal_color
+	# for child in csgs.get_children():
+	# 	child.material_override = StandardMaterial3D.new()
+	# 	child.material_override.albedo_color = portal_color
+	procedural_portal.portal_color = portal_color
+
+	procedural_portal.portal_surface.material_override.next_pass.set_shader_parameter("swirl_color", portal_color)
+
+	light1.light_color = portal_color
+	light2.light_color = portal_color
+	omni_light_3d.light_color = portal_color
 
 # func set_cutting_plane(car_controller: CarController, direction: float) -> void:
 # 	car_controller.car_model.set_cutting_plane(global_transform, direction)
