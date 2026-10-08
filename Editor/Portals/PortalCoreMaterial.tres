@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://chrksql5c7k77"]
+
+[ext_resource type="Shader" uid="uid://bmumwfpfhlkgq" path="res://Editor/Portals/PortalCore.gdshader" id="1_544qk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_544qk")
+shader_parameter/anim_speed = 0.395
+shader_parameter/anim_speed2 = 0.76
+shader_parameter/core_color = Color(0, 0.74, 0.74, 1)

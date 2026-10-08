@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cjjlkln6jvbrc"]
+
+[ext_resource type="Shader" uid="uid://bjpfbyk6sw03t" path="res://Editor/Portals/PortalFrameShader.gdshader" id="1_simi8"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_simi8")
+shader_parameter/base_color = Color(0.88, 0.88, 0.88, 1)
+shader_parameter/rust_color = Color(0.54, 0.4104, 0.32400003, 1)
+shader_parameter/noise_scale = Vector3(0.23, 53.13, 0.285)
+shader_parameter/noise_dir = Vector3(0.31, 8.78, -0.18)
+shader_parameter/rust_size = 9.585
+shader_parameter/rust_strength = 0.6
+shader_parameter/normal_bump = 0.03
+shader_parameter/roughness = Vector2(0.14, 0.19)

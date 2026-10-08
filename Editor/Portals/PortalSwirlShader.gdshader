@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled;
+render_mode cull_disabled, shadows_disabled;
 
 uniform vec3 swirl_color : source_color;
 uniform vec2 side_dist;
@@ -51,6 +51,6 @@ void fragment() {
 	dither_transparency(swirl_overlay, FRAGCOORD.xy);
 	//ALPHA = swirl_overlay;
 	//ALBEDO = vec3(step(.7, UV.x));
-	ALBEDO = swirl_color;
-	EMISSION = swirl_color * noise_pass2 * 1.42857142857;
+	ALBEDO = swirl_color * noise_pass2 * 2.5;
+	EMISSION = swirl_color * noise_pass2 * 2.5;
 }
