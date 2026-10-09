@@ -138,6 +138,7 @@ signal finishedRace(playerIndex: int, networkId: int)
 signal isReady(playerIndex: int, networkId: int)
 signal isResetting(playerIndex: int, resetting: bool, networkId: int)
 signal changeCameraMode()
+signal teleported(entry_transform: Transform3D, exit_transform: Transform3D, entry_side: float)
 
 
 
@@ -265,6 +266,7 @@ func _physics_process(_delta):
 			respawned.emit(playerIndex, networkId)
 		elif should_set_transform:
 			print("[Car] Teleporting car!")
+			var entry_side := -signf(offset_transform.origin.z)
 			global_transform = exit_transform * offset_transform
 
 			var relative_rotation := exit_transform.basis * entry_transform.basis.inverse()
@@ -273,6 +275,7 @@ func _physics_process(_delta):
 			angular_velocity = relative_rotation * angular_velocity
 
 			should_set_transform = false
+			teleported.emit(entry_transform, exit_transform, entry_side)
 
 
 		else:

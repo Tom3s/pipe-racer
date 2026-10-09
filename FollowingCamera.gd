@@ -5,6 +5,12 @@ var car: CarController = null
 
 var shouldUpdatePosition = false
 
+var portalTransitionActive := false
+var portalEntryTransform := Transform3D.IDENTITY
+var portalExitTransform := Transform3D.IDENTITY
+var portalEntrySide := 0.0
+var dopplerResumeFrames := 0
+
 @export
 var mode: int = 0
 
@@ -27,12 +33,14 @@ func _init(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
 	car.playerIndexChanged.connect(changeCullMask)
+	car.teleported.connect(onCarTeleported)
 	changeCullMask(car.playerIndex)
 
 func setup(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
 	car.playerIndexChanged.connect(changeCullMask)
+	car.teleported.connect(onCarTeleported)
 	changeCullMask(car.playerIndex)
 
 func _ready():
@@ -44,11 +52,14 @@ func _physics_process(delta):
 	if car == null:
 		return
 	if car.paused && !shouldUpdatePosition:
+		_updateDopplerReset()
 		return
 
-	var car_pos = car.global_transform.origin
-	var car_y = car.global_transform.basis.y
-	var car_z = car.global_transform.basis.z
+	var cameraPositionBeforeUpdate := global_position
+	var trackedCarTransform := getTrackedCarTransform()
+	var car_pos = trackedCarTransform.origin
+	var car_y = trackedCarTransform.basis.y
+	var car_z = trackedCarTransform.basis.z
 	fov = 65
 	if shouldUpdatePosition:
 		print("Force update camera position")
@@ -76,11 +87,63 @@ func _physics_process(delta):
 
 		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
 	
+	if portalTransitionActive && hasCrossedPortal(cameraPositionBeforeUpdate, global_position):
+		completePortalTransition()
 
 	shouldUpdatePosition = false
+	_updateDopplerReset()
 
 func forceUpdatePosition():
+	portalTransitionActive = false
+	_suspendDoppler()
 	shouldUpdatePosition = true
+
+func onCarTeleported(entryTransform: Transform3D, exitTransform: Transform3D, entrySide: float) -> void:
+	portalEntryTransform = entryTransform
+	portalExitTransform = exitTransform
+	portalEntrySide = entrySide
+
+	if is_zero_approx(portalEntrySide):
+		portalEntrySide = signf((portalEntryTransform.affine_inverse() * global_transform).origin.z)
+
+	portalTransitionActive = true
+	var currentSide := signf((portalEntryTransform.affine_inverse() * global_transform).origin.z)
+	if is_zero_approx(currentSide) || (!is_zero_approx(portalEntrySide) && currentSide != portalEntrySide):
+		completePortalTransition()
+
+func getTrackedCarTransform() -> Transform3D:
+	if !portalTransitionActive:
+		return car.global_transform
+
+	return portalEntryTransform * portalExitTransform.affine_inverse() * car.global_transform
+
+func hasCrossedPortal(previousPosition: Vector3, currentPosition: Vector3) -> bool:
+	var previousOffset := portalEntryTransform.affine_inverse() * previousPosition
+	var currentOffset := portalEntryTransform.affine_inverse() * currentPosition
+
+	if is_zero_approx(portalEntrySide):
+		return previousOffset.z * currentOffset.z <= 0.0
+
+	var previousSide := signf(previousOffset.z)
+	var currentSide := signf(currentOffset.z)
+	return is_zero_approx(currentSide) || (previousSide == portalEntrySide && currentSide != portalEntrySide)
+
+func completePortalTransition() -> void:
+	global_transform = portalExitTransform * portalEntryTransform.affine_inverse() * global_transform
+	portalTransitionActive = false
+	_suspendDoppler()
+
+func _suspendDoppler() -> void:
+	doppler_tracking = Camera3D.DOPPLER_TRACKING_DISABLED
+	dopplerResumeFrames = 2
+
+func _updateDopplerReset() -> void:
+	if dopplerResumeFrames <= 0:
+		return
+
+	dopplerResumeFrames -= 1
+	if dopplerResumeFrames == 0:
+		doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
 
 func changeMode():
 	mode = (mode + 1) % 3
