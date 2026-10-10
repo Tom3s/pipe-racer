@@ -48,7 +48,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/fontawesome/plugin.cfg", "res://addons/shader-previewer/plugin.cfg")
+enabled=PackedStringArray("res://addons/fontawesome/plugin.cfg")
 
 [input]
 

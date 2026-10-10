@@ -26,13 +26,14 @@ void fragment() {
 	noise_layer1 = smoothstep(0.4, 1.0, noise_layer1);
 	float noise_layer2 = seamless_noise_3d(COLOR.rgb * 5.0 * (1./rust_size)) * .5;
 	float noise_layer3 = seamless_noise_3d(COLOR.rgb * 50.0);
-	noise_layer3 = remap(noise_layer3, 0., 1., 0.15, .25);
-	//float fractal_nosie = (noise_layer1 + noise_layer2 + noise_layer3) / 1.75;
-	float fractal_noise = noise_layer1 * noise_layer2 * noise_layer3 * 8.0 * rust_strength;
+	float remapped_noise_layer3 = remap(noise_layer3, 0., 1., 0.15, .25);
+	//float fractal_nosie = (noise_layer1 + noise_layer2 + remapped_noise_layer3) / 1.75;
+	float fractal_noise = noise_layer1 * noise_layer2 * remapped_noise_layer3 * 8.0 * rust_strength;
 	
+	float rust_variation = remap(smoothstep(.2, .9, noise_layer3), 0., 1., 0.2, 1.0);
 	//float squashed_noise = ;
 	//ALBEDO = base_color;
-	ALBEDO = mix(base_color, rust_color, smoothstep(0., 0.4, fractal_noise));
+	ALBEDO = mix(base_color, (rust_color * rust_variation), smoothstep(0., 0.4, fractal_noise));
 	METALLIC = mix(0.9, 0.2, ease_out_cubic(fractal_noise));
 	NORMAL = mix(NORMAL + remap(surface_streaks, 0., 1., -normal_bump, normal_bump), NORMAL, fractal_noise);
 	ROUGHNESS = mix(remap(surface_streaks, 0., 1., roughness.x, roughness.y), 1., ease_out_cubic(fractal_noise));
