@@ -1,0 +1,309 @@
+[gd_scene format=3 uid="uid://3yjb48b2roqb"]
+
+[ext_resource type="Script" uid="uid://d4m2221afft10" path="res://Editor/Portals/PortalPropertiesUI.gd" id="1_25thy"]
+
+[node name="PortalPropertiesUI" type="VBoxContainer" unique_id=1614376869]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -121.0
+offset_right = 121.0
+offset_bottom = 400.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_25thy")
+
+[node name="MainContainer" type="PanelContainer" parent="." unique_id=1031089031]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer" unique_id=1870366656]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer" unique_id=1564573240]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1942933754]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Light Options"
+horizontal_alignment = 1
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=174526914]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1247961972]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ID: "
+
+[node name="Label2" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1875211079]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label3" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1197735922]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Linked ID: "
+
+[node name="Label4" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1892890367]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1133463952]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=886194178]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Width"
+
+[node name="WidthSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1547331341]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 8.0
+max_value = 128.0
+value = 16.0
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=2042358614]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer9" unique_id=1274647596]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Height"
+
+[node name="HeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer9" unique_id=1361522701]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 8.0
+max_value = 128.0
+value = 12.0
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1238180362]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=185711965]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Portal Color"
+
+[node name="PortalColorButton" type="ColorPickerButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=1183433421]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1465367076]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=235848491]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Frame Color"
+
+[node name="FrameColorButton" type="ColorPickerButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=1805306120]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=2141131797]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer8" unique_id=1927880653]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rust Color"
+
+[node name="RustColorButton" type="ColorPickerButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer8" unique_id=142930801]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1718100674]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1754098111]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rust Intensity"
+
+[node name="RustStrengthSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=2016628478]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 0.4
+alignment = 1
+custom_arrow_step = 0.1
+select_all_on_focus = true
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=418461406]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=256780104]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bottom Frame"
+
+[node name="BottomFrameToggle" type="CheckButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1769324010]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1964305428]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=794001375]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1540023839]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=435831286]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=379021029]
+layout_mode = 2
+text = "Position"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=142324957]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=175590846]
+layout_mode = 2
+text = "X"
+
+[node name="PosXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=409692342]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.1
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1973390634]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=6037011]
+layout_mode = 2
+text = "Y"
+
+[node name="PosYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1993187817]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.1
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=365465977]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=2104915587]
+layout_mode = 2
+text = "Z"
+
+[node name="PosZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=599091331]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.1
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="VSeparator" type="VSeparator" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=2055472194]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=918800647]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=625306211]
+layout_mode = 2
+text = "Rotation"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1401202478]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=583584231]
+layout_mode = 2
+text = "X"
+
+[node name="RotXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=623935175]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=446140541]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=1828845633]
+layout_mode = 2
+text = "Y"
+
+[node name="RotYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=817887695]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1774492821]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=1521969070]
+layout_mode = 2
+text = "Z"
+
+[node name="RotZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=1586989047]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
+
+[node name="VisibilityButton" type="Button" parent="." unique_id=1828322916]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+focus_mode = 0
+toggle_mode = true
+text = "^ Portal"
