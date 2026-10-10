@@ -42,6 +42,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	free_fly_camera._update_mouselook()
+	free_fly_camera._update_movement(delta)
+	carCamera.update_camera(delta)
 	current_camera = get_viewport().get_camera_3d()
 	for portal: FunctionalPortal in portals_parent.get_children():
 		portal.set_remote_camera(current_camera)

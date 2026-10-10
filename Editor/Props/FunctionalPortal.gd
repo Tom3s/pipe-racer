@@ -190,8 +190,8 @@ func set_remote_camera(camera: Camera3D) -> void:
 
 	# await RenderingServer.frame_post_draw
 	# linked_portal.portal_viewport.force_draw
-	linked_portal.portal_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	RenderingServer.force_draw(false) 
+	# linked_portal.portal_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	# RenderingServer.force_draw(false) 
 
 	var camera_texture := linked_portal.portal_viewport.get_texture()
 	procedural_portal.portal_surface.material_override.set_shader_parameter("viewport_texture", camera_texture)

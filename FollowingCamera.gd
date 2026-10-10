@@ -40,9 +40,14 @@ func _ready():
 	fov = 65
 	set_physics_process(true)
 
-func _physics_process(delta):
+# func _physics_process(delta):
+	
+# 	update_camera(delta)
+
+func update_camera(delta: float) -> void:
 	if car == null:
 		return
+
 	if car.paused && !shouldUpdatePosition:
 		return
 
