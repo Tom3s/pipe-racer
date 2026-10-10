@@ -151,6 +151,9 @@ func _ready() -> void:
 	FunctionalPortal.idCounter += 1
 	id = FunctionalPortal.idCounter
 
+	enable_collision(!isPreview)
+
+
 func _physics_process(delta: float) -> void:
 	# var marked_to_remove: Array[Node3D] = []
 
@@ -262,6 +265,9 @@ func set_collision_shape() -> void:
 	base_right_side.disabled = use_bottom_frame || isPreview
 
 func enable_collision(enabled: bool) -> void:
+	if !is_node_ready():
+		return 
+
 	for child in collider.get_children():
 		child.disabled = !enabled
 
@@ -391,5 +397,10 @@ func importData(data: Dictionary):
 	if data.has("use_bottom_frame"):
 		use_bottom_frame = data["use_bottom_frame"]
 	
-	
+@onready var portalScene: PackedScene = preload("res://Editor/Portals/FunctionalPortal.tscn")
 
+func getCopy() -> FunctionalPortal:
+	var newNode: FunctionalPortal = portalScene.instantiate()
+	newNode.setProperties(getProperties(), false)
+
+	return newNode

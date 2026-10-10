@@ -219,13 +219,15 @@ func _physics_process(_delta):
 			calculateTirePhysics(tire, _delta)
 		#TODO: rotate wheels here
 		car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
-		car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+		if car_copy_model != null:
+			car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 		
 		for bottomOut in bottomOuts:
 			calculateBottomOutPhysics(bottomOut, _delta)
 		
 		car_model.place_wheels(wheel_position)
-		car_copy_model.place_wheels(wheel_position)
+		if car_copy_model != null:
+			car_copy_model.place_wheels(wheel_position)
 		#TODO: place wheels here
 
 		if inFluid != null:

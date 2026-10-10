@@ -128,10 +128,10 @@ func getProperties() -> Dictionary:
 	var properties = {
 		"width": width_spinbox.value,
 		"height": height_spinbox.value,
-		"portal_color": rust_strength_spinbox.value,
-		"frame_color": portal_color_button.color,
-		"rust_color": frame_color_button.color,
-		"rust_strength": rust_color_button.color,
+		"portal_color": portal_color_button.color,
+		"frame_color": frame_color_button.color,
+		"rust_color": rust_color_button.color,
+		"rust_strength": rust_strength_spinbox.value,
 		"use_bottom_frame": bottom_frame_toggle.button_pressed,
 		
 		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),

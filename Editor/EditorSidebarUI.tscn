@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dbyuroab0s0la"]
+[gd_scene format=3 uid="uid://dbyuroab0s0la"]
 
-[ext_resource type="Script" path="res://Editor/EditorSidebarUI.gd" id="1_2xesl"]
+[ext_resource type="Script" uid="uid://dij47p5s31hqa" path="res://Editor/EditorSidebarUI.gd" id="1_2xesl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r82oc"]
 bg_color = Color(0, 0, 0, 0.247059)
 
-[node name="EditorSidebarUI" type="Control"]
+[node name="EditorSidebarUI" type="Control" unique_id=210522683]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_2xesl")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=876198772]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,139 +24,146 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=907001959]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MainContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="MainContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=758224692]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MainContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MainContainer" unique_id=109174666]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer" unique_id=1080637369]
 layout_mode = 2
 
-[node name="EditorModeButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer"]
+[node name="EditorModeButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer" unique_id=402898814]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="BuildButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="BuildButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1173559755]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Build"
 
-[node name="EditButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="EditButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1266531750]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Edit"
 
-[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1453651696]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Delete"
 
-[node name="SceneryButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="SceneryButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1463776580]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Scenery"
 
-[node name="PaintButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="PaintButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1276854938]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Paint"
 
-[node name="TestButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="TestButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1114802246]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Test"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=744672900]
 layout_mode = 2
 
-[node name="MetadataButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="MetadataButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=832313517]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Metadata"
 
-[node name="SaveButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons"]
+[node name="SaveButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1430196126]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Save"
 
-[node name="BuildButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer"]
+[node name="BuildButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer" unique_id=1592635866]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="RoadButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="RoadButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1130594854]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Road"
 
-[node name="PipeButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="PipeButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1385700993]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Pipe"
 
-[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="PortalButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1826245343]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Portal"
+
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=196631557]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Start"
 
-[node name="CPButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="CPButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1354570610]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "CP"
 
-[node name="DecoButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="DecoButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1372294222]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Deco"
 
-[node name="PrismButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="PrismButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1976217665]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Prism"
 
-[node name="LightButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons"]
+[node name="LightButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=679271203]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Light"
 
-[node name="VisibilityButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="VisibilityButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1161158655]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
@@ -166,9 +173,9 @@ focus_mode = 0
 toggle_mode = true
 text = "<"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=67026083]
 
-[node name="MetadataContainer" type="Panel" parent="CanvasLayer"]
+[node name="MetadataContainer" type="Panel" parent="CanvasLayer" unique_id=1203907763]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 15
@@ -178,7 +185,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r82oc")
 
-[node name="Container" type="PanelContainer" parent="CanvasLayer/MetadataContainer"]
+[node name="Container" type="PanelContainer" parent="CanvasLayer/MetadataContainer" unique_id=882050023]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -192,56 +199,56 @@ offset_bottom = 123.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MetadataContainer/Container"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MetadataContainer/Container" unique_id=1284179481]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer" unique_id=159860027]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=1317102009]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Edit Metadata"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=232089573]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=197872978]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer" unique_id=571671889]
 layout_mode = 2
 text = "Track Name"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1196908966]
 layout_mode = 2
 
-[node name="TrackNameLineEdit" type="LineEdit" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="TrackNameLineEdit" type="LineEdit" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=145884087]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Name"
 
-[node name="SaveTrackNameButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="SaveTrackNameButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1497471655]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Set"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=1280930834]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer" unique_id=901885472]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Nr Laps"
 
-[node name="LapCountSpinbox" type="SpinBox" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="LapCountSpinbox" type="SpinBox" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1966682331]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -249,25 +256,25 @@ min_value = 1.0
 value = 3.0
 alignment = 1
 
-[node name="SaveLapCountButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="SaveLapCountButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1041289574]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Set"
 
-[node name="spacer" type="Control" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="spacer" type="Control" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=81050768]
 custom_minimum_size = Vector2(256, 48)
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=1163830591]
 layout_mode = 2
 alignment = 1
 
-[node name="CloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="CloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1385050808]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Close"
 
-[node name="SaveCloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="SaveCloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1521577330]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save & Close"

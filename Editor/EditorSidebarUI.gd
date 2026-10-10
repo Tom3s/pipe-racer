@@ -18,6 +18,7 @@ class_name EditorSidebarUI
 @onready var buildButtons: VBoxContainer = %BuildButtons
 @onready var roadButton: Button = %RoadButton
 @onready var pipeButton: Button = %PipeButton
+@onready var portalButton: Button = %PortalButton
 @onready var startButton: Button = %StartButton
 @onready var cpButton: Button = %CPButton
 @onready var decoButton: Button = %DecoButton
@@ -83,6 +84,9 @@ func connectSignals():
 	pipeButton.pressed.connect(func():
 		onBuildButtonPressed(EditorEventListener.BuildMode.PIPE)
 	)
+	portalButton.pressed.connect(func():
+		onBuildButtonPressed(EditorEventListener.BuildMode.PORTAL)
+	)
 	startButton.pressed.connect(func():
 		onBuildButtonPressed(EditorEventListener.BuildMode.START)
 	)
@@ -133,6 +137,7 @@ func connectSignals():
 func onBuildButtonPressed(index: int) -> void:
 	roadButton.button_pressed = index == EditorEventListener.BuildMode.ROAD
 	pipeButton.button_pressed = index == EditorEventListener.BuildMode.PIPE
+	portalButton.button_pressed = index == EditorEventListener.BuildMode.PORTAL
 	startButton.button_pressed = index == EditorEventListener.BuildMode.START
 	cpButton.button_pressed = index == EditorEventListener.BuildMode.CP
 	decoButton.button_pressed = index == EditorEventListener.BuildMode.DECO

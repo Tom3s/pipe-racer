@@ -18,6 +18,7 @@ var autoSaveInterval: float = 12
 @onready var checkpointScene: PackedScene = preload("res://Editor/FunctionalElements/FunctionalCheckpoint.tscn")
 @onready var roadNodeScene: PackedScene = preload("res://Editor/Road/RoadNode.tscn")
 @onready var pipeNodeScene: PackedScene = preload("res://Editor/Pipe/PipeNode.tscn")
+@onready var portalScene: PackedScene = preload("res://Editor/Portals/FunctionalPortal.tscn")
 @onready var ledBoardScene: PackedScene = preload("res://Editor/Props/LedBoard.tscn")
 @onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
 @onready var lightDecoScene: PackedScene = preload("res://Editor/Props/LightDeco.tscn")
@@ -41,6 +42,8 @@ var lastPipeElement: PipeMeshGenerator
 
 signal pipePreviewElementRequested()
 
+@onready var portals: Node3D = %Portals
+var last_portal: FunctionalPortal
 
 @onready var startParent: Node3D = %Start
 var start: FunctionalStartLine
@@ -51,6 +54,7 @@ var start: FunctionalStartLine
 var ledBoards: Node3D
 var prisms: Node3D
 var lights: Node3D
+
 
 # scenery
 
@@ -122,7 +126,38 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 		lastPipeElement.convertToPhysicsObject()
 		lastPipeNode = null
 		lastPipeElement = null
+
+func add_portal(portal: FunctionalPortal, position: Vector3, rotation: Vector3, portalProperties: Dictionary):
+	# if portal.get_parent() == null:
+	portals.add_child(portal)
+	portal.global_position = position
+	portal.global_rotation = rotation
+	portal.setProperties(portalProperties, false)
 	
+	if last_portal == null:
+		# var pipeElement: PipeMeshGenerator = pipeScene.instantiate()
+		# pipePieces.add_child(pipeElement)
+		# pipeElement.setProperties(pipeProperties)
+		# pipeElement.startNode = node
+		last_portal = portal
+		# lastPipeElement = pipeElement
+		# pipePreviewElementRequested.emit()
+	else:
+		# if EditorMath.positionsMatch(lastPipeElement.startNode, node):
+		# 	# pipeNodes.remove_child(node)
+		# 	# node.queue_free()
+		# 	return
+		last_portal.linked_portal = portal
+		last_portal.linked_id = portal.id
+
+		portal.linked_portal = last_portal
+		portal.linked_id = last_portal.id
+
+		# lastPipeElement.refreshMesh()
+		# lastPipeElement.convertToPhysicsObject()
+		last_portal = null
+
+
 func onPipePreviewElementProvided(node: PipeNode):
 	if lastPipeElement != null:
 		lastPipeElement.endNode = node
@@ -145,6 +180,7 @@ func clearPreviews():
 		lastPipeElement.queue_free()
 		lastPipeElement = null
 		lastPipeNode = null
+	
 
 func setStartLine(position: Vector3, rotation: Vector3, properties: Dictionary):
 	if start == null:
@@ -180,6 +216,7 @@ func addLightDeco(node: LightDeco, position: Vector3, rotation: Vector3, propert
 	node.global_position = position
 	node.global_rotation = rotation
 	node.setProperties(properties, false)
+
 
 var lastSceneryVertexIndex: Vector2i = Vector2i(-1, -1)
 var scenerySelectionSize: int = 1
@@ -275,6 +312,7 @@ func removePipeElement(node: PipeMeshGenerator):
 
 	node.queue_free()
 
+
 func removeRoadNode(node: RoadNode):
 	var roadNodes: Dictionary = {}
 	var meshGeneratorRefs: Array = []
@@ -323,6 +361,14 @@ func removePipeNode(node: PipeNode):
 	if node != null:
 		node.queue_free()
 
+func removePortal(portal: FunctionalPortal):
+	if portal.linked_portal != null:
+		portal.linked_portal.linked_portal = null
+		portal.linked_portal.linked_id = -1
+
+	portal.queue_free()
+
+
 func removeCheckpoint(node: FunctionalCheckpoint):
 	node.queue_free()
 
@@ -358,6 +404,8 @@ func clearMap():
 	for child in pipePieces.get_children():
 		child.queue_free()
 	for child in checkpoints.get_children():
+		child.queue_free()
+	for child in portals.get_children():
 		child.queue_free()
 	
 	for child in deco.get_children():
@@ -439,6 +487,11 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 		for element in pipePieces.get_children():
 			pipeData["elements"].append(element.getExportData())
 		trackData["pipes"] = pipeData
+
+	if portals.get_child_count() > 0:
+		trackData["portals"] = []
+		for node in portals.get_children():
+			trackData["portals"].append(node.getExportData())
 
 	trackData["deco"] = {}
 	if ledBoards.get_child_count() > 0:
@@ -615,6 +668,19 @@ func importTrack(fileName: String) -> bool:
 			element.refreshMesh()
 			element.convertToPhysicsObject()
 	
+	if trackData.has("portals"):
+		var nodeIds: Dictionary = {}
+
+		for nodeData in trackData["portals"]:
+			var node: FunctionalPortal = portalScene.instantiate()
+			portals.add_child(node)
+			node.importData(nodeData)
+			nodeIds[nodeData["id"]] = node
+		
+		for portal in portals.get_children():
+			portal.linked_portal = nodeIds[portal.linked_id]
+
+
 	if trackData["deco"].has("ledBoards"):
 		for ledBoardData in trackData["deco"]["ledBoards"]:
 			var ledBoard: LedBoard = ledBoardScene.instantiate() as LedBoard
@@ -660,6 +726,9 @@ func setIngame(ingame: bool = true) -> void:
 		child.setIngame(ingame)
 
 	for child in pipeNodes.get_children():
+		child.setIngame(ingame)
+	
+	for child in portals.get_children():
 		child.setIngame(ingame)
 
 	for child in checkpoints.get_children():

@@ -17,6 +17,8 @@ class_name EditorEventListener
 @onready var ledBoard: LedBoard = %LedBoard
 @onready var prismShapeDeco: PrismShapeDeco = %PrismShapeDeco
 @onready var lightDeco: LightDeco = %LightDeco
+@onready var portalPreview: FunctionalPortal = %Portal
+
 var currentElement: Node3D = null
 
 @onready var gridMesh: MeshInstance3D = %GridMesh
@@ -28,6 +30,8 @@ var currentElement: Node3D = null
 
 @onready var pipeNodePropertiesUI: PipeNodePropertiesUI = %PipeNodePropertiesUI
 @onready var pipePropertiesUI: PipePropertiesUI = %PipePropertiesUI
+@onready var portalPropertiesUI: PortalPropertiesUI = %PortalPropertiesUI
+
 
 @onready var startLinePropertiesUI: StartLinePropertiesUI = %StartLinePropertiesUI
 @onready var checkpointPropertiesUI: CheckpointPropertiesUI = %CheckpointPropertiesUI
@@ -71,6 +75,7 @@ var currentEditorMode: EditorMode = EditorMode.BUILD
 enum BuildMode {
 	ROAD,
 	PIPE,
+	PORTAL,
 	START,
 	CP,
 	DECO,
@@ -253,6 +258,19 @@ func connectSignals():
 					pipePropertiesUI.getProperties()
 				)
 				editorStats.increasePlacedTrackPieces()
+			
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalPortal":
+				# var collidedObject = screenPointToRay()
+				var newElement = currentElement.getCopy()
+				
+				map.add_portal(
+					newElement, 
+					currentElement.global_position, 
+					currentElement.global_rotation,
+					portalPropertiesUI.getProperties()
+				)
+				editorStats.increasePlacedTrackPieces()
+			
 			elif ClassFunctions.getClassName(currentElement) == "ProceduralStartLine":
 				map.setStartLine(
 					currentElement.global_position, 
@@ -328,6 +346,7 @@ func connectSignals():
 				if currentElement != null && \
 					(ClassFunctions.getClassName(currentElement) == "FunctionalStartLine" || \
 					 ClassFunctions.getClassName(currentElement) == "LedBoard" || \
+					#  ClassFunctions.getClassName(currentElement) == "FunctionalPortal" || \
 					 ClassFunctions.getClassName(currentElement) == "PrismShapeDeco"):
 					currentElement.convertToPhysicsObject()
 
@@ -356,6 +375,16 @@ func connectSignals():
 					currentElement.setCollision(false)
 					pipeNodePropertiesUI.setProperties(collidedObject.getProperties())
 					setEditUIVisibility(EditUIType.PIPE_NODE_PROPERTIES)
+					rotator.enable()
+					rotator.moveToNode(currentElement)
+					translator.enable()
+					translator.global_position = currentElement.global_position
+				elif ClassFunctions.getClassName(collidedObject) == "FunctionalPortal":
+					# map.lastPipeNode = collidedObject
+					currentElement = collidedObject
+					# currentElement.setCollision(false)
+					portalPropertiesUI.setProperties(collidedObject.getProperties())
+					setEditUIVisibility(EditUIType.PORTAL_PROPERTIES)
 					rotator.enable()
 					rotator.moveToNode(currentElement)
 					translator.enable()
@@ -433,6 +462,8 @@ func connectSignals():
 				map.removeRoadNode(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
 				map.removePipeNode(collidedObject)
+			elif ClassFunctions.getClassName(collidedObject) == "FunctionalPortal":
+				map.removePortal(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
 				map.removeCheckpoint(collidedObject)
 			elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
@@ -554,6 +585,8 @@ func connectSignals():
 				roadNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalPortal":
+				portalPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
@@ -577,6 +610,8 @@ func connectSignals():
 				roadNodePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "PipeNode":
 				pipeNodePropertiesUI.setProperties(currentElement.getProperties())
+			elif ClassFunctions.getClassName(currentElement) == "FunctionalPortal":
+				portalPropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalStartLine":
 				startLinePropertiesUI.setProperties(currentElement.getProperties())
 			elif ClassFunctions.getClassName(currentElement) == "FunctionalCheckpoint":
@@ -656,6 +691,11 @@ func connectSignals():
 			pipeNodeProperties.erase("position")
 			pipeNodeProperties.erase("rotation")
 			pipeNode.setProperties(pipeNodeProperties)
+			
+			var portalProperties = portalPropertiesUI.getProperties()
+			portalProperties.erase("position")
+			portalProperties.erase("rotation")
+			portalPreview.setProperties(portalProperties)
 
 			# var startLineProperties = startLinePropertiesUI.getProperties()
 			# startLineProperties.erase("position")
@@ -897,6 +937,83 @@ func connectSignals():
 			return
 		
 		currentElement = currentElement as PipeNode
+		currentElement.global_rotation = value
+
+		rotator.moveToNode(currentElement)
+	)
+
+	# portal properties ui
+	portalPropertiesUI.width_changed.connect(func(width: int):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.width = width
+	)
+	portalPropertiesUI.height_changed.connect(func(height: int):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.height = height		
+
+	)
+	portalPropertiesUI.frame_color_changed.connect(func(frame_color: Color):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.frame_color = frame_color		
+
+	)
+	portalPropertiesUI.rust_color_changed.connect(func(rust_color: Color):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.rust_color = rust_color		
+
+	)
+	portalPropertiesUI.rust_strength_changed.connect(func(rust_strength: float):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.rust_strength = rust_strength		
+
+	)
+	portalPropertiesUI.portal_color_changed.connect(func(portal_color: Color):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.portal_color = portal_color		
+
+	)
+	portalPropertiesUI.use_bottom_frame_changed.connect(func(use_bottom_frame: bool):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.use_bottom_frame = use_bottom_frame		
+
+	)
+	portalPropertiesUI.positionChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		currentElement.global_position = value
+	
+		rotator.moveToNode(currentElement)
+		translator.global_position = value
+	)
+
+	portalPropertiesUI.rotationChanged.connect(func(value: Vector3):
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
 		currentElement.global_rotation = value
 
 		rotator.moveToNode(currentElement)
@@ -1391,6 +1508,7 @@ enum EditUIType {
 	ROAD_PROPERTIES,
 	PIPE_NODE_PROPERTIES,
 	PIPE_PROPERTIES,
+	PORTAL_PROPERTIES,
 	START_LINE_PROPERTIES,
 	CP_PROPERTIES,
 	LED_BOARD_PROPERTIES,
@@ -1404,6 +1522,7 @@ func setEditUIVisibility(ui: EditUIType):
 	roadNodePropertiesUI.visible = ui == EditUIType.ROAD_NODE_PROPERTIES
 	pipePropertiesUI.visible = ui == EditUIType.PIPE_PROPERTIES
 	pipeNodePropertiesUI.visible = ui == EditUIType.PIPE_NODE_PROPERTIES
+	portalPropertiesUI.visible = ui == EditUIType.PORTAL_PROPERTIES
 	startLinePropertiesUI.visible = ui == EditUIType.START_LINE_PROPERTIES
 	checkpointPropertiesUI.visible = ui == EditUIType.CP_PROPERTIES
 	ledBoardPropertiesUI.visible = ui == EditUIType.LED_BOARD_PROPERTIES
@@ -1419,6 +1538,7 @@ func setCurrentElement():
 	if currentEditorMode == EditorMode.BUILD:
 		roadNode.visible = currentBuildMode == BuildMode.ROAD
 		pipeNode.visible = currentBuildMode == BuildMode.PIPE
+		portalPreview.visible = currentBuildMode == BuildMode.PORTAL
 		startLine.visible = currentBuildMode == BuildMode.START
 		checkpoint.visible = currentBuildMode == BuildMode.CP
 		ledBoard.visible = currentBuildMode == BuildMode.DECO
@@ -1430,6 +1550,8 @@ func setCurrentElement():
 			currentElement = roadNode
 		elif currentBuildMode == BuildMode.PIPE:
 			currentElement = pipeNode
+		elif currentBuildMode == BuildMode.PORTAL:
+			currentElement = portalPreview
 		elif currentBuildMode == BuildMode.START:
 			currentElement = startLine
 		elif currentBuildMode == BuildMode.CP:
@@ -1448,6 +1570,7 @@ func setCurrentElement():
 
 	roadNode.visible = currentEditorMode == EditorMode.BUILD
 	pipeNode.visible = currentEditorMode == EditorMode.BUILD
+	portalPreview.visible = currentEditorMode == EditorMode.BUILD
 	startLine.visible = currentEditorMode == EditorMode.BUILD
 	checkpoint.visible = currentEditorMode == EditorMode.BUILD
 	ledBoard.visible = currentEditorMode == EditorMode.BUILD

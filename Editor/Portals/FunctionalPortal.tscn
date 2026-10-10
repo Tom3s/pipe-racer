@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmi5fb8uigr35"]
 
-[ext_resource type="Script" uid="uid://b466vg3nme85b" path="res://Editor/Props/FunctionalPortal.gd" id="1_4hdyq"]
+[ext_resource type="Script" uid="uid://b466vg3nme85b" path="res://Editor/Portals/FunctionalPortal.gd" id="1_4hdyq"]
 [ext_resource type="PackedScene" uid="uid://bwcjmlodk6rpy" path="res://Editor/Portals/ProceduralPortal.tscn" id="2_bagdj"]
 [ext_resource type="Script" uid="uid://cuxaqff5k3se2" path="res://Editor/PhysicsSurface.gd" id="3_1swij"]
 
