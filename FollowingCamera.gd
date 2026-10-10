@@ -23,6 +23,8 @@ var insideTilt: float = 1.12
 @export
 var mode3distance: float = 5.0
 
+var manual_update: bool = false
+
 func _init(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
@@ -40,9 +42,9 @@ func _ready():
 	fov = 65
 	set_physics_process(true)
 
-# func _physics_process(delta):
-	
-# 	update_camera(delta)
+func _physics_process(delta):
+	if !manual_update:	
+		update_camera(delta)
 
 func update_camera(delta: float) -> void:
 	if car == null:

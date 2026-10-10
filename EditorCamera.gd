@@ -85,10 +85,14 @@ func _unhandled_input(event):
 	# _e = Input.is_action_pressed("editor_down")
 	_shift = Input.is_action_pressed("editor_move_fast")
 
+
+var manual_update: bool = false
+
 # Updates mouselook and movement every frame
-# func _process(delta):
-# 	_update_mouselook()
-# 	_update_movement(delta)
+func _process(delta):
+	if !manual_update:
+		_update_mouselook()
+		_update_movement(delta)
 
 # Updates camera movement
 

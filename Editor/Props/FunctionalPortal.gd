@@ -2,6 +2,10 @@
 extends Node3D
 class_name FunctionalPortal
 
+static var idCounter: int = -1
+var id: int
+var linked_id: int = -1
+
 @onready var portal_camera: Camera3D = %PortalCamera
 @onready var portal_viewport: SubViewport = %PortalViewport
 # @onready var portal_surface: MeshInstance3D%ProceduralPortal
@@ -24,6 +28,8 @@ class_name FunctionalPortal
 @onready var base_right: CollisionShape3D = %BaseRight
 @onready var base_left_side: CollisionPolygon3D = %BaseLeftSide
 @onready var base_right_side: CollisionPolygon3D = %BaseRightSide
+
+@onready var arrow: CSGPolygon3D = %Arrow
 
 @export
 var linked_portal: FunctionalPortal
@@ -101,8 +107,13 @@ var corner_offset: float = 0.395:
 		corner_offset = value
 		set_collision_shape()
 
-# var portal_sur
-# @export_tool_button()
+@export
+var isPreview: bool = false:
+	set(newValue):
+		isPreview = newValue
+		# arrow.visible
+		enable_collision(!isPreview)
+
 
 var travelers: Dictionary[Node3D, Transform3D]
 
@@ -136,6 +147,9 @@ func _ready() -> void:
 
 	set_collision_shape()
 	set_visuals()
+
+	FunctionalPortal.idCounter += 1
+	id = FunctionalPortal.idCounter
 
 func _physics_process(delta: float) -> void:
 	# var marked_to_remove: Array[Node3D] = []
@@ -241,11 +255,21 @@ func set_collision_shape() -> void:
 	base_left_side.position.y = -height / 2.0
 	base_right_side.position.y = -height / 2.0
 
-	frame_bottom.disabled = !use_bottom_frame
-	base_left.disabled = use_bottom_frame
-	base_right.disabled = use_bottom_frame
-	base_left_side.disabled = use_bottom_frame
-	base_right_side.disabled = use_bottom_frame
+	frame_bottom.disabled = !use_bottom_frame || isPreview
+	base_left.disabled = use_bottom_frame || isPreview
+	base_right.disabled = use_bottom_frame || isPreview
+	base_left_side.disabled = use_bottom_frame || isPreview
+	base_right_side.disabled = use_bottom_frame || isPreview
+
+func enable_collision(enabled: bool) -> void:
+	for child in collider.get_children():
+		child.disabled = !enabled
+
+	frame_bottom.disabled = !use_bottom_frame || !enabled
+	base_left.disabled = use_bottom_frame || !enabled
+	base_right.disabled = use_bottom_frame || !enabled
+	base_left_side.disabled = use_bottom_frame || !enabled
+	base_right_side.disabled = use_bottom_frame || !enabled
 
 func set_visuals() -> void:
 	procedural_portal.width = width
@@ -255,3 +279,117 @@ func set_visuals() -> void:
 	procedural_portal.rust_strength = rust_strength
 	procedural_portal.portal_color = portal_color
 	procedural_portal.use_bottom_frame = use_bottom_frame
+
+func setIngame(ingame: bool = true) -> void:
+	%Arrow.visible = !ingame
+
+# Data handling
+
+func getProperties() -> Dictionary:
+	return {
+		"width": width,
+		"height": height,
+		"frame_color": frame_color,
+		"rust_color": rust_color,
+		"rust_strength": rust_strength,
+		"portal_color": portal_color,
+		"use_bottom_frame": use_bottom_frame,
+
+		"position": global_position,
+		"rotation": global_rotation,
+	}
+
+func setProperties(properties: Dictionary, setTransform: bool = true) -> void:
+	if properties.has("width"):
+		width = properties["width"]
+
+	if properties.has("height"):
+		height = properties["height"]
+
+	if properties.has("frame_color"):
+		frame_color = properties["frame_color"]
+
+	if properties.has("rust_color"):
+		rust_color = properties["rust_color"]
+
+	if properties.has("rust_strength"):
+		rust_strength = properties["rust_strength"]
+
+	if properties.has("portal_color"):
+		portal_color = properties["portal_color"]
+
+	if properties.has("use_bottom_frame"):
+		use_bottom_frame = properties["use_bottom_frame"]
+
+	
+
+	if setTransform:
+		if properties.has("position"):
+			global_position = properties["position"]
+		if properties.has("rotation"):
+			global_rotation = properties["rotation"]
+
+func getExportData() -> Dictionary:
+	var data = {
+		"position": var_to_str(global_position),
+		"rotation": var_to_str(global_rotation),
+		"id": id,
+	}
+
+	if linked_portal != null:
+		data["linked_id"] = linked_portal.id
+
+	if width != 16:
+		data["width"] = width
+
+	if height != 12:
+		data["height"] = height
+
+	if frame_color != Color(0.831, 0.831, 0.831):
+		data["frame_color"] = frame_color.to_html()
+
+	if rust_color != Color(0.6, 0.212, 0.047):
+		data["rust_color"] = rust_color.to_html()
+
+	if rust_strength != 0.4:
+		data["rust_strength"] = rust_strength
+
+	if portal_color != Color(0.0, 0.694, 0.749):
+		data["portal_color"] = portal_color.to_html()
+
+	if use_bottom_frame != false:
+		data["use_bottom_frame"] = use_bottom_frame
+	
+	return data
+
+func importData(data: Dictionary):
+	global_position = str_to_var(data["position"])
+	global_rotation = str_to_var(data["rotation"])
+	id = data["id"]
+
+	if data.has("linked_id"):
+		linked_id = data["linked_id"]
+
+	if data.has("width"):
+		width = data["width"]
+
+	if data.has("height"):
+		height = data["height"]
+
+	if data.has("frame_color"):
+		frame_color = Color.from_string(data["frame_color"], Color.WHITE)
+
+	if data.has("rust_color"):
+		rust_color = Color.from_string(data["rust_color"], Color.WHITE)
+
+	if data.has("rust_strength"):
+		rust_strength = data["rust_strength"]
+
+	if data.has("portal_color"):
+		portal_color = Color.from_string(data["portal_color"], Color.WHITE)
+
+	if data.has("use_bottom_frame"):
+		use_bottom_frame = data["use_bottom_frame"]
+	
+	
+

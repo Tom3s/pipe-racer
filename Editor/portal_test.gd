@@ -18,6 +18,9 @@ func _ready() -> void:
 	add_child(carCamera)
 	move_child(carCamera, 0)
 
+	free_fly_camera.manual_update = true
+	carCamera.manual_update = true
+
 	car_copy = car_controller.car_model.get_duplicate()
 	car_copies_parent.add_child(car_copy)
 	car_copy.set_frame_color(Color.PINK)
