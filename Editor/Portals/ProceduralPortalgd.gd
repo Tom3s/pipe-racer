@@ -23,6 +23,10 @@ class_name ProceduralPortal
 @onready var top_frame: CSGCombiner3D = %TopFrame
 @onready var bottom_frame: CSGCombiner3D = %BottomFrame
 
+@onready var light1: AreaLight3D = %Light1
+@onready var light2: AreaLight3D = %Light2
+
+
 var core_material: ShaderMaterial = preload("res://Editor/Portals/PortalCoreMaterial.tres")
 var portal_material: ShaderMaterial = preload("res://Editor/Portals/PortalSurfaceMaterial.tres")
 var frame_material: ShaderMaterial = preload("res://Editor/Portals/PortalFrameMaterial.tres")
@@ -83,6 +87,8 @@ func _ready() -> void:
 	core_bottom.material_override = applied_core_material
 
 	applied_portal_material = portal_material.duplicate()
+	applied_portal_material.next_pass = applied_portal_material.next_pass.duplicate()
+	portal_surface.material_override = applied_portal_material
 
 	applied_frame_material = frame_material.duplicate()
 
@@ -170,6 +176,9 @@ func refresh_model() -> void:
 	# y - 9
 	bottom_frame.get_child(3).size.y = max(3, width - 9)
 
+	light1.area_size = Vector2(width, height)
+	light2.area_size = Vector2(width, height)
+
 func set_side_frame_parameters(parent: Node3D) -> void:
 	if !use_bottom_frame:
 		parent.position.y = 1.0
@@ -204,4 +213,6 @@ func set_colors() -> void:
 	applied_frame_material.set_shader_parameter("base_color", frame_color)
 	applied_frame_material.set_shader_parameter("rust_color", rust_color)
 	applied_frame_material.set_shader_parameter("rust_strength", rust_strength)
-	pass
+
+	light1.light_color = portal_color
+	light2.light_color = portal_color

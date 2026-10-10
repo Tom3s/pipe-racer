@@ -43,6 +43,6 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	current_camera = get_viewport().get_camera_3d()
-	for portal: Portal in portals_parent.get_children():
+	for portal: FunctionalPortal in portals_parent.get_children():
 		portal.set_remote_camera(current_camera)
 	pass

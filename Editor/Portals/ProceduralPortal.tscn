@@ -407,3 +407,27 @@ size = Vector3(1.2, 10, 1.2)
 [node name="CSGBox3D3" type="CSGBox3D" parent="PortalParent/CSGFrame/BottomFrame" unique_id=272150440]
 operation = 2
 size = Vector3(0.2, 7, 2)
+
+[node name="Lights" type="Node3D" parent="PortalParent" unique_id=1232798962]
+
+[node name="Light1" type="AreaLight3D" parent="PortalParent/Lights" unique_id=1122343674]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+light_color = Color(0, 0.694, 0.749, 1)
+light_energy = 1.5
+shadow_enabled = true
+area_range = 10.0
+area_attenuation = 2.0
+area_normalize_energy = false
+area_size = Vector2(16, 12)
+
+[node name="Light2" type="AreaLight3D" parent="PortalParent/Lights" unique_id=1874138839]
+unique_name_in_owner = true
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0.01)
+light_color = Color(0, 0.694, 0.749, 1)
+light_energy = 1.5
+shadow_enabled = true
+area_range = 10.0
+area_attenuation = 2.0
+area_normalize_energy = false
+area_size = Vector2(16, 12)

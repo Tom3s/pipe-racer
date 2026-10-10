@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://dmi5fb8uigr35"]
+
+[ext_resource type="Script" uid="uid://b466vg3nme85b" path="res://Editor/Props/FunctionalPortal.gd" id="1_4hdyq"]
+[ext_resource type="PackedScene" uid="uid://bwcjmlodk6rpy" path="res://Editor/Portals/ProceduralPortal.tscn" id="2_bagdj"]
+[ext_resource type="Script" uid="uid://cuxaqff5k3se2" path="res://Editor/PhysicsSurface.gd" id="3_1swij"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_i8d41"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i8d41"]
+size = Vector3(16, 12, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1swij"]
+size = Vector3(1.4, 10, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o8tko"]
+size = Vector3(1.4, 14, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d0uik"]
+size = Vector3(1.4, 3.111, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_joi5d"]
+size = Vector3(1.8, 3, 1.8)
+
+[node name="FunctionalPortal" type="Node3D" unique_id=1599138379]
+script = ExtResource("1_4hdyq")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1412121481]
+
+[node name="ProceduralPortal" parent="Visual" unique_id=171729285 instance=ExtResource("2_bagdj")]
+unique_name_in_owner = true
+
+[node name="PortalViewport" type="SubViewport" parent="." unique_id=1483486606]
+unique_name_in_owner = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 1
+
+[node name="PortalCamera" type="Camera3D" parent="PortalViewport" unique_id=952749451]
+unique_name_in_owner = true
+cull_mask = 1015807
+near = 0.001
+far = 2500.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PortalViewport/PortalCamera" unique_id=289292748]
+visible = false
+mesh = SubResource("SphereMesh_i8d41")
+
+[node name="DetectionArea" type="Area3D" parent="." unique_id=2024503918]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+collision_mask = 2
+
+[node name="DetectionShape" type="CollisionShape3D" parent="DetectionArea" unique_id=467095904]
+unique_name_in_owner = true
+shape = SubResource("BoxShape3D_i8d41")
+
+[node name="Physicsyaye" type="MeshInstance3D" parent="." unique_id=1383128854]
+script = ExtResource("3_1swij")
+
+[node name="Collider" type="StaticBody3D" parent="Physicsyaye" unique_id=717841044]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+
+[node name="FrameLeft" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=1363925487]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 0)
+shape = SubResource("BoxShape3D_1swij")
+
+[node name="FrameRight" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=393385488]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 0)
+shape = SubResource("BoxShape3D_1swij")
+
+[node name="FrameTop" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=2123210982]
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 6.5, 0)
+shape = SubResource("BoxShape3D_o8tko")
+
+[node name="FrameBottom" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=1168355096]
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, -6.5, 0)
+shape = SubResource("BoxShape3D_o8tko")
+disabled = true
+
+[node name="CornerTL" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=1458796064]
+unique_name_in_owner = true
+transform = Transform3D(0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0, 1, -7.605, 5.605, 0)
+shape = SubResource("BoxShape3D_d0uik")
+
+[node name="CornerTR" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=45316511]
+unique_name_in_owner = true
+transform = Transform3D(0.7071067, -0.7071067, 0, 0.7071067, 0.7071067, 0, 0, 0, 1, 7.605, 5.605, 0)
+shape = SubResource("BoxShape3D_d0uik")
+
+[node name="CornerBL" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=1065996223]
+unique_name_in_owner = true
+transform = Transform3D(0.7071067, -0.7071067, 0, 0.7071067, 0.7071067, 0, 0, 0, 1, -7.605, -5.605, 0)
+shape = SubResource("BoxShape3D_d0uik")
+
+[node name="CornerBR" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=464359707]
+unique_name_in_owner = true
+transform = Transform3D(0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0, 1, 7.605, -5.605, 0)
+shape = SubResource("BoxShape3D_d0uik")
+
+[node name="BaseLeft" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=225479881]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, -4.5, 0)
+shape = SubResource("BoxShape3D_joi5d")
+
+[node name="BaseRight" type="CollisionShape3D" parent="Physicsyaye/Collider" unique_id=372037855]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, -4.5, 0)
+shape = SubResource("BoxShape3D_joi5d")
+
+[node name="BaseLeftSide" type="CollisionPolygon3D" parent="Physicsyaye/Collider" unique_id=2012814189]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -6, 0)
+depth = 2.2
+polygon = PackedVector2Array(-0.5, 1.6, -0.5, 0, -2.435, 0, -1.498, 1.6)
+
+[node name="BaseRightSide" type="CollisionPolygon3D" parent="Physicsyaye/Collider" unique_id=672871488]
+unique_name_in_owner = true
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 8, -6, 0)
+depth = 2.2
+polygon = PackedVector2Array(-0.5, 1.6, -0.5, 0, -2.435, 0, -1.498, 1.6)
