@@ -5,6 +5,7 @@ class_name CarController
 @onready var car_model: CuttableCarModel = %CarModel
 var car_copy_model: CuttableCarModel
 
+var camera: FollowingCamera
 
 @export
 var springConstant: float = 150
@@ -267,7 +268,15 @@ func _physics_process(_delta):
 			respawned.emit(playerIndex, networkId)
 		elif should_set_transform:
 			print("[Car] Teleporting car!")
+			var cam_old := Transform3D.IDENTITY
+
+			if camera != null:
+				cam_old = global_transform.affine_inverse() * camera.global_transform
+
 			global_transform = exit_transform * offset_transform
+
+			if camera != null:
+				camera.global_transform = global_transform * cam_old
 
 			var relative_rotation := exit_transform.basis * entry_transform.basis.inverse()
 

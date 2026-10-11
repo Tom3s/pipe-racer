@@ -129,6 +129,7 @@ func _ready():
 
 	carCamera = FollowingCamera.new(car)
 	carCamera.current = false
+	car.camera = carCamera
 	playerParent.add_child(carCamera)
 
 	car.isResetting.connect(func(_sink1 = null, _sink2 = null, _sink3 = null):

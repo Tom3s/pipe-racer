@@ -18,6 +18,8 @@ func _ready() -> void:
 	add_child(carCamera)
 	move_child(carCamera, 0)
 
+	car_controller.camera = carCamera
+
 	free_fly_camera.manual_update = true
 	carCamera.manual_update = true
 

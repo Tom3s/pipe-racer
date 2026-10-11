@@ -7,6 +7,7 @@
 [sub_resource type="SphereMesh" id="SphereMesh_i8d41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i8d41"]
+resource_local_to_scene = true
 size = Vector3(16, 12, 3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1swij"]
@@ -18,9 +19,11 @@ emission = Color(0.309804, 1, 0.494118, 1)
 emission_energy_multiplier = 0.3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1swij"]
+resource_local_to_scene = true
 size = Vector3(1.4, 10, 1.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o8tko"]
+resource_local_to_scene = true
 size = Vector3(1.4, 14, 1.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d0uik"]

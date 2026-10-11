@@ -678,7 +678,8 @@ func importTrack(fileName: String) -> bool:
 			nodeIds[int(nodeData["id"])] = node
 		
 		for portal in portals.get_children():
-			portal.linked_portal = nodeIds[portal.linked_id]
+			if nodeIds.has(portal.linked_id):
+				portal.linked_portal = nodeIds[portal.linked_id]
 
 
 	if trackData["deco"].has("ledBoards"):

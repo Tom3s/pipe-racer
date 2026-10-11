@@ -259,4 +259,3 @@ func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
 	else:
 		print("[TimeTrialManager.gd] replaceSplitsIfBetter: invalid arguments")
 		return
-

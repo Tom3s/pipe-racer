@@ -598,6 +598,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 
 	localCameras[car.name] = camera
 	camera.manual_update = true
+	car.camera = camera
 
 	var viewPortContainer = getNewViewportContainer()
 	var viewPort = getNewViewport()

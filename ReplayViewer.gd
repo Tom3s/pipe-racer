@@ -58,6 +58,7 @@ func setup(
 
 	camera = FollowingCamera.new(replayGhost.getCar(0))
 	add_child(camera)
+	camera.car.camera = camera
 	camera.manual_update = true
 	freeCam.manual_update = true
 

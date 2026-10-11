@@ -124,6 +124,8 @@ func _ready() -> void:
 	set_physics_process(true)
 
 	detection_area.body_entered.connect(func (body: Node3D) -> void:
+		if linked_portal == null:
+			return
 		travelers[body] = body.global_transform
 		var offset := global_transform.affine_inverse() * body.global_transform
 		body.car_model.set_cutting_plane(global_transform, -sign(offset.origin.z))
@@ -157,6 +159,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# var marked_to_remove: Array[Node3D] = []
+	if linked_portal == null:
+		return
 
 	for traveler: Node3D in travelers.keys():
 		var current_transform: Transform3D = traveler.global_transform
