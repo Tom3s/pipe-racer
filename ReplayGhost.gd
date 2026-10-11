@@ -4,6 +4,9 @@ class_name ReplayGhost
 # @onready var carController: CarController = %CarController
 @onready var carScene := preload("res://CarController.tscn")
 
+@onready var main: Node3D = %Main
+@onready var copies: Node3D = %Copies
+
 var frameData = []
 
 var playing = false
@@ -44,7 +47,7 @@ func _physics_process(_delta):
 		currentFraction = frame - currentIndex
 
 
-		for i in get_child_count():
+		for i in main.get_child_count():
 			if frameData.size() <= currentIndex + 2:
 				continue
 			# var currentFrame = frameData[i][currentIndex]
@@ -55,7 +58,7 @@ func _physics_process(_delta):
 			if currentFrame[0] == null || nextFrame[0] == null:
 				continue
 
-			var carController = get_child(i)
+			var carController = main.get_child(i)
 			carController.global_position = lerp(currentFrame[0], nextFrame[0], currentFraction)
 			carController.global_rotation = lerp(currentFrame[1], nextFrame[1], currentFraction)
 			carController.linear_velocity = (nextFrame[0] - currentFrame[0]) * (1 / _delta) 
@@ -64,8 +67,8 @@ func _physics_process(_delta):
 	else:
 		if !inReplayViewer && !GlobalProperties.SHOW_GHOSTS_INGAME:
 			return
-		for i in get_child_count():
-			var carController = get_child(i)
+		for i in main.get_child_count():
+			var carController = main.get_child(i)
 			
 			if frameData.size() <= currentIndex + 2:
 				continue
@@ -120,14 +123,20 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		var playerName = carMetadata[0]
 		var playerColor = Color.from_string(carMetadata[1], Color.WHITE)
 		var carController: CarController = carScene.instantiate()
-		carController.collision_layer = 0
+		carController.collision_layer = 2
 		carController.collision_mask = 1
 		carController.continuous_cd = false
 		carController.contact_monitor = false
 		carController.max_contacts_reported = 6
-		add_child(carController)
+		main.add_child(carController)
+
 		carController.playerName = playerName
 		carController.frameColor = playerColor
+		
+		var car_copy = carController.car_model.get_duplicate()
+		copies.add_child(car_copy)
+		car_copy.visible = false
+
 		if ghostMode:
 			carController.setGhostMode(true)
 		
@@ -198,7 +207,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 
 			if frameData.size() <= i:
 				frameData.append([])
-				if get_child_count() - _nrCars > 0:
+				if main.get_child_count() - _nrCars > 0:
 					frameData[i].append([null, null])
 
 
@@ -230,8 +239,8 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 func stopReplay():
 	playing = false
 	frame = 0
-	for i in get_child_count():
-		var carController = get_child(i)
+	for i in main.get_child_count():
+		var carController = main.get_child(i)
 		# carController.global_position = frameData[i][0][0]
 		# carController.global_rotation = frameData[i][0][1]
 		var currentFrame = frameData[0][i]
@@ -256,38 +265,38 @@ func getNrFrames():
 	return frameData.size()
 
 func getCar(index: int):
-	if index >= get_child_count():
-		return get_child(0)
-	return get_child(index)
+	if index >= main.get_child_count():
+		return main.get_child(0)
+	return main.get_child(index)
 
 func clearReplays():
 	frameData.clear()
-	for i in get_child_count():
-		var child = get_child(i)
-		remove_child(child)
+	for i in main.get_child_count():
+		var child = main.get_child(i)
+		main.remove_child(child)
 		child.queue_free()
 	
 func setLabelVisibility(visible: bool):
-	for i in get_child_count():
-		var car: CarController = get_child(i)
+	for i in main.get_child_count():
+		var car: CarController = main.get_child(i)
 		car.setLabelVisibility(visible)
 
 func setTimeMultiplier(multiplier: float, builder: String = ""):
 	timeScale = 1.0 / multiplier
 
 	if multiplier == MedalMenu.GOLD_MULTIPLIER:
-		for i in get_child_count():
-			var car: CarController = get_child(i)
+		for i in main.get_child_count():
+			var car: CarController = main.get_child(i)
 			car.playerName = "Gold"
 	elif multiplier == MedalMenu.SILVER_MULTIPLIER:
-		for i in get_child_count():
-			var car: CarController = get_child(i)
+		for i in main.get_child_count():
+			var car: CarController = main.get_child(i)
 			car.playerName = "Silver"
 	elif multiplier == MedalMenu.BRONZE_MULTIPLIER:
-		for i in get_child_count():
-			var car: CarController = get_child(i)
+		for i in main.get_child_count():
+			var car: CarController = main.get_child(i)
 			car.playerName = "Bronze"
 	elif multiplier == 1.0:
-		for i in get_child_count():
-			var car: CarController = get_child(i)
+		for i in main.get_child_count():
+			var car: CarController = main.get_child(i)
 			car.playerName = builder

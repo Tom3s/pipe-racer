@@ -1,16 +1,16 @@
-[gd_scene load_steps=35 format=3 uid="uid://bbyihno4uk3q7"]
+[gd_scene format=3 uid="uid://bbyihno4uk3q7"]
 
 [ext_resource type="PackedScene" uid="uid://c16w22k328oqp" path="res://Editor/Road/RoadNodePropertiesUI.tscn" id="1_2olcp"]
-[ext_resource type="Script" path="res://Editor/MapEditor.gd" id="1_6ohh1"]
-[ext_resource type="Script" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
+[ext_resource type="Script" uid="uid://5i7f80utpcft" path="res://Editor/MapEditor.gd" id="1_6ohh1"]
+[ext_resource type="Script" uid="uid://cute1xxvstoe6" path="res://Editor/Scripts/EditorCamera.gd" id="1_nfa8o"]
 [ext_resource type="PackedScene" uid="uid://dl56mby6n2hiu" path="res://Editor/Road/RoadPropertiesUI.tscn" id="2_0cxd4"]
 [ext_resource type="PackedScene" uid="uid://jfef8x3bl627" path="res://Editor/InteractiveMap.tscn" id="2_xocc0"]
 [ext_resource type="PackedScene" uid="uid://c1hooek1vtv6b" path="res://Editor/Pipe/PipeNodePropertiesUI.tscn" id="3_6opws"]
 [ext_resource type="PackedScene" uid="uid://dbyuroab0s0la" path="res://Editor/EditorSidebarUI.tscn" id="3_k84hq"]
 [ext_resource type="PackedScene" uid="uid://cptpsvgtq4jgc" path="res://Editor/Road/RoadNode.tscn" id="3_nyxif"]
-[ext_resource type="Script" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
+[ext_resource type="Script" uid="uid://v7k45yu15bd8" path="res://Editor/Scripts/EditorInputHandler.gd" id="3_yc3pc"]
 [ext_resource type="PackedScene" uid="uid://bk861qiqtdvug" path="res://Editor/Pipe/PipePropertiesUI.tscn" id="4_dqsn7"]
-[ext_resource type="Script" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
+[ext_resource type="Script" uid="uid://bonpfo18dntbl" path="res://Editor/EditorEventListener.gd" id="4_miouu"]
 [ext_resource type="PackedScene" uid="uid://dxowojga3va4l" path="res://Editor/FunctionalElements/StartLinePropertiesUI.tscn" id="5_o7bqe"]
 [ext_resource type="PackedScene" uid="uid://dx86u8lk4jsed" path="res://Editor/Scenery/SceneryEditorUI.tscn" id="6_2dxsa"]
 [ext_resource type="PackedScene" uid="uid://cpiqv66u8wuj4" path="res://Editor/FunctionalElements/CheckpointPropertiesUI.tscn" id="6_3b1bn"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://oaolsndg7xim" path="res://Editor/Props/LightDecoPropertiesUI.tscn" id="10_2qm6b"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="11_6xw54"]
 [ext_resource type="Shader" uid="uid://tvmq5pwcsoob" path="res://Editor/Functional/GridShader.res" id="11_m3iqd"]
+[ext_resource type="PackedScene" uid="uid://3yjb48b2roqb" path="res://Editor/Portals/PortalPropertiesUI.tscn" id="12_1q5yo"]
 [ext_resource type="Texture2D" uid="uid://b6yytcfoqyg5u" path="res://Editor/Functional/Grid.png" id="12_5xrek"]
 [ext_resource type="Theme" uid="uid://bnulg8akvjth4" path="res://DarkTheme/Dark.theme" id="12_rc3nc"]
 [ext_resource type="PackedScene" uid="uid://cadslbpwpj2rx" path="res://Editor/Functional/Rotator.tscn" id="13_2gn6g"]
@@ -32,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://pc8ac2621xjd" path="res://Editor/Props/PrismShapeDeco.tscn" id="24_8u7j6"]
 [ext_resource type="PackedScene" uid="uid://cu1o1ufpacigj" path="res://carMaterial/Model.tscn" id="24_hbp31"]
 [ext_resource type="PackedScene" uid="uid://bhm3itq8us1mi" path="res://Editor/Props/LightDeco.tscn" id="26_f1ojp"]
+[ext_resource type="PackedScene" uid="uid://dmi5fb8uigr35" path="res://Editor/Portals/FunctionalPortal.tscn" id="27_hn3dm"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4qril"]
 size = Vector2(128, 128)
@@ -41,12 +43,12 @@ render_priority = 0
 shader = ExtResource("11_m3iqd")
 shader_parameter/Grid = ExtResource("12_5xrek")
 
-[node name="MapEditor" type="Node3D"]
+[node name="MapEditor" type="Node3D" unique_id=597259827]
 script = ExtResource("1_6ohh1")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1648770214]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=2072326498]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -54,70 +56,75 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer" unique_id=110453427]
 layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="RoadNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("1_2olcp")]
+[node name="RoadNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1589257004 instance=ExtResource("1_2olcp")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="RoadPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("2_0cxd4")]
+[node name="RoadPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=627584136 instance=ExtResource("2_0cxd4")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PipeNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("3_6opws")]
+[node name="PipeNodePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1985888471 instance=ExtResource("3_6opws")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="PipePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("4_dqsn7")]
+[node name="PipePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=619648931 instance=ExtResource("4_dqsn7")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="StartLinePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("5_o7bqe")]
+[node name="StartLinePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1476117908 instance=ExtResource("5_o7bqe")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="CheckpointPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("6_3b1bn")]
+[node name="CheckpointPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1783930219 instance=ExtResource("6_3b1bn")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LedBoardPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("7_4pe1b")]
+[node name="LedBoardPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=816458798 instance=ExtResource("7_4pe1b")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="PrismShapePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("9_7ykw3")]
+[node name="PrismShapePropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1082102960 instance=ExtResource("9_7ykw3")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LightDecoPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("10_2qm6b")]
+[node name="LightDecoPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=922090746 instance=ExtResource("10_2qm6b")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="PaintBrushUI" parent="UI/VBoxContainer/HBoxContainer" instance=ExtResource("8_xxuga")]
+[node name="PaintBrushUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1283303071 instance=ExtResource("8_xxuga")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="EditorSidebarUI" parent="UI" instance=ExtResource("3_k84hq")]
+[node name="PortalPropertiesUI" parent="UI/VBoxContainer/HBoxContainer" unique_id=1614376869 instance=ExtResource("12_1q5yo")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="EditorSidebarUI" parent="UI" unique_id=787840526 instance=ExtResource("3_k84hq")]
 unique_name_in_owner = true
 
-[node name="SceneryEditorUI" parent="UI" instance=ExtResource("6_2dxsa")]
+[node name="SceneryEditorUI" parent="UI" unique_id=1065375405 instance=ExtResource("6_2dxsa")]
 unique_name_in_owner = true
 
-[node name="PauseMenu" parent="UI" instance=ExtResource("11_6xw54")]
+[node name="PauseMenu" parent="UI" unique_id=2138773004 instance=ExtResource("11_6xw54")]
 unique_name_in_owner = true
 visible = false
 
-[node name="LevelSavedLabel" type="Label" parent="UI"]
+[node name="LevelSavedLabel" type="Label" parent="UI" unique_id=1819868518]
 unique_name_in_owner = true
 anchors_preset = 5
 anchor_left = 0.5
@@ -133,71 +140,75 @@ theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 67
 text = "Level Saved!"
 
-[node name="EditorCamera" type="Camera3D" parent="."]
+[node name="EditorCamera" type="Camera3D" parent="." unique_id=1260993123]
 unique_name_in_owner = true
 script = ExtResource("1_nfa8o")
 
-[node name="InteractiveMap" parent="." instance=ExtResource("2_xocc0")]
+[node name="InteractiveMap" parent="." unique_id=1038003075 instance=ExtResource("2_xocc0")]
 unique_name_in_owner = true
 
-[node name="PreviewElement" type="Node3D" parent="."]
+[node name="PreviewElement" type="Node3D" parent="." unique_id=913774483]
 unique_name_in_owner = true
 
-[node name="RoadNode" parent="PreviewElement" instance=ExtResource("3_nyxif")]
-unique_name_in_owner = true
-isPreviewNode = true
-
-[node name="PipeNode" parent="PreviewElement" instance=ExtResource("6_07kp7")]
+[node name="RoadNode" parent="PreviewElement" unique_id=57243153 instance=ExtResource("3_nyxif")]
 unique_name_in_owner = true
 isPreviewNode = true
 
-[node name="GridMesh" type="MeshInstance3D" parent="PreviewElement"]
+[node name="PipeNode" parent="PreviewElement" unique_id=1373428700 instance=ExtResource("6_07kp7")]
+unique_name_in_owner = true
+isPreviewNode = true
+
+[node name="GridMesh" type="MeshInstance3D" parent="PreviewElement" unique_id=32384057]
 unique_name_in_owner = true
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_4qril")
 surface_material_override/0 = SubResource("ShaderMaterial_1wdtv")
 
-[node name="StartLine" parent="PreviewElement" instance=ExtResource("13_gh66r")]
+[node name="StartLine" parent="PreviewElement" unique_id=206744450 instance=ExtResource("13_gh66r")]
 unique_name_in_owner = true
 
-[node name="Checkpoint" parent="PreviewElement" instance=ExtResource("15_d2ml2")]
+[node name="Checkpoint" parent="PreviewElement" unique_id=1970634941 instance=ExtResource("15_d2ml2")]
 unique_name_in_owner = true
 isPreview = true
 
-[node name="LedBoard" parent="PreviewElement" instance=ExtResource("17_emavj")]
+[node name="LedBoard" parent="PreviewElement" unique_id=1070032834 instance=ExtResource("17_emavj")]
 unique_name_in_owner = true
 
-[node name="PrismShapeDeco" parent="PreviewElement" instance=ExtResource("24_8u7j6")]
+[node name="PrismShapeDeco" parent="PreviewElement" unique_id=1119215539 instance=ExtResource("24_8u7j6")]
 unique_name_in_owner = true
 
-[node name="LightDeco" parent="PreviewElement" instance=ExtResource("26_f1ojp")]
+[node name="LightDeco" parent="PreviewElement" unique_id=61538813 instance=ExtResource("26_f1ojp")]
 unique_name_in_owner = true
 
-[node name="Gizmos" type="Node3D" parent="."]
+[node name="Portal" parent="PreviewElement" unique_id=1599138379 instance=ExtResource("27_hn3dm")]
+unique_name_in_owner = true
+isPreview = true
 
-[node name="Rotator" parent="Gizmos" instance=ExtResource("13_2gn6g")]
+[node name="Gizmos" type="Node3D" parent="." unique_id=533268456]
+
+[node name="Rotator" parent="Gizmos" unique_id=1139290313 instance=ExtResource("13_2gn6g")]
 unique_name_in_owner = true
 
-[node name="Translator" parent="Gizmos" instance=ExtResource("14_ou2ir")]
+[node name="Translator" parent="Gizmos" unique_id=1993808576 instance=ExtResource("14_ou2ir")]
 unique_name_in_owner = true
 
-[node name="Player" type="Node3D" parent="."]
+[node name="Player" type="Node3D" parent="." unique_id=879197803]
 unique_name_in_owner = true
 
-[node name="CarController" parent="Player" instance=ExtResource("23_nr0wy")]
+[node name="CarController" parent="Player" unique_id=819540127 instance=ExtResource("23_nr0wy")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1000, 0)
 
-[node name="CarPreview" parent="Player" instance=ExtResource("24_hbp31")]
+[node name="CarPreview" parent="Player" unique_id=1163755199 instance=ExtResource("24_hbp31")]
 unique_name_in_owner = true
 
-[node name="CarPath" type="Node3D" parent="."]
+[node name="CarPath" type="Node3D" parent="." unique_id=1444412539]
 unique_name_in_owner = true
 
-[node name="EditorInputHandler" type="Node" parent="."]
+[node name="EditorInputHandler" type="Node" parent="." unique_id=737758633]
 unique_name_in_owner = true
 script = ExtResource("3_yc3pc")
 
-[node name="EditorEventListener" type="Node3D" parent="."]
+[node name="EditorEventListener" type="Node3D" parent="." unique_id=2080632892]
 unique_name_in_owner = true
 script = ExtResource("4_miouu")

@@ -13,25 +13,6 @@
 - named `Procedural<whatever>`
 
 ```python
-func getProperties() -> Dictionary:
-	return {
-		"<param>": <param>,
-
-		"position": global_position,
-		"rotation": global_rotation,
-	}
-```
-```python
-func setProperties(properties: Dictionary) -> void:
-	if properties.has("<param>"):
-		<param> = properties["<param>"]
-	
-	if properties.has("position"):
-		global_position = properties["position"]
-	if properties.has("rotation"):
-		global_rotation = properties["rotation"]
-```
-```python
 func convertToPhysicsObject() -> void:
 	<mesh>.create_trimesh_collision()
 	<mesh>.setPhysicsMaterial(PhysicsSurface.SurfaceType.ROAD)

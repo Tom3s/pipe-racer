@@ -52,6 +52,7 @@ func _ready():
 	carCamera = FollowingCamera.new(car)
 	carCamera.current = false
 	playerNode.add_child(carCamera)
+	car.camera = carCamera
 
 	editorStateMachine.editorState = editorStateMachine.EDITOR_STATE_PLAYTEST
 	onCar_pausePressed()

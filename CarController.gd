@@ -5,6 +5,7 @@ class_name CarController
 @onready var car_model: CuttableCarModel = %CarModel
 var car_copy_model: CuttableCarModel
 
+var camera: FollowingCamera
 
 @export
 var springConstant: float = 150
@@ -219,13 +220,15 @@ func _physics_process(_delta):
 			calculateTirePhysics(tire, _delta)
 		#TODO: rotate wheels here
 		car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
-		car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
+		if car_copy_model != null:
+			car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 		
 		for bottomOut in bottomOuts:
 			calculateBottomOutPhysics(bottomOut, _delta)
 		
 		car_model.place_wheels(wheel_position)
-		car_copy_model.place_wheels(wheel_position)
+		if car_copy_model != null:
+			car_copy_model.place_wheels(wheel_position)
 		#TODO: place wheels here
 
 		if inFluid != null:
@@ -265,7 +268,15 @@ func _physics_process(_delta):
 			respawned.emit(playerIndex, networkId)
 		elif should_set_transform:
 			print("[Car] Teleporting car!")
+			var cam_old := Transform3D.IDENTITY
+
+			if camera != null:
+				cam_old = global_transform.affine_inverse() * camera.global_transform
+
 			global_transform = exit_transform * offset_transform
+
+			if camera != null:
+				camera.global_transform = global_transform * cam_old
 
 			var relative_rotation := exit_transform.basis * entry_transform.basis.inverse()
 
@@ -777,9 +788,12 @@ func getCurrentFrame() -> CarFrame:
 
 func setGhostMode(ghostMode: bool):
 	if ghostMode:
-		%CarModel.setGhostMode(frameColor)
-		for tire in tires:
-			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
+		# %CarModel.setGhostMode(frameColor)
+		car_model.setGhostMode(frameColor)
+		if car_copy_model != null:
+			car_copy_model.setGhostMode(frameColor)
+		# for tire in tires:
+		# 	tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
 		%HeadLight.visible = false
 		# %ReflectionProbe.update_mode = ReflectionProbe.UPDATE_ONCE
 

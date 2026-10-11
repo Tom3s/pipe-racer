@@ -7,7 +7,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i8d41"]
 render_priority = 1
 shader = ExtResource("1_a0p85")
-shader_parameter/swirl_color = Color(2.4065375e-06, 0.69448406, 0.75068945, 1)
+shader_parameter/swirl_color = Color(0.65834004, 0.6583399, 0.6583399, 1)
 shader_parameter/side_dist = Vector2(0.37, 0.48)
 shader_parameter/swirl_strength = 4.35
 shader_parameter/noise_size = Vector2(0.5, 1.6)

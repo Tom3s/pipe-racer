@@ -23,6 +23,8 @@ var insideTilt: float = 1.12
 @export
 var mode3distance: float = 5.0
 
+var manual_update: bool = false
+
 func _init(carReference):
 	car = carReference
 	car.changeCameraMode.connect(changeMode)
@@ -41,15 +43,22 @@ func _ready():
 	set_physics_process(true)
 
 func _physics_process(delta):
+	if manual_update:	
+		return
+
+	update_camera(delta)
+
+func update_camera(delta: float) -> void:
 	if car == null:
 		return
+
 	if car.paused && !shouldUpdatePosition:
 		return
 
 	var car_pos = car.global_transform.origin
 	var car_y = car.global_transform.basis.y
 	var car_z = car.global_transform.basis.z
-	fov = 65
+	fov = 85
 	if shouldUpdatePosition:
 		print("Force update camera position")
 		global_position = car_pos + car_y * 3 + car_z * -4
@@ -60,13 +69,13 @@ func _physics_process(delta):
 		var target = car_pos + car_y * 3 + car_z * -4
 
 
-		global_position = lerp(global_position, target, 25 * delta if !shouldUpdatePosition else 1)
+		global_position = lerp(global_position, target, clampf(delta * 15, 0.0, 1.0) if !shouldUpdatePosition else 1.0) # delta * 25
 
 		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
-	elif mode == 1:
+	elif mode == 2:
 		global_position = car_pos + car_y * insideY + car_z * insideZ 
 		look_at(car_pos + car_y * insideTilt + car_z, car_y)
-	elif mode == 2:
+	elif mode == 1:
 		var direction = (global_position - (car_pos + car_y * 2.75)).normalized()
 		global_position = (car_pos + car_y * 2.75) + direction * (mode3distance + (car.getSpeed() / 120))
 
@@ -84,6 +93,9 @@ func forceUpdatePosition():
 
 func changeMode():
 	mode = (mode + 1) % 3
+	if mode == 0:
+		mode += 1
+
 	shouldUpdatePosition = true
 	if car.playerIndex < 4:
 		GlobalProperties.PREFERED_CAMERAS[car.playerIndex] = mode

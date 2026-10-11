@@ -3,6 +3,9 @@ class_name CuttableCarModel
 
 @onready var chassis_parent: Node3D = %CarChassis
 
+var ghost_material: ShaderMaterial = preload("res://Visuals/GhostMaterial.tres")
+var applied_ghost_material: ShaderMaterial
+
 var rollcage_material: StandardMaterial3D
 
 var wheels: Array[Node3D]
@@ -25,14 +28,25 @@ func _ready() -> void:
 	rollcage_material = rollcage_mesh.material_override.next_pass.duplicate()
 	rollcage_mesh.material_override.next_pass = rollcage_material
 
-	set_frame_color(Color.BLACK)
+	# set_frame_color(Color.BLACK)
 
 func set_frame_color(new_color: Color) -> void:
 	rollcage_material.albedo_color = new_color
 
 func setGhostMode(color: Color):
-	push_error("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
-	print("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
+	# push_error("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
+	# print("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
+	applied_ghost_material = ghost_material.duplicate()
+
+	applied_ghost_material.set_shader_parameter("color", color)
+
+	for mesh: MeshInstance3D in chassis_parent.get_children():
+		mesh.material_override = applied_ghost_material
+	
+	for wheel in wheels:
+		wheel.get_child(0).get_child(0).get_child(0)\
+			.setGhostMaterial(applied_ghost_material)
+
 
 func set_cutting_plane(plane_transform: Transform3D, direction: float = 1.0) -> void:
 	for mesh: MeshInstance3D in chassis_parent.get_children():

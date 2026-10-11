@@ -94,7 +94,11 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 			imageError = image.load_png_from_buffer(body)
 			if imageError != OK:
 				print("[TextureLoader.gd] Error loading png: ", imageUrl, "\n", error_string(imageError))
-				return
+				print("[TextureLoader.gd] Trying WEBP...")	
+				imageError = image.load_webp_from_buffer(body)
+				if imageError != OK:
+					print("[TextureLoader.gd] Error loading WEBP: ", imageUrl, "\n", error_string(imageError))
+					return
 
 		var texture = ImageTexture.create_from_image(image)
 		onlineTextures[imageUrl] = texture

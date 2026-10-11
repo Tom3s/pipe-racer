@@ -1,22 +1,22 @@
-[gd_scene load_steps=13 format=3 uid="uid://bw0tsauvupiuc"]
+[gd_scene format=3 uid="uid://bw0tsauvupiuc"]
 
-[ext_resource type="Script" path="res://GameScene.gd" id="1_4deyh"]
+[ext_resource type="Script" uid="uid://cl57bnas1idys" path="res://GameScene.gd" id="1_4deyh"]
 [ext_resource type="PackedScene" uid="uid://bf023ng2nrvk2" path="res://UniversalCanvas.tscn" id="2_m124p"]
-[ext_resource type="Script" path="res://RaceInputHandler.gd" id="2_wmk0g"]
+[ext_resource type="Script" uid="uid://b660hik4ia742" path="res://RaceInputHandler.gd" id="2_wmk0g"]
 [ext_resource type="PackedScene" uid="uid://wgcae8ei5xn5" path="res://Menu/LeaderboardUI.tscn" id="3_6e8rj"]
 [ext_resource type="PackedScene" uid="uid://dgurpytbg7dx6" path="res://Sounds/IngameSFX.tscn" id="3_iemo0"]
 [ext_resource type="PackedScene" uid="uid://d0e2cc72nlueq" path="res://PauseMenu.tscn" id="4_ose2u"]
 [ext_resource type="PackedScene" uid="uid://vdk81nau8765" path="res://Menu/ValidationFeedbackUI.tscn" id="5_eco3g"]
 [ext_resource type="PackedScene" uid="uid://5jcye3hd2nrm" path="res://Menu/IngameMedalMenu.tscn" id="6_64ltm"]
 [ext_resource type="PackedScene" uid="uid://py3sgavbk1hr" path="res://ReplayGhost.tscn" id="6_xhgul"]
-[ext_resource type="Script" path="res://GameStateMachine.gd" id="7_yxiqb"]
-[ext_resource type="Script" path="res://GameEventListener.gd" id="8_c3gqs"]
-[ext_resource type="Script" path="res://ReplayManager.gd" id="9_dwb25"]
+[ext_resource type="Script" uid="uid://ct07fufhma47" path="res://GameStateMachine.gd" id="7_yxiqb"]
+[ext_resource type="Script" uid="uid://d0nu8i5jqp8l0" path="res://GameEventListener.gd" id="8_c3gqs"]
+[ext_resource type="Script" uid="uid://dhkybnttvxk5d" path="res://ReplayManager.gd" id="9_dwb25"]
 
-[node name="GameScene" type="Node3D"]
+[node name="GameScene" type="Node3D" unique_id=1009454279]
 script = ExtResource("1_4deyh")
 
-[node name="HorizontalSplit" type="VBoxContainer" parent="."]
+[node name="HorizontalSplit" type="VBoxContainer" parent="." unique_id=1090803962]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,66 +25,67 @@ grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="VerticalSplitTop" type="HBoxContainer" parent="HorizontalSplit"]
+[node name="VerticalSplitTop" type="HBoxContainer" parent="HorizontalSplit" unique_id=802792615]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="VerticalSplitBottom" type="HBoxContainer" parent="HorizontalSplit"]
+[node name="VerticalSplitBottom" type="HBoxContainer" parent="HorizontalSplit" unique_id=832653966]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="UniversalCanvas" parent="." instance=ExtResource("2_m124p")]
+[node name="UniversalCanvas" parent="." unique_id=2144045204 instance=ExtResource("2_m124p")]
 unique_name_in_owner = true
 
-[node name="LeaderboardUI" parent="UniversalCanvas" instance=ExtResource("3_6e8rj")]
-unique_name_in_owner = true
-visible = false
-
-[node name="PauseMenu" parent="UniversalCanvas" instance=ExtResource("4_ose2u")]
+[node name="LeaderboardUI" parent="UniversalCanvas" unique_id=992058903 instance=ExtResource("3_6e8rj")]
 unique_name_in_owner = true
 visible = false
 
-[node name="ValidationFeedbackUI" parent="UniversalCanvas" instance=ExtResource("5_eco3g")]
+[node name="PauseMenu" parent="UniversalCanvas" unique_id=1456282933 instance=ExtResource("4_ose2u")]
 unique_name_in_owner = true
 visible = false
 
-[node name="IngameMedalMenu" parent="UniversalCanvas" instance=ExtResource("6_64ltm")]
+[node name="ValidationFeedbackUI" parent="UniversalCanvas" unique_id=1407539958 instance=ExtResource("5_eco3g")]
 unique_name_in_owner = true
 visible = false
-currentTime = 0
-currentLap = 0
 
-[node name="RaceInputHandler" type="Node3D" parent="."]
+[node name="IngameMedalMenu" parent="UniversalCanvas" unique_id=1325553504 instance=ExtResource("6_64ltm")]
+unique_name_in_owner = true
+visible = false
+
+[node name="RaceInputHandler" type="Node3D" parent="." unique_id=693413369]
 unique_name_in_owner = true
 script = ExtResource("2_wmk0g")
 
-[node name="Players" type="Node3D" parent="."]
+[node name="Players" type="Node3D" parent="." unique_id=437587512]
 unique_name_in_owner = true
 
-[node name="ReplayGhost" parent="." instance=ExtResource("6_xhgul")]
+[node name="PlayerCopies" type="Node3D" parent="." unique_id=562565909]
 unique_name_in_owner = true
 
-[node name="IngameSFX" parent="." instance=ExtResource("3_iemo0")]
+[node name="ReplayGhost" parent="." unique_id=234601078 instance=ExtResource("6_xhgul")]
 unique_name_in_owner = true
 
-[node name="GameStateMachine" type="Node" parent="."]
+[node name="IngameSFX" parent="." unique_id=803465062 instance=ExtResource("3_iemo0")]
+unique_name_in_owner = true
+
+[node name="GameStateMachine" type="Node" parent="." unique_id=1763127250]
 unique_name_in_owner = true
 script = ExtResource("7_yxiqb")
 
-[node name="GameEventListener" type="Node" parent="."]
+[node name="GameEventListener" type="Node" parent="." unique_id=74473314]
 unique_name_in_owner = true
 script = ExtResource("8_c3gqs")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://CarController.tscn")
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=461166320]
+_spawnable_scenes = PackedStringArray("uid://dvesbfub7s22l")
 spawn_path = NodePath("../Players")
 
-[node name="ReplayManager" type="Node" parent="."]
+[node name="ReplayManager" type="Node" parent="." unique_id=689432725]
 unique_name_in_owner = true
 script = ExtResource("9_dwb25")

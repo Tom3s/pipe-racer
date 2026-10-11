@@ -14,6 +14,8 @@ var camera: FollowingCamera
 
 signal exitPressed()
 
+var map: InteractiveMap
+
 func setup(
 	localReplays: Array[String],
 	downloadedReplays: Array[String],
@@ -29,7 +31,7 @@ func setup(
 
 	# map.loadMap("user://tracks/downloaded/" + mapId + ".json")
 
-	var map = mapScene.instantiate() as InteractiveMap
+	map = mapScene.instantiate() as InteractiveMap
 	add_child(map)
 
 	var mapName: String = "user://tracks/downloaded/" + mapId + ".json"
@@ -56,6 +58,10 @@ func setup(
 
 	camera = FollowingCamera.new(replayGhost.getCar(0))
 	add_child(camera)
+	camera.car.camera = camera
+	camera.manual_update = true
+	freeCam.manual_update = true
+
 	camera.current = true
 	freeCam.current = false
 
@@ -98,9 +104,16 @@ func _ready():
 	replayViewerUI.hideUI.connect(func(visible: bool):
 		replayGhost.setLabelVisibility(visible)
 	)
-		
 
 	set_physics_process(true)
+
+func _process(delta: float) -> void:
+	freeCam._update_mouselook()
+	freeCam._update_movement(delta)
+	camera.update_camera(delta)
+	var current_camera = get_viewport().get_camera_3d()
+	for portal: FunctionalPortal in map.portals.get_children():
+		portal.set_remote_camera(current_camera)
 
 func _physics_process(delta):
 	if replayGhost.playing:

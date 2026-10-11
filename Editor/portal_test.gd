@@ -18,6 +18,11 @@ func _ready() -> void:
 	add_child(carCamera)
 	move_child(carCamera, 0)
 
+	car_controller.camera = carCamera
+
+	free_fly_camera.manual_update = true
+	carCamera.manual_update = true
+
 	car_copy = car_controller.car_model.get_duplicate()
 	car_copies_parent.add_child(car_copy)
 	car_copy.set_frame_color(Color.PINK)
@@ -42,7 +47,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	free_fly_camera._update_mouselook()
+	free_fly_camera._update_movement(delta)
+	carCamera.update_camera(delta)
 	current_camera = get_viewport().get_camera_3d()
-	for portal: Portal in portals_parent.get_children():
+	for portal: FunctionalPortal in portals_parent.get_children():
 		portal.set_remote_camera(current_camera)
 	pass

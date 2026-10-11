@@ -31,3 +31,7 @@ func get_duplicate() -> CuttableCarModel:
 	# copy.set_frame_color()
 
 	return copy
+
+func setGhostMaterial(material: ShaderMaterial) -> void:
+	for mesh in get_children():
+		mesh.material_override = material

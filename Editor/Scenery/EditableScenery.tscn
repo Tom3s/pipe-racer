@@ -18,9 +18,6 @@ shader_parameter/SelectionPosition = Vector2(0.32, 0.19)
 shader_parameter/SelectionRadius = 0.02
 shader_parameter/SelectionVisible = false
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jn2xb"]
-render_priority = 1
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_k00li"]
 _surfaces = [{
 "aabb": AABB(-2048, 0, -2048, 4032, 1e-05, 4032),
@@ -50,7 +47,6 @@ collision_mask = 40
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 32)
 material_override = SubResource("ShaderMaterial_amq2c")
-material_overlay = SubResource("StandardMaterial3D_jn2xb")
 mesh = SubResource("ArrayMesh_k00li")
 
 [node name="Collider" type="CollisionShape3D" parent="Ground" unique_id=2115022360]
