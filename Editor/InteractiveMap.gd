@@ -675,7 +675,7 @@ func importTrack(fileName: String) -> bool:
 			var node: FunctionalPortal = portalScene.instantiate()
 			portals.add_child(node)
 			node.importData(nodeData)
-			nodeIds[nodeData["id"]] = node
+			nodeIds[int(nodeData["id"])] = node
 		
 		for portal in portals.get_children():
 			portal.linked_portal = nodeIds[portal.linked_id]

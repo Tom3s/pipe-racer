@@ -135,12 +135,22 @@ func _ready():
 		if currentEditorMode == EditorMode.TEST && currentTestMode == TestMode.DRIVING:
 			car.setRespawnPositionFromDictionary(originalRespawn)
 			car.respawn()
+			carPathArray.append([])
 	)
 
 	carPreview.visible = false
 
+	var car_copy: CuttableCarModel
+	car_copy = car.car_model.get_duplicate()
+	playerParent.add_child(car_copy)
+	# car_copy.set_frame_color(Color.PINK)
+	car_copy.visible = false
+
 	levelSavedLabel.modulate.a = 0
 	levelSavedLabel.text = "Level Saved As: " + map.trackName
+
+	camera.manual_update = true
+	carCamera.manual_update = true
 
 	set_physics_process(true)
 
@@ -148,6 +158,14 @@ const MAX_CAR_PATH_LENGTH: int = 8192
 const MAX_CAR_PATHS: int = 16
 
 var wasTesting: bool = false
+
+func _process(delta: float) -> void:
+	camera._update_mouselook()
+	camera._update_movement(delta)
+	carCamera.update_camera(delta)
+	var current_camera = get_viewport().get_camera_3d()
+	for portal: FunctionalPortal in map.portals.get_children():
+		portal.set_remote_camera(current_camera)
 
 func _physics_process(delta):
 	if currentTestMode == TestMode.DRIVING && !wasTesting:
@@ -564,7 +582,7 @@ func connectSignals():
 				carPreview.global_position = intersectData["position"] + 0.35 * intersectData["normal"]
 				carPreview.global_rotation = intersectData["normal"]
 				# carPreview.global_rotation.y += carPreviewAngleOffset
-				carPreview.rotate(carPreview.global_basis.y, carPreviewAngleOffset)
+				carPreview.rotate((carPreview.global_basis.y).normalized(), carPreviewAngleOffset)
 				
 				
 	)
@@ -1486,6 +1504,8 @@ func setUIVisibility():
 	pipeNodePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
 	pipePropertiesUI.visible = currentBuildMode == BuildMode.PIPE && currentEditorMode == EditorMode.BUILD
 
+	portalPropertiesUI.visible = currentBuildMode == BuildMode.PORTAL && currentEditorMode == EditorMode.BUILD
+
 	startLinePropertiesUI.visible = currentBuildMode == BuildMode.START && currentEditorMode == EditorMode.BUILD
 
 	checkpointPropertiesUI.visible = currentBuildMode == BuildMode.CP && currentEditorMode == EditorMode.BUILD
@@ -1785,16 +1805,17 @@ func clearCarPath():
 var carPathArray: Array = []
 func generateCarPath():
 	for path in carPathArray:
-		var length = path.size()
-		for i in length - 1:
-			if i <= 2:
-				continue
-			carPath.add_child(PathDrawer3D.get3DLine(
-				path[i].position + Vector3(0, 0.6, 0),
-				path[i + 1].position + Vector3(0, 0.6, 0),
-				path[i].getColor()
-				)
-			)
+		# var length = path.size()
+		# for i in length - 1:
+		# 	if i <= 2:
+		# 		continue
+		# 	carPath.add_child(PathDrawer3D.get3DLine(
+		# 		path[i].position + Vector3(0, 0.6, 0),
+		# 		path[i + 1].position + Vector3(0, 0.6, 0),
+		# 		path[i].getColor()
+		# 		)
+		# 	)
+		carPath.add_child(PathDrawer3D.get3DPath(path))
 
 func loadMap(filePath: String) -> bool:
 	var success = map.importTrack(filePath)

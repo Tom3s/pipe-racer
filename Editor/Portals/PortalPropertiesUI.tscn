@@ -43,7 +43,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "ID: "
 
-[node name="Label2" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1875211079]
+[node name="SelfID" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1875211079]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
@@ -53,7 +54,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Linked ID: "
 
-[node name="Label4" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1892890367]
+[node name="LinkedID" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1892890367]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -106,7 +108,7 @@ text = "Portal Color"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-color = Color(1, 1, 1, 1)
+color = Color(0, 0.694, 0.749, 1)
 edit_alpha = false
 
 [node name="HBoxContainer7" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1465367076]
@@ -121,7 +123,7 @@ text = "Frame Color"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-color = Color(1, 1, 1, 1)
+color = Color(0.831, 0.831, 0.831, 1)
 edit_alpha = false
 
 [node name="HBoxContainer8" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=2141131797]
@@ -136,7 +138,7 @@ text = "Rust Color"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-color = Color(1, 1, 1, 1)
+color = Color(0.6, 0.212, 0.047, 1)
 edit_alpha = false
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1718100674]

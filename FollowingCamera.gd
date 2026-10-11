@@ -56,7 +56,7 @@ func update_camera(delta: float) -> void:
 	var car_pos = car.global_transform.origin
 	var car_y = car.global_transform.basis.y
 	var car_z = car.global_transform.basis.z
-	fov = 65
+	fov = 85
 	if shouldUpdatePosition:
 		print("Force update camera position")
 		global_position = car_pos + car_y * 3 + car_z * -4
@@ -67,7 +67,7 @@ func update_camera(delta: float) -> void:
 		var target = car_pos + car_y * 3 + car_z * -4
 
 
-		global_position = lerp(global_position, target, 25 * delta if !shouldUpdatePosition else 1)
+		global_position = lerp(global_position, target, delta * 15 if !shouldUpdatePosition else 1.0) # delta * 25
 
 		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
 	elif mode == 1:

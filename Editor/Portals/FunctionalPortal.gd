@@ -8,6 +8,7 @@ var linked_id: int = -1
 
 @onready var portal_camera: Camera3D = %PortalCamera
 @onready var portal_viewport: SubViewport = %PortalViewport
+@onready var visible_notifier: VisibleOnScreenNotifier3D = %VisibleNotifier
 # @onready var portal_surface: MeshInstance3D%ProceduralPortal
 @onready var procedural_portal: ProceduralPortal = %ProceduralPortal
 @onready var detection_area: Area3D = %DetectionArea
@@ -190,8 +191,8 @@ func _physics_process(delta: float) -> void:
 	# 	travelers.erase(marked)
 
 func set_remote_camera(camera: Camera3D) -> void:
-	if linked_portal == null:
-		print("Portal has no linked portal. Aborting set camera")
+	if linked_portal == null || !visible_notifier.is_on_screen():
+		# print("Portal has no linked portal. Aborting set camera")
 		return
 	
 	portal_camera.fov = camera.fov
@@ -220,6 +221,11 @@ func set_collision_shape() -> void:
 	detection_area.position.y = height / 2.0
 	detection_shape.shape.size.x = width
 	detection_shape.shape.size.y = height
+
+	visible_notifier.aabb = AABB(
+		Vector3(-width / 2.0, -height / 2.0, -.5),
+		Vector3(float(width), float(height), 1.0)
+	)
 
 	collider.position.y = height / 2.0
 
@@ -293,6 +299,8 @@ func setIngame(ingame: bool = true) -> void:
 
 func getProperties() -> Dictionary:
 	return {
+		"id": id,
+		"linked_id": linked_id,
 		"width": width,
 		"height": height,
 		"frame_color": frame_color,

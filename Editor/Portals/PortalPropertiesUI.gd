@@ -4,6 +4,9 @@ class_name PortalPropertiesUI
 # UI elements
 @onready var mainContainer: PanelContainer = %MainContainer
 
+@onready var self_id: Label = %SelfID
+@onready var linked_id: Label = %LinkedID
+
 @onready var width_spinbox: SpinBox = %WidthSpinbox
 @onready var height_spinbox: SpinBox = %HeightSpinbox
 @onready var portal_color_button: ColorPickerButton = %PortalColorButton
@@ -30,6 +33,12 @@ signal use_bottom_frame_changed(use_bottom_frame: bool)
 
 signal positionChanged(position: Vector3)
 signal rotationChanged(rotation: Vector3)
+
+func set_id(id: int) -> void:
+	self_id.text = str(id)
+
+func set_linked_id(id: int) -> void:
+	linked_id.text = str(id)
 
 func set_width(width: int) -> void:
 	width_spinbox.set_value_no_signal(width)
@@ -141,6 +150,15 @@ func getProperties() -> Dictionary:
 	return properties
 
 func setProperties(properties: Dictionary) -> void:
+	if properties.has("id"):
+		set_id(properties["id"])
+	
+	if properties.has("linked_id"):
+		set_linked_id(properties["linked_id"])
+
+	if properties.has("width"):
+		set_width(properties["width"])
+
 	if properties.has("width"):
 		set_width(properties["width"])
 

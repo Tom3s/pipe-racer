@@ -39,6 +39,7 @@ TextureLoader="*res://Global/TextureLoader.gd"
 
 [debug]
 
+settings/profiler/max_timestamp_query_elements=512
 gdscript/warnings/onready_with_export=1
 
 [display]

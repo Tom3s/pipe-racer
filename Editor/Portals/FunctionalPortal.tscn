@@ -45,7 +45,7 @@ size = Vector2i(1280, 720)
 unique_name_in_owner = true
 cull_mask = 1015807
 near = 0.001
-far = 2500.0
+far = 500.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PortalViewport/PortalCamera" unique_id=289292748]
 visible = false
@@ -71,6 +71,10 @@ spin_degrees = 360.0
 spin_sides = 12
 smooth_faces = true
 material = SubResource("StandardMaterial3D_1swij")
+
+[node name="VisibleNotifier" type="VisibleOnScreenNotifier3D" parent="DetectionArea" unique_id=2087567758]
+unique_name_in_owner = true
+aabb = AABB(-8, -6, -0.5, 16, 12, 1)
 
 [node name="Physicsyaye" type="MeshInstance3D" parent="." unique_id=1383128854]
 script = ExtResource("3_1swij")
