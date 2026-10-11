@@ -779,9 +779,12 @@ func getCurrentFrame() -> CarFrame:
 
 func setGhostMode(ghostMode: bool):
 	if ghostMode:
-		%CarModel.setGhostMode(frameColor)
-		for tire in tires:
-			tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
+		# %CarModel.setGhostMode(frameColor)
+		car_model.setGhostMode(frameColor)
+		if car_copy_model != null:
+			car_copy_model.setGhostMode(frameColor)
+		# for tire in tires:
+		# 	tire.visualRotationNode.get_child(0).setGhostMode(frameColor)
 		%HeadLight.visible = false
 		# %ReflectionProbe.update_mode = ReflectionProbe.UPDATE_ONCE
 

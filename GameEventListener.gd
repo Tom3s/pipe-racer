@@ -25,6 +25,7 @@ var map:
 		pauseMenu.leaderboardButton.visible = state.ranked
 
 @onready var players: Node3D = %Players
+@onready var player_copies: Node3D = %PlayerCopies
 @onready var state: GameStateMachine = %GameStateMachine
 @onready var verticalSplitTop: HBoxContainer = %VerticalSplitTop
 @onready var verticalSplitBottom: HBoxContainer = %VerticalSplitBottom
@@ -62,6 +63,16 @@ func _ready():
 	# ])
 
 	connectSignals()
+
+func _process(delta: float) -> void:
+	var current_camera = get_viewport().get_camera_3d()
+	for playerId in localCameras.keys():
+		var carCamera: FollowingCamera = localCameras[playerId]
+		carCamera.update_camera(delta)
+		current_camera = carCamera
+
+	for portal: FunctionalPortal in map.portals.get_children():
+		portal.set_remote_camera(current_camera)
 
 func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)
@@ -526,6 +537,11 @@ func spawnPlayer(
 		map.lapCount
 	)
 
+	var car_copy: CuttableCarModel
+	car_copy = car.car_model.get_duplicate()
+	player_copies.add_child(car_copy)
+	car_copy.visible = false
+
 	# car.respawned.connect(onCar_respawned)
 	# car.isReady.connect(onCar_isReady)
 	# car.finishedRace.connect(onCar_finishedRace)
@@ -581,6 +597,7 @@ func addLocalCamera(car: CarController, inputDevices: Array) -> void:
 		camera.mode = GlobalProperties.PREFERED_CAMERAS[car.playerIndex]
 
 	localCameras[car.name] = camera
+	camera.manual_update = true
 
 	var viewPortContainer = getNewViewportContainer()
 	var viewPort = getNewViewport()
