@@ -6,6 +6,8 @@ static var idCounter: int = -1
 var id: int
 var linked_id: int = -1
 
+var unlinked_portal_texture: NoiseTexture2D = preload("res://Tracks/road noise 2.tres")
+
 @onready var portal_camera: Camera3D = %PortalCamera
 @onready var portal_viewport: SubViewport = %PortalViewport
 @onready var visible_notifier: VisibleOnScreenNotifier3D = %VisibleNotifier
@@ -416,3 +418,47 @@ func getCopy() -> FunctionalPortal:
 	newNode.setProperties(getProperties(), false)
 
 	return newNode
+
+func link_with(portal: FunctionalPortal) -> void:
+	if linked_id == portal.id || linked_portal == portal:
+		print("[FunctionalPortal.gd] Link between %d nd %d alredy exists. Aborting..." % [
+			linked_portal.id, id
+		])
+		return
+
+	if portal.linked_portal != null:
+		print("[FunctionalPortal.gd] Portal (ID: %d) is already linked. Relinking with %d..." % [
+			portal.id, id
+		])
+		portal.linked_portal.unlink()
+	
+	if linked_portal != null:
+		print("[FunctionalPortal.gd] Portal (ID: %d) is already linked. Overriding link %d..." % [
+			id, linked_portal.id
+		])
+		linked_portal.unlink()
+	
+	portal.linked_id = id
+	portal.linked_portal = self
+	linked_id = portal.id
+	linked_portal = portal
+
+	if linked_portal != null && linked_portal.width != width:
+		linked_portal.width = width
+	
+	if linked_portal != null && linked_portal.height != height:
+		linked_portal.height = height
+	
+func unlink() -> void:
+	if linked_portal == null:
+		print("[FunctionalPortal.gd] Portal (id: %d) is already orphan. Aborting unlink..." % [
+			id
+		])
+		return
+	
+	linked_portal.linked_id = -1
+	linked_portal.linked_portal = null
+	linked_portal = null
+	linked_id = -1
+
+	procedural_portal.portal_surface.material_override.set_shader_parameter("viewport_texture", unlinked_portal_texture)

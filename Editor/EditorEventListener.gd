@@ -1038,6 +1038,27 @@ func connectSignals():
 		rotator.moveToNode(currentElement)
 	)
 
+	# linking portals
+	portalPropertiesUI.link_pressed.connect(func(base_id: int, link_id: int) -> void:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		map.link_portals(base_id, link_id)
+
+		portalPropertiesUI.setProperties(currentElement.getProperties())
+	)
+
+	portalPropertiesUI.unlink_pressed.connect(func(id: int) -> void:
+		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
+			return
+		
+		currentElement = currentElement as FunctionalPortal
+		map.unlink_portal(id)
+
+		portalPropertiesUI.setProperties(currentElement.getProperties())
+	)
+
 
 	# pipe properties ui
 
