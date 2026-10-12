@@ -6,6 +6,9 @@ class_name PortalPropertiesUI
 
 @onready var self_id: Label = %SelfID
 @onready var linked_id: Label = %LinkedID
+@onready var linked_id_spinbox: SpinBox = %LinkedIDSpinbox
+@onready var link_button: Button = %LinkButton
+@onready var unlink_button: Button = %UnlinkButton
 
 @onready var width_spinbox: SpinBox = %WidthSpinbox
 @onready var height_spinbox: SpinBox = %HeightSpinbox
@@ -23,6 +26,11 @@ class_name PortalPropertiesUI
 @onready var rotYSpinbox: SpinBox = %RotYSpinbox
 @onready var rotZSpinbox: SpinBox = %RotZSpinbox
 
+@onready var visibilityButton: Button = %VisibilityButton
+
+signal link_pressed(base_id: int, link_id: int)
+signal unlink_pressed(id: int)
+
 signal width_changed(width: int)
 signal height_changed(height: int)
 signal frame_color_changed(frame_color: Color)
@@ -38,7 +46,8 @@ func set_id(id: int) -> void:
 	self_id.text = str(id)
 
 func set_linked_id(id: int) -> void:
-	linked_id.text = str(id)
+	linked_id.text = str(id) if id != -1 else "None"
+	linked_id_spinbox.value = id
 
 func set_width(width: int) -> void:
 	width_spinbox.set_value_no_signal(width)
@@ -83,6 +92,18 @@ func _ready():
 	connect_signals()
 
 func connect_signals() -> void:
+	visibilityButton.pressed.connect(func():
+		mainContainer.visible = !visibilityButton.button_pressed
+		visibilityButton.text = "v Portal" if visibilityButton.button_pressed else "^ Portal"
+	)
+
+	link_button.pressed.connect(func():
+		link_pressed.emit(int(self_id.text), linked_id_spinbox.value)
+	)
+	unlink_button.pressed.connect(func():
+		unlink_pressed.emit(int(self_id.text))
+	)
+
 	width_spinbox.value_changed.connect(func(value: float) -> void:
 		width_changed.emit(value)
 	)
@@ -132,6 +153,8 @@ func connect_signals() -> void:
 	rotZSpinbox.value_changed.connect(func(value: float):
 		rotationChanged.emit(Vector3(rotXSpinbox.value, rotYSpinbox.value, value))
 	)
+
+
 
 func getProperties() -> Dictionary:
 	var properties = {

@@ -44,6 +44,8 @@ signal pipePreviewElementRequested()
 
 @onready var portals: Node3D = %Portals
 var last_portal: FunctionalPortal
+var portal_refs: Dictionary[int, FunctionalPortal] = {}
+
 
 @onready var startParent: Node3D = %Start
 var start: FunctionalStartLine
@@ -130,31 +132,16 @@ func addPipeNode(node: PipeNode, position: Vector3, rotation: Vector3, pipePrope
 func add_portal(portal: FunctionalPortal, position: Vector3, rotation: Vector3, portalProperties: Dictionary):
 	# if portal.get_parent() == null:
 	portals.add_child(portal)
+	portal_refs[portal.id] = portal
 	portal.global_position = position
 	portal.global_rotation = rotation
 	portal.setProperties(portalProperties, false)
 	
 	if last_portal == null:
-		# var pipeElement: PipeMeshGenerator = pipeScene.instantiate()
-		# pipePieces.add_child(pipeElement)
-		# pipeElement.setProperties(pipeProperties)
-		# pipeElement.startNode = node
 		last_portal = portal
-		# lastPipeElement = pipeElement
-		# pipePreviewElementRequested.emit()
 	else:
-		# if EditorMath.positionsMatch(lastPipeElement.startNode, node):
-		# 	# pipeNodes.remove_child(node)
-		# 	# node.queue_free()
-		# 	return
-		last_portal.linked_portal = portal
-		last_portal.linked_id = portal.id
+		last_portal.link_with(portal)
 
-		portal.linked_portal = last_portal
-		portal.linked_id = last_portal.id
-
-		# lastPipeElement.refreshMesh()
-		# lastPipeElement.convertToPhysicsObject()
 		last_portal = null
 
 
@@ -363,8 +350,9 @@ func removePipeNode(node: PipeNode):
 
 func removePortal(portal: FunctionalPortal):
 	if portal.linked_portal != null:
-		portal.linked_portal.linked_portal = null
-		portal.linked_portal.linked_id = -1
+		portal.linked_portal.unlink()
+
+	portal_refs.erase(portal.id)
 
 	portal.queue_free()
 
@@ -380,6 +368,22 @@ func removePrismShapeDeco(node: PrismShapeDeco):
 
 func removeLightDeco(node: LightDeco):
 	node.queue_free()
+
+
+# portl specific
+func link_portals(base_id: int, link_id: int) -> void:
+	if !portal_refs.has_all([base_id, link_id]):
+		print("[InteractiveMap.gd] Trying to link non-existent portals. Aborting...")
+		return
+	
+	portal_refs[base_id].link_with(portal_refs[link_id])
+
+func unlink_portal(id: int) -> void:
+	if !portal_refs.has(id):
+		print("[InteractiveMap.gd] Trying to unlink non-existent portal. Aborting...")
+		return
+	
+	portal_refs[id].unlink()
 
 var validated: bool = false
 var bestTotalTime: int = -1

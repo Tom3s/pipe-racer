@@ -35,13 +35,15 @@ theme_override_font_sizes/font_size = 24
 text = "Portal Options"
 horizontal_alignment = 1
 
+[node name="HSeparator2" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1342847865]
+layout_mode = 2
+
 [node name="HBoxContainer5" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=174526914]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1247961972]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "ID: "
+text = "ID:  "
 
 [node name="SelfID" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1875211079]
 unique_name_in_owner = true
@@ -49,16 +51,46 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label3" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1197735922]
+[node name="Label2" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=9793430]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Linked ID: "
+text = "Linked ID:  "
 
-[node name="LinkedID" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1892890367]
+[node name="LinkedID" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=2111451625]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "1"
+text = "0"
+
+[node name="UnlinkButton" type="Button" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=503233669]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Unlink"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1653236541]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1197735922]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Change Link: "
+
+[node name="LinkedIDSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=185883189]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -2.0
+value = 16.0
+allow_greater = true
+alignment = 1
+custom_arrow_step = 1.0
+select_all_on_focus = true
+
+[node name="LinkButton" type="Button" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=313732515]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Link"
+
+[node name="HSeparator3" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=774061186]
+layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1133463952]
 layout_mode = 2
