@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhr0gg8gqdduy"]
+[gd_scene format=3 uid="uid://dhr0gg8gqdduy"]
 
-[ext_resource type="Script" path="res://Editor/Props/LedBoardPropertiesUI.gd" id="1_ed8m2"]
+[ext_resource type="Script" uid="uid://cqcluujfks7dy" path="res://Editor/Props/LedBoardPropertiesUI.gd" id="1_ed8m2"]
 [ext_resource type="Texture2D" uid="uid://bqs7ug2x7dj0x" path="res://BillboardTextures/BigJump.png" id="2_vqyh7"]
+[ext_resource type="PackedScene" uid="uid://tfqvyisrbti8" path="res://Editor/UI/GizmoControlUI.tscn" id="3_vpvps"]
 
-[node name="LedBoardPropertiesUI" type="VBoxContainer"]
+[node name="LedBoardPropertiesUI" type="VBoxContainer" unique_id=137657989]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -16,35 +17,37 @@ size_flags_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ed8m2")
 
-[node name="MainContainer" type="PanelContainer" parent="."]
+[node name="MainContainer" type="PanelContainer" parent="." unique_id=1205021959]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="MainContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer" unique_id=2013149752]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer" unique_id=954059187]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=270270750]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "LED Board Options"
 horizontal_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1065843180]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1958950569]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Width"
 
-[node name="WidthSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="WidthSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=282485590]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 4.0
@@ -55,15 +58,15 @@ alignment = 1
 custom_arrow_step = 4.0
 select_all_on_focus = true
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1083275695]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=596816148]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Height"
 
-[node name="HeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="HeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1742205093]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 4.0
@@ -74,28 +77,28 @@ alignment = 1
 custom_arrow_step = 4.0
 select_all_on_focus = true
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1565807979]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=853915436]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Support Beams"
 
-[node name="SupportToggle" type="CheckButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="SupportToggle" type="CheckButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=403756836]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=594400807]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=1212994146]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Support Bottom"
 
-[node name="SupportBottomHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+[node name="SupportBottomHeightSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=982889686]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = -1024.0
@@ -106,188 +109,66 @@ alignment = 1
 custom_arrow_step = 4.0
 select_all_on_focus = true
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=619109943]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1486599034]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Use Custom Texture"
 
-[node name="CustomTextureToggle" type="CheckButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="CustomTextureToggle" type="CheckButton" parent="MainContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1381259473]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LocalTextureContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="LocalTextureContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=130364913]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/LocalTextureContainer"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/LocalTextureContainer" unique_id=1061459290]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Texture"
 
-[node name="LocalTextureOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/LocalTextureContainer"]
+[node name="LocalTextureOptions" type="OptionButton" parent="MainContainer/MarginContainer/VBoxContainer/LocalTextureContainer" unique_id=1196476339]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(148, 80)
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
-item_count = 1
 selected = 0
+item_count = 1
 popup/item_0/text = "BigJump"
 popup/item_0/icon = ExtResource("2_vqyh7")
 popup/item_0/id = 0
 
-[node name="CustomTextureContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="CustomTextureContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=587003103]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/CustomTextureContainer"]
+[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/CustomTextureContainer" unique_id=717190812]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Image URL"
 
-[node name="CustomTextureLineEdit" type="LineEdit" parent="MainContainer/MarginContainer/VBoxContainer/CustomTextureContainer"]
+[node name="CustomTextureLineEdit" type="LineEdit" parent="MainContainer/MarginContainer/VBoxContainer/CustomTextureContainer" unique_id=730763394]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 placeholder_text = "URL"
 
-[node name="HSeparator" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1541823768]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-text = "Position"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "X"
-
-[node name="PosXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
+[node name="GizmoControlUI" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1639606207 instance=ExtResource("3_vpvps")]
 unique_name_in_owner = true
 layout_mode = 2
-step = 4.0
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 4.0
-select_all_on_focus = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Y"
-
-[node name="PosYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-step = 4.0
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 4.0
-select_all_on_focus = true
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Z"
-
-[node name="PosZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3"]
-unique_name_in_owner = true
-layout_mode = 2
-step = 4.0
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 4.0
-select_all_on_focus = true
-
-[node name="VSeparator" type="VSeparator" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
-layout_mode = 2
-text = "Rotation"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
-layout_mode = 2
-text = "X"
-
-[node name="RotXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2"]
-layout_mode = 2
-text = "Y"
-
-[node name="RotYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3"]
-layout_mode = 2
-text = "Z"
-
-[node name="RotZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3"]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
-
-[node name="VisibilityButton" type="Button" parent="."]
+[node name="VisibilityButton" type="Button" parent="." unique_id=1699699851]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2

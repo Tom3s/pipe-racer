@@ -801,7 +801,7 @@ func connectSignals():
 		currentElement.rightRunoff = value
 	)
 
-	roadNodePropertiesUI.positionChanged.connect(func(value: Vector3):
+	roadNodePropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -812,7 +812,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	roadNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
+	roadNodePropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "RoadNode":
 			return
 		
@@ -940,7 +940,7 @@ func connectSignals():
 		currentElement.flat = flat
 	)
 
-	pipeNodePropertiesUI.positionChanged.connect(func(value: Vector3):
+	pipeNodePropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
 			return
 		
@@ -951,7 +951,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	pipeNodePropertiesUI.rotationChanged.connect(func(value: Vector3):
+	pipeNodePropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PipeNode":
 			return
 		
@@ -1017,7 +1017,7 @@ func connectSignals():
 		currentElement.use_bottom_frame = use_bottom_frame		
 
 	)
-	portalPropertiesUI.positionChanged.connect(func(value: Vector3):
+	portalPropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
 			return
 		
@@ -1028,7 +1028,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	portalPropertiesUI.rotationChanged.connect(func(value: Vector3):
+	portalPropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalPortal":
 			return
 		
@@ -1091,7 +1091,7 @@ func connectSignals():
 		currentElement.height = height
 	)
 
-	startLinePropertiesUI.positionChanged.connect(func(value: Vector3):
+	startLinePropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || \
 			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
 			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
@@ -1104,7 +1104,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	startLinePropertiesUI.rotationChanged.connect(func(value: Vector3):
+	startLinePropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || \
 			(ClassFunctions.getClassName(currentElement) != "FunctionalStartLine" && \
 			 ClassFunctions.getClassName(currentElement) != "ProceduralStartLine"):
@@ -1134,7 +1134,7 @@ func connectSignals():
 		currentElement.ringRadius = radius
 	)
 
-	checkpointPropertiesUI.positionChanged.connect(func(value: Vector3):
+	checkpointPropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
 			return
 		
@@ -1145,7 +1145,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	checkpointPropertiesUI.rotationChanged.connect(func(value: Vector3):
+	checkpointPropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "FunctionalCheckpoint":
 			return
 		
@@ -1213,7 +1213,7 @@ func connectSignals():
 		currentElement.customTextureUrl = textureUrl
 	)
 
-	ledBoardPropertiesUI.positionChanged.connect(func(value: Vector3):
+	ledBoardPropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
 			return
 		
@@ -1224,7 +1224,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	ledBoardPropertiesUI.rotationChanged.connect(func(value: Vector3):
+	ledBoardPropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LedBoard":
 			return
 		
@@ -1348,7 +1348,7 @@ func connectSignals():
 		currentElement.bottomTextureUrl = url
 	)
 
-	prismShapePropertiesUI.positionChanged.connect(func(value: Vector3):
+	prismShapePropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
 			return
 		
@@ -1359,7 +1359,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	prismShapePropertiesUI.rotationChanged.connect(func(value: Vector3):
+	prismShapePropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "PrismShapeDeco":
 			return
 		
@@ -1411,7 +1411,7 @@ func connectSignals():
 		currentElement.spotAngle = angle
 	)
 
-	lightDecoPropertiesUI.positionChanged.connect(func(value: Vector3):
+	lightDecoPropertiesUI.gizmo_control_ui.positionChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
 			return
 		
@@ -1422,7 +1422,7 @@ func connectSignals():
 		translator.global_position = value
 	)
 
-	lightDecoPropertiesUI.rotationChanged.connect(func(value: Vector3):
+	lightDecoPropertiesUI.gizmo_control_ui.rotationChanged.connect(func(value: Vector3):
 		if currentElement == null || ClassFunctions.getClassName(currentElement) != "LightDeco":
 			return
 		

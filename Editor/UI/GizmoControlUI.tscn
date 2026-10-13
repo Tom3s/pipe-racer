@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://tfqvyisrbti8"]
+
+[ext_resource type="Script" uid="uid://st0080l4u1xx" path="res://Editor/UI/GizmoControlUI.gd" id="1_si1fm"]
+
+[node name="GizmoControlUI" type="VBoxContainer" unique_id=1639606207]
+script = ExtResource("1_si1fm")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=371258659]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2" unique_id=1940012389]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer" unique_id=1450360181]
+layout_mode = 2
+text = "Position"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer" unique_id=159931515]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=1780392412]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "X"
+
+[node name="PosXSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=386379345]
+unique_name_in_owner = true
+layout_mode = 2
+step = 4.0
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 4.0
+select_all_on_focus = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer" unique_id=1577398490]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=883211210]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72156864, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "Y"
+
+[node name="PosYSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1500799815]
+unique_name_in_owner = true
+layout_mode = 2
+step = 4.0
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 4.0
+select_all_on_focus = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer" unique_id=1305133878]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=190441485]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "Z"
+
+[node name="PosZSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=926387092]
+unique_name_in_owner = true
+layout_mode = 2
+step = 4.0
+allow_greater = true
+allow_lesser = true
+alignment = 1
+custom_arrow_step = 4.0
+select_all_on_focus = true
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer2" unique_id=2049547081]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer2" unique_id=706425661]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer2" unique_id=1163031660]
+layout_mode = 2
+text = "Rotation"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer2" unique_id=427165406]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=1363910423]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "X"
+
+[node name="RotXSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=672842115]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer2" unique_id=1804326591]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=814387908]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.72, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "Y"
+
+[node name="RotYSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=307032855]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer2" unique_id=1707027014]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=1778149997]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6666667, 0, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+text = "Z"
+
+[node name="RotZSpinbox" type="SpinBox" parent="HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=762662246]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.087
+allow_greater = true
+allow_lesser = true
+alignment = 1
+select_all_on_focus = true
