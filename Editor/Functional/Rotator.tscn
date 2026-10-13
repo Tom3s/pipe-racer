@@ -1,92 +1,129 @@
-[gd_scene load_steps=6 format=3 uid="uid://cadslbpwpj2rx"]
+[gd_scene format=3 uid="uid://cadslbpwpj2rx"]
 
-[ext_resource type="Script" path="res://Editor/Functional/RotatorGizmo.gd" id="1_bmu4a"]
-[ext_resource type="Script" path="res://Editor/Functional/Rotator.gd" id="1_obahr"]
+[ext_resource type="Script" uid="uid://uoq85h5h5rr7" path="res://Editor/Functional/RotatorGizmo.gd" id="1_bmu4a"]
+[ext_resource type="Script" uid="uid://36j8chk2y7yb" path="res://Editor/Functional/Rotator.gd" id="1_obahr"]
+[ext_resource type="Shader" uid="uid://bfrsuf1v35viy" path="res://Editor/Functional/GizmoXRay.gdshader" id="2_fo3m4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fo3m4"]
+render_priority = 0
+shader = ExtResource("2_fo3m4")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(0, 1, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8puws"]
+next_pass = SubResource("ShaderMaterial_fo3m4")
 shading_mode = 0
 albedo_color = Color(0, 1, 0, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wjt5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7hlc"]
+render_priority = 0
+shader = ExtResource("2_fo3m4")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fo3m4"]
+next_pass = SubResource("ShaderMaterial_b7hlc")
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6tytb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dywn5"]
+render_priority = 0
+shader = ExtResource("2_fo3m4")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(0.666667, 0, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b7hlc"]
+next_pass = SubResource("ShaderMaterial_dywn5")
 shading_mode = 0
 albedo_color = Color(0.666667, 0, 1, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
-[node name="Rotator" type="Node3D"]
+[node name="Rotator" type="Node3D" unique_id=1061121776]
 script = ExtResource("1_obahr")
 
-[node name="Direction" type="Node3D" parent="."]
+[node name="Direction" type="Node3D" parent="." unique_id=972964076]
 unique_name_in_owner = true
 
-[node name="Mesh" type="CSGTorus3D" parent="Direction"]
+[node name="Mesh" type="CSGTorus3D" parent="Direction" unique_id=693514182]
 cast_shadow = 0
-inner_radius = 66.0
-outer_radius = 72.0
-sides = 16
+inner_radius = 67.0
+outer_radius = 71.0
+sides = 32
 ring_sides = 4
 smooth_faces = false
 material = SubResource("StandardMaterial3D_8puws")
 
-[node name="DirectionCollider" type="CSGTorus3D" parent="Direction"]
+[node name="DirectionCollider" type="CSGTorus3D" parent="Direction" unique_id=60338770]
 visible = false
 use_collision = true
+collision_layer = 8388608
+collision_mask = 8388608
 inner_radius = 62.0
 outer_radius = 76.0
-sides = 16
+sides = 32
 ring_sides = 4
 smooth_faces = false
 script = ExtResource("1_bmu4a")
 originalColor = Color(0, 1, 0, 1)
 
-[node name="Elevation" type="Node3D" parent="Direction"]
+[node name="Elevation" type="Node3D" parent="Direction" unique_id=1272202712]
 unique_name_in_owner = true
 
-[node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation"]
+[node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation" unique_id=1279222496]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 cast_shadow = 0
-inner_radius = 58.0
-outer_radius = 64.0
-sides = 16
+inner_radius = 59.0
+outer_radius = 63.0
+sides = 32
 ring_sides = 4
 smooth_faces = false
-material = SubResource("StandardMaterial3D_0wjt5")
+material = SubResource("StandardMaterial3D_fo3m4")
 
-[node name="ElevationCollider" type="CSGTorus3D" parent="Direction/Elevation"]
+[node name="ElevationCollider" type="CSGTorus3D" parent="Direction/Elevation" unique_id=2132640938]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 use_collision = true
+collision_layer = 8388608
+collision_mask = 8388608
 inner_radius = 54.0
 outer_radius = 68.0
-sides = 16
+sides = 32
 ring_sides = 4
 smooth_faces = false
 script = ExtResource("1_bmu4a")
 originalColor = Color(1, 0, 0, 1)
 rotationAxis = Vector3(1, 0, 0)
 
-[node name="Tilt" type="Node3D" parent="Direction/Elevation"]
+[node name="Tilt" type="Node3D" parent="Direction/Elevation" unique_id=562335291]
 unique_name_in_owner = true
 
-[node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation/Tilt"]
+[node name="Mesh" type="CSGTorus3D" parent="Direction/Elevation/Tilt" unique_id=324108221]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 cast_shadow = 0
-inner_radius = 50.0
-outer_radius = 56.0
-sides = 16
+inner_radius = 51.0
+outer_radius = 55.0
+sides = 32
 ring_sides = 4
 smooth_faces = false
-material = SubResource("StandardMaterial3D_6tytb")
+material = SubResource("StandardMaterial3D_b7hlc")
 
-[node name="TiltCollider" type="CSGTorus3D" parent="Direction/Elevation/Tilt"]
+[node name="TiltCollider" type="CSGTorus3D" parent="Direction/Elevation/Tilt" unique_id=920354449]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 visible = false
 use_collision = true
+collision_layer = 8388608
+collision_mask = 8388608
 inner_radius = 46.0
 outer_radius = 60.0
-sides = 16
+sides = 32
 ring_sides = 4
 smooth_faces = false
 script = ExtResource("1_bmu4a")
