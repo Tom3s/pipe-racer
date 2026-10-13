@@ -18,13 +18,7 @@ class_name PortalPropertiesUI
 @onready var rust_strength_spinbox: SpinBox = %RustStrengthSpinbox
 @onready var bottom_frame_toggle: CheckButton = %BottomFrameToggle
 
-@onready var posXSpinbox: SpinBox = %PosXSpinbox
-@onready var posYSpinbox: SpinBox = %PosYSpinbox
-@onready var posZSpinbox: SpinBox = %PosZSpinbox
-
-@onready var rotXSpinbox: SpinBox = %RotXSpinbox
-@onready var rotYSpinbox: SpinBox = %RotYSpinbox
-@onready var rotZSpinbox: SpinBox = %RotZSpinbox
+@onready var gizmo_control_ui: GizmoControlUI = %GizmoControlUI
 
 @onready var visibilityButton: Button = %VisibilityButton
 
@@ -71,24 +65,16 @@ func set_use_bottom_frame(use_bottom_frame: bool) -> void:
 	bottom_frame_toggle.button_pressed = use_bottom_frame
 
 func setPosition(newPosition: Vector3) -> void:
-	posXSpinbox.set_value_no_signal(newPosition.x)
-	posYSpinbox.set_value_no_signal(newPosition.y)
-	posZSpinbox.set_value_no_signal(newPosition.z)
+	gizmo_control_ui.posXSpinbox.set_value_no_signal(newPosition.x)
+	gizmo_control_ui.posYSpinbox.set_value_no_signal(newPosition.y)
+	gizmo_control_ui.posZSpinbox.set_value_no_signal(newPosition.z)
 
 func setRotation(newRotation: Vector3) -> void:
-	rotXSpinbox.set_value_no_signal(newRotation.x)
-	rotYSpinbox.set_value_no_signal(newRotation.y)
-	rotZSpinbox.set_value_no_signal(newRotation.z)
+	gizmo_control_ui.rotXSpinbox.set_value_no_signal(newRotation.x)
+	gizmo_control_ui.rotYSpinbox.set_value_no_signal(newRotation.y)
+	gizmo_control_ui.rotZSpinbox.set_value_no_signal(newRotation.z)
 
 func _ready():
-	rotXSpinbox.step = deg_to_rad(5)
-	rotYSpinbox.step = deg_to_rad(5)
-	rotZSpinbox.step = deg_to_rad(5)
-
-	rotXSpinbox.custom_arrow_step = deg_to_rad(5)
-	rotYSpinbox.custom_arrow_step = deg_to_rad(5)
-	rotZSpinbox.custom_arrow_step = deg_to_rad(5)
-
 	connect_signals()
 
 func connect_signals() -> void:
@@ -128,32 +114,6 @@ func connect_signals() -> void:
 		use_bottom_frame_changed.emit(button_pressed)
 	)
 
-	# Transform
-
-	posXSpinbox.value_changed.connect(func(value: float):
-		positionChanged.emit(Vector3(value, posYSpinbox.value, posZSpinbox.value))
-	)
-
-	posYSpinbox.value_changed.connect(func(value: float):
-		positionChanged.emit(Vector3(posXSpinbox.value, value, posZSpinbox.value))
-	)
-
-	posZSpinbox.value_changed.connect(func(value: float):
-		positionChanged.emit(Vector3(posXSpinbox.value, posYSpinbox.value, value))
-	)
-
-	rotXSpinbox.value_changed.connect(func(value: float):
-		rotationChanged.emit(Vector3(value, rotYSpinbox.value, rotZSpinbox.value))
-	)
-
-	rotYSpinbox.value_changed.connect(func(value: float):
-		rotationChanged.emit(Vector3(rotXSpinbox.value, value, rotZSpinbox.value))
-	)
-
-	rotZSpinbox.value_changed.connect(func(value: float):
-		rotationChanged.emit(Vector3(rotXSpinbox.value, rotYSpinbox.value, value))
-	)
-
 
 
 func getProperties() -> Dictionary:
@@ -166,8 +126,8 @@ func getProperties() -> Dictionary:
 		"rust_strength": rust_strength_spinbox.value,
 		"use_bottom_frame": bottom_frame_toggle.button_pressed,
 		
-		"position": Vector3(posXSpinbox.value, posYSpinbox.value, posZSpinbox.value),
-		"rotation": Vector3(rotXSpinbox.value, rotYSpinbox.value, rotZSpinbox.value),
+		"position": gizmo_control_ui.get_position_vec3(),
+		"rotation": gizmo_control_ui.get_rotation_vec3()
 	}
 
 	return properties

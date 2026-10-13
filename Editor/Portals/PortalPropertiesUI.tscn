@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://3yjb48b2roqb"]
 
 [ext_resource type="Script" uid="uid://d4m2221afft10" path="res://Editor/Portals/PortalPropertiesUI.gd" id="1_25thy"]
+[ext_resource type="PackedScene" uid="uid://tfqvyisrbti8" path="res://Editor/UI/GizmoControlUI.tscn" id="2_eji0y"]
 
 [node name="PortalPropertiesUI" type="VBoxContainer" unique_id=1614376869]
 anchors_preset = 5
@@ -206,131 +207,9 @@ layout_mode = 2
 [node name="HSeparator" type="HSeparator" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1964305428]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=794001375]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1540023839]
-layout_mode = 2
-size_flags_vertical = 0
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=435831286]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=379021029]
-layout_mode = 2
-text = "Position"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=142324957]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=175590846]
-layout_mode = 2
-text = "X"
-
-[node name="PosXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=409692342]
+[node name="GizmoControlUI" parent="MainContainer/MarginContainer/VBoxContainer" unique_id=1639606207 instance=ExtResource("2_eji0y")]
 unique_name_in_owner = true
 layout_mode = 2
-step = 0.1
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 1.0
-select_all_on_focus = true
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1973390634]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=6037011]
-layout_mode = 2
-text = "Y"
-
-[node name="PosYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1993187817]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.1
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 1.0
-select_all_on_focus = true
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=365465977]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=2104915587]
-layout_mode = 2
-text = "Z"
-
-[node name="PosZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=599091331]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.1
-allow_greater = true
-allow_lesser = true
-alignment = 1
-custom_arrow_step = 1.0
-select_all_on_focus = true
-
-[node name="VSeparator" type="VSeparator" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=2055472194]
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=918800647]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=625306211]
-layout_mode = 2
-text = "Rotation"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1401202478]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=583584231]
-layout_mode = 2
-text = "X"
-
-[node name="RotXSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=623935175]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=446140541]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=1828845633]
-layout_mode = 2
-text = "Y"
-
-[node name="RotYSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer2" unique_id=817887695]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1774492821]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=1521969070]
-layout_mode = 2
-text = "Z"
-
-[node name="RotZSpinbox" type="SpinBox" parent="MainContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer3" unique_id=1586989047]
-unique_name_in_owner = true
-layout_mode = 2
-step = 0.087
-allow_greater = true
-allow_lesser = true
-alignment = 1
-select_all_on_focus = true
 
 [node name="VisibilityButton" type="Button" parent="." unique_id=1828322916]
 unique_name_in_owner = true
