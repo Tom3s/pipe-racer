@@ -123,7 +123,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		var playerName = carMetadata[0]
 		var playerColor = Color.from_string(carMetadata[1], Color.WHITE)
 		var carController: CarController = carScene.instantiate()
-		carController.collision_layer = 2
+		carController.collision_layer = 16384
 		carController.collision_mask = 1
 		carController.continuous_cd = false
 		carController.contact_monitor = false

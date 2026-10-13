@@ -1,4 +1,6 @@
 shader_type spatial;
+//render_mode depth_test_disabled;
+//stencil_mode read, write, compare_equal, 1;
 
 uniform vec3 color : source_color;
 

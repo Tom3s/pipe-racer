@@ -6,7 +6,7 @@ var car: CarController = null
 var shouldUpdatePosition = false
 
 @export
-var mode: int = 0
+var mode: int = 1
 
 @export
 var insideX: float = 0.0
@@ -39,7 +39,7 @@ func setup(carReference):
 
 func _ready():
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
-	fov = 65
+	fov = 85
 	set_physics_process(true)
 
 func _physics_process(delta):

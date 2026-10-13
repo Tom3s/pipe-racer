@@ -1,36 +1,12 @@
 [gd_resource type="AudioBusLayout" format=3 uid="uid://n6b4x02624r2"]
 
-[sub_resource type="AudioEffectPitchShift" id="AudioEffectPitchShift_vqdmd"]
-resource_name = "PitchShift"
-pitch_scale = 0.85
-fft_size = 2
-
-[sub_resource type="AudioEffectDistortion" id="AudioEffectDistortion_kes0b"]
-resource_name = "Distortion"
-mode = 4
-drive = 0.33
-post_gain = -4.89
-
-[sub_resource type="AudioEffectEQ10" id="AudioEffectEQ10_544my"]
-resource_name = "EQ10"
-band_db/31_hz = 1.0
-band_db/62_hz = -1.5
-band_db/125_hz = -3.0
-band_db/250_hz = -4.6
-band_db/500_hz = -6.7
-band_db/1000_hz = -3.6
-band_db/2000_hz = -2.0
-band_db/4000_hz = 2.6
-band_db/8000_hz = 6.6
-band_db/16000_hz = -16.4
-
 [resource]
 bus/0/volume_db = 0.0694828
 bus/1/name = &"SFX"
 bus/1/solo = false
-bus/1/mute = true
+bus/1/mute = false
 bus/1/bypass_fx = false
-bus/1/volume_db = -14.6228
+bus/1/volume_db = 0.0
 bus/1/send = &"Master"
 bus/2/name = &"Music"
 bus/2/solo = false
@@ -40,13 +16,7 @@ bus/2/volume_db = 0.0
 bus/2/send = &"Master"
 bus/3/name = &"Engine Sound"
 bus/3/solo = false
-bus/3/mute = true
+bus/3/mute = false
 bus/3/bypass_fx = false
 bus/3/volume_db = 0.0
 bus/3/send = &"SFX"
-bus/3/effect/0/effect = SubResource("AudioEffectPitchShift_vqdmd")
-bus/3/effect/0/enabled = false
-bus/3/effect/1/effect = SubResource("AudioEffectDistortion_kes0b")
-bus/3/effect/1/enabled = true
-bus/3/effect/2/effect = SubResource("AudioEffectEQ10_544my")
-bus/3/effect/2/enabled = true

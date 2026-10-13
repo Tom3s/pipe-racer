@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://j6tx35pkacye"]
+
+[ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="1_lyyfm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvgc8"]
+transparency = 1
+albedo_color = Color(0, 0.76345396, 0.077283286, 1)
+metallic = 0.9
+roughness = 0.36
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 2
+
+[resource]
+render_priority = -1
+next_pass = SubResource("StandardMaterial3D_bvgc8")
+shader = ExtResource("1_lyyfm")
+shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/enable_cut = -1.0
+shader_parameter/cut_direction = 1.0

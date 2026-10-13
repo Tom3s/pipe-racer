@@ -1,3 +1,8 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://cos8mlvu83kp5"]
 
+[ext_resource type="Shader" uid="uid://c5a2o5eby5yi5" path="res://Visuals/Cars/GhostShader.gdshader" id="1_836bn"]
+
 [resource]
+render_priority = 0
+shader = ExtResource("1_836bn")
+shader_parameter/color = Color(1, 1, 1, 1)

@@ -5,6 +5,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bd74kdaj88jd7" path="res://Visuals/Cars/Default/CarBody.res" id="2_bvgc8"]
 [ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="3_bbsld"]
 [ext_resource type="ArrayMesh" uid="uid://dfk8nsu257p1g" path="res://Visuals/Cars/Default/Rollcage.res" id="4_210c5"]
+[ext_resource type="Material" uid="uid://j6tx35pkacye" path="res://Visuals/CuttableRollcageMaterial.tres" id="5_m73yk"]
 [ext_resource type="ArrayMesh" uid="uid://bbfir17roxrdo" path="res://Visuals/Cars/Default/Spoilers.res" id="5_vfgqd"]
 [ext_resource type="Shader" uid="uid://eul7tm2grevq" path="res://carMaterial/spoilers.tres" id="6_bvgc8"]
 [ext_resource type="PackedScene" uid="uid://0e6ywfuhrk2r" path="res://Visuals/Wheels/CuttableWheel.tscn" id="8_210c5"]
@@ -51,23 +52,6 @@ shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
 shader_parameter/enable_cut = -1.0
 shader_parameter/cut_direction = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvgc8"]
-transparency = 1
-albedo_color = Color(0, 0.76345396, 0.077283286, 1)
-metallic = 0.9
-roughness = 0.36
-stencil_mode = 3
-stencil_flags = 1
-stencil_compare = 2
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1sg5n"]
-render_priority = -1
-next_pass = SubResource("StandardMaterial3D_bvgc8")
-shader = ExtResource("3_bbsld")
-shader_parameter/cutplane = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-shader_parameter/enable_cut = -1.0
-shader_parameter/cut_direction = 1.0
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_210c5"]
 render_priority = 0
 shader = ExtResource("6_bvgc8")
@@ -107,9 +91,8 @@ skeleton = NodePath("../..")
 [node name="Rollcage" type="MeshInstance3D" parent="CarChassis" unique_id=1546582418]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565332, 1.76329, 1.85594)
-material_override = SubResource("ShaderMaterial_1sg5n")
+material_override = ExtResource("5_m73yk")
 mesh = ExtResource("4_210c5")
-skeleton = NodePath("../..")
 
 [node name="Spoilers" type="MeshInstance3D" parent="CarChassis" unique_id=698597196]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
