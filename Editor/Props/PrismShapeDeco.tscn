@@ -1,12 +1,12 @@
 [gd_scene format=4 uid="uid://pc8ac2621xjd"]
 
 [ext_resource type="Script" uid="uid://eb7nqua1vj0r" path="res://Editor/Props/PrismShapeDeco.gd" id="1_1u5qt"]
-[ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="2_4v14t"]
 [ext_resource type="Texture2D" uid="uid://bk7ycinsihbw8" path="res://Editor/PropTextures/Cobblestone.png" id="2_d8d72"]
 [ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="2_wglns"]
+[ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="3_7j06y"]
 [ext_resource type="Script" uid="uid://cuxaqff5k3se2" path="res://Editor/PhysicsSurface.gd" id="4_hmx4d"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_7j06y"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_480ao"]
 _surfaces = [{
 "aabb": AABB(-0.5, 1, -0.5, 1, 1e-05, 1),
 "attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAAAAAAAAAAACAPwAAAAA="),
@@ -39,22 +39,24 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AAAAPwAAgD8AAAA/AAAAPwAAgD8AAAA/AAAAvwAAgD8AAAA/AAAAvwAAgD8AAAA/AAAAvwAAgD8AAAC/AAAAvwAAgD8AAAC/AAAAPwAAgD8AAAC/AAAAPwAAgD8AAAC/AAAAPwAAAAAAAAA/AAAAPwAAAAAAAAA/AAAAvwAAAAAAAAA/AAAAvwAAAAAAAAA/AAAAvwAAAAAAAAC/AAAAvwAAAAAAAAC/AAAAPwAAAAAAAAC/AAAAPwAAAAAAAAC/////f/9//7//f/9//38AgP9//3//fwCAAAD/f/9//78AAP9//3//v///////fwCA//////9/AID///9//3//v////3//f/+//3//f/9/AID/f/9//38AgAAA/3//f/+/AAD/f/9//7///////38AgP//////fwCA////f/9//78=")
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_480ao"]
-render_priority = 0
-next_pass = ExtResource("2_wglns")
-shader = ExtResource("2_4v14t")
-shader_parameter/Repeat = Vector2(1, 1)
-shader_parameter/Texture = ExtResource("2_d8d72")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tgqnf"]
 render_priority = 0
-shader = ExtResource("2_4v14t")
+next_pass = ExtResource("2_wglns")
+shader = ExtResource("3_7j06y")
 shader_parameter/Repeat = Vector2(1, 1)
 shader_parameter/Texture = ExtResource("2_d8d72")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vpdw5"]
 render_priority = 0
-shader = ExtResource("2_4v14t")
+next_pass = ExtResource("2_wglns")
+shader = ExtResource("3_7j06y")
+shader_parameter/Repeat = Vector2(1, 1)
+shader_parameter/Texture = ExtResource("2_d8d72")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mdfkk"]
+render_priority = 0
+next_pass = ExtResource("2_wglns")
+shader = ExtResource("3_7j06y")
 shader_parameter/Repeat = Vector2(4, 1)
 shader_parameter/Texture = ExtResource("2_d8d72")
 
@@ -65,8 +67,8 @@ repeatSidesPointy = true
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=1814198958]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_7j06y")
-surface_material_override/0 = SubResource("ShaderMaterial_480ao")
-surface_material_override/1 = SubResource("ShaderMaterial_tgqnf")
-surface_material_override/2 = SubResource("ShaderMaterial_vpdw5")
+mesh = SubResource("ArrayMesh_480ao")
+surface_material_override/0 = SubResource("ShaderMaterial_tgqnf")
+surface_material_override/1 = SubResource("ShaderMaterial_vpdw5")
+surface_material_override/2 = SubResource("ShaderMaterial_mdfkk")
 script = ExtResource("4_hmx4d")
