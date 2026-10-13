@@ -1,9 +1,11 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://7x22yvmy0871"]
 
 [ext_resource type="Shader" uid="uid://cq1srv2lm6tb6" path="res://Editor/FunctionalElements/ProceduralCheckpointShader.tres" id="1_8x3fp"]
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_depb3"]
 
 [resource]
 render_priority = 0
+next_pass = ExtResource("1_depb3")
 shader = ExtResource("1_8x3fp")
 shader_parameter/ring_color1 = Color(1, 0, 0, 1)
 shader_parameter/speed = 4.8

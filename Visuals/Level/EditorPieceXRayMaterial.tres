@@ -5,4 +5,4 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_x3ivf")
-shader_parameter/dither_treshold = 0.25
+shader_parameter/dither_treshold = 0.0

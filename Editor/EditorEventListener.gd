@@ -1497,6 +1497,7 @@ func connectSignals():
 
 	
 	pauseMenu.exitPressed.connect(func():
+		set_xray_treshold(0.0)
 		# AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 		if !VersionCheck.offline:
 			var signalResponse = submitEditorStats(editorStats.getObject())
