@@ -456,6 +456,8 @@ func unlink() -> void:
 		])
 		return
 	
+	linked_portal.procedural_portal.portal_surface.material_override.set_shader_parameter("viewport_texture", unlinked_portal_texture)
+
 	linked_portal.linked_id = -1
 	linked_portal.linked_portal = null
 	linked_portal = null

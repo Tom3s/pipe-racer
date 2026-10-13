@@ -31,7 +31,7 @@ var mousePos2D: Vector2 = Vector2()
 var angleSnap: float = deg_to_rad(5)
 
 var scrollCooldown: float = 0.0
-var scrollCooldownTime: float = 0.05
+var scrollCooldownTime: float = 0.083
 
 var editorMode: EditorEventListener.EditorMode = EditorEventListener.EditorMode.BUILD
 
@@ -45,7 +45,7 @@ func _ready():
 func _physics_process(delta):
 	scrollCooldown -= delta
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent):
 	if Input.is_action_just_pressed("p1_pause"):
 		if editorMode == EditorEventListener.EditorMode.TEST && carTestDriving:
 			stopTestingPressed.emit()
