@@ -1,5 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://csajb4dudwu06"]
 
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_dhkgm"]
+
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_e1x4a"]
 output_port_for_preview = 0
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0.2, 0.2)]
@@ -73,6 +75,9 @@ output_port_for_preview = 0
 input_name = "uv"
 
 [sub_resource type="VisualShader" id="VisualShader_m30hq"]
+stencil/enabled = true
+stencil/reference = 2
+stencil_flags/write = true
 nodes/fragment/0/position = Vector2(1120, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_bhtph")
 nodes/fragment/2/position = Vector2(180, 160)
@@ -98,5 +103,6 @@ nodes/fragment/connections = PackedInt32Array(2, 0, 8, 1, 8, 0, 7, 1, 7, 0, 0, 3
 
 [resource]
 render_priority = 0
+next_pass = ExtResource("1_dhkgm")
 shader = SubResource("VisualShader_m30hq")
 shader_parameter/ColorParameter = Color(0.364706, 0.364706, 0.364706, 1)

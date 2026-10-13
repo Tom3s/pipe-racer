@@ -1,14 +1,9 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://hfk7jo2i0iqc"]
 
 [ext_resource type="Shader" uid="uid://bpa7nsn7svg8e" path="res://aphaltShader.tres" id="1_38rn5"]
-[ext_resource type="Shader" uid="uid://5g5jy03jab2b" path="res://Visuals/Level/EditorXRay.gdshader" id="1_eieip"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_si1fm"]
-render_priority = 0
-shader = ExtResource("1_eieip")
-shader_parameter/dither_treshold = 0.25
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_eieip"]
 
 [resource]
 render_priority = 0
-next_pass = SubResource("ShaderMaterial_si1fm")
+next_pass = ExtResource("1_eieip")
 shader = ExtResource("1_38rn5")

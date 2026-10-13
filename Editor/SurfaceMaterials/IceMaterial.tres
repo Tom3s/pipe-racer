@@ -1,7 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cl0vmeyg8kx6w"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cl0vmeyg8kx6w"]
 
 [ext_resource type="Shader" uid="uid://ht7m50rr2v6x" path="res://Editor/SurfaceMaterials/IceShader.res" id="1_ov5ny"]
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_x5ncu"]
 
 [resource]
 render_priority = 0
+next_pass = ExtResource("1_x5ncu")
 shader = ExtResource("1_ov5ny")

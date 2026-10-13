@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://v577u1joifmx" path="res://Editor/Road/RoadNode.gd" id="4_duv0h"]
 [ext_resource type="Script" uid="uid://cuxaqff5k3se2" path="res://Editor/PhysicsSurface.gd" id="4_ovk7q"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_gjv43"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_bkfjd"]
 _surfaces = [{
 "aabb": AABB(-32, 0, 0, 64, 1e-05, 64),
 "attribute_data": PackedByteArray("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"),
@@ -49,11 +49,11 @@ _surfaces = [{
 "vertex_data": PackedByteArray("7///wQAAAAAAAIBCT3TRwQAAAAAAAIBCr+iiwQAAAAAAAIBCILpowQAAAAAAAIBC4KILwQAAAAAAAIBCgC46wAAAAAAAAIBCgC46QAAAAAAAAIBC4KILQQAAAAAAAIBCILpoQQAAAAAAAIBCr+iiQQAAAAAAAIBCT3TRQQAAAAAAAIBC7///QQAAAAAAAIBC7///wQAAgMAAAIBCT3TRwQAAgMAAAIBCr+iiwQAAgMAAAIBCILpowQAAgMAAAIBC4KILwQAAgMAAAIBCgC46wAAAgMAAAIBCgC46QAAAgMAAAIBC4KILQQAAgMAAAIBCILpoQQAAgMAAAIBCr+iiQQAAgMAAAIBCT3TRQQAAgMAAAIBC7///QQAAgMAAAIBC/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA")
 }]
 
+[sub_resource type="ArrayMesh" id="ArrayMesh_gjv43"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_ob5ja"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ppi4p"]
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_6lxjw"]
 
 [node name="RoadMeshGenerator" type="Node3D" unique_id=1546484915]
 script = ExtResource("1_cul7h")
@@ -61,7 +61,7 @@ script = ExtResource("1_cul7h")
 [node name="RoadMesh" type="MeshInstance3D" parent="." unique_id=848999893]
 unique_name_in_owner = true
 top_level = true
-mesh = SubResource("ArrayMesh_gjv43")
+mesh = SubResource("ArrayMesh_bkfjd")
 surface_material_override/0 = ExtResource("2_bkfjd")
 surface_material_override/1 = ExtResource("3_cauys")
 surface_material_override/2 = ExtResource("3_cauys")
@@ -70,17 +70,17 @@ script = ExtResource("4_ovk7q")
 
 [node name="RunoffMesh" type="MeshInstance3D" parent="." unique_id=2112300832]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_ob5ja")
+mesh = SubResource("ArrayMesh_gjv43")
 script = ExtResource("4_ovk7q")
 
 [node name="WallMesh" type="MeshInstance3D" parent="." unique_id=1066272601]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_ppi4p")
+mesh = SubResource("ArrayMesh_ob5ja")
 script = ExtResource("4_ovk7q")
 
 [node name="SupportMesh" type="MeshInstance3D" parent="." unique_id=789845966]
 unique_name_in_owner = true
-mesh = SubResource("ArrayMesh_6lxjw")
+mesh = SubResource("ArrayMesh_ppi4p")
 script = ExtResource("4_ovk7q")
 
 [node name="Start" type="Node3D" parent="." unique_id=2094316831]
