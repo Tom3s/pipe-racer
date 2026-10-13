@@ -17,6 +17,7 @@ func capture():
 		originalColor = meshMaterial.albedo_color
 
 	meshMaterial.albedo_color = Color(1, 1, 1)
+	meshMaterial.next_pass.set_shader_parameter("color", Color.WHITE)
 
 
 func release():
@@ -24,6 +25,8 @@ func release():
 
 	var meshMaterial: StandardMaterial3D = mesh.material
 	meshMaterial.albedo_color = originalColor
+	meshMaterial.next_pass.set_shader_parameter("color", originalColor)
+
 
 func getCenterPoint() -> Vector2:
 	var mesh: CSGTorus3D = get_parent().get_child(0)

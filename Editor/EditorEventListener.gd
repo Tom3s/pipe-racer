@@ -343,6 +343,7 @@ func connectSignals():
 				if ClassFunctions.getClassName(collidedObject) == "RotatorGizmo" || \
 					ClassFunctions.getClassName(collidedObject) == "TranslatorGizmo":
 					return
+				
 				rotator.disable()
 				translator.disable()
 
@@ -391,7 +392,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 				elif ClassFunctions.getClassName(collidedObject) == "PipeNode":
 					# map.lastPipeNode = collidedObject
 					currentElement = collidedObject
@@ -420,7 +420,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 
 				elif ClassFunctions.getClassName(collidedObject) == "FunctionalCheckpoint":
 					currentElement = collidedObject
@@ -430,7 +429,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 
 				elif ClassFunctions.getClassName(collidedObject) == "LedBoard":
 					currentElement = collidedObject
@@ -440,7 +438,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 
 				elif ClassFunctions.getClassName(collidedObject) == "PrismShapeDeco":
 					currentElement = collidedObject
@@ -450,7 +447,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 				elif ClassFunctions.getClassName(collidedObject) == "LightDeco":
 					currentElement = collidedObject
 					lightDecoPropertiesUI.setProperties(collidedObject.getProperties())
@@ -459,7 +455,6 @@ func connectSignals():
 					rotator.moveToNode(currentElement)
 					translator.enable()
 					translator.global_position = currentElement.global_position
-					setGizmoScale(camera.global_position)
 				else:
 					map.lastRoadElement = null
 					map.lastPipeElement = null
@@ -467,6 +462,8 @@ func connectSignals():
 					currentElement = null
 
 					setEditUIVisibility(EditUIType.NONE)
+				setGizmoScale(camera.global_position)
+				
 		elif currentEditorMode == EditorMode.DELETE:
 			var collidedObject = screenPointToRay()
 			if collidedObject == null:
@@ -1640,11 +1637,16 @@ func screenPointToRay() -> Node3D:
 	var spaceState = get_world_3d().direct_space_state
 
 	var mousePos = get_viewport().get_mouse_position()
-	var camera = get_tree().root.get_camera_3d()
+	# var camera = get_tree().root.get_camera_3d()
 	var from = camera.project_ray_origin(mousePos)
 	var to = from + camera.project_ray_normal(mousePos) * maxRaycastDistance
-	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to))
+	var gizmoRayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, 8388608))
 	
+	if gizmoRayArray.has("collider"):
+		return gizmoRayArray["collider"]
+	
+	var rayArray = spaceState.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, 4294967295 - 8388608))
+
 	if rayArray.has("collider"):
 		return rayArray["collider"]
 	return null

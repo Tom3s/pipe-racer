@@ -1,75 +1,112 @@
-[gd_scene load_steps=8 format=3 uid="uid://ca7tfdokimak7"]
+[gd_scene format=3 uid="uid://ca7tfdokimak7"]
 
-[ext_resource type="Script" path="res://Editor/Functional/Translator.gd" id="1_2vmro"]
-[ext_resource type="Script" path="res://Editor/Functional/TranslatorGizmo.gd" id="1_3fylw"]
+[ext_resource type="Script" uid="uid://cnmx33pjflaya" path="res://Editor/Functional/Translator.gd" id="1_2vmro"]
+[ext_resource type="Script" uid="uid://jd3aqvpslv43" path="res://Editor/Functional/TranslatorGizmo.gd" id="1_3fylw"]
+[ext_resource type="Shader" uid="uid://bfrsuf1v35viy" path="res://Editor/Functional/GizmoXRay.gdshader" id="3_kmr11"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_j1sl2"]
-top_radius = 3.0
-bottom_radius = 3.0
-height = 48.0
+top_radius = 2.0
+bottom_radius = 2.0
+height = 80.0
 radial_segments = 8
 rings = 1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qqhpc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kmr11"]
+render_priority = 0
+shader = ExtResource("3_kmr11")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y4qrp"]
+next_pass = SubResource("ShaderMaterial_kmr11")
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vdfsm"]
-height = 52.0
-radius = 6.0
+height = 80.0
+radius = 3.48
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d1yua"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4qrp"]
+render_priority = 0
+shader = ExtResource("3_kmr11")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jrp3"]
+next_pass = SubResource("ShaderMaterial_y4qrp")
 shading_mode = 0
 albedo_color = Color(0, 1, 0, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c1wgs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qn02b"]
+render_priority = 0
+shader = ExtResource("3_kmr11")
+shader_parameter/dither_treshold = 0.25
+shader_parameter/color = Color(0, 0, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_21bg5"]
+next_pass = SubResource("ShaderMaterial_qn02b")
 shading_mode = 0
 albedo_color = Color(0, 0, 1, 1)
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 3
 
-[node name="Translator" type="Node3D"]
+[node name="Translator" type="Node3D" unique_id=849004370]
 script = ExtResource("1_2vmro")
 
-[node name="XPos" type="StaticBody3D" parent="."]
+[node name="XPos" type="StaticBody3D" parent="." unique_id=2071902884]
 unique_name_in_owner = true
+collision_layer = 8388608
+collision_mask = 8388608
 script = ExtResource("1_3fylw")
 originalColor = Color(1, 0, 0, 1)
 
-[node name="Mesh" type="MeshInstance3D" parent="XPos"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 24, 0, 0)
+[node name="Mesh" type="MeshInstance3D" parent="XPos" unique_id=776385921]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 40, 0, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
-surface_material_override/0 = SubResource("StandardMaterial3D_qqhpc")
+surface_material_override/0 = SubResource("StandardMaterial3D_y4qrp")
 
-[node name="Collider" type="CollisionShape3D" parent="XPos"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 24, 0, 0)
+[node name="Collider" type="CollisionShape3D" parent="XPos" unique_id=1178605698]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 41, 0, 0)
 shape = SubResource("CylinderShape3D_vdfsm")
 
-[node name="YPos" type="StaticBody3D" parent="."]
+[node name="YPos" type="StaticBody3D" parent="." unique_id=2003702297]
 unique_name_in_owner = true
+collision_layer = 8388608
+collision_mask = 8388608
 script = ExtResource("1_3fylw")
 moveAxis = Vector3(0, 1, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="YPos"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, 0)
+[node name="Mesh" type="MeshInstance3D" parent="YPos" unique_id=2105531497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
-surface_material_override/0 = SubResource("StandardMaterial3D_d1yua")
+surface_material_override/0 = SubResource("StandardMaterial3D_8jrp3")
 
-[node name="Collider" type="CollisionShape3D" parent="YPos"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, 0)
+[node name="Collider" type="CollisionShape3D" parent="YPos" unique_id=1514062204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41, 0)
 shape = SubResource("CylinderShape3D_vdfsm")
 
-[node name="ZPos" type="StaticBody3D" parent="."]
+[node name="ZPos" type="StaticBody3D" parent="." unique_id=448845039]
 unique_name_in_owner = true
+collision_layer = 8388608
+collision_mask = 8388608
 script = ExtResource("1_3fylw")
 moveAxis = Vector3(0, 0, 1)
 
-[node name="Mesh" type="MeshInstance3D" parent="ZPos"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 24)
+[node name="Mesh" type="MeshInstance3D" parent="ZPos" unique_id=1818048193]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 40)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_j1sl2")
-surface_material_override/0 = SubResource("StandardMaterial3D_c1wgs")
+surface_material_override/0 = SubResource("StandardMaterial3D_21bg5")
 
-[node name="Collider" type="CollisionShape3D" parent="ZPos"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 24)
+[node name="Collider" type="CollisionShape3D" parent="ZPos" unique_id=1698997318]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 41)
 shape = SubResource("CylinderShape3D_vdfsm")
