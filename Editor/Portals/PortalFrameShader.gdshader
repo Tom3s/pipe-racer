@@ -1,4 +1,5 @@
 shader_type spatial;
+stencil_mode write, compare_always, 2;
 
 uniform vec3 base_color : source_color;
 uniform vec3 rust_color : source_color;

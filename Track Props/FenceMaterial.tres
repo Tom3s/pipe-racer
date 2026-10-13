@@ -1,7 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://domwxepyqiacb"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://domwxepyqiacb"]
 
 [ext_resource type="Shader" uid="uid://c1n0qhjmiffwc" path="res://Track Props/FenceShader.tres" id="1_c1u2c"]
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_gvk8o"]
 
 [resource]
 render_priority = 0
+next_pass = ExtResource("1_gvk8o")
 shader = ExtResource("1_c1u2c")

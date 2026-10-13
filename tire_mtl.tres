@@ -1,9 +1,11 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://8c2iujneurql"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://8c2iujneurql"]
 
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_0islg"]
 [ext_resource type="Shader" uid="uid://oi62eaxkfrry" path="res://tire.tres" id="1_5v7is"]
 
 [resource]
 resource_local_to_scene = true
 render_priority = 0
+next_pass = ExtResource("1_0islg")
 shader = ExtResource("1_5v7is")
 shader_parameter/ColorParameter = Color(0, 0.215686, 0.129412, 1)

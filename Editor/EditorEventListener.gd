@@ -5,6 +5,8 @@ class_name EditorEventListener
 @onready var prismShapeDecoScene: PackedScene = preload("res://Editor/Props/PrismShapeDeco.tscn")
 @onready var lightDecoScene: PackedScene = preload("res://Editor/Props/LightDeco.tscn")
 
+@onready var xray_material: Material = preload("res://Visuals/Level/EditorPieceXRayMaterial.tres")
+
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
 # @onready var previewElementParent: Node3D = %PreviewElement
@@ -152,6 +154,8 @@ func _ready():
 
 	camera.manual_update = true
 	carCamera.manual_update = true
+
+	set_xray_treshold(0.25)
 
 	set_physics_process(true)
 
@@ -745,6 +749,13 @@ func connectSignals():
 
 		setUIVisibility()
 		setCurrentElement()
+	)
+
+	editorSidebarUI.xray_toggled.connect(func(xray: bool):
+		if xray:
+			set_xray_treshold(0.25)
+		else: 
+			set_xray_treshold(0.0)
 	)
 
 	editorSidebarUI.trackNameChanged.connect(func(name: String):
@@ -1486,6 +1497,7 @@ func connectSignals():
 
 	
 	pauseMenu.exitPressed.connect(func():
+		set_xray_treshold(0.0)
 		# AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), oldSoundVolume)
 		if !VersionCheck.offline:
 			var signalResponse = submitEditorStats(editorStats.getObject())
@@ -1792,6 +1804,8 @@ func startTesting(
 
 	map.setIngame(true)
 
+	set_xray_treshold(0.0)
+
 	carPreview.visible = false
 
 	clearCarPath()
@@ -1811,6 +1825,8 @@ func stopTesting() -> void:
 	camera.inputEnabled = true
 
 	map.setIngame(false)
+
+	set_xray_treshold(0.25)
 
 	carPreview.visible = true
 
@@ -1846,3 +1862,7 @@ func loadMap(filePath: String) -> bool:
 		editorSidebarUI.lapCountSpinbox.value = map.lapCount
 	
 	return success
+
+func set_xray_treshold(treshold: float) -> void:
+	# xray_material.set_shader_parameter("")
+	xray_material.set_shader_parameter("dither_treshold", treshold)

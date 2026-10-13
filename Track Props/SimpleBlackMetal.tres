@@ -1,7 +1,13 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://qkyt6jjraevf"]
 
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_8s1ab"]
+
 [resource]
+next_pass = ExtResource("1_8s1ab")
 albedo_color = Color(0, 0, 0, 1)
 metallic = 0.9
 metallic_specular = 0.0
 roughness = 0.15
+stencil_mode = 3
+stencil_flags = 2
+stencil_reference = 2

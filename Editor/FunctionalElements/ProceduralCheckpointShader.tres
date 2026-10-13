@@ -106,6 +106,8 @@ operator = 2
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_tp76q"]
 
 [resource]
+stencil/enabled = true
+stencil_flags/write = true
 nodes/fragment/0/position = Vector2(1360, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_xm5rc")
 nodes/fragment/2/position = Vector2(-740, 40)

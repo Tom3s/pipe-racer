@@ -1,7 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://2i0p3tddq4mn"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://2i0p3tddq4mn"]
 
 [ext_resource type="Shader" uid="uid://b3wq1n7bq8qj7" path="res://Track Props/BoosterShader.tres" id="1_5xc5t"]
+[ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_gw3lh"]
 
 [resource]
 render_priority = 0
+next_pass = ExtResource("1_gw3lh")
 shader = ExtResource("1_5xc5t")
