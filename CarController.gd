@@ -208,7 +208,7 @@ var inFluid: Area3D = null
 var wheel_travelled_rotation: PackedFloat32Array = [0, 0, 0, 0]
 var wheel_position: PackedFloat32Array = [0, 0, 0, 0]
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	# angular_velocity = clamp(angular_velocity, -angularTerminalVelocity * Vector3.ONE, angularTerminalVelocity * Vector3.ONE)
 	if angular_velocity.x > angularTerminalVelocity || angular_velocity.x < -angularTerminalVelocity || \
 		angular_velocity.y > angularTerminalVelocity || angular_velocity.y < -angularTerminalVelocity || \
@@ -217,14 +217,14 @@ func _physics_process(_delta):
 		
 	if !paused && !shouldRespawn && !should_set_transform:
 		for tire in tires:
-			calculateTirePhysics(tire, _delta)
+			calculateTirePhysics(tire, delta)
 		#TODO: rotate wheels here
 		car_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 		if car_copy_model != null:
 			car_copy_model.rotate_wheels(wheel_travelled_rotation, tires[0].rotation.y)
 		
 		for bottomOut in bottomOuts:
-			calculateBottomOutPhysics(bottomOut, _delta)
+			calculateBottomOutPhysics(bottomOut, delta)
 		
 		car_model.place_wheels(wheel_position)
 		if car_copy_model != null:
@@ -232,7 +232,7 @@ func _physics_process(_delta):
 		#TODO: place wheels here
 
 		if inFluid != null:
-			calculateBouyancy(_delta)
+			calculateBouyancy(delta)
 			var viscosityDamping = remap(inFluid.viscosity, 0, 5, 1.0, 0.9)
 			linear_velocity *= viscosityDamping
 			angular_velocity *= viscosityDamping
@@ -292,8 +292,9 @@ func _physics_process(_delta):
 			if state.isAirborne():
 				applyAirPitch()
 				applyAirSteering()
-				slidingFactor = 0.9
-				surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
+				slidingFactor = 0.8
+				# surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
+				surfaceFriction = Util.exp_decay(surfaceFriction, 1.0, 0.01, delta)
 		
 		if shouldPause && !paused:
 			pauseLinearVelocity = linear_velocity
@@ -348,7 +349,8 @@ func calculateTirePhysics(tire: Tire, delta):
 	# 	tire.rotation.y = tire.targetRotation
 	# else:
 	# 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
-	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
+	# tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
+	tire.rotation.y = Util.exp_decay(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering, delta)
 	
 	tire.force_raycast_update()
 
