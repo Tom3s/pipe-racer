@@ -67,9 +67,9 @@ func setup(
 	freeCam.current = false
 
 	replayViewerUI.changePlayer.connect(func(player: int):
-		currentPlayerIndex = (currentPlayerIndex + player) % replayGhost.get_child_count()
+		currentPlayerIndex = (currentPlayerIndex + player) % replayGhost.get_number_of_cars()
 		if currentPlayerIndex < 0:
-			currentPlayerIndex = replayGhost.get_child_count() - 1
+			currentPlayerIndex = replayGhost.get_number_of_cars() - 1
 		var newCar = replayGhost.getCar(currentPlayerIndex)
 		camera.car = newCar
 		replayViewerUI.currentPlayer.text = newCar.playerName
@@ -117,8 +117,8 @@ func _process(delta: float) -> void:
 	freeCam._update_movement(delta)
 	camera.update_camera(delta)
 	var current_camera = get_viewport().get_camera_3d()
-		for portal: FunctionalPortal in map.portals.get_children():
-			portal.set_remote_camera(current_camera)
+	for portal: FunctionalPortal in map.portals.get_children():
+		portal.set_remote_camera(current_camera)
 
 func _physics_process(delta):
 	if replayGhost.playing:

@@ -269,6 +269,9 @@ func getCar(index: int):
 		return main.get_child(0)
 	return main.get_child(index)
 
+func get_number_of_cars():
+	return main.get_child_count()
+
 func clearReplays():
 	frameData.clear()
 	for i in main.get_child_count():
