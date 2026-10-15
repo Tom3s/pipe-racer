@@ -14,7 +14,8 @@ var camera: FollowingCamera
 
 signal exitPressed()
 
-var map: InteractiveMap
+# TODO: can't set InteractiveMap type bcuz that breaks legacy maps
+var map: Node3D
 
 func setup(
 	localReplays: Array[String],
@@ -108,12 +109,16 @@ func _ready():
 	set_physics_process(true)
 
 func _process(delta: float) -> void:
+	# TODO: this is only needed for legacy maps
+	if "portals" not in map:
+		return
+	
 	freeCam._update_mouselook()
 	freeCam._update_movement(delta)
 	camera.update_camera(delta)
 	var current_camera = get_viewport().get_camera_3d()
-	for portal: FunctionalPortal in map.portals.get_children():
-		portal.set_remote_camera(current_camera)
+		for portal: FunctionalPortal in map.portals.get_children():
+			portal.set_remote_camera(current_camera)
 
 func _physics_process(delta):
 	if replayGhost.playing:
