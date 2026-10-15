@@ -15,7 +15,6 @@ script = ExtResource("1_jn2xb")
 [node name="EditableScenery" parent="." unique_id=1366195238 instance=ExtResource("1_te75h")]
 
 [node name="DynamicSky" parent="." unique_id=2135879671 instance=ExtResource("2_p0l7o")]
-day_time = 1.4146
 
 [node name="Player" type="Node3D" parent="." unique_id=248480563]
 

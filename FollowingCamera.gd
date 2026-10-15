@@ -38,8 +38,12 @@ func setup(carReference):
 	changeCullMask(car.playerIndex)
 
 func _ready():
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
 	doppler_tracking = Camera3D.DOPPLER_TRACKING_PHYSICS_STEP
 	fov = 85
+
+	shouldUpdatePosition = true
+
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -66,12 +70,16 @@ func update_camera(delta: float) -> void:
 
 	if mode == 0:
 
-		var target = car_pos + car_y * 3 + car_z * -4
+		var target = car_pos + car_y * 2.5 + car_z * -3.5
 
 
-		global_position = lerp(global_position, target, clampf(delta * 15, 0.0, 1.0) if !shouldUpdatePosition else 1.0) # delta * 25
+		# global_position = lerp(global_position, target, clampf(delta * 15, 0.0, 1.0) if !shouldUpdatePosition else 1.0) # delta * 25
+		if shouldUpdatePosition:
+			global_position = target
+		else:
+			global_position = Util.exp_decay(global_position, target, 25, delta)
 
-		look_at(car_pos + Vector3.UP * 2, Vector3.UP)
+		look_at(car_pos + Vector3.UP * 2.3, Vector3.UP)
 	elif mode == 2:
 		global_position = car_pos + car_y * insideY + car_z * insideZ 
 		look_at(car_pos + car_y * insideTilt + car_z, car_y)
@@ -93,8 +101,6 @@ func forceUpdatePosition():
 
 func changeMode():
 	mode = (mode + 1) % 3
-	if mode == 0:
-		mode += 1
 
 	shouldUpdatePosition = true
 	if car.playerIndex < 4:

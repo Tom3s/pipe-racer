@@ -120,7 +120,7 @@ var SMOOTH_STEERING: float = 0.75:
 	set(newSmoothing):
 		# SMOOTH_STEERING = clamp(remap(newSmoothing, 0, 1, 0.99, 0.5), 0.5, 0.99)
 		SMOOTH_STEERING = newSmoothing
-		ingameSmoothSteering = clamp(remap(newSmoothing, 0, 1, 0.275, 0.04), 0.04, 0.275)
+		ingameSmoothSteering = remap(newSmoothing, 0, 1, 50, 2)
 		saveToFile()
 	get:
 		return SMOOTH_STEERING
