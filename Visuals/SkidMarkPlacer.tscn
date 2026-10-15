@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dffu3d0xrcet3"]
+
+[ext_resource type="Script" uid="uid://dfblde0yrq28p" path="res://Tracks/SkidMarkPlacer.gd" id="1_5yiwi"]
+
+[node name="SkidMarkPlacer" type="Node3D" unique_id=1514091081]
+script = ExtResource("1_5yiwi")

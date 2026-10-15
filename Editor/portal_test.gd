@@ -7,6 +7,8 @@ var current_camera: Camera3D
 @onready var free_fly_camera: Camera3D = %Camera3D
 @onready var car_copies_parent: Node3D = %CarCopies
 
+@onready var skid_mark_placer: SkidMarkPlacer = %SkidMarkPlacer
+
 var carCamera: FollowingCamera
 var state: bool = false
 
@@ -27,6 +29,25 @@ func _ready() -> void:
 	car_copies_parent.add_child(car_copy)
 	car_copy.set_frame_color(Color.PINK)
 	car_copy.visible = false
+
+	for skid_mark: SkidMark in car_controller.get_skidmarks():
+		skid_mark_placer.init_skidmark(skid_mark)
+		
+		skid_mark.new_contact_point.connect(func(last_l: Vector3, last_r: Vector3, left: Vector3, right: Vector3) -> void:
+			var should_draw: bool = car_controller.slidingFactor > 0.1 && car_controller.getSpeed() > 15
+
+			# if should_draw && !skid_mark.drawing:
+			# 	skid_mark_placer.begin_new_skidmark(skid_mark, left, right)
+			# 	skid_mark.drawing = true
+			# elif should_draw && skid_mark.drawing:
+			# 	skid_mark_placer.continue_skidmark(skid_mark, left, right)
+			# elif !should_draw && skid_mark.drawing:
+			# 	skid_mark_placer.end_skidmark(skid_mark)
+			# 	skid_mark.drawing = false
+			if should_draw:
+				skid_mark_placer.add_quad(skid_mark, last_l, last_r, left, right)
+
+		)
 
 
 func _physics_process(delta: float) -> void:

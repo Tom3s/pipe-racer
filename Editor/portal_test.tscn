@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dvesbfub7s22l" path="res://CarController.tscn" id="3_w0lpi"]
 [ext_resource type="Script" uid="uid://c6hlb2fr214mv" path="res://EditorCamera.gd" id="4_p0l7o"]
 [ext_resource type="PackedScene" uid="uid://dmi5fb8uigr35" path="res://Editor/Portals/FunctionalPortal.tscn" id="5_w0lpi"]
+[ext_resource type="PackedScene" uid="uid://dffu3d0xrcet3" path="res://Visuals/SkidMarkPlacer.tscn" id="7_k8dv1"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_jn2xb"]
 
@@ -77,4 +78,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.154991, 3.5603, 18.921364
 radius = 1.4745003
 
 [node name="CarCopies" type="Node3D" parent="." unique_id=1148469972]
+unique_name_in_owner = true
+
+[node name="SkidMarkPlacer" parent="." unique_id=1514091081 instance=ExtResource("7_k8dv1")]
 unique_name_in_owner = true

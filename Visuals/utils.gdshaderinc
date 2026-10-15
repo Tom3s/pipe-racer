@@ -1,7 +1,7 @@
 const vec3 DITHER_MAGIC_NUM = vec3(0.06711056f, 0.00583715f, 52.9829189f);
 
-void dither_transparency(float transparency, vec2 frag_coord) {
-	if (transparency < 0.001 || transparency < fract(DITHER_MAGIC_NUM.z * fract(dot(frag_coord.xy, DITHER_MAGIC_NUM.xy)))) {
+void dither_transparency(float _transparency, vec2 frag_coord) {
+	if (_transparency < 0.001 || _transparency < fract(DITHER_MAGIC_NUM.z * fract(dot(frag_coord.xy, DITHER_MAGIC_NUM.xy)))) {
 		discard;
 	}
 }
@@ -72,8 +72,8 @@ float ease_in_cubic(float x) {
 	return x * x * x;
 }
 
-void dither_noise(float transparency, vec2 frag_coord) {
-	if (transparency < 0.001 || transparency < random(frag_coord).x) {
+void dither_noise(float _transparency, vec2 frag_coord) {
+	if (_transparency < 0.001 || _transparency < random(frag_coord).x) {
 		discard;
 	}
 }

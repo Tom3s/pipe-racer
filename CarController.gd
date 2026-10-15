@@ -5,6 +5,8 @@ class_name CarController
 @onready var car_model: CuttableCarModel = %CarModel
 var car_copy_model: CuttableCarModel
 
+# @onready var skid_mark: SkidMark = %SkidMark
+
 var camera: FollowingCamera
 
 @export
@@ -815,3 +817,11 @@ func debugSkiddingRatio():
 	var text = "Sliding Factor: "
 	text += str(slidingFactor)
 	return text
+
+func get_skidmarks() -> Array[SkidMark]:
+	return [
+		%SkidMark1,
+		%SkidMark2,
+		%SkidMark3,
+		%SkidMark4,
+	]
