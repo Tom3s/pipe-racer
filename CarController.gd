@@ -379,7 +379,6 @@ func calculateTirePhysics(tire: Tire, delta):
 			useSmokeParticles = true
 		
 		if surfaceFriction < frictionMultiplier:
-			# surfaceFriction = lerp(surfaceFriction, frictionMultiplier, tireRegripSpeed)
 			surfaceFriction = Util.exp_decay(surfaceFriction, frictionMultiplier, tireRegripSpeed, delta)
 		else:
 			surfaceFriction = frictionMultiplier
@@ -505,6 +504,7 @@ func calculate_tire_grip(slipAngle: float):
 		# var positiveSlipAngle = abs(slipAngle)
 		# var lerpWeight = (-(2 * positiveSlipAngle) / PI + 1) ** 5 # non-linear decay according to slip angle
 		var lerpWeight = (-(2 * abs(slipAngle)) / PI + 1) ** 5 # non-linear decay according to slip angle
+		# TODO: touch this when rewriting physics. It's gonna get thrown out anyways
 		slidingFactor = lerp(slidingFactor, driftInput, lerpWeight * regripFactor)
 		if slidingFactor <= skiddingTreshold:
 			slidingFactor = 0

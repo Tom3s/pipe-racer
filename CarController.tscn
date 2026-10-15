@@ -106,6 +106,7 @@ properties/23/spawn = true
 properties/23/replication_mode = 1
 
 [node name="CarController" type="RigidBody3D" unique_id=1181592475]
+physics_interpolation_mode = 1
 collision_layer = 2
 collision_mask = 11
 mass = 700.0
