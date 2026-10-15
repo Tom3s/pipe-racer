@@ -25,6 +25,8 @@ var map:
 		leaderboardUI.setHeader(map.trackName, map.author)
 		pauseMenu.leaderboardButton.visible = state.ranked
 
+		has_portals = "portals" in map
+
 @onready var players: Node3D = %Players
 @onready var player_copies: Node3D = %PlayerCopies
 @onready var state: GameStateMachine = %GameStateMachine
@@ -65,6 +67,9 @@ func _ready():
 
 	connectSignals()
 
+# this is for legacy maps only
+var has_portals: bool = true
+
 func _process(delta: float) -> void:
 	var current_camera = get_viewport().get_camera_3d()
 	for playerId in localCameras.keys():
@@ -72,8 +77,9 @@ func _process(delta: float) -> void:
 		carCamera.update_camera(delta)
 		current_camera = carCamera
 
-	for portal: FunctionalPortal in map.portals.get_children():
-		portal.set_remote_camera(current_camera)
+	if has_portals:
+		for portal: FunctionalPortal in map.portals.get_children():
+			portal.set_remote_camera(current_camera)
 
 func connectSignals():
 	countdown.countdownFinished.connect(onCountdown_countdownFinished)

@@ -138,13 +138,36 @@ func initializeRace():
 	if Network.userId != 1:
 		raceNode.finishedLoading.connect(broadcastReady)
 	raceNode.exitPressed.connect(onRace_exited)
-	var success = raceNode.setup(selectedTrack, true, true)
-	if !success:
-		AlertManager.showAlert(
-			self,
-			"Error loading map",
-			"Try updating the map to the new format, or download it again"
-		)
+	var setup_result: GameScene.SetupResult = raceNode.setup(selectedTrack, true, true)
+	if setup_result != GameScene.SetupResult.SUCCESS:
+		match setup_result:
+			GameScene.SetupResult.NO_CP:
+				AlertManager.showAlert(
+					self,
+					"Error loading map",
+					"A level cannot be validated until it has at least 1 Checkpoint"
+				)
+
+			GameScene.SetupResult.NO_START:
+				AlertManager.showAlert(
+					self,
+					"Error loading map",
+					"There is no Start Line in the level"
+				)
+
+			GameScene.SetupResult.INVALID_DATA:
+				AlertManager.showAlert(
+					self,
+					"Error loading map",
+					"Level data is invalid. Level might be corrupt or uses old format"
+				)
+
+			_:
+				AlertManager.showAlert(
+					self,
+					"Error loading map",
+					"Unknown error: %s. Please report this to a developer" % str(setup_result)
+				)
 		return
 
 	if Network.playerCount == 0 && Network.userId == 1:
