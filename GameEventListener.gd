@@ -20,7 +20,8 @@ var map:
 		map = newMap
 		for checkpoint in map.getCheckpoints():
 			checkpoint.bodyEnteredCheckpoint.connect(onCheckpoint_bodyEnteredCheckpoint)
-		map.start.bodyEnteredStart.connect(onStart_bodyEnteredStart)
+		if map.start != null:
+			map.start.bodyEnteredStart.connect(onStart_bodyEnteredStart)
 		leaderboardUI.setHeader(map.trackName, map.author)
 		pauseMenu.leaderboardButton.visible = state.ranked
 
