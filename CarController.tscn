@@ -129,6 +129,7 @@ acceleration = 7.7
 passiveBraking = 0.05
 downforceMaximumSpeed = 70.0
 downForce = 100.0
+tireRegripSpeed = 5.0
 airPitchControl = 1.5
 airYawControl = 1.5
 skiddingTreshold = 0.1

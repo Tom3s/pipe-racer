@@ -345,11 +345,6 @@ var tireRegripSpeed: float = 0.05
 
 var surfaceFriction: float = 1.0
 func calculateTirePhysics(tire: Tire, delta):
-	# if GlobalProperties.PRECISE_INPUT:
-	# 	tire.rotation.y = tire.targetRotation
-	# else:
-	# 	tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, steeringSpeed)
-	# tire.rotation.y = lerp(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering)
 	tire.rotation.y = Util.exp_decay(tire.rotation.y, tire.targetRotation, GlobalProperties.ingameSmoothSteering, delta)
 	
 	tire.force_raycast_update()
@@ -384,7 +379,8 @@ func calculateTirePhysics(tire: Tire, delta):
 			useSmokeParticles = true
 		
 		if surfaceFriction < frictionMultiplier:
-			surfaceFriction = lerp(surfaceFriction, frictionMultiplier, tireRegripSpeed)
+			# surfaceFriction = lerp(surfaceFriction, frictionMultiplier, tireRegripSpeed)
+			surfaceFriction = Util.exp_decay(surfaceFriction, frictionMultiplier, tireRegripSpeed, delta)
 		else:
 			surfaceFriction = frictionMultiplier
 		
