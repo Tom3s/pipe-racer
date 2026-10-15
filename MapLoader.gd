@@ -258,4 +258,3 @@ func onUploadRequest_completed(_result: int, responseCode: int, _headers: Packed
 	var response = JSON.parse_string(body.get_string_from_utf8())
 
 	AlertManager.showAlert(self, "Success", response.name + " Uploaded Successfully", "Track ID: " + response._id) 
-

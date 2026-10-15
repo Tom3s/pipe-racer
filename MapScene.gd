@@ -745,6 +745,10 @@ func loadFromJSON(fileName: String) -> bool:
 	else:
 		author = ""
 
+	if !trackData.has("format"):
+		print("Error loading map: file has no 'format' field")
+
+		return false
 
 	if trackData["format"] != CURRENT_FORMAT_VERSION:
 		print("Error loading map: wrong format version")

@@ -12,6 +12,13 @@ var map = null
 signal exitPressed()
 signal finishedLoading()
 
+enum SetupResult {
+	SUCCESS,
+	INVALID_DATA,
+	NO_CP,
+	NO_START,
+}
+
 func setup(
 	mapName: String,
 	ranked: bool = false,
@@ -23,7 +30,7 @@ func setup(
 	totalTimePB: int = 9223372036854775807,
 	lapTimePB: int = 9223372036854775807,
 
-) -> bool:
+) -> SetupResult:
 	# load map
 	get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED 
 
@@ -48,8 +55,19 @@ func setup(
 
 			print("[GameScene.gd] Failed to load legacy format, exiting.")
 			exitPressed.emit()
-			return false
+			return SetupResult.INVALID_DATA
 
+	if map.start == null:
+		print("[GameScene.gd] No start line found in the file. Aborting play...")
+		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+		exitPressed.emit()
+		return SetupResult.NO_START
+
+	if map.getCheckpoints().size() == 0:
+		print("[GameScene.gd] No checkpoint in the file. Aborting play...")
+		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+		exitPressed.emit()
+		return SetupResult.NO_CP
 
 	map.setIngame()
 
@@ -97,7 +115,7 @@ func setup(
 	
 	finishedLoading.emit()
 
-	return true
+	return SetupResult.SUCCESS
 
 func initializePlayers():
 	%GameEventListener.clearPlayers()
