@@ -1,8 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dc5nux53vtjie"]
+[gd_scene format=3 uid="uid://dc5nux53vtjie"]
 
-[ext_resource type="Script" path="res://MapScene.gd" id="1_afyhu"]
+[ext_resource type="Script" uid="uid://dtnx2xf6s7lej" path="res://MapScene.gd" id="1_afyhu"]
 [ext_resource type="PackedScene" uid="uid://d3cy8j4irxx4d" path="res://Scenery.tscn" id="2_34d4j"]
-[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://TestTrackEnv.tscn" id="3_di0q6"]
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://Test/TestTrackEnv.tscn" id="3_di0q6"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_gccje"]
 size = Vector2(1000, 1000)

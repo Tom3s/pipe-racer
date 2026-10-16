@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dadg354a8rg6r"]
+[gd_scene format=3 uid="uid://dadg354a8rg6r"]
 
-[ext_resource type="Script" path="res://playground.gd" id="1_a7mpm"]
-[ext_resource type="Shader" uid="uid://ck5xxsg71fjjg" path="res://playground.tres" id="2_xiodi"]
+[ext_resource type="Script" uid="uid://b6yk1kjn2vcv4" path="res://Demo/playground.gd" id="1_a7mpm"]
+[ext_resource type="Shader" uid="uid://ck5xxsg71fjjg" path="res://Demo/playground.tres" id="2_xiodi"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_cfeyc"]
 size = Vector2(8, 8)

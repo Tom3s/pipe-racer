@@ -4,9 +4,11 @@ var offline = true
 
 var currentVersion = "v1.4.1"
 
+var current_build = "277"
+
 var versionCheckComplete = false
 
-signal fetchedNewestVersion(version: String)
+signal fetchedNewestVersion(version: String, build: String)
 
 func _ready():
 	theme = load("res://DarkTheme/Dark.theme")
@@ -30,7 +32,7 @@ func checkVersion():
 			"Error",
 			"Error while checking for updates. Playing in offline mode."
 		)
-		fetchedNewestVersion.emit(currentVersion)
+		fetchedNewestVersion.emit(currentVersion, current_build)
 		versionCheckComplete = true
 
 
@@ -44,7 +46,7 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 			"Error",
 			"Error while checking for updates. Playing in offline mode."
 		)
-		fetchedNewestVersion.emit(currentVersion)
+		fetchedNewestVersion.emit(currentVersion, current_build)
 		versionCheckComplete = true
 		return
 
@@ -62,7 +64,7 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 
 	offline = newestVersion != currentVersion
 
-	fetchedNewestVersion.emit(newestVersion)
+	fetchedNewestVersion.emit(newestVersion, current_build)
 
 	versionCheckComplete = true
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dtips6h3b4446"]
 
-[ext_resource type="Script" uid="uid://daw688lqc8lyd" path="res://Editor/Functional/PortalCutterTest.gd" id="1_r3g3o"]
+[ext_resource type="Script" uid="uid://daw688lqc8lyd" path="res://Test/PortalCutterTest.gd" id="1_r3g3o"]
 [ext_resource type="Material" uid="uid://dbrsm6m16it3c" path="res://carMaterial/rollcage.tres" id="2_4ewug"]
 [ext_resource type="Shader" uid="uid://bif5jhqjueh12" path="res://Editor/PortalCutterShader.gdshader" id="2_la7c2"]
 

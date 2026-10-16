@@ -1,8 +1,8 @@
 extends Node3D
 class_name GameScene
 
-@onready var Map = preload("res://MapScene.tscn")
-@onready var MapEnvironment = preload("res://TestTrackEnv.tscn")
+@onready var map_scene = preload("res://MapScene.tscn")
+# @onready var MapEnvironment = preload("res://Test/TestTrackEnv.tscn")
 
 @onready var mapScene: PackedScene = preload("res://Editor/InteractiveMap.tscn")
 
@@ -45,7 +45,7 @@ func setup(
 		print("[GameScene.gd] Trying legacy format")
 		map.queue_free()
 
-		map = Map.instantiate()
+		map = map_scene.instantiate()
 		add_child(map)
 
 		# TODO: check if map exists locally, if not, download it
