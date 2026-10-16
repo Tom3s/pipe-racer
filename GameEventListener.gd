@@ -515,6 +515,7 @@ func getTimestamp():
 
 func addPlayers(_playerDatas: Array[PlayerData], networkId: int) -> void:
 	for playerData in _playerDatas:
+		print("[GameEventListener.gd] Spawning player %s" % playerData.toJson())
 		spawnPlayer(playerData, networkId, _playerDatas.size() > 1)
 	
 	# TODO: may not be the best place for this

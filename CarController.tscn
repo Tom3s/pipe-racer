@@ -94,18 +94,6 @@ properties/18/replication_mode = 1
 properties/19/path = NodePath("../PlayernameLabel:text")
 properties/19/spawn = true
 properties/19/replication_mode = 1
-properties/20/path = NodePath("../Tires/TireFL/VisualRotation/tire-new good normals:rotation")
-properties/20/spawn = true
-properties/20/replication_mode = 1
-properties/21/path = NodePath("../Tires/TireFR/VisualRotation/tire-new good normals:rotation")
-properties/21/spawn = true
-properties/21/replication_mode = 1
-properties/22/path = NodePath("../Tires/TireBL/VisualRotation/tire-new good normals:rotation")
-properties/22/spawn = true
-properties/22/replication_mode = 1
-properties/23/path = NodePath("../Tires/TireBR/VisualRotation/tire-new good normals:rotation")
-properties/23/spawn = true
-properties/23/replication_mode = 1
 
 [node name="CarController" type="RigidBody3D" unique_id=1181592475]
 physics_interpolation_mode = 1

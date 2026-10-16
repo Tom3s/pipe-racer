@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://e356rr68lj74" path="res://EditorEventListener.gd" id="1_f0b2n"]
 [ext_resource type="Script" uid="uid://bqrpyyrtcgo0n" path="res://MapEditor.gd" id="1_h77wk"]
 [ext_resource type="PackedScene" uid="uid://dekkh255k7tti" path="res://Tracks/PrefabPropertiesUI.tscn" id="1_oo1hv"]
-[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://Test/TestTrackEnv.tscn" id="2_l42gs"]
+[ext_resource type="PackedScene" uid="uid://buuhagohaw8gr" path="res://Tracks/TestTrackEnv.tscn" id="2_l42gs"]
 [ext_resource type="Script" uid="uid://di3n25s1auygl" path="res://EditorInputHandler.gd" id="2_nlp2q"]
 [ext_resource type="PackedScene" uid="uid://c8mpq5k80nw87" path="res://Track Props/PropPropertiesUI.tscn" id="2_p5lab"]
 [ext_resource type="Script" uid="uid://c6hlb2fr214mv" path="res://EditorCamera.gd" id="3_ciak8"]
