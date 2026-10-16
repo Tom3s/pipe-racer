@@ -2,7 +2,6 @@ extends Node3D
 class_name GameScene
 
 @onready var map_scene = preload("res://MapScene.tscn")
-# @onready var MapEnvironment = preload("res://Test/TestTrackEnv.tscn")
 
 @onready var mapScene: PackedScene = preload("res://Editor/InteractiveMap.tscn")
 
@@ -120,7 +119,7 @@ func setup(
 func initializePlayers():
 	%GameEventListener.clearPlayers()
 	if Network.userId == 1:
-		for key in Network.playerDatas:
+		for key in Network.playerDatas.keys():
 			%GameEventListener.addPlayers(Network.playerDatas[key], key.to_int())
 
 func initializeLocalPlayers():

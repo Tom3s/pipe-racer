@@ -120,9 +120,13 @@ func setSurfaceMaterial(type: PhysicsSurface.SurfaceType) -> PhysicsSurface.Surf
 
 	roadMesh.set_surface_override_material(0, PhysicsSurface.materials[type])
 	roadMesh.set_surface_override_material(1, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
-	if startNode.cap || endNode.cap:
+	# if startNode.cap || endNode.cap:
+	if startNode.meshGeneratorRefs.size() <= 1 || \
+		endNode.meshGeneratorRefs.size() <= 1:
 		roadMesh.set_surface_override_material(2, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
-	if startNode.cap && endNode.cap:
+	# if startNode.cap && endNode.cap:
+	if startNode.meshGeneratorRefs.size() <= 1 && \
+		endNode.meshGeneratorRefs.size() <= 1:
 		roadMesh.set_surface_override_material(3, PhysicsSurface.materials[PhysicsSurface.SurfaceType.CONCRETE])
 
 	return type

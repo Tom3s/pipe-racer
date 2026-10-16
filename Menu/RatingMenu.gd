@@ -74,11 +74,12 @@ func loadYourRating():
 
 func onAllRatingsLoaded(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	if _responseCode != 200:
-		AlertManager.showAlert(
-			self,
-			"Error loading your rating",
-			_body.get_string_from_utf8()
-		)
+		# AlertManager.showAlert(
+		# 	self,
+		# 	"Error loading your rating",
+		# 	_body.get_string_from_utf8()
+		# )
+		print("Error loading your rating")
 		return
 	
 	var data = JSON.parse_string(_body.get_string_from_utf8())
