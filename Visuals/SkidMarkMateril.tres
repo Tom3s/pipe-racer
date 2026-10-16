@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://db1510f3qg8vh"]
+
+[ext_resource type="Shader" uid="uid://2o68tadhy77i" path="res://Visuals/SkidMarkShader.gdshader" id="1_5ymtq"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5ymtq")
+shader_parameter/color = Color(0.19076231, 0.19076234, 0.19076231, 1)
+shader_parameter/noise_scale = Vector2(10, 0.8)
+shader_parameter/noise_scale2 = Vector2(12, 1.2)
+shader_parameter/cutoff = 0.86

@@ -5,6 +5,10 @@ class_name CarController
 @onready var car_model: CuttableCarModel = %CarModel
 var car_copy_model: CuttableCarModel
 
+@onready var skid_mark_placer: SkidMarkPlacer = %SkidMarkPlacer
+
+# @onready var skid_mark: SkidMark = %SkidMark
+
 var camera: FollowingCamera
 
 @export
@@ -200,6 +204,24 @@ func _ready():
 	set_multiplayer_authority(networkId)
 
 	# state.hasControl = true
+	for skid_mark: SkidMark in get_skidmarks():
+		skid_mark_placer.init_skidmark(skid_mark)
+		
+		skid_mark.new_contact_point.connect(func(last_l: Vector3, last_r: Vector3, left: Vector3, right: Vector3) -> void:
+			var should_draw: bool = (slidingFactor > 0.1 && getSpeed() > 15) && skid_mark.touching
+
+			if should_draw && !skid_mark.drawing:
+				skid_mark_placer.init_skidmark(skid_mark)
+				skid_mark.drawing = true
+				print("[CarController.gd] Started new skidmark")
+			
+			elif should_draw && skid_mark.drawing:
+				skid_mark_placer.add_quad(skid_mark, last_l, last_r, left, right)
+			elif !should_draw && skid_mark.drawing:
+				skid_mark.drawing = false
+				print("[CarController.gd] Ended skidmark")
+
+		)
 
 	set_physics_process(true)
 
@@ -815,3 +837,11 @@ func debugSkiddingRatio():
 	var text = "Sliding Factor: "
 	text += str(slidingFactor)
 	return text
+
+func get_skidmarks() -> Array[SkidMark]:
+	return [
+		%SkidMark1,
+		%SkidMark2,
+		%SkidMark3,
+		%SkidMark4,
+	]

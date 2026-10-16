@@ -7,6 +7,8 @@ var current_camera: Camera3D
 @onready var free_fly_camera: Camera3D = %Camera3D
 @onready var car_copies_parent: Node3D = %CarCopies
 
+@onready var skid_mark_placer: SkidMarkPlacer = %SkidMarkPlacer
+
 var carCamera: FollowingCamera
 var state: bool = false
 

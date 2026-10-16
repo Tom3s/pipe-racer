@@ -9,8 +9,10 @@
 [ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
 [ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
 [ext_resource type="PlaneMesh" uid="uid://dvof0mms3yhd8" path="res://Track Props/smokeParticleMAterial.tres" id="6_obe7c"]
+[ext_resource type="PackedScene" uid="uid://wg40dsgvpetp" path="res://Visuals/SkidMark.tscn" id="8_q8rx4"]
 [ext_resource type="PackedScene" uid="uid://bjnvfde7d8cwk" path="res://CarSoundEffects.tscn" id="11_vb0oa"]
 [ext_resource type="Script" uid="uid://b0py8xxeifusi" path="res://CarStateMachine.gd" id="12_usspm"]
+[ext_resource type="PackedScene" uid="uid://dffu3d0xrcet3" path="res://Visuals/SkidMarkPlacer.tscn" id="15_6tpiy"]
 [ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
 [ext_resource type="Script" uid="uid://7s35b4uwt776" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
@@ -183,6 +185,10 @@ amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
+[node name="SkidMark1" parent="Tires/TireFL" unique_id=1868034423 instance=ExtResource("8_q8rx4")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2661007, 0)
+
 [node name="TireFR" type="RayCast3D" parent="Tires" unique_id=293198095]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, 1.5)
@@ -210,6 +216,10 @@ emitting = false
 amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
+
+[node name="SkidMark2" parent="Tires/TireFR" unique_id=1021345068 instance=ExtResource("8_q8rx4")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2661007, 0)
 
 [node name="TireBL" type="RayCast3D" parent="Tires" unique_id=243460552]
 unique_name_in_owner = true
@@ -239,6 +249,10 @@ amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
 
+[node name="SkidMark3" parent="Tires/TireBL" unique_id=92059193 instance=ExtResource("8_q8rx4")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2661007, 0)
+
 [node name="TireBR" type="RayCast3D" parent="Tires" unique_id=2044516187]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.375, -1.5)
@@ -266,6 +280,10 @@ emitting = false
 amount = 28
 process_material = ExtResource("6_clm3g")
 draw_pass_1 = SubResource("PlaneMesh_lagfo")
+
+[node name="SkidMark4" parent="Tires/TireBR" unique_id=500337479 instance=ExtResource("8_q8rx4")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2661007, 0)
 
 [node name="BottomOutFL" type="RayCast3D" parent="Tires" unique_id=686453369]
 unique_name_in_owner = true
@@ -346,6 +364,10 @@ spot_range = 256.0
 spot_attenuation = 0.37893
 spot_angle = 35.0
 spot_angle_attenuation = 0.659754
+
+[node name="SkidMarkPlacer" parent="." unique_id=1514091081 instance=ExtResource("15_6tpiy")]
+unique_name_in_owner = true
+top_level = true
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=1537521308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.109589, 0)
