@@ -1,21 +1,23 @@
 extends Node3D
 class_name SkidMarkPlacer
 
-var skid_material: ShaderMaterial = preload("res://Visuals/SkidMarkMateril.tres")
+@export
+var skid_material: ShaderMaterial = ShaderMaterial.new()
 
 var skid_dictionary: Dictionary[SkidMark, MeshInstance3D]
 var skid_array: Dictionary[MeshInstance3D, PackedVector3Array]
 
+# TODO: [perf] prune oldest skidmark arrays
 func init_skidmark(skid: SkidMark) -> void:
+	if skid_dictionary.has(skid) && skid_array[skid_dictionary[skid]].size() == 0:
+		print("[SkidMarkPlacer.gd] Skid array is already empty, no need to remake it")
+		return
+	
 	var skid_mesh: MeshInstance3D = MeshInstance3D.new()
 
 	skid_array[skid_mesh] = []
 
 	add_child(skid_mesh)
-
-	# var material: StandardMaterial3D = skid_material
-
-	# material.cull_mode = BaseMaterial3D.CULL_DISABLED
 
 	skid_mesh.material_override = skid_material
 	
@@ -24,6 +26,8 @@ func init_skidmark(skid: SkidMark) -> void:
 
 	skid_mesh.mesh = ImmediateMesh.new()
 
+
+# TODO: [perf] end surface and start new one after x quads
 func add_quad(skid: SkidMark, last_l: Vector3, last_r: Vector3, left: Vector3, right: Vector3) -> void:
 	var mesh: ImmediateMesh = skid_dictionary[skid].mesh
 

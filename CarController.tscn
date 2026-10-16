@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://wg40dsgvpetp" path="res://Visuals/SkidMark.tscn" id="8_q8rx4"]
 [ext_resource type="PackedScene" uid="uid://bjnvfde7d8cwk" path="res://CarSoundEffects.tscn" id="11_vb0oa"]
 [ext_resource type="Script" uid="uid://b0py8xxeifusi" path="res://CarStateMachine.gd" id="12_usspm"]
+[ext_resource type="PackedScene" uid="uid://dffu3d0xrcet3" path="res://Visuals/SkidMarkPlacer.tscn" id="15_6tpiy"]
 [ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
 [ext_resource type="Script" uid="uid://7s35b4uwt776" path="res://CarSynchronizer.gd" id="16_d1km7"]
 
@@ -363,6 +364,10 @@ spot_range = 256.0
 spot_attenuation = 0.37893
 spot_angle = 35.0
 spot_angle_attenuation = 0.659754
+
+[node name="SkidMarkPlacer" parent="." unique_id=1514091081 instance=ExtResource("15_6tpiy")]
+unique_name_in_owner = true
+top_level = true
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=1537521308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.109589, 0)

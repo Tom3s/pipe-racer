@@ -4,7 +4,7 @@
 
 [node name="SkidMark" type="Node3D" unique_id=1868034423]
 script = ExtResource("1_j0vnf")
-offset = 0.005
+offset = 0.05
 
 [node name="Left" type="RayCast3D" parent="." unique_id=1561961248]
 unique_name_in_owner = true

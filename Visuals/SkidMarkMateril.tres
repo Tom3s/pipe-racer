@@ -5,5 +5,7 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_5ymtq")
-shader_parameter/color = Color(0.021434637, 0.021434635, 0.021434633, 1)
-shader_parameter/transparency = 0.45
+shader_parameter/color = Color(0.19076231, 0.19076234, 0.19076231, 1)
+shader_parameter/noise_scale = Vector2(10, 0.8)
+shader_parameter/noise_scale2 = Vector2(12, 1.2)
+shader_parameter/cutoff = 0.86
