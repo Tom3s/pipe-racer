@@ -34,6 +34,7 @@ func _ready():
 func _physics_process(_delta):
 	if shouldCountdown:
 		playCountdown()
+		countingDown = true
 		shouldCountdown = false
 
 @export_range(0.0, 1.0, 0.05)
@@ -75,6 +76,7 @@ func onCountdownFinished():
 	if ingameSFX != null:
 		ingameSFX.playStartRaceSFX()
 	countdownFinished.emit(floor(Time.get_unix_time_from_system() * 1000))
+	countingDown = false
 
 func startCountdown():
 	shouldCountdown = true

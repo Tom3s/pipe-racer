@@ -2,6 +2,8 @@ extends Control
 
 var offline = true
 
+var debug_version = "v1.5"
+
 var currentVersion = "v1.4.1"
 
 var current_build = "277"
@@ -54,7 +56,9 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 	var newestVersion = bodyJson["tag_name"]
 
 	MogyiLogger.log(self, "Newest version: %s" % newestVersion)
-	MogyiLogger.log(self, "Current version: %s" % currentVersion)
+	MogyiLogger.log(self, "Current version: %s.%s" % [currentVersion, current_build])
+	if OS.is_debug_build():
+		MogyiLogger.log(self, "Displayed (in dev) version: %s.%s" % [debug_version, current_build])
 
 	offline = newestVersion != currentVersion
 
