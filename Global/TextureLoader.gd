@@ -146,5 +146,26 @@ func load_cached_texture(url: String) -> bool:
 		return false
 	
 func clear_cached_images() -> void:
+	MogyiLogger.log(self, "Clearing cached textures...")
 	for file in DirAccess.get_files_at(ONLINE_TEXTURE_PATH):  
-		DirAccess.remove_absolute(file)
+		DirAccess.remove_absolute(ONLINE_TEXTURE_PATH + "/" + file)
+	
+func get_cached_texture_size() -> float:
+	var folder_size: float = 0.0
+	var dir: DirAccess = DirAccess.open(ONLINE_TEXTURE_PATH)
+	if dir:
+		dir.list_dir_begin()
+		var file_name: String = dir.get_next()
+		while file_name != "":
+			if !file_name.ends_with(".png"): 
+				file_name = dir.get_next()
+				continue
+			
+			var full_path := "%s/%s" % [ONLINE_TEXTURE_PATH, file_name]
+			folder_size += FileAccess.get_size(full_path)
+
+			file_name = dir.get_next()
+	
+	MogyiLogger.log(self, "Total size of cached textures: %.2f MB" % (folder_size / 1024.0 / 1024.0))
+
+	return folder_size / 1024.0 / 1024.0

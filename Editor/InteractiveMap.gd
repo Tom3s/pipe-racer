@@ -531,6 +531,8 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 
 
 func importTrack(fileName: String) -> bool:
+	MogyiLogger.log(self, "Importing map %s" % fileName)
+	var start_time: int = Time.get_ticks_msec()
 	var path = fileName
 	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
 		path = "user://tracks/local/" + fileName
@@ -719,6 +721,10 @@ func importTrack(fileName: String) -> bool:
 			)
 
 	fileHandler.close()
+
+	var end_time := Time.get_ticks_msec()
+
+	MogyiLogger.log(self, "Successfully imported track. Took %d ms" % (end_time - start_time))
 
 	return true
 

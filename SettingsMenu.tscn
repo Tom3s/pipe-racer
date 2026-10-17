@@ -1,12 +1,12 @@
-[gd_scene load_steps=33 format=3 uid="uid://q0icvxyovnsr"]
+[gd_scene format=3 uid="uid://q0icvxyovnsr"]
 
 [ext_resource type="FontFile" uid="uid://r7guvh1d66vn" path="res://Theme/HyperSuperItalic.ttf" id="1_6foeu"]
 [ext_resource type="FontFile" uid="uid://dckyut1557c7h" path="res://DarkTheme/Fonts/Ubuntu-L.ttf" id="1_yskjr"]
-[ext_resource type="Script" path="res://SettingsMenu.gd" id="2_7exx8"]
+[ext_resource type="Script" uid="uid://cglur7np211cs" path="res://SettingsMenu.gd" id="2_7exx8"]
 [ext_resource type="StyleBox" uid="uid://dl3aukcscpak1" path="res://Menu/PaddedPanel.tres" id="3_e7j8m"]
 [ext_resource type="StyleBox" uid="uid://bf45466abjstu" path="res://Menu/DefaultPanel.tres" id="3_lrfj4"]
 [ext_resource type="PackedScene" uid="uid://m0ulbe340r3v" path="res://Menu/RebindMenu.tscn" id="4_1eqkh"]
-[ext_resource type="Script" path="res://Menu/GamepadTabController.gd" id="5_isldy"]
+[ext_resource type="Script" uid="uid://djdijws1bab8u" path="res://Menu/GamepadTabController.gd" id="5_isldy"]
 [ext_resource type="Shortcut" uid="uid://lkdbo436rr3x" path="res://BackShortcut.tres" id="8_02jec"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl3p0"]
@@ -100,7 +100,7 @@ shadow_color = Color(0.184314, 0.352941, 0.12549, 1)
 shadow_size = 1
 shadow_offset = Vector2(2, 2)
 
-[sub_resource type="Image" id="Image_5g7xh"]
+[sub_resource type="Image" id="Image_7fud2"]
 data = {
 "data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 18, 253, 253, 253, 99, 255, 255, 255, 156, 254, 254, 254, 183, 254, 254, 254, 183, 255, 255, 255, 156, 255, 255, 255, 98, 255, 255, 255, 16, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 254, 254, 254, 182, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 181, 251, 251, 251, 62, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 255, 255, 255, 61, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 18, 254, 254, 254, 182, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 180, 255, 255, 255, 15, 255, 255, 255, 0, 255, 255, 255, 0, 253, 253, 253, 99, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 253, 253, 253, 96, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 156, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 255, 255, 255, 153, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 183, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 182, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 183, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 182, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 158, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 154, 255, 255, 255, 0, 255, 255, 255, 0, 253, 253, 253, 100, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 253, 253, 253, 96, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 17, 254, 254, 254, 181, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 180, 255, 255, 255, 15, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 251, 251, 251, 62, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 190, 251, 251, 251, 59, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 61, 254, 254, 254, 181, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 191, 254, 254, 254, 180, 251, 251, 251, 59, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 16, 255, 255, 255, 97, 254, 254, 254, 155, 254, 254, 254, 183, 254, 254, 254, 181, 254, 254, 254, 154, 253, 253, 253, 96, 255, 255, 255, 15, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
 "format": "RGBA8",
@@ -110,9 +110,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_kvmig"]
-image = SubResource("Image_5g7xh")
+image = SubResource("Image_7fud2")
 
-[sub_resource type="Image" id="Image_fmef1"]
+[sub_resource type="Image" id="Image_qx6hv"]
 data = {
 "data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 9, 255, 255, 255, 49, 255, 255, 255, 77, 255, 255, 255, 90, 255, 255, 255, 90, 255, 255, 255, 77, 255, 255, 255, 49, 255, 255, 255, 8, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 32, 255, 255, 255, 90, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 89, 255, 255, 255, 31, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 32, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 30, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 9, 255, 255, 255, 90, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 89, 255, 255, 255, 8, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 49, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 47, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 77, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 76, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 90, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 90, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 90, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 90, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 78, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 76, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 49, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 47, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 9, 255, 255, 255, 89, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 89, 255, 255, 255, 7, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 31, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 29, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 30, 255, 255, 255, 89, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 94, 255, 255, 255, 89, 255, 255, 255, 29, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 8, 255, 255, 255, 48, 255, 255, 255, 77, 255, 255, 255, 90, 255, 255, 255, 89, 255, 255, 255, 76, 255, 255, 255, 47, 255, 255, 255, 7, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
 "format": "RGBA8",
@@ -122,9 +122,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_5me6p"]
-image = SubResource("Image_fmef1")
+image = SubResource("Image_qx6hv")
 
-[sub_resource type="Image" id="Image_w8xe2"]
+[sub_resource type="Image" id="Image_252gt"]
 data = {
 "data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 23, 255, 255, 255, 131, 254, 254, 254, 208, 254, 254, 254, 243, 254, 254, 254, 243, 254, 254, 254, 208, 255, 255, 255, 130, 255, 255, 255, 21, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 85, 254, 254, 254, 242, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 241, 255, 255, 255, 82, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 85, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255, 255, 255, 81, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 23, 254, 254, 254, 242, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 240, 255, 255, 255, 20, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 131, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255, 255, 255, 127, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 208, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 204, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 243, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 242, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 244, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 242, 255, 255, 255, 0, 255, 255, 255, 0, 254, 254, 254, 210, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 205, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 132, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255, 255, 255, 127, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 22, 254, 254, 254, 241, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 239, 255, 255, 255, 19, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 82, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 253, 255, 255, 255, 78, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 81, 254, 254, 254, 241, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 239, 255, 255, 255, 78, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 21, 255, 255, 255, 129, 254, 254, 254, 206, 254, 254, 254, 243, 254, 254, 254, 241, 254, 254, 254, 205, 255, 255, 255, 127, 255, 255, 255, 19, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
 "format": "RGBA8",
@@ -134,9 +134,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_oydg3"]
-image = SubResource("Image_w8xe2")
+image = SubResource("Image_252gt")
 
-[sub_resource type="Image" id="Image_md2qj"]
+[sub_resource type="Image" id="Image_kqhgn"]
 data = {
 "data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 64, 255, 255, 255, 64, 255, 255, 255, 0),
 "format": "RGBA8",
@@ -146,7 +146,7 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_y5bqj"]
-image = SubResource("Image_md2qj")
+image = SubResource("Image_kqhgn")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_odd67"]
 content_margin_left = 4.0
@@ -230,7 +230,7 @@ LineEdit/fonts/font = ExtResource("1_yskjr")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_ef7yk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_w5lrt")
 
-[node name="SettingsMenu" type="Control"]
+[node name="SettingsMenu" type="Control" unique_id=1523728340]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,7 +243,7 @@ script = ExtResource("2_7exx8")
 fixedPedalAccelAxis = 4
 fixedPedalBreakAxis = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=669240896]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -258,13 +258,13 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=286188194]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1511443596]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(550, 560)
 layout_mode = 2
@@ -274,23 +274,24 @@ current_tab = 2
 clip_tabs = false
 script = ExtResource("5_isldy")
 
-[node name="Audio" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+[node name="Audio" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=681706798]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
+metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Audio"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Audio" unique_id=385329155]
 layout_mode = 2
 
-[node name="Master" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
+[node name="Master" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=608729688]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master" unique_id=1437464903]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Master Volume"
 
-[node name="MasterVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master"]
+[node name="MasterVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Master" unique_id=1247261631]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -300,14 +301,14 @@ focus_neighbor_top = NodePath("../../SFX/SFXVolumeSlider")
 focus_neighbor_bottom = NodePath("../../Music/MusicVolumeSlider")
 value = 100.0
 
-[node name="Music" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
+[node name="Music" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=305526611]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music" unique_id=554761874]
 layout_mode = 2
 text = "Music"
 
-[node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music"]
+[node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/Music" unique_id=1430747471]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -317,14 +318,14 @@ focus_neighbor_top = NodePath("../../Master/MasterVolumeSlider")
 focus_neighbor_bottom = NodePath("../../SFX/SFXVolumeSlider")
 value = 100.0
 
-[node name="SFX" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer"]
+[node name="SFX" type="HBoxContainer" parent="VBoxContainer/TabContainer/Audio/VBoxContainer" unique_id=1295940767]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX" unique_id=618586735]
 layout_mode = 2
 text = "Sound Effects"
 
-[node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX"]
+[node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/TabContainer/Audio/VBoxContainer/SFX" unique_id=1879440787]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -334,15 +335,16 @@ focus_neighbor_top = NodePath("../../Music/MusicVolumeSlider")
 focus_neighbor_bottom = NodePath("../../Master/MasterVolumeSlider")
 value = 100.0
 
-[node name="Graphics" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+[node name="Graphics" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=816473426]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
+metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Graphics"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Graphics" unique_id=1891723182]
 layout_mode = 2
 
-[node name="FullscreenButton" type="Button" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer"]
+[node name="FullscreenButton" type="Button" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer" unique_id=1981971211]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -350,36 +352,37 @@ focus_neighbor_top = NodePath("../HBoxContainer/RenderQuality")
 focus_neighbor_bottom = NodePath("../HBoxContainer/RenderQuality")
 text = "Toggle Fullscreen"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer" unique_id=1676856714]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer" unique_id=1068893183]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Render Quality"
 
-[node name="RenderQuality" type="OptionButton" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer"]
+[node name="RenderQuality" type="OptionButton" parent="VBoxContainer/TabContainer/Graphics/VBoxContainer/HBoxContainer" unique_id=1613045949]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_top = NodePath("../../FullscreenButton")
 focus_neighbor_bottom = NodePath("../../FullscreenButton")
 
-[node name="Misc" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+[node name="Misc" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=586552196]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
+metadata/_tab_index = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Misc"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Misc" unique_id=1653533857]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=345183513]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2" unique_id=1461890679]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Fix Pedal Input"
 
-[node name="FixPedalInput" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2"]
+[node name="FixPedalInput" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer2" unique_id=893069054]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -388,15 +391,15 @@ size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../HBoxContainer4/SmoothSteeringSlider")
 focus_neighbor_bottom = NodePath("../../HBoxContainer5/CompareAgainstBestLap")
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=855803820]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5" unique_id=1394837581]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Compare Split Against Best Lap"
 
-[node name="CompareAgainstBestLap" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5"]
+[node name="CompareAgainstBestLap" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer5" unique_id=828712893]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -405,17 +408,17 @@ size_flags_vertical = 4
 focus_neighbor_top = NodePath("../../HBoxContainer2/FixPedalInput")
 focus_neighbor_bottom = NodePath("../../HBoxContainer3/DeadzoneSlider")
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=487121836]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer7"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer7" unique_id=749131369]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "The current implementation of ghosts may cause lag even on higher end hardware. If experiencing lag, turn this off."
 mouse_filter = 1
 text = "Show Ghosts (slow performance)"
 
-[node name="ShowGhostsToggle" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer7"]
+[node name="ShowGhostsToggle" type="CheckBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer7" unique_id=1161728191]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -425,15 +428,15 @@ tooltip_text = "The current implementation of ghosts may cause lag even on highe
 focus_neighbor_top = NodePath("../../HBoxContainer2/FixPedalInput")
 focus_neighbor_bottom = NodePath("../../HBoxContainer3/DeadzoneSlider")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=259694968]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3" unique_id=1096944369]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Deadzone"
 
-[node name="DeadzoneSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
+[node name="DeadzoneSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3" unique_id=1288961769]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
@@ -443,7 +446,7 @@ max_value = 0.5
 step = 0.01
 value = 0.1
 
-[node name="DeadzoneSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3"]
+[node name="DeadzoneSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer3" unique_id=1220821298]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_left = NodePath("../DeadzoneSlider")
@@ -454,10 +457,10 @@ step = 0.01
 value = 0.1
 custom_arrow_step = 0.05
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=1924267427]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4" unique_id=44966889]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -467,7 +470,7 @@ For Gamepad, lower values (0.0-0.2) correspond to a more precise experience
 mouse_filter = 1
 text = "Smooth Steering"
 
-[node name="SmoothSteeringSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
+[node name="SmoothSteeringSlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4" unique_id=599382429]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
@@ -482,7 +485,7 @@ max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="SmoothSteeringSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4"]
+[node name="SmoothSteeringSpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer4" unique_id=1288541808]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -497,10 +500,10 @@ step = 0.01
 value = 0.1
 custom_arrow_step = 0.05
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=619659758]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6" unique_id=2001580700]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -510,7 +513,7 @@ For Gamepad, lower values (0.0-0.2) correspond to a more precise experience
 mouse_filter = 1
 text = "Mouse Sensitivity"
 
-[node name="SensitivitySlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6"]
+[node name="SensitivitySlider" type="HSlider" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6" unique_id=545599070]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 25)
 layout_mode = 2
@@ -526,7 +529,7 @@ max_value = 25.0
 step = 0.01
 value = 20.0
 
-[node name="SensitivitySpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6"]
+[node name="SensitivitySpinbox" type="SpinBox" parent="VBoxContainer/TabContainer/Misc/VBoxContainer/HBoxContainer6" unique_id=427964333]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Will make the front wheels turn smoothly.
@@ -542,15 +545,27 @@ step = 0.01
 value = 20.0
 custom_arrow_step = 0.25
 
-[node name="Controls" type="PanelContainer" parent="VBoxContainer/TabContainer"]
+[node name="ClearCacheButton" type="Button" parent="VBoxContainer/TabContainer/Misc/VBoxContainer" unique_id=1359316373]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "All online textures (profile pictures, Custom Level texture, etc.) are downloaded and cached for faster loading times.
+This takes up storage space.
+Use this to clear all downloaded textures."
+focus_neighbor_top = NodePath("../HBoxContainer/RenderQuality")
+focus_neighbor_bottom = NodePath("../HBoxContainer/RenderQuality")
+text = "Clear Texture Cache (0.0 MB)"
+
+[node name="Controls" type="PanelContainer" parent="VBoxContainer/TabContainer" unique_id=1053258629]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_e7j8m")
+metadata/_tab_index = 3
 
-[node name="RebindMenu" parent="VBoxContainer/TabContainer/Controls" instance=ExtResource("4_1eqkh")]
+[node name="RebindMenu" parent="VBoxContainer/TabContainer/Controls" unique_id=250827478 instance=ExtResource("4_1eqkh")]
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="VBoxContainer"]
+[node name="CloseButton" type="Button" parent="VBoxContainer" unique_id=1177754842]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2
