@@ -14,7 +14,7 @@ var PLAYER_NAME: String = "Player" + str(randi() % 1000):
 var PLAYER_PASSWORD: String = "":
 	set(newPassword):
 		PLAYER_PASSWORD = newPassword
-		saveToFile()
+		storePW()
 	get:
 		return PLAYER_PASSWORD
 
@@ -205,10 +205,12 @@ var USER_ID: String = "":
 
 
 const SAVE_FILE := "user://player.json"
+const PW_FILE := "user://auth.file"
 
 
 func _ready() -> void:
 	loadFromFile()
+	loadPW()
 	playerSelectorNode = playerSelectorMenu.instantiate()
 	# playerSelectorMenu.visible = false
 	add_child(playerSelectorNode)
@@ -236,7 +238,7 @@ func onPlayerColorChanged(newColor: Color) -> Color:
 func saveToFile() -> void:
 	var jsonData = {
 		"PLAYER_NAME": PLAYER_NAME,
-		"PLAYER_PASSWORD": PLAYER_PASSWORD,
+		# "PLAYER_PASSWORD": PLAYER_PASSWORD,
 		"PLAYER_COLOR": PLAYER_COLOR.to_html(),
 		"MASTER_VOLUME": MASTER_VOLUME,
 		"MUSIC_VOLUME": MUSIC_VOLUME,
@@ -260,16 +262,24 @@ func saveToFile() -> void:
 	var file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
 	file.store_string(jsonText)
 
+	MogyiLogger.log(self, "Stored player data")
+
 func loadFromFile() -> void:
+	MogyiLogger.log(self, "Loading player data")
 	if FileAccess.file_exists(SAVE_FILE):
 		var file = FileAccess.open(SAVE_FILE, FileAccess.READ)
 		var jsonText = file.get_as_text()
 		var jsonData = JSON.parse_string(jsonText)
 
+		if jsonData == null:
+			MogyiLogger.log(self, "Error parsing player save JSON", MogyiLogger.Severity.ERROR)
+			saveToFile()
+			return
+
 		if jsonData.has("PLAYER_NAME"):
 			PLAYER_NAME = jsonData["PLAYER_NAME"]
-		if jsonData.has("PLAYER_PASSWORD"):
-			PLAYER_PASSWORD = jsonData["PLAYER_PASSWORD"]
+		# if jsonData.has("PLAYER_PASSWORD"):
+		# 	PLAYER_PASSWORD = jsonData["PLAYER_PASSWORD"]
 		if jsonData.has("PLAYER_COLOR"):
 			PLAYER_COLOR = Color.html(jsonData["PLAYER_COLOR"])
 		if jsonData.has("MASTER_VOLUME"):
@@ -302,12 +312,31 @@ func loadFromFile() -> void:
 			SHOW_GHOSTS_INGAME = bool(jsonData["SHOW_GHOSTS_INGAME"])
 		if jsonData.has("MOUSE_SENSITIVITY"):
 			MOUSE_SENSITIVITY = float(jsonData["MOUSE_SENSITIVITY"])
+
 	else:
 		saveToFile()
+
+func storePW() -> void:
+	var file = FileAccess.open_encrypted_with_pass(PW_FILE, FileAccess.WRITE, Util.get_device_pass())
+	file.store_string(PLAYER_PASSWORD)
+
+	MogyiLogger.log(self, "Stored encrypted PW")
+
+
+func loadPW() -> void:
+	MogyiLogger.log(self, "Loading encrypted PW")
+	
+	if FileAccess.file_exists(PW_FILE):
+		var file = FileAccess.open_encrypted_with_pass(PW_FILE, FileAccess.READ, Util.get_device_pass())
+		PLAYER_PASSWORD = file.get_as_text()
+	else:
+		storePW()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		saveToFile()
+		storePW()
+
 
 var settingsMenuNode: Node
 var settingsMenuOwner: Node

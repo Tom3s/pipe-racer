@@ -10,7 +10,7 @@ var skid_array: Dictionary[MeshInstance3D, PackedVector3Array]
 # TODO: [perf] prune oldest skidmark arrays
 func init_skidmark(skid: SkidMark) -> void:
 	if skid_dictionary.has(skid) && skid_array[skid_dictionary[skid]].size() == 0:
-		print("[SkidMarkPlacer.gd] Skid array is already empty, no need to remake it")
+		MogyiLogger.log(self, "Skid array is already empty, no need to remake it")
 		return
 	
 	var skid_mesh: MeshInstance3D = MeshInstance3D.new()
