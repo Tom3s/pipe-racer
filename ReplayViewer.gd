@@ -109,13 +109,16 @@ func _ready():
 	set_physics_process(true)
 
 func _process(delta: float) -> void:
+	# my dumbass put these after the portal check
+	# -> legacy replays didn't work
+	freeCam._update_mouselook()
+	freeCam._update_movement(delta)
+	camera.update_camera(delta)
+
 	# TODO: this is only needed for legacy maps
 	if "portals" not in map:
 		return
 	
-	freeCam._update_mouselook()
-	freeCam._update_movement(delta)
-	camera.update_camera(delta)
 	var current_camera = get_viewport().get_camera_3d()
 	for portal: FunctionalPortal in map.portals.get_children():
 		portal.set_remote_camera(current_camera)
