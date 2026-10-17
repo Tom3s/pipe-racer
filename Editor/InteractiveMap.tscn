@@ -12,6 +12,7 @@ unique_name_in_owner = true
 
 [node name="DynamicSky" parent="." unique_id=124858897 instance=ExtResource("2_d55jv")]
 unique_name_in_owner = true
+day_time = 21.0137
 
 [node name="RoadElements" type="Node3D" parent="." unique_id=1895864997]
 unique_name_in_owner = true

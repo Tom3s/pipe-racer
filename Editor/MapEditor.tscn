@@ -212,3 +212,8 @@ script = ExtResource("3_yc3pc")
 [node name="EditorEventListener" type="Node3D" parent="." unique_id=2080632892]
 unique_name_in_owner = true
 script = ExtResource("4_miouu")
+
+[node name="FullBright" type="DirectionalLight3D" parent="." unique_id=1264275883]
+unique_name_in_owner = true
+transform = Transform3D(0.99133354, -0.030667521, -0.12773938, 0.13136913, 0.23142228, 0.9639429, 0, -0.9723699, 0.23344542, 0, 0, 0)
+sky_mode = 1

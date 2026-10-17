@@ -6,6 +6,7 @@ class_name EditorEventListener
 @onready var lightDecoScene: PackedScene = preload("res://Editor/Props/LightDeco.tscn")
 
 @onready var xray_material: Material = preload("res://Visuals/Level/EditorPieceXRayMaterial.tres")
+@onready var full_bright: DirectionalLight3D = %FullBright
 
 @onready var inputHandler: EditorInputHandler = %EditorInputHandler
 @onready var camera: EditorCamera = %EditorCamera
@@ -156,6 +157,8 @@ func _ready():
 	carCamera.manual_update = true
 
 	set_xray_treshold(0.25)
+
+	full_bright.visible = false
 
 	set_physics_process(true)
 
@@ -753,6 +756,10 @@ func connectSignals():
 			set_xray_treshold(0.25)
 		else: 
 			set_xray_treshold(0.0)
+	)
+
+	editorSidebarUI.full_bright_toggled.connect(func(fullbright_visible: bool):
+		full_bright.visible = fullbright_visible
 	)
 
 	editorSidebarUI.trackNameChanged.connect(func(name: String):
@@ -1804,6 +1811,8 @@ func startTesting(
 
 	set_xray_treshold(0.0)
 
+	full_bright.visible = false
+
 	carPreview.visible = false
 
 	clearCarPath()
@@ -1824,7 +1833,12 @@ func stopTesting() -> void:
 
 	map.setIngame(false)
 
-	set_xray_treshold(0.25)
+	if editorSidebarUI.xray_toggle.button_pressed:
+		set_xray_treshold(0.25)
+	else:
+		set_xray_treshold(0.0)
+
+	full_bright.visible = editorSidebarUI.full_bright_toggle.button_pressed
 
 	carPreview.visible = true
 
