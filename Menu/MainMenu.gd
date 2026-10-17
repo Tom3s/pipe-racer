@@ -49,9 +49,14 @@ func _ready():
 	
 	GlobalProperties.mainPlayerPanel.reparent(statsContainer)
 
-	%VersionLabel.text = "Version: %s (build %s)" % [
-		VersionCheck.currentVersion, VersionCheck.current_build
-	]
+	if !OS.is_debug_build():
+		%VersionLabel.text = "Version: %s.%s" % [
+			VersionCheck.currentVersion, VersionCheck.current_build
+		]
+	else:
+		%VersionLabel.text = "Version: %s.%s" % [
+			VersionCheck.debug_version, VersionCheck.current_build
+		]
 
 	statsButton.visible = false
 

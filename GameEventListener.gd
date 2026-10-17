@@ -161,7 +161,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = -1
 			pauseMenu.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-		elif state.pausedBy == -1 && state.raceStarted:
+		elif state.pausedBy == -1: # && state.raceStarted: shouldnt need to check pause when online
 			for player in players.get_children():
 				player = player as CarController
 				if player.networkId == Network.userId:
@@ -191,7 +191,7 @@ func onRaceInputHandler_pausePressed(playerIndex: int):
 			state.pausedBy = -1
 			pauseMenu.visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-		elif state.pausedBy == -1 && state.raceStarted:
+		elif state.pausedBy == -1 && (state.raceStarted || !countdown.countingDown):
 			var timestamp = floor(getTimestamp())
 			for player in players.get_children():
 				player = player as CarController
@@ -318,11 +318,18 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		MogyiLogger.log(self, "Total Time: %s" % IngameHUD.getTimeStringFromTicks(totalTime))
 
 func onCar_isResetting(playerIndex: int, resetting: bool, networkId: int) -> void:
+	if countdown.countingDown:
+		var car: CarController = players.get_child(playerIndex)
+		car.state.isResetting = false
+		return 
+
+	if resetting && (!state.raceStarted || countdown.countingDown):
+		return
 	rpc("broadcastReset", playerIndex, resetting, networkId)
 
 @rpc("any_peer", "call_local", "reliable")
 func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
-	if !state.raceStarted || (state.pausedBy != -1 && !state.online):
+	if (!state.raceStarted || countdown.countingDown) || (state.pausedBy != -1 && !state.online):
 		return
 	state.setPlayerReset(playerIndex, resetting)
 	if networkId == Network.userId:
