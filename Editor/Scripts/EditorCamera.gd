@@ -26,7 +26,7 @@ var _e = false
 var _shift = false
 var _alt = false
 
-
+signal mouseJustCaptured()
 signal mouseCaptureExited()
 signal positionChanged(position: Vector3)
 
@@ -34,7 +34,7 @@ func _ready():
 	global_position = Vector3.UP * 128
 
 var inputEnabled = true
-func _unhandled_input(event):
+func _input(event):
 	if !inputEnabled:
 		return
 	# Receives mouse motion
@@ -44,9 +44,16 @@ func _unhandled_input(event):
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if Input.is_action_pressed("editor_look_around") else Input.MOUSE_MODE_VISIBLE)
 	mouseCaptured = Input.is_action_pressed("editor_look_around")
 
+	if mouseCaptured:
+		mouseJustCaptured.emit()
+
 	if Input.is_action_just_released("editor_look_around"):
 		mouseCaptureExited.emit()
 
+func _unhandled_input(_event: InputEvent) -> void:
+	if !inputEnabled:
+		return
+	
 	_w = Input.is_action_pressed("editor_move_forward")
 	_s = Input.is_action_pressed("editor_move_backward")
 	_a = Input.is_action_pressed("editor_move_left")
@@ -94,7 +101,7 @@ func _update_movement(delta):
 		_velocity.x = clamp(_velocity.x + offset.x, -_vel_multiplier, _vel_multiplier)
 		_velocity.y = clamp(_velocity.y + offset.y, -_vel_multiplier, _vel_multiplier)
 		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
-	
+
 		if !mouseCaptured:
 			# # Change velocity here to not move on global y axis
 			# ...
@@ -102,6 +109,7 @@ func _update_movement(delta):
 			var globalVelocity = global_transform.basis * _velocity
 			globalVelocity.y = 0
 			global_position += globalVelocity * delta * speed_multi
+			positionChanged.emit(global_position)
 			return 
 
 		translate(_velocity * delta * speed_multi)

@@ -1515,6 +1515,9 @@ func connectSignals():
 		setGizmoScale(value)
 	)
 
+	camera.mouseJustCaptured.connect(reset_focus)
+	camera.positionChanged.connect(func(_sink: Vector3): reset_focus())
+
 func saveTrack():
 		map.exportTrack()
 
@@ -1694,11 +1697,11 @@ const ROTATION_SNAP = deg_to_rad(5)
 var rotateTreshold: float = 5
 
 @export
-var MOVE_SPEED: float = 1
+var MOVE_SPEED: float = .5
 
 const MOVE_SNAP = PrefabConstants.GRID_SIZE
 
-var moveTreshold: float = 5
+var moveTreshold: float = 10
 
 func handleMouseMovement(mousePos: Vector2):
 	if capturedGizmo == null:
@@ -1878,3 +1881,6 @@ func loadMap(filePath: String) -> bool:
 func set_xray_treshold(treshold: float) -> void:
 	# xray_material.set_shader_parameter("")
 	xray_material.set_shader_parameter("dither_treshold", treshold)
+
+func reset_focus() -> void:
+	get_viewport().gui_release_focus()
