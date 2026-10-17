@@ -31,7 +31,7 @@ var mousePos2D: Vector2 = Vector2()
 var angleSnap: float = deg_to_rad(5)
 
 var scrollCooldown: float = 0.0
-var scrollCooldownTime: float = 0.083
+var scrollCooldownTime: float = 0.0 # 0.083
 
 var editorMode: EditorEventListener.EditorMode = EditorEventListener.EditorMode.BUILD
 
@@ -46,6 +46,46 @@ func _physics_process(delta):
 	scrollCooldown -= delta
 
 func _unhandled_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if editorMode == EditorEventListener.EditorMode.BUILD || \
+			editorMode == EditorEventListener.EditorMode.SCENERY || \
+			editorMode == EditorEventListener.EditorMode.DELETE || \
+			editorMode == EditorEventListener.EditorMode.PAINT || \
+			editorMode == EditorEventListener.EditorMode.TEST:
+			if Input.is_action_just_pressed("editor_place"):
+				placePressed.emit()
+		
+		elif editorMode == EditorEventListener.EditorMode.EDIT:
+			if Input.is_action_just_pressed("editor_place"):
+				clickStarted.emit()
+				placePressed.emit()
+			elif Input.is_action_just_released("editor_place"):
+				clickEnded.emit()
+
+	if editorMode == EditorEventListener.EditorMode.BUILD:
+		var newMousePos: Vector2 = get_viewport().get_mouse_position()
+		if !Input.is_action_pressed("editor_look_around") && (mousePos2D != newMousePos || lastGridHeight != currentGridHeight):
+			mousePos2D = newMousePos
+			mouseMovedTo.emit(onScreenMousePosToGridIntersect())
+
+	elif editorMode == EditorEventListener.EditorMode.SCENERY:
+		if !Input.is_action_pressed("editor_look_around"):
+			mouseMovedTo_Scenery.emit(screenPointToRay_Scenery(), Input.is_action_pressed("editor_place"))
+
+
+	elif editorMode == EditorEventListener.EditorMode.EDIT:
+		if !Input.is_action_pressed("editor_look_around") && Input.is_action_pressed("editor_place"):
+			mouseMovedOnScreen.emit(get_viewport().get_mouse_position())
+
+	
+
+	
+	elif editorMode == EditorEventListener.EditorMode.TEST:
+		if !Input.is_action_pressed("editor_look_around"):
+			mouseMovedOnScreen.emit(Vector2.ZERO)
+	
+
+func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("p1_pause"):
 		if editorMode == EditorEventListener.EditorMode.TEST && carTestDriving:
 			stopTestingPressed.emit()
@@ -54,11 +94,6 @@ func _unhandled_input(event: InputEvent):
 	
 
 	if editorMode == EditorEventListener.EditorMode.BUILD:
-		var newMousePos: Vector2 = get_viewport().get_mouse_position()
-		if !Input.is_action_pressed("editor_look_around") && (mousePos2D != newMousePos || lastGridHeight != currentGridHeight):
-			mousePos2D = newMousePos
-			mouseMovedTo.emit(onScreenMousePosToGridIntersect())
-		
 		if Input.is_action_just_pressed("editor_rotate_right"):
 			rotatePressed.emit(Vector3.UP, -angleSnap)
 		elif Input.is_action_just_pressed("editor_tilt_right"):
@@ -92,28 +127,9 @@ func _unhandled_input(event: InputEvent):
 		if Input.is_action_just_pressed("editor_reset_rotation"):
 			resetRotationPressed.emit()
 
-		if Input.is_action_just_pressed("editor_place"):
-			placePressed.emit()
-
-
-	elif editorMode == EditorEventListener.EditorMode.SCENERY:
-		if !Input.is_action_pressed("editor_look_around"):
-			mouseMovedTo_Scenery.emit(screenPointToRay_Scenery(), Input.is_action_pressed("editor_place"))
-
-		if Input.is_action_just_pressed("editor_place"):
-			placePressed.emit()
 
 
 	elif editorMode == EditorEventListener.EditorMode.EDIT:
-		if !Input.is_action_pressed("editor_look_around") && Input.is_action_pressed("editor_place"):
-			mouseMovedOnScreen.emit(get_viewport().get_mouse_position())
-
-		if Input.is_action_just_pressed("editor_place"):
-			clickStarted.emit()
-			placePressed.emit()
-		elif Input.is_action_just_released("editor_place"):
-			clickEnded.emit()
-		
 		if Input.is_action_just_pressed("editor_rotate_right"):
 			rotatePressed.emit(Vector3.UP, -angleSnap)
 		elif Input.is_action_just_pressed("editor_tilt_right"):
@@ -131,22 +147,8 @@ func _unhandled_input(event: InputEvent):
 			rotatePressed.emit(Vector3.RIGHT, angleSnap)
 	
 
-	elif editorMode == EditorEventListener.EditorMode.DELETE:
-		if Input.is_action_just_pressed("editor_place"):
-			placePressed.emit()
-	
-
-	elif editorMode == EditorEventListener.EditorMode.PAINT:
-		if Input.is_action_just_pressed("editor_place"):
-			placePressed.emit()
-
 	
 	elif editorMode == EditorEventListener.EditorMode.TEST:
-		if !Input.is_action_pressed("editor_look_around"):
-			mouseMovedOnScreen.emit(Vector2.ZERO)
-		if Input.is_action_just_pressed("editor_place"):
-			placePressed.emit()
-		
 		if Input.is_action_just_pressed("editor_rotate_right"):
 			rotatePressed.emit(Vector3.UP, -angleSnap)
 
