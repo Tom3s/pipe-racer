@@ -17,6 +17,8 @@ class_name SettingsMenu
 @onready var sensitivitySlider: HSlider = %SensitivitySlider
 @onready var sensitivitySpinbox: SpinBox = %SensitivitySpinbox
 
+@onready var clear_cache_button: Button = %ClearCacheButton
+
 var renderQualities = [
 	['Tometo (x0.25)', 0.25],
 	['Low (x0.5)', 0.5],
@@ -56,6 +58,8 @@ func _ready():
 
 	closeButton.pressed.connect(onCloseButton_pressed)
 	closeButton.grab_focus()
+
+	clear_cache_button.pressed.connect(onClearCache_pressed)
 
 	visibility_changed.connect(onVisibilityChanged)
 
@@ -151,6 +155,8 @@ func onCloseButton_pressed():
 func onVisibilityChanged():
 	if visible:
 		closeButton.grab_focus()
+		clear_cache_button.text = "Clear Texture Cache (%.2f MB)" % TextureLoader.get_cached_texture_size()
+	
 
 func onTabChanged(tab: int):
 	if tab == 0:
@@ -205,3 +211,7 @@ func animateOut():
 
 func onAnimateOutFinished():
 	visible = false
+
+func onClearCache_pressed() -> void:
+	TextureLoader.clear_cached_images()
+	clear_cache_button.text = "Clear Texture Cache (0.0 MB)"

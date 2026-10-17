@@ -698,6 +698,9 @@ func loadMap(fileName: String) -> bool:
 	return false
 
 func loadFromJSON(fileName: String) -> bool:
+	MogyiLogger.log(self, "Importing LEGACY map %s" % fileName)
+	var start_time: int = Time.get_ticks_msec()
+
 	var path = fileName
 	if !fileName.begins_with("user://tracks/local/") && !fileName.begins_with("user://tracks/downloaded/"):
 		path = "user://tracks/local/" + fileName
@@ -816,6 +819,12 @@ func loadFromJSON(fileName: String) -> bool:
 	# mapLoadSuccess = true
 	# loaded.emit()
 	mapLoaded.emit(trackData["trackName"], trackData["lapCount"])
+
+	var end_time := Time.get_ticks_msec()
+
+	MogyiLogger.log(self, "Successfully imported LEGACY track. Took %d ms" % (end_time - start_time))
+
+
 	return true
 
 func getCheckpoints():
