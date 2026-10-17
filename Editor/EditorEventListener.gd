@@ -134,6 +134,8 @@ func _ready():
 	carCamera.current = false
 	car.camera = carCamera
 	playerParent.add_child(carCamera)
+	# carCamera.position += Vector3.ONE
+	carCamera.mode = 0
 
 	car.isResetting.connect(func(_sink1 = null, _sink2 = null, _sink3 = null):
 		if currentEditorMode == EditorMode.TEST && currentTestMode == TestMode.DRIVING:

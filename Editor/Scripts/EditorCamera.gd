@@ -102,7 +102,7 @@ func _update_movement(delta):
 		_velocity.y = clamp(_velocity.y + offset.y, -_vel_multiplier, _vel_multiplier)
 		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
 
-		if !mouseCaptured:
+		if !mouseCaptured && _velocity != Vector3.ZERO:
 			# # Change velocity here to not move on global y axis
 			# ...
 			# translate(_velocity * delta * speed_multi)
@@ -112,9 +112,10 @@ func _update_movement(delta):
 			positionChanged.emit(global_position)
 			return 
 
-		translate(_velocity * delta * speed_multi)
+		if _velocity != Vector3.ZERO:
+			translate(_velocity * delta * speed_multi)
 
-		positionChanged.emit(global_position)
+			positionChanged.emit(global_position)
 
 # Updates mouse look 
 func _update_mouselook():

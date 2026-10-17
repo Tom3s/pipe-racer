@@ -96,6 +96,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "On: placed track elements will be partially visible underground and behind other objects
 Off: Normal rendering"
+focus_mode = 0
 button_pressed = true
 text = "X-Ray"
 
@@ -103,6 +104,7 @@ text = "X-Ray"
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Makes the level visible for night time editing"
+focus_mode = 0
 text = "Fulbright"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=744672900]
@@ -255,6 +257,7 @@ placeholder_text = "Name"
 [node name="SaveTrackNameButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1497471655]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 text = "Set"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=1280930834]
@@ -276,6 +279,7 @@ alignment = 1
 [node name="SaveLapCountButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1041289574]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 text = "Set"
 
 [node name="spacer" type="Control" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer" unique_id=81050768]
@@ -289,9 +293,11 @@ alignment = 1
 [node name="CloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1385050808]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 text = "Close"
 
 [node name="SaveCloseMetadataButton" type="Button" parent="CanvasLayer/MetadataContainer/Container/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1521577330]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 text = "Save & Close"

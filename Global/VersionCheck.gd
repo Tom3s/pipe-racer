@@ -6,7 +6,7 @@ var debug_version = "v1.5"
 
 var currentVersion = "v1.4.1"
 
-var current_build = "277"
+var current_build = "292"
 
 var versionCheckComplete = false
 
