@@ -1,12 +1,13 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://dpqfp8ed7dptc"]
 
 [ext_resource type="Material" uid="uid://cj0jggkm85j17" path="res://Visuals/Level/EditorPieceXRayMaterial.tres" id="1_t03kg"]
-[ext_resource type="Shader" uid="uid://d0bh52mvk8g7w" path="res://Editor/Props/SimpleShapeDecoShader.tres" id="2_7mq0k"]
+[ext_resource type="Shader" uid="uid://dih7hoj8gkorv" path="res://Editor/Props/SimpleShapeDecoPointyShader.tres" id="2_t03kg"]
 [ext_resource type="Texture2D" uid="uid://bk7ycinsihbw8" path="res://Editor/PropTextures/Cobblestone.png" id="2_tkn8v"]
 
 [resource]
 render_priority = 0
 next_pass = ExtResource("1_t03kg")
-shader = ExtResource("2_7mq0k")
-shader_parameter/Repeat = Vector2(1, 1)
+shader = ExtResource("2_t03kg")
+shader_parameter/Sides = 4
+shader_parameter/Repeated = false
 shader_parameter/Texture = ExtResource("2_tkn8v")
