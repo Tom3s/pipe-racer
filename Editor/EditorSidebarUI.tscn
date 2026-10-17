@@ -158,7 +158,7 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-text = "Deco"
+text = "LED Board"
 
 [node name="PrismButton" type="Button" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/BuildButtons" unique_id=1976217665]
 unique_name_in_owner = true
