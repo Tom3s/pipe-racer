@@ -916,7 +916,7 @@ func refreshSupportMesh() -> void:
 			
 
 
-	print("[roadMeshGenerator.gd] Support Type Not Implemented Yet: ", supportType)
+	MogyiLogger.log(self, "Support Type Not Implemented Yet: %s" % SupportType.keys()[supportType])
 
 func _getRectPillarVertices(
 	vertex1: Vector3,

@@ -63,11 +63,11 @@ func saveRecording(
 	path += str(Time.get_datetime_string_from_system()).split("T")[0]
 	path += ".replay"
 
-	print("Saving replay to " + path)
+	MogyiLogger.log(self, "Saving replay to %s" % path)
 
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
 	if fileHandler == null:
-		print("Error opening replay file to save into")
+		MogyiLogger.log(self, "Error opening replay %s to save into" % path)
 		return ""
 	
 	fileHandler.store_8(REPLAY_FORMAT_VERSION)

@@ -31,7 +31,7 @@ func setCollisionShape():
 signal bodyEnteredStart(body: Node3D, start: Node3D)
 
 func onBodyEntered(body):
-	print("[FunctionalStartLine.gd] Body entered start: ", body)
+	MogyiLogger.log(self, "Body entered start: %s", body.name)
 	bodyEnteredStart.emit(body, self)
 
 func _ready():

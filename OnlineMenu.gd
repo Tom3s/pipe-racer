@@ -37,7 +37,7 @@ func onJoinButton_pressed():
 	var clientResult = client.create_client(ipAddress.text, Network.DEFAULT_PORT)
 
 	if clientResult != OK:
-		print("[OnlineMenu.gd] Client creation failed")
+		MogyiLogger.log(self, "Client creation failed", MogyiLogger.Severity.ERROR)
 		statusLabel.text = "STATUS: Client creation failed"
 		AlertManager.showAlert(
 			self,
@@ -82,7 +82,8 @@ func onServerCreated():
 	connectionEstablished.emit()
 
 func onConnectionFailed():
-	print("[OnlineMenu.gd] Connection failed")
+	MogyiLogger.log(self, "Connection failed", MogyiLogger.Severity.ERROR)
+
 	statusLabel.text = "STATUS: Connection failed"
 	AlertManager.showAlert(
 		self,

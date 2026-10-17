@@ -332,9 +332,6 @@ func refreshMesh():
 			indices.append(i + (sides * 2))
 			indices.append((i + 1 + (sides * 2)) % (sides * 2) + (sides * 2))
 		
-		# for vertex in indices:
-			# print("[SimpleShapeDeco.gd] Index ", var_to_str(vertex), ": ", var_to_str(sideVertices[vertex]))
-		
 
 	uv = []
 	if !sharp:
@@ -361,7 +358,6 @@ func refreshMesh():
 		uv.append(lerp(Vector2(1, 1), Vector2(0, 1), float(sides - 1) / sides))
 
 	normal = getSideNormals(sideVertices)
-	# print("[SimpleShapeDeco.gd] ", sideVertices.size(), " ", normal.size())
 
 	proceduralMesh.addMeshCustom(
 		mesh,
@@ -436,9 +432,6 @@ func getSideNormals(vertices: PackedVector3Array):
 					extra = normal
 			
 			normals.append(extra)
-
-			# for normal in normals:
-				# print("[SimpleShapeDeco.gd] Normal: ", var_to_str(normal), " ", var_to_str(normal.is_normalized()))
 
 			return normals
 

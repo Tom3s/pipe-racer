@@ -40,8 +40,7 @@ func setup(
 
 	var success = map.importTrack(mapName)
 	if !success:
-		print("[GameScene.gd] Failed to load map: " + mapName)
-		print("[GameScene.gd] Trying legacy format")
+		MogyiLogger.log(self, "Failed to load map: %s. Trying legacy format..." % mapName, MogyiLogger.Severity.WARNING)
 		map.queue_free()
 
 		map = map_scene.instantiate()
@@ -52,18 +51,18 @@ func setup(
 		if !success:
 			get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 
-			print("[GameScene.gd] Failed to load legacy format, exiting.")
+			MogyiLogger.log(self, "Failed to load legacy format. Exiting...", MogyiLogger.Severity.WARNING)
 			exitPressed.emit()
 			return SetupResult.INVALID_DATA
 
 	if map.start == null:
-		print("[GameScene.gd] No start line found in the file. Aborting play...")
+		MogyiLogger.log(self, "No start line found in the file. Aborting play...", MogyiLogger.Severity.WARNING)
 		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 		exitPressed.emit()
 		return SetupResult.NO_START
 
 	if map.getCheckpoints().size() == 0:
-		print("[GameScene.gd] No checkpoint in the file. Aborting play...")
+		MogyiLogger.log(self, "No checkpoint in the file. Aborting play...", MogyiLogger.Severity.WARNING)
 		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 		exitPressed.emit()
 		return SetupResult.NO_CP
@@ -95,7 +94,7 @@ func setup(
 
 	%GameEventListener.replayGhost.setTimeMultiplier(timeMultiplier)
 
-	print("Time Multiplier: ", timeMultiplier)
+	MogyiLogger.log(self, "Current Time Multiplier: %.3f" % timeMultiplier)
 	if timeMultiplier != 1.0:
 		%GameEventListener.state.timeMultiplier = timeMultiplier
 		%GameEventListener.addGhosts([] as Array[String], [map.bestTotalReplay + '.replay'] as Array[String])

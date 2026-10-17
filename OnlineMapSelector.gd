@@ -51,10 +51,6 @@ func _ready():
 	loadDownloadedTracks()
 
 
-# func setIpAddress(newIp: String):
-# 	print("New IP: ", newIp)
-# 	ipAddress.text = newIp
-
 func showIpAddress():
 	ipAddress.text = Network.ipAddress
 
@@ -147,7 +143,7 @@ func loadTrackListItems():
 		HTTPClient.METHOD_GET
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError))
 
 func onLoadTracksRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
@@ -185,7 +181,7 @@ func playButton_pressed(_sink = null) -> void:
 	if Network.userId == 1:
 		rpc("downloadAndPlay", trackId)
 	trackSelected.emit(trackName)
-	print("Selected track: ", trackName)
+	MogyiLogger.log(self, "Selected track: %s" % trackName)
 
 func getDownloadedTrackIds() -> Array[String]:
 	var ids: Array[String] = []
@@ -223,7 +219,8 @@ func downloadTrack(trackId: String):
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError))
+
 
 func onDownloadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
@@ -279,7 +276,8 @@ func downloadAndPlay(trackId: String):
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError))
+
 
 func onDownloadAndPlayRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):

@@ -126,7 +126,7 @@ func onRace_exited():
 @rpc("any_peer", "call_remote", "reliable")
 func increaseReadyPlayers(_sink = null):
 	readyPlayers += 1
-	print("readyPlayers: ", readyPlayers, "/", Network.playerCount)
+	MogyiLogger.log(self, "Players ready: %d/%d" % [readyPlayers, Network.playerCount])
 	if readyPlayers >= Network.playerCount:
 		# initializeRace()
 		raceNode.initializePlayers()

@@ -106,7 +106,7 @@ func deleteComment():
 		HTTPClient.METHOD_DELETE
 	)
 	if httpError != OK:
-		print("Error sending delete request: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending delete request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func onCommentDeletedResponse(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	# var title = "Comment deleted"
@@ -152,7 +152,8 @@ func submitRating(newRating: int):
 		JSON.stringify(data)
 	)
 	if httpError != OK:
-		print("Error submitting rating: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting rating: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func onCommentRatingSubmittedResponse(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	# var title = "Rating submitted"

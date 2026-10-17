@@ -151,13 +151,13 @@ func fetchLevelDetails():
 		Backend.BACKEND_IP_ADRESS + "/api/tracks/" + trackId
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending level detiails request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 var builderReplayId: String = ""
 
 func onDetailsRequest_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error: ", _responseCode)
+		MogyiLogger.log(self, "Error requesting details: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 
 		if (_responseCode == 404):
 			AlertManager.showAlert(self, "Error", "Track not found", "The track you are looking for does not exist")
@@ -230,7 +230,7 @@ func downloadTrack():
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending download track request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func onDownloadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if (responseCode != 200):
@@ -311,7 +311,7 @@ func fetchPersonalBestTime():
 	request.timeout = 25
 	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 		if responseCode != 200:
-			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			MogyiLogger.log(self, "Error requesting PB time: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 			return
 		var data = JSON.parse_string(body.get_string_from_utf8())
 		if data.has("time"):
@@ -332,7 +332,7 @@ func fetchPersonalBestTime():
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending PB time request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func fetchPersonalBestLap():
 	var request = HTTPRequest.new()
@@ -340,7 +340,7 @@ func fetchPersonalBestLap():
 	request.timeout = 25
 	request.request_completed.connect(func(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 		if responseCode != 200:
-			print("Error ", responseCode, " ", body.get_string_from_utf8())
+			MogyiLogger.log(self, "Error requesting PB lap: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 			return
 		var data = JSON.parse_string(body.get_string_from_utf8())
 
@@ -362,7 +362,7 @@ func fetchPersonalBestLap():
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending PB lap request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func getTimeMultiplier() -> float:
 	return medalMenu.getCurrentMultiplier(personalBestTime)

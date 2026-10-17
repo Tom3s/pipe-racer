@@ -15,7 +15,7 @@ func sendRequest(
 
 	request.request_completed.connect(func(_result, response_code, _headers, _body):
 		if response_code != 200:
-			print("[" + requesterNodeName + "'s request] Error with response: " + _body.get_string_from_utf8())
+			MogyiLogger.log(self, "[%s's request] Error with response: %s" % [requesterNodeName, _body.get_string_from_utf8()], MogyiLogger.Severity.ERROR)
 			return
 		onRequestSuccess.call(_body)
 	)
@@ -30,4 +30,5 @@ func sendRequest(
 	)
 
 	if httpError != OK:
-		print("[" + requesterNodeName + "'s request] Error while sending request: " + error_string(httpError))
+		MogyiLogger.log(self, "[%s's request] Error while sending request: %s" % [requesterNodeName, error_string(httpError)], MogyiLogger.Severity.ERROR)
+

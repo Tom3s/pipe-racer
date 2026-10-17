@@ -116,7 +116,6 @@ static func getHeightLerp(
 			t = newT
 			heightError = abs(p3.x - expectedPoint)
 			iter += 1
-		# print("[PipeMeshGenerator.gd] Height Bezier iterations: ", iter, " - Error: ", heightError)
 		return Vector3(0, p3.y, 0) 
 
 static func positionsMatch(
@@ -163,15 +162,6 @@ static func get3DBezierLerp(
 
 		control1 = lerp(start, control1, 0.6)
 		control2 = lerp(end, control2, 0.6)
-
-		# print("[EditorMath.gd] get3DBezierLerp points: ", points)
-		# if t == 0:
-		# 	print("[EditorMath.gd] get3DBezierLerp: control points: ", control1, control2)
-
-		# if control1.is_equal_approx(control2):
-		# 	if t == 0:
-		# 		print("[EditorMath.gd] get3DBezierLerp: control points are equal")
-
 
 
 	var p1: Vector3 = lerp(start, control1, t)

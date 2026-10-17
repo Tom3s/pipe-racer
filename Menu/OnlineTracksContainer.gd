@@ -69,11 +69,11 @@ func loadTracks():
 		HTTPClient.METHOD_GET,
 	)
 	if httpError != OK:
-		print("Error loading tracks: " + error_string(httpError))
+		MogyiLogger.log(self, "Error loading tracks:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func onTracksLoaded(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error loading tracks: ", _responseCode)
+		MogyiLogger.log(self, "Error loading tracks: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 	
 	var tracks = JSON.parse_string(_body.get_string_from_utf8())

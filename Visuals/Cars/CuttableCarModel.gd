@@ -34,8 +34,6 @@ func set_frame_color(new_color: Color) -> void:
 	rollcage_material.albedo_color = new_color
 
 func setGhostMode(color: Color):
-	# push_error("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
-	# print("func 'setGhostMode' uninmplemented on [CuttableCarModel.gd]!!")
 	applied_ghost_material = ghost_material.duplicate()
 
 	applied_ghost_material.set_shader_parameter("color", color)

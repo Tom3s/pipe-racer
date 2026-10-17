@@ -30,7 +30,7 @@ func _ready():
 		if local.size() == 0 and online.size() == 0:
 			return
 
-		print("[ReplaySelector.gd] selected replays: ", local, online)
+		MogyiLogger.log(self, "Selected replays: \n%s \n%s" % [str(local), str(online)])
 
 		hide()
 		replaysSelected.emit(local, online)

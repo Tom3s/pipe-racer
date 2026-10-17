@@ -35,7 +35,7 @@ func fetchBestLaps(trackId: String):
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=true"
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending best laps request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func fetchBestTimes(trackId: String):
 	bestTimesList.clear()
@@ -49,11 +49,11 @@ func fetchBestTimes(trackId: String):
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=false"
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending best times request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error: ", _responseCode)
+		MogyiLogger.log(self, "Error requesting best laps: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -74,7 +74,7 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 
 func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error: ", _responseCode)
+		MogyiLogger.log(self, "Error requesting best times: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())

@@ -30,6 +30,10 @@ func _ready() -> void:
 	car_copy.set_frame_color(Color.PINK)
 	car_copy.visible = false
 
+	MogyiLogger.log(self, "message")
+	MogyiLogger.log(self, "warning", MogyiLogger.Severity.WARNING)
+	MogyiLogger.log(self, "error", MogyiLogger.Severity.ERROR)
+
 
 func _physics_process(delta: float) -> void:
 	# sceneryEditorInputHandler.pausePressed.connect(func(_paused):

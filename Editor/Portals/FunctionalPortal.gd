@@ -133,7 +133,7 @@ func _ready() -> void:
 		body.car_model.set_cutting_plane(global_transform, -sign(offset.origin.z))
 		body.car_copy_model.visible = true
 		body.car_copy_model.set_cutting_plane(linked_portal.global_transform, sign(offset.origin.z))
-		print("[%s] Body entered portal detection area!" % str(name))
+		MogyiLogger.log(self, "Body %s entered portal detection area!" % str(body.name))
 
 	)
 
@@ -144,7 +144,7 @@ func _ready() -> void:
 				body.car_model.reset_cutting_plane()
 				body.car_copy_model.reset_cutting_plane()
 				body.car_copy_model.visible = false
-		print("[%s] Body exited portal detection area!" % str(name))
+		MogyiLogger.log(self, "Body %s exited portal detection area!" % str(body.name))
 	)
 
 	# procedural_portal.portal_surface.material_override = procedural_portal.portal_surface.material_override.duplicate()
@@ -172,9 +172,8 @@ func _physics_process(delta: float) -> void:
 		var last_offset := global_transform.affine_inverse() * last_frame_transform
 
 		traveler.car_copy_model.global_transform = linked_portal.global_transform * current_offset
-		# print(current_offset.origin.z)
 		if current_offset.origin.z * last_offset.origin.z < 0:
-			print("[%s] Body passed through portal surface" % str(name))
+			MogyiLogger.log(self, "Body %s passed through portal surface" % traveler.name)
 			passed_portal_surface.emit(traveler)
 
 			if traveler.has_method("set_new_transform"):
@@ -198,7 +197,6 @@ func _physics_process(delta: float) -> void:
 
 func set_remote_camera(camera: Camera3D) -> void:
 	if linked_portal == null || !visible_notifier.is_on_screen():
-		# print("Portal has no linked portal. Aborting set camera")
 		return
 	
 	portal_camera.fov = camera.fov
@@ -421,19 +419,19 @@ func getCopy() -> FunctionalPortal:
 
 func link_with(portal: FunctionalPortal) -> void:
 	if linked_id == portal.id || linked_portal == portal:
-		print("[FunctionalPortal.gd] Link between %d nd %d alredy exists. Aborting..." % [
+		MogyiLogger.log(self, "Link between %d nd %d alredy exists. Aborting..." % [
 			linked_portal.id, id
-		])
+		], MogyiLogger.Severity.WARNING)
 		return
 
 	if portal.linked_portal != null:
-		print("[FunctionalPortal.gd] Portal (ID: %d) is already linked. Relinking with %d..." % [
+		MogyiLogger.log(self, "Portal (ID: %d) is already linked. Relinking with %d..." % [
 			portal.id, id
 		])
 		portal.linked_portal.unlink()
 	
 	if linked_portal != null:
-		print("[FunctionalPortal.gd] Portal (ID: %d) is already linked. Overriding link %d..." % [
+		MogyiLogger.log(self, "Portal (ID: %d) is already linked. Overriding link %d..." % [
 			id, linked_portal.id
 		])
 		linked_portal.unlink()
@@ -451,9 +449,9 @@ func link_with(portal: FunctionalPortal) -> void:
 	
 func unlink() -> void:
 	if linked_portal == null:
-		print("[FunctionalPortal.gd] Portal (id: %d) is already orphan. Aborting unlink..." % [
+		MogyiLogger.log(self, "Portal (id: %d) is already orphan. Aborting unlink..." % [
 			id
-		])
+		], MogyiLogger.Severity.WARNING)
 		return
 	
 	linked_portal.procedural_portal.portal_surface.material_override.set_shader_parameter("viewport_texture", unlinked_portal_texture)

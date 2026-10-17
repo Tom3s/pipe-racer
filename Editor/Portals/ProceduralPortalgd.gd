@@ -108,7 +108,7 @@ func _ready() -> void:
 
 func refresh_model() -> void:
 	if !is_node_ready():
-		print("Aborting procedural portal model refresh!")
+		MogyiLogger.log(self, "Aborting procedural portal model refresh!")
 		return
 
 	portal_parent.position.y = height / 2.0;
@@ -205,7 +205,7 @@ func set_side_frame_parameters(parent: Node3D) -> void:
 
 func set_colors() -> void:
 	if !is_node_ready():
-		print("Aborting procedural portal color refresh!")
+		MogyiLogger.log(self, "Aborting procedural portal color refresh!")
 		return
 
 	applied_core_material.set_shader_parameter("core_color", portal_color)

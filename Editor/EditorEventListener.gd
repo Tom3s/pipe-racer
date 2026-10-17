@@ -248,7 +248,7 @@ func connectSignals():
 				var newElement = currentElement.getCopy()	
 				if collidedObject != null: # && map.lastRoadElement == null:
 					collidedObject = collidedObject.get_parent()
-					print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+					MogyiLogger.log(self, "Class of collidedObject: %s" % ClassFunctions.getClassName(collidedObject))
 
 					if ClassFunctions.getClassName(collidedObject) == "RoadNode":
 						currentElement.global_position = collidedObject.global_position
@@ -267,7 +267,7 @@ func connectSignals():
 				var newElement = currentElement.getCopy()
 				if collidedObject != null:
 					collidedObject = collidedObject.get_parent()
-					print("[EditorEventListener.gd] Class of collidedObject: ", ClassFunctions.getClassName(collidedObject))
+					MogyiLogger.log(self, "Class of collidedObject: %s" % ClassFunctions.getClassName(collidedObject))
 
 					if ClassFunctions.getClassName(collidedObject) == "PipeNode":
 						currentElement.global_position = collidedObject.global_position
@@ -352,7 +352,7 @@ func connectSignals():
 					ClassFunctions.getClassName(collidedObject) == "ProceduralCheckpoint":
 					collidedObject = collidedObject.get_parent()
 
-				print("[EditorEventListener.gd] Class of collided Object (edit mode): ", ClassFunctions.getClassName(collidedObject))
+				MogyiLogger.log(self, "Class of collided Object (edit mode): %s" % ClassFunctions.getClassName(collidedObject))
 
 				# apply edits to prev element
 				if map.lastRoadElement != null:
@@ -494,7 +494,7 @@ func connectSignals():
 				map.removeLightDeco(collidedObject)
 			
 			else:
-				print("[EditorEventListener.gd] Class of collided Object (delete mode): ", ClassFunctions.getClassName(collidedObject)) 
+				MogyiLogger.log(self, "Class of collided Object (delete mode): %s" % ClassFunctions.getClassName(collidedObject)) 
 
 
 		elif currentEditorMode == EditorMode.PAINT:
@@ -1615,7 +1615,7 @@ func setCurrentElement():
 			currentElement = lightDeco
 		
 		else:
-			print("[EditorEventListener.gd] Build Mode Not Implemented Yet!")
+			MogyiLogger.log(self, "Build Mode Not Implemented yet for %s" % BuildMode.keys()[currentBuildMode])
 			currentElement = null
 		return
 
@@ -1697,8 +1697,6 @@ func handleMouseMovement(mousePos: Vector2):
 	if capturedGizmo == null:
 		return
 
-	# print("[EditorEventListener.gd] Handling mouse movement; Gizmo: ", ClassFunctions.getClassName(capturedGizmo))
-	
 	if ClassFunctions.getClassName(capturedGizmo) == "RotatorGizmo":
 		var delta = mousePos - lastMousePos
 		if delta.length() < rotateTreshold:
@@ -1715,8 +1713,6 @@ func handleMouseMovement(mousePos: Vector2):
 		var angle = angleX + angleY
 
 		angle = round(angle / ROTATION_SNAP) * ROTATION_SNAP
-
-		# print("[EditorEventListener.gd] Rotating gizmo by: ", angle)
 
 		capturedGizmo.rotateGizmo(angle)
 
@@ -1755,12 +1751,12 @@ func submitEditorStats(stats: Dictionary) -> Signal:
 		JSON.stringify(stats)
 	)
 	if httpError != OK:
-		print("Error submitting time: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting time: %s" % error_string(httpError))
 	
 	return request.request_completed
 
 func onSubmitEditorStats_requestCompleted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
-	print("Editor stat Submit Response: ", _responseCode)
+	MogyiLogger.log(self, "Editor stat Submit Response: %d" % _responseCode)
 	return
 
 var originalRespawn: Dictionary = {

@@ -84,26 +84,6 @@ var start: Start
 const START_MAGIC_VECTOR = Vector3(0.134, 1.224, -0.0788)
 const START_OFFSET = Vector3(0, 9.15, 0)
 
-# @export_file("*.json")
-# var loadFrom: String:
-# 	set(newFile):
-# 		loadFrom = loadFromChanged(newFile)
-# 		print("loadFrom changed to: ", loadFrom)
-# 		# emit_signal("loadFromChanged", loadFrom)
-# 		# load(loadFrom
-# 	get:
-# 		return loadFrom
-
-# func loadFromChanged(newFile: String) -> String:
-# 	if newFile == "":
-# 		return newFile
-	
-# 	if is_node_ready():
-# 		loadMap(newFile)
-		# return newFile
-	
-	# return newFile
-
 var connectionPoints: Array[Dictionary] = []
 
 # Called when the node enters the scene tree for the first time.
@@ -707,7 +687,7 @@ func saveToJSON(autosave: bool = false):
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
 
 	if fileHandler == null:
-		print("Error opening file to save into")
+		MogyiLogger.log(self, "Error opening %s to save into" % path, MogyiLogger.Severity.ERROR)
 		return
 
 	fileHandler.store_string(JSON.stringify(trackData, "\t"))
@@ -730,13 +710,13 @@ func loadFromJSON(fileName: String) -> bool:
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 
 	if fileHandler == null:
-		print("Error opening file to load from", path)
+		MogyiLogger.log(self, "Error opening %s to load from" % path, MogyiLogger.Severity.ERROR)
 		return false
 	
 	var trackData = JSON.parse_string(fileHandler.get_as_text())
 
 	if trackData == null:
-		print("Error parsing JSON when loading map")
+		MogyiLogger.log(self, "Error parsing JSON when loading map %s" % path, MogyiLogger.Severity.ERROR)
 		return false
 
 	
@@ -746,12 +726,13 @@ func loadFromJSON(fileName: String) -> bool:
 		author = ""
 
 	if !trackData.has("format"):
-		print("Error loading map: file has no 'format' field")
+		MogyiLogger.log(self, "Error loading map: %s has no 'format' field" % path, MogyiLogger.Severity.ERROR)
+
 
 		return false
 
 	if trackData["format"] != CURRENT_FORMAT_VERSION:
-		print("Error loading map: wrong format version")
+		MogyiLogger.log(self, "Error loading map: %s has wrong format version" % path, MogyiLogger.Severity.ERROR)
 
 		if !path.begins_with("user://tracks/downloaded/"):
 			fileHandler.close()
@@ -771,7 +752,8 @@ func loadFromJSON(fileName: String) -> bool:
 	
 
 	if !trackData.has("trackPieces"):
-		print("Error loading map: no trackPieces")
+		MogyiLogger.log(self, "Error loading map: %s has no trackPieces" % path, MogyiLogger.Severity.ERROR)
+
 		return false
 	
 	var prefabMesher = PrefabMesher.new()
@@ -786,14 +768,16 @@ func loadFromJSON(fileName: String) -> bool:
 
 
 	if !trackData.has("start"):
-		print("Error loading map: no start")
+		MogyiLogger.log(self, "Error loading map: %s has no start" % path, MogyiLogger.Severity.ERROR)
+
 		return false
 	
 	var startPosData = trackData["start"]
 	updateStartPosition(Vector3(startPosData["positionX"], startPosData["positionY"], startPosData["positionZ"]), Vector3(0, startPosData["rotation"], 0))
 
 	if !trackData.has("checkPoints"):
-		print("Error loading map: no checkPoints")
+		MogyiLogger.log(self, "Error loading map: %s has no checkPoints" % path, MogyiLogger.Severity.ERROR)
+
 		return false
 
 	var propPlacer = PropPlacer.instantiate()
@@ -813,11 +797,12 @@ func loadFromJSON(fileName: String) -> bool:
 			var propObject = propPlacer.getPropObject(propData["textureName"], imageUrl)
 			addPropObject(propObject, Vector3(propData["positionX"], propData["positionY"], propData["positionZ"]), Vector3(0, propData["rotation"], 0))
 	else:
-		print("No props on this track")
+		MogyiLogger.log(self, "%s has no props" % path)
+
 
 	propPlacer.queue_free()
 
-	print("Loaded track: " + trackData["trackName"])
+	MogyiLogger.log(self, "Loaded track %s successfully" % trackData["trackName"])
 
 	# load validation details
 	validated = false

@@ -67,7 +67,7 @@ func onLoginButton_pressed(_sink = null):
 
 	setButtonsLoggingIn()
 
-	print("Logging in...")
+	MogyiLogger.log(self, "Logging in...")
 
 	var loginData = getLoginData()
 	var loginRequest = HTTPRequest.new()
@@ -83,7 +83,8 @@ func onLoginButton_pressed(_sink = null):
 		JSON.stringify(loginData)
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError))
+
 		setButtonsLoggedOut()
 
 
@@ -109,7 +110,8 @@ func asGuestButton_pressed():
 		JSON.stringify(loginData)
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func onLogoutButton_pressed():
 	setButtonsLoggedOut()
@@ -121,10 +123,11 @@ func onLoginRequestCompleted(_result: int, responseCode: int, _headers: PackedSt
 
 	if responseCode != 200:
 		setButtonsLoggedOut()
-		print("Error after login request: ", body.get_string_from_utf8())
+		MogyiLogger.log(self, "Error after login request: %s" % body.get_string_from_utf8())
+
 		if GlobalProperties.playerSelectorNode.visible:
 			AlertManager.showAlert(self, "Error logging in", body.get_string_from_utf8())
-		print("Result: ", responseCode)
+		MogyiLogger.log(self, "Login request result: %d" % responseCode)
 		return
 	
 	setButtonsLoggedIn()

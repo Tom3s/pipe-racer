@@ -4,7 +4,7 @@ class_name Start
 signal bodyEnteredStart(body: Node3D, start: Node3D)
 
 func onBodyEntered(body):
-	print("[Start.gd] Body entered start: ", body)
+	MogyiLogger.log(self, "Body entered start: %s" % body.name)
 	bodyEnteredStart.emit(body, self)
 
 func _ready():
@@ -40,8 +40,6 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 
 	var spawnPosition = raycastPosition + raycastNormal * 0.35
 
-	# print("Spawn position: ", spawnPosition)
-
 	return {
 		"position": spawnPosition,
 		"rotation": getRotationVector(-localBackwards, (-localBackwards).cross(raycastNormal).normalized())
@@ -50,8 +48,6 @@ func getStartPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
 	var localBasis = Basis(localRight, localForward.cross(localRight).normalized(), -localForward)
 	var localQuaternion = Quaternion(localBasis.get_rotation_quaternion())
-
-	print("Rotation: ", localQuaternion.get_euler())
 
 	return localQuaternion.get_euler()
 

@@ -119,7 +119,7 @@ func rebindJoy(toggledState: bool):
 	rebindJoyButton.custom_minimum_size = rebindJoyButton.size
 	if toggledState:
 		rebindJoyButton.text = "..."
-		print("Rebinding Joy Action: ", actionName)
+		MogyiLogger.log(self, "Rebinding Joy Action for %s" % actionName)
 		set_process_unhandled_input(true)
 	else:
 		rebindJoyButton.text = "Rebind Joy"
@@ -170,7 +170,8 @@ func rebindKB(toggledState: bool):
 	rebindKBButton.custom_minimum_size = rebindKBButton.size
 	if toggledState:
 		rebindKBButton.text = "..."
-		print("Rebinding KB Action: ", actionName)
+		MogyiLogger.log(self, "Rebinding KB Action for %s" % actionName)
+
 		set_process_unhandled_input(true)
 	else:
 		rebindKBButton.text = "Rebind KB"

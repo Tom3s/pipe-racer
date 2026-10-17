@@ -64,7 +64,7 @@ func update_camera(delta: float) -> void:
 	var car_z = car.global_transform.basis.z
 	fov = 85
 	if shouldUpdatePosition:
-		print("Force update camera position")
+		MogyiLogger.log(self, "Force updating camera position for %d" % car.playerIndex)
 		global_position = car_pos + car_y * 3 + car_z * -4
 		shouldUpdatePosition = false
 

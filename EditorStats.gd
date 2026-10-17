@@ -39,16 +39,16 @@ func getObject() -> Dictionary:
 
 func increasePlacedTrackPieces():
 	placedTrackPieces += 1
-	print("[EditorStats.gd] Incresed placedTrackPieces to ", placedTrackPieces)
+	MogyiLogger.log(self, "Incresed placedTrackPieces to %d" % placedTrackPieces)
 
 func increasePlacedCheckpoints():
 	placedCheckpoints += 1
-	print("[EditorStats.gd] Incresed placedCheckpoints to ", placedCheckpoints)
+	MogyiLogger.log(self, "Incresed placedCheckpoints to %d" % placedCheckpoints)
 
 func increasePlacedProps():
 	placedProps += 1
-	print("[EditorStats.gd] Incresed placedProps to ", placedProps)
+	MogyiLogger.log(self, "Incresed placedProps to %d" % placedProps)
 
 func increaseNrTests():
 	nrTests += 1
-	print("[EditorStats.gd] Incresed nrTests to ", nrTests)
+	MogyiLogger.log(self, "Incresed nrTests to %d" % nrTests)
