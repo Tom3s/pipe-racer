@@ -7,11 +7,11 @@
 [ext_resource type="Shader" uid="uid://ddhtdhtpsdk5r" path="res://Track Props/dirtParticleShader.tres" id="5_0o4p6"]
 [ext_resource type="Material" uid="uid://db2jkyqdfgrng" path="res://Track Props/SMokeParticles.tres" id="5_myblr"]
 [ext_resource type="Material" uid="uid://b1pnwhuyr8gxe" path="res://Track Props/dirtParticleMaterial.tres" id="6_clm3g"]
-[ext_resource type="PackedScene" uid="uid://yonx6jdmd008" path="res://CarEngineSoundPlayer.tscn" id="6_g1nx1"]
 [ext_resource type="PlaneMesh" uid="uid://dvof0mms3yhd8" path="res://Track Props/smokeParticleMAterial.tres" id="6_obe7c"]
 [ext_resource type="PackedScene" uid="uid://wg40dsgvpetp" path="res://Visuals/SkidMark.tscn" id="8_q8rx4"]
 [ext_resource type="PackedScene" uid="uid://bjnvfde7d8cwk" path="res://CarSoundEffects.tscn" id="11_vb0oa"]
 [ext_resource type="Script" uid="uid://b0py8xxeifusi" path="res://CarStateMachine.gd" id="12_usspm"]
+[ext_resource type="PackedScene" uid="uid://cnsfxr4l0lu5f" path="res://EngineAudioSimulator/EngineMain.tscn" id="15_3gfw5"]
 [ext_resource type="PackedScene" uid="uid://dffu3d0xrcet3" path="res://Visuals/SkidMarkPlacer.tscn" id="15_6tpiy"]
 [ext_resource type="FontFile" uid="uid://bdp5mderdkbsi" path="res://Theme/FOT-NewRodin Pro EB.otf" id="16_crdig"]
 [ext_resource type="Script" uid="uid://7s35b4uwt776" path="res://CarSynchronizer.gd" id="16_d1km7"]
@@ -301,9 +301,6 @@ target_position = Vector3(0, -0.28, 0)
 collision_mask = 9
 hit_back_faces = false
 
-[node name="CarEngineSound" parent="." unique_id=906923911 instance=ExtResource("6_g1nx1")]
-unique_name_in_owner = true
-
 [node name="InputHandler" type="Node" parent="." unique_id=585176401]
 unique_name_in_owner = true
 script = ExtResource("3_kfdpd")
@@ -363,3 +360,7 @@ visible = false
 update_mode = 1
 size = Vector3(50, 20, 50)
 origin_offset = Vector3(0, -5.17, 0)
+
+[node name="EngineAudio" parent="." unique_id=1854253308 instance=ExtResource("15_3gfw5")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5101646, 1.5304937)

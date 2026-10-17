@@ -7,6 +7,8 @@ var car_copy_model: CuttableCarModel
 
 @onready var skid_mark_placer: SkidMarkPlacer = %SkidMarkPlacer
 
+@onready var engine_audio: EngineMain = %EngineAudio
+
 # @onready var skid_mark: SkidMark = %SkidMark
 
 var camera: FollowingCamera
@@ -223,6 +225,8 @@ func _ready():
 
 		)
 
+	engine_audio.drivetrain.changeGear(1)
+
 	set_physics_process(true)
 
 var inFluid: Area3D = null
@@ -318,6 +322,13 @@ func _physics_process(delta):
 				# surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
 				surfaceFriction = Util.exp_decay(surfaceFriction, 1.0, 0.01, delta)
 		
+		engine_audio.accelerate_pressed = accelerationInput if accelerationInput > 0 else 0.0
+		engine_audio.brake_pressed = accelerationInput if accelerationInput <= 0.0 else 0.0
+		# engine_audio.set_gear(getSpeed())
+
+		# if state.isAirborne():
+		# 	engine_audio.accelerate_pressed = 0.0
+
 		if shouldPause && !paused:
 			pauseLinearVelocity = linear_velocity
 			pauseAngularVelocity = angular_velocity
@@ -555,6 +566,8 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 		_applyFriction_force *= jumpingForceReduction
 	
 	apply_force(_applyFriction_force, contactPoint - global_position)
+
+
 
 func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3, accelerationMultiplier: float):
 	if accelerationInput == 0:
@@ -829,7 +842,7 @@ func setLabelVisibility(visible: bool):
 	%PlayernameLabel.visible = visible
 
 func set2DAudio():
-	%CarEngineSound.set2DAudio()
+	# %CarEngineSound.set2DAudio()
 	%CarSoundEffects.set2DAudio()
 # DEBUG FUNCTIONS
 
@@ -845,3 +858,4 @@ func get_skidmarks() -> Array[SkidMark]:
 		%SkidMark3,
 		%SkidMark4,
 	]
+

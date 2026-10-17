@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cnsfxr4l0lu5f"]
+
+[ext_resource type="Script" uid="uid://v4ph3yrfrmu1" path="res://EngineAudioSimulator/EngineMain.gd" id="1_8oiky"]
+[ext_resource type="PackedScene" uid="uid://c70owikgeoig0" path="res://EngineAudioSimulator/EngineAudioManager.tscn" id="3_xg8rf"]
+
+[node name="Node" type="Node3D" unique_id=1854253308]
+script = ExtResource("1_8oiky")
+gear_speed = [5.0, 120.0, 180.0]
+
+[node name="EngineAudioManager" parent="." unique_id=2098699853 instance=ExtResource("3_xg8rf")]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1714001379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36778784, 0.70185864)

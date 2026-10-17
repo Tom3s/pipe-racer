@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://c70owikgeoig0"]
+
+[ext_resource type="Script" uid="uid://bklxb1up2xaxx" path="res://EngineAudioSimulator/EngineAudioManager.gd" id="1_uxjn6"]
+[ext_resource type="AudioStream" uid="uid://bex7vnqvq32he" path="res://EngineAudioSimulator/audio/limiter.wav" id="2_2g606"]
+[ext_resource type="AudioStream" uid="uid://cnd2olyusdgy4" path="res://EngineAudioSimulator/audio/on_midhigh.wav" id="2_xpmo5"]
+[ext_resource type="Script" uid="uid://bob1wd3o2npo2" path="res://EngineAudioSimulator/EngineSampler.gd" id="3_an0yh"]
+[ext_resource type="AudioStream" uid="uid://c8fhvt4uog5o8" path="res://EngineAudioSimulator/audio/off_lower.wav" id="3_engck"]
+[ext_resource type="AudioStream" uid="uid://ctfdik6c1iwk1" path="res://EngineAudioSimulator/audio/on_low.wav" id="4_1t2yi"]
+[ext_resource type="AudioStream" uid="uid://bvjs0px71b3ue" path="res://EngineAudioSimulator/audio/off_midhigh.wav" id="5_447xr"]
+[ext_resource type="AudioStream" uid="uid://cq04cdjpfi80p" path="res://EngineAudioSimulator/audio/universfield-party-balloon-pop-323588.mp3" id="8_an0yh"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_i8d41"]
+random_pitch = 1.0892487
+streams_count = 1
+stream_0/stream = ExtResource("8_an0yh")
+
+[node name="EngineAudioManager" type="Node3D" unique_id=2098699853]
+script = ExtResource("1_uxjn6")
+
+[node name="OnHigh" type="AudioStreamPlayer3D" parent="." unique_id=1897286240]
+unique_name_in_owner = true
+stream = ExtResource("2_xpmo5")
+bus = &"Engine Sound"
+script = ExtResource("3_an0yh")
+rpm = 8000.0
+
+[node name="OnLow" type="AudioStreamPlayer3D" parent="." unique_id=1549056270]
+unique_name_in_owner = true
+stream = ExtResource("4_1t2yi")
+bus = &"Engine Sound"
+script = ExtResource("3_an0yh")
+rpm = 3200.0
+
+[node name="OffHigh" type="AudioStreamPlayer3D" parent="." unique_id=2102477116]
+unique_name_in_owner = true
+stream = ExtResource("5_447xr")
+bus = &"Engine Sound"
+script = ExtResource("3_an0yh")
+rpm = 8430.0
+volume = 1.3
+
+[node name="OffLow" type="AudioStreamPlayer3D" parent="." unique_id=331295994]
+unique_name_in_owner = true
+stream = ExtResource("3_engck")
+bus = &"Engine Sound"
+script = ExtResource("3_an0yh")
+rpm = 3400.0
+volume = 1.3
+
+[node name="Limiter" type="AudioStreamPlayer3D" parent="." unique_id=2005083769]
+unique_name_in_owner = true
+stream = ExtResource("2_2g606")
+bus = &"Engine Sound"
+script = ExtResource("3_an0yh")
+rpm = 8000.0
+volume = 0.05
+
+[node name="Backfire" type="AudioStreamPlayer3D" parent="." unique_id=2119061847]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_i8d41")
+pitch_scale = 0.87
+bus = &"Engine Sound"

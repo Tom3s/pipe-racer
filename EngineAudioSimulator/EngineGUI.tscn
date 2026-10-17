@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bsdvodksmmif7"]
+
+[ext_resource type="Script" uid="uid://couwpwigl035f" path="res://EngineGUI.gd" id="1_muvm1"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=570726743]
+script = ExtResource("1_muvm1")
+ui_name = "Throttle"
+
+[node name="Name" type="Label" parent="." unique_id=997350106]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Throttle"
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=2037657704]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.0
+show_percentage = false
+
+[node name="Value" type="Label" parent="." unique_id=1297385313]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.0"
