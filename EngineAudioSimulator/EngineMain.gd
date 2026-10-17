@@ -33,6 +33,7 @@ class Drivetrain extends Node:
 	var backfire_delay: float = 0.1
 
 	signal shiftedUp()
+	signal shift_completed()
 
 	# TODO: lod config
 	# func load_config(..)
@@ -131,6 +132,8 @@ class Drivetrain extends Node:
 			self.gear = local_gear
 			self.gear = clamp(local_gear, 0, self.gears.size())
 			self.downShift = false
+
+			shift_completed.emit()
 		)
 		if local_gear > self.gear:
 			get_tree().create_timer(backfire_delay).timeout.connect(shiftedUp.emit)
@@ -467,6 +470,10 @@ func _ready() -> void:
 
 	drivetrain.shiftedUp.connect(engine_audio_manager.play_backfire)
 
+	drivetrain.shift_completed.connect(func() -> void:
+		is_shifting = false
+	)
+
 	engine_audio_manager.start_all_sounds()
 
 	set_physics_process(true)
@@ -476,19 +483,37 @@ var brake_pressed: bool = false
 var gear_up_pressed: bool = false
 var gear_down_pressed: bool = false
 
+@export var upshift_rpm: float = 8500.0
+@export var downshift_rpm: float = 2800.0
+
+@export var shift_cooldown: float = 2.0
+
+var shift_cooldown_timer: float = 0.0
+var is_shifting: bool = false
+
 func _physics_process(delta: float) -> void:
 	# accelerate_pressed = Input.is_action_pressed("accel")
 	# brake_pressed = Input.is_action_pressed("brake")
 	# gear_up_pressed = Input.is_action_just_pressed("gear_up")
 	# gear_down_pressed = Input.is_action_just_pressed("gear_down")
 
+	shift_cooldown_timer = shift_cooldown_timer - delta
+	if shift_cooldown_timer < 0.0:
+		is_shifting = false
 
-	if gear_up_pressed:
-		drivetrain.nextGear()
-		print("shifting up")
-	if gear_down_pressed:
-		drivetrain.prevGear()
-		print("shifting down")
+	if is_shifting or shift_cooldown_timer > 0.0:
+		pass
+	else:
+		if engine.rpm >= upshift_rpm:
+			drivetrain.nextGear()
+			is_shifting = true
+			shift_cooldown_timer = shift_cooldown
+			print("shifting up")
+		if engine.rpm <= downshift_rpm && drivetrain.gear > 0:
+			drivetrain.prevGear()
+			is_shifting = true
+			shift_cooldown_timer = shift_cooldown
+			print("shifting down")
 
 	if drivetrain.downShift:
 		engine.throttle = 0.8 # Rev matching

@@ -117,7 +117,6 @@ maxSteeringAngle = 0.13
 tireGrip = 1.0
 driftFactor = 0.2
 acceleration = 7.7
-passiveBraking = 0.05
 downforceMaximumSpeed = 70.0
 downForce = 100.0
 tireRegripSpeed = 5.0

@@ -53,7 +53,7 @@ var acceleration: float = 20
 var brakingMultiplier: float = 2.0
 
 @export
-var passiveBraking: float = 2.0
+var passiveBraking: float = 5.0
 
 
 @export
@@ -225,7 +225,7 @@ func _ready():
 
 		)
 
-	engine_audio.drivetrain.changeGear(1)
+	# engine_audio.drivetrain.changeGear(1)
 
 	set_physics_process(true)
 
@@ -242,6 +242,14 @@ func _physics_process(delta):
 		angular_velocity *= angularVelocityDamping
 		
 	if !paused && !shouldRespawn && !should_set_transform:
+		if accelerationInput > 0.0 && engine_audio.drivetrain.gear == 0:
+			engine_audio.drivetrain.nextGear()
+			engine_audio.shift_cooldown_timer = engine_audio.shift_cooldown
+			engine_audio.is_shifting = true
+		
+		engine_audio.accelerate_pressed = accelerationInput if accelerationInput > 0 else 0.0
+		engine_audio.brake_pressed = accelerationInput if accelerationInput <= 0.0 else 0.0
+
 		for tire in tires:
 			calculateTirePhysics(tire, delta)
 		#TODO: rotate wheels here
@@ -322,8 +330,8 @@ func _physics_process(delta):
 				# surfaceFriction = lerp(surfaceFriction, 1.0, 0.01)
 				surfaceFriction = Util.exp_decay(surfaceFriction, 1.0, 0.01, delta)
 		
-		engine_audio.accelerate_pressed = accelerationInput if accelerationInput > 0 else 0.0
-		engine_audio.brake_pressed = accelerationInput if accelerationInput <= 0.0 else 0.0
+		
+
 		# engine_audio.set_gear(getSpeed())
 
 		# if state.isAirborne():
@@ -567,7 +575,24 @@ func applyFriction(steeringDirection: Vector3, tireVelocity: Vector3, tireMass: 
 	
 	apply_force(_applyFriction_force, contactPoint - global_position)
 
+@export var drivetrain_efficiency: float = 0.5
 
+func get_drive_force() -> float:
+	if engine_audio.drivetrain == null or engine_audio.engine == null:
+		return 0.0
+
+	if engine_audio.drivetrain.gear <= 0:
+		return 0.0
+
+	var gear_ratio: float = engine_audio.drivetrain.getTotalGearRatio()
+
+	var wheel_torque: float = (
+		engine_audio.engine.output_torque
+		* gear_ratio
+		* drivetrain_efficiency
+	)
+
+	return wheel_torque / tireRadius
 
 func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, contactPoint: Vector3, accelerationMultiplier: float):
 	if accelerationInput == 0:
@@ -583,7 +608,8 @@ func applyAcceleration(accelerationDirection: Vector3, tireVelocity: Vector3, co
 		apply_force(force, contactPoint - global_position)
 		return
 
-	var force = accelerationDirection * accelerationInput * acceleration * mass * accelerationMultiplier
+	# var force = accelerationDirection * accelerationInput * acceleration * mass * accelerationMultiplier
+	var force = accelerationDirection * get_drive_force() * accelerationMultiplier
 
 	if force.dot(linear_velocity) < 0:
 		force *= brakingMultiplier
