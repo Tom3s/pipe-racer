@@ -99,6 +99,12 @@ Off: Normal rendering"
 button_pressed = true
 text = "X-Ray"
 
+[node name="FullBrightToggle" type="CheckButton" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=1606712131]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Makes the level visible for night time editing"
+text = "Fulbright"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer/MainContainer/MarginContainer/HBoxContainer/EditorModeButtons" unique_id=744672900]
 layout_mode = 2
 

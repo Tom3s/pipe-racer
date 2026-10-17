@@ -13,6 +13,7 @@ class_name EditorSidebarUI
 @onready var testButton: Button = %TestButton
 
 @onready var xray_toggle: CheckButton = %XRayToggle
+@onready var full_bright_toggle: CheckButton = %FullBrightToggle
 
 @onready var metadataButton: Button = %MetadataButton
 @onready var saveButton: Button = %SaveButton
@@ -45,6 +46,7 @@ signal buildModeChanged(mode: EditorEventListener.BuildMode)
 signal editorModeChanged(mode: EditorEventListener.EditorMode)
 
 signal xray_toggled(xray: bool)
+signal full_bright_toggled(xray: bool)
 
 signal savePressed()
 signal trackNameChanged(name: String)
@@ -109,6 +111,10 @@ func connectSignals():
 
 	xray_toggle.toggled.connect(func(xray: bool):
 		xray_toggled.emit(xray)
+	)
+	
+	full_bright_toggle.toggled.connect(func(fulllbright: bool):
+		full_bright_toggled.emit(fulllbright)
 	)
 
 	metadataButton.pressed.connect(func():
