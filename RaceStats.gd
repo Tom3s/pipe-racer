@@ -34,16 +34,16 @@ func getObject() -> Dictionary:
 
 func increaseAttempts():
 	nrAttempts += 1
-	print("[RaceStats.gd] Increased attempts to " + str(nrAttempts))
+	MogyiLogger.log(self, "Increased attempts to %d" % nrAttempts)
 
 func increaseFinishes():
 	nrFinishes += 1
-	print("[RaceStats.gd] Increased finishes to " + str(nrFinishes))
+	MogyiLogger.log(self, "Increased finishes to %d" % nrFinishes)
 
 func setBestLap(lapTime: int):
 	bestLap = min(bestLap, lapTime)
-	print("[RaceStats.gd] Set best lap to " + str(bestLap))
+	MogyiLogger.log(self, "Set best lap to %d" % bestLap)
 
 func setBestTime(time: int):
 	bestTime = min(bestTime, time)
-	print("[RaceStats.gd] Set best time to " + str(bestTime))
+	MogyiLogger.log(self, "Set best time to %d" % bestTime)

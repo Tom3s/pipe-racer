@@ -10,7 +10,7 @@ func submitTime(
 	requestCompletedCallback: Callable,
 ) -> void:
 	if trackId == "":
-		print("Can't submit record on a non-downloaded track")
+		MogyiLogger.log(self, "Can't submit record on a non-downloaded track", MogyiLogger.Severity.WARNING)
 		return
 
 	var recordingRequest = HTTPRequest.new()
@@ -18,7 +18,7 @@ func submitTime(
 	recordingRequest.timeout = 10
 	recordingRequest.request_completed.connect(func(_result, response_code, _headers, _body):
 		if response_code != 200:
-			print(_body.get_string_from_utf8())
+			MogyiLogger.log(self, "recordingRequest response: %s" % _body.get_string_from_utf8())
 			return
 
 		var replayId = JSON.parse_string(_body.get_string_from_utf8())._id
@@ -47,7 +47,7 @@ func submitTime(
 			JSON.stringify(submitData)
 		)
 		if httpError != OK:
-			print("Error submitting time: " + error_string(httpError))
+			MogyiLogger.log(self, "Error submitting time: %s" % error_string(httpError))
 	)
 
 	var recordingFileData = FileAccess.open(recordingFile, FileAccess.READ)
@@ -65,7 +65,7 @@ func submitTime(
 	)
 
 	if httpError != OK:
-		print("Error submitting replay: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting replay: %s" % error_string(httpError))
 
 
 func submitRaceStats(
@@ -86,4 +86,4 @@ func submitRaceStats(
 		JSON.stringify(stats)
 	)
 	if httpError != OK:
-		print("Error submitting time: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting time: %s" % error_string(httpError))

@@ -32,7 +32,8 @@ func fetchBestLaps(trackId: String):
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=true"
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func setTotalTimesLoading(loading: bool):
 	for label in totalTimesGrid.get_children():
@@ -55,7 +56,8 @@ func fetchBestTimes(trackId: String):
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=false"
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func setBestLapsLoading(loading: bool):
 	for label in bestLapsGrid.get_children():
@@ -67,7 +69,7 @@ func setBestLapsLoading(loading: bool):
 
 func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error: ", _responseCode)
+		MogyiLogger.log(self, "Error requesting laps: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -120,7 +122,8 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 						replayDownloadRequest.timeout = 10
 						replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 							if responseCode != 200:
-								print("Error downloading replay: ", body.get_string_from_utf8())
+								MogyiLogger.log(self, "Error downloading replay: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
+								
 								ghostButton.disabled = false
 								ghostButton.button_pressed = false
 								return
@@ -129,7 +132,8 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 							var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
 
 							if fileAccess == null:
-								print("Error opening file: ", filePath)
+								MogyiLogger.log(self, "Error opening %s" % filePath, MogyiLogger.Severity.ERROR)
+								
 								return
 
 							fileAccess.store_buffer(body)
@@ -147,7 +151,8 @@ func onBestLaps_RequestCompleted(result: int, _responseCode: int, _headers: Pack
 							]
 						)
 						if httpError != OK:
-							print("Error: " + error_string(httpError))
+							MogyiLogger.log(self, "Error sending request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 							ghostButton.disabled = false
 							ghostButton.button_pressed = false
 
@@ -184,7 +189,7 @@ func addBestLapsHeaders():
 
 func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error: ", _responseCode)
+		MogyiLogger.log(self, "Error requesting best times: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -239,7 +244,7 @@ func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: Pac
 						replayDownloadRequest.timeout = 10
 						replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 							if responseCode != 200:
-								print("Error downloading replay: ", body.get_string_from_utf8())
+								MogyiLogger.log(self, "Error downloading replay: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 								ghostButton.disabled = false
 								ghostButton.button_pressed = false
 								return
@@ -248,7 +253,7 @@ func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: Pac
 							var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
 
 							if fileAccess == null:
-								print("Error opening file: ", filePath)
+								MogyiLogger.log(self, "Error opening %s" % filePath, MogyiLogger.Severity.ERROR)
 								return
 
 							fileAccess.store_buffer(body)
@@ -266,7 +271,7 @@ func onBestTimes_RequestCompleted(result: int, _responseCode: int, _headers: Pac
 							]
 						)
 						if httpError != OK:
-							print("Error: " + error_string(httpError))
+							MogyiLogger.log(self, "Error sending request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 							ghostButton.disabled = false
 							ghostButton.button_pressed = false
 
@@ -316,14 +321,14 @@ func downloadReplay(replayId: String):
 	replayDownloadRequest.timeout = 10
 	replayDownloadRequest.request_completed.connect(func(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 		if responseCode != 200:
-			print("Error downloading replay: ", body.get_string_from_utf8())
+			MogyiLogger.log(self, "Error downloading replay: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 			return
 		
 		var filePath = "user://replays/downloaded/" + replayId + ".replay"
 		var fileAccess = FileAccess.open(filePath, FileAccess.WRITE)
 
 		if fileAccess == null:
-			print("Error opening file: ", filePath)
+			MogyiLogger.log(self, "Error opening %s" % filePath, MogyiLogger.Severity.ERROR)
 			return
 
 		fileAccess.store_buffer(body)
@@ -337,4 +342,4 @@ func downloadReplay(replayId: String):
 		]
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)

@@ -49,8 +49,6 @@ func _physics_process(delta: float) -> void:
 	var left_contact: Vector3 = left.get_collision_point() + left.get_collision_normal() * offset
 	var right_contact: Vector3 = right.get_collision_point() + right.get_collision_normal() * offset
 
-	# print(left_contact)
-	# print(right_contact)
 
 	if left_contact.distance_squared_to(last_left) >= distance_treshold || \
 		right_contact.distance_squared_to(last_right) >= distance_treshold:
@@ -61,11 +59,6 @@ func _physics_process(delta: float) -> void:
 			left_contact,
 			right_contact,
 		)
-
-		# print("[SkidMark.gd] New contact points at: %v - %v" % [
-		# 	left_contact + left.get_collision_normal() * offset,
-		# 	right_contact + right.get_collision_normal() * offset,
-		# ])
 
 		last_left = left_contact
 		last_right = right_contact

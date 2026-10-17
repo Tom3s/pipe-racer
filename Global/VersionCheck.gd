@@ -26,7 +26,7 @@ func checkVersion():
 	)
 
 	if result != OK:
-		print("Error while checking for updates: ", error_string(result))
+		MogyiLogger.log(self, "Error while checking for updates: %s" % error_string(result), MogyiLogger.Severity.ERROR)
 		AlertManager.showAlert(
 			self,
 			"Error",
@@ -37,10 +37,8 @@ func checkVersion():
 
 
 func onCheckVersion_requestCompleted(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray):
-	# print(body.get_string_from_ascii())
-	print("Response: %d, Result code: %d" % [response_code, result])
 	if response_code != 200 || result != HTTPRequest.RESULT_SUCCESS:
-		print("Error: ", error_string(result), " (respone code: ", response_code, ")")
+		MogyiLogger.log(self, "Error checking version: %s (response code: %d)" % [error_string(result), response_code])
 		AlertManager.showAlert(
 			self,
 			"Error",
@@ -53,14 +51,10 @@ func onCheckVersion_requestCompleted(result: int, response_code: int, headers: P
 	var bodyString = body.get_string_from_utf8()
 	var bodyJson = JSON.parse_string(bodyString)
 
-	# print(bodyString)
-
-	# var versionPos = bodyString.find("releases/tag/v") + 14
-	
 	var newestVersion = bodyJson["tag_name"]
 
-	print("Newest version: ", newestVersion)
-	print("Current version: ", currentVersion)
+	MogyiLogger.log(self, "Newest version: %s" % newestVersion)
+	MogyiLogger.log(self, "Current version: %s" % currentVersion)
 
 	offline = newestVersion != currentVersion
 

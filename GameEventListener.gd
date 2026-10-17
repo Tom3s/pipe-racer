@@ -314,8 +314,8 @@ func onCar_finishedRace(playerIndex: int, networkId: int):
 		
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-		print("Best Lap: ", bestLap)
-		print("Total time: ", totalTime)
+		MogyiLogger.log(self, "Best Lap: %s" % IngameHUD.getTimeStringFromTicks(bestLap))
+		MogyiLogger.log(self, "Total Time: %s" % IngameHUD.getTimeStringFromTicks(totalTime))
 
 func onCar_isResetting(playerIndex: int, resetting: bool, networkId: int) -> void:
 	rpc("broadcastReset", playerIndex, resetting, networkId)
@@ -330,7 +330,7 @@ func broadcastReset(playerIndex: int, resetting: bool, networkId: int) -> void:
 		validationFeedbackUI.visible = false
 
 func onCheckpoint_bodyEnteredCheckpoint(car: CarController, checkpoint: Node3D):
-	print("Checkpoint ", checkpoint.index, " entered by ", car.playerName)
+	MogyiLogger.log(self, "Checkpoint %d entered by %s" % [checkpoint.index, car.playerName])
 
 	var alreadyCollected = car.state.collectCheckpoint(checkpoint.index)
 
@@ -376,7 +376,7 @@ func onState_allPlayersReady():
 		raceStats[key].increaseAttempts()
 
 func onState_allPlayersFinished():
-	print("All players finished")
+	MogyiLogger.log(self, "All players finished")
 	if state.ranked:
 		# var tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 		# var windowSize = ingameMedalMenu.get_viewport_rect().size
@@ -515,7 +515,7 @@ func getTimestamp():
 
 func addPlayers(_playerDatas: Array[PlayerData], networkId: int) -> void:
 	for playerData in _playerDatas:
-		print("[GameEventListener.gd] Spawning player %s" % playerData.toJson())
+		MogyiLogger.log(self, "Spawning player %s" % playerData.toJson())
 		spawnPlayer(playerData, networkId, _playerDatas.size() > 1)
 	
 	# TODO: may not be the best place for this
@@ -531,7 +531,7 @@ func spawnPlayer(
 	var car: CarController = Car.instantiate()
 
 	car.name = str(networkId) + '_' + str(getTimestamp())
-	print("[CarController.gd] Car.name: ", car.name)
+	MogyiLogger.log(self, "Car.name: " % car.name)
 	car.playerName = data.PLAYER_NAME
 	car.playerId = data.PLAYER_ID
 	# car.playerIndex = players.get_child_count()
@@ -664,7 +664,7 @@ func getNewViewport() -> SubViewport:
 @rpc("authority", "call_local", "reliable")
 func recalculate() -> void:
 	# reset state
-	print("Recalculating", players.get_child_count())
+	MogyiLogger.log(self, "Recalculating %d" % players.get_child_count())
 
 	var musicPlayer = get_tree().root.get_node("MainMenu/MusicPlayer")
 	if musicPlayer != null:

@@ -10,7 +10,7 @@ func getGhostMaterial(color: Color) -> Material:
 	return mat
 
 func setGhostMode(color: Color):
-	print("[GhostModeMesh.gd] setGhostMode")
+	MogyiLogger.log(self, "Setting ghost mode")
 	for child in get_children():
 		if child is MeshInstance3D:
 			child.material_override = getGhostMaterial(color)

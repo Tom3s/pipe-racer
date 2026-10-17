@@ -213,13 +213,13 @@ func _ready():
 			if should_draw && !skid_mark.drawing:
 				skid_mark_placer.init_skidmark(skid_mark)
 				skid_mark.drawing = true
-				print("[CarController.gd] Started new skidmark")
+				MogyiLogger.log(self, "Started new skidmark")
 			
 			elif should_draw && skid_mark.drawing:
 				skid_mark_placer.add_quad(skid_mark, last_l, last_r, left, right)
 			elif !should_draw && skid_mark.drawing:
 				skid_mark.drawing = false
-				print("[CarController.gd] Ended skidmark")
+				MogyiLogger.log(self, "Ended skidmark")
 
 		)
 
@@ -289,7 +289,7 @@ func _physics_process(delta):
 				pauseMovement()
 			respawned.emit(playerIndex, networkId)
 		elif should_set_transform:
-			print("[Car] Teleporting car!")
+			MogyiLogger.log(self, "Teleporting car with ID: %d" % playerIndex)
 			var cam_old := Transform3D.IDENTITY
 
 			if camera != null:
@@ -376,8 +376,6 @@ func calculateTirePhysics(tire: Tire, delta):
 
 		var contactPoint = tire.get_collision_point()
 		var raycastDistance = (contactPoint - tire.global_position).length()
-		# print('Raycast distance: ', raycastDistance)
-		# print('Debug: ', (contactPoint - tire.global_position).dot(-global_transform.basis.y))
 
 		var tireVelocitySuspension = get_point_velocity(tire.global_position)
 
@@ -630,7 +628,7 @@ func respawn(initial: bool = false):
 	shouldRespawn = true
 	pauseAngularVelocity = Vector3.ZERO
 	pauseLinearVelocity = Vector3.ZERO
-	print('Reset paused velocity')
+	MogyiLogger.log(self, "Car respawned with ID: %d" % playerIndex)
 	initialRespawn = initial
 
 func getSkiddingRatio():
@@ -682,8 +680,6 @@ func calculateDisplacedVolume() -> float:
 		var maxY: float = -10000
 
 		for vertex in collider.polygon:
-			print('Vertex: ', vertex)
-		
 			if vertex.x < minX:
 				minX = vertex.x
 			if vertex.x > maxX:
@@ -769,11 +765,11 @@ func getPlayingIdle():
 
 func pauseMovement():
 	shouldPause = true
-	print('pause movement')
+	MogyiLogger.log(self, "Paused movement by ID: %d" % playerIndex)
 
 func resumeMovement():
 	shouldPause = false
-	print('unpause movement')
+	MogyiLogger.log(self, "Unpaused movement by ID: %d" % playerIndex)
 
 func startRace():
 	resumeMovement()

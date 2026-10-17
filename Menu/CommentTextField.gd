@@ -58,7 +58,8 @@ func submitComment():
 		JSON.stringify(data)
 	)
 	if httpError != OK:
-		print("Error submitting comment: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting comment:  %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 	
 	commentTextEdit.text = ""
 

@@ -94,12 +94,12 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	# var path = "user://replays/" + fileName
 	var fileHandler = FileAccess.open(fileName, FileAccess.READ)
 	if fileHandler == null:
-		print("[ReplayGhost.gd] Error opening replay file ", fileName)
+		MogyiLogger.log(self, "Error opening replay file %s" % fileName, MogyiLogger.Severity.ERROR)
 		return
 	
 	var formatVesion = fileHandler.get_8()
 	if formatVesion != ReplayManager.REPLAY_FORMAT_VERSION:
-		print("[ReplayGhost.gd] Error reading replay file (wrong format version) ", fileName)
+		MogyiLogger.log(self, "Error reading replay file (wrong format version) %s" % fileName, MogyiLogger.Severity.ERROR)
 		return
 
 	var mapMetadata = fileHandler.get_csv_line()
@@ -115,7 +115,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		_time = fileHandler.get_32()
 		
 	if clearReplays:
-		print("[ReplayGhost.gd] =================== Clearing replays ===================")
+		MogyiLogger.log(self, "=================== Clearing replays ===================")
 		self.clearReplays()
 
 	for i in _nrCars:
@@ -158,25 +158,25 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	var _splitData = []
 	for i in _nrCars:
 		if fileHandler.get_line() != "SPLIT_BEGIN":
-			print("[ReplayGhost.gd] Error reading replay file (no SPLIT_BEGIN) ", fileName, " index ", i)
+			MogyiLogger.log(self, "Error reading replay file (no SPLIT_BEGIN) %s index %d" % [fileName, i], MogyiLogger.Severity.ERROR)
 			return
 		_splitData.append([])
 		for ii in _nrLaps:
 			if fileHandler.get_line() != "LAP_BEGIN":
-				print("[ReplayGhost.gd] Error reading replay file (no LAP_BEGIN) ", fileName, " index ", i, " lap ", ii)
+				MogyiLogger.log(self, "Error reading replay file (no LAP_BEGIN) %s index %d lap %d" % [fileName, i, ii], MogyiLogger.Severity.ERROR)
 				return
 			_splitData.back().append([])
 			for iii in _nrCheckpoints + 1:
 				_splitData.back().back().append(fileHandler.get_32())
 			if fileHandler.get_line() != "LAP_END":
-				print("[ReplayGhost.gd] Error reading replay file (no LAP_END) ", fileName, " index ", i, " lap ", ii)
+				MogyiLogger.log(self, "Error reading replay file (no LAP_END) %s index %d lap %d" % [fileName, i, ii], MogyiLogger.Severity.ERROR)
 				return
 		if fileHandler.get_line() != "SPLIT_END":
-			print("[ReplayGhost.gd] Error reading replay file (no SPLIT_END) ", fileName, " index ", i)
+			MogyiLogger.log(self, "Error reading replay file (no SPLIT_END) %s index %d" % [fileName, i], MogyiLogger.Severity.ERROR)
 			return
 
 
-	print("[ReplayGhost.gd] Split data: ", _splitData)
+	MogyiLogger.log(self, "Split data: %s" % str(_splitData))
 
 	# loadedGhost.emit(_time, _splitData)
 	if _time < bestGhostTime or bestGhostTime == 0:
@@ -187,11 +187,9 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 	var rot: Vector3 = Vector3.ZERO
 	
 	
-	# print("[ReplayGhost.gd] Loading replay: ", frameData)
-
 	for carIndex in _nrCars:
 		if fileHandler.get_line() != "REPLAY_BEGIN":
-			print("[ReplayGhost.gd] Error reading replay file (no REPLAY_BEGIN) ", fileName, " index ", carIndex)
+			MogyiLogger.log(self, "Error reading replay file (no REPLAY_BEGIN) %s index %d" % [fileName, carIndex], MogyiLogger.Severity.ERROR)
 			return
 		# frameData.append([])
 		for i in nrFrames:
@@ -214,7 +212,7 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 			frameData[i].append([pos, rot])
 
 		if fileHandler.get_line() != "REPLAY_END":
-			print("[ReplayGhost.gd] Error reading replay file (no REPLAY_END) ", fileName, " index ", carIndex)
+			MogyiLogger.log(self, "Error reading replay file (no REPLAY_END) %s index %d" % [fileName, carIndex], MogyiLogger.Severity.ERROR)
 			return
 	
 	# adjust for shorter replays:
@@ -225,7 +223,6 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 		# while data.size() < maxDataSize:
 		# 	data.append([null, null])	
 		if data.size() < maxDataSize:
-			# print("ReplayGhost.gd] Adjusting for max data size: ", maxDataSize - data.size())
 			for i in (maxDataSize - data.size()):
 				data.append([null, null])
 			
@@ -233,8 +230,8 @@ func loadReplay(fileName: String, clearReplays: bool = true, ghostMode: bool = t
 
 	
 	fileHandler.close()
-	print("[ReplayGhost.gd] Replay loaded: ", fileName)
-	print("[ReplayGhost.gd] Frames: ", frameData.size())
+	MogyiLogger.log(self, "Replay loaded: %s" % fileName)
+	MogyiLogger.log(self, "Frames: %d" % frameData.size())
 
 func stopReplay():
 	playing = false

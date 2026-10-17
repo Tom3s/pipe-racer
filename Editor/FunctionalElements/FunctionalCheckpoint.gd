@@ -53,7 +53,7 @@ func _ready():
 	%CheckpointArea.body_entered.connect(onBodyEntered)
 
 func onBodyEntered(body):
-	print("[Checkpoint.gd] Body entered checkpoint: ", body)
+	MogyiLogger.log(self, "Body entered checkpoint: %s" % body.name)
 	bodyEnteredCheckpoint.emit(body, self)
 
 var index: int = -1
@@ -102,8 +102,6 @@ func getRespawnPosition(playerIndex: int, nrPlayers: int) -> Dictionary:
 func getRotationVector(localForward: Vector3, localRight: Vector3) -> Vector3:
 	var localBasis = Basis(localRight, localForward.cross(localRight).normalized(), -localForward)
 	var localQuaternion = Quaternion(localBasis.get_rotation_quaternion())
-
-	print("Rotation: ", localQuaternion.get_euler())
 
 	return localQuaternion.get_euler()
 

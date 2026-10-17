@@ -34,7 +34,7 @@ func _ready():
 	ipAddress = "localhost"
 
 func onConnectedToServer():
-	print("[Network.gd] Connected to server")
+	MogyiLogger.log(self, "Connected to server")
 	var id = get_tree().get_multiplayer().get_unique_id()
 	var jsonData = []
 	for data in localData:
@@ -92,7 +92,7 @@ func updateUserCount(_sink = null):
 	playerCount = get_tree().get_multiplayer().get_peers().size()
 
 func onServerDisconnected():
-	print("[Network.gd] Server closed connection")
+	MogyiLogger.log(self, "Server closed connection")
 	AlertManager.showAlert(self, "Disconnected", "Server closed connection")
 	userId = 1
 
@@ -116,7 +116,7 @@ func hostServer(callback: Callable, errorParent: Node):
 			ipAddress = upnp.query_external_address()
 			ipAddressChanged.emit(ipAddress)
 		else:
-			print("No valid gateway found for forwarding. Try manually forwarding port ", DEFAULT_PORT)
+			MogyiLogger.log(self,"No valid gateway found for forwarding. Try manually forwarding port %d" % DEFAULT_PORT, MogyiLogger.Severity.WARNING)
 			AlertManager.showAlert(
 				errorParent,
 				"Error hosting online server",
@@ -125,7 +125,7 @@ func hostServer(callback: Callable, errorParent: Node):
 			)
 			# return
 	else:
-		print(error_string(discoverResult), ": Could not forward port")
+		MogyiLogger.log(self, "Could not forward port: %s" % error_string(discoverResult))
 		AlertManager.showAlert(
 			errorParent,
 			"Error hosting online server",

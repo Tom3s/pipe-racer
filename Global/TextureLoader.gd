@@ -73,11 +73,11 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 	if !is_node_ready():
 		return
 	if onlineTextures.has(imageUrl):
-		print("[TextureLoader.gd] Texture already loaded: ", imageUrl)
+		MogyiLogger.log(self, "Texture already loaded: %s" % imageUrl, MogyiLogger.Severity.WARNING)
 		setTextureCallback.call(onlineTextures[imageUrl])
 		return
 	if pendingRequests.has(imageUrl):
-		print("[TextureLoader.gd] Request already in progress: ", imageUrl)
+		MogyiLogger.log(self, "Request already in progress: %s" % imageUrl, MogyiLogger.Severity.WARNING)
 		pendingRequests[imageUrl].append(setTextureCallback)
 		return
 	pendingRequests[imageUrl] = [setTextureCallback]
@@ -87,17 +87,17 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 	httpRequest.request_completed.connect(func(_result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 		var image = Image.new()
 		var imageError = image.load_jpg_from_buffer(body)
-		print("[TextureLoader.gd] Trying JPG...")
+		MogyiLogger.log(self, "Trying JPG...")
 		if imageError != OK:
-			print("[TextureLoader.gd] Error loading jpg ", imageUrl, "\n", error_string(imageError))
-			print("[TextureLoader.gd] Trying PNG...")
+			MogyiLogger.log(self, "Error loading jpg %s - %s" % [imageUrl, error_string(imageError)], MogyiLogger.Severity.WARNING)
+			MogyiLogger.log(self, "Trying PNG...")
 			imageError = image.load_png_from_buffer(body)
 			if imageError != OK:
-				print("[TextureLoader.gd] Error loading png: ", imageUrl, "\n", error_string(imageError))
-				print("[TextureLoader.gd] Trying WEBP...")	
+				MogyiLogger.log(self, "Error loading png: %s - %s" % [imageUrl, error_string(imageError)], MogyiLogger.Severity.WARNING)
+				MogyiLogger.log(self, "Trying WEBP...")	
 				imageError = image.load_webp_from_buffer(body)
 				if imageError != OK:
-					print("[TextureLoader.gd] Error loading WEBP: ", imageUrl, "\n", error_string(imageError))
+					MogyiLogger.log(self, "Error loading WEBP: %s - %s" % [imageUrl, error_string(imageError)], MogyiLogger.Severity.ERROR)
 					return
 
 		var texture = ImageTexture.create_from_image(image)
@@ -109,4 +109,4 @@ func loadOnlineTexture(imageUrl: String, setTextureCallback: Callable) -> void:
 
 	var httpError = httpRequest.request(imageUrl)
 	if httpError != OK:
-		print("[TextureLoader.gd] Error sending request: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError))

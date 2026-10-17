@@ -55,11 +55,12 @@ func loadComments(trackId: String = ""):
 		HTTPClient.METHOD_GET,
 	)
 	if httpError != OK:
-		print("Error loading comments: " + error_string(httpError))
+		MogyiLogger.log(self, "Error loading comments %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func onCommentsLoaded(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	if _responseCode != 200:
-		print("Error loading comments: ", _responseCode)
+		MogyiLogger.log(self, "Error loading comments: %d" % _responseCode, MogyiLogger.Severity.ERROR)
 		return
 	
 	var comments = JSON.parse_string(_body.get_string_from_utf8())

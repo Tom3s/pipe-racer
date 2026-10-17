@@ -32,13 +32,13 @@ func hide():
 	mapLoader.visible = false
 
 func editMap(mapName: String):
-	print("Editing map: ", mapName)
+	MogyiLogger.log(self, "Opening map for editing: %s" % mapName)
 	editor = editorScene.instantiate()
 	add_child(editor)
 	# editor.loadFailed.connect(unloadMap)
 	if mapName != "":
 		var success = editor.loadMap(mapName)
-		print("================== Map load success: ", success)
+		MogyiLogger.log(self, "Map load result: %s" % str(success))
 		if !success:
 			unloadMap()
 			AlertManager.showAlert(

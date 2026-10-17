@@ -134,12 +134,12 @@ func loadPersonalBest() -> void:
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId,
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 
 func onPersonalBestLoaded(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Response: ", _responseCode)
+		MogyiLogger.log(self, "Loading personal best response: %d" % _responseCode, MogyiLogger.Severity.WARNING)
 		return
 	
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -147,14 +147,16 @@ func onPersonalBestLoaded(result: int, _responseCode: int, _headers: PackedStrin
 	for time in data:
 		if time["user"]["_id"] == playerId:
 			bestSplits = time["splits"]
-			print("[TimeTrialManager.gd] Loaded PB")
+			MogyiLogger.log(self, "Loaded PB for %s" % playerId)
+
 			return
 
 	
 	if data.size() > 0:
 		bestSplits = data.back()["splits"]
 	
-	print("[TimeTrialManager.gd] Loaded PB")
+	MogyiLogger.log(self, "Loaded PB")
+
 
 func loadPersonalBestLap() -> void:
 	var pbRequest = HTTPRequest.new()
@@ -166,11 +168,12 @@ func loadPersonalBestLap() -> void:
 		Backend.BACKEND_IP_ADRESS + "/api/leaderboard/" + trackId + "?sortByLap=true",
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func onPersonalBestLapLoaded(result: int, _responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if _responseCode != 200:
-		print("Response: ", _responseCode)
+		MogyiLogger.log(self, "Loading personal best lap response: %d" % _responseCode, MogyiLogger.Severity.WARNING)
 		return
 	
 	var data = JSON.parse_string(body.get_string_from_utf8())
@@ -178,14 +181,16 @@ func onPersonalBestLapLoaded(result: int, _responseCode: int, _headers: PackedSt
 	for time in data:
 		if time["user"]["_id"] == playerId:
 			setBestLapSplits(time["splits"])
-			print("[TimeTrialManager.gd] Loaded PB lap")
+			MogyiLogger.log(self, "Loaded PB lap for %s" % playerId)
+
 			return
 
 	
 	if data.size() > 0:
 		# bestSplits = data.back()["splits"]
 		setBestLapSplits(data.back()["splits"])
-	print("[TimeTrialManager.gd] Loaded PB lap")
+	MogyiLogger.log(self, "Loaded PB lap")
+
 
 func setBestLapSplits(loadedBestSplits):
 	# var bestLapTime = loadedBestSplits[0].back()
@@ -229,7 +234,7 @@ func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
 
 		if bestTime >= totalTime || bestSplits.size() == 0:
 			# bestSplits = splits
-			print("Setting new PB splits")
+			MogyiLogger.log(self, "Setting new PB splits")
 			isPB = true
 			bestSplits.clear()
 			for array in splits:
@@ -238,18 +243,14 @@ func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
 				bestSplits.append(copyArray)
 		setBestLapSplits(splits)
 	elif totalTimeData != null && splitData != null:
-		# while !loadedPBLap || !loadedPBTime:
-		# 	print("[TimeTrialManager.gd] waiting for PB to load")
-		# 	await get_tree().create_timer(1.0).timeout
-		
-		print("[TimeTrialManager.gd] trying to replace splits with ghost splits")
+		MogyiLogger.log(self, "Trying to replace splits with ghost splits...")
 
 		var totalTime = totalTimeData
 		var bestTime = bestSplits.reduce(func(accum, lap): return accum + lap.back(), 0)
 
 		if bestTime >= totalTime || bestSplits.size() == 0:
 			# bestSplits = splits
-			print("Setting new PB splits")
+			MogyiLogger.log(self, "Setting new PB splits")
 			bestSplits.clear()
 			for array in splitData:
 				var copyArray = []
@@ -257,5 +258,5 @@ func replaceSplitsIfBetter(totalTimeData = null, splitData = null):
 				bestSplits.append(copyArray)
 		setBestLapSplits(splitData)
 	else:
-		print("[TimeTrialManager.gd] replaceSplitsIfBetter: invalid arguments")
+		MogyiLogger.log(self, "replaceSplitsIfBetter: invalid arguments", MogyiLogger.Severity.ERROR)
 		return

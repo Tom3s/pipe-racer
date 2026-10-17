@@ -72,7 +72,7 @@ func onEditButton_pressed(_sink = null):
 	trackName += localTrackListItems[localTrackList.get_selected_items()[0]]
 	visible = false
 	editTrack.emit(trackName)
-	print("Selected track for edit: ", trackName)
+	MogyiLogger.log(self, "Selected track for editing: %s" % trackName)
 
 func onPlayButton_pressed(_sink = null):
 	var trackName = ""
@@ -80,7 +80,8 @@ func onPlayButton_pressed(_sink = null):
 	trackName += localTrackListItems[localTrackList.get_selected_items()[0]]
 	visible = false
 	playTrack.emit(trackName)
-	print("Selected track for play: ", trackName)
+	MogyiLogger.log(self, "Selected track for play: %s" % trackName)
+
 
 var selectedTrackForDelete: String = ""
 func onDeleteButton_pressed() -> void:
@@ -99,7 +100,8 @@ func onDeleteButton_pressed() -> void:
 		readableTrackName + "\n",
 	)
 
-	print("Deleting track: ", trackName)
+	MogyiLogger.log(self, "Deleting track: %s" % trackName)
+
 
 func onDeleteConfirmed():
 	var fileHandler = DirAccess.open("user://")
@@ -133,7 +135,9 @@ func uploadTrack(trackFileName: String):
 	if VersionCheck.offline:
 		AlertManager.showAlert(self, "Error", "Cannot upload track in offline mode", "Please connect to the internet and try again") 
 		return
-	print("Uploading track: ", trackFileName)
+
+	MogyiLogger.log(self, "Uploading track: %s" % trackFileName)
+
 	
 
 	var path = "user://tracks/local/" + trackFileName
@@ -162,7 +166,7 @@ func uploadTrack(trackFileName: String):
 	replayRequest.timeout = 10
 	replayRequest.request_completed.connect(func(_result, response_code, _headers, _body):
 		if response_code != 200:
-			print(_body.get_string_from_utf8())
+			MogyiLogger.log(self, "Error uploading replay: %s" % _body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 			return
 		
 		var replayId = JSON.parse_string(_body.get_string_from_utf8())._id
@@ -174,7 +178,7 @@ func uploadTrack(trackFileName: String):
 			lapReplayRequest.timeout = 10
 			lapReplayRequest.request_completed.connect(func(_result, response_code, _headers, _body):
 				if response_code != 200:
-					print(_body.get_string_from_utf8())
+					MogyiLogger.log(self, "Error uploading replay: %s" % _body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 					return
 				
 				var lapReplayId = JSON.parse_string(_body.get_string_from_utf8())._id
@@ -200,7 +204,7 @@ func uploadTrack(trackFileName: String):
 			)
 
 			if httpError != OK:
-				print("Error: " + error_string(httpError))
+				MogyiLogger.log(self, "Error uploading lap replay: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 				AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading lap replay")
 		else:
 			jsonData.metadata.bestTotalReplay = replayId
@@ -224,7 +228,8 @@ func uploadTrack(trackFileName: String):
 	)
 
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error uploading lap replay: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 		AlertManager.showAlert(self, "Error", "Upload Failed", "Error uploading replay")
 
 
@@ -246,7 +251,8 @@ func sendUploadRequest(jsonData):
 		JSON.stringify(jsonData)
 	)
 	if httpError != OK:
-		print("Error: " + error_string(httpError))
+		MogyiLogger.log(self, "Error uploading level: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 
 func onUploadRequest_completed(_result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 

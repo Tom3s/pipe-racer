@@ -76,12 +76,12 @@ func fetchPlayerStats():
 	)
 
 	if httpError != OK:
-		print("[PlayerStatsUI.gd] Error sending request: " + error_string(httpError))
+		MogyiLogger.log(self, "Error sending request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 
 func onFetchPlayerStats_completed(result: int, responseCode: int, _headers: PackedStringArray, body: PackedByteArray):
 	if responseCode != 200:
-		print("[PlayerStatsUI.gd] Error ", responseCode, ": ", body.get_string_from_utf8())
+		MogyiLogger.log(self, "Error fetching player stats: %s" % body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 		return
 
 	var data = JSON.parse_string(body.get_string_from_utf8())

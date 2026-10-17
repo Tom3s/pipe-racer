@@ -12,6 +12,8 @@ func showAlert(parent: Node, title: String, text: String, response: String = "")
 	parent.add_child(alert)
 	alert.popup_centered()
 
+	# MogyiLogger.log(parent, "%s - %s" % [title, text], MogyiLogger.Severity.WARNING)
+
 func showDeleteAlert(
 	parent: Node,
 	text: String,

@@ -51,7 +51,6 @@ static func updateMap(jsonData, fileName: String) -> void:
 	var fileHandler = FileAccess.open(fileName, FileAccess.WRITE)
 
 	if fileHandler == null:
-		print("Map update failed: ", fileHandler.get_open_error())
 		return
 	
 	fileHandler.store_string(JSON.stringify(jsonData, "\t"))

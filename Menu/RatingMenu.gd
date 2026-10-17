@@ -70,16 +70,11 @@ func loadYourRating():
 		HTTPClient.METHOD_GET
 	)
 	if httpError != OK:
-		print("Error sending get request: " + error_string(httpError))
+		MogyiLogger.log(self, "Error requesting rating request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
 
 func onAllRatingsLoaded(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):
 	if _responseCode != 200:
-		# AlertManager.showAlert(
-		# 	self,
-		# 	"Error loading your rating",
-		# 	_body.get_string_from_utf8()
-		# )
-		print("Error loading your rating")
+		MogyiLogger.log(self, "Error loading your rating: %s" % _body.get_string_from_utf8(), MogyiLogger.Severity.ERROR)
 		return
 	
 	var data = JSON.parse_string(_body.get_string_from_utf8())
@@ -115,7 +110,8 @@ func submitRating(rating: int):
 		})
 	)
 	if httpError != OK:
-		print("Error submitting rating request: " + error_string(httpError))
+		MogyiLogger.log(self, "Error submitting rating request: %s" % error_string(httpError), MogyiLogger.Severity.ERROR)
+
 		enableButtons()
 
 func onRatingSubmitted(_result: int, _responseCode: int, _headers: PackedStringArray, _body: PackedByteArray):

@@ -373,14 +373,14 @@ func removeLightDeco(node: LightDeco):
 # portl specific
 func link_portals(base_id: int, link_id: int) -> void:
 	if !portal_refs.has_all([base_id, link_id]):
-		print("[InteractiveMap.gd] Trying to link non-existent portals. Aborting...")
+		MogyiLogger.log(self, "Trying to link non-existent portals. Aborting...", MogyiLogger.Severity.WARNING)
 		return
 	
 	portal_refs[base_id].link_with(portal_refs[link_id])
 
 func unlink_portal(id: int) -> void:
 	if !portal_refs.has(id):
-		print("[InteractiveMap.gd] Trying to unlink non-existent portal. Aborting...")
+		MogyiLogger.log(self, "Trying to unlink non-existent portal. Aborting...", MogyiLogger.Severity.WARNING)
 		return
 	
 	portal_refs[id].unlink()
@@ -444,14 +444,14 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 
 	# add start line
 	if start == null:
-		print("[InteractiveMap.gd] No start line found! Please add one.")
+		MogyiLogger.log(self, "No start line found! Please add one", MogyiLogger.Severity.WARNING)
 		# return false
 	else:
 		trackData["start"] = start.getExportData()
 
 	# add checkpoints
 	if checkpoints.get_child_count() <= 0:
-		print("[InteractiveMap.gd] No checkpoints found! Please add at least one.")
+		MogyiLogger.log(self, "No checkpoints found! Please add at least one", MogyiLogger.Severity.WARNING)
 		# return false
 	else:
 		trackData["checkpoints"] = []
@@ -520,7 +520,7 @@ func exportTrack(autosave: bool = false, resetValidate: bool = true) -> bool:
 	var fileHandler = FileAccess.open(path, FileAccess.WRITE)
 
 	if fileHandler == null:
-		print("[InteractiveMap.gd] Error opening file to save into")
+		MogyiLogger.log(self, "Error opening %s to save into" % path, MogyiLogger.Severity.ERROR)
 		return false
 
 	fileHandler.store_string(JSON.stringify(trackData, "\t"))
@@ -543,18 +543,18 @@ func importTrack(fileName: String) -> bool:
 	var fileHandler = FileAccess.open(path, FileAccess.READ)
 
 	if fileHandler == null:
-		print("[InteractiveMap.gd] Error opening file to load from", path)
+		MogyiLogger.log(self, "Error opening %s to load from" % path, MogyiLogger.Severity.ERROR)
 		return false
 	
 	var trackData = JSON.parse_string(fileHandler.get_as_text())
 
 	if trackData == null:
-		print("[InteractiveMap.gd] Error parsing JSON when loading map")
+		MogyiLogger.log(self, "Error parsing JSON when loading %s" % path, MogyiLogger.Severity.ERROR)
 		return false
 	
 
 	if !trackData.has("metadata"):
-		print("[InteractiveMap.gd] No metadata found in the file")
+		MogyiLogger.log(self, "No metadata found in %s" % path, MogyiLogger.Severity.ERROR)
 		return false
 
 	if trackData["metadata"].has("author"):
@@ -563,11 +563,11 @@ func importTrack(fileName: String) -> bool:
 		author = ""
 	
 	if !trackData.has("format"):
-		print("[InteractiveMap.gd] No format version found in the file")
+		MogyiLogger.log(self, "No format version found in %s" % path, MogyiLogger.Severity.ERROR)
 		return false
 
 	if trackData["format"] != CURRENT_FORMAT_VERSION:
-		print("[InteractiveMap.gd] Error loading map: wrong format version")
+		MogyiLogger.log(self, "Error loading %s: wrong format version" % path, MogyiLogger.Severity.ERROR)
 
 		# handle different format versions here
 		
@@ -597,7 +597,7 @@ func importTrack(fileName: String) -> bool:
 		unvalidate()
 
 	if !trackData.has("start"):
-		print("[InteractiveMap.gd] No start line found in the file")
+		MogyiLogger.log(self, "[InteractiveMap.gd] No start line found in the file", MogyiLogger.Severity.WARNING)
 		# return false
 	else:
 		setStartLine(
@@ -607,7 +607,7 @@ func importTrack(fileName: String) -> bool:
 		)
 
 	if !trackData.has("checkpoints"):
-		print("[InteractiveMap.gd] No checkpoints found in the file")
+		MogyiLogger.log(self, "[InteractiveMap.gd] No checkpoints found in the file", MogyiLogger.Severity.WARNING)
 		# return false
 	else:
 		var checkpointIndex = 0
@@ -620,8 +620,6 @@ func importTrack(fileName: String) -> bool:
 				checkpointData
 			)
 			checkpoint.index = checkpointIndex
-			# checkpoint.setCollisionShape()
-			# print("Checkpoint ", checkpointIndex, " collision size: ", checkpoint.areaCollisionShape.shape.radius) 
 			checkpointIndex += 1
 	
 	if trackData.has("terrain"):

@@ -198,7 +198,6 @@ func onPrefabMesher_propertiesUpdated():
 	prefabPropertiesUI.setFromData(prefabMesher.encodeData())
 
 func onEditorInputHandler_mouseMovedTo(worldMousePos: Vector3):
-	# print("Mouse moved to: ", worldMousePos)
 	var currentPlacerNode = editorStateMachine.currentPlacerNode
 	if worldMousePos != Vector3.INF && editorStateMachine.canMovePreview():
 		currentPlacerNode.updatePosition(worldMousePos, camera.global_position, editorStateMachine.gridCurrentHeight, map.getConnectionPoints())

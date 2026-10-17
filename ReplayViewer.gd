@@ -39,8 +39,7 @@ func setup(
 
 	var success = map.importTrack(mapName)
 	if !success:
-		print("[ReplayViewer.gd] Failed to load map: " + mapName)
-		print("[ReplayViewer.gd] Trying legacy format")
+		MogyiLogger.log(self, "Failed to load map: %s\nTrying legacy format" % mapName, MogyiLogger.Severity.WARNING)
 		map.queue_free()
 
 		map = legacyMapScene.instantiate()
@@ -49,7 +48,8 @@ func setup(
 		# TODO: check if map exists locally, if not, download it
 		success = map.loadMap(mapName)
 		if !success:
-			print("[ReplayViewer.gd] Failed to load legacy format, exiting.")
+			MogyiLogger.log(self, "Failed to load map %s with legacy format. Exiting..." % mapName, MogyiLogger.Severity.ERROR)
+
 			exitPressed.emit()
 			return false
 

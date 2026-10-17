@@ -290,12 +290,10 @@ func resetButtons():
 
 func hideMainContentsAnimated():
 	await animateMainContentsOut()
-	print('Anim out done')
 	mainContent.visible = false
 	resetButtons()
 
 func showMainContentsAnimated():
 	# mainContent.visible = true
 	await animateMainContentsIn()
-	print('Anim in done')
 	resetButtons()

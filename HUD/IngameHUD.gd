@@ -57,7 +57,7 @@ func init(initialCar: CarController, initialTimeTrialManager: TimeTrialManager, 
 	%HUDContainer.hide()
 
 func _ready() -> void:
-	print("HUD loaded")
+	MogyiLogger.log(self, "HUD loaded")
 	setNickname(car.playerName)
 	setReadyIndicator(false)
 	setResetIndicator(false)
